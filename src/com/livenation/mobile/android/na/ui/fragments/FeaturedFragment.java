@@ -70,7 +70,7 @@ public class FeaturedFragment extends Fragment {
 
 		@Override
 		public void onLocationFailure(int failureCode) {
-
+			//TODO: this
 		}
 	};
 
@@ -81,14 +81,14 @@ public class FeaturedFragment extends Fragment {
 		public void onGetCharts(List<Chart> topCharts) {
 			for (Chart chart : topCharts) {
 				NetworkImageView image = new NetworkImageView(getActivity());
-				image.setImageUrl(chart.getFeatureImageUrl(), getImageLoader());
+				image.setImageUrl(chart.getImageUrl(), getImageLoader());
 				chartingContainer.addView(image, new LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			}
 		}
 
 		@Override
-		public void onFailure(int arg0, String arg1) {
+		public void onFailure(int errorCode, String message) {
 			// TODO Auto-generated method stub
 
 		}
