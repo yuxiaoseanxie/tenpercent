@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="@dimen/list_show_item_min_height"
+    android:padding="@dimen/list_show_item_padding" >
+
+    <include
+        android:id="@+id/list_generic_show_date"
+        layout="@layout/list_show_date_sub"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/list_generic_show_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_show_item_event_title_left_margin"
+        android:layout_toRightOf="@id/list_generic_show_date"
+        android:text="Fatboy Slim"
+        android:textAppearance="@style/list_show_title" />
+
+    <TextView
+        android:id="@+id/list_generic_show_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/list_generic_show_title"
+        android:layout_below="@id/list_generic_show_title"
+        android:text="Big Beat Boutique"
+        android:textAppearance="@style/list_show_location" />
+
+</RelativeLayout>

@@ -74,6 +74,11 @@ public class FeaturedFragment extends LiveNationFragment {
 		@Override
 		public void onGetCharts(List<Chart> topCharts) {
 			for (Chart chart : topCharts) {
+				//TODO: DataModel helper method here
+				if (null == chart.getImageUrl() || 
+						chart.getImageUrl().trim().length() == 0) {
+					continue;
+				}
 				NetworkImageView image = new NetworkImageView(getActivity());
 				image.setImageUrl(chart.getImageUrl(), getImageLoader());
 				chartingContainer.addView(image, new LayoutParams(

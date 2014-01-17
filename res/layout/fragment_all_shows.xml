@@ -11,21 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dip"
         android:layout_weight="1"
         android:background="@drawable/ic_launcher" >
-
     </ListView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/icon_144"
-        android:orientation="vertical" >
-
-    </LinearLayout>
 
 </LinearLayout>

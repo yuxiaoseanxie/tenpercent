@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/list_show_item_date_dotw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="MON"
+        android:textAllCaps="true"
+        android:textAppearance="@style/list_show_date_dotw" />
+
+    <TextView
+        android:id="@+id/list_show_item_date_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="18"
+        android:textAllCaps="true"
+        android:textAppearance="@style/list_show_date_day" />
+
+    <TextView
+        android:id="@+id/list_show_item_date_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="NOV"
+        android:textAllCaps="true"
+        android:textAppearance="@style/list_show_date_month" />
+
+</LinearLayout>

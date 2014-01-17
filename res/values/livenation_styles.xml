@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <color name="background_gray">#999999</color>
     <color name="featured_text">#ffffff</color>
-    
-    <style name="featured_title" parent="@android:style/TextAppearance.Medium">
+    <color name="list_show_date_text_highlight">#ff0000</color>
+
+    <style name="featured_title" parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/featured_text</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="featured_see_all" parent="@style/featured_title">
         <item name="android:textStyle"></item>
     </style>
+
+    <style name="list_show_title" parent="@android:style/TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_show_location" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="list_show_date_dotw" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="list_show_date_day" parent="@android:style/TextAppearance">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/list_show_date_text_highlight</item>
+    </style>
+
+    <style name="list_show_date_month" parent="@android:style/TextAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/list_show_date_text_highlight</item>
+    </style>
+
 </resources>
