@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import java.util.List;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,12 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.ui.fragments.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 
-public class FeaturedFragment extends Fragment {
+public class FeaturedFragment extends LiveNationFragment {
 	private ViewGroup chartingContainer;
 	private LocationCallback locationCallback = null;
 
@@ -53,13 +53,7 @@ public class FeaturedFragment extends Fragment {
 		getApiService().getTopCharts(parameters, new OnGetTopCharts());
 	}
 
-	private LiveNationApiService getApiService() {
-		return LiveNationApplication.get().getServiceApi();
-	}
 
-	private LocationHelper getLocationHelper() {
-		return LiveNationApplication.get().getLocationHelper();
-	}
 
 	private class LocationCallback implements LocationHelper.LocationCallback {
 
