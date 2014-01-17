@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    <string name="featured_title">Featured</string>
+    <string name="featured_see_all">+ See all</string>
 </resources>

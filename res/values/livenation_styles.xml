@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background_gray">#999999</color>
-</resources>
 
+    <color name="background_gray">#999999</color>
+    <color name="featured_text">#ffffff</color>
+    
+    <style name="featured_title" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/featured_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="featured_see_all" parent="@style/featured_title">
+        <item name="android:textStyle"></item>
+    </style>
+</resources>
