@@ -24,17 +24,21 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.util.Logger;
 
 public class ShowsListFragment extends LiveNationListFragment {
+	//TODO: Refactor this out of scope
 	private List<Event> items;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		//TODO: saveInstanceState data serializaiton
 		items = new ArrayList<Event>();
+		//TODO: Refactor redundant layout parameter out
 		setListAdapter(new EventAdapter(getActivity(), R.layout.list_show_item, items));
 		getData();
 	}
 	
 	private void getData() {
+		//TODO: Parameters from intent
 		ApiParameters.EventParameters parameters = ApiParameters.createEventParameters();
 		GetEventsCallback callback = new GetEventsCallback();
 		getApiService().getEvents(parameters, callback);
@@ -84,7 +88,7 @@ public class ShowsListFragment extends LiveNationListFragment {
 			holder.getTitle().setText(event.getName());
 			holder.getLocation().setText(event.getVenue().getName());
 			
-			//TODO: Move date parsing to Data Model Entity. This is ugly 
+			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
 			SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.TIME_FORMAT, Locale.US);
 			
 			try {

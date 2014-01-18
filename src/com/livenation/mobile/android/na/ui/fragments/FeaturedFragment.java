@@ -53,8 +53,6 @@ public class FeaturedFragment extends LiveNationFragment {
 		getApiService().getTopCharts(parameters, new OnGetTopCharts());
 	}
 
-
-
 	private class LocationCallback implements LocationHelper.LocationCallback {
 
 		@Override
@@ -88,13 +86,13 @@ public class FeaturedFragment extends LiveNationFragment {
 
 		@Override
 		public void onFailure(int errorCode, String message) {
-			// TODO Auto-generated method stub
-
+			// TODO: This
 		}
 
 	}
 
 	private ImageLoader getImageLoader() {
+		//TODO: As support function?
 		return LiveNationApplication.get().getImageLoader();
 	}
 }
