@@ -16,15 +16,18 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.fragments.support.LiveNationListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -66,6 +69,14 @@ public class ShowsListFragment extends LiveNationListFragment {
 			Logger.log("WTF", "Error: " + failureCode + " " + message);
 			// TODO: this
 		}
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Intent intent = new Intent(getActivity(), ShowActivity.class);
+		Event event = items.get(position);
+		intent.putExtra(ShowFragment.PARAMETER_EVENT_ID, event.getId());
+		startActivity(intent);
 	}
 	
 	private class EventAdapter extends ArrayAdapter<Event> {

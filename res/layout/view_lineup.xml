@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <CheckBox
+        android:id="@+id/view_lineup_favorite_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_favorite_selector"
+        android:layout_gravity="center_vertical"
+        android:checked="false" />
+
+    <TextView
+        android:id="@+id/view_lineup_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/view_line_up_artist_title_margin_left"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="@style/view_artist_title"
+        android:text="Macklemore n Ryan Lewis" />
+
+</LinearLayout>

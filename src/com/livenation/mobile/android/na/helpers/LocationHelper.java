@@ -16,10 +16,8 @@ public class LocationHelper {
 	public static final int FAILURE_UNKNOWN = 0;
 	public static final int FAILURE_GOOGLE_SERVICES_USER_REQUIRED = 1;
 	
-
 	private LocationCache locationCache = null;
 	private LocationProvider currentRequest = null;
-	
 	
 	public void prepareCache(Context context) {
 		LocationCallback callback = new LocationCallback() {

@@ -16,10 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.ui.fragments.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -91,8 +89,4 @@ public class FeaturedFragment extends LiveNationFragment {
 
 	}
 
-	private ImageLoader getImageLoader() {
-		//TODO: As support function?
-		return LiveNationApplication.get().getImageLoader();
-	}
 }

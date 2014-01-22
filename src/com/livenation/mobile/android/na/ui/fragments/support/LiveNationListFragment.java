@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments.support;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -24,5 +25,10 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	@Override
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
-	}	
+	}
+	
+	@Override
+	public ImageLoader getImageLoader() {
+		return LiveNationApplication.get().getImageLoader();
+	}
 }
