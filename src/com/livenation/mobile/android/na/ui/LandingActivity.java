@@ -23,11 +23,11 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 public class LandingActivity extends FragmentActivity {
 	private ViewPager viewPager;
 	private LandingAdapter viewPagerAdapter;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+	
 		setContentView(R.layout.activity_landing);
 		viewPager = (ViewPager) findViewById(R.id.landing_viewpager);
 		viewPagerAdapter = new LandingAdapter(getSupportFragmentManager());
@@ -68,6 +68,7 @@ public class LandingActivity extends FragmentActivity {
 	}
 
 	public static class LandingAdapter extends FragmentPagerAdapter {
+
 		public LandingAdapter(FragmentManager fm) {
 			super(fm);
 		}

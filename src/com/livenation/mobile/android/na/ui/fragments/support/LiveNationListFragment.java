@@ -13,9 +13,16 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		setRetainInstance(true);
+	}
 	
 	@Override
 	public LiveNationApiService getApiService() {

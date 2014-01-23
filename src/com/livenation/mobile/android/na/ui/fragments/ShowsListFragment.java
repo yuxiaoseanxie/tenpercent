@@ -27,14 +27,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.fragments.support.LiveNationListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
-import com.livenation.mobile.android.platform.util.Logger;
 
-public class ShowsListFragment extends LiveNationListFragment {
+public class ShowsListFragment extends LiveNationListFragment implements EventsView {
 	//TODO: Refactor this out of scope
 	private List<Event> items;
 	
@@ -45,30 +44,14 @@ public class ShowsListFragment extends LiveNationListFragment {
 		items = new ArrayList<Event>();
 		//TODO: Refactor redundant layout parameter out
 		setListAdapter(new EventAdapter(getActivity(), R.layout.list_show_item, items));
-		getData();
 	}
 	
-	private void getData() {
-		//TODO: Parameters from intent
-		ApiParameters.EventParameters parameters = ApiParameters.createEventParameters();
-		GetEventsCallback callback = new GetEventsCallback();
-		getApiService().getEvents(parameters, callback);
-	}
-	
-	private class GetEventsCallback implements LiveNationApiService.GetEventsApiCallback {
-		@Override
-		public void onGetEvents(List<Event> result) {
-			items.clear();
-			items.addAll(result);
-			EventAdapter adapter = (EventAdapter) getListAdapter();
-			adapter.notifyDataSetChanged();
-		}
-		
-		@Override
-		public void onFailure(int failureCode, String message) {
-			Logger.log("WTF", "Error: " + failureCode + " " + message);
-			// TODO: this
-		}
+	@Override
+	public void setEvents(List<Event> events) {
+		items.clear();
+		items.addAll(events);
+		EventAdapter adapter = (EventAdapter) getListAdapter();
+		adapter.notifyDataSetChanged();
 	}
 	
 	@Override

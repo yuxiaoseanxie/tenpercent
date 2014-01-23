@@ -6,13 +6,13 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/fragment1"
+        android:id="@+id/fragment_all_shows_featured_content"
         android:name="com.livenation.mobile.android.na.ui.fragments.FeaturedFragment"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 
     <fragment
-        android:id="@+id/fragment2"
+        android:id="@+id/fragment_all_shows_show_content"
         android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

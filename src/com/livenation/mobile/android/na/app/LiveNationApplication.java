@@ -14,6 +14,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.presenters.EventsPresenter;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.LiveNationApiServiceImpl;
 
@@ -23,7 +25,9 @@ public class LiveNationApplication extends Application {
 	private LocationHelper locationHelper;
 	private ImageLoader imageLoader;
 	private RequestQueue requestQueue;
-
+	private EventsPresenter eventsPresenter;
+	private SingleEventPresenter singleEventPresenter;
+	
 	public static LiveNationApplication get() {
 		return instance;
 	}
@@ -34,6 +38,10 @@ public class LiveNationApplication extends Application {
 		instance = this;
 		serviceApi = new LiveNationApiServiceImpl(Constants.clientId, Constants.deviceId, getApplicationContext());
 		locationHelper = new LocationHelper();
+		
+		eventsPresenter = new EventsPresenter();
+		singleEventPresenter = new SingleEventPresenter();
+		
 		locationHelper.prepareCache(getApplicationContext());
 		requestQueue = Volley.newRequestQueue(getApplicationContext());
 		int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -51,5 +59,13 @@ public class LiveNationApplication extends Application {
 	
 	public ImageLoader getImageLoader() {
 		return imageLoader;
+	}
+	
+	public EventsPresenter getEventsPresenter() {
+		return eventsPresenter;
+	}
+
+	public SingleEventPresenter getSingleEventPresenter() {
+		return singleEventPresenter;
 	}
 }
