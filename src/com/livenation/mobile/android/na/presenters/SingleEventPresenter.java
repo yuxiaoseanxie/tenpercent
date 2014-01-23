@@ -53,11 +53,6 @@ public class SingleEventPresenter extends BasePresenter implements
 		// TODO: this
 	}
 
-	@Override
-	public String getTag() {
-		return SingleEventPresenter.this.getClass().getSimpleName();
-	}
-
 	private static class SingleEventState extends BaseState
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;

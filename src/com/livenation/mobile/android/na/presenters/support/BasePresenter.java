@@ -21,12 +21,12 @@ public abstract class BasePresenter implements StateListener {
 	private List<BaseState> activeStates = new ArrayList<BaseState>();
 	
 	public void addActiveState(BaseState state) {
-		Logger.log("BasePresenter", "Adding active state:" + state.hashCode());
+		Logger.log(getTag(), "Adding active state:" + state.hashCode());
 		activeStates.add(state);
 	}
 	
 	private void removeActiveState(BaseState state) {
-		Logger.log("BasePresenter", "Removing active state:" + state.hashCode());
+		Logger.log(getTag(), "Removing active state:" + state.hashCode());
 		if (activeStates.contains(state)) {
 			activeStates.remove(state);
 		}
@@ -54,7 +54,9 @@ public abstract class BasePresenter implements StateListener {
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
 	}
-	
-	public abstract String getTag();
+
+	public String getTag() {
+		return this.getClass().getSimpleName();
+	}
 	
 }

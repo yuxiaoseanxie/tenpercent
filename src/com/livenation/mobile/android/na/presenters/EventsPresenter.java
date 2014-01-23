@@ -50,11 +50,6 @@ public class EventsPresenter extends BasePresenter implements Presenter<EventsVi
 		super.onStateFailed(failureCode, state);
 		//TODO: This
 	}
-	
-	@Override
-	public String getTag() {
-		return EventsPresenter.this.getClass().getSimpleName();
-	}
 
 	public static class EventsState extends BaseState implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		public static final int STATE_FAILURE_LOCATION = 0;
