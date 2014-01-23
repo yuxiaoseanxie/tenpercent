@@ -29,6 +29,8 @@ public abstract class BasePresenter implements StateListener {
 		Logger.log(getTag(), "Removing active state:" + state.hashCode());
 		if (activeStates.contains(state)) {
 			activeStates.remove(state);
+		} else {
+			throw new IllegalStateException("State was never registered..");
 		}
 	}
 	
