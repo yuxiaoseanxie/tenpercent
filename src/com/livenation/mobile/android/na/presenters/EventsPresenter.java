@@ -52,11 +52,11 @@ public class EventsPresenter extends BasePresenter implements Presenter<EventsVi
 	}
 
 	public static class EventsState extends BaseState implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
-		public static final int STATE_FAILURE_LOCATION = 0;
-		public static final int STATE_FAILURE_API = 1;
-		
 		private List<Event> events = null;
 		private final EventsView view;
+
+		public static final int FAILURE_API_GENERAL = 0;
+		public static final int FAILURE_LOCATION = 1;	
 		
 		public EventsState(StateListener listener, EventsView view) {
 			super(listener);
@@ -82,12 +82,12 @@ public class EventsPresenter extends BasePresenter implements Presenter<EventsVi
 
 		@Override
 		public void onFailure(int failureCode, String message) {
-			notifyFailed(STATE_FAILURE_API);
+			notifyFailed(FAILURE_API_GENERAL);
 		}
 		
 		@Override
 		public void onLocationFailure(int failureCode) {
-			notifyFailed(STATE_FAILURE_LOCATION);
+			notifyFailed(FAILURE_LOCATION);
 		}
 		
 		public List<Event> getEvents() {
