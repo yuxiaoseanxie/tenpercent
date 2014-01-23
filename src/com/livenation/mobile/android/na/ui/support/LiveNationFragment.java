@@ -6,7 +6,7 @@
  * 
  */
 
-package com.livenation.mobile.android.na.ui.fragments.support;
+package com.livenation.mobile.android.na.ui.support;
 
 import android.support.v4.app.Fragment;
 

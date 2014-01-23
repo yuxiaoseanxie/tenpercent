@@ -6,7 +6,7 @@
  * 
  */
 
-package com.livenation.mobile.android.na.ui.fragments.support;
+package com.livenation.mobile.android.na.ui.support;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.helpers.LocationHelper;

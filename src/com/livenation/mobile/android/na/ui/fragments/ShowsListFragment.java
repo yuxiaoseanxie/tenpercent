@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
-import com.livenation.mobile.android.na.ui.fragments.support.LiveNationListFragment;
+import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
