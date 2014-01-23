@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="MON"
+        android:text="@string/mock_date_dotw"
         android:textAllCaps="true"
         android:textAppearance="@style/list_show_date_dotw" />
 
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="18"
+        android:text="@string/mock_date_day"
         android:textAllCaps="true"
         android:textAppearance="@style/list_show_date_day" />
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="NOV"
+        android:text="@string/mock_date_month"
         android:textAllCaps="true"
         android:textAppearance="@style/list_show_date_month" />
 

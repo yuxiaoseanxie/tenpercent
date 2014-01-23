@@ -19,6 +19,6 @@
         android:layout_marginLeft="@dimen/view_line_up_artist_title_margin_left"
         android:layout_gravity="center_vertical"
         android:textAppearance="@style/view_artist_title"
-        android:text="Macklemore n Ryan Lewis" />
+        android:text="@string/mock_artist_title_1" />
 
 </LinearLayout>

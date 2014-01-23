@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/list_show_item_event_title_left_margin"
         android:layout_toRightOf="@id/list_generic_show_date"
-        android:text="Fatboy Slim"
+        android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/list_show_title" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/list_generic_show_title"
         android:layout_below="@id/list_generic_show_title"
-        android:text="Big Beat Boutique"
+        android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/list_show_location" />
 
 </RelativeLayout>

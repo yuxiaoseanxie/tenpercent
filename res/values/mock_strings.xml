@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="mock_venue_title_1">Big Beat Boutique</string>
+    <string name="mock_artist_title_1">Fatboy Slim</string>
+    
+    <string name="mock_placeholder_venue_title_1">Venue Name</string>
+    <string name="mock_placeholder_artist_title_1">Artist Title</string>
+    
+    <string name="mock_date_day">18</string>
+    <string name="mock_date_dotw">MON</string>
+    <string name="mock_date_month">NOV</string>
+
+</resources>

@@ -23,7 +23,7 @@
             android:layout_alignBottom="@id/fragment_show_image"
             android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="Boo123"
+            android:text="@string/mock_placeholder_artist_title_1"
             android:textAppearance="@style/show_artist_title" >
         </TextView>
     </RelativeLayout>
