@@ -8,6 +8,6 @@
 
 package com.livenation.mobile.android.na.presenters.support;
 
-public interface BasePresenterView {
+public interface PresenterView {
 
 }

@@ -11,6 +11,6 @@ package com.livenation.mobile.android.na.presenters.support;
 import android.content.Context;
 import android.os.Bundle;
 
-public interface Presenter<T extends BasePresenterView> {
+public interface Presenter<T extends PresenterView> {
 	void initialize(Context context, Bundle args, T view);
 }

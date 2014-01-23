@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class BaseState<T extends BasePresenterView> {
+public class BaseState<T extends PresenterView> {
 	private final StateListener listener;
 	private final T view;
 	

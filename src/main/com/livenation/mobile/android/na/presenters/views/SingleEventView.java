@@ -8,9 +8,9 @@
 
 package com.livenation.mobile.android.na.presenters.views;
 
-import com.livenation.mobile.android.na.presenters.support.BasePresenterView;
+import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public interface SingleEventView extends BasePresenterView {
+public interface SingleEventView extends PresenterView {
 	void setEvent(Event event);
 }
