@@ -57,7 +57,9 @@ public class SingleEventPresenter extends BasePresenter implements
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;
 		private final SingleEventView view;
-
+		
+		public static final int FAILURE_API_GENERAL = 0;
+		
 		public SingleEventState(StateListener listener, SingleEventView view) {
 			super(listener);
 			this.view = view;
@@ -77,7 +79,7 @@ public class SingleEventPresenter extends BasePresenter implements
 
 		@Override
 		public void onFailure(int failureCode, String message) {
-			notifyFailed(failureCode);
+			notifyFailed(FAILURE_API_GENERAL);
 		}
 		
 		public Event getEvent() {
