@@ -15,9 +15,4 @@ import com.livenation.mobile.android.na.presenters.views.PresenterBaseView;
 
 public interface Presenter<T extends PresenterBaseView> {
 	void initailize(Context context, Bundle args, T view);
-	
-	public static interface PresenterLifecycle {
-		void onReady();
-		void onInitializing();
-	}
 }
