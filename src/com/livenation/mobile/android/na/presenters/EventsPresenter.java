@@ -24,41 +24,38 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.EventParameters;
 
-public class EventsPresenter extends BasePresenter implements Presenter<EventsView>, StateListener {
+public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
 
 	@Override
 	public void initailize(Context context, Bundle args, EventsView view) {
 		EventsState state = new EventsState(EventsPresenter.this, view);
 		state.retrieveLocation(context); 
 	}
-
+	
 	@Override
-	public void onStateReady(BaseState state) {
+	public void onStateReady(EventsState state) {
 		super.onStateReady(state);
-		EventsState eventsState = (EventsState) state;
-		EventsView view = eventsState.getView();
-		List<Event> events = eventsState.getEvents();
+		EventsView view = state.getView();
+		List<Event> events = state.getEvents();
 		if (null != view) {
 			view.setEvents(events);
 		}
 	}
 	
 	@Override
-	public void onStateFailed(int failureCode, BaseState state) {
+	public void onStateFailed(int failureCode, EventsState state) {
 		super.onStateFailed(failureCode, state);
 		//TODO: This
 	}
 
-	public static class EventsState extends BaseState implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
+	static class EventsState extends BaseState<EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		private List<Event> events = null;
-		private final EventsView view;
-
+		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;	
 		
-		public EventsState(StateListener listener, EventsView view) {
-			super(listener);
-			this.view = view;
+		public EventsState(StateListener<EventsState> listener, EventsView view) {
+			super(listener, view);
 		}
 		
 		private void retrieveLocation(Context context) {
@@ -90,10 +87,6 @@ public class EventsPresenter extends BasePresenter implements Presenter<EventsVi
 		
 		public List<Event> getEvents() {
 			return events;
-		}
-
-		public EventsView getView() {
-			return view;
 		}
 		
 	}

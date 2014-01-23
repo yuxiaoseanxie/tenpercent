@@ -10,21 +10,24 @@ package com.livenation.mobile.android.na.presenters.support;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.presenters.views.PresenterBaseView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
-
-public class BaseState {
-	private StateListener listener = null;
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class BaseState<T extends PresenterBaseView> {
+	private final StateListener listener;
+	private final T view;
 	
-	public BaseState(StateListener listener) {
-		setStateListener(listener);
+	public BaseState(StateListener listener, T view) {
+		this.listener = listener;
+		this.view = view;
 		listener.onNewState(BaseState.this);
 	}
 	
-	public void setStateListener(StateListener listener) {
-		this.listener = listener;
+	public T getView() {
+		return view;
 	}
-	
+
 	public void notifyReady() {
 		if (null == listener) return;
 		listener.onStateReady(this);
@@ -43,10 +46,10 @@ public class BaseState {
 		return LiveNationApplication.get().getLocationHelper();
 	}
 	
-	public interface StateListener {
-		void onNewState(BaseState state);
-		void onStateReady(BaseState state);
-		void onStateFailed(int failureCode, BaseState state);
+	public interface StateListener<T1 extends BaseState> {
+		void onNewState(T1 state);
+		void onStateReady(T1 state);
+		void onStateFailed(int failureCode, T1 state);
 	}
 	
 }

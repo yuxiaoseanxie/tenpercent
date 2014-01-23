@@ -17,15 +17,16 @@ import com.livenation.mobile.android.na.presenters.support.BaseState.StateListen
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.util.Logger;
 
-public abstract class BasePresenter implements StateListener {
-	private List<BaseState> activeStates = new ArrayList<BaseState>();
+@SuppressWarnings("rawtypes")
+public abstract class BasePresenter<T extends BaseState> implements StateListener<T> {
+	private List<T> activeStates = new ArrayList<T>();
 	
-	public void addActiveState(BaseState state) {
+	public void addActiveState(T state) {
 		Logger.log(getTag(), "Adding active state:" + state.hashCode());
 		activeStates.add(state);
 	}
 	
-	private void removeActiveState(BaseState state) {
+	private void removeActiveState(T state) {
 		Logger.log(getTag(), "Removing active state:" + state.hashCode());
 		if (activeStates.contains(state)) {
 			activeStates.remove(state);
@@ -35,17 +36,17 @@ public abstract class BasePresenter implements StateListener {
 	}
 	
 	@Override
-	public void onNewState(BaseState state) {
+	public void onNewState(T state) {
 		addActiveState(state);
 	}
 	
 	@Override
-	public void onStateReady(BaseState state) {
+	public void onStateReady(T state) {
 		removeActiveState(state);
 	}
 	
 	@Override
-	public void onStateFailed(int failureCode, BaseState state) {
+	public void onStateFailed(int failureCode, T state) {
 		removeActiveState(state);
 	}
 	

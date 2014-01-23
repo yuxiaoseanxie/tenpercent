@@ -21,8 +21,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleEventParameters;
 
-public class SingleEventPresenter extends BasePresenter implements
-		Presenter<SingleEventView>, StateListener {
+public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.SingleEventState> implements
+		Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
 	public static final String PARAMETER_EVENT_ID = "event_id";
 
 	@Override
@@ -34,32 +34,31 @@ public class SingleEventPresenter extends BasePresenter implements
 	}
 
 	@Override
-	public void onStateReady(BaseState state) {
+	public void onStateReady(SingleEventState state) {
 		super.onStateReady(state);
-		SingleEventState singleEventState = (SingleEventState) state;
-		SingleEventView view = singleEventState.getView();
+		SingleEventView view = state.getView();
 		
-		Event event = singleEventState.getEvent();
+		Event event = state.getEvent();
 		if (null != view) {
 			view.setEvent(event);
 		}
 	}
 
 	@Override
-	public void onStateFailed(int failureCode, BaseState state) {
+	public void onStateFailed(int failureCode, SingleEventState state) {
 		super.onStateFailed(failureCode, state);
 		// TODO: this
 	}
 
-	private static class SingleEventState extends BaseState
+	static class SingleEventState extends BaseState<SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;
 		private final SingleEventView view;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		
-		public SingleEventState(StateListener listener, SingleEventView view) {
-			super(listener);
+		public SingleEventState(StateListener<SingleEventState> listener, SingleEventView view) {
+			super(listener, view);
 			this.view = view;
 		}
 
