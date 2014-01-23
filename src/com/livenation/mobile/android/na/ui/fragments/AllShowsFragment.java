@@ -54,8 +54,8 @@ public class AllShowsFragment extends Fragment implements EventsView, FeatureVie
 	}
 	
 	private void init() {
-		getEventsPresenter().initailize(getActivity(), null, AllShowsFragment.this);	
-		getFeaturePresenter().initailize(getActivity(), null, AllShowsFragment.this);
+		getEventsPresenter().initialize(getActivity(), null, AllShowsFragment.this);	
+		getFeaturePresenter().initialize(getActivity(), null, AllShowsFragment.this);
 	}
 	
 	private EventsPresenter getEventsPresenter() {

@@ -19,7 +19,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureState> implements Presenter<FeatureView>, StateListener<FeaturePresenter.FeatureState> {
 
 	@Override
-	public void initailize(Context context, Bundle args, FeatureView view) {
+	public void initialize(Context context, Bundle args, FeatureView view) {
 		FeatureState state = new FeatureState(FeaturePresenter.this, view);
 		state.retrieveLocation(context);
 	}

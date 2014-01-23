@@ -27,7 +27,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
 
 	@Override
-	public void initailize(Context context, Bundle args, EventsView view) {
+	public void initialize(Context context, Bundle args, EventsView view) {
 		EventsState state = new EventsState(EventsPresenter.this, view);
 		state.retrieveLocation(context); 
 	}

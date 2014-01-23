@@ -12,5 +12,5 @@ import android.content.Context;
 import android.os.Bundle;
 
 public interface Presenter<T extends BasePresenterView> {
-	void initailize(Context context, Bundle args, T view);
+	void initialize(Context context, Bundle args, T view);
 }

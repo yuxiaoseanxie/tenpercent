@@ -53,7 +53,7 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	}
 	
 	private void init() {
-		getSingleEventPresenter().initailize(ShowActivity.this, getIntent().getExtras(), ShowActivity.this);		
+		getSingleEventPresenter().initialize(ShowActivity.this, getIntent().getExtras(), ShowActivity.this);		
 	}
 	
 	private SingleEventPresenter getSingleEventPresenter() {
