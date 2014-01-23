@@ -25,11 +25,9 @@ public class SingleEventPresenter extends BasePresenter implements
 		Presenter<SingleEventView>, StateListener {
 	public static final String PARAMETER_EVENT_ID = "event_id";
 
-	private SingleEventState state = null;
-
 	@Override
 	public void initailize(Context context, Bundle args, SingleEventView view) {
-		state = new SingleEventState(SingleEventPresenter.this, view);
+		SingleEventState state = new SingleEventState(SingleEventPresenter.this, view);
 		String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
 		long eventId = Event.getNumericEventId(eventIdRaw);
 		state.retrieveEvent(eventId);
