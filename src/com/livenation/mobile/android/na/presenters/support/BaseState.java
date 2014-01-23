@@ -10,11 +10,10 @@ package com.livenation.mobile.android.na.presenters.support;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
-import com.livenation.mobile.android.na.presenters.views.PresenterBaseView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class BaseState<T extends PresenterBaseView> {
+public class BaseState<T extends BasePresenterView> {
 	private final StateListener listener;
 	private final T view;
 	
