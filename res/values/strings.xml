@@ -6,4 +6,7 @@
 
     <string name="featured_title">Featured</string>
     <string name="featured_see_all">+ See all</string>
+    
+    <string name="show_lineup">Lineup</string>
+    
 </resources>

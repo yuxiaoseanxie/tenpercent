@@ -13,7 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ff777777"
-            android:minHeight="200dp" >
+            android:minHeight="200dp"
+            android:scaleType="centerCrop" >
         </com.android.volley.toolbox.NetworkImageView>
 
         <TextView
@@ -27,6 +28,12 @@
             android:textAppearance="@style/show_artist_title" >
         </TextView>
     </RelativeLayout>
+
+    <TextView
+        style="@style/ui_header1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_lineup" />
 
     <LinearLayout
         android:id="@+id/fragment_show_artist_lineup_container"
