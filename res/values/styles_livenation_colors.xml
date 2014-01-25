@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <color name="background_gray">#999999</color>
-    <color name="featured_text">#ffffff</color>
-    <color name="list_show_date_text_highlight">#ff0000</color>
-    <color name="show_artist_title">#ffffff</color>
-    <color name="view_artist_title">#000000</color>
+
+	<color name="background_gray">#999999</color>
+	<color name="featured_text">#ffffff</color>
+	<color name="list_show_date_text_highlight">#ff0000</color>
+	<color name="show_artist_title">#ffffff</color>
+	<color name="view_artist_title">#000000</color>
 	<color name="ui_header1_text">#dd1f3b</color>
 	<color name="ui_header1_background">#e6e6e6</color>
 	<color name="ui_header1_accent">#868686</color>
-			
+
 </resources>
