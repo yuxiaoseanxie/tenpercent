@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/featured_title_text"
         android:layout_marginTop="@dimen/featured_layout_padding"
-        android:background="#ff556677"
         android:orientation="horizontal" >
 
     </LinearLayout>
