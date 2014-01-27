@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/fragment_all_shows_show_content"
-        android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListFragment"
+        android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListWithHeaderFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
