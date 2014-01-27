@@ -8,6 +8,8 @@
 
 package com.livenation.mobile.android.na.ui;
 
+import java.util.Locale;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
@@ -61,9 +63,22 @@ public class LandingActivity extends FragmentActivity {
 			}
 
 		};
-
+		
 		for (int i = 0; i < 3; i++) {
-			actionBar.addTab(actionBar.newTab().setText("Tab " + (i + 1)).setTabListener(tabListener));
+			String text = "";
+			switch (i) {
+			case 0:
+				text = getString(R.string.landing_tab_1).toUpperCase(Locale.US);
+				break;
+			case 1:
+				text = getString(R.string.landing_tab_2).toUpperCase(Locale.US);
+				break;
+			case 2:
+				text = getString(R.string.landing_tab_3).toUpperCase(Locale.US);
+				break;
+				
+			}
+			actionBar.addTab(actionBar.newTab().setText(text).setTabListener(tabListener));
 		}
 	}
 

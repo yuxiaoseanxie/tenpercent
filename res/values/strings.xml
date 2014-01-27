@@ -9,4 +9,8 @@
     
     <string name="show_lineup">Lineup</string>
     
+    <string name="landing_tab_1">Your shows</string>
+    <string name="landing_tab_2">All shows</string>
+    <string name="landing_tab_3">Nearby</string>
+        
 </resources>

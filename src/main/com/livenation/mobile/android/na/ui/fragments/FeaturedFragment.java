@@ -35,17 +35,29 @@ public class FeaturedFragment extends LiveNationFragment implements FeatureView 
 
 	@Override
 	public void setFeatured(List<Chart> featured) {
-		for (Chart chart : featured) {
-			//TODO: DataModel helper method here
+		chartingContainer.removeAllViews();
+		
+		if (featured == null || featured.size() < 3) {
+			//TODO: Investigate the default behavior for when there's nothing featured
+			//throw new IllegalStateException("Returned featured data is missing/too short");
+			return;
+		}
+		
+		for (int i = 0; i < 3; i++) {
+			Chart chart = featured.get(i);
+			//TODO: Valid image url helper here
 			if (null == chart.getImageUrl() || 
 					chart.getImageUrl().trim().length() == 0) {
 				continue;
 			}
+			
 			NetworkImageView image = new NetworkImageView(getActivity());
+			LayoutParams layoutParams =  new LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			
 			image.setImageUrl(chart.getImageUrl(), getImageLoader());
-			chartingContainer.addView(image, new LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			
+			chartingContainer.addView(image, layoutParams);
 		}
-
 	}
 }
