@@ -66,6 +66,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		public void onLocation(double lat, double lng) {
 			EventParameters params = ApiParameters.createEventParameters();
 			params.setLocation(lat, lng);
+			params.setSortMethod("start_time");
 			getApiService().getEvents(params, EventsState.this);
 		}
 		
