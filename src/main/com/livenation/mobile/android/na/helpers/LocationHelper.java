@@ -42,9 +42,10 @@ public class LocationHelper {
 			completeLocationRequest(locationCache.getLatitude(),
 					locationCache.getLongitude(), callback);
 		} else {
+			LocationCallback wrapped = getCacheableCallback(callback);
+			
 			switch (PlayServicesLocationProvider.getGooglePlayServiceStatus(context)) {
 			case PlayServicesLocationProvider.STATUS_GOOGLE_PLAY_SUCCESS :
-				LocationCallback wrapped = getCacheableCallback(callback);
 				currentRequest = new PlayServicesLocationProvider();
 				currentRequest.getLocation(context, wrapped);
 				break;
@@ -53,7 +54,8 @@ public class LocationHelper {
 				break;
 			case PlayServicesLocationProvider.STATUS_GOOGLE_PLAY_FAILURE_GIVEUP:
 				//TODO: Fallback to GPS/Network location here: DeviceLocationProvider();
-				callback.onLocationFailure(FAILURE_UNKNOWN);
+				currentRequest = new DummyLocationProvider();
+				currentRequest.getLocation(context, wrapped);
 				break;	
 			}
 		}
