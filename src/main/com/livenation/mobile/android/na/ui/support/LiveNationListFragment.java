@@ -8,13 +8,13 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-
-import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
 
