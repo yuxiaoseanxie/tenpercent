@@ -9,7 +9,7 @@
         android:layout_height="wrap_content" >
 
         <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/fragment_show_image"
+            android:id="@+id/fragment_venue_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ff777777"
@@ -18,14 +18,23 @@
         </com.android.volley.toolbox.NetworkImageView>
 
         <TextView
-            android:id="@+id/fragment_show_artist_title"
+            android:id="@+id/fragment_venue_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fragment_show_image"
+            android:layout_alignBottom="@id/fragment_venue_image"
+            android:layout_marginLeft="@dimen/show_artist_title_margin_left"
+            android:text="@string/mock_placeholder_venue_title_1"
+            android:textAppearance="@style/show_artist_title" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/fragment_venue_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_venue_image"
             android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="@string/mock_placeholder_artist_title_1"
-            android:textAppearance="@style/show_artist_title" >
+            android:text="@string/mock_placeholder_venue_details_1" >
         </TextView>
     </RelativeLayout>
 
@@ -33,21 +42,14 @@
         style="@style/ui_header1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/show_lineup" />
+        android:text="@string/venue_upcoming_shows" />
 
     <LinearLayout
-        android:id="@+id/fragment_show_artist_lineup_container"
+        android:id="@+id/fragment_venue_show_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
         android:orientation="vertical" >
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/fragment_show_venue_details"
-        style="@style/ui_header1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/mock_show_venue_details" />
 
 </LinearLayout>

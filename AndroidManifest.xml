@@ -30,6 +30,8 @@
         </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity" >
         </activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity" >
+        </activity>
     </application>
 
 </manifest>

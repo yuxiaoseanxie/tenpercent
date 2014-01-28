@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -29,6 +31,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	private TextView artistTitle;
 	private ViewGroup lineupContainer;
 	private NetworkImageView artistImage;
+	private TextView venueDetails;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -43,13 +46,23 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
 		lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
 		artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
+		venueDetails = (TextView) result.findViewById(R.id.fragment_show_venue_details);
+		
 		return result;
 	}
 	
 	@Override
 	public void setEvent(Event event) {
 		artistTitle.setText(event.getName());
-		String imageUrl = null;
+		
+		if (null != event.getVenue()) {
+			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue().getId());
+			venueDetails.setOnClickListener(onVenueClick);
+		} else {
+			venueDetails.setOnClickListener(null);
+		}
+			
+		String imageUrl = null;		
 		//TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
 		for (LineupEntry lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
@@ -69,6 +82,21 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		}
 		if (null != imageUrl) {
 			artistImage.setImageUrl(imageUrl, getImageLoader());
+		}
+	}
+	
+	private class OnVenueDetailsClick implements View.OnClickListener {
+		private final String venueId;
+		
+		public OnVenueDetailsClick(String venueId) {
+			this.venueId = venueId;
+		}
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(getActivity(), VenueActivity.class);
+			intent.putExtra(VenueFragment.PARAMETER_VENUE_ID, venueId);
+			startActivity(intent);
 		}
 	}
 	

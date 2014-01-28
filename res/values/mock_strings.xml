@@ -6,6 +6,9 @@
     
     <string name="mock_placeholder_venue_title_1">Venue Name</string>
     <string name="mock_placeholder_artist_title_1">Artist Title</string>
+
+    <string name="mock_placeholder_venue_details_1">Venue Details</string>
+    <string name="mock_show_venue_details">Venue Details</string>
     
     <string name="mock_date_day">18</string>
     <string name="mock_date_dotw">MON</string>
