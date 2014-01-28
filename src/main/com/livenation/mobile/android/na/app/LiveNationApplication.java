@@ -40,7 +40,7 @@ public class LiveNationApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
-		serviceApi = new LiveNationApiServiceImpl(Constants.clientId, Constants.deviceId, getApplicationContext());
+		serviceApi = new LiveNationApiServiceImpl("http", "api.livenation.com", Constants.clientId, Constants.deviceId, null, getApplicationContext());
 		locationHelper = new LocationHelper();
 		
 		eventsPresenter = new EventsPresenter();
