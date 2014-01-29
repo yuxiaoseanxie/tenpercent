@@ -55,7 +55,7 @@ public class VerticalDate extends LinearLayout {
 
 		//TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
 		//No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-		View view = inflater.inflate(R.layout.sub_list_show_date, null);
+		View view = inflater.inflate(R.layout.view_vertical_date, null);
 		
 		this.dateDotw = (TextView) view.findViewById(R.id.list_show_item_date_dotw);
 		this.dateDay = (TextView) view.findViewById(R.id.list_show_item_date_day);
