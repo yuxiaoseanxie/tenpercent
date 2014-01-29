@@ -43,11 +43,9 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <TextView
+    <com.livenation.mobile.android.na.ui.views.ShowVenueView
         android:id="@+id/fragment_show_venue_details"
-        style="@style/ui_header1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/mock_show_venue_details" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

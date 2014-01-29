@@ -18,7 +18,6 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
+import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -58,7 +59,7 @@ public class ShowsListFragment extends LiveNationListFragment implements EventsV
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = items.get(position);
-		intent.putExtra(ShowFragment.PARAMETER_EVENT_ID, event.getId());
+		intent.putExtra(EventsPresenter.PARAMETER_EVENT_ID, event.getId());
 		startActivity(intent);
 	}
 	
@@ -91,20 +92,13 @@ public class ShowsListFragment extends LiveNationListFragment implements EventsV
 			holder.getLocation().setText(event.getVenue().getName());
 			
 			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
-			SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.TIME_FORMAT, Locale.US);
+			SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
 			
 			try {
 				Date date = sdf.parse(event.getStartTime());
-				String day = DateFormat.format("d", date).toString();
-				String dotw = DateFormat.format("EEE", date).toString();
-				String month = DateFormat.format("MMM", date).toString();
-				
-				holder.getDateDotw().setText(dotw);
-				holder.getDateDay().setText(day);
-				holder.getDateMonth().setText(month);
+				holder.getDate().setDate(date);
 			} catch (ParseException e) {
-				//wtf'y f.
-				e.printStackTrace();
+				throw new RuntimeException("Error parsing date: " + event.getStartTime());
 			}
 			
 			return view;
@@ -113,16 +107,12 @@ public class ShowsListFragment extends LiveNationListFragment implements EventsV
 		private class ViewHolder {
 			private final TextView title;
 			private final TextView location;
-			private final TextView dateDotw;
-			private final TextView dateDay;
-			private final TextView dateMonth;
+			private final VerticalDate date;
 			
 			public ViewHolder(View view) {
 				this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
 				this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
-				this.dateDotw = (TextView) view.findViewById(R.id.list_show_item_date_dotw);
-				this.dateDay = (TextView) view.findViewById(R.id.list_show_item_date_day);
-				this.dateMonth = (TextView) view.findViewById(R.id.list_show_item_date_month);
+				this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
 			}
 			
 			public TextView getTitle() {
@@ -133,16 +123,8 @@ public class ShowsListFragment extends LiveNationListFragment implements EventsV
 				return location;
 			}
 			
-			public TextView getDateDotw() {
-				return dateDotw;
-			}
-						
-			public TextView getDateDay() {
-				return dateDay;
-			}
-
-			public TextView getDateMonth() {
-				return dateMonth;
+			public VerticalDate getDate() {
+				return date;
 			}
 		}
 	}

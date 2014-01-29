@@ -30,17 +30,18 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 public class ShowsListWithHeaderFragment extends LiveNationFragment implements EventsView, OnItemClickListener  {
-	//TODO: Refactor this out of scope
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
-	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.TIME_FORMAT, Locale.US);
+	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +66,7 @@ public class ShowsListWithHeaderFragment extends LiveNationFragment implements E
 			long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = adapter.getItems().get(position);
-		intent.putExtra(ShowFragment.PARAMETER_EVENT_ID, event.getId());
+		intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, event.getId());
 		startActivity(intent);
 	}
 	
@@ -115,13 +116,7 @@ public class ShowsListWithHeaderFragment extends LiveNationFragment implements E
 			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
 			try {
 				Date date = sdf.parse(event.getStartTime());
-				String day = DateFormat.format("d", date).toString();
-				String dotw = DateFormat.format("EEE", date).toString();
-				String month = DateFormat.format("MMM", date).toString();
-				
-				holder.getDateDotw().setText(dotw);
-				holder.getDateDay().setText(day);
-				holder.getDateMonth().setText(month);
+				holder.getDate().setDate(date);
 			} catch (ParseException e) {
 				//wtf'y f.
 				e.printStackTrace();
@@ -179,16 +174,12 @@ public class ShowsListWithHeaderFragment extends LiveNationFragment implements E
 		private class ViewHolder {
 			private final TextView title;
 			private final TextView location;
-			private final TextView dateDotw;
-			private final TextView dateDay;
-			private final TextView dateMonth;
+			private final VerticalDate date;
 			
 			public ViewHolder(View view) {
 				this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
 				this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
-				this.dateDotw = (TextView) view.findViewById(R.id.list_show_item_date_dotw);
-				this.dateDay = (TextView) view.findViewById(R.id.list_show_item_date_day);
-				this.dateMonth = (TextView) view.findViewById(R.id.list_show_item_date_month);
+				this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
 			}
 			
 			public TextView getTitle() {
@@ -199,16 +190,8 @@ public class ShowsListWithHeaderFragment extends LiveNationFragment implements E
 				return location;
 			}
 			
-			public TextView getDateDotw() {
-				return dateDotw;
-			}
-						
-			public TextView getDateDay() {
-				return dateDay;
-			}
-
-			public TextView getDateMonth() {
-				return dateMonth;
+			public VerticalDate getDate() {
+				return date;
 			}
 		}
 		

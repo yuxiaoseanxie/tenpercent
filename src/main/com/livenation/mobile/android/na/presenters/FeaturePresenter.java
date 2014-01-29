@@ -20,8 +20,8 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 
 	@Override
 	public void initialize(Context context, Bundle args, FeatureView view) {
-		FeatureState state = new FeatureState(FeaturePresenter.this, view);
-		state.retrieveLocation(context);
+		FeatureState state = new FeatureState(FeaturePresenter.this, args, view, context);
+		state.run();
 	}
 	
 	@Override
@@ -30,17 +30,23 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		FeatureView view = state.getView();
 		List<Chart> featured = state.getCharts();
 		view.setFeatured(featured);
-		
 	}
 	
 	static class FeatureState extends BaseState<FeatureView> implements GetTopChartsCallback, LocationCallback {
 		private List<Chart> charts;
+		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;
 		
-		public FeatureState(StateListener<FeatureState> listener, FeatureView view) {
-			super(listener, view);
+		public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
+			super(listener, args, view);
+			this.context = context;
+		}
+		
+		@Override
+		public void run() {
+			getLocationHelper().getLocation(context, FeatureState.this);
 		}
 		
 		@Override
@@ -62,10 +68,6 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		@Override
 		public void onLocationFailure(int failureCode) {
 			notifyFailed(FAILURE_LOCATION);
-		}
-		
-		public void retrieveLocation(Context context) {
-			getLocationHelper().getLocation(context, FeatureState.this);
 		}
 		
 		private void retrieveCharts(double lat, double lng) {

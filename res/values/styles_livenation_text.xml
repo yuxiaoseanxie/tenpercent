@@ -55,6 +55,23 @@
         <item name="android:textColor">@color/ui_header1_text</item>
     </style>
 
-    <!-- View styles -->
+    <style name="venue_detail_link_text" parent="@style/livenation_app_text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ui_header1_text</item>
+    </style>
+    
+    <style name="venue_detail_text" parent="@style/livenation_app_text">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+    
+    <style name="view_venue_show_title" parent="@style/livenation_app_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="view_venue_show_time" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/view_venue_show_time</item>
+    </style>
+    
 </resources>

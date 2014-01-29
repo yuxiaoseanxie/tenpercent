@@ -27,10 +27,8 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 
 	@Override
 	public void initialize(Context context, Bundle args, SingleEventView view) {
-		SingleEventState state = new SingleEventState(SingleEventPresenter.this, view);
-		String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
-		long eventId = Event.getNumericEventId(eventIdRaw);
-		state.retrieveEvent(eventId);
+		SingleEventState state = new SingleEventState(SingleEventPresenter.this, args, view);
+		state.run();
 	}
 
 	@Override
@@ -39,9 +37,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		SingleEventView view = state.getView();
 		
 		Event event = state.getEvent();
-		if (null != view) {
-			view.setEvent(event);
-		}
+		view.setEvent(event);
 	}
 
 	@Override
@@ -54,20 +50,31 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;
 		private final SingleEventView view;
+		private long eventId;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		
-		public SingleEventState(StateListener<SingleEventState> listener, SingleEventView view) {
-			super(listener, view);
+		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
+			super(listener, args, view);
 			this.view = view;
 		}
-
-		public void retrieveEvent(long eventId) {
+		
+		@Override
+		public void run() {
 			SingleEventParameters params = ApiParameters.createSingleEventParameters();
 			params.setEventId(eventId);
 			getApiService().getSingleEvent(params, SingleEventState.this);
 		}
-
+		
+		@Override
+		public void applyArgs(Bundle args) {
+			if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
+                String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
+                long eventId = Event.getNumericEventId(eventIdRaw);
+                this.eventId = eventId;
+			}
+		}
+		
 		@Override
 		public void onGetEvent(Event result) {
 			this.event = result;

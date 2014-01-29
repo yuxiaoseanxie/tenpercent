@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.List;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -7,47 +9,48 @@ import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
-import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
 
-public class SingleVenuePresenter extends
-		BasePresenter<SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
-		StateListener<SingleVenuePresenter.SingleVenueState> {
+public class VenueEventsPresenter extends
+		BasePresenter<VenueEventsPresenter.VenueEventsState> implements Presenter<EventsView>,
+		StateListener<VenueEventsPresenter.VenueEventsState> {
 	public static final String PARAMETER_EVENT_ID = "venue_id";
 	
 	@Override
-	public void initialize(Context context, Bundle args, SingleVenueView view) {
-		SingleVenueState state = new SingleVenueState(SingleVenuePresenter.this, args, view);
+	public void initialize(Context context, Bundle args, EventsView view) {
+		VenueEventsState state = new VenueEventsState(VenueEventsPresenter.this, args, view);
 		state.run();
 	}
 
 	@Override
-	public void onStateReady(SingleVenueState state) {
+	public void onStateReady(VenueEventsState state) {
 		super.onStateReady(state);
-		SingleVenueView view = state.getView();
 		
-		Venue venue = state.getVenue();
-		view.setVenue(venue);
+		EventsView view = state.getView();
+		List<Event> events = state.getEvents();
+		view.setEvents(events);
 	}
 
 	@Override
-	public void onStateFailed(int failureCode, SingleVenueState state) {
+	public void onStateFailed(int failureCode, VenueEventsState state) {
 		super.onStateFailed(failureCode, state);
 		// TODO: this
 	}
 	
-	static class SingleVenueState extends BaseState<SingleVenueView> implements
-			LiveNationApiService.GetSingleVenueApiCallback {
-		private Venue venue;
+	static class VenueEventsState extends BaseState<EventsView> implements
+			LiveNationApiService.GetEventsApiCallback {
+		private List<Event> events = null;
 		private Long venueId;
-		private final SingleVenueView view;
+		private final EventsView view;
 
 		public static final int FAILURE_API_GENERAL = 0;
 
-		public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
+		public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
 			super(listener, args, view);
 			this.view = view;
 		}
@@ -56,7 +59,7 @@ public class SingleVenuePresenter extends
 		public void run() {
 			SingleVenueParameters params = ApiParameters.createSingleVenueParameters();
 			params.setVenueId(venueId);
-			getApiService().getSingleVenue(params, SingleVenueState.this);
+			getApiService().getVenueEvents(params, VenueEventsState.this);
 		}
 		
 		@Override
@@ -66,8 +69,8 @@ public class SingleVenuePresenter extends
 		}
 
 		@Override
-		public void onGetVenue(Venue result) {
-			this.venue = result;
+		public void onGetEvents(List<Event> events) {
+			this.events = events;
 			notifyReady();
 		}
 
@@ -76,11 +79,11 @@ public class SingleVenuePresenter extends
 			notifyFailed(FAILURE_API_GENERAL);
 		}
 
-		public Venue getVenue() {
-			return venue;
+		public List<Event> getEvents() {
+			return events;
 		}
 
-		public SingleVenueView getView() {
+		public EventsView getView() {
 			return view;
 		}
 		

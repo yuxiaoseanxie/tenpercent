@@ -22,16 +22,17 @@ import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.LineupView;
+import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Image;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView {
-	public static final String PARAMETER_EVENT_ID = "event_id";
 	private TextView artistTitle;
 	private ViewGroup lineupContainer;
 	private NetworkImageView artistImage;
-	private TextView venueDetails;
+	private ShowVenueView venueDetails;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
 		lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
 		artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
-		venueDetails = (TextView) result.findViewById(R.id.fragment_show_venue_details);
+		venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
 		
 		return result;
 	}
@@ -56,6 +57,19 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		artistTitle.setText(event.getName());
 		
 		if (null != event.getVenue()) {
+			Venue venue = event.getVenue();
+			
+			venueDetails.getTitle().setText(venue.getName());
+			
+			if (null != venue.getAddress()) {
+				String address = venue.getAddress().getSmallFriendlyAddress(false);
+				venueDetails.getLocation().setText(address);		
+			} else {
+				venueDetails.getLocation().setText("");
+			}
+			 
+			venueDetails.getTelephone().setText(venue.getFormattedPhoneNumber());
+			
 			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue().getId());
 			venueDetails.setOnClickListener(onVenueClick);
 		} else {

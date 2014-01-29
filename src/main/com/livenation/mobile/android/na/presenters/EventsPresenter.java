@@ -25,11 +25,12 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.EventParameters;
 
 public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
+	public static final String PARAMETER_EVENT_ID = "event_id";
 
 	@Override
 	public void initialize(Context context, Bundle args, EventsView view) {
-		EventsState state = new EventsState(EventsPresenter.this, view);
-		state.retrieveLocation(context); 
+		EventsState state = new EventsState(EventsPresenter.this, args, view, context);
+		state.run(); 
 	}
 	
 	@Override
@@ -37,9 +38,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		super.onStateReady(state);
 		EventsView view = state.getView();
 		List<Event> events = state.getEvents();
-		if (null != view) {
-			view.setEvents(events);
-		}
+		view.setEvents(events);
 	}
 	
 	@Override
@@ -50,15 +49,18 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 
 	static class EventsState extends BaseState<EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		private List<Event> events = null;
+		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;	
 		
-		public EventsState(StateListener<EventsState> listener, EventsView view) {
-			super(listener, view);
+		public EventsState(StateListener<EventsState> listener, Bundle args, EventsView view, Context context) {
+			super(listener, args, view);
+			this.context = context;
 		}
 		
-		private void retrieveLocation(Context context) {
+		@Override
+		public void run() {
 			getLocationHelper().getLocation(context, EventsState.this);		
 		}
 

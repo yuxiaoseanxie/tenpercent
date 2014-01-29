@@ -22,20 +22,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/fragment_venue_image"
+            android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
             android:text="@string/mock_placeholder_venue_title_1"
             android:textAppearance="@style/show_artist_title" >
         </TextView>
 
-        <TextView
+        <include
             android:id="@+id/fragment_venue_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fragment_venue_image"
-            android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
-            android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="@string/mock_placeholder_venue_details_1" >
-        </TextView>
+            android:layout_marginBottom="@dimen/venue_detail_margin_bottom"
+            android:layout_marginLeft="@dimen/venue_detail_margin_left"
+            android:layout_marginRight="@dimen/venue_detail_margin_right"
+            android:layout_marginTop="@dimen/venue_detail_margin_top"
+            layout="@layout/sub_fragment_venue_details" >
+        </include>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fragment_venue_details" >
+
+            <!-- Empty view to kick the marginBottom attribute from the VenueDetail into action -->
+        </Space>
     </RelativeLayout>
 
     <TextView
@@ -44,12 +55,10 @@
         android:layout_height="wrap_content"
         android:text="@string/venue_upcoming_shows" />
 
-    <LinearLayout
-        android:id="@+id/fragment_venue_show_container"
+    <fragment
+        android:id="@+id/fragment_venue_shows"
+        android:name="com.livenation.mobile.android.na.ui.fragments.ShowFixedListFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

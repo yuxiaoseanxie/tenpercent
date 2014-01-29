@@ -9,5 +9,6 @@
 	<color name="ui_header1_text">#dd1f3b</color>
 	<color name="ui_header1_background">#e6e6e6</color>
 	<color name="ui_header1_accent">#868686</color>
-
+	<color name="ui_header1_accent">#868686</color>
+	<color name="view_venue_show_time">#868686</color>
 </resources>

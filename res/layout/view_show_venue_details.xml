@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/ui_header1_background"
+    android:padding="@dimen/list_show_item_padding" >
+
+    <CheckBox
+        android:id="@+id/view_show_venue_favorite_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:button="@drawable/checkbox_favorite_selector"
+        android:checked="false" />
+
+    <TextView
+        android:id="@+id/view_show_venue_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="@dimen/venue_detail_title_margin_bottom"
+        android:layout_marginLeft="@dimen/view_line_up_artist_title_margin_left"
+        android:layout_toRightOf="@id/view_show_venue_favorite_checkbox"
+        android:text="@string/mock_venue_title_1"
+        android:textAppearance="@style/view_artist_title" />
+
+    <LinearLayout
+        android:id="@+id/view_show_venue_telephone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/view_show_venue_title"
+        android:layout_below="@id/view_show_venue_title"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:src="@drawable/venue_phone" />
+
+        <TextView
+            android:id="@+id/venue_detail_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mock_venue_telephone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/view_show_venue_telephone"
+        android:layout_below="@id/view_show_venue_telephone"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:src="@drawable/venue_location" />
+
+        <TextView
+            android:id="@+id/venue_detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mock_venue_location" />
+    </LinearLayout>
+
+</RelativeLayout>

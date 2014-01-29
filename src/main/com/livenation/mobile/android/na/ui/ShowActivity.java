@@ -17,7 +17,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
-import com.livenation.mobile.android.na.ui.fragments.ShowFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.util.Logger;
 
@@ -32,7 +31,7 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 		init();
 		
 		Intent data = getIntent();
-		Logger.log("ShowActivity", "Showing: " + data.getStringExtra(ShowFragment.PARAMETER_EVENT_ID));
+		Logger.log("ShowActivity", "Showing: " + data.getStringExtra(SingleEventPresenter.PARAMETER_EVENT_ID));
 	}
 	
 	@Override

@@ -8,24 +8,31 @@
 
 package com.livenation.mobile.android.na.presenters.support;
 
+import android.os.Bundle;
+
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class BaseState<T extends PresenterView> {
+public abstract class BaseState<T extends PresenterView> implements Runnable {
 	private final StateListener listener;
 	private final T view;
-	
-	public BaseState(StateListener listener, T view) {
+
+	public BaseState(StateListener listener, Bundle args, T view) {
 		this.listener = listener;
 		this.view = view;
+		if (null != args) {
+			applyArgs(args);
+		}
 		listener.onNewState(BaseState.this);
 	}
 	
 	public T getView() {
 		return view;
 	}
+	
+	public void applyArgs(Bundle args) {};
 
 	public void notifyReady() {
 		if (null == listener) return;
