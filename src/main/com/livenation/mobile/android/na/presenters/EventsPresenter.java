@@ -61,6 +61,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		
 		@Override
 		public void run() {
+			//TODO: For fun: Allow for lat/lng to be overridden via args bundle
 			getLocationHelper().getLocation(context, EventsState.this);		
 		}
 

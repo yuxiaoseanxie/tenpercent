@@ -42,7 +42,8 @@ public class SingleVenuePresenter extends
 	static class SingleVenueState extends BaseState<SingleVenueView> implements
 			LiveNationApiService.GetSingleVenueApiCallback {
 		private Venue venue;
-		private Long venueId;
+		private SingleVenueParameters apiParams;
+		
 		private final SingleVenueView view;
 
 		public static final int FAILURE_API_GENERAL = 0;
@@ -54,15 +55,16 @@ public class SingleVenuePresenter extends
 
 		@Override
 		public void run() {
-			SingleVenueParameters params = ApiParameters.createSingleVenueParameters();
-			params.setVenueId(venueId);
-			getApiService().getSingleVenue(params, SingleVenueState.this);
+			getApiService().getSingleVenue(apiParams, SingleVenueState.this);
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			apiParams = ApiParameters.createSingleVenueParameters();
+
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
-			venueId = Venue.getNumericVenueId(venueIdRaw);
+			long venueId = Venue.getNumericVenueId(venueIdRaw);
+			apiParams.setVenueId(venueId);
 		}
 
 		@Override

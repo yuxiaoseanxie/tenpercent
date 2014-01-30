@@ -46,9 +46,8 @@ public class VenueEventsPresenter extends
 	static class VenueEventsState extends BaseState<EventsView> implements
 			LiveNationApiService.GetEventsApiCallback {
 		private List<Event> events;
-		private Long venueId;
-		private Integer limit;
-		
+		private VenueEventsParameters apiParams;
+
 		private final EventsView view;
 
 		public static final int FAILURE_API_GENERAL = 0;
@@ -60,21 +59,20 @@ public class VenueEventsPresenter extends
 
 		@Override
 		public void run() {
-			VenueEventsParameters params = ApiParameters.createVenueEventsParameters();
-			params.setVenueId(venueId);
-			if (null != limit) {
-				params.setPage(0, limit);
-			}
-			getApiService().getVenueEvents(params, VenueEventsState.this);
+			getApiService().getVenueEvents(apiParams, VenueEventsState.this);
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			apiParams = ApiParameters.createVenueEventsParameters();
+
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
+			apiParams.setVenueId(Venue.getNumericVenueId(venueIdRaw));	
+			
 			if (args.containsKey(PARAMETER_LIMIT)) {
-				limit = args.getInt(PARAMETER_LIMIT);				
+				int limit = args.getInt(PARAMETER_LIMIT);
+				apiParams.setPage(0, limit);
 			}
-			venueId = Venue.getNumericVenueId(venueIdRaw);	
 		}
 
 		@Override

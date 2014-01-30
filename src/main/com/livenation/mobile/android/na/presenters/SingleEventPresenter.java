@@ -50,8 +50,8 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;
 		private final SingleEventView view;
-		private long eventId;
-		
+		private SingleEventParameters apiParams;
+
 		public static final int FAILURE_API_GENERAL = 0;
 		
 		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
@@ -61,17 +61,16 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		
 		@Override
 		public void run() {
-			SingleEventParameters params = ApiParameters.createSingleEventParameters();
-			params.setEventId(eventId);
-			getApiService().getSingleEvent(params, SingleEventState.this);
+			getApiService().getSingleEvent(apiParams, SingleEventState.this);
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			apiParams = ApiParameters.createSingleEventParameters();
 			if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
-                String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
-                long eventId = Event.getNumericEventId(eventIdRaw);
-                this.eventId = eventId;
+				String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
+				long eventId = Event.getNumericEventId(eventIdRaw);
+				apiParams.setEventId(eventId);
 			}
 		}
 		
