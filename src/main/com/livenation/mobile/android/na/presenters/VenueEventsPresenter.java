@@ -14,12 +14,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.VenueEventsParameters;
 
 public class VenueEventsPresenter extends
 		BasePresenter<VenueEventsPresenter.VenueEventsState> implements Presenter<EventsView>,
 		StateListener<VenueEventsPresenter.VenueEventsState> {
 	public static final String PARAMETER_EVENT_ID = "venue_id";
+	public static final String PARAMETER_LIMIT = "limit";
 	
 	@Override
 	public void initialize(Context context, Bundle args, EventsView view) {
@@ -44,8 +45,10 @@ public class VenueEventsPresenter extends
 	
 	static class VenueEventsState extends BaseState<EventsView> implements
 			LiveNationApiService.GetEventsApiCallback {
-		private List<Event> events = null;
+		private List<Event> events;
 		private Long venueId;
+		private Integer limit;
+		
 		private final EventsView view;
 
 		public static final int FAILURE_API_GENERAL = 0;
@@ -57,15 +60,21 @@ public class VenueEventsPresenter extends
 
 		@Override
 		public void run() {
-			SingleVenueParameters params = ApiParameters.createSingleVenueParameters();
+			VenueEventsParameters params = ApiParameters.createVenueEventsParameters();
 			params.setVenueId(venueId);
+			if (null != limit) {
+				params.setPage(0, limit);
+			}
 			getApiService().getVenueEvents(params, VenueEventsState.this);
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
-			venueId = Venue.getNumericVenueId(venueIdRaw);
+			if (args.containsKey(PARAMETER_LIMIT)) {
+				limit = args.getInt(PARAMETER_LIMIT);				
+			}
+			venueId = Venue.getNumericVenueId(venueIdRaw);	
 		}
 
 		@Override

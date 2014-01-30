@@ -29,12 +29,15 @@ import com.livenation.mobile.android.platform.util.Logger;
 public class VenueActivity extends FragmentActivity implements SingleVenueView, EventsView  {
 	private SingleVenueView singleVenueView;
 	private EventsView eventsView;
+	private static final int EVENTS_PER_VENUE_LIMIT = 3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_venue);
-			
+		if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
+			getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
+		}
 		init();
 		
 		Intent data = getIntent();
