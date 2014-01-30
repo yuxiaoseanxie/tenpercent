@@ -1,51 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/fragment_show_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff777777"
-            android:minHeight="200dp"
-            android:scaleType="centerCrop" >
-        </com.android.volley.toolbox.NetworkImageView>
-
-        <TextView
-            android:id="@+id/fragment_show_artist_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fragment_show_image"
-            android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
-            android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="@string/mock_placeholder_artist_title_1"
-            android:textAppearance="@style/show_artist_title" >
-        </TextView>
-    </RelativeLayout>
-
-    <TextView
-        style="@style/ui_header1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_lineup" />
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/fragment_show_artist_lineup_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
         android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/fragment_show_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff777777"
+                android:minHeight="200dp"
+                android:scaleType="centerCrop" >
+            </com.android.volley.toolbox.NetworkImageView>
+
+            <TextView
+                android:id="@+id/fragment_show_artist_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/fragment_show_image"
+                android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
+                android:layout_marginLeft="@dimen/show_artist_title_margin_left"
+                android:text="@string/mock_placeholder_artist_title_1"
+                android:textAppearance="@style/show_artist_title" >
+            </TextView>
+        </RelativeLayout>
+
+        <TextView
+            style="@style/ui_header1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show_lineup" />
+
+        <LinearLayout
+            android:id="@+id/fragment_show_artist_lineup_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <com.livenation.mobile.android.na.ui.views.ShowVenueView
+            android:id="@+id/fragment_show_venue_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <fragment
+            android:id="@+id/fragment_show_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_show_map_height" />
     </LinearLayout>
 
-    <com.livenation.mobile.android.na.ui.views.ShowVenueView
-        android:id="@+id/fragment_show_venue_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+</ScrollView>

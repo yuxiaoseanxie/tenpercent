@@ -17,6 +17,11 @@ import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.VenueActivity;
@@ -33,11 +38,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	private ViewGroup lineupContainer;
 	private NetworkImageView artistImage;
 	private ShowVenueView venueDetails;
+	private GoogleMap map;
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	}
+	private static final float DEFAULT_MAP_ZOOM = 13f;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +51,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
 		artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
 		venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
-		
+
+		SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.fragment_show_map);
+		map = mapFragment.getMap();
+		map.getUiSettings().setZoomControlsEnabled(false);
+		map.getUiSettings().setAllGesturesEnabled(false);
 		return result;
 	}
 	
@@ -72,6 +79,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			
 			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue().getId());
 			venueDetails.setOnClickListener(onVenueClick);
+			
+			double lat = Double.valueOf(venue.getLat());
+			double lng = Double.valueOf(venue.getLng());
+			setMapLocation(lat, lng);
+			
 		} else {
 			venueDetails.setOnClickListener(null);
 		}
@@ -99,6 +111,17 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		}
 	}
 	
+	private void setMapLocation(double lat, double lng) {
+		LatLng latLng = new LatLng(lat, lng);
+
+		MarkerOptions marker = new MarkerOptions();
+		marker.position(latLng);
+
+		map.clear();
+		map.addMarker(marker);
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+	}
+
 	private class OnVenueDetailsClick implements View.OnClickListener {
 		private final String venueId;
 		

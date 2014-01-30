@@ -16,6 +16,7 @@
     <dimen name="view_line_up_artist_title_margin_bottom">8dp</dimen>
     <dimen name="view_lineup_min_height">60dp</dimen>
     <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
+    <dimen name="fragment_show_map_height">200dp</dimen>
     <dimen name="ui_header1_min_height">30dp</dimen>
     <dimen name="ui_header1_text_offset_vertical">2dp</dimen>
     <dimen name="ui_header1_accent_height">2dp</dimen>
@@ -28,5 +29,5 @@
     <dimen name="venue_detail_margin_right">10dp</dimen>
     <dimen name="venue_detail_item_spacing">2dp</dimen>
     <dimen name="venue_detail_link_text_margin_left">10dp</dimen>
-
+    
 </resources>
