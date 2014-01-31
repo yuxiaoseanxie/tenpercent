@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
@@ -59,7 +60,10 @@ public class ShowsListFragment extends LiveNationListFragment implements EventsV
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = items.get(position);
+		
 		intent.putExtra(EventsPresenter.PARAMETER_EVENT_ID, event.getId());
+		intent.putExtra(SingleEventPresenter.INTENT_DATA_KEY, event);
+		
 		startActivity(intent);
 	}
 	

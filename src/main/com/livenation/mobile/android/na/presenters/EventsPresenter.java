@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -25,6 +26,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.EventParameters;
 
 public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
+	public static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "event_id";
 
 	@Override
@@ -37,7 +39,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 	public void onStateReady(EventsState state) {
 		super.onStateReady(state);
 		EventsView view = state.getView();
-		List<Event> events = state.getEvents();
+		List<Event> events = state.getResult();
 		view.setEvents(events);
 	}
 	
@@ -47,24 +49,28 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		//TODO: This
 	}
 
-	static class EventsState extends BaseState<EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
-		private List<Event> events = null;
+	static class EventsState extends BaseState<ArrayList<Event>, EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;	
 		
 		public EventsState(StateListener<EventsState> listener, Bundle args, EventsView view, Context context) {
-			super(listener, args, view);
+			super(listener, args, INTENT_DATA_KEY, view);
 			this.context = context;
 		}
 		
 		@Override
-		public void run() {
+		public void onHasResult(ArrayList<Event> result) {
+			onGetEvents(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
 			//TODO: For fun: Allow for lat/lng to be overridden via args bundle
 			getLocationHelper().getLocation(context, EventsState.this);		
 		}
-
+		
 		@Override
 		public void onLocation(double lat, double lng) {
 			EventParameters params = ApiParameters.createEventParameters();
@@ -75,7 +81,8 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		
 		@Override
 		public void onGetEvents(List<Event> result) {
-			this.events = result;
+			//The Java List interface does not implement Serializable, but ArrayList does
+			setResult((ArrayList<Event>) result);
 			notifyReady();
 		}
 
@@ -87,10 +94,6 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		@Override
 		public void onLocationFailure(int failureCode) {
 			notifyFailed(FAILURE_LOCATION);
-		}
-		
-		public List<Event> getEvents() {
-			return events;
 		}
 		
 	}

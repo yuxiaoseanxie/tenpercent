@@ -16,6 +16,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 public class SingleVenuePresenter extends
 		BasePresenter<SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
 		StateListener<SingleVenuePresenter.SingleVenueState> {
+	public static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "venue_id";
 	
 	@Override
@@ -29,7 +30,7 @@ public class SingleVenuePresenter extends
 		super.onStateReady(state);
 		SingleVenueView view = state.getView();
 		
-		Venue venue = state.getVenue();
+		Venue venue = state.getResult();
 		view.setVenue(venue);
 	}
 
@@ -39,27 +40,29 @@ public class SingleVenuePresenter extends
 		// TODO: this
 	}
 	
-	static class SingleVenueState extends BaseState<SingleVenueView> implements
+	static class SingleVenueState extends BaseState<Venue, SingleVenueView> implements
 			LiveNationApiService.GetSingleVenueApiCallback {
-		private Venue venue;
 		private SingleVenueParameters apiParams;
-		
-		private final SingleVenueView view;
-
+	
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
-			super(listener, args, view);
-			this.view = view;
+			super(listener, args, INTENT_DATA_KEY, view);
 		}
 
 		@Override
-		public void run() {
-			getApiService().getSingleVenue(apiParams, SingleVenueState.this);
+		public void onHasResult(Venue result) {
+			onGetVenue(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
+			getApiService().getSingleVenue(apiParams, SingleVenueState.this);				
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			super.applyArgs(args);
 			apiParams = ApiParameters.createSingleVenueParameters();
 
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
@@ -69,21 +72,13 @@ public class SingleVenuePresenter extends
 
 		@Override
 		public void onGetVenue(Venue result) {
-			this.venue = result;
+			setResult(result);
 			notifyReady();
 		}
 
 		@Override
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
-		}
-
-		public Venue getVenue() {
-			return venue;
-		}
-
-		public SingleVenueView getView() {
-			return view;
 		}
 		
 	}

@@ -8,6 +8,8 @@
 
 package com.livenation.mobile.android.na.presenters.support;
 
+import java.io.Serializable;
+
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -15,13 +17,18 @@ import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class BaseState<T extends PresenterView> implements Runnable {
+public abstract class BaseState<D extends Serializable, T extends PresenterView> implements Runnable {
 	private final StateListener listener;
+	
 	private final T view;
+	private final String presenterDataKey;
+	
+	private D result;
 
-	public BaseState(StateListener listener, Bundle args, T view) {
+	public BaseState(StateListener listener, Bundle args, String presenterDataKey, T view) {
 		this.listener = listener;
 		this.view = view;
+		this.presenterDataKey = presenterDataKey;
 		if (null != args) {
 			applyArgs(args);
 		}
@@ -32,7 +39,20 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 		return view;
 	}
 	
-	public void applyArgs(Bundle args) {};
+	public void applyArgs(Bundle args) {
+		if (args.containsKey(presenterDataKey)) {
+			result = (D) args.getSerializable(presenterDataKey);
+		}
+	};
+	
+	@Override
+	public final void run() {
+		if (hasResult()) {
+			onHasResult(result);
+		} else {
+			retrieveResult();
+		}
+	}
 
 	public void notifyReady() {
 		if (null == listener) return;
@@ -51,6 +71,22 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
 	}
+	
+	public void setResult(D result) {
+		this.result = result;
+	}
+	
+	public D getResult() {
+		return result;
+	}
+	
+	public boolean hasResult() {
+		return result != null;
+	}
+	
+	public abstract void onHasResult(D result);
+	
+	public abstract void retrieveResult();
 	
 	public interface StateListener<T1 extends BaseState> {
 		void onNewState(T1 state);

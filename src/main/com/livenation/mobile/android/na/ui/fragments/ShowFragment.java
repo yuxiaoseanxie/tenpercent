@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -77,7 +78,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			 
 			venueDetails.getTelephone().setText(venue.getFormattedPhoneNumber());
 			
-			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue().getId());
+			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue());
 			venueDetails.setOnClickListener(onVenueClick);
 			
 			double lat = Double.valueOf(venue.getLat());
@@ -124,16 +125,17 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	}
 
 	private class OnVenueDetailsClick implements View.OnClickListener {
-		private final String venueId;
+		private final Venue venue;
 		
-		public OnVenueDetailsClick(String venueId) {
-			this.venueId = venueId;
+		public OnVenueDetailsClick(Venue venue) {
+			this.venue = venue;
 		}
 
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(getActivity(), VenueActivity.class);
-			intent.putExtra(VenueFragment.PARAMETER_VENUE_ID, venueId);
+			intent.putExtra(VenueFragment.PARAMETER_VENUE_ID, venue.getId());
+			intent.putExtra(SingleVenuePresenter.INTENT_DATA_KEY, venue);
 			startActivity(intent);
 		}
 	}

@@ -23,8 +23,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.SingleEventState> implements
 		Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
+	public static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "event_id";
-
+	
 	@Override
 	public void initialize(Context context, Bundle args, SingleEventView view) {
 		SingleEventState state = new SingleEventState(SingleEventPresenter.this, args, view);
@@ -36,7 +37,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		super.onStateReady(state);
 		SingleEventView view = state.getView();
 		
-		Event event = state.getEvent();
+		Event event = state.getResult();
 		view.setEvent(event);
 	}
 
@@ -46,26 +47,29 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		// TODO: this
 	}
 
-	static class SingleEventState extends BaseState<SingleEventView>
+	static class SingleEventState extends BaseState<Event, SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {
-		private Event event;
-		private final SingleEventView view;
 		private SingleEventParameters apiParams;
 
 		public static final int FAILURE_API_GENERAL = 0;
 		
 		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
-			super(listener, args, view);
-			this.view = view;
+			super(listener, args, INTENT_DATA_KEY, view);
 		}
 		
 		@Override
-		public void run() {
+		public void onHasResult(Event result) {
+			onGetEvent(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
 			getApiService().getSingleEvent(apiParams, SingleEventState.this);
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			super.applyArgs(args);
 			apiParams = ApiParameters.createSingleEventParameters();
 			if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
 				String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
@@ -76,7 +80,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		
 		@Override
 		public void onGetEvent(Event result) {
-			this.event = result;
+			setResult(result);
 			notifyReady();
 		}
 
@@ -84,13 +88,6 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-		
-		public Event getEvent() {
-			return event;
-		}
-
-		public SingleEventView getView() {
-			return view;
-		}
+	
 	}
 }

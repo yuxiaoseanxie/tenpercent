@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -17,6 +18,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.TopChartParameters;
 
 public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureState> implements Presenter<FeatureView>, StateListener<FeaturePresenter.FeatureState> {
+	public static final String INTENT_DATA_KEY = FeaturePresenter.class.getName();
 
 	@Override
 	public void initialize(Context context, Bundle args, FeatureView view) {
@@ -28,30 +30,34 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 	public void onStateReady(FeatureState state) {
 		super.onStateReady(state);
 		FeatureView view = state.getView();
-		List<Chart> featured = state.getCharts();
+		List<Chart> featured = state.getResult();
 		view.setFeatured(featured);
 	}
 	
-	static class FeatureState extends BaseState<FeatureView> implements GetTopChartsCallback, LocationCallback {
-		private List<Chart> charts;
+	static class FeatureState extends BaseState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;
 		
 		public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
-			super(listener, args, view);
+			super(listener, args, INTENT_DATA_KEY, view);
 			this.context = context;
 		}
 		
 		@Override
-		public void run() {
+		public void onHasResult(ArrayList<Chart> result) {
+			onGetCharts(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
 			getLocationHelper().getLocation(context, FeatureState.this);
 		}
 		
 		@Override
 		public void onGetCharts(List<Chart> charts) {
-			this.charts = charts;
+			setResult((ArrayList<Chart>) charts);
 			notifyReady();
 		}
 		
@@ -74,10 +80,6 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 			TopChartParameters params = ApiParameters.createChartParameters();
 			params.setLocation(lat, lng);
 			getApiService().getTopCharts(params, FeatureState.this);
-		}
-		
-		public List<Chart> getCharts() {
-			return charts;
 		}
 
 	}
