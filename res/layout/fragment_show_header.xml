@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_show_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <FrameLayout
+        android:id="@+id/fragment_show_frame_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/show_image_foreground" >
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/fragment_show_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff777777"
+            android:minHeight="200dp"
+            android:scaleType="centerCrop" >
+        </com.android.volley.toolbox.NetworkImageView>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/fragment_show_artist_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/fragment_show_frame_foreground"
+        android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
+        android:layout_marginLeft="@dimen/show_artist_title_margin_left"
+        android:text="@string/mock_placeholder_artist_title_1"
+        android:textAppearance="@style/show_artist_title" >
+    </TextView>
+
+</RelativeLayout>
