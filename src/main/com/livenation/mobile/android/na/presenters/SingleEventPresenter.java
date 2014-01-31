@@ -23,8 +23,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.SingleEventState> implements
 		Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
+	public static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "event_id";
-
+	
 	@Override
 	public void initialize(Context context, Bundle args, SingleEventView view) {
 		SingleEventState state = new SingleEventState(SingleEventPresenter.this, args, view);
@@ -55,17 +56,22 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		public static final int FAILURE_API_GENERAL = 0;
 		
 		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
-			super(listener, args, view);
+			super(listener, args, INTENT_DATA_KEY, view);
 			this.view = view;
 		}
 		
 		@Override
 		public void run() {
-			getApiService().getSingleEvent(apiParams, SingleEventState.this);
+			if (hasResult()) {
+				onGetEvent((Event) getResult());
+			} else {
+				getApiService().getSingleEvent(apiParams, SingleEventState.this);
+			}
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			super.applyArgs(args);
 			apiParams = ApiParameters.createSingleEventParameters();
 			if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
 				String eventIdRaw = args.getString(PARAMETER_EVENT_ID);

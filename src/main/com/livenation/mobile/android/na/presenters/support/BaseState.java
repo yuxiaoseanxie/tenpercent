@@ -8,6 +8,8 @@
 
 package com.livenation.mobile.android.na.presenters.support;
 
+import java.io.Serializable;
+
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -17,11 +19,16 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class BaseState<T extends PresenterView> implements Runnable {
 	private final StateListener listener;
+	
 	private final T view;
+	private final String presenterDataKey;
+	
+	private Serializable intentData;
 
-	public BaseState(StateListener listener, Bundle args, T view) {
+	public BaseState(StateListener listener, Bundle args, String presenterDataKey, T view) {
 		this.listener = listener;
 		this.view = view;
+		this.presenterDataKey = presenterDataKey;
 		if (null != args) {
 			applyArgs(args);
 		}
@@ -32,7 +39,19 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 		return view;
 	}
 	
-	public void applyArgs(Bundle args) {};
+	public void applyArgs(Bundle args) {
+		if (args.containsKey(presenterDataKey)) {
+			intentData = args.getSerializable(presenterDataKey);
+		}
+	};
+	
+	public boolean hasResult() {
+		return intentData != null;
+	}
+	
+	public Serializable getResult() {
+		return intentData;
+	}
 
 	public void notifyReady() {
 		if (null == listener) return;

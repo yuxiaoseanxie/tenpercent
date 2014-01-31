@@ -19,6 +19,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 public class VenueEventsPresenter extends
 		BasePresenter<VenueEventsPresenter.VenueEventsState> implements Presenter<EventsView>,
 		StateListener<VenueEventsPresenter.VenueEventsState> {
+	public static final String INTENT_DATA_KEY = VenueEventsPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "venue_id";
 	public static final String PARAMETER_LIMIT = "limit";
 	
@@ -53,17 +54,22 @@ public class VenueEventsPresenter extends
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
-			super(listener, args, view);
+			super(listener, args, INTENT_DATA_KEY, view);
 			this.view = view;
 		}
 
 		@Override
 		public void run() {
-			getApiService().getVenueEvents(apiParams, VenueEventsState.this);
+			if (hasResult()) {
+				onGetEvents((List<Event>) getResult());
+			} else {
+				getApiService().getVenueEvents(apiParams, VenueEventsState.this);				
+			}
 		}
 		
 		@Override
 		public void applyArgs(Bundle args) {
+			super.applyArgs(args);
 			apiParams = ApiParameters.createVenueEventsParameters();
 
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);

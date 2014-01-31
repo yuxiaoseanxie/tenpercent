@@ -17,6 +17,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.TopChartParameters;
 
 public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureState> implements Presenter<FeatureView>, StateListener<FeaturePresenter.FeatureState> {
+	public static final String INTENT_DATA_KEY = FeaturePresenter.class.getName();
 
 	@Override
 	public void initialize(Context context, Bundle args, FeatureView view) {
@@ -40,7 +41,7 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		public static final int FAILURE_LOCATION = 1;
 		
 		public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
-			super(listener, args, view);
+			super(listener, args, INTENT_DATA_KEY, view);
 			this.context = context;
 		}
 		
