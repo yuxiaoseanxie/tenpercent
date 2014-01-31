@@ -90,6 +90,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			
 		String imageUrl = null;		
 		//TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
+		lineupContainer.removeAllViews();
 		for (LineupEntry lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
 			view.getTitle().setText(lineup.getName());

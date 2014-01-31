@@ -45,6 +45,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
             android:orientation="vertical" >
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/view_loading" >
+            </include>
         </LinearLayout>
 
         <com.livenation.mobile.android.na.ui.views.ShowVenueView
