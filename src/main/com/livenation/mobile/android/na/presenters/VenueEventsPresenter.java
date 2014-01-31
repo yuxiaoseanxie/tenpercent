@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -44,7 +45,7 @@ public class VenueEventsPresenter extends
 		// TODO: this
 	}
 	
-	static class VenueEventsState extends BaseState<EventsView> implements
+	static class VenueEventsState extends BaseState<ArrayList<Event>, EventsView> implements
 			LiveNationApiService.GetEventsApiCallback {
 		private List<Event> events;
 		private VenueEventsParameters apiParams;
@@ -57,16 +58,18 @@ public class VenueEventsPresenter extends
 			super(listener, args, INTENT_DATA_KEY, view);
 			this.view = view;
 		}
-
+		
 		@Override
-		public void run() {
-			if (hasResult()) {
-				onGetEvents((List<Event>) getResult());
-			} else {
-				getApiService().getVenueEvents(apiParams, VenueEventsState.this);				
-			}
+		public void onHaveResult(ArrayList<Event> result) {
+			onGetEvents(result);
 		}
 		
+		@Override
+		public void retrieveResult() {
+			getApiService().getVenueEvents(apiParams, VenueEventsState.this);				
+
+		}
+
 		@Override
 		public void applyArgs(Bundle args) {
 			super.applyArgs(args);

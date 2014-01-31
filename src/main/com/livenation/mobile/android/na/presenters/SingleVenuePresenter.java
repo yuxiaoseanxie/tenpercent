@@ -40,7 +40,7 @@ public class SingleVenuePresenter extends
 		// TODO: this
 	}
 	
-	static class SingleVenueState extends BaseState<SingleVenueView> implements
+	static class SingleVenueState extends BaseState<Venue, SingleVenueView> implements
 			LiveNationApiService.GetSingleVenueApiCallback {
 		private Venue venue;
 		private SingleVenueParameters apiParams;
@@ -55,12 +55,13 @@ public class SingleVenuePresenter extends
 		}
 
 		@Override
-		public void run() {
-			if (hasResult()) {
-				onGetVenue((Venue) getResult());
-			} else {
-				getApiService().getSingleVenue(apiParams, SingleVenueState.this);				
-			}
+		public void onHaveResult(Venue result) {
+			onGetVenue(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
+			getApiService().getSingleVenue(apiParams, SingleVenueState.this);				
 		}
 		
 		@Override

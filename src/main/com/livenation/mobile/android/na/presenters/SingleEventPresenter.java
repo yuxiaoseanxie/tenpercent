@@ -47,7 +47,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		// TODO: this
 	}
 
-	static class SingleEventState extends BaseState<SingleEventView>
+	static class SingleEventState extends BaseState<Event, SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private Event event;
 		private final SingleEventView view;
@@ -61,12 +61,13 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		}
 		
 		@Override
-		public void run() {
-			if (hasResult()) {
-				onGetEvent((Event) getResult());
-			} else {
-				getApiService().getSingleEvent(apiParams, SingleEventState.this);
-			}
+		public void onHaveResult(Event result) {
+			onGetEvent(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
+			getApiService().getSingleEvent(apiParams, SingleEventState.this);
 		}
 		
 		@Override

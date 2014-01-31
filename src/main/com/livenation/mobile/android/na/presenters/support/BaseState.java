@@ -17,13 +17,13 @@ import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class BaseState<T extends PresenterView> implements Runnable {
+public abstract class BaseState<D extends Serializable, T extends PresenterView> implements Runnable {
 	private final StateListener listener;
 	
 	private final T view;
 	private final String presenterDataKey;
 	
-	private Serializable intentData;
+	private D intentData;
 
 	public BaseState(StateListener listener, Bundle args, String presenterDataKey, T view) {
 		this.listener = listener;
@@ -41,16 +41,17 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 	
 	public void applyArgs(Bundle args) {
 		if (args.containsKey(presenterDataKey)) {
-			intentData = args.getSerializable(presenterDataKey);
+			intentData = (D) args.getSerializable(presenterDataKey);
 		}
 	};
 	
-	public boolean hasResult() {
-		return intentData != null;
-	}
-	
-	public Serializable getResult() {
-		return intentData;
+	@Override
+	public final void run() {
+		if (hasResult()) {
+			onHaveResult(intentData);
+		} else {
+			retrieveResult();
+		}
 	}
 
 	public void notifyReady() {
@@ -69,6 +70,14 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 	
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
+	}
+	
+	public abstract void onHaveResult(D result);
+	
+	public abstract void retrieveResult();
+	
+	private boolean hasResult() {
+		return intentData != null;
 	}
 	
 	public interface StateListener<T1 extends BaseState> {

@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -48,7 +49,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		//TODO: This
 	}
 
-	static class EventsState extends BaseState<EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
+	static class EventsState extends BaseState<ArrayList<Event>, EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		private List<Event> events = null;
 		private final Context context;
 		
@@ -61,10 +62,16 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		}
 		
 		@Override
-		public void run() {
+		public void onHaveResult(ArrayList<Event> result) {
+			onGetEvents(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
 			//TODO: For fun: Allow for lat/lng to be overridden via args bundle
 			getLocationHelper().getLocation(context, EventsState.this);		
 		}
+		
 		
 		@Override
 		public void onLocation(double lat, double lng) {

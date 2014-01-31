@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.presenters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -33,7 +34,7 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		view.setFeatured(featured);
 	}
 	
-	static class FeatureState extends BaseState<FeatureView> implements GetTopChartsCallback, LocationCallback {
+	static class FeatureState extends BaseState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
 		private List<Chart> charts;
 		private final Context context;
 		
@@ -46,7 +47,12 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		}
 		
 		@Override
-		public void run() {
+		public void onHaveResult(ArrayList<Chart> result) {
+			onGetCharts(result);
+		}
+		
+		@Override
+		public void retrieveResult() {
 			getLocationHelper().getLocation(context, FeatureState.this);
 		}
 		
