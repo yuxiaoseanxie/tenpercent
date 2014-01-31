@@ -37,7 +37,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		super.onStateReady(state);
 		SingleEventView view = state.getView();
 		
-		Event event = state.getEvent();
+		Event event = state.getResult();
 		view.setEvent(event);
 	}
 
@@ -49,19 +49,16 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 
 	static class SingleEventState extends BaseState<Event, SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {
-		private Event event;
-		private final SingleEventView view;
 		private SingleEventParameters apiParams;
 
 		public static final int FAILURE_API_GENERAL = 0;
 		
 		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
 			super(listener, args, INTENT_DATA_KEY, view);
-			this.view = view;
 		}
 		
 		@Override
-		public void onHaveResult(Event result) {
+		public void onHasResult(Event result) {
 			onGetEvent(result);
 		}
 		
@@ -83,7 +80,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		
 		@Override
 		public void onGetEvent(Event result) {
-			this.event = result;
+			setResult(result);
 			notifyReady();
 		}
 
@@ -91,13 +88,6 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-		
-		public Event getEvent() {
-			return event;
-		}
-
-		public SingleEventView getView() {
-			return view;
-		}
+	
 	}
 }

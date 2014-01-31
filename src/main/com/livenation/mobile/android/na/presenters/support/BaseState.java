@@ -23,7 +23,7 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 	private final T view;
 	private final String presenterDataKey;
 	
-	private D intentData;
+	private D result;
 
 	public BaseState(StateListener listener, Bundle args, String presenterDataKey, T view) {
 		this.listener = listener;
@@ -41,14 +41,14 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 	
 	public void applyArgs(Bundle args) {
 		if (args.containsKey(presenterDataKey)) {
-			intentData = (D) args.getSerializable(presenterDataKey);
+			result = (D) args.getSerializable(presenterDataKey);
 		}
 	};
 	
 	@Override
 	public final void run() {
 		if (hasResult()) {
-			onHaveResult(intentData);
+			onHasResult(result);
 		} else {
 			retrieveResult();
 		}
@@ -72,13 +72,21 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 		return LiveNationApplication.get().getLocationHelper();
 	}
 	
-	public abstract void onHaveResult(D result);
+	public void setResult(D result) {
+		this.result = result;
+	}
+	
+	public D getResult() {
+		return result;
+	}
+	
+	public boolean hasResult() {
+		return result != null;
+	}
+	
+	public abstract void onHasResult(D result);
 	
 	public abstract void retrieveResult();
-	
-	private boolean hasResult() {
-		return intentData != null;
-	}
 	
 	public interface StateListener<T1 extends BaseState> {
 		void onNewState(T1 state);

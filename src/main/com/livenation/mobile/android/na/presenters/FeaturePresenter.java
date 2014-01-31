@@ -30,12 +30,11 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 	public void onStateReady(FeatureState state) {
 		super.onStateReady(state);
 		FeatureView view = state.getView();
-		List<Chart> featured = state.getCharts();
+		List<Chart> featured = state.getResult();
 		view.setFeatured(featured);
 	}
 	
 	static class FeatureState extends BaseState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
-		private List<Chart> charts;
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
@@ -47,7 +46,7 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		}
 		
 		@Override
-		public void onHaveResult(ArrayList<Chart> result) {
+		public void onHasResult(ArrayList<Chart> result) {
 			onGetCharts(result);
 		}
 		
@@ -58,7 +57,7 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 		
 		@Override
 		public void onGetCharts(List<Chart> charts) {
-			this.charts = charts;
+			setResult((ArrayList<Chart>) charts);
 			notifyReady();
 		}
 		
@@ -81,10 +80,6 @@ public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureStat
 			TopChartParameters params = ApiParameters.createChartParameters();
 			params.setLocation(lat, lng);
 			getApiService().getTopCharts(params, FeatureState.this);
-		}
-		
-		public List<Chart> getCharts() {
-			return charts;
 		}
 
 	}

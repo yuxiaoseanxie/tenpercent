@@ -35,7 +35,7 @@ public class VenueEventsPresenter extends
 		super.onStateReady(state);
 		
 		EventsView view = state.getView();
-		List<Event> events = state.getEvents();
+		List<Event> events = state.getResult();
 		view.setEvents(events);
 	}
 
@@ -47,20 +47,16 @@ public class VenueEventsPresenter extends
 	
 	static class VenueEventsState extends BaseState<ArrayList<Event>, EventsView> implements
 			LiveNationApiService.GetEventsApiCallback {
-		private List<Event> events;
 		private VenueEventsParameters apiParams;
-
-		private final EventsView view;
 
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
 			super(listener, args, INTENT_DATA_KEY, view);
-			this.view = view;
 		}
 		
 		@Override
-		public void onHaveResult(ArrayList<Event> result) {
+		public void onHasResult(ArrayList<Event> result) {
 			onGetEvents(result);
 		}
 
@@ -85,21 +81,13 @@ public class VenueEventsPresenter extends
 
 		@Override
 		public void onGetEvents(List<Event> events) {
-			this.events = events;
+			setResult((ArrayList<Event>) events);
 			notifyReady();
 		}
 
 		@Override
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
-		}
-
-		public List<Event> getEvents() {
-			return events;
-		}
-
-		public EventsView getView() {
-			return view;
 		}
 		
 	}

@@ -39,7 +39,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 	public void onStateReady(EventsState state) {
 		super.onStateReady(state);
 		EventsView view = state.getView();
-		List<Event> events = state.getEvents();
+		List<Event> events = state.getResult();
 		view.setEvents(events);
 	}
 	
@@ -50,7 +50,6 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 	}
 
 	static class EventsState extends BaseState<ArrayList<Event>, EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
-		private List<Event> events = null;
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
@@ -62,7 +61,7 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		}
 		
 		@Override
-		public void onHaveResult(ArrayList<Event> result) {
+		public void onHasResult(ArrayList<Event> result) {
 			onGetEvents(result);
 		}
 		
@@ -82,7 +81,8 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		
 		@Override
 		public void onGetEvents(List<Event> result) {
-			this.events = result;
+			//The Java List interface does not implement Serializable, but ArrayList does
+			setResult((ArrayList<Event>) result);
 			notifyReady();
 		}
 
@@ -94,10 +94,6 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 		@Override
 		public void onLocationFailure(int failureCode) {
 			notifyFailed(FAILURE_LOCATION);
-		}
-		
-		public List<Event> getEvents() {
-			return events;
 		}
 		
 	}
