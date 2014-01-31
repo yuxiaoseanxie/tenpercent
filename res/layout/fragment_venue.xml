@@ -37,7 +37,8 @@
             android:layout_marginLeft="@dimen/venue_detail_margin_left"
             android:layout_marginRight="@dimen/venue_detail_margin_right"
             android:layout_marginTop="@dimen/venue_detail_margin_top"
-            layout="@layout/sub_show_venue_details" >
+            layout="@layout/sub_show_venue_details"
+            android:background="@drawable/ui_underscore_background" >
         </include>
 
         <Space

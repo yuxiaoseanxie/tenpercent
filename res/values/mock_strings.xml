@@ -17,5 +17,7 @@
     <string name="mock_date_day">18</string>
     <string name="mock_date_dotw">MON</string>
     <string name="mock_date_month">NOV</string>
+    
+    <string name="mock_show_calendar_date_time">Fri Dec 3. 2013 at 8:00PM</string>
 
 </resources>
