@@ -47,10 +47,11 @@ public class ShowsListWithHeaderFragment extends LiveNationFragment implements E
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_all_shows_headers, container, false);
-		listView = (StickyListHeadersListView) view.findViewById(R.id.list);
+		listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
 		adapter = new EventAdapter(getActivity());
 		listView.setOnItemClickListener(ShowsListWithHeaderFragment.this);
 		listView.setAdapter(adapter);
+		listView.setEmptyView(view.findViewById(android.R.id.empty));
 		return view;
 	}
 	

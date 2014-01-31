@@ -22,7 +22,11 @@ public class ShowFixedListFragment extends LiveNationFragment implements EventsV
 			Bundle savedInstanceState) {
 		View result = inflater.inflate(R.layout.fragment_show_fixed, container,
 				false);
+		View loading = inflater.inflate(R.layout.view_loading, null, false);
+		
 		showContainer = (ViewGroup) result;
+		showContainer.addView(loading);
+		
 		return result;
 	}
 	
@@ -36,4 +40,5 @@ public class ShowFixedListFragment extends LiveNationFragment implements EventsV
 			showContainer.addView(show, layoutParams);
 		}
 	}
+	
 }

@@ -5,8 +5,14 @@
     android:orientation="vertical" >
 
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-        android:id="@+id/list"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dip" 
+        android:layout_weight="1"/>
+
+    <com.livenation.mobile.android.na.ui.views.LoadingView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
