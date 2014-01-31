@@ -63,11 +63,10 @@ public class VenueEventsPresenter extends
 		public void onHaveResult(ArrayList<Event> result) {
 			onGetEvents(result);
 		}
-		
+
 		@Override
 		public void retrieveResult() {
 			getApiService().getVenueEvents(apiParams, VenueEventsState.this);				
-
 		}
 
 		@Override

@@ -72,7 +72,6 @@ public class EventsPresenter extends BasePresenter<EventsPresenter.EventsState> 
 			getLocationHelper().getLocation(context, EventsState.this);		
 		}
 		
-		
 		@Override
 		public void onLocation(double lat, double lng) {
 			EventParameters params = ApiParameters.createEventParameters();
