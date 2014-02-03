@@ -20,6 +20,9 @@
     <dimen name="view_loading_padding_top_bottom">10dp</dimen>
     <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
     <dimen name="fragment_show_map_height">70dp</dimen>
+    <dimen name="fragment_show_map_gradient_height">35dp</dimen>
+    <dimen name="fragment_show_image_height">250dp</dimen>
+    <dimen name="fragment_show_image_gradient_height">125dp</dimen>
     <dimen name="ui_header1_min_height">30dp</dimen>
     <dimen name="ui_header1_text_offset_vertical">2dp</dimen>
     <dimen name="ui_header1_accent_height">2dp</dimen>
@@ -37,6 +40,7 @@
     <dimen name="show_calendar_margin_right">10dp</dimen>
     <dimen name="show_calendar_margin_top">10dp</dimen>
     <dimen name="show_calendar_margin_bottom">10dp</dimen>
+    <dimen name="show_calendar_padding_bottom">15dp</dimen>
     <dimen name="ui_underscore_height">1dp</dimen>
     <dimen name="show_calendar_image_margin_right">10dp</dimen>
     <dimen name="ui_ticketbar_height">50dp</dimen>

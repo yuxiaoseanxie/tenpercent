@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ff777777"
-            android:minHeight="200dp"
+            android:minHeight="@dimen/fragment_show_image_height"
             android:scaleType="centerCrop" >
         </com.android.volley.toolbox.NetworkImageView>
     </FrameLayout>

@@ -37,7 +37,7 @@
     </style>
 
     <style name="show_artist_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/show_artist_title</item>
     </style>
@@ -88,7 +88,7 @@
     </style>
     
     <style name="ticketbar_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
     </style>
