@@ -16,5 +16,7 @@
     <string name="landing_tab_3">Nearby</string>
     
     <string name="venue_detail_link">+ Venue Detail</string>
-          
+    
+    <string name="ticketbar_find_ticket">Find Tickets ></string>
+               
 </resources>

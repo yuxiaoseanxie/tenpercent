@@ -19,8 +19,10 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,6 +49,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	private ViewGroup lineupContainer;
 	private NetworkImageView artistImage;
 	private ShowVenueView venueDetails;
+	private Button findTickets;
 	private GoogleMap map;
 	
 	private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
@@ -65,10 +68,15 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
 		venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
 		calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
+		
+		findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_button);
+		
 		SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.fragment_show_map);
 		map = mapFragment.getMap();
 		map.getUiSettings().setZoomControlsEnabled(false);
 		map.getUiSettings().setAllGesturesEnabled(false);
+		
+		
 		return result;
 	}
 	
@@ -110,6 +118,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		} else {
 			venueDetails.setOnClickListener(null);
 		}
+		
+		OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
+		findTickets.setOnClickListener(onFindTicketsClick);
 			
 		String imageUrl = null;		
 		//TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
@@ -156,6 +167,19 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			intent.putExtra(VenueFragment.PARAMETER_VENUE_ID, venue.getId());
 			intent.putExtra(SingleVenuePresenter.INTENT_DATA_KEY, venue);
 			startActivity(intent);
+		}
+	}
+	
+	private class OnFindTicketsClick implements View.OnClickListener {
+		private final Event event;
+
+		public OnFindTicketsClick(Event event) {
+			this.event = event;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
 	

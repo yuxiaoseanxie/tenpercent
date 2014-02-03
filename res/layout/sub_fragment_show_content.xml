@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/fragment_show_header" />
+
+        <TextView
+            style="@style/ui_header1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show_details" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/show_calendar_margin_bottom"
+            android:layout_marginLeft="@dimen/show_calendar_margin_left"
+            android:layout_marginRight="@dimen/show_calendar_margin_right"
+            android:layout_marginTop="@dimen/show_calendar_margin_top"
+            layout="@layout/sub_show_calender" />
+
+        <com.livenation.mobile.android.na.ui.views.ShowVenueView
+            android:id="@+id/fragment_show_venue_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/show_map_foreground" >
+
+            <fragment
+                android:id="@+id/fragment_show_map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fragment_show_map_height" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/map_shadow" >
+        </View>
+
+        <TextView
+            style="@style/ui_header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show_lineup" />
+
+        <LinearLayout
+            android:id="@+id/fragment_show_artist_lineup_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
+            android:orientation="vertical" >
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/view_loading" >
+            </include>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
