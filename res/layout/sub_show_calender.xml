@@ -11,6 +11,7 @@
         android:src="@drawable/show_event_date" />
 
     <TextView
+        android:id="@+id/sub_show_calendar_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/sub_show_calendar_image"

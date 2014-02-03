@@ -8,8 +8,14 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +35,22 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.util.Logger;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView {
 	private TextView artistTitle;
+	private TextView calendarText;
 	private ViewGroup lineupContainer;
 	private NetworkImageView artistImage;
 	private ShowVenueView venueDetails;
 	private GoogleMap map;
+	
+	private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
+	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
 	
 	private static final float DEFAULT_MAP_ZOOM = 13f;
 	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
@@ -52,7 +64,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
 		artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
 		venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
-
+		calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
 		SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.fragment_show_map);
 		map = mapFragment.getMap();
 		map.getUiSettings().setZoomControlsEnabled(false);
@@ -64,6 +76,16 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	public void setEvent(Event event) {
 		artistTitle.setText(event.getName());
 		
+		try {
+			Date date = DATE_FORMATTER.parse(event.getLocalStartTime());
+			String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, date).toString();
+			calendarText.setText(calendarValue);
+		} catch (ParseException e) {
+			calendarText.setText("");
+			Logger.log("ShowFragment", "Error parsing date", e);
+			e.printStackTrace();
+		} 
+	
 		if (null != event.getVenue()) {
 			Venue venue = event.getVenue();
 			
