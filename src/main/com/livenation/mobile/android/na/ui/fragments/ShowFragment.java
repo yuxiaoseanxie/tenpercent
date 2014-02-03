@@ -30,7 +30,6 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Image;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
@@ -42,7 +41,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	private GoogleMap map;
 	
 	private static final float DEFAULT_MAP_ZOOM = 13f;
-	
+	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -98,14 +98,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			lineupContainer.addView(view, layoutParams);
 			if (null == imageUrl) {
-				if (lineup.getImages().length > 0) {
-					for (Image image : lineup.getImages()) {
-						if (image.hasTapImage()) {
-							imageUrl = image.getTapImage();
-							break;
-						}
-					}
-				}
+				String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
+				
+				if (null == imageKey) continue;
+				
+				imageUrl = lineup.getImageURL(imageKey);
 			}
 		}
 		if (null != imageUrl) {
