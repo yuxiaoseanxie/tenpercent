@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="white">#ffffffff</color>
+	<color name="windowBackground">#ffffff</color>
 	<color name="background_gray">#999999</color>
 	<color name="featured_text">#ffffff</color>
 	<color name="list_show_date_text_highlight">#ff0000</color>
@@ -11,5 +11,5 @@
 	<color name="ui_header1_background">#e6e6e6</color>
 	<color name="ui_header1_accent">#c7c7c7</color>
 	<color name="view_venue_show_time">#868686</color>
-	
+	<color name="underscore">#d0d0d0</color>
 </resources>

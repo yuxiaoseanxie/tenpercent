@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="@dimen/venue_detail_title_margin_bottom"
-        android:layout_marginLeft="@dimen/view_line_up_artist_title_margin_left"
+        android:layout_marginLeft="@dimen/venue_detail_title_margin_left"
         android:layout_toRightOf="@id/view_show_venue_favorite_checkbox"
         android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/show_venue_text_title" />

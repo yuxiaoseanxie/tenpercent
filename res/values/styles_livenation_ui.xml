@@ -8,10 +8,23 @@
         <item name="android:paddingTop">@dimen/ui_header1_text_offset_vertical</item>
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
-    
+
     <style name="ui_header2" parent="@android:style/Widget.Holo.Light.TextView">
         <item name="android:minHeight">@dimen/ui_header1_min_height</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
+
+    <style name="ui_underscore">
+        <item name="android:background">@drawable/ui_underscore_background</item>
+    </style>
+
+    <style name="ui_lineup" parent="@style/ui_underscore">
+        <item name="android:paddingTop">@dimen/ui_lineup_padding_top</item>
+        <item name="android:paddingBottom">@dimen/ui_lineup_padding_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/ui_lineup_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/ui_lineup_margin_right</item>
+        <item name="android:layout_marginBottom">@dimen/ui_lineup_margin_bottom</item>
+    </style>
+
 </resources>

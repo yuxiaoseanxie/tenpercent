@@ -3,14 +3,14 @@
     <item>
       <shape 
         android:shape="rectangle">
-             <solid android:color="@color/ui_header1_accent" />
+             <solid android:color="@color/underscore" />
         </shape>
    </item>
 
-   <item android:bottom="@dimen/ui_header1_accent_height"> 
+   <item android:bottom="@dimen/ui_underscore_height"> 
       <shape 
         android:shape="rectangle">
-            <solid android:color="@color/ui_header1_background" />
+          <solid android:color="@color/windowBackground" />
         </shape>
    </item>
 

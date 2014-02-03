@@ -11,9 +11,12 @@
     <dimen name="list_show_item_date_min_width">30dp</dimen>
     <dimen name="show_artist_title_margin_left">20dp</dimen>
     <dimen name="show_artist_title_margin_bottom">15dp</dimen>
-    <dimen name="view_line_up_artist_title_margin_left">10dp</dimen>
-    <dimen name="view_line_up_artist_title_margin_top">8dp</dimen>
-    <dimen name="view_line_up_artist_title_margin_bottom">8dp</dimen>
+    <dimen name="ui_lineup_margin_left">10dp</dimen>
+    <dimen name="ui_lineup_margin_right">10dp</dimen>
+    <dimen name="ui_lineup_margin_top">8dp</dimen>
+    <dimen name="ui_lineup_margin_bottom">8dp</dimen>
+    <dimen name="ui_lineup_padding_top">10dp</dimen>
+    <dimen name="ui_lineup_padding_bottom">16dp</dimen>
     <dimen name="view_lineup_min_height">60dp</dimen>
     <dimen name="view_loading_padding_top_bottom">10dp</dimen>
     <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
@@ -24,6 +27,7 @@
     <dimen name="venue_detail_image_min_width">48dp</dimen>
     <dimen name="venue_detail_image_min_height">48dp</dimen>
     <dimen name="venue_detail_title_margin_bottom">10dp</dimen>
+    <dimen name="venue_detail_title_margin_left">10dp</dimen>
     <dimen name="venue_detail_margin_top">0dp</dimen>
     <dimen name="venue_detail_margin_bottom">0dp</dimen>
     <dimen name="venue_detail_margin_left">0dp</dimen>
@@ -34,7 +38,7 @@
     <dimen name="show_calendar_margin_right">10dp</dimen>
     <dimen name="show_calendar_margin_top">10dp</dimen>
     <dimen name="show_calendar_margin_bottom">10dp</dimen>
-    
+    <dimen name="ui_underscore_height">1dp</dimen>
     <dimen name="show_calendar_image_margin_right">10dp</dimen>
     
 </resources>

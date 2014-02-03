@@ -42,8 +42,8 @@
         <item name="android:textColor">@color/show_artist_title</item>
     </style>
 
-    <style name="view_artist_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">20sp</item>
+    <style name="view_lineup_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/view_artist_title</item>
     </style>

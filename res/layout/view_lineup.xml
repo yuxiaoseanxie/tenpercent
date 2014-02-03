@@ -8,19 +8,17 @@
         android:id="@+id/view_lineup_favorite_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:button="@drawable/checkbox_favorite_selector"
-        android:layout_gravity="center_vertical"
         android:checked="false" />
 
     <TextView
         android:id="@+id/view_lineup_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/view_line_up_artist_title_margin_left"
-        android:layout_marginTop="@dimen/view_line_up_artist_title_margin_top"
-        android:layout_marginBottom="@dimen/view_line_up_artist_title_margin_bottom"
-        android:layout_gravity="center_vertical"
-        android:textAppearance="@style/view_artist_title"
-        android:text="@string/mock_artist_title_1" />
+        android:layout_gravity="top"
+		style="@style/ui_lineup"
+        android:text="@string/mock_artist_title_1"
+        android:textAppearance="@style/view_lineup_text" />
 
 </LinearLayout>
