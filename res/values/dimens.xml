@@ -22,7 +22,7 @@
     <dimen name="fragment_show_map_height">70dp</dimen>
     <dimen name="fragment_show_map_gradient_height">35dp</dimen>
     <dimen name="fragment_show_image_height">250dp</dimen>
-    <dimen name="fragment_show_image_gradient_height">125dp</dimen>
+    <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="ui_header1_min_height">30dp</dimen>
     <dimen name="ui_header1_text_offset_vertical">2dp</dimen>
     <dimen name="ui_header1_accent_height">2dp</dimen>
