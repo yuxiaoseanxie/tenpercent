@@ -33,6 +33,9 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayShowTitleEnabled(false);
+		getActionBar().setDisplayShowCustomEnabled(true);
+		
+		getActionBar().setCustomView(R.layout.actionbar_show_custom);
 		
 		init();
 		

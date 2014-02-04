@@ -20,4 +20,6 @@
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     
     <string name="home">Home</string>
+    
+    <string name="actionbar_show_title">Show</string>
 </resources>
