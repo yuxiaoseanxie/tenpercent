@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -27,7 +29,11 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show);
-			
+		
+		getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayShowTitleEnabled(false);
+		
 		init();
 		
 		Intent data = getIntent();
@@ -40,6 +46,22 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 		if (null == singleEventView) {
 			singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_show, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				navigateUp();
+				break;
+		}
+		return true;
 	}
 	
 	@Override
@@ -57,6 +79,12 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	
 	private SingleEventPresenter getSingleEventPresenter() {
 		return LiveNationApplication.get().getSingleEventPresenter();
+	}
+
+	private void navigateUp() {
+		Intent intent = new Intent(ShowActivity.this, LandingActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 	}
 
 }

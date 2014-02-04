@@ -18,5 +18,6 @@
     <string name="venue_detail_link">+ Venue Detail</string>
     
     <string name="ticketbar_find_ticket">Find Tickets ></string>
-               
+    
+    <string name="home">Home</string>
 </resources>
