@@ -30,12 +30,12 @@ fi
 GIT_BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
 if [ ${GIT_BRANCH} != "${TARGET_GIT_BRANCH}" ]; then
-  echo "You are not on the develop branch. Aborting. Branch is ${GIT_BRANCH}"
+  echo "You are not on the '${TARGET_GIT_BRANCH}' branch. Aborting. Branch is ${GIT_BRANCH}"
   exit
 fi
 
 echo "****"
-echo "Updating ${APP_FOLDER_NAME} project and subprojects"
+echo "Updating ${APP_FOLDER_NAME} project and associated projects"
 echo
 
 cd ..
