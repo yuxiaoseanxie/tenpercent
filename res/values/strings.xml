@@ -22,4 +22,8 @@
     <string name="home">Home</string>
     
     <string name="actionbar_show_title">Show</string>
+    
+    <string name="actionbar_drawer_open">Open</string>
+    <string name="actionbar_drawer_close">Close</string>
+    
 </resources>
