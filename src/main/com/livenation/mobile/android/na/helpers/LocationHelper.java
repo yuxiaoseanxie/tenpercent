@@ -50,7 +50,10 @@ public class LocationHelper {
 				currentRequest.getLocation(context, wrapped);
 				break;
 			case PlayServicesLocationProvider.STATUS_GOOGLE_PLAY_FAILURE_RECOVERABLE:
-				callback.onLocationFailure(FAILURE_GOOGLE_SERVICES_USER_REQUIRED);
+				//TODO: Handle Google Services recoverable intent;
+				currentRequest = new DummyLocationProvider();
+				currentRequest.getLocation(context, wrapped);
+				//callback.onLocationFailure(FAILURE_GOOGLE_SERVICES_USER_REQUIRED);
 				break;
 			case PlayServicesLocationProvider.STATUS_GOOGLE_PLAY_FAILURE_GIVEUP:
 				//TODO: Fallback to GPS/Network location here: DeviceLocationProvider();
