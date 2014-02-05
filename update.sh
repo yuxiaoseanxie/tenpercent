@@ -39,7 +39,6 @@ echo "Updating ${APP_FOLDER_NAME} project and associated projects"
 echo
 
 cd ..
-CODE_DIR=`pwd`
 
 update_or_install "${APP_FOLDER_NAME}" git@github.com:TeamSidewinder/adr-appLiveNation.gi
 update_or_install adr-libsLabsPlatform git://github.com/TeamSidewinder/adr-libLabsPlatform.git
