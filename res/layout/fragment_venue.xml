@@ -56,9 +56,8 @@
         android:layout_height="wrap_content"
         android:text="@string/venue_upcoming_shows" />
 
-    <fragment
-        android:id="@+id/fragment_venue_shows"
-        android:name="com.livenation.mobile.android.na.ui.fragments.ShowFixedListFragment"
+    <FrameLayout
+        android:id="@+id/fragment_venue_container_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

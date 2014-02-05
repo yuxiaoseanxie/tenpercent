@@ -14,7 +14,7 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.VenueShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowFixedListFragment extends LiveNationFragment implements EventsView {
+public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
 	private ViewGroup showContainer;
 	
 	@Override

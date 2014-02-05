@@ -24,7 +24,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 public class FeaturedFragment extends LiveNationFragment implements FeatureView {
 	private ViewGroup chartingContainer;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

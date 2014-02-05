@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,10 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 		telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
 		link = result.findViewById(R.id.venue_detail_venue_info_link);
 		
-		shows = (EventsView) getFragmentManager().findFragmentById(R.id.fragment_venue_shows);
+		Fragment showsFragment = new ShowsListNonScrollingFragment();
+		addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
+		
+		shows = (EventsView) showsFragment;
 		
 		return result;
 	}

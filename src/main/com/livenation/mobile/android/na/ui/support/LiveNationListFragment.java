@@ -14,6 +14,8 @@ import android.support.v4.app.ListFragment;
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.presenters.EventsPresenter;
+import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
@@ -21,7 +23,6 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setRetainInstance(true);
 	}
 	
 	@Override
@@ -38,4 +39,15 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	public ImageLoader getImageLoader() {
 		return LiveNationApplication.get().getImageLoader();
 	}
+	
+	@Override
+	public EventsPresenter getEventsPresenter() {
+		return LiveNationApplication.get().getEventsPresenter();
+	}
+	
+	@Override
+	public FeaturePresenter getFeaturePresenter() {
+		return LiveNationApplication.get().getFeaturePresenter();
+	}
+	
 }
