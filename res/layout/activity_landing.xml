@@ -4,12 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <fragment
-        android:id="@+id/activity_landing_tab_fragment"
-        android:name="com.livenation.mobile.android.na.ui.fragments.LandingTabsFragment"
+    <android.support.v4.app.FragmentTabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
     <LinearLayout
         android:id="@+id/activity_landing_container"
         android:layout_width="match_parent"
