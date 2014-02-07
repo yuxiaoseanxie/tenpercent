@@ -93,4 +93,9 @@
         <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
     </style>
     
+    
+    <style name="tab_title_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

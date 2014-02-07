@@ -45,5 +45,6 @@
     <dimen name="ui_underscore_height">1dp</dimen>
     <dimen name="show_calendar_image_margin_right">10dp</dimen>
     <dimen name="ui_ticketbar_height">50dp</dimen>
+    <dimen name="ui_tab_height">48dp</dimen>
     
 </resources>
