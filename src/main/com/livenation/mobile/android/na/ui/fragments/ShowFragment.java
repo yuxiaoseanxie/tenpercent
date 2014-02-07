@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
@@ -35,6 +34,7 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -43,7 +43,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
 
-public class ShowFragment extends LiveNationFragment implements SingleEventView {
+public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
 	private TextView artistTitle;
 	private TextView calendarText;
 	private ViewGroup lineupContainer;
@@ -57,7 +57,18 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 	
 	private static final float DEFAULT_MAP_ZOOM = 13f;
 	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
-
+	private LiveNationMapFragment mapFragment;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		mapFragment = new LiveNationMapFragment();
+		mapFragment.setMapReadyListener(this);
+	
+		addFragment(R.id.fragment_show_map_container, mapFragment, "map");
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -70,12 +81,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
 		
 		findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_button);
-		
-		SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.fragment_show_map);
-		map = mapFragment.getMap();
-		map.getUiSettings().setZoomControlsEnabled(false);
-		map.getUiSettings().setAllGesturesEnabled(false);
-		
 		
 		return result;
 	}
@@ -143,7 +148,21 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 		}
 	}
 	
+	@Override
+	public void onMapReady(GoogleMap map) {
+		this.map = map;
+		if (map != null) {
+			map.getUiSettings().setZoomControlsEnabled(false);
+			map.getUiSettings().setAllGesturesEnabled(false);
+		} else {
+			//TODO: Possible No Google play services installed
+		}
+
+	};
+	
 	private void setMapLocation(double lat, double lng) {
+		if (null == map) return;
+		
 		LatLng latLng = new LatLng(lat, lng);
 
 		MarkerOptions marker = new MarkerOptions();
@@ -182,5 +201,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView 
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
+	
 	
 }

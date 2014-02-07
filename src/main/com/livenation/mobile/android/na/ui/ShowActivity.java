@@ -20,7 +20,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.util.Logger;
 
 public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	private SingleEventView singleEventView;
@@ -36,11 +35,12 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 		getActionBar().setDisplayShowCustomEnabled(true);
 		
 		getActionBar().setCustomView(R.layout.actionbar_show_custom);
-		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		init();
-		
-		Intent data = getIntent();
-		Logger.log("ShowActivity", "Showing: " + data.getStringExtra(SingleEventPresenter.PARAMETER_EVENT_ID));
 	}
 	
 	@Override

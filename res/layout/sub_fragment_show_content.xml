@@ -37,16 +37,10 @@
             android:layout_marginRight="@dimen/show_calendar_margin_right" />
 
         <FrameLayout
+            android:id="@+id/fragment_show_map_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="@drawable/show_map_foreground" >
-
-            <fragment
-                android:id="@+id/fragment_show_map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/fragment_show_map_height" />
-        </FrameLayout>
+            android:layout_height="@dimen/fragment_show_map_height"
+            android:foreground="@drawable/show_map_foreground" />
 
         <View
             android:layout_width="match_parent"

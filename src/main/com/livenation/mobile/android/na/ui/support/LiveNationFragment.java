@@ -8,9 +8,11 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -19,8 +21,18 @@ import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
-public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract {
-
+public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract, StateEnhancer {
+	
+	private Bundle state;
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (null != state) {
+			applyInstanceState(state);
+		}
+	}
+	
 	@Override
 	public LiveNationApiService getApiService() {
 		return LiveNationApplication.get().getServiceApi();
@@ -46,11 +58,26 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 		return LiveNationApplication.get().getFeaturePresenter();
 	}
 	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		state = new Bundle();
+		onSaveInstanceState(state);
+	}
+	
+	@Override
+	public void applyInstanceState(Bundle state) {}
+	
+		
 	public void addFragment(int containerId, Fragment fragment, String tag) {
 		FragmentManager fragmentManager = getChildFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 		transaction.add(containerId, fragment, tag);
 		transaction.commit();
+	}
+	
+	public String getViewKey(View view) {
+		return Integer.valueOf(view.getId()).toString();
 	}
 
 	

@@ -20,6 +20,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,17 +43,25 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 public class ShowsListFragment extends LiveNationFragment implements EventsView, OnItemClickListener  {
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
-
+	
 	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		adapter = new EventAdapter(getActivity());
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
 		listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
-		adapter = new EventAdapter(getActivity());
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
+		listView.setEmptyView(view.findViewById(android.R.id.empty));
+				
 		return view;
 	}
 	
@@ -63,6 +72,21 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
+		outState.putParcelable(getViewKey(listView), listState);
+	}	
+	
+	@Override
+	public void applyInstanceState(Bundle state) {
+		Parcelable listState = state.getParcelable(getViewKey(listView));
+		if (null != listState) {
+			listView.getWrappedList().onRestoreInstanceState(listState);
+		}
+	}
+	
+	
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
