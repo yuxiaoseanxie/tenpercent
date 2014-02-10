@@ -4,54 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <include
+        android:id="@+id/fragment_venue_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        layout="@layout/fragment_venue_header" >
+    </include>
 
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/fragment_venue_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff777777"
-            android:minHeight="200dp"
-            android:scaleType="centerCrop" >
-        </com.android.volley.toolbox.NetworkImageView>
-
-        <TextView
-            android:id="@+id/fragment_venue_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/fragment_venue_image"
-            android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
-            android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="@string/mock_placeholder_venue_title_1"
-            android:textAppearance="@style/show_artist_title" >
-        </TextView>
-
-        <include
-            android:id="@+id/fragment_venue_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fragment_venue_image"
-            android:layout_marginBottom="@dimen/venue_detail_margin_bottom"
-            android:layout_marginLeft="@dimen/venue_detail_margin_left"
-            android:layout_marginRight="@dimen/venue_detail_margin_right"
-            android:layout_marginTop="@dimen/venue_detail_margin_top"
-            layout="@layout/sub_show_venue_details"
-            android:background="@drawable/ui_underscore_background" >
-        </include>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fragment_venue_details" >
-
-            <!-- Empty view to kick the marginBottom attribute from the VenueDetail into action -->
-        </Space>
-    </RelativeLayout>
+    <include
+        android:id="@+id/fragment_venue_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/venue_detail_margin_bottom"
+        android:layout_marginLeft="@dimen/venue_detail_margin_left"
+        android:layout_marginRight="@dimen/venue_detail_margin_right"
+        android:layout_marginTop="@dimen/venue_detail_margin_top"
+        layout="@layout/sub_show_venue_details"
+        android:background="@drawable/ui_underscore_background" >
+    </include>
 
     <TextView
-        style="@style/ui_header1"
+        style="@style/ui_header_top_accent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/venue_upcoming_shows" />
