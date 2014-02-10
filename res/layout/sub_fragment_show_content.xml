@@ -14,7 +14,7 @@
             layout="@layout/fragment_show_header" />
 
         <TextView
-            style="@style/ui_header1"
+            style="@style/ui_header_top_accent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/show_details" />

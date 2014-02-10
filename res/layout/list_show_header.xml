@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        style="@style/ui_header1"
+        style="@style/ui_header_top_accent"
         android:id="@+id/list_show_header_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
