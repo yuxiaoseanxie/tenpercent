@@ -10,7 +10,6 @@ package com.livenation.mobile.android.na.ui;
 
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,10 +20,8 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
-import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.util.Logger;
 
 public class VenueActivity extends FragmentActivity implements SingleVenueView, EventsView  {
 	private SingleVenueView singleVenueView;
@@ -38,10 +35,12 @@ public class VenueActivity extends FragmentActivity implements SingleVenueView, 
 		if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
 			getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 		init();
-		
-		Intent data = getIntent();
-		Logger.log("VenueActivity", "Showing: " + data.getStringExtra(VenueFragment.PARAMETER_VENUE_ID));
 	}
 	
 	@Override
