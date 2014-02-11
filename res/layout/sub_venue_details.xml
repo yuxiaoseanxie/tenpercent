@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/venue_detail_location_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/venue_detail_image_min_height"
+            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/venue_location" />
+
+        <TextView
+            android:id="@+id/venue_detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mock_venue_title_linebreak_1"
+            android:textAppearance="@style/venue_detail_text" />
+    </LinearLayout>
+    
+
+    <LinearLayout
+        android:id="@+id/venue_detail_phone_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/venue_detail_location_box"
+        android:layout_marginTop="@dimen/venue_detail_item_spacing"
+        android:gravity="top"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/venue_detail_image_min_height"
+            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/venue_phone" />
+
+        <TextView
+            android:id="@+id/venue_detail_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mock_venue_telephone"
+            android:textAppearance="@style/venue_detail_text" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/venue_detail_venue_info_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/venue_detail_phone_box"
+        android:layout_marginLeft="@dimen/venue_detail_link_text_margin_left"
+        android:text="@string/venue_detail_link"
+        android:textAppearance="@style/venue_detail_link_text" />
+
+</RelativeLayout>

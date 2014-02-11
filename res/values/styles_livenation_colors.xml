@@ -3,7 +3,7 @@
 	<color name="windowBackground">#ffffff</color>
 	<color name="background_gray">#999999</color>
 	<color name="featured_text">#ffffff</color>
-	<color name="list_show_date_text_highlight">#ff0000</color>
+	<color name="list_show_date_text_highlight">#e11716</color>
 	<color name="show_artist_title">#ffffff</color>
 	<color name="show_venue_text">#616161</color>
 	<color name="view_artist_title">#000000</color>
@@ -16,5 +16,5 @@
 	<color name="ticketbar_text_color_pressed">#444444</color>
 	<color name="ticketbar_text_color_focused">#ffc000</color>
 	<color name="venue_venue_title">#000000</color>
-	
+	<color name="venue_detail_text_color">#636363</color>
 </resources>

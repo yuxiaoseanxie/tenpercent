@@ -2,20 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/list_show_item_min_height"
-    android:padding="@dimen/list_show_item_padding" >
+    android:minHeight="@dimen/list_show_item_min_height" >
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
         android:id="@+id/view_venue_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true" />
+        android:layout_marginTop="@dimen/venue_show_date_margin_top"
+        android:layout_marginLeft="@dimen/venue_show_date_margin_left"
+        android:layout_marginRight="@dimen/venue_show_date_margin_right" />
 
     <TextView
         android:id="@+id/view_venue_show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/list_show_item_event_title_left_margin"
+        android:layout_alignTop="@id/view_venue_show_date"
         android:layout_toRightOf="@id/view_venue_show_date"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/view_venue_show_title" />
@@ -28,5 +29,13 @@
         android:layout_below="@id/view_venue_show_title"
         android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/view_venue_show_time" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignLeft="@id/view_venue_show_title"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/view_venue_show_time"
+        android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>
