@@ -19,5 +19,5 @@
     <string name="mock_date_month">NOV</string>
     
     <string name="mock_show_calendar_date_time">Fri Dec 3. 2013 at 8:00PM</string>
-
+    <string name="mock_account_footer_location_detail">San Francisco, CA</string>
 </resources>
