@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/account_detail_min_height" >
 
-    <TextView
-        android:id="@+id/textView1"
+    <ImageView
+        android:id="@+id/account_footer_location_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Footer"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignTop="@+id/account_detail_text_container"
+        android:layout_centerVertical="true"
+        android:minWidth="@dimen/account_detail_image_min_width"
+        android:scaleType="center"
+        android:src="@drawable/your_location" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/account_detail_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@id/account_footer_location_image"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/account_detail_location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_detail_location_title"
+            android:textAppearance="@style/account_detail_header" />
+
+        <TextView
+            android:id="@+id/account_detail_location_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_detail_location_detail"
+            android:textAppearance="@style/account_footer_detail" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/account_detail_location_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/account_footer_change_margin_right"
+        android:text="@string/account_detail_location_change"
+        android:textAppearance="@style/account_footer_change" />
+
+</RelativeLayout>

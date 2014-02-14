@@ -17,4 +17,8 @@
 	<color name="ticketbar_text_color_focused">#ffc000</color>
 	<color name="venue_venue_title">#000000</color>
 	<color name="venue_detail_text_color">#636363</color>
+	
+	<color name="text_primary">#000000</color>
+	<color name="text_secondary">#636363</color>
+	
 </resources>

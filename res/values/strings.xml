@@ -26,4 +26,12 @@
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
     
+    <string name="account_your_orders_title">Your Orders</string>
+    <string name="account_favorite_venues_title">Favorite Venues</string>
+    <string name="account_favorite_artists_title">Favorite Artists</string>
+    <string name="account_your_orders_no_upcoming">You have no upcoming shows</string>
+    <string name="account_detail_location_title">Your Location</string>
+    <string name="account_detail_location_detail">San Francisco, CA</string>
+    <string name="account_detail_location_change">Change</string>
+    
 </resources>

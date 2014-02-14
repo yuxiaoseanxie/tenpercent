@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="livenation_app_text" parent="@android:style/TextAppearance"/>
-    
+    <style name="livenation_app_text" parent="@android:style/TextAppearance" />
+
     <style name="featured_see_all" parent="@style/livenation_app_text">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/featured_text</item>
@@ -47,7 +47,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/view_artist_title</item>
     </style>
-    
+
     <style name="ui_header1_text" parent="@style/livenation_app_text">
         <item name="android:textSize">15sp</item>
         <item name="android:textAllCaps">true</item>
@@ -59,27 +59,27 @@
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/show_venue_text</item>
     </style>
-    
+
     <style name="show_venue_text_title" parent="@style/show_venue_text">
         <item name="android:textStyle">bold|italic</item>
     </style>
-    
+
     <style name="venue_detail_link_text" parent="@style/livenation_app_text">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/ui_header1_text</item>
         <item name="android:textSize">14sp</item>
     </style>
-    
+
     <style name="venue_detail_text" parent="@style/livenation_app_text">
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/venue_detail_text_color</item>
     </style>
-    
+
     <style name="venue_detail_date_time_text" parent="@style/livenation_app_text">
         <item name="android:textStyle">bold</item>
-    </style>  
-      
+    </style>
+
     <style name="view_venue_show_title" parent="@style/livenation_app_text">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
@@ -89,22 +89,46 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/view_venue_show_time</item>
     </style>
-    
+
     <style name="ticketbar_text" parent="@style/livenation_app_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
     </style>
-    
-    
+
     <style name="tab_title_text" parent="@style/livenation_app_text">
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="venue_venue_title" parent="@style/livenation_app_text">
         <item name="android:textSize">30sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/venue_venue_title</item>
     </style>
+
+    <style name="account_detail_header" parent="@style/livenation_app_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="account_detail_detail" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="account_footer_detail" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ui_header1_text</item>
+    </style>
+
+    <style name="account_footer_change" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#bbbbbb</item>
+    </style>
+
 </resources>

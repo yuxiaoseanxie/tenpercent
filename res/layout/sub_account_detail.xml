@@ -4,11 +4,108 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Detail"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/account_detail_min_height" >
+
+        <ImageView
+            android:id="@+id/account_detail_image_your_orders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:minWidth="@dimen/account_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/your_orders" />
+
+        <LinearLayout
+            android:id="@+id/account_detail_text_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/account_detail_image_your_orders"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/account_detail_text_your_orders_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_your_orders_title"
+                android:textAppearance="@style/account_detail_header" />
+
+            <TextView
+                android:id="@+id/account_detail_text_your_orders_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_your_orders_no_upcoming"
+                android:textAppearance="@style/account_detail_detail" />
+        </LinearLayout>
+
+        <View
+            style="@style/ui_underscore"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/underscore_container_height"
+            android:layout_alignLeft="@id/account_detail_text_container"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/account_detail_min_height" >
+
+        <ImageView
+            android:id="@+id/account_detail_image_favorite_artists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:minWidth="@dimen/account_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/favorite_artists" />
+
+        <TextView
+            android:id="@+id/account_detail_text_favorite_artists_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/account_detail_image_favorite_artists"
+            android:text="@string/account_favorite_artists_title"
+            android:textAppearance="@style/account_detail_header" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/underscore_container_height"
+            android:layout_alignLeft="@id/account_detail_text_favorite_artists_title"
+            android:layout_alignParentBottom="true"
+            style="@style/ui_underscore" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/account_detail_min_height" >
+
+        <ImageView
+            android:id="@+id/account_detail_image_favorite_venues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:minWidth="@dimen/account_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/favorite_venues" />
+
+        <TextView
+            android:id="@+id/account_detail_text_favorite_venues_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/account_detail_image_favorite_venues"
+            android:text="@string/account_favorite_venues_title"
+            android:textAppearance="@style/account_detail_header" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/underscore_container_height"
+            android:layout_alignLeft="@id/account_detail_text_favorite_venues_title"
+            android:layout_alignParentBottom="true"
+            style="@style/ui_underscore" />
+    </RelativeLayout>
 
 </LinearLayout>

@@ -53,5 +53,9 @@
     <dimen name="show_calendar_image_margin_right">10dp</dimen>
     <dimen name="ui_ticketbar_height">50dp</dimen>
     <dimen name="ui_tab_height">48dp</dimen>
-    
+    <dimen name="account_detail_image_min_height">48dp</dimen>
+    <dimen name="account_detail_image_min_width">56dp</dimen>
+    <dimen name="account_detail_min_height">59dp</dimen>
+    <dimen name="account_footer_change_margin_right">15dp</dimen>
+    <dimen name="underscore_container_height">5dp</dimen>
 </resources>
