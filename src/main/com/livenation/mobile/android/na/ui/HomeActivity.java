@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 
-public class LandingActivity extends FragmentActivity {
+public class HomeActivity extends FragmentActivity {
 	private ActionBarDrawerToggle drawerToggle;
 	private FragmentTabHost tabHost;
 	
@@ -40,7 +40,7 @@ public class LandingActivity extends FragmentActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
 		DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
-		drawerToggle = new ActionBarDrawerToggle(LandingActivity.this, rootView,
+		drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
 											R.drawable.ic_drawer, 
 											R.string.actionbar_drawer_open,
 											R.string.actionbar_drawer_close);
@@ -55,21 +55,21 @@ public class LandingActivity extends FragmentActivity {
 		TabSpec tabSpec;
 		
 		title = getString(R.string.tab_title_all_shows);
-		view = createTab(LandingActivity.this, title);
+		view = createTab(HomeActivity.this, title);
 		tabSpec = tabHost.newTabSpec("all_shows");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec,
 				AllShowsFragment.class, null);
 		
 		title = getString(R.string.tab_title_nearby);
-		view = createTab(LandingActivity.this, title);
+		view = createTab(HomeActivity.this, title);
 		tabSpec = tabHost.newTabSpec("nearby");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec,
 				Fragment.class, null);
 		
 		title = getString(R.string.tab_title_your_shows);
-		view = createTab(LandingActivity.this, title);
+		view = createTab(HomeActivity.this, title);
 		tabSpec = tabHost.newTabSpec("your_shows");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);

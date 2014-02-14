@@ -85,7 +85,7 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	}
 
 	private void navigateUp() {
-		Intent intent = new Intent(ShowActivity.this, LandingActivity.class);
+		Intent intent = new Intent(ShowActivity.this, HomeActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
