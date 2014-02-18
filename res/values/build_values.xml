@@ -2,4 +2,5 @@
 <resources>
     <string name="release_cert_api_key"></string>
     <string name="charlies_debug_cert_api_key">AIzaSyB-m9XKAyFJRPIfzBMGZRJQ-yOeFzyTdKM</string>
+    <string name="facebook_app_id">387261387994194</string>
 </resources>

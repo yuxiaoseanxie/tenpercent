@@ -76,6 +76,13 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 		transaction.commit();
 	}
 	
+	public void removeFragment(Fragment fragment) {
+		FragmentManager fragmentManager = getChildFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.remove(fragment);
+		transaction.commit();
+	}
+	
 	public String getViewKey(View view) {
 		return Integer.valueOf(view.getId()).toString();
 	}
