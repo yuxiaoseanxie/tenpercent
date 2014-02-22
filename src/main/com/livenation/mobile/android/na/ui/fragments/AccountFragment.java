@@ -15,14 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.models.User;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenter;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountFragment extends LiveNationFragment implements AccountUserView {
-	private AccountPresenter accountProviderPresenter = new AccountPresenter();
+	private AccountPresenter accountProviderPresenter = new AccountPresenter(LiveNationApplication.get().getSsoManager());
 	private Fragment profileFragment;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

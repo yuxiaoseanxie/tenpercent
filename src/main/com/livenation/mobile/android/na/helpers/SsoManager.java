@@ -1,91 +1,94 @@
 package com.livenation.mobile.android.na.helpers;
 
+import java.lang.ref.WeakReference;
+
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.text.TextUtils;
 
-import com.livenation.mobile.android.na.models.User;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
-public class SsoManager {
+public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	public static final int SSO_FACEBOOK = 0;
 	public static final int SSO_GOOGLE = 1;
-	private FacebookSsoProvider facebookSso = new FacebookSsoProvider();
-	private final PersistenceProvider<String> persistance = new PreferencePersistence("sso");
-	private final String AUTH_TOKEN = "auth_token";
-	private final String AUTH_SSO_PROVIDER_ID = "sso_provider_id";
+	private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
+	private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
+	private final PersistenceProvider<String> persistance = new PreferencePersistence("auth_configuration");
+	private final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
+	private final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
 	private final String USER_ID = "user_id";
 	private final String USER_NAME = "user_name";
 	private final String USER_EMAIL = "user_email";
 	private final String USER_PIC_URL = "user_pic_url";
+	private WeakReference<Activity> weakActivity;
 	
-	public Intent getSignInIntent(int ssoProviderId, Activity activity) {
-		SsoProvider ssoProvider = getSsoProvider(ssoProviderId, activity);
-		return ssoProvider.getSignInIntent(activity);
+	@Override
+	public Activity getActivity() {
+		return weakActivity.get();
 	}
 	
-	
-	public void logout(Context context) {
-		AuthToken authToken = getAuthToken(context);
-		if (null == authToken) {
-			//not logged in
-			return;
-		}
-		int ssoProviderId = authToken.getSsoProviderId();
-		logout(ssoProviderId, context);
-	}
-	
-	private void logout(int ssoProviderId, Context context) {
-		SsoProvider ssoProvider = getSsoProvider(ssoProviderId, context);
-		ssoProvider.logout();
-	}
-	
-	private SsoProvider getSsoProvider(int ssoProviderId, Context context) {
-		switch (ssoProviderId) {
-		case SSO_FACEBOOK:
-			return facebookSso;
-		default:
-			throw new IllegalArgumentException("Unknown SSO provider id: " + ssoProviderId);
+	public void logout(Activity activity) {
+		ApiSsoProvider ssoProvider = getConfiguredSsoProvider(activity);
+		if (ssoProvider != null) {
+			ssoProvider.clearSession();
 		}
 	}
 	
-	public void saveAuthToken(int ssoProviderId, String token, Context context) {
-		persistance.write(AUTH_TOKEN, token, context);
+	public UiApiSsoProvider getConfiguredSsoProvider(Context context) {
+		AuthConfiguration authConfig = getAuthConfiguration(context);
+		if (null == authConfig) {
+			return null;
+		}
+		int ssoProviderId = authConfig.getSsoProviderId();
+		return getSsoProvider(ssoProviderId, context);
+	}
+	
+	public void saveAuthConfiguration(int ssoProviderId, String token, Context context) {
+		persistance.write(PARAMETER_ACCESS_TOKEN_KEY, token, context);
 		String ssoIdValue = Integer.valueOf(ssoProviderId).toString();
-		persistance.write(AUTH_SSO_PROVIDER_ID, ssoIdValue, context);
+		persistance.write(PARAMETER_SSO_PROVIDER_ID_KEY, ssoIdValue, context);
 	}
 	
-	public AuthToken getAuthToken(Context context) {
-		String authToken = (String) persistance.read(AUTH_TOKEN, context);
-		String ssoId = persistance.read(AUTH_SSO_PROVIDER_ID, context);
+	public AuthConfiguration getAuthConfiguration(Context context) {
+		String accessToken = (String) persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
+		String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
+		
+		if (TextUtils.isEmpty(ssoId)) {
+			return null;
+		}
+		
 		Integer ssoIdValue = Integer.valueOf(ssoId);
-		return new AuthToken(ssoIdValue, authToken);
+		return new AuthConfiguration(ssoIdValue, accessToken);
 	}
 	
-	public void removeAuthToken(Context context) {
-		persistance.remove(AUTH_TOKEN, context);
-		persistance.remove(AUTH_SSO_PROVIDER_ID, context);
+	public void removeAuthConfiguration(Context context) {
+		persistance.remove(PARAMETER_ACCESS_TOKEN_KEY, context);
+		persistance.remove(PARAMETER_SSO_PROVIDER_ID_KEY, context);
 	}
 	
 	public void saveUser(User user, Context context) {
 		if (null == user) throw new IllegalArgumentException("User is null");
 		persistance.write(USER_ID, user.getId(), context);
-		persistance.write(USER_NAME, user.getName(), context);
+		persistance.write(USER_NAME, user.getDisplayName(), context);
 		persistance.write(USER_EMAIL, user.getEmail(), context);
-		persistance.write(USER_PIC_URL, user.getPictureUrl(), context);
+		persistance.write(USER_PIC_URL, user.getUrl(), context);
 	}
 	
 	public User readUser(Context context) {
 		String userId = persistance.read(USER_ID, context);
 		String userName = persistance.read(USER_NAME, context);
+		
 		String userEmail = persistance.read(USER_EMAIL, context);
 		String userPicUrl = persistance.read(USER_PIC_URL, context);
 		
 		if (null == userId) return null;
 		
-		User user = new User(userId);
-		user.setName(userName);
+		User user = new User();
+		user.setId(userId);
+		user.setDisplayName(userName);
 		user.setEmail(userEmail);
-		user.setPictureUrl(userPicUrl);
+		user.setUrl(userPicUrl);
 		
 		return user;
 	}
@@ -97,21 +100,57 @@ public class SsoManager {
 		persistance.remove(USER_PIC_URL, context);
 	}
 	
-	public static class AuthToken {
+	public static int getProviderId(ApiSsoProvider provider) {
+		if (provider instanceof FacebookSsoProvider) {
+			return SSO_FACEBOOK;
+		}
+		if (provider instanceof GoogleSsoProvider) {
+			return SSO_GOOGLE;
+		}
+		throw new IllegalArgumentException("Unknown provider type");
+	}
+	
+	public static class AuthConfiguration {
 		private final int ssoProviderId;
-		private final String authToken;
+		private final String accessToken;
 		
-		public AuthToken(int ssoProviderId, String authToken) {
+		public AuthConfiguration(int ssoProviderId, String accessToken) {
 			this.ssoProviderId = ssoProviderId;
-			this.authToken = authToken;
+			this.accessToken = accessToken;
 		}
 		
 		public int getSsoProviderId() {
 			return ssoProviderId;
 		}
 		
-		public String getAuthToken() {
-			return authToken;
+		public String getAccessToken() {
+			return accessToken;
 		}
 	}
+	
+	/**
+	 * Force anything that wants to use the SsoProvider to supply an Activity reference. 
+	 * This means that the SSOManager is always tracking the latest activity. 
+	 * 
+	 * The SSOProviders do not store the activity directly, instead when/if they need it they 
+	 * request it from the SSOManager. 
+	 * 
+	 * Since this Activity is stored in a weakreference, the SSOManager will not cause a 
+	 * context/activity memory leak. 
+	 * 
+	 */
+	public UiApiSsoProvider getSsoProvider(int ssoProviderId, Context context) {
+		if (context instanceof Activity) {
+			weakActivity = new WeakReference<Activity>((Activity)context);
+		}
+		switch (ssoProviderId) {
+		case SSO_FACEBOOK:
+			return facebookSso;
+		case SSO_GOOGLE:
+			return googleSso;
+		default:
+			throw new IllegalArgumentException("Unknown SSO provider id: " + ssoProviderId);
+		}
+	}
+
 }

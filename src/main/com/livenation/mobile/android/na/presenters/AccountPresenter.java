@@ -2,32 +2,32 @@ package com.livenation.mobile.android.na.presenters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.na.models.User;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
-import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.presenters.views.AccountUserView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountPresenter implements Presenter<AccountUserView> {
-	private final FacebookProfilePresenter facebookProfilePresenter;
+	private final SsoProfilePresenter ssoProfilePresenter;
 	private final SsoManager ssoManager;
-	private final SetAuthTokenPresenter setAuthTokenPresenter;
-	private final SetUserPresenter setUserPresenter;
+	private final SaveAuthTokenPresenter saveAuthTokenPresenter;
+	private final SaveUserPresenter saveUserPresenter;
 	private final SignOutPresenter signOutPresenter;
 
 	private static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
 	
-	public AccountPresenter() {
-		ssoManager = new SsoManager();
-		facebookProfilePresenter  = new FacebookProfilePresenter();
+	public AccountPresenter(SsoManager ssoManager) {
+		this.ssoManager = ssoManager;
 		
-		setAuthTokenPresenter = new SetAuthTokenPresenter(ssoManager);
-		setUserPresenter = new SetUserPresenter(ssoManager);
+		ssoProfilePresenter  = new SsoProfilePresenter();
+		
+		saveAuthTokenPresenter = new SaveAuthTokenPresenter(ssoManager);
+		saveUserPresenter = new SaveUserPresenter(ssoManager);
 		signOutPresenter = new SignOutPresenter(ssoManager);
 	}
 	
@@ -37,24 +37,16 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		view.setUser(user);
 	}
 
-	public Presenter<AccountUserView> getActiveProfilePresenter() {
-		return facebookProfilePresenter;
+	public Presenter<AccountUserView> getProfilePresenter() {
+		return ssoProfilePresenter;
 	}
-		
-	public Intent getFacebookSigninIntent(Activity activity) {
-		return ssoManager.getSignInIntent(SsoManager.SSO_FACEBOOK, activity);
-	}
-	
-	public FacebookProfilePresenter getFacebookProfilePresenter() {
-		return facebookProfilePresenter;
+
+	public SaveAuthTokenPresenter getSetAuthTokenPresenter() {
+		return saveAuthTokenPresenter;
 	}
 	
-	public SetAuthTokenPresenter getSetAuthTokenPresenter() {
-		return setAuthTokenPresenter;
-	}
-	
-	public SetUserPresenter getSetUserPresenter() {
-		return setUserPresenter;
+	public SaveUserPresenter getSetUserPresenter() {
+		return saveUserPresenter;
 	}
 	
 	public SignOutPresenter getSignOutPresenter() {
@@ -67,43 +59,44 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		return bundle;
 	}
 	
-	public static class SetAuthTokenPresenter extends BaseSsoPresenter implements Presenter<AccountSaveAuthTokenView> {
-		private static String ARG_AUTH_TOKEN_KEY = "auth_token";
+	public static class SaveAuthTokenPresenter extends BaseSsoPresenter implements Presenter<AccountSaveAuthTokenView> {
+		private static String ARG_ACCESS_TOKEN_KEY = "access_token";
 		private static String ARG_SSO_PROVIDER_ID = "sso_id";
 				
-		public SetAuthTokenPresenter(SsoManager ssoManager) {
+		public SaveAuthTokenPresenter(SsoManager ssoManager) {
 			super(ssoManager);
 		}		
 		
 		@Override
 		public void initialize(Context context, Bundle args,
 				AccountSaveAuthTokenView view) {
-			Integer providerId = args.getInt(ARG_SSO_PROVIDER_ID);
-			String authToken = args.getString(ARG_AUTH_TOKEN_KEY);
 			
-			if (null == authToken) {
-				ssoManager.removeAuthToken(context);
-				return;
+			if (null == args) {
+				ssoManager.removeAuthConfiguration(context);
+				return;			
 			}
 			
-			ssoManager.saveAuthToken(providerId, authToken, context);
+			Integer providerId = args.getInt(ARG_SSO_PROVIDER_ID);
+			String accessToken = args.getString(ARG_ACCESS_TOKEN_KEY);
+			
+			ssoManager.saveAuthConfiguration(providerId, accessToken, context);
 			view.onSaveAuthTokenSuccess();
 		}
-
-		public Bundle getFaceBookArgumentsBundle(String accessToken) {
+	
+		public Bundle getArgumentsBundle(int providerId, String accessToken) {
 			Bundle bundle = new Bundle();
 			
-			bundle.putString(ARG_AUTH_TOKEN_KEY, accessToken);
-			bundle.putInt(ARG_SSO_PROVIDER_ID, SsoManager.SSO_FACEBOOK);
+			bundle.putString(ARG_ACCESS_TOKEN_KEY, accessToken);
+			bundle.putInt(ARG_SSO_PROVIDER_ID, providerId);
 			
 			return bundle;
 		}
 	}
 	
-	public static class SetUserPresenter extends BaseSsoPresenter implements Presenter<AccountSaveUserView> {
+	public static class SaveUserPresenter extends BaseSsoPresenter implements Presenter<AccountSaveUserView> {
 		private static String ARG_USER = "sso_user";
 		
-		public SetUserPresenter(SsoManager ssoManager) {
+		public SaveUserPresenter(SsoManager ssoManager) {
 			super(ssoManager);
 		}
 		
@@ -118,7 +111,7 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 			User user = (User) args.getSerializable(ARG_USER);
 			ssoManager.saveUser(user, context);
 			view.onSaveUserSuccess(user);
-		}
+		}		
 	}
 	
 	public static class SignOutPresenter extends BaseSsoPresenter implements Presenter<AccountSignOutView> {
@@ -129,15 +122,15 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		
 		@Override
 		public void initialize(Context context, Bundle args, AccountSignOutView view) {
-			ssoManager.logout(context);
-			ssoManager.removeAuthToken(context);
+			ssoManager.logout((Activity) context);
+			ssoManager.removeAuthConfiguration(context);
 			ssoManager.removeUser(context);
 			view.onSignOut();
 		}
 		
 	}
 	
-	public static class FacebookProfilePresenter implements Presenter<AccountUserView> {
+	public static class SsoProfilePresenter implements Presenter<AccountUserView> {
 		
 		@Override
 		public void initialize(Context context, Bundle args,
@@ -157,5 +150,6 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 			this.ssoManager = ssoManager;
 		}
 	}
+
 
 }
