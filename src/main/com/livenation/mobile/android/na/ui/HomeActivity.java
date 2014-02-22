@@ -193,6 +193,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 			if (!allowForeground) {
 				//Lets try again, but this time with foreground activities that may resolve the session error
 				Intent intent = new Intent(HomeActivity.this, SsoActivity.class);
+				intent.putExtra(SsoActivity.ARG_PROVIDER_ID, ssoProvider.getId());
 				startActivityForResult(intent, RC_SSO_REPAIR);
 			}
 		}
