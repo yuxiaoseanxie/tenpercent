@@ -8,11 +8,12 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.models.User;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenter;
-import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountUserFragment extends LiveNationFragment implements
 		AccountUserView, AccountSignOutView {
@@ -25,7 +26,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		presenter = new AccountPresenter();
+		presenter = new AccountPresenter(LiveNationApplication.get().getSsoManager());
 	}
 	
 	@Override
@@ -48,9 +49,9 @@ public class AccountUserFragment extends LiveNationFragment implements
 
 	@Override
 	public void setUser(User user) {
-		name.setText(user.getName());
+		name.setText(user.getDisplayName());
 		email.setText(user.getEmail());
-		image.setImageUrl(user.getPictureUrl(), getImageLoader());
+		image.setImageUrl(user.getUrl(), getImageLoader());
 	}
 
 	@Override

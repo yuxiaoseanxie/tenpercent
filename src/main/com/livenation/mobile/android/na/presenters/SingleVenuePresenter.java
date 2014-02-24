@@ -9,6 +9,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseState.StateListen
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
@@ -66,7 +67,7 @@ public class SingleVenuePresenter extends
 			apiParams = ApiParameters.createSingleVenueParameters();
 
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
-			long venueId = Venue.getNumericVenueId(venueIdRaw);
+			long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
 			apiParams.setVenueId(venueId);
 		}
 
