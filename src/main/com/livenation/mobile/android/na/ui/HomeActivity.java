@@ -31,6 +31,7 @@ import com.livenation.mobile.android.na.presenters.AccountPresenter;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
+import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
@@ -74,7 +75,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec = tabHost.newTabSpec("nearby");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec,
-				Fragment.class, null);
+				NearbyVenuesFragment.class, null);
 		
 		title = getString(R.string.tab_title_your_shows);
 		view = createTab(HomeActivity.this, title);

@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
+import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract, StateEnhancer {
@@ -56,6 +57,11 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 	@Override
 	public FeaturePresenter getFeaturePresenter() {
 		return LiveNationApplication.get().getFeaturePresenter();
+	}
+	
+	@Override
+	public NearbyVenuesPresenter getNearbyVenuesPresenter() {
+		return LiveNationApplication.get().getNearbyVenuesPresenter();
 	}
 	
 	@Override

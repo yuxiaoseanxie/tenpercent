@@ -18,6 +18,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
+import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -37,6 +38,7 @@ public class LiveNationApplication extends Application {
 	private SingleVenuePresenter singleVenuePresenter;
 	private VenueEventsPresenter venueEventsPresenter;
 	private AccountPresenter accountPresenter;
+	private NearbyVenuesPresenter nearbyVenuesPresenter;
 	private SsoManager ssoManager;
 	
 	public static LiveNationApplication get() {
@@ -61,6 +63,7 @@ public class LiveNationApplication extends Application {
 		singleVenuePresenter = new SingleVenuePresenter();
 		venueEventsPresenter = new VenueEventsPresenter();
 		accountPresenter = new AccountPresenter(getSsoManager());
+		nearbyVenuesPresenter = new NearbyVenuesPresenter();
 		
 		locationHelper.prepareCache(getApplicationContext());
 		requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -99,6 +102,10 @@ public class LiveNationApplication extends Application {
 	
 	public VenueEventsPresenter getVenueEventsPresenter() {
 		return venueEventsPresenter;
+	}
+	
+	public NearbyVenuesPresenter getNearbyVenuesPresenter() {
+		return nearbyVenuesPresenter;
 	}
 	
 	public AccountPresenter getAccountPresenter() {
