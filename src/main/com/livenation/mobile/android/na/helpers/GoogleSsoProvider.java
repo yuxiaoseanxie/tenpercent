@@ -227,7 +227,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
 		private GoogleApiClient googleApiClient;
 		private boolean intentInProgress = false;
-		private final int RC_SIGN_IN = 0;
+		private final int RC_SIGN_IN = 600613;
 
 		public SessionState(Activity activity, boolean allowForeground,
 				BaseSessionState.SessionPayload<GoogleApiClient> sessionPayload) {
