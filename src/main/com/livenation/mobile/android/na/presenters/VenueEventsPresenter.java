@@ -12,8 +12,8 @@ import com.livenation.mobile.android.na.presenters.support.BaseState.StateListen
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.VenueEventsParameters;
 
@@ -71,7 +71,7 @@ public class VenueEventsPresenter extends
 			apiParams = ApiParameters.createVenueEventsParameters();
 
 			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
-			apiParams.setVenueId(Venue.getNumericVenueId(venueIdRaw));	
+			apiParams.setVenueId(DataModelHelper.getNumericEntityId(venueIdRaw));	
 			
 			if (args.containsKey(PARAMETER_LIMIT)) {
 				int limit = args.getInt(PARAMETER_LIMIT);

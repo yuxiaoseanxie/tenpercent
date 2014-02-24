@@ -17,6 +17,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseState.StateListen
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleEventParameters;
@@ -73,7 +74,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.Sin
 			apiParams = ApiParameters.createSingleEventParameters();
 			if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
 				String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
-				long eventId = Event.getNumericEventId(eventIdRaw);
+				long eventId = DataModelHelper.getNumericEntityId(eventIdRaw);
 				apiParams.setEventId(eventId);
 			}
 		}
