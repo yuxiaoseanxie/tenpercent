@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.util.Logger;
 
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
 	private User user;
@@ -268,7 +269,8 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 								result.getResolution().getIntentSender(), RC_SIGN_IN,
 								null, 0, 0, 0);
 					} catch (SendIntentException e) {
-						//intentInProgress = false;
+						intentInProgress = false;
+						googleApiClient.connect();
 					}
 				}
 			}
@@ -276,16 +278,16 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
 		public void onActivityResult(Activity activity, int requestCode,
 				int resultCode, Intent data) {
-			//Logger.log("Google", "OAR: request:" + requestCode + " result: " + resultCode + " connected: " +googleApiClient.isConnected() + " connecting: " + googleApiClient.isConnecting() );
+			Logger.log("Google", "OAR: request:" + requestCode + " result: " + resultCode + " connected: " +googleApiClient.isConnected() + " connecting: " + googleApiClient.isConnecting() );
 			
 			if (requestCode == RC_SIGN_IN) {
+				intentInProgress = false;
 				if (resultCode != Activity.RESULT_OK) {
 					sessionPayload.onSessionFailed();
 					return;
 				}
 
 				if (!googleApiClient.isConnected() && !googleApiClient.isConnecting()) {
-					intentInProgress = false;
 					googleApiClient.connect();
 				}
 			}
