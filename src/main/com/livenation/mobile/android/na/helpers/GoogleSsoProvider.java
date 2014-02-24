@@ -257,6 +257,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 		@Override
 		public void onConnectionFailed(ConnectionResult result) {
 			if (!allowForeground || !result.hasResolution()) {
+				intentInProgress = false;
 				sessionPayload.onSessionFailed();
 				return;
 			}
@@ -281,13 +282,13 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 			Logger.log("Google", "OAR: request:" + requestCode + " result: " + resultCode + " connected: " +googleApiClient.isConnected() + " connecting: " + googleApiClient.isConnecting() );
 			
 			if (requestCode == RC_SIGN_IN) {
-				intentInProgress = false;
 				if (resultCode != Activity.RESULT_OK) {
+					intentInProgress = false;
 					sessionPayload.onSessionFailed();
 					return;
 				}
 
-				if (!googleApiClient.isConnected() && !googleApiClient.isConnecting()) {
+				if (!googleApiClient.isConnecting()) {
 					googleApiClient.connect();
 				}
 			}
