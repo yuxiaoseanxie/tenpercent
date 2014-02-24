@@ -12,6 +12,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
+import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 public interface LiveNationFragmentContract {
@@ -21,5 +22,5 @@ public interface LiveNationFragmentContract {
 	
 	EventsPresenter getEventsPresenter();
 	FeaturePresenter getFeaturePresenter();
-	
+	NearbyVenuesPresenter getNearbyVenuesPresenter();
 }
