@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -15,7 +14,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -29,7 +27,8 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 	private final String PARAMETER_ACCESS_KEY = "google_plus_code";
 	@SuppressWarnings("unused")
 	private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
-
+	private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
+	
 	public GoogleSsoProvider(ActivityProvider activityProvider) {
 		super(activityProvider);
 	}
@@ -43,7 +42,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 		}
 
 		SessionState.SessionPayload<GoogleApiClient> payload = new GetTokenAndUserPayload(
-				getActivity(), allowForeground, GoogleSsoProvider.this) {
+				getActivity(), GoogleSsoProvider.this) {
 
 			@Override
 			public void onComplete(String accessToken, User user) {
@@ -156,21 +155,18 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 			BaseSessionState.SessionPayload<GoogleApiClient> {
 
 		private final Activity activity;
-		private final boolean allowForeground;
 		
-		
-		public GetTokenAndUserPayload(Activity activity, boolean allowForeground, 
+		public GetTokenAndUserPayload(Activity activity, 
 				SessionPayloadListener<GoogleApiClient> listener) {
 			super(listener);
 			this.activity = activity;
-			this.allowForeground = allowForeground;
 		}
 
 		@Override
 		public void run() {
 			String accessToken = null;
 			try {
-				final String SCOPE = String.format("oauth2:%s", TextUtils.join(" ", activity.getResources().getStringArray(R.array.scopes)));
+				final String SCOPE = String.format("oauth2:%s", PLUS_LOGIN_SCOPE);
 
 				accessToken = GoogleAuthUtil.getToken(activity,	Plus.AccountApi.getAccountName(getSession()), SCOPE);
 				User user = getProfileInformation(getSession());
@@ -183,10 +179,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 				onSessionFailed();
 				return;
 			} catch (UserRecoverableAuthException e) {
-				if (allowForeground) {
-					activity.startActivityForResult(e.getIntent(), 1);
-				}
-				accessToken = null;
+				throw new IllegalStateException("Initial Google Scope was not wide enough");
 			} catch (GoogleAuthException authEx) {
 				return;
 			} catch (Exception e) {
@@ -279,17 +272,15 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
 		public void onActivityResult(Activity activity, int requestCode,
 				int resultCode, Intent data) {
-			Logger.log("Google", "OAR: request:" + requestCode + " result: " + resultCode + " connected: " +googleApiClient.isConnected() + " connecting: " + googleApiClient.isConnecting() );
 			
-			if (requestCode == RC_SIGN_IN) {
-				if (resultCode != Activity.RESULT_OK) {
+			if (requestCode == RC_SIGN_IN) {	
+				if (resultCode == Activity.RESULT_OK) {
+					if (!googleApiClient.isConnecting()) {
+						googleApiClient.connect();
+					}
+				} else {
 					intentInProgress = false;
-					sessionPayload.onSessionFailed();
-					return;
-				}
-
-				if (!googleApiClient.isConnecting()) {
-					googleApiClient.connect();
+					sessionPayload.onSessionFailed();				
 				}
 			}
 		}
