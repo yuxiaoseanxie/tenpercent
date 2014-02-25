@@ -3,6 +3,8 @@ package com.livenation.mobile.android.na.helpers;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
@@ -11,13 +13,13 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
-import com.livenation.mobile.android.platform.util.Logger;
 
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
 	private User user;
@@ -266,6 +268,17 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 						intentInProgress = false;
 						googleApiClient.connect();
 					}
+				} else {
+					Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+							result.getErrorCode(), activity, RC_SIGN_IN,
+							new DialogInterface.OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									intentInProgress = false;
+									sessionPayload.onSessionFailed();
+								}
+							});
+					dialog.show();
 				}
 			}
 		}
