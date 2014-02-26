@@ -1,0 +1,2 @@
+include ':facebookSDK', 'LiveNationApp', 'LabsPlatform'
+project(':LabsPlatform').projectDir = new File(settingsDir, "../adr-libsLabsPlatform/LabsPlatform")

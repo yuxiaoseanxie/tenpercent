@@ -27,7 +27,4 @@ proguard/
 *.ipr
 *.iws
 .idea/
-
-
-#Mac
-.DS_Store
+build/
