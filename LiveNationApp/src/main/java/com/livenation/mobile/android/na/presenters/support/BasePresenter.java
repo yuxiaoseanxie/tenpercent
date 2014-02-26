@@ -18,7 +18,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.util.Logger;
 
 @SuppressWarnings("rawtypes")
-public abstract class BasePresenter<T extends BaseState> implements StateListener<T> {
+public abstract class BasePresenter<T2 extends PresenterView, T extends BaseState> implements Presenter<T2>, StateListener<T> {
 	private List<T> activeStates = new ArrayList<T>();
 	
 	public void addActiveState(T state) {
@@ -34,8 +34,17 @@ public abstract class BasePresenter<T extends BaseState> implements StateListene
 			throw new IllegalStateException("State was never registered..");
 		}
 	}
-	
-	@Override
+
+    @Override
+    public void cancel(T2 view) {
+        for (T state : activeStates) {
+            if (state.getView().equals(view)) {
+                state.cancel();
+            }
+        }
+    }
+
+    @Override
 	public void onNewState(T state) {
 		addActiveState(state);
 	}
@@ -44,8 +53,13 @@ public abstract class BasePresenter<T extends BaseState> implements StateListene
 	public void onStateReady(T state) {
 		removeActiveState(state);
 	}
-	
-	@Override
+
+    @Override
+    public void onStateCancelled(T state) {
+         removeActiveState(state);
+    }
+
+    @Override
 	public void onStateFailed(int failureCode, T state) {
 		removeActiveState(state);
 	}

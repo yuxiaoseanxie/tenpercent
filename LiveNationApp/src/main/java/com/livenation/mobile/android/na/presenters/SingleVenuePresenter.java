@@ -15,7 +15,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
 
 public class SingleVenuePresenter extends
-		BasePresenter<SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
+		BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
 		StateListener<SingleVenuePresenter.SingleVenueState> {
 	public static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "venue_id";

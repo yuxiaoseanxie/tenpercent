@@ -34,7 +34,7 @@ public class AllShowsFragment extends LiveNationFragment implements EventsView, 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+gio
 		Fragment featured = new FeaturedFragment();
 		Fragment showList = new ShowsListFragment();
 	
@@ -57,12 +57,18 @@ public class AllShowsFragment extends LiveNationFragment implements EventsView, 
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		init();
 	}
-	
-	@Override
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        deinit();
+    }
+
+    @Override
 	public void setEvents(List<Event> events) {
 		getActivity().getIntent().putExtra(EventsPresenter.INTENT_DATA_KEY, (Serializable) events);
 		showList.setEvents(events);
@@ -81,5 +87,10 @@ public class AllShowsFragment extends LiveNationFragment implements EventsView, 
 		getEventsPresenter().initialize(context, args, AllShowsFragment.this);	
 		getFeaturePresenter().initialize(context, args, AllShowsFragment.this);
 	}
+
+    private void deinit() {
+        getEventsPresenter().cancel(AllShowsFragment.this);
+        getFeaturePresenter().cancel(AllShowsFragment.this);
+    }
 	
 }

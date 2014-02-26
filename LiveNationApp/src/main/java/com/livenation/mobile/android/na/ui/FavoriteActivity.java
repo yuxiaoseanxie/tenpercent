@@ -44,8 +44,14 @@ public class FavoriteActivity extends FragmentActivity implements FavoritesView 
 		super.onStart();
 		init();
 	}
-	
-	@Override
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deinit();
+    }
+
+    @Override
 	public void onAttachFragment(Fragment fragment) {
 		super.onAttachFragment(fragment);
 		if (null == favoritesView) {
@@ -81,6 +87,10 @@ public class FavoriteActivity extends FragmentActivity implements FavoritesView 
 	private void init() {
 		getFavoritesPresenter().initialize(FavoriteActivity.this, getIntent().getExtras(), FavoriteActivity.this);		
 	}
+
+    private void deinit() {
+        getFavoritesPresenter().cancel(FavoriteActivity.this);
+    }
 	
 	private FavoritesPresenter getFavoritesPresenter() {
 		return LiveNationApplication.get().getFavoritesPresenter();

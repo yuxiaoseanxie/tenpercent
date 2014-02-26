@@ -26,7 +26,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.NearbyVenuesWithEventsParameters;
 
 public class NearbyVenuesPresenter extends
-		BasePresenter<NearbyVenuesPresenter.VenuesState> implements
+		BasePresenter<VenuesView, NearbyVenuesPresenter.VenuesState> implements
 		Presenter<VenuesView>, StateListener<NearbyVenuesPresenter.VenuesState> {
 	public static final String INTENT_DATA_KEY = NearbyVenuesPresenter.class
 			.getName();

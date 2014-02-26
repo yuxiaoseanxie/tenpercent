@@ -38,12 +38,18 @@ public class VenueActivity extends FragmentActivity implements SingleVenueView, 
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 		init();
 	}
-	
-	@Override
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deinit();
+    }
+
+    @Override
 	public void onAttachFragment(Fragment fragment) {
 		super.onAttachFragment(fragment);
 		if (null == singleVenueView) {
@@ -71,12 +77,16 @@ public class VenueActivity extends FragmentActivity implements SingleVenueView, 
 		}
 		eventsView.setEvents(events);
 	}
-	
-	
+
 	private void init() {
 		getSingleVenuePresenter().initialize(VenueActivity.this, getIntent().getExtras(), VenueActivity.this);	
 		getVenueEventPresenter().initialize(VenueActivity.this, getIntent().getExtras(), VenueActivity.this);	
 	}
+
+    private void deinit() {
+        getSingleVenuePresenter().cancel(VenueActivity.this);
+        getVenueEventPresenter().cancel(VenueActivity.this);
+    }
 	
 	private SingleVenuePresenter getSingleVenuePresenter() {
 		return LiveNationApplication.get().getSingleVenuePresenter();

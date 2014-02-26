@@ -22,7 +22,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleEventParameters;
 
-public class SingleEventPresenter extends BasePresenter<SingleEventPresenter.SingleEventState> implements
+public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleEventPresenter.SingleEventState> implements
 		Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
 	public static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "event_id";

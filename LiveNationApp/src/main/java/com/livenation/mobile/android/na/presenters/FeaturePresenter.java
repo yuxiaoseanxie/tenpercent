@@ -17,7 +17,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.TopChartParameters;
 
-public class FeaturePresenter extends BasePresenter<FeaturePresenter.FeatureState> implements Presenter<FeatureView>, StateListener<FeaturePresenter.FeatureState> {
+public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresenter.FeatureState>
+            implements Presenter<FeatureView>, StateListener<FeaturePresenter.FeatureState> {
 	public static final String INTENT_DATA_KEY = FeaturePresenter.class.getName();
 
 	@Override

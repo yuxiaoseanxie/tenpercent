@@ -38,12 +38,19 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 		init();
-	}
-	
-	@Override
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deinit();
+    }
+
+    @Override
 	public void onAttachFragment(Fragment fragment) {
 		super.onAttachFragment(fragment);
 		if (null == singleEventView) {
@@ -66,8 +73,8 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 		}
 		return true;
 	}
-	
-	@Override
+
+    @Override
 	public void setEvent(Event event) {
 		if (singleEventView == null) {
 			//TODO: Possible race condition?
@@ -79,6 +86,10 @@ public class ShowActivity extends FragmentActivity implements SingleEventView  {
 	private void init() {
 		getSingleEventPresenter().initialize(ShowActivity.this, getIntent().getExtras(), ShowActivity.this);		
 	}
+
+    private void deinit() {
+        getSingleEventPresenter().cancel(ShowActivity.this);
+    }
 	
 	private SingleEventPresenter getSingleEventPresenter() {
 		return LiveNationApplication.get().getSingleEventPresenter();

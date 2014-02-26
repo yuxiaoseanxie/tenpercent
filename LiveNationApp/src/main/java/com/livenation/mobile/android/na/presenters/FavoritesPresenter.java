@@ -20,7 +20,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
 
 public class FavoritesPresenter extends
-		BasePresenter<FavoritesPresenter.FavoritesState> implements Presenter<FavoritesView>,
+		BasePresenter<FavoritesView, FavoritesPresenter.FavoritesState> implements Presenter<FavoritesView>,
 		StateListener<FavoritesPresenter.FavoritesState> {
 	private AddFavoritePresenter addFavoritePresenter = new AddFavoritePresenter();
 	private RemoveFavoritePresenter removeFavoritePresenter = new RemoveFavoritePresenter();
@@ -106,7 +106,7 @@ public class FavoritesPresenter extends
 	}
 	
 	private static class AddFavoritePresenter extends
-			BasePresenter<AddFavoritePresenter.AddFavoriteState> implements
+			BasePresenter<FavoriteAddView, AddFavoritePresenter.AddFavoriteState> implements
 			Presenter<FavoriteAddView>,
 			StateListener<AddFavoritePresenter.AddFavoriteState> {
 
@@ -180,7 +180,7 @@ public class FavoritesPresenter extends
 	}
 	
 	private static class RemoveFavoritePresenter extends
-			BasePresenter<RemoveFavoritePresenter.RemoveFavoriteState> implements
+			BasePresenter<FavoriteRemoveView, RemoveFavoritePresenter.RemoveFavoriteState> implements
 			Presenter<FavoriteRemoveView>,
 			StateListener<RemoveFavoritePresenter.RemoveFavoriteState> {
 	

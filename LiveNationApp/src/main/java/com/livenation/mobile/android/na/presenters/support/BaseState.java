@@ -24,6 +24,7 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 	private final String presenterDataKey;
 	
 	private D result;
+    private boolean cancelled = false;
 
 	public BaseState(StateListener listener, Bundle args, String presenterDataKey, T view) {
 		this.listener = listener;
@@ -43,7 +44,7 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 		if (args.containsKey(presenterDataKey)) {
 			result = (D) args.getSerializable(presenterDataKey);
 		}
-	};
+	}
 	
 	@Override
 	public final void run() {
@@ -54,9 +55,17 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 		}
 	}
 
+    public void cancel() {
+        this.cancelled = true;
+    }
+
 	public void notifyReady() {
 		if (null == listener) return;
-		listener.onStateReady(this);
+        if (cancelled) {
+            listener.onStateCancelled(this);
+        } else {
+		    listener.onStateReady(this);
+        }
 	}
 	
 	public void notifyFailed(int failureCode) {
@@ -91,6 +100,7 @@ public abstract class BaseState<D extends Serializable, T extends PresenterView>
 	public interface StateListener<T1 extends BaseState> {
 		void onNewState(T1 state);
 		void onStateReady(T1 state);
+        void onStateCancelled(T1 state);
 		void onStateFailed(int failureCode, T1 state);
 	}
 	

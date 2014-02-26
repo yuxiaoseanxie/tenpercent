@@ -62,12 +62,18 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		init();
 	}
-	
-	@Override
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        deinit();
+    }
+
+    @Override
 	public void setVenues(List<Venue> venues) {
 		List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
 		adapter.getItems().clear();
@@ -94,7 +100,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 		Bundle args = getActivity().getIntent().getExtras();
 		getNearbyVenuesPresenter().initialize(context, args, NearbyVenuesFragment.this);
 	}
-	
+
+    private void deinit() {
+        getNearbyVenuesPresenter().cancel(NearbyVenuesFragment.this);
+    }
+
 	private class EventVenueAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 	    private LayoutInflater inflater;
 		private final List<Event> items;

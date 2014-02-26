@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
@@ -37,7 +38,12 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		view.setUser(user);
 	}
 
-	public Presenter<AccountUserView> getProfilePresenter() {
+    @Override
+    public void cancel(AccountUserView view) {
+        //do nothing, no state
+    }
+
+    public Presenter<AccountUserView> getProfilePresenter() {
 		return ssoProfilePresenter;
 	}
 
@@ -59,7 +65,7 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		return bundle;
 	}
 	
-	public static class SaveAuthTokenPresenter extends BaseSsoPresenter implements Presenter<AccountSaveAuthTokenView> {
+	public static class SaveAuthTokenPresenter extends BaseSsoPresenter<AccountSaveAuthTokenView> implements Presenter<AccountSaveAuthTokenView> {
 		private static String ARG_ACCESS_TOKEN_KEY = "access_token";
 		private static String ARG_SSO_PROVIDER_ID = "sso_id";
 				
@@ -93,7 +99,7 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		}
 	}
 	
-	public static class SaveUserPresenter extends BaseSsoPresenter implements Presenter<AccountSaveUserView> {
+	public static class SaveUserPresenter extends BaseSsoPresenter<AccountSaveUserView> implements Presenter<AccountSaveUserView> {
 		private static String ARG_USER = "sso_user";
 		
 		public SaveUserPresenter(SsoManager ssoManager) {
@@ -114,7 +120,7 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		}		
 	}
 	
-	public static class SignOutPresenter extends BaseSsoPresenter implements Presenter<AccountSignOutView> {
+	public static class SignOutPresenter extends BaseSsoPresenter<AccountSignOutView> implements Presenter<AccountSignOutView> {
 		
 		public SignOutPresenter(SsoManager ssoManager) {
 			super(ssoManager);
@@ -140,16 +146,25 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 				view.setUser(user);
 			}
 		}
-		
-	}
+
+        @Override
+        public void cancel(AccountUserView view) {
+            //no state, do nothing
+        }
+    }
 	
-	private static abstract class BaseSsoPresenter {
+	private static abstract class BaseSsoPresenter<T extends PresenterView> implements Presenter<T> {
 		protected final SsoManager ssoManager;
 		
 		public BaseSsoPresenter(SsoManager ssoManager) {
 			this.ssoManager = ssoManager;
 		}
-	}
+
+        @Override
+        public void cancel(T view) {
+            //no state,
+        }
+    }
 
 
 }
