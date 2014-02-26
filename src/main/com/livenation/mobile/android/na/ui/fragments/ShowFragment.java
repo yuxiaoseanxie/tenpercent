@@ -35,6 +35,9 @@ import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnArtistFavoriteClick;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -113,8 +116,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			 
 			venueDetails.getTelephone().setText(venue.getFormattedPhoneNumber());
 			
-			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event.getVenue());
+			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(venue);
 			venueDetails.setOnClickListener(onVenueClick);
+			
+			OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity());
+			venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
 			
 			double lat = Double.valueOf(venue.getLat());
 			double lng = Double.valueOf(venue.getLng());
@@ -133,8 +139,13 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		for (LineupEntry lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
 			view.getTitle().setText(lineup.getName());
+			
 			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			lineupContainer.addView(view, layoutParams);
+			
+			OnArtistFavoriteClick onCheckBoxClick = new OnFavoriteClickListener.OnArtistFavoriteClick(lineup, getFavoritesPresenter(), getActivity());
+			view.getFavorite().setOnClickListener(onCheckBoxClick);
+			
 			if (null == imageUrl) {
 				String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
 				
@@ -201,6 +212,4 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
-	
-	
 }
