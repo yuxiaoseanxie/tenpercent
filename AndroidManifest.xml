@@ -43,10 +43,12 @@
         </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity" >
         </activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity" >
+        </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.SsoActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity android:name="com.facebook.LoginActivity" />
 

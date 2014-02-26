@@ -50,7 +50,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height" >
+        android:layout_height="@dimen/account_detail_min_height"
+        android:id="@+id/account_detail_favorite_artists_container" >
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_artists"
@@ -80,7 +81,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height" >
+        android:layout_height="@dimen/account_detail_min_height" 
+        android:id="@+id/account_detail_favorite_venues_container">
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_venues"

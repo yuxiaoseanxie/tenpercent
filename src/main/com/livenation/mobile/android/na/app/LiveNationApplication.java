@@ -13,10 +13,12 @@ import android.app.Application;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
+import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -39,6 +41,7 @@ public class LiveNationApplication extends Application {
 	private VenueEventsPresenter venueEventsPresenter;
 	private AccountPresenter accountPresenter;
 	private NearbyVenuesPresenter nearbyVenuesPresenter;
+	private FavoritesPresenter favoritesPresenter;
 	private SsoManager ssoManager;
 	
 	public static LiveNationApplication get() {
@@ -53,8 +56,12 @@ public class LiveNationApplication extends Application {
 		ssoManager = new SsoManager();
 		
 		ApiSsoProvider ssoTokenProvider = ssoManager.getConfiguredSsoProvider(getApplicationContext());
+		
+		if (null == ssoTokenProvider) {
+			ssoTokenProvider = new DummySsoProvider();
+		}
 
-		serviceApi = new LiveNationApiServiceImpl("http", "api.livenation.com", Constants.clientId, Constants.deviceId, ssoTokenProvider, getApplicationContext());
+		serviceApi = new LiveNationApiServiceImpl("https", "stg-faceoff.herokuapp.com", Constants.clientId, Constants.deviceId, ssoTokenProvider, getApplicationContext());
 		locationHelper = new LocationHelper();
 		
 		eventsPresenter = new EventsPresenter();
@@ -64,6 +71,7 @@ public class LiveNationApplication extends Application {
 		venueEventsPresenter = new VenueEventsPresenter();
 		accountPresenter = new AccountPresenter(getSsoManager());
 		nearbyVenuesPresenter = new NearbyVenuesPresenter();
+		favoritesPresenter = new FavoritesPresenter();
 		
 		locationHelper.prepareCache(getApplicationContext());
 		requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -110,6 +118,10 @@ public class LiveNationApplication extends Application {
 	
 	public AccountPresenter getAccountPresenter() {
 		return accountPresenter;
+	}
+	
+	public FavoritesPresenter getFavoritesPresenter() {
+		return favoritesPresenter;
 	}
 	
 	public SsoManager getSsoManager() {

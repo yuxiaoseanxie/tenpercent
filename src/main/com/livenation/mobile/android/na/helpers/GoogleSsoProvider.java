@@ -20,7 +20,6 @@ import com.google.android.gms.plus.model.people.Person;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
-import com.livenation.mobile.android.platform.util.Logger;
 
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
 	private User user;

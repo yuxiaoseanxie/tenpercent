@@ -15,6 +15,9 @@
     <string name="tab_title_all_shows">All shows</string>
     <string name="tab_title_nearby">Nearby</string>
     
+    <string name="tab_favorites_artists">Artists</string>
+    <string name="tab_favorites_venues">Venues</string>
+    
     <string name="venue_detail_link">+ Venue Info</string>
     
     <string name="ticketbar_find_ticket">Find Tickets ></string>
@@ -22,6 +25,7 @@
     <string name="home">Home</string>
     
     <string name="actionbar_show_title">Show</string>
+    <string name="actionbar_favorites_title">Favorites</string>
     
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
