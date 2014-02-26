@@ -34,7 +34,7 @@ public class AllShowsFragment extends LiveNationFragment implements EventsView, 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-gio
+        
 		Fragment featured = new FeaturedFragment();
 		Fragment showList = new ShowsListFragment();
 	
