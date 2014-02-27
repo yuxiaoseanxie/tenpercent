@@ -73,9 +73,12 @@
 
 
         <!-- Urban Airship config -->
-        <activity android:name="com.livenation.mobile.android.na2.notifications.ui.InboxActivity"
-            android:theme="@style/Theme.AppCompat"/>
-        <activity android:name="com.livenation.mobile.android.na2.notifications.ui.MessageActivity" />
+        <activity
+            android:name="com.livenation.mobile.android.na2.notifications.ui.InboxActivity"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name="com.livenation.mobile.android.na2.notifications.ui.MessageActivity"
+            android:theme="@style/Theme.AppCompat" />
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver
