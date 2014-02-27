@@ -86,7 +86,7 @@ public abstract class InboxFragment extends ListFragment {
     }
 
     /**
-     * Selects all the messages in the inbox
+     * Selects all the messages in the activity_inbox
      */
     public void selectAll() {
         selectedMessageIds.clear();

@@ -39,7 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Activity that manages the inbox.
+ * Activity that manages the activity_inbox.
  * On a tablet it also manages the message view pager.
  */
 public class InboxActivity extends ActionBarActivity implements
@@ -67,14 +67,14 @@ RichPushInbox.Listener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.inbox);
+        this.setContentView(R.layout.activity_inbox);
 
         actionBar = getSupportActionBar();
         configureActionBar();
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 
-        // Set up the inbox fragment
+        // Set up the activity_inbox fragment
         this.inbox = (InboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         this.inbox.getListView().setBackgroundColor(Color.BLACK);
@@ -83,11 +83,11 @@ RichPushInbox.Listener {
         this.messagePager = (ViewPager) this.findViewById(R.id.message_pager);
         if (messagePager != null) {
             messagePager.setAdapter(new MessageFragmentAdapter(this.getSupportFragmentManager()));
-            this.messagePager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            this.messagePager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
                     messages.get(position).markRead();
-                    // Highlight the current item you are viewing in the inbox
+                    // Highlight the current item you are viewing in the activity_inbox
                     inbox.getListView().setItemChecked(position, true);
 
                     // If we are in actionMode, update the menu items
@@ -196,7 +196,7 @@ RichPushInbox.Listener {
         // Add a pop up menu to the action bar to select/deselect all
         // Pop up menu requires api >= 11
         if (Build.VERSION.SDK_INT >= 11) {
-            View customView = LayoutInflater.from(this).inflate(R.layout.cab_selection_dropdown, null);
+            View customView = LayoutInflater.from(this).inflate(R.layout.inbox_ab_selection_dropdown, null);
             actionSelectionButton = (Button) customView.findViewById(R.id.selection_button);
 
             final PopupMenu popupMenu = new PopupMenu(this, customView);
@@ -362,13 +362,12 @@ RichPushInbox.Listener {
 
     /**
      * Starts the action mode if there are any selected
-     * messages in the inbox fragment
+     * messages in the activity_inbox fragment
      */
     private void startActionModeIfNecessary() {
         List<String> checkedIds = inbox.getSelectedMessages();
         if (actionMode != null && checkedIds.isEmpty()) {
             actionMode.finish();
-            return;
         } else if (actionMode == null && !checkedIds.isEmpty()) {
             actionMode = this.startSupportActionMode(this);
         }
@@ -398,8 +397,8 @@ RichPushInbox.Listener {
     }
 
     /**
-     * Grabs the latest messages from the rich push inbox, and syncs them
-     * with the inbox fragment and message view pager if available
+     * Grabs the latest messages from the rich push activity_inbox, and syncs them
+     * with the activity_inbox fragment and message view pager if available
      */
     private void updateRichPushMessages() {
         messages = RichPushManager.shared().getRichPushUser().getInbox().getMessages();
