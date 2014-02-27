@@ -22,18 +22,11 @@ public class PushReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Log.i(LOG_TAG, "Incoming notification intent: " + action);
 
-        if(RichPushManager.isRichPushMessage(intent.getExtras())) {
-            richMessageReceived(context, intent);
-        } else if(PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
+        if(PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
             registrationFinished(context, intent);
         } else if(PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
             messageClicked(context, intent);
         }
-    }
-
-    private void richMessageReceived(Context context, Intent intent)
-    {
-        Log.i(LOG_TAG, "rich message received");
     }
 
     private void messageClicked(Context context, Intent intent)
