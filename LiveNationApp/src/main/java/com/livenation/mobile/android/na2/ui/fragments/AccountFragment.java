@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
+import com.livenation.mobile.android.na2.notifications.inbox.InboxActivity;
 import com.livenation.mobile.android.na2.presenters.AccountPresenter;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na2.ui.FavoriteActivity;
@@ -43,7 +44,10 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 		
 		OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
 		result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
-		
+
+        OnNotificationsClick notificationsClick = new OnNotificationsClick();
+        result.findViewById(R.id.account_detail_notifications_container).setOnClickListener(notificationsClick);
+
 		return result;
 	}
 	
@@ -86,4 +90,12 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 			startActivity(intent);
 		}
 	}
+
+    private class OnNotificationsClick implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent launchInboxIntent = new Intent(getActivity(), InboxActivity.class);
+            startActivity(launchInboxIntent);
+        }
+    }
 }
