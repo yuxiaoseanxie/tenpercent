@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.livenation.mobile.android.na2.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na2.ui.HomeActivity;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.PushManager;
+import com.urbanairship.richpush.RichPushManager;
 
 /**
  * Created by km on 2/27/14.
@@ -18,20 +20,42 @@ public class PushReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if(PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
-            Log.i(LOG_TAG, "Registration finished with APID: " + intent.getStringExtra(PushManager.EXTRA_APID));
-        } else if(PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
-            Log.i(LOG_TAG, "User clicked (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
-                    "): " + intent.getStringExtra(PushManager.EXTRA_ALERT));
+        Log.i(LOG_TAG, "Incoming notification intent: " + action);
 
-            Context applicationContext = UAirship.shared().getApplicationContext();
-            Intent launchHomeActivity = new Intent(Intent.ACTION_MAIN);
-            launchHomeActivity.setClass(applicationContext, HomeActivity.class);
-            launchHomeActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            applicationContext.startActivity(launchHomeActivity);
-        } else if(PushManager.ACTION_PUSH_RECEIVED.equals(action)) {
-            Log.i(LOG_TAG, "Received push (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
-                    "): " + intent.getStringExtra(PushManager.EXTRA_ALERT));
+        if(RichPushManager.isRichPushMessage(intent.getExtras())) {
+            richMessageReceived(context, intent);
+        } else if(PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
+            registrationFinished(context, intent);
+        } else if(PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
+            messageClicked(context, intent);
         }
+    }
+
+    private void richMessageReceived(Context context, Intent intent)
+    {
+        Log.i(LOG_TAG, "rich message received");
+    }
+
+    private void messageClicked(Context context, Intent intent)
+    {
+        Log.i(LOG_TAG, "User clicked (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
+                "): " + intent.getStringExtra(PushManager.EXTRA_ALERT));
+
+        String messageId = intent.getStringExtra("_uamid");
+        Intent inboxIntent = new Intent(context, InboxActivity.class);
+        if(messageId != null) {
+            inboxIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
+        } else {
+            Log.i(LOG_TAG, "Message ID was missing.");
+        }
+
+        inboxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(inboxIntent);
+    }
+
+    private void registrationFinished(Context context, Intent intent)
+    {
+        /* This is where platform registration will occur. -km */
+        Log.i(LOG_TAG, "Registration finished with APID: " + intent.getStringExtra(PushManager.EXTRA_APID));
     }
 }
