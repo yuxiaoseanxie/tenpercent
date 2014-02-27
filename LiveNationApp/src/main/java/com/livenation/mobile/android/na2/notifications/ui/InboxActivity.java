@@ -69,7 +69,6 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
         // Set up the activity_inbox fragment
         this.inbox = (InboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        this.inbox.getListView().setBackgroundColor(Color.BLACK);
     }
 
     @Override
@@ -292,7 +291,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
         actionBar.setHomeButtonEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setTitle(R.string.inbox_title);
     }
 
     /**
@@ -384,7 +383,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
             .setIcon(R.drawable.icon_144)
             .setTitle(R.string.inbox_refresh_failed_dialog_title)
             .setMessage(R.string.inbox_refresh_failed_dialog_message)
-            .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+            .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
                     dialog.dismiss();
