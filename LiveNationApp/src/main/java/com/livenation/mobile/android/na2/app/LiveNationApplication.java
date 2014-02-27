@@ -9,6 +9,7 @@
 package com.livenation.mobile.android.na2.app;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na2.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na2.helpers.LocationHelper;
 import com.livenation.mobile.android.na2.helpers.SsoManager;
+import com.livenation.mobile.android.na2.notifications.PushReceiver;
 import com.livenation.mobile.android.na2.presenters.AccountPresenter;
 import com.livenation.mobile.android.na2.presenters.EventsPresenter;
 import com.livenation.mobile.android.na2.presenters.FavoritesPresenter;
@@ -27,6 +29,10 @@ import com.livenation.mobile.android.na2.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.LiveNationApiServiceImpl;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.urbanairship.Logger;
+import com.urbanairship.UAirship;
+import com.urbanairship.push.BasicPushNotificationBuilder;
+import com.urbanairship.push.PushManager;
 
 public class LiveNationApplication extends Application {
 	private static LiveNationApplication instance;
@@ -78,7 +84,21 @@ public class LiveNationApplication extends Application {
 		int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
 		MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
 		imageLoader = new ImageLoader(requestQueue, cache);
+
+        setupNotifications();
 	}
+
+    private void setupNotifications()
+    {
+        Logger.logLevel = Log.VERBOSE;
+        UAirship.takeOff(this);
+
+        PushManager.enablePush();
+
+        BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
+        PushManager.shared().setNotificationBuilder(notificationBuilder);
+        PushManager.shared().setIntentReceiver(PushReceiver.class);
+    }
 	
 	public LiveNationApiService getServiceApi() {
 		return serviceApi;
