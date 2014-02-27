@@ -19,7 +19,7 @@ import java.util.List;
  * A list fragment that shows rich push messages.
  *
  */
-public abstract class InboxFragment extends ListFragment {
+public abstract class BaseInboxFragment extends ListFragment {
     private OnMessageListener listener;
     private RichPushMessageAdapter adapter;
     private List<String> selectedMessageIds = new ArrayList<String>();
@@ -99,7 +99,7 @@ public abstract class InboxFragment extends ListFragment {
     public abstract int getRowLayoutId();
 
     /**
-     * @return The string id of the message to display when no messages are available
+     * @return The string id of the activity_message to display when no messages are available
      */
     public abstract int getEmptyListStringId();
 
@@ -111,13 +111,13 @@ public abstract class InboxFragment extends ListFragment {
         try {
             this.listener = (OnMessageListener) activity;
         } catch (ClassCastException e) {
-            throw new IllegalStateException("Activities using InboxFragment must implement " +
-                    "the InboxFragment.OnMessageListener interface.");
+            throw new IllegalStateException("Activities using BaseInboxFragment must implement " +
+                    "the BaseInboxFragment.OnMessageListener interface.");
         }
     }
 
     /**
-     * Listens for message selection and selection changes
+     * Listens for activity_message selection and selection changes
      *
      */
     public interface OnMessageListener {
@@ -127,9 +127,9 @@ public abstract class InboxFragment extends ListFragment {
 
 
     /**
-     * Sets a message is selected or not
-     * @param messageId The id of the message
-     * @param isChecked Boolean indicating if the message is selected or not
+     * Sets a activity_message is selected or not
+     * @param messageId The id of the activity_message
+     * @param isChecked Boolean indicating if the activity_message is selected or not
      */
     protected void onMessageSelected(String messageId, boolean isChecked) {
         if (isChecked && !selectedMessageIds.contains(messageId)) {
@@ -142,9 +142,9 @@ public abstract class InboxFragment extends ListFragment {
     }
 
     /**
-     * Returns if a message is selected
-     * @param messageId The id of the message
-     * @return <code>true</code> If the message is selected, <code>false</code> otherwise.
+     * Returns if a activity_message is selected
+     * @param messageId The id of the activity_message
+     * @return <code>true</code> If the activity_message is selected, <code>false</code> otherwise.
      */
     protected boolean isMessageSelected(String messageId) {
         return selectedMessageIds.contains(messageId);

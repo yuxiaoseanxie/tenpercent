@@ -18,7 +18,7 @@ import com.livenation.mobile.android.na2.R;
 import java.util.List;
 
 /**
- * Manages the message view pager and display messages
+ * Manages the activity_message view pager and display messages
  *
  */
 public class MessageActivity extends FragmentActivity {
@@ -31,7 +31,7 @@ public class MessageActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.message);
+        this.setContentView(R.layout.activity_message);
 
         String messageId = savedInstanceState == null ? this.getIntent().getStringExtra(EXTRA_MESSAGE_ID_KEY) :
             savedInstanceState.getString(EXTRA_MESSAGE_ID_KEY);
@@ -64,11 +64,12 @@ public class MessageActivity extends FragmentActivity {
         // Mark it as read
         messages.get(position).markRead();
 
-        // Sets the current item to the position of the current message
+        // Sets the current item to the position of the current activity_message
         this.messagePager.setCurrentItem(position);
 
         this.getActionBar().setDisplayHomeAsUpEnabled(true);
         this.getActionBar().setHomeButtonEnabled(true);
+        this.getActionBar().setTitle(R.string.inbox_title);
     }
 
     @Override

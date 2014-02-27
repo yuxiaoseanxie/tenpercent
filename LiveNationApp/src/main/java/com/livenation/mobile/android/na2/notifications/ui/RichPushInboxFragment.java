@@ -17,16 +17,16 @@ import com.livenation.mobile.android.na2.notifications.ui.RichPushMessageAdapter
 import java.text.SimpleDateFormat;
 
 /**
- * Sample implementation of the InboxFragment
+ * Sample implementation of the BaseInboxFragment
  *
  */
-public class RichPushSampleInboxFragment extends InboxFragment {
+public class RichPushInboxFragment extends BaseInboxFragment {
 
-    private static final SimpleDateFormat UA_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final SimpleDateFormat UA_DATE_FORMATTER = new SimpleDateFormat("EEE MMM d'.' yyyy 'at' h:mm aa");
 
     @Override
     public int getRowLayoutId() {
-        return R.layout.inbox_message;
+        return R.layout.list_inbox_message;
     }
 
     @Override
@@ -46,10 +46,10 @@ public class RichPushSampleInboxFragment extends InboxFragment {
                 final CheckBox checkBox = (CheckBox) view.findViewById(R.id.message_checkbox);
 
                 if (message.isRead()) {
-                    unreadIndicator.setBackgroundColor(Color.BLACK);
+                    unreadIndicator.setBackgroundColor(Color.TRANSPARENT);
                     unreadIndicator.setContentDescription("Message is read");
                 } else {
-                    unreadIndicator.setBackgroundColor(Color.YELLOW);
+                    unreadIndicator.setBackgroundColor(0xffdd223e);
                     unreadIndicator.setContentDescription("Message is unread");
                 }
 

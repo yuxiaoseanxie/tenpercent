@@ -4,7 +4,6 @@
 
 package com.livenation.mobile.android.na2.notifications.ui;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,8 +11,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -41,14 +38,14 @@ import java.util.List;
 
 /**
  * Activity that manages the activity_inbox.
- * On a tablet it also manages the message view pager.
+ * On a tablet it also manages the activity_message view pager.
  */
-public class InboxActivity extends FragmentActivity implements InboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
+public class InboxActivity extends FragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na2.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
 
-    private InboxFragment inbox;
+    private BaseInboxFragment inbox;
     private RichPushInbox richPushInbox;
     private ActionBar actionBar;
 
@@ -67,7 +64,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 
         // Set up the activity_inbox fragment
-        this.inbox = (InboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
+        this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
@@ -88,14 +85,14 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
     protected void onResume() {
         super.onResume();
 
-        // Listen for any rich push message changes
+        // Listen for any rich push activity_message changes
         RichPushManager.shared().addListener(this);
         RichPushManager.shared().getRichPushUser().getInbox().addListener(this);
 
         // Update the rich push messages to the latest
         updateRichPushMessages();
 
-        // Show any pending message ids from the intent
+        // Show any pending activity_message ids from the intent
         showPendingMessageId();
 
         startActionModeIfNecessary();
@@ -108,7 +105,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
     protected void onPause() {
         super.onPause();
 
-        // Remove listener for message changes
+        // Remove listener for activity_message changes
         RichPushManager.shared().removeListener(this);
         richPushInbox.removeListener(this);
 
@@ -290,7 +287,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
     }
 
     /**
-     * Tries to show a message if the pendingMessageId is set.
+     * Tries to show a activity_message if the pendingMessageId is set.
      * Clears the pendingMessageId after.
      */
     private void showPendingMessageId() {
@@ -304,9 +301,9 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
     }
 
     /**
-     * Shows a message either in the message view pager, or by launching
+     * Shows a activity_message either in the activity_message view pager, or by launching
      * a new MessageActivity
-     * @param messageId the specified message id
+     * @param messageId the specified activity_message id
      */
     private void showMessage(String messageId) {
         RichPushMessage message = richPushInbox.getMessage(messageId);
@@ -341,7 +338,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
         // Stop the progress spinner and display the list
         inbox.setListShownNoAnimation(true);
 
-        // If the message update failed
+        // If the activity_message update failed
         if (!success) {
             // Show an error dialog
             DialogFragment fragment = new InboxRefreshFailedDialog();
@@ -361,7 +358,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
 
     /**
      * Grabs the latest messages from the rich push activity_inbox, and syncs them
-     * with the activity_inbox fragment and message view pager if available
+     * with the activity_inbox fragment and activity_message view pager if available
      */
     private void updateRichPushMessages() {
         messages = RichPushManager.shared().getRichPushUser().getInbox().getMessages();
@@ -369,7 +366,7 @@ public class InboxActivity extends FragmentActivity implements InboxFragment.OnM
     }
 
     /**
-     * Alert dialog for when messages fail to refresh
+     * Alert dialog for when messages fail to inbox_refresh
      */
     public static class InboxRefreshFailedDialog extends DialogFragment {
         @Override

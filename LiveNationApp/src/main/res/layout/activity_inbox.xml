@@ -4,7 +4,7 @@
     android:layout_height="fill_parent">
 
     <fragment
-        class="com.livenation.mobile.android.na2.notifications.ui.RichPushSampleInboxFragment"
+        class="com.livenation.mobile.android.na2.notifications.ui.RichPushInboxFragment"
         android:id="@+id/inbox"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

@@ -30,7 +30,7 @@ public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
      * Creates a new RichPushMessageAdapter
      * @param context Application context
      * @param layout The layout for the created views
-     * @param mapping The mapping for message value to view
+     * @param mapping The mapping for activity_message value to view
      */
     public RichPushMessageAdapter(Context context, int layout) {
         this(context, layout, new ArrayList<RichPushMessage>());

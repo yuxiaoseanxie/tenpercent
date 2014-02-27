@@ -18,7 +18,7 @@ import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.widget.RichPushMessageView;
 
 /**
- * Fragment that displays a rich push message in a RichPushMessageView
+ * Fragment that displays a rich push activity_message in a RichPushMessageView
  */
 public class MessageFragment extends Fragment {
 
@@ -27,7 +27,7 @@ public class MessageFragment extends Fragment {
 
     /**
      * Creates a new MessageFragment
-     * @param messageId The message's id to display
+     * @param messageId The activity_message's id to display
      * @return messageFragment new MessageFragment
      */
     public static MessageFragment newInstance(String messageId) {
@@ -55,7 +55,7 @@ public class MessageFragment extends Fragment {
         if (message != null) {
             browser.loadRichPushMessage(message);
         } else {
-            Logger.info("Couldn't retrieve message for ID: " + messageId);
+            Logger.info("Couldn't retrieve activity_message for ID: " + messageId);
         }
     }
 

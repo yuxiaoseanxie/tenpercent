@@ -32,7 +32,8 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:textAppearance="@style/list_show_title" />
     
     <TextView
         android:id="@+id/date_sent"
@@ -42,6 +43,7 @@
         android:layout_below="@id/title"
         android:layout_toRightOf="@id/message_checkbox"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:textAppearance="@style/list_show_location" />
 
 </RelativeLayout>

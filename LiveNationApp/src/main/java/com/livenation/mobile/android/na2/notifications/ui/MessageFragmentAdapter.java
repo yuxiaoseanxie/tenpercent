@@ -13,7 +13,7 @@ import com.urbanairship.richpush.RichPushMessage;
 import java.util.List;
 
 /**
- * Pager adapter that manages the message fragments
+ * Pager adapter that manages the activity_message fragments
  *
  */
 public class MessageFragmentAdapter extends FragmentStatePagerAdapter {

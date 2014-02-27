@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/refresh"
-        android:icon="@drawable/refresh"
+        android:icon="@drawable/inbox_refresh"
         android:showAsAction="ifRoom"
         android:title="@string/refresh" />
 
