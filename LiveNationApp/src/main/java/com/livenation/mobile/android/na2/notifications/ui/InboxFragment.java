@@ -20,10 +20,6 @@ import java.util.List;
  *
  */
 public abstract class InboxFragment extends ListFragment {
-    public static final String EMPTY_COLUMN_NAME = "";
-    public static final String ROW_LAYOUT_ID_KEY = "row_layout_id";
-    public static final String EMPTY_LIST_STRING_KEY = "empty_list_string";
-
     private OnMessageListener listener;
     private RichPushMessageAdapter adapter;
     private List<String> selectedMessageIds = new ArrayList<String>();

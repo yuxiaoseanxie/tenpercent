@@ -5,18 +5,19 @@
 package com.livenation.mobile.android.na2.notifications.ui;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.view.ActionMode;
+import android.support.v4.app.FragmentActivity;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,19 +43,10 @@ import java.util.List;
  * Activity that manages the activity_inbox.
  * On a tablet it also manages the message view pager.
  */
-public class InboxActivity extends ActionBarActivity implements
-InboxFragment.OnMessageListener,
-ActionMode.Callback,
-RichPushManager.Listener,
-RichPushInbox.Listener {
-
-    static final String CHECKED_IDS_KEY = "com.livenation.mobile.android.na2.notifications.CHECKED_IDS";
-    static final String MESSAGE_ID_KEY = "com.livenation.mobile.android.na2.notifications.FIRST_MESSAGE_ID";
+public class InboxActivity extends FragmentActivity implements InboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na2.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
-
-    private ViewPager messagePager;
 
     private InboxFragment inbox;
     private RichPushInbox richPushInbox;
@@ -69,7 +61,7 @@ RichPushInbox.Listener {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_inbox);
 
-        actionBar = getSupportActionBar();
+        actionBar = getActionBar();
         configureActionBar();
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
@@ -78,25 +70,6 @@ RichPushInbox.Listener {
         this.inbox = (InboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         this.inbox.getListView().setBackgroundColor(Color.BLACK);
-
-        // Set up the message view pager if it exists
-        this.messagePager = (ViewPager) this.findViewById(R.id.message_pager);
-        if (messagePager != null) {
-            messagePager.setAdapter(new MessageFragmentAdapter(this.getSupportFragmentManager()));
-            this.messagePager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-                @Override
-                public void onPageSelected(int position) {
-                    messages.get(position).markRead();
-                    // Highlight the current item you are viewing in the activity_inbox
-                    inbox.getListView().setItemChecked(position, true);
-
-                    // If we are in actionMode, update the menu items
-                    if (actionMode != null) {
-                        actionMode.invalidate();
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -128,8 +101,8 @@ RichPushInbox.Listener {
 
         startActionModeIfNecessary();
 
-        // Dismiss any notifications if available
-        //RichNotificationBuilder.dismissInboxNotification();
+        // Dismiss any notifications
+        ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     }
 
     @Override
@@ -351,13 +324,9 @@ RichPushInbox.Listener {
 
         message.markRead();
 
-        if (messagePager != null) {
-            this.messagePager.setCurrentItem(messages.indexOf(message));
-        } else {
-            Intent intent = new Intent(this, MessageActivity.class);
-            intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);
-            this.startActivity(intent);
-        }
+        Intent intent = new Intent(this, MessageActivity.class);
+        intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);
+        this.startActivity(intent);
     }
 
     /**
@@ -369,7 +338,7 @@ RichPushInbox.Listener {
         if (actionMode != null && checkedIds.isEmpty()) {
             actionMode.finish();
         } else if (actionMode == null && !checkedIds.isEmpty()) {
-            actionMode = this.startSupportActionMode(this);
+            actionMode = this.startActionMode(this);
         }
     }
 
@@ -403,9 +372,6 @@ RichPushInbox.Listener {
     private void updateRichPushMessages() {
         messages = RichPushManager.shared().getRichPushUser().getInbox().getMessages();
         this.inbox.setMessages(messages);
-        if (messagePager != null) {
-            ((MessageFragmentAdapter) messagePager.getAdapter()).setRichPushMessages(messages);
-        }
     }
 
     /**

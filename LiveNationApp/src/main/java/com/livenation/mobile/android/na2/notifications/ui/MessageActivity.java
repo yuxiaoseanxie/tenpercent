@@ -6,8 +6,8 @@ package com.livenation.mobile.android.na2.notifications.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 import com.urbanairship.UAirship;
@@ -21,7 +21,7 @@ import java.util.List;
  * Manages the message view pager and display messages
  *
  */
-public class MessageActivity extends ActionBarActivity {
+public class MessageActivity extends FragmentActivity {
 
     public static final String EXTRA_MESSAGE_ID_KEY = "com.livenation.mobile.android.na2.notifications.EXTRA_MESSAGE_ID_KEY";
 
@@ -67,8 +67,8 @@ public class MessageActivity extends ActionBarActivity {
         // Sets the current item to the position of the current message
         this.messagePager.setCurrentItem(position);
 
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        this.getSupportActionBar().setHomeButtonEnabled(true);
+        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getActionBar().setHomeButtonEnabled(true);
     }
 
     @Override
