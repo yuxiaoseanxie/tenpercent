@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/activity_show_content"
-        android:name="com.livenation.mobile.android.na.ui.fragments.ShowFragment"
+        android:name="com.livenation.mobile.android.na2.ui.fragments.ShowFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

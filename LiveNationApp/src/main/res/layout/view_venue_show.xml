@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_show_item_min_height" >
 
-    <com.livenation.mobile.android.na.ui.views.VerticalDate
+    <com.livenation.mobile.android.na2.ui.views.VerticalDate
         android:id="@+id/view_venue_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

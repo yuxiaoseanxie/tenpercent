@@ -28,7 +28,7 @@
             android:layout_marginTop="@dimen/show_calendar_margin_top"
             layout="@layout/sub_show_calender" />
 
-        <com.livenation.mobile.android.na.ui.views.ShowVenueView
+        <com.livenation.mobile.android.na2.ui.views.ShowVenueView
             android:id="@+id/fragment_show_venue_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
