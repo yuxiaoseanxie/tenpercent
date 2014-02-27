@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
-import com.livenation.mobile.android.na2.notifications.inbox.InboxActivity;
+import com.livenation.mobile.android.na2.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na2.presenters.AccountPresenter;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na2.ui.FavoriteActivity;

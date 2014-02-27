@@ -2,7 +2,7 @@
  * Copyright 2013 Urban Airship and Contributors
  */
 
-package com.livenation.mobile.android.na2.notifications.inbox;
+package com.livenation.mobile.android.na2.notifications.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Build;

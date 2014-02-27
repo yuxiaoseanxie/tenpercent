@@ -2,7 +2,7 @@
  * Copyright 2013 Urban Airship and Contributors
  */
 
-package com.livenation.mobile.android.na2.notifications.inbox;
+package com.livenation.mobile.android.na2.notifications.ui;
 
 import android.graphics.Color;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.urbanairship.richpush.RichPushMessage;
 import com.livenation.mobile.android.na2.R;
-import com.livenation.mobile.android.na2.notifications.inbox.RichPushMessageAdapter.ViewBinder;
+import com.livenation.mobile.android.na2.notifications.ui.RichPushMessageAdapter.ViewBinder;
 
 import java.text.SimpleDateFormat;
 
