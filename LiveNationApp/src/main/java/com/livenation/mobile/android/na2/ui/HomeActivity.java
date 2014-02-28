@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost.TabSpec;
@@ -71,8 +72,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		title = getString(R.string.tab_title_all_shows);
 		view = createTab(HomeActivity.this, title);
 		tabSpec = tabHost.newTabSpec("all_shows");
-		tabSpec.setIndicator(view);
-		tabHost.addTab(tabSpec,
+		tabSpec.setIndicator(view); tabHost.addTab(tabSpec,
 				AllShowsFragment.class, null);
 		
 		title = getString(R.string.tab_title_nearby);
@@ -113,12 +113,22 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.syncState();
 	}
-	
-	@Override
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		}
+		} else if(item.getItemId() == R.id.menu_home_debug) {
+            startActivity(new Intent(this, DebugActivity.class));
+
+            return true;
+        }
 		return super.onOptionsItemSelected(item);
 	}
 	
