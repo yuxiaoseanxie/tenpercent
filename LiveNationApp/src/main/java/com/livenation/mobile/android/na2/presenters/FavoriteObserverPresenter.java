@@ -1,11 +1,11 @@
-package com.livenation.mobile.android.na.presenters;
+package com.livenation.mobile.android.na2.presenters;
 
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.presenters.support.BaseObserverPresenter;
-import com.livenation.mobile.android.na.presenters.support.BaseState;
-import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.na2.presenters.support.BaseObserverPresenter;
+import com.livenation.mobile.android.na2.presenters.support.BaseState;
+import com.livenation.mobile.android.na2.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
 

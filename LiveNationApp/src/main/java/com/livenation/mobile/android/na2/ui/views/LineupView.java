@@ -17,10 +17,10 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.FavoriteObserverPresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.na2.R;
+import com.livenation.mobile.android.na2.app.LiveNationApplication;
+import com.livenation.mobile.android.na2.presenters.FavoriteObserverPresenter;
+import com.livenation.mobile.android.na2.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 

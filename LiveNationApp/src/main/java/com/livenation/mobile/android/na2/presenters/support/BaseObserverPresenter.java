@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.presenters.support;
+package com.livenation.mobile.android.na2.presenters.support;
 
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 

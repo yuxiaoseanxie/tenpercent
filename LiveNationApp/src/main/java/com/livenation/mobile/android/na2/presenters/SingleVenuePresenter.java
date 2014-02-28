@@ -3,12 +3,12 @@ package com.livenation.mobile.android.na2.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na.presenters.support.BaseResultState;
-import com.livenation.mobile.android.na.presenters.support.BaseState;
-import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na.presenters.support.Presenter;
-import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na2.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na2.presenters.support.BaseState;
+import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na2.presenters.support.Presenter;
+import com.livenation.mobile.android.na2.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
