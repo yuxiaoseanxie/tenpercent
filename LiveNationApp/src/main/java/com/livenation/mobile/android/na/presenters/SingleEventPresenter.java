@@ -12,6 +12,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
@@ -48,14 +49,14 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 		// TODO: this
 	}
 
-	static class SingleEventState extends BaseState<Event, SingleEventView>
+	static class SingleEventState extends BaseResultState<Event, SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {
 		private SingleEventParameters apiParams;
 
 		public static final int FAILURE_API_GENERAL = 0;
 		
 		public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 		}
 		
 		@Override
@@ -89,6 +90,10 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-	
-	}
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 }
