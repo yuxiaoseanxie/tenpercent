@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
-import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
@@ -43,7 +42,7 @@ public class FavoritesPresenter extends
 		
 		List<Favorite> result = state.getResult();
 
-        cacheResult(state);
+        postResult(state);
 
         view.setFavorites(result);
 	}
@@ -51,7 +50,7 @@ public class FavoritesPresenter extends
     @Override
     public void onStateCancelled(FavoritesState state) {
         super.onStateCancelled(state);
-        cacheResult(state);
+        postResult(state);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class FavoritesPresenter extends
 		return bundle;
 	}
 
-    private void cacheResult(FavoritesState state) {
+    private void postResult(FavoritesState state) {
         List<Favorite> result = state.getResult();
 
         getObserverPresenter().clear();
@@ -149,7 +148,7 @@ public class FavoritesPresenter extends
 			super.onStateReady(state);
 			FavoriteAddView view = state.getView();
 
-            cacheResult(state);
+            postResult(state);
 
 			view.onFavoriteAddSuccess();
 		}
@@ -157,7 +156,7 @@ public class FavoritesPresenter extends
         @Override
         public void onStateCancelled(AddFavoriteState state) {
             super.onStateCancelled(state);
-            cacheResult(state);
+            postResult(state);
         }
 
         @Override
@@ -167,7 +166,7 @@ public class FavoritesPresenter extends
 			view.onFavoriteAddFailed();
 		}
 
-        private void cacheResult(AddFavoriteState state) {
+        private void postResult(AddFavoriteState state) {
             Favorite result = state.getResult();
             getObserverPresenter().post(result);
         }
@@ -242,7 +241,7 @@ public class FavoritesPresenter extends
 			super.onStateReady(state);
 			FavoriteRemoveView view = state.getView();
 
-            cacheResult(state);
+            postResult(state);
 
 			view.onFavoriteRemoveSuccess();
 		}
@@ -250,7 +249,7 @@ public class FavoritesPresenter extends
         @Override
         public void onStateCancelled(RemoveFavoriteState state) {
             super.onStateCancelled(state);
-            cacheResult(state);
+            postResult(state);
         }
 
         @Override
@@ -260,7 +259,7 @@ public class FavoritesPresenter extends
 			view.onFavoriteRemoveFailed();
 		}
 
-        private void cacheResult(RemoveFavoriteState state) {
+        private void postResult(RemoveFavoriteState state) {
             Favorite result = state.getResult();
             getObserverPresenter().remove(result);
         }

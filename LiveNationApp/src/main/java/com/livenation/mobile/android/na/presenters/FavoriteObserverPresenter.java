@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.presenters.support.BaseObserverPresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
-import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
@@ -39,28 +38,8 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, B
     }
 
     @Override
-    public void onNewState(Observer state) {
-        super.onNewState(state);
-    }
-
-    @Override
-    public void onStateReady(Observer state) {
-        super.onStateReady(state);
-    }
-
-    @Override
-    public void onStateCancelled(Observer state) {
-        super.onStateCancelled(state);
-    }
-
-    @Override
-    public void onStateFailed(int failureCode, Observer state) {
-        super.onStateFailed(failureCode, state);
-    }
-
-    @Override
     public void post(Favorite target) {
-        Favorite existing = get(target);
+        Favorite existing = getExisting(target);
         if (null == existing) {
              //new favorite
             favorites.add(target);
@@ -81,7 +60,7 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, B
 
     @Override
     public boolean remove(Favorite target) {
-        Favorite favorite = get(target);
+        Favorite favorite = getExisting(target);
         if (null == favorite) return false;
         boolean result = favorites.remove(favorite);
         if (result) {
@@ -92,11 +71,11 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, B
 
     @Override
     public boolean contains(Favorite target) {
-        return (null != get(target));
+        return (null != getExisting(target));
     }
 
     @Override
-    public Favorite get(Favorite target) {
+    public Favorite getExisting(Favorite target) {
         for (Favorite favorite : favorites) {
             if (favorite.idEquals(target)) {
                 return favorite;

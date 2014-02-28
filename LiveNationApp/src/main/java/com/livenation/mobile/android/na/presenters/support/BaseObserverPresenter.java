@@ -13,5 +13,5 @@ public abstract class BaseObserverPresenter<T extends IdEquals, T2, P extends Pr
     public abstract boolean contains(T object);
     public abstract boolean remove(T object);
     public abstract void clear();
-    public abstract T get(T stub);
+    public abstract T getExisting(T stub);
 }
