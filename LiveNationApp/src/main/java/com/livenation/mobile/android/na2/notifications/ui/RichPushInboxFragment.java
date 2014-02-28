@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na2.notifications.NotificationUtils;
 import com.urbanairship.richpush.RichPushMessage;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.notifications.ui.RichPushMessageAdapter.ViewBinder;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
  */
 public class RichPushInboxFragment extends BaseInboxFragment {
 
-    private static final SimpleDateFormat UA_DATE_FORMATTER = new SimpleDateFormat("EEE MMM d'.' yyyy 'at' h:mm aa");
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("EEE MMM d'.' yyyy 'at' h:mm aa");
 
     @Override
     public int getRowLayoutId() {
@@ -41,8 +42,9 @@ public class RichPushInboxFragment extends BaseInboxFragment {
             @Override
             public void bindView(View view, final RichPushMessage message) {
                 View unreadIndicator = view.findViewById(R.id.unread_indicator);
-                TextView title = (TextView) view.findViewById(R.id.title);
-                TextView timeStamp = (TextView) view.findViewById(R.id.date_sent);
+                TextView info = (TextView) view.findViewById(R.id.message_info);
+                TextView title = (TextView) view.findViewById(R.id.message_title);
+                TextView details = (TextView) view.findViewById(R.id.message_details);
                 final CheckBox checkBox = (CheckBox) view.findViewById(R.id.message_checkbox);
 
                 if (message.isRead()) {
@@ -53,8 +55,9 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                     unreadIndicator.setContentDescription("Message is unread");
                 }
 
-                title.setText(message.getTitle());
-                timeStamp.setText(UA_DATE_FORMATTER.format(message.getSentDate()));
+                info.setText(NotificationUtils.getMessageInfoText(getActivity(), message));
+                title.setText(NotificationUtils.getMessageTitleText(getActivity(), message));
+                details.setText(NotificationUtils.getMessageDetailText(getActivity(), message));
 
                 checkBox.setChecked(isMessageSelected(message.getMessageId()));
 

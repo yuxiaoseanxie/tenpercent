@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dp" 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="6dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
     android:contentDescription="Inbox message">
 
     <View
         android:id="@+id/unread_indicator"
         android:layout_width="6dp"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_height="fill_parent"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
-    
+
     <CheckBox
         android:id="@+id/message_checkbox"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/unread_indicator"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:focusable="false"
         android:focusableInTouchMode="false" />
-    
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/message_checkbox"
-        android:layout_toRightOf="@id/message_checkbox"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textAppearance="@style/list_show_title" />
-    
-    <TextView
-        android:id="@+id/date_sent"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/message_checkbox"
-        android:layout_below="@id/title"
-        android:layout_toRightOf="@id/message_checkbox"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textAppearance="@style/list_show_location" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/message_info"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="info"
+            android:textAppearance="@style/list_notification_info"/>
+
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="title"
+            android:textAppearance="@style/list_show_title"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:id="@+id/message_details"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="detail"
+        android:textAppearance="@style/list_show_location" />
+    </LinearLayout>
+
+</LinearLayout>
