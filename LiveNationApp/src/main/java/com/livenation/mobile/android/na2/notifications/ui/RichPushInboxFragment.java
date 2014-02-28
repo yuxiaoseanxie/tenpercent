@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na2.app.Constants;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.util.Logger;
 import com.urbanairship.richpush.RichPushMessage;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.notifications.ui.RichPushMessageAdapter.ViewBinder;
@@ -30,8 +31,8 @@ import java.util.Locale;
 public class RichPushInboxFragment extends BaseInboxFragment {
 
     private static final SimpleDateFormat INCOMING_FORMAT = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a", Locale.US);
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
+    private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
+    private static final SimpleDateFormat LONG_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd' at 'h:mm a", Locale.US);
 
     private int getMessageType(RichPushMessage message)
     {
@@ -64,28 +65,41 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         return (getMessageType(message) == Constants.Notifications.TYPE_IN_VENUE);
     }
 
+    private Date parseDateString(SimpleDateFormat formatter, String dateTimeString)
+    {
+        Date date;
+        try {
+            date = formatter.parse(dateTimeString);
+        } catch (ParseException e) {
+            date = new Date(1041509106000L);
+
+            Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);
+        }
+
+        return date;
+    }
 
     private String getNameForType(int type)
     {
         switch (type) {
             case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
-                return "ON SALE";
+                return getString(R.string.notif_type_on_sale);
 
             case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
-                return "ON SALE";
+                return getString(R.string.notif_type_announcement);
 
             case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:
-                return "LAST MINUTE";
+                return getString(R.string.notif_type_last_minute);
 
             case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE:
-                return "PRESALE";
+                return getString(R.string.notif_type_presale);
 
             case Constants.Notifications.TYPE_IN_VENUE:
-                return "LIVE FEED";
+                return getString(R.string.notif_type_in_venue);
 
             case Constants.Notifications.TYPE_FEATURED_CONTENT:
             default:
-                return "FEATURED";
+                return getString(R.string.notif_type_featured);
         }
     }
 
@@ -96,35 +110,31 @@ public class RichPushInboxFragment extends BaseInboxFragment {
 
             int type = getMessageType(message);
             String localizedName = getNameForType(type);
-            Date onSaleDate = null;
-            try {
-                onSaleDate = INCOMING_FORMAT.parse(extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_ON_SALE_DATE));
-            } catch (ParseException e) {
-                Log.e("Notification Parse Errors", "Malformed date passed through. " + e.toString());
-            }
+            Date onSaleDate = parseDateString(INCOMING_FORMAT, extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_ON_SALE_DATE));
 
             switch (type) {
                 case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT: {
-                    String onSaleString = (onSaleDate != null)? DATE_FORMAT.format(onSaleDate) : null;
+                    String onSaleString = (onSaleDate != null)? SHORT_DATE_FORMAT.format(onSaleDate) : null;
                     if(onSaleString == null)
-                        onSaleString = "NOW";
-                    return (localizedName + " - " + onSaleString);
+                        onSaleString = getString(R.string.notif_date_now);
+                    return String.format(getString(R.string.notif_event_info_format), localizedName, onSaleString);
                 }
 
                 case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
                 case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE: {
-                    String onSaleString = TIME_FORMAT.format(onSaleDate);
+                    String onSaleString = LONG_DATE_FORMAT.format(onSaleDate);
                     if(onSaleString == null)
-                        onSaleString = "NOW";
-                    return (localizedName  + " - TODAY " + onSaleString);
+                        onSaleString = getString(R.string.notif_date_now);
+                    return String.format(getString(R.string.notif_event_info_format), localizedName, onSaleString);
                 }
 
                 default:
                     return localizedName;
             }
         } else if(isMessageInVenue(message)) {
+            String typeName = getNameForType(Constants.Notifications.TYPE_IN_VENUE);
             String artistName = message.getExtras().getString(Constants.Notifications.EXTRA_EVENT_INFO_ARTIST_NAME);
-            return (getNameForType(Constants.Notifications.TYPE_IN_VENUE) + " - " + artistName);
+            return String.format(getString(R.string.notif_event_info_format), typeName, artistName);
         } else {
             return getNameForType(Constants.Notifications.TYPE_FEATURED_CONTENT);
         }
@@ -147,14 +157,10 @@ public class RichPushInboxFragment extends BaseInboxFragment {
     {
         if(isMessageForEvent(message)) {
             Bundle extra = message.getExtras();
-            Date startTime = null;
-            try {
-                startTime = INCOMING_FORMAT.parse(extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_LOCAL_START_TIME));
-            } catch (ParseException e) {
-                Log.e("Notification Parse Errors", "Malformed date passed through. " + e.toString());
-            }
-            String startTimeString = (startTime != null)? DATE_FORMAT.format(startTime) : null;
-            return (startTimeString + " @ " + extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_VENUE_NAME));
+            Date startTime = parseDateString(INCOMING_FORMAT, extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_LOCAL_START_TIME));
+            String startTimeString = (startTime != null)? SHORT_DATE_FORMAT.format(startTime) : null;
+            String venueName = extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_VENUE_NAME);
+            return String.format(getString(R.string.notif_event_details_format), startTimeString, venueName);
         } else {
             return "";
         }
