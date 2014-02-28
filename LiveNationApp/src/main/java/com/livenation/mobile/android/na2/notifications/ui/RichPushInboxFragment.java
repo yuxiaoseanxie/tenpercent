@@ -38,14 +38,8 @@ public class RichPushInboxFragment extends BaseInboxFragment {
     {
         Bundle extras = message.getExtras();
         if(extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
-            Object type = extras.get(Constants.Notifications.EXTRA_TYPE);
-            if(type instanceof String) {
-                return Integer.valueOf((String)type);
-            } else if(type instanceof Integer) {
-                return (Integer)type;
-            } else {
-                return Constants.Notifications.TYPE_FEATURED_CONTENT;
-            }
+            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
+            return Integer.valueOf(typeString);
         } else {
             return Constants.Notifications.TYPE_FEATURED_CONTENT;
         }
@@ -192,7 +186,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                     unreadIndicator.setBackgroundColor(Color.TRANSPARENT);
                     unreadIndicator.setContentDescription("Message is read");
                 } else {
-                    unreadIndicator.setBackgroundColor(0xffdd223e);
+                    unreadIndicator.setBackgroundColor(getResources().getColor(R.color.list_show_date_text_highlight));
                     unreadIndicator.setContentDescription("Message is unread");
                 }
 
