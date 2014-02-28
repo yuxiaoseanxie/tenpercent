@@ -16,6 +16,7 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
@@ -49,14 +50,14 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 		//TODO: This
 	}
 
-	static class EventsState extends BaseState<ArrayList<Event>, EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
+	static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements LocationCallback, LiveNationApiService.GetEventsApiCallback {
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;	
 		
 		public EventsState(StateListener<EventsState> listener, Bundle args, EventsView view, Context context) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 			this.context = context;
 		}
 		
@@ -95,6 +96,10 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 		public void onLocationFailure(int failureCode) {
 			notifyFailed(FAILURE_LOCATION);
 		}
-		
-	}
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 }
