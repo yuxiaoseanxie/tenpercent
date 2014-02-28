@@ -65,7 +65,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         try {
             date = formatter.parse(dateTimeString);
         } catch (ParseException e) {
-            date = new Date(1041509106000L);
+            date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
 
             Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);
         }
@@ -176,27 +176,27 @@ public class RichPushInboxFragment extends BaseInboxFragment {
 
             @Override
             public void bindView(View view, final RichPushMessage message) {
-                View unreadIndicator = view.findViewById(R.id.unread_indicator);
-                TextView info = (TextView) view.findViewById(R.id.message_info);
-                TextView title = (TextView) view.findViewById(R.id.message_title);
-                TextView details = (TextView) view.findViewById(R.id.message_details);
-                final CheckBox checkBox = (CheckBox) view.findViewById(R.id.message_checkbox);
-
+                ViewHolder viewHolder = (ViewHolder)view.getTag();
+                if(viewHolder == null) {
+                    viewHolder = new ViewHolder(view);
+                    view.setTag(viewHolder);
+                }
                 if (message.isRead()) {
-                    unreadIndicator.setBackgroundColor(Color.TRANSPARENT);
-                    unreadIndicator.setContentDescription("Message is read");
+                    viewHolder.unreadIndicator.setBackgroundColor(Color.TRANSPARENT);
+                    viewHolder.unreadIndicator.setContentDescription("Message is read");
                 } else {
-                    unreadIndicator.setBackgroundColor(getResources().getColor(R.color.list_show_date_text_highlight));
-                    unreadIndicator.setContentDescription("Message is unread");
+                    viewHolder.unreadIndicator.setBackgroundColor(getResources().getColor(R.color.list_show_date_text_highlight));
+                    viewHolder.unreadIndicator.setContentDescription("Message is unread");
                 }
 
-                info.setText(getMessageInfoText(message));
-                title.setText(getMessageTitleText(message));
-                details.setText(getMessageDetailText(message));
+                viewHolder.info.setText(getMessageInfoText(message));
+                viewHolder.title.setText(getMessageTitleText(message));
+                viewHolder.details.setText(getMessageDetailText(message));
 
-                checkBox.setChecked(isMessageSelected(message.getMessageId()));
+                viewHolder.checkBox.setChecked(isMessageSelected(message.getMessageId()));
 
-                checkBox.setOnClickListener(new OnClickListener() {
+                final CheckBox checkBox = viewHolder.checkBox;
+                viewHolder.checkBox.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         onMessageSelected(message.getMessageId(), checkBox.isChecked());
@@ -206,5 +206,24 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                 view.setFocusableInTouchMode(false);
             }
         };
+    }
+
+
+    private class ViewHolder
+    {
+        final View unreadIndicator;
+        final TextView info;
+        final TextView title;
+        final TextView details;
+        final CheckBox checkBox;
+
+        public ViewHolder(View view)
+        {
+            this.unreadIndicator = view.findViewById(R.id.unread_indicator);
+            this.info = (TextView)view.findViewById(R.id.message_info);
+            this.title = (TextView)view.findViewById(R.id.message_title);
+            this.details = (TextView)view.findViewById(R.id.message_details);
+            this.checkBox = (CheckBox)view.findViewById(R.id.message_checkbox);
+        }
     }
 }
