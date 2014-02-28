@@ -57,6 +57,7 @@
         </activity>
         <activity android:name="com.livenation.mobile.android.na2.ui.FavoriteActivity" >
         </activity>
+        <activity android:name=".ui.DebugActivity"/>
         <activity
             android:name="com.livenation.mobile.android.na2.ui.SsoActivity"
             android:launchMode="singleTop"

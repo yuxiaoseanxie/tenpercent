@@ -38,6 +38,10 @@
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
 
+    <string name="debug_menu_title">Debug</string>
+    <string name="debug_actionbar_title">DEBUG</string>
+    <string name="debug_copied_toast">Copied</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">Notifications</string>
