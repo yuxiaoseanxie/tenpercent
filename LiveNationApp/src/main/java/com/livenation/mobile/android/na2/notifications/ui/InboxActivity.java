@@ -24,7 +24,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import com.livenation.mobile.android.na2.notifications.PushDispatcher;
+import com.livenation.mobile.android.na2.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na2.ui.HomeActivity;
+import com.livenation.mobile.android.na2.ui.ShowActivity;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
@@ -315,9 +318,16 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
 
         message.markRead();
 
-        Intent intent = new Intent(this, MessageActivity.class);
-        intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);
-        this.startActivity(intent);
+        Bundle extras = message.getExtras();
+        if(extras.containsKey(PushDispatcher.ENTITY_ID)) {
+            Intent intent = new Intent(this, ShowActivity.class);
+            intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, extras.getString(PushDispatcher.ENTITY_ID));
+            this.startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, MessageActivity.class);
+            intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);
+            this.startActivity(intent);
+        }
     }
 
     /**

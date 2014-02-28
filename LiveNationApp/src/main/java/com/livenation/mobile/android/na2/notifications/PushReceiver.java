@@ -32,18 +32,8 @@ public class PushReceiver extends BroadcastReceiver {
     private void messageClicked(Context context, Intent intent)
     {
         Log.i(LOG_TAG, "User clicked (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
-                "): " + intent.getStringExtra(PushManager.EXTRA_ALERT));
-
-        String messageId = intent.getStringExtra("_uamid");
-        Intent inboxIntent = new Intent(context, InboxActivity.class);
-        if(messageId != null) {
-            inboxIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
-        } else {
-            Log.i(LOG_TAG, "Message ID was missing.");
-        }
-
-        inboxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(inboxIntent);
+                "): " + intent.getExtras());
+        PushDispatcher.dispatch(context, intent);
     }
 
     private void registrationFinished(Context context, Intent intent)
