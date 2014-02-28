@@ -24,7 +24,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
-import com.livenation.mobile.android.na2.notifications.NotificationUtils;
+import com.livenation.mobile.android.na2.app.Constants;
 import com.livenation.mobile.android.na2.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na2.ui.HomeActivity;
 import com.livenation.mobile.android.na2.ui.ShowActivity;
@@ -319,9 +319,9 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         message.markRead();
 
         Bundle extras = message.getExtras();
-        if(extras.containsKey(NotificationUtils.EXTRA_ENTITY_ID)) {
+        if(extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
             Intent intent = new Intent(this, ShowActivity.class);
-            intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, extras.getString(NotificationUtils.EXTRA_ENTITY_ID));
+            intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
             this.startActivity(intent);
         } else {
             Intent intent = new Intent(this, MessageActivity.class);

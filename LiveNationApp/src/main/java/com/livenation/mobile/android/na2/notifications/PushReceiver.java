@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.livenation.mobile.android.na2.app.Constants;
 import com.livenation.mobile.android.na2.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na2.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na2.ui.ShowActivity;
@@ -34,11 +35,11 @@ public class PushReceiver extends BroadcastReceiver {
                 "): " + intent.getExtras());
 
         Intent outgoingIntent;
-        if(intent.hasExtra(NotificationUtils.EXTRA_ENTITY_ID)) {
+        if(intent.hasExtra(Constants.Notifications.EXTRA_ENTITY_ID)) {
             outgoingIntent = new Intent(context, ShowActivity.class);
-            outgoingIntent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, intent.getStringExtra(NotificationUtils.EXTRA_ENTITY_ID));
+            outgoingIntent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, intent.getStringExtra(Constants.Notifications.EXTRA_ENTITY_ID));
         } else {
-            String messageId = intent.getStringExtra(NotificationUtils.EXTRA_RICH_MESSAGE_ID);
+            String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
             outgoingIntent = new Intent(context, InboxActivity.class);
             outgoingIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
         }
