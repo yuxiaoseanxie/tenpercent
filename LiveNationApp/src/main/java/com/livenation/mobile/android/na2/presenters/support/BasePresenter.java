@@ -21,7 +21,7 @@ import com.livenation.mobile.android.platform.util.Logger;
 public abstract class BasePresenter<T2 extends PresenterView, T extends BaseState> implements Presenter<T2>, StateListener<T> {
 	private List<T> activeStates = new ArrayList<T>();
 	
-	public void addActiveState(T state) {
+	private void addActiveState(T state) {
 		Logger.log(getTag(), "Adding active state:" + state.hashCode());
 		activeStates.add(state);
 	}
@@ -63,7 +63,11 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 	public void onStateFailed(int failureCode, T state) {
 		removeActiveState(state);
 	}
-	
+
+    public List<T> getStates() {
+        return activeStates;
+    }
+
 	public LiveNationApiService getApiService() {
 		return LiveNationApplication.get().getServiceApi();
 	}

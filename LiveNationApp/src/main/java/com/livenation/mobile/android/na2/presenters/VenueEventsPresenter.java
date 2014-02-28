@@ -6,11 +6,12 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na2.presenters.support.BaseState;
-import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na2.presenters.support.Presenter;
-import com.livenation.mobile.android.na2.presenters.views.EventsView;
+import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -45,14 +46,14 @@ public class VenueEventsPresenter extends
 		// TODO: this
 	}
 	
-	static class VenueEventsState extends BaseState<ArrayList<Event>, EventsView> implements
+	static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
 			LiveNationApiService.GetEventsApiCallback {
 		private VenueEventsParameters apiParams;
 
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 		}
 		
 		@Override
@@ -89,6 +90,10 @@ public class VenueEventsPresenter extends
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-		
-	}
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 }

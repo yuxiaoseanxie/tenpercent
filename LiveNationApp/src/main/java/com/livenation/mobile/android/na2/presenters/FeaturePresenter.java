@@ -6,12 +6,13 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na2.helpers.LocationHelper.LocationCallback;
-import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na2.presenters.support.BaseState;
-import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na2.presenters.support.Presenter;
-import com.livenation.mobile.android.na2.presenters.views.FeatureView;
+import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
+import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService.GetTopChartsCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
@@ -35,14 +36,14 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 		view.setFeatured(featured);
 	}
 	
-	static class FeatureState extends BaseState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
+	static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;
 		
 		public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 			this.context = context;
 		}
 		
@@ -76,8 +77,13 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 		public void onLocationFailure(int failureCode) {
 			notifyFailed(FAILURE_LOCATION);
 		}
-		
-		private void retrieveCharts(double lat, double lng) {
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+
+        private void retrieveCharts(double lat, double lng) {
 			TopChartParameters params = ApiParameters.createChartParameters();
 			params.setLocation(lat, lng);
 			getApiService().getTopCharts(params, FeatureState.this);

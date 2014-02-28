@@ -215,6 +215,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 			
 			Favorite favorite = items.get(position);
 			holder.getTitle().setText(favorite.getName());
+            holder.getCheckbox().setChecked(true);
 			holder.getCheckbox().setOnClickListener(new OnFavoriteClickListener.OnFavoriteClick(favorite, getFavoritesPresenter(), getActivity()));
 			return view;
 		}

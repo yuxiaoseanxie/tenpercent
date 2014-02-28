@@ -3,11 +3,12 @@ package com.livenation.mobile.android.na2.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na2.presenters.support.BaseState;
-import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na2.presenters.support.Presenter;
-import com.livenation.mobile.android.na2.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -41,14 +42,14 @@ public class SingleVenuePresenter extends
 		// TODO: this
 	}
 	
-	static class SingleVenueState extends BaseState<Venue, SingleVenueView> implements
+	static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
 			LiveNationApiService.GetSingleVenueApiCallback {
 		private SingleVenueParameters apiParams;
 	
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 		}
 
 		@Override
@@ -81,6 +82,10 @@ public class SingleVenuePresenter extends
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-		
-	}
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 }

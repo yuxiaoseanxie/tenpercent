@@ -14,12 +14,13 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na2.helpers.LocationHelper.LocationCallback;
-import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na2.presenters.support.BaseState;
-import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na2.presenters.support.Presenter;
-import com.livenation.mobile.android.na2.presenters.views.VenuesView;
+import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
+import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.views.VenuesView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
@@ -52,7 +53,7 @@ public class NearbyVenuesPresenter extends
 		// TODO: This
 	}
 
-	static class VenuesState extends BaseState<ArrayList<Venue>, VenuesView>
+	static class VenuesState extends BaseResultState<ArrayList<Venue>, VenuesView>
 			implements LocationCallback,
 			LiveNationApiService.GetVenuesApiCallback {
 		private final Context context;
@@ -62,7 +63,7 @@ public class NearbyVenuesPresenter extends
 
 		public VenuesState(StateListener<VenuesState> listener, Bundle args,
 				VenuesView view, Context context) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 			this.context = context;
 		}
 		
@@ -107,5 +108,9 @@ public class NearbyVenuesPresenter extends
 			notifyFailed(FAILURE_LOCATION);
 		}
 
-	}
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 }

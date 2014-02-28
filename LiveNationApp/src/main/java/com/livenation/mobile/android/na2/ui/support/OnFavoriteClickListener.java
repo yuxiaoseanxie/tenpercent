@@ -25,7 +25,7 @@ public class OnFavoriteClickListener {
 		public Favorite getFavorite() {
 			Favorite favorite = new Favorite();
 			favorite.setName(venue.getName());
-			favorite.setType("venue");
+			favorite.setType(Favorite.FAVORITE_VENUE_KEY);
 			favorite.setId(venue.getNumericId());
 			return favorite;
 		};
@@ -42,7 +42,7 @@ public class OnFavoriteClickListener {
 		public Favorite getFavorite() {
 			Favorite favorite = new Favorite();
 			favorite.setName(artist.getName());
-			favorite.setType("artist");
+			favorite.setType(Favorite.FAVORITE_ARTIST_KEY);
 			favorite.setId(artist.getNumericId());
 			return favorite;
 		};
@@ -85,12 +85,11 @@ public class OnFavoriteClickListener {
 			
 			Favorite favorite = getFavorite();
 
+            Bundle args = getFavoritesPresenter().getArgsBundle(favorite);
 			if (value) {
-				Bundle args = getFavoritesPresenter().getArgsBundle(favorite);
 				getFavoritesPresenter().addFavorite(getActivity(), args, AbstractOnFavoriteClick.this);
 				checkbox.setChecked(value);
 			} else {
-				Bundle args = getFavoritesPresenter().getArgsBundle(favorite);
 				getFavoritesPresenter().removeFavorite(getActivity(), args, AbstractOnFavoriteClick.this);
 				checkbox.setChecked(value);
 			}

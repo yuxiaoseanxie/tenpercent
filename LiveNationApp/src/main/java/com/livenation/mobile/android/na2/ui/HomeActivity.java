@@ -24,16 +24,21 @@ import android.view.View;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
-import com.livenation.mobile.android.na2.R;
-import com.livenation.mobile.android.na2.app.LiveNationApplication;
-import com.livenation.mobile.android.na2.helpers.UiApiSsoProvider;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
-import com.livenation.mobile.android.na2.presenters.views.AccountSaveAuthTokenView;
-import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.na2.ui.fragments.AllShowsFragment;
-import com.livenation.mobile.android.na2.ui.fragments.NearbyVenuesFragment;
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
+import com.livenation.mobile.android.na.presenters.AccountPresenter;
+import com.livenation.mobile.android.na.presenters.FavoriteObserverPresenter;
+import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
+import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.presenters.views.FavoritesView;
+import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
+import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import java.util.List;
 
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
@@ -88,9 +93,16 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 			int providerId = ssoProvider.getId();
 			ssoProvider.openSession(false, new TokenUpdater(providerId));
 		}
+
+        LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
 	}
-	
-	@Override
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
@@ -205,5 +217,12 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		}
 
 	}
+
+    private class FavoriteUpdater implements FavoritesView {
+        @Override
+        public void setFavorites(List<Favorite> favorites) {
+            //do nothing, was cached
+        }
+    }
 	
 }

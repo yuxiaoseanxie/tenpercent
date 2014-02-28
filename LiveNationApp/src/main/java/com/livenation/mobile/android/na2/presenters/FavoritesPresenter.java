@@ -6,13 +6,13 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na2.presenters.support.BasePresenter;
-import com.livenation.mobile.android.na2.presenters.support.BaseState;
-import com.livenation.mobile.android.na2.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.na2.presenters.support.Presenter;
-import com.livenation.mobile.android.na2.presenters.views.FavoriteAddView;
-import com.livenation.mobile.android.na2.presenters.views.FavoriteRemoveView;
-import com.livenation.mobile.android.na2.presenters.views.FavoritesView;
+import com.livenation.mobile.android.na.presenters.support.BasePresenter;
+import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
+import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
+import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
+import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -24,9 +24,11 @@ public class FavoritesPresenter extends
 		StateListener<FavoritesPresenter.FavoritesState> {
 	private AddFavoritePresenter addFavoritePresenter = new AddFavoritePresenter();
 	private RemoveFavoritePresenter removeFavoritePresenter = new RemoveFavoritePresenter();
-	
+	private FavoriteObserverPresenter favoriteObserverPresenter = new FavoriteObserverPresenter();
+
 	public static final String INTENT_DATA_KEY = FavoritesPresenter.class.getName();
 	public static final String PARAMETER_EVENT_ID = "item_id";
+
 	@Override
 	public void initialize(Context context, Bundle args, FavoritesView view) {
 		FavoritesState state = new FavoritesState(FavoritesPresenter.this, args, view);
@@ -39,10 +41,19 @@ public class FavoritesPresenter extends
 		FavoritesView view = state.getView();
 		
 		List<Favorite> result = state.getResult();
-		view.setFavorites(result);
+
+        postResult(state);
+
+        view.setFavorites(result);
 	}
 
-	@Override
+    @Override
+    public void onStateCancelled(FavoritesState state) {
+        super.onStateCancelled(state);
+        postResult(state);
+    }
+
+    @Override
 	public void onStateFailed(int failureCode, FavoritesState state) {
 		super.onStateFailed(failureCode, state);
 		// TODO: this
@@ -55,21 +66,32 @@ public class FavoritesPresenter extends
 	public void removeFavorite(Context context, Bundle args, FavoriteRemoveView view) {
 		removeFavoritePresenter.initialize(context, args, view);
 	}
-	
-	public Bundle getArgsBundle(Favorite favorite) {
+
+    public FavoriteObserverPresenter getObserverPresenter() {
+        return favoriteObserverPresenter;
+    }
+
+    public Bundle getArgsBundle(Favorite favorite) {
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(INTENT_DATA_KEY, favorite);
 		return bundle;
 	}
+
+    private void postResult(FavoritesState state) {
+        List<Favorite> result = state.getResult();
+
+        getObserverPresenter().clear();
+        getObserverPresenter().postAll(result);
+    }
 	
-	static class FavoritesState extends BaseState<ArrayList<Favorite>, FavoritesView> implements
+	static class FavoritesState extends BaseResultState<ArrayList<Favorite>, FavoritesView> implements
 			LiveNationApiService.GetFavoritesApiCallback {
 		private SingleVenueParameters apiParams;
-	
+
 		public static final int FAILURE_API_GENERAL = 0;
 
 		public FavoritesState(StateListener<FavoritesState> listener, Bundle args, FavoritesView view) {
-			super(listener, args, INTENT_DATA_KEY, view);
+			super(listener, args, view);
 		}
 
 		@Override
@@ -102,10 +124,14 @@ public class FavoritesPresenter extends
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
 		}
-		
-	}
+
+        @Override
+        public String getDataKey() {
+            return INTENT_DATA_KEY;
+        }
+    }
 	
-	private static class AddFavoritePresenter extends
+	private class AddFavoritePresenter extends
 			BasePresenter<FavoriteAddView, AddFavoritePresenter.AddFavoriteState> implements
 			Presenter<FavoriteAddView>,
 			StateListener<AddFavoritePresenter.AddFavoriteState> {
@@ -121,24 +147,38 @@ public class FavoritesPresenter extends
 		public void onStateReady(AddFavoriteState state) {
 			super.onStateReady(state);
 			FavoriteAddView view = state.getView();
+
+            postResult(state);
+
 			view.onFavoriteAddSuccess();
 		}
 
-		@Override
+        @Override
+        public void onStateCancelled(AddFavoriteState state) {
+            super.onStateCancelled(state);
+            postResult(state);
+        }
+
+        @Override
 		public void onStateFailed(int failureCode, AddFavoriteState state) {
 			super.onStateFailed(failureCode, state);
 			FavoriteAddView view = state.getView();
 			view.onFavoriteAddFailed();
 		}
+
+        private void postResult(AddFavoriteState state) {
+            Favorite result = state.getResult();
+            getObserverPresenter().post(result);
+        }
 		
-		static class AddFavoriteState extends BaseState<Favorite, FavoriteAddView> implements
+		class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
 		LiveNationApiService.AddRemoveFavoriteApiCallback {
 			private ApiParameters.FavoriteWithNameParameters apiParams;
 			
 			public static final int FAILURE_API_GENERAL = 0;
 
 			public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
-				super(listener, args, INTENT_DATA_KEY, view);
+				super(listener, args, view);
 			}
 
 			@Override
@@ -175,11 +215,15 @@ public class FavoritesPresenter extends
 			public void onFailure(int failureCode, String message) {
 				notifyFailed(FAILURE_API_GENERAL);
 			}
-			
-		}
+
+            @Override
+            public String getDataKey() {
+                return INTENT_DATA_KEY;
+            }
+        }
 	}
 	
-	private static class RemoveFavoritePresenter extends
+	private class RemoveFavoritePresenter extends
 			BasePresenter<FavoriteRemoveView, RemoveFavoritePresenter.RemoveFavoriteState> implements
 			Presenter<FavoriteRemoveView>,
 			StateListener<RemoveFavoritePresenter.RemoveFavoriteState> {
@@ -196,18 +240,32 @@ public class FavoritesPresenter extends
 		public void onStateReady(RemoveFavoriteState state) {
 			super.onStateReady(state);
 			FavoriteRemoveView view = state.getView();
+
+            postResult(state);
+
 			view.onFavoriteRemoveSuccess();
 		}
 
-		@Override
+        @Override
+        public void onStateCancelled(RemoveFavoriteState state) {
+            super.onStateCancelled(state);
+            postResult(state);
+        }
+
+        @Override
 		public void onStateFailed(int failureCode, RemoveFavoriteState state) {
 			super.onStateFailed(failureCode, state);
 			FavoriteRemoveView view = state.getView();
 			view.onFavoriteRemoveFailed();
 		}
-		
-		static class RemoveFavoriteState extends
-				BaseState<Favorite, FavoriteRemoveView> implements
+
+        private void postResult(RemoveFavoriteState state) {
+            Favorite result = state.getResult();
+            getObserverPresenter().remove(result);
+        }
+
+		class RemoveFavoriteState extends
+				BaseResultState<Favorite, FavoriteRemoveView> implements
 				LiveNationApiService.AddRemoveFavoriteApiCallback {
 			private ApiParameters.FavoriteParameters apiParams;
 
@@ -215,7 +273,7 @@ public class FavoritesPresenter extends
 
 			public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,
 					Bundle args, FavoriteRemoveView view) {
-				super(listener, args, INTENT_DATA_KEY, view);
+				super(listener, args, view);
 			}
 
 			@Override
@@ -253,6 +311,10 @@ public class FavoritesPresenter extends
 				notifyFailed(FAILURE_API_GENERAL);
 			}
 
-		}
+            @Override
+            public String getDataKey() {
+                return INTENT_DATA_KEY;
+            }
+        }
 	}
 }

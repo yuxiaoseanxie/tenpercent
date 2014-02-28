@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,19 +30,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.livenation.mobile.android.na2.R;
-import com.livenation.mobile.android.na2.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.na2.presenters.views.SingleEventView;
-import com.livenation.mobile.android.na2.ui.VenueActivity;
-import com.livenation.mobile.android.na2.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na2.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na2.ui.support.OnFavoriteClickListener;
-import com.livenation.mobile.android.na2.ui.support.OnFavoriteClickListener.OnArtistFavoriteClick;
-import com.livenation.mobile.android.na2.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
-import com.livenation.mobile.android.na2.ui.views.LineupView;
-import com.livenation.mobile.android.na2.ui.views.ShowVenueView;
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
+import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.VenueActivity;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnArtistFavoriteClick;
+import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
+import com.livenation.mobile.android.na.ui.views.LineupView;
+import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
@@ -61,7 +64,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 	private static final float DEFAULT_MAP_ZOOM = 13f;
 	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
 	private LiveNationMapFragment mapFragment;
-	
+	private VenueFavoriteObserver venueFavoriteObserver;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,8 +91,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		
 		return result;
 	}
-	
-	@Override
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        deinitVenueFavoriteObserver();
+    }
+
+    @Override
 	public void setEvent(Event event) {
 		artistTitle.setText(event.getName());
 		
@@ -121,12 +131,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			
 			OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity());
 			venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
-			
+
 			double lat = Double.valueOf(venue.getLat());
 			double lng = Double.valueOf(venue.getLng());
 			setMapLocation(lat, lng);
-			
-		} else {
+
+            initVenueFavoriteObserver(venue, venueDetails.getFavorite());
+
+        } else {
 			venueDetails.setOnClickListener(null);
 		}
 		
@@ -145,7 +157,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			
 			OnArtistFavoriteClick onCheckBoxClick = new OnFavoriteClickListener.OnArtistFavoriteClick(lineup, getFavoritesPresenter(), getActivity());
 			view.getFavorite().setOnClickListener(onCheckBoxClick);
-			
+
+            view.setFavoriteObserver(lineup);
+
 			if (null == imageUrl) {
 				String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
 				
@@ -170,6 +184,20 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		}
 
 	};
+
+    private void initVenueFavoriteObserver(Venue venue, CheckBox checkbox) {
+        deinitVenueFavoriteObserver();
+        venueFavoriteObserver = new VenueFavoriteObserver(checkbox);
+
+        Bundle args = getFavoritesPresenter().getObserverPresenter().getBundleArgs(Favorite.FAVORITE_VENUE, venue.getNumericId());
+        getFavoritesPresenter().getObserverPresenter().initialize(getActivity(), args, venueFavoriteObserver);
+    }
+
+    private void deinitVenueFavoriteObserver() {
+        if (null != venueFavoriteObserver) {
+            getFavoritesPresenter().getObserverPresenter().cancel(venueFavoriteObserver);
+        }
+    }
 	
 	private void setMapLocation(double lat, double lng) {
 		if (null == map) return;
@@ -212,4 +240,22 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
+
+    private class VenueFavoriteObserver implements FavoriteObserverView {
+        private final CheckBox checkbox;
+
+        private VenueFavoriteObserver(CheckBox checkbox) {
+            this.checkbox = checkbox;
+        }
+
+        @Override
+        public void onFavoriteAdded(Favorite favorite) {
+            checkbox.setChecked(true);
+        }
+
+        @Override
+        public void onFavoriteRemoved(Favorite favorite) {
+            checkbox.setChecked(false);
+        }
+    }
 }
