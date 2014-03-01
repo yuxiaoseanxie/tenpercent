@@ -10,7 +10,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na2.R;
-import com.livenation.mobile.android.na2.ui.support.DebugAction;
+import com.livenation.mobile.android.na2.app.Constants;
+import com.livenation.mobile.android.na2.app.LiveNationApplication;
+import com.livenation.mobile.android.na2.ui.support.DebugItem;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
+import com.urbanairship.push.PushManager;
+import com.urbanairship.richpush.RichPushManager;
+import com.urbanairship.richpush.RichPushUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,21 +26,26 @@ import java.util.List;
  */
 public class DebugActivity extends ListActivity {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
-    private ArrayList<DebugAction> actions;
-    private DebugActionsAdapter actionsAdapter;
+    private ArrayList<DebugItem> actions;
+    private DebugItemsAdapter actionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null) {
-            actions = new ArrayList<DebugAction>();
-            actions.add(new DebugAction("Testytest", "123 ABC XZYW"));
+            actions = new ArrayList<DebugItem>();
+            actions.add(new DebugItem(getString(R.string.debug_item_device_uuid), Constants.deviceId));
+            AccessToken accessToken = (AccessToken)LiveNationApplication.get().getServiceApi().getAuthorizer().getAuthorization();
+            actions.add(new DebugItem(getString(R.string.debug_item_access_token), accessToken.getToken()));
+            actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
+            RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
+            actions.add(new DebugItem(getString(R.string.debug_item_urban_airship_id), urbanAirshipUser.getId()));
         } else {
-            actions = (ArrayList<DebugAction>)savedInstanceState.getSerializable(ACTIONS);
+            actions = (ArrayList<DebugItem>)savedInstanceState.getSerializable(ACTIONS);
         }
 
-        actionsAdapter = new DebugActionsAdapter(this, actions);
+        actionsAdapter = new DebugItemsAdapter(this, actions);
         setListAdapter(actionsAdapter);
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
@@ -50,13 +61,13 @@ public class DebugActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        DebugAction action = actionsAdapter.getItem(position);
+        DebugItem action = actionsAdapter.getItem(position);
         action.doAction(this);
     }
 
-    private class DebugActionsAdapter extends ArrayAdapter<DebugAction> {
-        public DebugActionsAdapter(Context context, List<DebugAction> debugActions) {
-            super(context, R.layout.list_debug_action, debugActions);
+    private class DebugItemsAdapter extends ArrayAdapter<DebugItem> {
+        public DebugItemsAdapter(Context context, List<DebugItem> debugItems) {
+            super(context, R.layout.list_debug_action, debugItems);
         }
 
 
@@ -68,7 +79,7 @@ public class DebugActivity extends ListActivity {
                 view.setTag(new ViewHolder(view));
             }
 
-            DebugAction action = getItem(position);
+            DebugItem action = getItem(position);
             ViewHolder holder = (ViewHolder)view.getTag();
             holder.actionTitle.setText(action.getName());
             holder.actionDetail.setText(action.getValue());

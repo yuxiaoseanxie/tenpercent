@@ -12,11 +12,11 @@ import java.io.Serializable;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugAction implements Serializable {
+public class DebugItem implements Serializable {
     private String name;
     private String value;
 
-    public DebugAction(String name, String value) {
+    public DebugItem(String name, String value) {
         this.name = name;
         this.value = value;
     }

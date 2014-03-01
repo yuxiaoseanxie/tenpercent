@@ -41,6 +41,11 @@
     <string name="debug_menu_title">Debug</string>
     <string name="debug_actionbar_title">DEBUG</string>
     <string name="debug_copied_toast">Copied</string>
+    <string name="debug_item_device_uuid">Device ID</string>
+    <string name="debug_item_user_id">User ID</string>
+    <string name="debug_item_access_token">Access Token</string>
+    <string name="debug_item_apid">APID</string>
+    <string name="debug_item_urban_airship_id">Urban Airship ID</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
