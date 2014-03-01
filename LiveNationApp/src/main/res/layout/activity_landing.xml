@@ -25,7 +25,7 @@
 
         <fragment
             android:id="@+id/fragment_account"
-            android:name="com.livenation.mobile.android.na.ui.fragments.AccountFragment"
+            android:name="com.livenation.mobile.android.na2.ui.fragments.AccountFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

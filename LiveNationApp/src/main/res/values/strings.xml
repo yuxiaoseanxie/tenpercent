@@ -31,10 +31,35 @@
     <string name="actionbar_drawer_close">Close</string>
     
     <string name="account_your_orders_title">Your Orders</string>
+    <string name="account_notifications">Notifications</string>
     <string name="account_favorite_venues_title">Favorite Venues</string>
     <string name="account_favorite_artists_title">Favorite Artists</string>
     <string name="account_your_orders_no_upcoming">You have no upcoming shows</string>
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
-    
+
+    <!-- Notifications -->
+    <string name="no_messages">No messages</string>
+    <string name="inbox_title">Notifications</string>
+    <string name="add_message">Add Message</string>
+    <string name="mark_read">Mark Read</string>
+    <string name="mark_unread">Mark Unread</string>
+    <string name="delete">Delete</string>
+    <string name="refresh">Refresh</string>
+    <string name="inbox_refresh_failed_dialog_title">Unable to retrieve new messages</string>
+    <string name="inbox_refresh_failed_dialog_message">Please try again later</string>
+    <string name="menu_deselect_all">Deselect all</string>
+    <string name="menu_select_all">Select all</string>
+    <string name="cab_selection">%d Selected</string>
+
+    <string name="notif_type_on_sale">ON SALE</string>
+    <string name="notif_type_announcement">JUST ANNOUNCED</string>
+    <string name="notif_type_last_minute">LAST MINUTE</string>
+    <string name="notif_type_presale">PRESALE</string>
+    <string name="notif_type_in_venue">LIVE FEED</string>
+    <string name="notif_type_featured">FEATURED</string>
+
+    <string name="notif_date_now">NOW</string>
+    <string name="notif_event_info_format" formatted="false">%s - %s</string>
+    <string name="notif_event_details_format" formatted="false">%s at %s</string>
 </resources>

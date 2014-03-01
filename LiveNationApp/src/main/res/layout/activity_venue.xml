@@ -10,7 +10,7 @@
 
         <fragment
             android:id="@+id/activity_venue_content"
-            android:name="com.livenation.mobile.android.na.ui.fragments.VenueFragment"
+            android:name="com.livenation.mobile.android.na2.ui.fragments.VenueFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

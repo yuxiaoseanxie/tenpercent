@@ -6,6 +6,37 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="@dimen/account_detail_min_height"
+        android:id="@+id/account_detail_notifications_container">
+
+        <ImageView
+            android:id="@+id/account_detail_image_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:minWidth="@dimen/account_detail_image_min_width"
+            android:scaleType="center"
+            android:src="@drawable/favorite_venues" />
+
+        <TextView
+            android:id="@+id/account_detail_text_notifications_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/account_detail_image_notifications"
+            android:text="@string/account_notifications"
+            android:textAppearance="@style/account_detail_header" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/underscore_container_height"
+            android:layout_alignLeft="@id/account_detail_text_notifications_title"
+            android:layout_alignParentBottom="true"
+            style="@style/ui_underscore" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="@dimen/account_detail_min_height" >
 
         <ImageView
