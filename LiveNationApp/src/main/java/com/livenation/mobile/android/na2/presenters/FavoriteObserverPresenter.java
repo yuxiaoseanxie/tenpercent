@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by cchilton on 2/27/14.
  */
-public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, Bundle, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer> {
+public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer> {
 
     private final List<Favorite> favorites = new ArrayList<Favorite>();
     private final static String ARG_FAVORITE_KEY = "favorite";
