@@ -1,12 +1,12 @@
 package com.livenation.mobile.android.na2.ui;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na2.R;
@@ -21,32 +21,38 @@ import com.urbanairship.richpush.RichPushUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends ListActivity {
+public class DebugActivity extends Activity implements AdapterView.OnItemClickListener {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
+
+    private StickyListHeadersListView listView;
     private DebugItemsAdapter actionsAdapter;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_debug);
+
+        listView = (StickyListHeadersListView)findViewById(R.id.debug_activity_list_view);
 
         if(savedInstanceState == null) {
             actions = new ArrayList<DebugItem>();
-            actions.add(new DebugItem(getString(R.string.debug_item_device_uuid), Constants.deviceId));
-            AccessToken accessToken = (AccessToken)LiveNationApplication.get().getServiceApi().getAuthorizer().getAuthorization();
-            actions.add(new DebugItem(getString(R.string.debug_item_access_token), accessToken.getToken()));
-            actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
-            RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
-            actions.add(new DebugItem(getString(R.string.debug_item_urban_airship_id), urbanAirshipUser.getId()));
+            addInfoDebugItems();
+            addActionDebugItems();
         } else {
             actions = (ArrayList<DebugItem>)savedInstanceState.getSerializable(ACTIONS);
         }
 
         actionsAdapter = new DebugItemsAdapter(this, actions);
-        setListAdapter(actionsAdapter);
+        listView.setAdapter(actionsAdapter);
+        listView.setOnItemClickListener(this);
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
     }
@@ -58,14 +64,34 @@ public class DebugActivity extends ListActivity {
         outState.putSerializable(ACTIONS, actions);
     }
 
+    private void addInfoDebugItems()
+    {
+        actions.add(new DebugItem(getString(R.string.debug_item_device_uuid), Constants.deviceId));
+
+        AccessToken accessToken = (AccessToken)LiveNationApplication.get().getServiceApi().getAuthorizer().getAuthorization();
+        String accessTokenString = accessToken != null? accessToken.getToken() : "(None)";
+        actions.add(new DebugItem(getString(R.string.debug_item_access_token), accessTokenString));
+
+        actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
+
+        RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
+        String urbanAirshipUserID = urbanAirshipUser != null? urbanAirshipUser.getId() : "(None)";
+        actions.add(new DebugItem(getString(R.string.debug_item_urban_airship_id), urbanAirshipUserID));
+    }
+
+    private void addActionDebugItems()
+    {
+
+    }
+
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         DebugItem action = actionsAdapter.getItem(position);
         action.doAction(this);
     }
 
-    private class DebugItemsAdapter extends ArrayAdapter<DebugItem> {
+    private class DebugItemsAdapter extends ArrayAdapter<DebugItem> implements StickyListHeadersAdapter {
         public DebugItemsAdapter(Context context, List<DebugItem> debugItems) {
             super(context, R.layout.list_debug_action, debugItems);
         }
@@ -87,6 +113,38 @@ public class DebugActivity extends ListActivity {
             return view;
         }
 
+        @Override
+        public long getHeaderId(int position) {
+            return getItem(position).getType();
+        }
+
+        @Override
+        public View getHeaderView(int position, View view, ViewGroup viewGroup) {
+            View headerView = view;
+            if(headerView == null) {
+                headerView = getLayoutInflater().inflate(R.layout.list_show_header, viewGroup, false);
+                headerView.setTag(new HeaderViewHolder(headerView));
+            }
+
+            HeaderViewHolder holder = (HeaderViewHolder)headerView.getTag();
+
+            int type = getItem(position).getType();
+            switch (type) {
+                case DebugItem.TYPE_INFO:
+                    holder.text.setText(R.string.debug_header_info);
+                    break;
+
+                case DebugItem.TYPE_ACTION:
+                    holder.text.setText(R.string.debug_header_actions);
+                    break;
+
+                default:
+                    throw new RuntimeException("Invalid type given");
+            }
+
+            return headerView;
+        }
+
         private class ViewHolder {
             TextView actionTitle;
             TextView actionDetail;
@@ -94,6 +152,14 @@ public class DebugActivity extends ListActivity {
             public ViewHolder(View view) {
                 this.actionTitle = (TextView)view.findViewById(R.id.action_title);
                 this.actionDetail = (TextView)view.findViewById(R.id.action_detail);
+            }
+        }
+
+        private class HeaderViewHolder {
+            TextView text;
+
+            public HeaderViewHolder(View view) {
+                this.text = (TextView)view.findViewById(R.id.list_show_header_textview);
             }
         }
     }

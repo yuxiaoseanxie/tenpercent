@@ -40,6 +40,8 @@
 
     <string name="debug_menu_title">Debug</string>
     <string name="debug_actionbar_title">DEBUG</string>
+    <string name="debug_header_info">INFO</string>
+    <string name="debug_header_actions">ACTIONS</string>
     <string name="debug_copied_toast">Copied</string>
     <string name="debug_item_device_uuid">Device ID</string>
     <string name="debug_item_user_id">User ID</string>
