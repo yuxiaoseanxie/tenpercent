@@ -17,6 +17,7 @@ import android.view.View;
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.LocationHelper;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.EventsPresenter;
 import com.livenation.mobile.android.na2.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na2.presenters.FeaturePresenter;
@@ -69,8 +70,13 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 	public FavoritesPresenter getFavoritesPresenter() {
 		return LiveNationApplication.get().getFavoritesPresenter();
 	}
-	
-	@Override
+
+    @Override
+    public AccountPresenters getAccountPresenters() {
+        return LiveNationApplication.get().getAccountPresenters();
+    }
+
+    @Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		state = new Bundle();

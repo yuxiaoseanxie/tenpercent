@@ -18,14 +18,13 @@ import android.view.ViewGroup;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.notifications.ui.InboxActivity;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na2.ui.FavoriteActivity;
 import com.livenation.mobile.android.na2.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountFragment extends LiveNationFragment implements AccountUserView {
-	private AccountPresenter accountProviderPresenter = new AccountPresenter(LiveNationApplication.get().getSsoManager());
 	private Fragment profileFragment;
 	
 	@Override
@@ -54,7 +53,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 	@Override
 	public void onResume() {
 		super.onResume();
-		accountProviderPresenter.initialize(getActivity(), null, AccountFragment.this);
+ 		getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
 	}
 	
 	@Override
@@ -68,9 +67,6 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 			profileFragment = new AccountSignInFragment();
 		} else {
 			profileFragment = new AccountUserFragment();
-			
-			Bundle args = AccountPresenter.getArgumentsBundle(user);
-			profileFragment.setArguments(args);
 		}
 	
 		addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");

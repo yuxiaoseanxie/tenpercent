@@ -10,6 +10,7 @@ package com.livenation.mobile.android.na2.ui.support;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na2.helpers.LocationHelper;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.EventsPresenter;
 import com.livenation.mobile.android.na2.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na2.presenters.FeaturePresenter;
@@ -25,4 +26,5 @@ public interface LiveNationFragmentContract {
 	FeaturePresenter getFeaturePresenter();
 	NearbyVenuesPresenter getNearbyVenuesPresenter();
 	FavoritesPresenter getFavoritesPresenter();
+    AccountPresenters getAccountPresenters();
 }
