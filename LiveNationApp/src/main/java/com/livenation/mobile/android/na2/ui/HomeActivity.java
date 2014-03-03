@@ -128,7 +128,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 			case RC_SSO_REPAIR: 
 				if (resultCode != RESULT_OK) {
 					//the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
-					getAccountPresenter().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
+					getAccountPresenters().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
 					//finish the app. this will reset any tokens in memory.
 					//alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
 					finish();
@@ -171,7 +171,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	}
 	
 	
-	private AccountPresenters getAccountPresenter() {
+	private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
 	}
 
@@ -190,8 +190,8 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		
 		@Override
 		public void onOpenSession(String sessionToken) {
-			Bundle args = getAccountPresenter().getSetAuthToken().getArguments(providerId, sessionToken);
-			getAccountPresenter().getSetAuthToken().initialize(HomeActivity.this, args, HomeActivity.this);
+			Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
+			getAccountPresenters().getSetAuthToken().initialize(HomeActivity.this, args, HomeActivity.this);
 		}
 
 		@Override

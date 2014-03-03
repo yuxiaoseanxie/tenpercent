@@ -42,8 +42,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	@Override
 	public void onOpenSession(String sessionToken) {
 		int providerId = SsoManager.getProviderId(ssoProvider);
-		Bundle args = getAccountPresenter().getSetAuthToken().getArguments(providerId, sessionToken);
-		getAccountPresenter().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
+		getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 
 	@Override
@@ -53,8 +53,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	
 	@Override
 	public void onGetUser(User user) {
-		Bundle args = getAccountPresenter().getSetUser().getArguments(user);
-		getAccountPresenter().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenters().getSetUser().getArguments(user);
+		getAccountPresenters().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 		finish();
 	}
 	
-	private AccountPresenters getAccountPresenter() {
+	private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
 	}
 }
