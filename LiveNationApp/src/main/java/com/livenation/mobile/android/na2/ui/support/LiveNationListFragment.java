@@ -14,6 +14,7 @@ import android.support.v4.app.ListFragment;
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.LocationHelper;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.EventsPresenter;
 import com.livenation.mobile.android.na2.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na2.presenters.FeaturePresenter;
@@ -61,4 +62,9 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	public FavoritesPresenter getFavoritesPresenter() {
 		return LiveNationApplication.get().getFavoritesPresenter();
 	}
+
+    @Override
+    public AccountPresenters getAccountPresenters() {
+        return LiveNationApplication.get().getAccountPresenters();
+    }
 }

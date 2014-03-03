@@ -21,14 +21,6 @@ public class AccountUserFragment extends LiveNationFragment implements
 	private TextView email;
 	private NetworkImageView image;
 	
-	private AccountPresenters presenter;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		presenter = new AccountPresenters(LiveNationApplication.get().getSsoManager());
-	}
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -44,7 +36,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		presenter.getGetUser().initialize(getActivity(), getArguments(), this);
+		getAccountPresenters().getGetUser().initialize(getActivity(), getArguments(), this);
 	}
 
 	@Override
@@ -64,7 +56,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
 		@Override
 		public void onClick(View v) {
-			presenter.getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
+            getAccountPresenters().getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
 		}
 		
 	}
