@@ -51,7 +51,8 @@
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
-    <string name="inbox_title">Notifications</string>
+    <string name="inbox_title">NOTIFICATIONS</string>
+    <string name="message_title">FEATURED</string>
     <string name="add_message">Add Message</string>
     <string name="mark_read">Mark Read</string>
     <string name="mark_unread">Mark Unread</string>

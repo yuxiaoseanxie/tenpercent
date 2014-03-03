@@ -27,7 +27,7 @@ public class MessageActivity extends FragmentActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setTitle(R.string.inbox_title);
+        getActionBar().setTitle(R.string.message_title);
     }
 
     @Override
