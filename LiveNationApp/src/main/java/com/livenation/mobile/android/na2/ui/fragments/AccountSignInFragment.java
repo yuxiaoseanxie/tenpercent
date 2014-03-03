@@ -17,9 +17,13 @@ public class AccountSignInFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View result = inflater.inflate(R.layout.fragment_account_sign_in, container, false);
-		Button button = (Button) result.findViewById(R.id.fragment_account_sign_in_button);
+
+        View button = result.findViewById(R.id.fragment_account_google_sign_in_button);
+        button.setOnClickListener(new OnGoogleSignInClick());
+
+        button = result.findViewById(R.id.fragment_account_facebook_sign_in_button);
 		button.setOnClickListener(new OnFacebookSignInClick());
-		result.findViewById(R.id.sign_in_button).setOnClickListener(new OnGoogleSignInClick());
+
 		return result;
 	}
 	
