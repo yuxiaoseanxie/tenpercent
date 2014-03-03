@@ -13,57 +13,57 @@ import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
-public class AccountPresenter implements Presenter<AccountUserView> {
-	private final SsoProfilePresenter ssoProfilePresenter;
+public class AccountPresenter {
 	private final SsoManager ssoManager;
-	private final SaveAuthTokenPresenter saveAuthTokenPresenter;
+
+    private final GetUserPresenter getUserPresenter;
+    private final SaveAuthTokenPresenter saveAuthTokenPresenter;
 	private final SaveUserPresenter saveUserPresenter;
 	private final SignOutPresenter signOutPresenter;
 
-	private static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
-	
 	public AccountPresenter(SsoManager ssoManager) {
 		this.ssoManager = ssoManager;
 		
-		ssoProfilePresenter  = new SsoProfilePresenter();
-		
+        getUserPresenter = new GetUserPresenter(ssoManager);
 		saveAuthTokenPresenter = new SaveAuthTokenPresenter(ssoManager);
 		saveUserPresenter = new SaveUserPresenter(ssoManager);
 		signOutPresenter = new SignOutPresenter(ssoManager);
 	}
-	
-	@Override
-	public void initialize(Context context, Bundle args, AccountUserView view) {
-		User user = ssoManager.readUser(context);
-		view.setUser(user);
-	}
 
-    @Override
-    public void cancel(AccountUserView view) {
-        //do nothing, no state
+    public GetUserPresenter getGetUser() {
+        return getUserPresenter;
     }
 
-    public Presenter<AccountUserView> getProfilePresenter() {
-		return ssoProfilePresenter;
-	}
-
-	public SaveAuthTokenPresenter getSetAuthTokenPresenter() {
+	public SaveAuthTokenPresenter getSetAuthToken() {
 		return saveAuthTokenPresenter;
 	}
 	
-	public SaveUserPresenter getSetUserPresenter() {
+	public SaveUserPresenter getSetUser() {
 		return saveUserPresenter;
 	}
 	
-	public SignOutPresenter getSignOutPresenter() {
+	public SignOutPresenter getSignOut() {
 		return signOutPresenter;
 	}
-	
-	public static Bundle getArgumentsBundle(User user) {
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(INTENT_DATA_KEY, user);
-		return bundle;
-	}
+
+    public static class GetUserPresenter implements Presenter<AccountUserView> {
+        private final SsoManager ssoManager;
+
+        private GetUserPresenter(SsoManager ssoManager) {
+            this.ssoManager = ssoManager;
+        }
+
+        @Override
+        public void initialize(Context context, Bundle args, AccountUserView view) {
+            User user = ssoManager.readUser(context);
+            view.setUser(user);
+        }
+
+        @Override
+        public void cancel(AccountUserView view) {
+            //do nothing, no state
+        }
+    }
 	
 	public static class SaveAuthTokenPresenter extends BaseSsoPresenter<AccountSaveAuthTokenView> implements Presenter<AccountSaveAuthTokenView> {
 		private static String ARG_ACCESS_TOKEN_KEY = "access_token";
@@ -89,7 +89,7 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 			view.onSaveAuthTokenSuccess();
 		}
 	
-		public Bundle getArgumentsBundle(int providerId, String accessToken) {
+		public Bundle getArguments(int providerId, String accessToken) {
 			Bundle bundle = new Bundle();
 			
 			bundle.putString(ARG_ACCESS_TOKEN_KEY, accessToken);
@@ -105,19 +105,19 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		public SaveUserPresenter(SsoManager ssoManager) {
 			super(ssoManager);
 		}
-		
-		public Bundle getArgumentsBundle(User user) {
-			Bundle bundle = new Bundle();
-			bundle.putSerializable(ARG_USER, user);
-			return bundle;
-		}
 
 		@Override
 		public void initialize(Context context, Bundle args, AccountSaveUserView view) {
 			User user = (User) args.getSerializable(ARG_USER);
 			ssoManager.saveUser(user, context);
 			view.onSaveUserSuccess(user);
-		}		
+		}
+
+        public Bundle getArguments(User user) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ARG_USER, user);
+            return bundle;
+        }
 	}
 	
 	public static class SignOutPresenter extends BaseSsoPresenter<AccountSignOutView> implements Presenter<AccountSignOutView> {
@@ -135,23 +135,6 @@ public class AccountPresenter implements Presenter<AccountUserView> {
 		}
 		
 	}
-	
-	public static class SsoProfilePresenter implements Presenter<AccountUserView> {
-		
-		@Override
-		public void initialize(Context context, Bundle args,
-				AccountUserView view) {
-			if (args.containsKey(INTENT_DATA_KEY)) {
-				User user = (User) args.getSerializable(INTENT_DATA_KEY);
-				view.setUser(user);
-			}
-		}
-
-        @Override
-        public void cancel(AccountUserView view) {
-            //no state, do nothing
-        }
-    }
 	
 	private static abstract class BaseSsoPresenter<T extends PresenterView> implements Presenter<T> {
 		protected final SsoManager ssoManager;

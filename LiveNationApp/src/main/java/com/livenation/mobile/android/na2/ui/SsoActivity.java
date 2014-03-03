@@ -42,8 +42,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	@Override
 	public void onOpenSession(String sessionToken) {
 		int providerId = SsoManager.getProviderId(ssoProvider);
-		Bundle args = getAccountPresenter().getSetAuthTokenPresenter().getArgumentsBundle(providerId, sessionToken);
-		getAccountPresenter().getSetAuthTokenPresenter().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenter().getSetAuthToken().getArguments(providerId, sessionToken);
+		getAccountPresenter().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 
 	@Override
@@ -53,8 +53,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	
 	@Override
 	public void onGetUser(User user) {
-		Bundle args = getAccountPresenter().getSetUserPresenter().getArgumentsBundle(user);
-		getAccountPresenter().getSetUserPresenter().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenter().getSetUser().getArguments(user);
+		getAccountPresenter().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 	
 	@Override

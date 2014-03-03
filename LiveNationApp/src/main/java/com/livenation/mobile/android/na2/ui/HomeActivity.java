@@ -28,7 +28,6 @@ import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.UiApiSsoProvider;
 import com.livenation.mobile.android.na2.presenters.AccountPresenter;
-import com.livenation.mobile.android.na2.presenters.FavoriteObserverPresenter;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.FavoritesView;
@@ -129,7 +128,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 			case RC_SSO_REPAIR: 
 				if (resultCode != RESULT_OK) {
 					//the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
-					getAccountPresenter().getSignOutPresenter().initialize(HomeActivity.this, null, HomeActivity.this);
+					getAccountPresenter().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
 					//finish the app. this will reset any tokens in memory.
 					//alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
 					finish();
@@ -191,8 +190,8 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		
 		@Override
 		public void onOpenSession(String sessionToken) {
-			Bundle args = getAccountPresenter().getSetAuthTokenPresenter().getArgumentsBundle(providerId, sessionToken);
-			getAccountPresenter().getSetAuthTokenPresenter().initialize(HomeActivity.this, args, HomeActivity.this);
+			Bundle args = getAccountPresenter().getSetAuthToken().getArguments(providerId, sessionToken);
+			getAccountPresenter().getSetAuthToken().initialize(HomeActivity.this, args, HomeActivity.this);
 		}
 
 		@Override

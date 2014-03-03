@@ -54,7 +54,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 	@Override
 	public void onResume() {
 		super.onResume();
-		accountProviderPresenter.initialize(getActivity(), null, AccountFragment.this);
+ 		accountProviderPresenter.getGetUser().initialize(getActivity(), null, AccountFragment.this);
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 		} else {
 			profileFragment = new AccountUserFragment();
 			
-			Bundle args = AccountPresenter.getArgumentsBundle(user);
+			Bundle args = accountProviderPresenter.getGetUser().getArguments(user);
 			profileFragment.setArguments(args);
 		}
 	

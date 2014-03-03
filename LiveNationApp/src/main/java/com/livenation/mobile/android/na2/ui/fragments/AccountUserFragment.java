@@ -44,7 +44,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		presenter.initialize(getActivity(), getArguments(), this);
+		presenter.getGetUser().initialize(getActivity(), getArguments(), this);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
 		@Override
 		public void onClick(View v) {
-			presenter.getSignOutPresenter().initialize(getActivity(), null, AccountUserFragment.this);
+			presenter.getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
 		}
 		
 	}
