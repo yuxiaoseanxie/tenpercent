@@ -146,4 +146,14 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="fragment_message_subject_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="fragment_message_details_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
 </resources>

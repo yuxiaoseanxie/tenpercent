@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/widget_margin">
+
+        <TextView
+            android:id="@+id/fragment_message_subject"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/widget_margin"
+            android:textAppearance="@style/fragment_message_subject_text"/>
+
+        <TextView
+            android:id="@+id/fragment_message_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/widget_margin"
+            android:textAppearance="@style/fragment_message_details_text" />
+
+        <View
+            style="@style/ui_underscore"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/underscore_container_height" />
+
+    </LinearLayout>
 
     <com.urbanairship.widget.RichPushMessageView
         android:id="@+id/fragment_message_view"
