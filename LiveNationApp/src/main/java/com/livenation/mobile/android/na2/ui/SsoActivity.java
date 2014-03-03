@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.SsoManager;
 import com.livenation.mobile.android.na2.helpers.UiApiSsoProvider;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -42,8 +42,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	@Override
 	public void onOpenSession(String sessionToken) {
 		int providerId = SsoManager.getProviderId(ssoProvider);
-		Bundle args = getAccountPresenter().getSetAuthTokenPresenter().getArgumentsBundle(providerId, sessionToken);
-		getAccountPresenter().getSetAuthTokenPresenter().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
+		getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 
 	@Override
@@ -53,8 +53,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	
 	@Override
 	public void onGetUser(User user) {
-		Bundle args = getAccountPresenter().getSetUserPresenter().getArgumentsBundle(user);
-		getAccountPresenter().getSetUserPresenter().initialize(SsoActivity.this, args, SsoActivity.this);
+		Bundle args = getAccountPresenters().getSetUser().getArguments(user);
+		getAccountPresenters().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 		finish();
 	}
 	
-	private AccountPresenter getAccountPresenter() {
-		return LiveNationApplication.get().getAccountPresenter();
+	private AccountPresenters getAccountPresenters() {
+		return LiveNationApplication.get().getAccountPresenters();
 	}
 }
