@@ -2,7 +2,11 @@ package com.livenation.mobile.android.na2.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,6 +59,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         listView.setOnItemClickListener(this);
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -62,6 +67,25 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(ACTIONS, actions);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.debug_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if(item.getItemId() == R.id.debug_activity_menu_item_share) {
+            onShareSelected();
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+
+        return super.onMenuItemSelected(featureId, item);
     }
 
     private void addInfoDebugItems()
@@ -84,6 +108,20 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
     }
 
+
+    public void onShareSelected()
+    {
+        String itemsString = DebugItem.convertListToString(actions);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Session debug info");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, itemsString);
+
+        startActivity(Intent.createChooser(shareIntent, "Share info"));
+    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {

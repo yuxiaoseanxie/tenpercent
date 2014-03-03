@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.livenation.mobile.android.na2.R;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by km on 2/28/14.
@@ -50,5 +51,22 @@ public class DebugItem implements Serializable {
         shareIntent.putExtra(Intent.EXTRA_TEXT, getValue());
 
         context.startActivity(Intent.createChooser(shareIntent, "Share debug item"));
+    }
+
+
+    public static String convertListToString(List<DebugItem> items) {
+        String string = "";
+        for (DebugItem item : items) {
+            if(item.getType() != TYPE_INFO)
+                continue;
+
+            string += item + "\n";
+        }
+        return string;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + ": " + getValue();
     }
 }
