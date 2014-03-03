@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.SsoManager;
 import com.livenation.mobile.android.na2.helpers.UiApiSsoProvider;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -87,7 +87,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 		finish();
 	}
 	
-	private AccountPresenter getAccountPresenter() {
-		return LiveNationApplication.get().getAccountPresenter();
+	private AccountPresenters getAccountPresenter() {
+		return LiveNationApplication.get().getAccountPresenters();
 	}
 }

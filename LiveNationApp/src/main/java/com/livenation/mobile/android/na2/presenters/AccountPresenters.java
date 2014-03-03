@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
-public class AccountPresenter {
+public class AccountPresenters {
 	private final SsoManager ssoManager;
 
     private final GetUserPresenter getUserPresenter;
@@ -21,7 +21,7 @@ public class AccountPresenter {
 	private final SaveUserPresenter saveUserPresenter;
 	private final SignOutPresenter signOutPresenter;
 
-	public AccountPresenter(SsoManager ssoManager) {
+	public AccountPresenters(SsoManager ssoManager) {
 		this.ssoManager = ssoManager;
 		
         getUserPresenter = new GetUserPresenter(ssoManager);

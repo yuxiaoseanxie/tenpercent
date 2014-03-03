@@ -18,7 +18,7 @@ import com.livenation.mobile.android.na2.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na2.helpers.LocationHelper;
 import com.livenation.mobile.android.na2.helpers.SsoManager;
 import com.livenation.mobile.android.na2.notifications.PushReceiver;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.EventsPresenter;
 import com.livenation.mobile.android.na2.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na2.presenters.FeaturePresenter;
@@ -45,7 +45,7 @@ public class LiveNationApplication extends Application {
 	private FeaturePresenter featurePresenter;
 	private SingleVenuePresenter singleVenuePresenter;
 	private VenueEventsPresenter venueEventsPresenter;
-	private AccountPresenter accountPresenter;
+	private AccountPresenters accountPresenters;
 	private NearbyVenuesPresenter nearbyVenuesPresenter;
 	private FavoritesPresenter favoritesPresenter;
 	private SsoManager ssoManager;
@@ -75,7 +75,7 @@ public class LiveNationApplication extends Application {
 		featurePresenter = new FeaturePresenter();
 		singleVenuePresenter = new SingleVenuePresenter();
 		venueEventsPresenter = new VenueEventsPresenter();
-		accountPresenter = new AccountPresenter(getSsoManager());
+		accountPresenters = new AccountPresenters(getSsoManager());
 		nearbyVenuesPresenter = new NearbyVenuesPresenter();
 		favoritesPresenter = new FavoritesPresenter();
 		
@@ -136,8 +136,8 @@ public class LiveNationApplication extends Application {
 		return nearbyVenuesPresenter;
 	}
 	
-	public AccountPresenter getAccountPresenter() {
-		return accountPresenter;
+	public AccountPresenters getAccountPresenters() {
+		return accountPresenters;
 	}
 	
 	public FavoritesPresenter getFavoritesPresenter() {

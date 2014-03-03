@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na2.ui.support.LiveNationFragment;
@@ -21,12 +21,12 @@ public class AccountUserFragment extends LiveNationFragment implements
 	private TextView email;
 	private NetworkImageView image;
 	
-	private AccountPresenter presenter;
+	private AccountPresenters presenter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		presenter = new AccountPresenter(LiveNationApplication.get().getSsoManager());
+		presenter = new AccountPresenters(LiveNationApplication.get().getSsoManager());
 	}
 	
 	@Override

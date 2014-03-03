@@ -27,7 +27,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
 import com.livenation.mobile.android.na2.helpers.UiApiSsoProvider;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.FavoritesView;
@@ -171,8 +171,8 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	}
 	
 	
-	private AccountPresenter getAccountPresenter() {
-		return LiveNationApplication.get().getAccountPresenter();
+	private AccountPresenters getAccountPresenter() {
+		return LiveNationApplication.get().getAccountPresenters();
 	}
 
 	/**
