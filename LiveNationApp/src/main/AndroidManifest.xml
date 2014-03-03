@@ -58,6 +58,13 @@
         <activity android:name="com.livenation.mobile.android.na2.ui.FavoriteActivity" >
         </activity>
         <activity
+            android:name="com.livenation.mobile.android.na2.ui.DebugActivity"
+            android:parentActivityName="com.livenation.mobile.android.na2.ui.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.na2.ui.HomeActivity" />
+        </activity>
+        <activity
             android:name="com.livenation.mobile.android.na2.ui.SsoActivity"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >

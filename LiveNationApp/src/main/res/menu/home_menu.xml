@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_home_facebook"
-        android:title="FaceBook"/>
+        android:id="@+id/menu_home_debug"
+        android:title="@string/debug_menu_title"
+        android:showAsAction="never"/>
 
 </menu>
