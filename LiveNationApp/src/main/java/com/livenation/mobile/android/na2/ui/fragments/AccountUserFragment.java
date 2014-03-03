@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na2.R;
 import com.livenation.mobile.android.na2.app.LiveNationApplication;
-import com.livenation.mobile.android.na2.presenters.AccountPresenter;
+import com.livenation.mobile.android.na2.presenters.AccountPresenters;
 import com.livenation.mobile.android.na2.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na2.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na2.ui.support.LiveNationFragment;
@@ -20,14 +20,6 @@ public class AccountUserFragment extends LiveNationFragment implements
 	private TextView name;
 	private TextView email;
 	private NetworkImageView image;
-	
-	private AccountPresenter presenter;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		presenter = new AccountPresenter(LiveNationApplication.get().getSsoManager());
-	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +36,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		presenter.initialize(getActivity(), getArguments(), this);
+		getAccountPresenters().getGetUser().initialize(getActivity(), getArguments(), this);
 	}
 
 	@Override
@@ -64,7 +56,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
 		@Override
 		public void onClick(View v) {
-			presenter.getSignOutPresenter().initialize(getActivity(), null, AccountUserFragment.this);
+            getAccountPresenters().getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
 		}
 		
 	}
