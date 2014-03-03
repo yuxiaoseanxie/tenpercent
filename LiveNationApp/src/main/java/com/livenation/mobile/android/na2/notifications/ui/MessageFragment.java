@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.livenation.mobile.android.na2.R;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
@@ -21,35 +22,22 @@ import com.urbanairship.widget.RichPushMessageView;
  * Fragment that displays a rich push activity_message in a RichPushMessageView
  */
 public class MessageFragment extends Fragment {
-
-    private static final String MESSAGE_ID_KEY = "com.urbanairship.richpush.URL_KEY";
     private RichPushMessageView browser;
-
-    /**
-     * Creates a new MessageFragment
-     * @param messageId The activity_message's id to display
-     * @return messageFragment new MessageFragment
-     */
-    public static MessageFragment newInstance(String messageId) {
-        MessageFragment message = new MessageFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(MESSAGE_ID_KEY, messageId);
-        message.setArguments(arguments);
-        return message;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        browser = new RichPushMessageView(container.getContext());
-        browser.setLayoutParams(container.getLayoutParams());
-        return browser;
+        View view = inflater.inflate(R.layout.fragment_message, container);
+
+        browser = (RichPushMessageView)view.findViewById(R.id.fragment_message_view);
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String messageId = getArguments().getString(MESSAGE_ID_KEY);
+        String messageId = getActivity().getIntent().getStringExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY);
         RichPushMessage message = RichPushManager.shared().getRichPushUser().getInbox().getMessage(messageId);
 
         if (message != null) {

@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <android.support.v4.view.ViewPager
-        android:id="@+id/message_pager"
+
+    <fragment
+        android:id="@+id/activity_message_fragment"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_width="fill_parent" />
-    
+        android:name="com.livenation.mobile.android.na2.notifications.ui.MessageFragment" />
 
 </LinearLayout>
