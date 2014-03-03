@@ -12,12 +12,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="list_notification_info" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/list_show_date_text_highlight</item>
-    </style>
-
     <style name="list_show_title" parent="@style/livenation_app_text">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
@@ -135,6 +129,21 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#bbbbbb</item>
+    </style>
+
+    <style name="list_inbox_message_info" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/list_show_date_text_highlight</item>
+    </style>
+
+    <style name="list_inbox_message_title" parent="@style/livenation_app_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_inbox_message_details" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>
