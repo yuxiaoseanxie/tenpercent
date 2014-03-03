@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="release_cert_api_key"></string>
-    <string name="charlies_debug_cert_api_key">AIzaSyB-m9XKAyFJRPIfzBMGZRJQ-yOeFzyTdKM</string>
+    <string name="charlies_debug_cert_api_key_na">AIzaSyB-m9XKAyFJRPIfzBMGZRJQ-yOeFzyTdKM</string>
+    <string name="charlies_debug_cert_api_key_na2">AIzaSyCYoPg1Q_XahvmsU-bm0gU_Mj-B_7o_4y8</string>
     <string name="facebook_app_id">387261387994194</string>
 </resources>
