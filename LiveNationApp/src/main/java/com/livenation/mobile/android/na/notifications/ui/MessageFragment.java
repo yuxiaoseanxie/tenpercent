@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.Constants;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
