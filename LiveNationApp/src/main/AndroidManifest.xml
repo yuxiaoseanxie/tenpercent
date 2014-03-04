@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.livenation.mobile.android.na2"
+    package="com.livenation.mobile.android.na"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -21,11 +21,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission
-        android:name="com.livenation.mobile.android.na2.permission.C2D_MESSAGE"
+        android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na2.permission.C2D_MESSAGE" />
-    <permission android:name="com.livenation.mobile.android.na2.permission.UA_DATA" android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na2.permission.UA_DATA" />
+    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
+    <permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" android:protectionLevel="signature" />
+    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
     <uses-feature
@@ -33,7 +33,7 @@
         android:required="true" />
 
     <application
-        android:name="com.livenation.mobile.android.na2.app.LiveNationApplication"
+        android:name="com.livenation.mobile.android.na.app.LiveNationApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon_144"
         android:label="@string/app_name"
@@ -43,29 +43,28 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.livenation.mobile.android.na2.ui.HomeActivity"
+            android:name="com.livenation.mobile.android.na.ui.HomeActivity"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.livenation.mobile.android.na2.ui.ShowActivity" >
+        <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity" >
         </activity>
-        <activity android:name="com.livenation.mobile.android.na2.ui.VenueActivity" >
+        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity" >
         </activity>
-        <activity android:name="com.livenation.mobile.android.na2.ui.FavoriteActivity" >
+        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity" >
         </activity>
         <activity
-            android:name="com.livenation.mobile.android.na2.ui.DebugActivity"
-            android:parentActivityName="com.livenation.mobile.android.na2.ui.HomeActivity">
+            android:name="com.livenation.mobile.android.na.ui.DebugActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.livenation.mobile.android.na2.ui.HomeActivity" />
+                android:value="com.livenation.mobile.android.na.ui.HomeActivity" />
         </activity>
         <activity
-            android:name="com.livenation.mobile.android.na2.ui.SsoActivity"
+            android:name="com.livenation.mobile.android.na.ui.SsoActivity"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
@@ -73,7 +72,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/charlies_debug_cert_api_key_na2" />
+            android:value="@string/charlies_debug_cert_api_key_na" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -81,9 +80,9 @@
 
         <!-- Urban Airship config -->
         <activity
-            android:name="com.livenation.mobile.android.na2.notifications.ui.InboxActivity" />
+            android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
         <activity
-            android:name="com.livenation.mobile.android.na2.notifications.ui.MessageActivity" />
+            android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver
@@ -92,7 +91,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.livenation.mobile.android.na2" />
+                <category android:name="com.livenation.mobile.android.na" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -111,12 +110,12 @@
             android:name="com.urbanairship.analytics.EventService"
             android:label="Event Service" />
         <provider android:name="com.urbanairship.UrbanAirshipProvider"
-            android:authorities="com.livenation.mobile.android.na2.urbanairship.provider"
-            android:permission="com.livenation.mobile.android.na2.permission.UA_DATA"
+            android:authorities="com.livenation.mobile.android.na.urbanairship.provider"
+            android:permission="com.livenation.mobile.android.na.permission.UA_DATA"
             android:exported="true"
             android:multiprocess="true" />
 
-        <receiver android:name="com.livenation.mobile.android.na2.notifications.PushReceiver" />
+        <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
     </application>
 
 </manifest>
