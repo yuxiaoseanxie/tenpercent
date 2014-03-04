@@ -56,6 +56,7 @@ public class MessageFragment extends Fragment {
 
         String messageId = getActivity().getIntent().getStringExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY);
         message = RichPushManager.shared().getRichPushUser().getInbox().getMessage(messageId);
+        message.markRead();
 
         if (message != null) {
             subjectText.setText(message.getTitle());
