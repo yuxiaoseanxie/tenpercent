@@ -63,6 +63,7 @@
     <string name="menu_deselect_all">Deselect all</string>
     <string name="menu_select_all">Select all</string>
     <string name="cab_selection">%d Selected</string>
+    <string name="message_cta_default">Go</string>
 
     <string name="notif_type_on_sale">ON SALE</string>
     <string name="notif_type_announcement">JUST ANNOUNCED</string>
