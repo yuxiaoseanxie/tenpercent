@@ -10,6 +10,7 @@ import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
@@ -17,8 +18,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 public class SingleVenuePresenter extends
 		BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
 		StateListener<SingleVenuePresenter.SingleVenueState> {
-	public static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
-	public static final String PARAMETER_EVENT_ID = "venue_id";
+	private static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
+    private static final String PARAMETER_VENUE_ID = "venue_id";
 	
 	@Override
 	public void initialize(Context context, Bundle args, SingleVenueView view) {
@@ -40,6 +41,18 @@ public class SingleVenuePresenter extends
 		super.onStateFailed(failureCode, state);
 		// TODO: this
 	}
+
+    public static Bundle getAruguments(String venueIdRaw) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw);
+        return bundle;
+    }
+
+    public static void embedResult(Bundle args, Venue venueCache) {
+        if (null != venueCache) {
+            args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
+        }
+    }
 	
 	static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
 			LiveNationApiService.GetSingleVenueApiCallback {
@@ -66,7 +79,7 @@ public class SingleVenuePresenter extends
 			super.applyArgs(args);
 			apiParams = ApiParameters.createSingleVenueParameters();
 
-			String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
+			String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
 			long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
 			apiParams.setVenueId(venueId);
 		}

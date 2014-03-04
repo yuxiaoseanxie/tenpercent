@@ -92,10 +92,11 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 			long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = adapter.getItems().get(position);
-		
-		intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, event.getId());
-		intent.putExtra(SingleEventPresenter.INTENT_DATA_KEY, event);
-		
+
+        Bundle args = SingleEventPresenter.getAruguments(event.getId());
+        SingleEventPresenter.embedResult(args, event);
+        intent.putExtras(args);
+
 		startActivity(intent);
 	}
 	
