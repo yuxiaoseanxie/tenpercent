@@ -25,8 +25,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleEventPresenter.SingleEventState> implements
 		Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
-	public static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
-	public static final String PARAMETER_EVENT_ID = "event_id";
+	private static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
+	private static final String PARAMETER_EVENT_ID = "event_id";
 	
 	@Override
 	public void initialize(Context context, Bundle args, SingleEventView view) {
@@ -48,6 +48,18 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 		super.onStateFailed(failureCode, state);
 		// TODO: this
 	}
+
+    public static Bundle getAruguments(String eventIdRaw) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SingleEventPresenter.PARAMETER_EVENT_ID, eventIdRaw);
+        return bundle;
+    }
+
+    public static void embedResult(Bundle args, Event eventCache) {
+        if (null != eventCache) {
+            args.putSerializable(SingleEventPresenter.INTENT_DATA_KEY, eventCache);
+        }
+    }
 
 	static class SingleEventState extends BaseResultState<Event, SingleEventView>
 			implements LiveNationApiService.GetSingleEventApiCallback {

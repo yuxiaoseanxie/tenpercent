@@ -321,7 +321,8 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         Bundle extras = message.getExtras();
         if(extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
             Intent intent = new Intent(this, ShowActivity.class);
-            intent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
+            Bundle args = SingleEventPresenter.getAruguments(extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
+            intent.putExtras(args);
             this.startActivity(intent);
         } else {
             Intent intent = new Intent(this, MessageActivity.class);

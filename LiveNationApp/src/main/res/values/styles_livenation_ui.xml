@@ -56,4 +56,10 @@
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
         <item name="android:minHeight">@dimen/ui_tab_height</item>
     </style>
+    
+    <style name="list_venue_header_miles">
+        <item name="android:padding">3dp</item>
+        <item name="android:background">@drawable/list_venue_header_miles</item>
+        <item name="android:textAppearance">@style/list_venue_header_miles_text</item>
+    </style>
 </resources>

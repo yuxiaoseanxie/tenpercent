@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na2.notifications;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.livenation.mobile.android.na2.app.Constants;
@@ -37,7 +38,8 @@ public class PushReceiver extends BroadcastReceiver {
         Intent outgoingIntent;
         if(intent.hasExtra(Constants.Notifications.EXTRA_ENTITY_ID)) {
             outgoingIntent = new Intent(context, ShowActivity.class);
-            outgoingIntent.putExtra(SingleEventPresenter.PARAMETER_EVENT_ID, intent.getStringExtra(Constants.Notifications.EXTRA_ENTITY_ID));
+            Bundle args = SingleEventPresenter.getAruguments(intent.getStringExtra(Constants.Notifications.EXTRA_ENTITY_ID));
+            outgoingIntent.putExtras(args);
         } else {
             String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
             outgoingIntent = new Intent(context, InboxActivity.class);
