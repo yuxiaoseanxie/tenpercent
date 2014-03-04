@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.livenation.mobile.android.na2.R;
+import com.livenation.mobile.android.na.R;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
