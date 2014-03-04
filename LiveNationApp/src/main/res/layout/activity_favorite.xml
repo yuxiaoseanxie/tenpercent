@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/activity_favorite_content"
-        android:name="com.livenation.mobile.android.na2.ui.fragments.FavoritesFragment"
+        android:name="com.livenation.mobile.android.na.ui.fragments.FavoritesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_favorites" />

@@ -20,5 +20,11 @@
 	
 	<color name="text_primary">#000000</color>
 	<color name="text_secondary">#636363</color>
-	
+
+    <color name="login_facebook_button_color">#396ed3</color>
+    <color name="login_facebook_button_pressed_color">#666666</color>
+    <color name="login_google_plus_button_color">#db4c3f</color>
+    <color name="login_google_plus_button_pressed_color">#666666</color>
+    <color name="login_sso_button_text">#ffffff</color>
+
 </resources>
