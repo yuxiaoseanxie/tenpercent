@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
+import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
@@ -123,7 +124,11 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		} else if(item.getItemId() == R.id.menu_home_debug) {
+		} else if(item.getItemId() == R.id.menu_home_notifications_item) {
+            startActivity(new Intent(this, InboxActivity.class));
+
+            return true;
+        } else if(item.getItemId() == R.id.menu_home_debug_item) {
             startActivity(new Intent(this, DebugActivity.class));
 
             return true;
