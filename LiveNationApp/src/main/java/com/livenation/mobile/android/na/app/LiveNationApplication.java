@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
@@ -49,6 +50,7 @@ public class LiveNationApplication extends Application {
 	private NearbyVenuesPresenter nearbyVenuesPresenter;
 	private FavoritesPresenter favoritesPresenter;
 	private SsoManager ssoManager;
+    private InboxStatusPresenter inboxStatusPresenter;
 	
 	public static LiveNationApplication get() {
 		return instance;
@@ -147,4 +149,8 @@ public class LiveNationApplication extends Application {
 	public SsoManager getSsoManager() {
 		return ssoManager;
 	}
+
+    public InboxStatusPresenter getInboxStatusPresenter() {
+        return inboxStatusPresenter;
+    }
 }
