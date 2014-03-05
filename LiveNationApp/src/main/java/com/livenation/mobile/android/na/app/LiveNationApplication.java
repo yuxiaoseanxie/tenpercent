@@ -80,7 +80,8 @@ public class LiveNationApplication extends Application {
 		accountPresenters = new AccountPresenters(getSsoManager());
 		nearbyVenuesPresenter = new NearbyVenuesPresenter();
 		favoritesPresenter = new FavoritesPresenter();
-		
+		inboxStatusPresenter = new InboxStatusPresenter();
+
 		locationHelper.prepareCache(getApplicationContext());
 		requestQueue = Volley.newRequestQueue(getApplicationContext());
 		int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
