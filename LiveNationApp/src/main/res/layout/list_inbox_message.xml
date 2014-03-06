@@ -20,7 +20,10 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="7dp"
+        android:button="@drawable/ui_checkbox" />
 
     <LinearLayout
         android:layout_width="fill_parent"
