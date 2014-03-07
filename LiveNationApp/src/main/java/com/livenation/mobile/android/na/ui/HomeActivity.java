@@ -9,6 +9,7 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,10 +36,14 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoTokenConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.api.transport.ApiConfigElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
@@ -86,19 +92,24 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec = tabHost.newTabSpec("your_shows");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);
-		
-		ApiSsoProvider ssoProvider = getConfiguredSsoProvider();
-		if (null != ssoProvider) {
-			int providerId = ssoProvider.getId();
-			ssoProvider.openSession(false, new TokenUpdater(providerId));
-		}
 
+        int providerId = LiveNationApplication.get().getApiConfig().getSsoProvider().getResult().getId();
+        LiveNationApplication.get().getApiConfig().getSsoToken().addListener(new TokenUpdater(providerId));
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
 	}
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LiveNationApiConfig apiConfig = (LiveNationApiConfig) LiveNationApplication.get().getServiceApi().getApiConfig();
+        WeakReference<Activity> weakActivity = new WeakReference<Activity>(HomeActivity.this);
+        apiConfig.getActivity().setResult(weakActivity);
+        apiConfig.getActivity().notifyReady();
     }
 
     @Override
@@ -143,6 +154,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 					//alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
 					finish();
 				}
+                LiveNationApplication.get().getApiConfig().getSsoToken().setBlocked(false);
 				break;
 		}
 	}
@@ -161,11 +173,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	public void onSaveAuthTokenFailure() {
 		throw new IllegalStateException("Should not happen..");
 	}
-	
-	private UiApiSsoProvider getConfiguredSsoProvider() {
-		UiApiSsoProvider provider = LiveNationApplication.get().getSsoManager().getConfiguredSsoProvider(HomeActivity.this);
-		return provider;
-	}
+
 	
 	/**
 	 * Here we have to return our own Tab View object to get our desired LiveNation red tab.
@@ -185,47 +193,44 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		return LiveNationApplication.get().getAccountPresenters();
 	}
 
-	/**
-	 * Token Updater class.
-	 * 
-	 * This ensures that the SSO access token being passed to the LN api is current and correct.
-	 *
-	 */
-	private class TokenUpdater implements ApiSsoProvider.OpenSessionCallback {
-		private final int providerId;
+    private class TokenUpdater implements ApiConfigElement.ConfigListener<ApiConfigElement<Pair>> {
+        private final int providerId;
 
-		public TokenUpdater(int providerId) {
-			this.providerId = providerId;
-		}
-		
-		@Override
-		public void onOpenSession(String sessionToken) {
-			Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
-			getAccountPresenters().getSetAuthToken().initialize(HomeActivity.this, args, HomeActivity.this);
-		}
+        private TokenUpdater(int providerId) {
+            this.providerId = providerId;
+        }
 
-		@Override
-		public void onOpenSessionFailed(Exception exception, boolean allowForeground) {
-			//possible SSO configuration problem. 
+        @Override
+        public void onStart(ApiConfigElement<Pair> element) {
+        }
+
+        @Override
+        public void onReady(ApiConfigElement<Pair> element) {
+            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
+        }
+
+        @Override
+        public void onFailed(ApiConfigElement<Pair> element, int errorCode, String message) {
+            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
+            //set the config element to externally blocked, so config won't try running it until we resolve
+            //this externally
+            element.setBlocked(true);
+			//possible SSO configuration problem.
 			//Lets give control to whatever SSO SDK it is, and allow it to create whatever
 			//foreground windows for user input to resolve.
-			ApiSsoProvider ssoProvider = getConfiguredSsoProvider();
-			if (null == ssoProvider) return;
-			//if the session failed, and it was only allowed to run in the background..
-			if (!allowForeground) {
-				//Lets try again, but this time with foreground activities that may resolve the session error
-				Intent intent = new Intent(HomeActivity.this, SsoActivity.class);
-				intent.putExtra(SsoActivity.ARG_PROVIDER_ID, ssoProvider.getId());
-				startActivityForResult(intent, RC_SSO_REPAIR);
-			}
-		}
-		
-		@Override
-		public void onNoNetwork() {
-			//do nothing
-		}
+			ApiSsoProvider ssoProvider = LiveNationApplication.get().getSsoManager().getSsoProvider(providerId, HomeActivity.this);
 
-	}
+            //Lets try again, but this time with foreground activities that may resolve the session error
+            Intent intent = new Intent(HomeActivity.this, SsoActivity.class);
+            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, ssoProvider.getId());
+            startActivityForResult(intent, RC_SSO_REPAIR);
+        }
+
+        @Override
+        public void onInvalidated(ApiConfigElement<Pair> element) {
+            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
+        }
+    }
 
     private class FavoriteUpdater implements FavoritesView {
         @Override

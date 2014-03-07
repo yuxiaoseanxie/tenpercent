@@ -17,6 +17,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
@@ -92,7 +93,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     {
         actions.add(new DebugItem(getString(R.string.debug_item_device_uuid), Constants.deviceId));
 
-        AccessToken accessToken = (AccessToken)LiveNationApplication.get().getServiceApi().getAuthorizer().getAuthorization();
+        AccessToken accessToken = LiveNationApplication.get().getApiConfig().getAccessToken().getResult();
         String accessTokenString = accessToken != null? accessToken.getToken() : "(None)";
         actions.add(new DebugItem(getString(R.string.debug_item_access_token), accessTokenString));
 

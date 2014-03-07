@@ -10,17 +10,21 @@ import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
+import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.util.Logger;
 
-public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView {
+import java.lang.ref.WeakReference;
+
+public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
 	private UiApiSsoProvider ssoProvider;
 	public static final String ARG_PROVIDER_ID = "provider_id";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Integer providerId = null;
+  		Integer providerId = null;
 		if (getIntent().hasExtra(ARG_PROVIDER_ID)) {
 			providerId = getIntent().getExtras().getInt(ARG_PROVIDER_ID);
 		}
@@ -28,8 +32,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 		if (null == providerId) {
 			throw new IllegalArgumentException("Which SSO do you want me to sign in?!");
 		}
-		
-		ssoProvider = LiveNationApplication.get().getSsoManager().getSsoProvider(providerId, SsoActivity.this);
+
+        ssoProvider = LiveNationApplication.get().getSsoManager().getSsoProvider(providerId, SsoActivity.this);
 		ssoProvider.openSession(true, SsoActivity.this);
 	}
 
@@ -43,7 +47,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	public void onOpenSession(String sessionToken) {
 		int providerId = SsoManager.getProviderId(ssoProvider);
 		Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
-		getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
+        getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 
 	@Override
@@ -53,13 +57,19 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	
 	@Override
 	public void onGetUser(User user) {
+        if (null == user) return;
 		Bundle args = getAccountPresenters().getSetUser().getArguments(user);
 		getAccountPresenters().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
 	
 	@Override
 	public void onSaveUserSuccess(User user) {
-		setResult(RESULT_OK);
+        //bring up the new session in the API
+        LiveNationApplication.get().getApiConfig().invalidateApiSession();
+        LiveNationApplication.get().getApiConfig().getSsoProvider().setResult(ssoProvider);
+        LiveNationApplication.get().getApiConfig().run();
+
+        setResult(RESULT_OK);
 		finish();
 	}
 
@@ -86,8 +96,13 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 		setResult(RESULT_OK);
 		finish();
 	}
-	
-	private AccountPresenters getAccountPresenters() {
+
+    @Override
+    public void onSignOut() {
+
+    }
+
+    private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
 	}
 }

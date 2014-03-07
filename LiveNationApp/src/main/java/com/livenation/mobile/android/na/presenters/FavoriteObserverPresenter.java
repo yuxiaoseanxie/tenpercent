@@ -3,22 +3,33 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BaseObserverPresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.api.transport.ApiConfigElement;
 import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by cchilton on 2/27/14.
  */
-public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer> {
+public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer>, ApiConfigElement.ConfigListener {
 
     private final List<Favorite> favorites = new ArrayList<Favorite>();
     private final static String ARG_FAVORITE_KEY = "favorite";
+
+    public FavoriteObserverPresenter() {
+        LiveNationApiConfig apiConfig = (LiveNationApiConfig) LiveNationApplication.get().getServiceApi().getApiConfig();
+        apiConfig.getAccessToken().addListener(FavoriteObserverPresenter.this);
+    }
 
     @Override
     public void initialize(Context context, Bundle args, FavoriteObserverView view) {
@@ -87,6 +98,33 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     @Override
     public void clear() {
         favorites.clear();
+    }
+
+    @Override
+    public void onStart(ApiConfigElement element) {
+        //access token started
+    }
+
+    @Override
+    public void onReady(ApiConfigElement element) {
+        //api access token is ready
+    }
+
+    @Override
+    public void onFailed(ApiConfigElement element, int errorCode, String message) {
+        //api access token failed some generic way
+    }
+
+    @Override
+    public void onInvalidated(ApiConfigElement element) {
+        //api access token invalidated.
+        //CLEAR THE CACHE!!
+        ArrayList<Favorite> copy = new ArrayList<Favorite>();
+        copy.addAll(favorites);
+        for (Favorite favorite : copy) {
+            remove(favorite);
+        }
+
     }
 
     public Bundle getBundleArgs(int favoriteTypeId, long itemId) {
