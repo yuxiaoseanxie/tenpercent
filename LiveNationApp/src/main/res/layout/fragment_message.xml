@@ -14,14 +14,14 @@
 
         <TextView
             android:id="@+id/fragment_message_subject"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/widget_margin"
             android:textAppearance="@style/fragment_message_subject_text"/>
 
         <TextView
             android:id="@+id/fragment_message_date"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/widget_margin"
             android:textAppearance="@style/fragment_message_details_text" />
@@ -42,7 +42,7 @@
     <Button
         android:id="@+id/fragment_message_cta_button"
         style="@style/ticketbar_text"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#0ac600"
         android:text="@string/message_cta_default"/>

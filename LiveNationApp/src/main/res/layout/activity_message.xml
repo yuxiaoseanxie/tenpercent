@@ -6,8 +6,8 @@
 
     <fragment
         android:id="@+id/activity_message_fragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:name="com.livenation.mobile.android.na.notifications.ui.MessageFragment" />
 
 </LinearLayout>
