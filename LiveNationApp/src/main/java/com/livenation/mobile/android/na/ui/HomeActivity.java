@@ -140,16 +140,20 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		} else if(item.getItemId() == R.id.menu_home_notifications_item) {
-            startActivity(new Intent(this, InboxActivity.class));
+		}
 
-            return true;
-        } else if(item.getItemId() == R.id.menu_home_debug_item) {
-            startActivity(new Intent(this, DebugActivity.class));
+        switch (item.getItemId()) {
+            case R.id.menu_home_notifications_item:
+                startActivity(new Intent(this, InboxActivity.class));
+                return true;
 
-            return true;
+            case R.id.menu_home_debug_item:
+                startActivity(new Intent(this, DebugActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
