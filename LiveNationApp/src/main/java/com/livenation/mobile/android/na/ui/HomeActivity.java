@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
+import com.livenation.mobile.android.na.notifications.InboxStatusView;
+import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
@@ -43,6 +45,7 @@ import java.util.List;
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
 	private FragmentTabHost tabHost;
+    private boolean hasUnreadNotifications;
 	private static final int RC_SSO_REPAIR = 0;
 	
 	@Override
@@ -94,6 +97,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		}
 
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
+        LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
 	}
 
     @Override
@@ -116,6 +120,19 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem notificationsItem = menu.findItem(R.id.menu_home_notifications_item);
+        if(hasUnreadNotifications) {
+            notificationsItem.setIcon(R.drawable.notifications_unread);
+        } else {
+            notificationsItem.setIcon(R.drawable.notifications_normal);
+        }
+
         return true;
     }
 
@@ -123,12 +140,20 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		} else if(item.getItemId() == R.id.menu_home_debug) {
-            startActivity(new Intent(this, DebugActivity.class));
+		}
 
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_home_notifications_item:
+                startActivity(new Intent(this, InboxActivity.class));
+                return true;
+
+            case R.id.menu_home_debug_item:
+                startActivity(new Intent(this, DebugActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -233,5 +258,12 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
             //do nothing, was cached
         }
     }
-	
+
+    private class InboxStatusUpdater implements InboxStatusView {
+        @Override
+        public void setHasUnreadNotifications(boolean hasUnreadNotifications) {
+            HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
+            invalidateOptionsMenu();
+        }
+    }
 }
