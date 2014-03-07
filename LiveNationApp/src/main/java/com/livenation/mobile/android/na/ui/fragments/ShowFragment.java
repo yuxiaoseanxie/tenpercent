@@ -222,8 +222,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(getActivity(), VenueActivity.class);
-			intent.putExtra(VenueFragment.PARAMETER_VENUE_ID, venue.getId());
-			intent.putExtra(SingleVenuePresenter.INTENT_DATA_KEY, venue);
+
+            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
+            SingleVenuePresenter.embedResult(args, venue);
+            intent.putExtras(args);
+
 			startActivity(intent);
 		}
 	}

@@ -70,4 +70,10 @@
         <item name="android:textColor">@color/login_sso_button_text</item>
         <item name="android:background">@drawable/account_facebook_sso_button</item>
     </style>
+    
+    <style name="list_venue_header_miles">
+        <item name="android:padding">3dp</item>
+        <item name="android:background">@drawable/list_venue_header_miles</item>
+        <item name="android:textAppearance">@style/list_venue_header_miles_text</item>
+    </style>
 </resources>

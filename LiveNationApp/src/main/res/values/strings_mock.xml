@@ -13,7 +13,8 @@
     <string name="mock_venue_telephone">(323) 962-7000</string>
     <string name="mock_venue_location">6215 Sunset Blvd, Los Angeles, California</string>
     <string name="mock_venue_title_linebreak_1">6215 Sunset Blvd \nLos Angeles, California</string>
-    
+    <string name="mock_venue_distance">0.9 mi</string>
+
     <string name="mock_date_day">18</string>
     <string name="mock_date_dotw">MON</string>
     <string name="mock_date_month">NOV</string>
