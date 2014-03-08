@@ -62,7 +62,8 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         this.setContentView(R.layout.activity_inbox);
 
         actionBar = getActionBar();
-        configureActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.inbox_title);
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 
@@ -152,10 +153,14 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.refresh:
-            inbox.setListShownNoAnimation(false);
-            RichPushManager.shared().refreshMessages();
-            break;
+            case R.id.refresh:
+                inbox.setListShownNoAnimation(false);
+                RichPushManager.shared().refreshMessages();
+                break;
+
+            case android.R.id.home:
+                navigateToMain();
+                break;
         }
         return true;
     }
@@ -266,17 +271,6 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         this.startActivity(intent);
 
         this.finish();
-    }
-
-    /**
-     * Configures the action bar to have a navigation list of
-     * 'Home' and 'Inbox'
-     */
-    private void configureActionBar() {
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setTitle(R.string.inbox_title);
     }
 
     /**
