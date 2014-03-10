@@ -1,19 +1,10 @@
-
-import static org.junit.Assert.assertEquals;
-import org.junit.runner.RunWith;
-import org.junit.Test;
-
-import org.robolectric.RobolectricTestRunner;
-
-import android.app.Activity;
-import android.widget.TextView;
+import android.test.InstrumentationTestCase;
 
 import junit.framework.Assert;
 
-@RunWith(RobolectricTestRunner.class)
-public class FirstTest {
-    @Test
+public class FirstTest extends InstrumentationTestCase {
+
     public void testInstantiation() {
-       Assert.assertTrue(true);
+        Assert.assertTrue(true);
     }
 }
