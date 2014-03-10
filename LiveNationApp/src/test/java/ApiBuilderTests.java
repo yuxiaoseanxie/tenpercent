@@ -125,10 +125,6 @@ public class ApiBuilderTests extends ActivityInstrumentationTestCase2 implements
 
         LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(clientId, deviceId, ssoProvider, appContext);
 
-        Intent intent = new Intent();
-        intent.putExtra(HomeActivity.NO_LIFECYCLE, true);
-        setActivityIntent(intent);
-
         WeakReference<Activity> weakActivity = new WeakReference<Activity>(getActivity());
         apiBuilder.getActivity().setResult(weakActivity);
 
