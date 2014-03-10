@@ -30,6 +30,8 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbar</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbar</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbar</item>
+        <item name="actionModeCloseDrawable">@drawable/close_action_mode</item>
+        <item name="android:actionModeCloseDrawable">@drawable/close_action_mode</item>
     </style>
 
     <style name="ActionBar.Solid.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">

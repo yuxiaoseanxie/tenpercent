@@ -203,25 +203,18 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
         Logger.debug("onPrepareActionMode");
 
-        boolean selectionContainsRead = false;
         boolean selectionContainsUnread = false;
 
         for (String id : inbox.getSelectedMessages()) {
             RichPushMessage message = richPushInbox.getMessage(id);
-            if (message.isRead()) {
-                selectionContainsRead = true;
-            } else {
+            if (!message.isRead()) {
                 selectionContainsUnread = true;
-            }
-
-            if (selectionContainsRead && selectionContainsUnread) {
                 break;
             }
         }
 
         // Show them both
         menu.findItem(R.id.mark_read).setVisible(selectionContainsUnread);
-        menu.findItem(R.id.mark_unread).setVisible(selectionContainsRead);
 
         // If we have an action selection button update the text
         if (actionSelectionButton != null) {
@@ -238,9 +231,6 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         switch (item.getItemId()) {
         case R.id.mark_read:
             richPushInbox.markMessagesRead(new HashSet<String>(inbox.getSelectedMessages()));
-            break;
-        case R.id.mark_unread:
-            richPushInbox.markMessagesUnread(new HashSet<String>(inbox.getSelectedMessages()));
             break;
         case R.id.delete:
             richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));

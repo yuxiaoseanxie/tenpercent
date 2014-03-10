@@ -10,7 +10,7 @@
     <View
         android:id="@+id/unread_indicator"
         android:layout_width="6dp"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
@@ -20,41 +20,44 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="7dp"
+        android:button="@drawable/ui_checkbox" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
             android:id="@+id/message_info"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="info"
-            android:textAppearance="@style/list_notification_info"/>
+            android:textAppearance="@style/list_inbox_message_info"/>
 
         <TextView
             android:id="@+id/message_title"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="title"
-            android:textAppearance="@style/list_show_title"
+            android:textAppearance="@style/list_inbox_message_title"
             android:paddingTop="3dp"
             android:paddingBottom="3dp" />
 
         <TextView
             android:id="@+id/message_details"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="detail"
-        android:textAppearance="@style/list_show_location" />
+        android:textAppearance="@style/list_inbox_message_details" />
     </LinearLayout>
 
 </LinearLayout>
