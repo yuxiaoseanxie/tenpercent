@@ -20,7 +20,6 @@ import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
 
@@ -28,12 +27,7 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 	}
-	
-	@Override
-	public LiveNationApiService getApiService() {
-		return LiveNationApplication.get().getServiceApi();
-	}
-	
+
 	@Override
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();

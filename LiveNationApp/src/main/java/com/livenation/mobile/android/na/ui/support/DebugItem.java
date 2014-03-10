@@ -36,6 +36,13 @@ public class DebugItem implements Serializable {
 
     public int getType() { return TYPE_INFO; }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     public void doAction(Context context) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

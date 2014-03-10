@@ -12,7 +12,6 @@ import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenVie
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountPresenters {
@@ -133,9 +132,9 @@ public class AccountPresenters {
 			ssoManager.logout((Activity) context);
 			ssoManager.removeAuthConfiguration(context);
 			ssoManager.removeUser(context);
-            LiveNationApplication.get().getApiConfig().invalidateApiSession();
-            LiveNationApplication.get().getApiConfig().getSsoProvider().setResult(ssoManager.getConfiguredSsoProvider(context));
-            LiveNationApplication.get().getApiConfig().run();
+
+            LiveNationApplication.get().getApiHelper().buildWithSsoProvider(ssoManager.getConfiguredSsoProvider(context));
+
             view.onSignOut();
 		}
 		

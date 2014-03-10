@@ -14,10 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
@@ -32,12 +33,14 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends Activity implements AdapterView.OnItemClickListener {
+public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
 
     private StickyListHeadersListView listView;
     private DebugItemsAdapter actionsAdapter;
+    private DebugItem deviceIdItem;
+    private DebugItem accessTokenItem;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -51,6 +54,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
             actions = new ArrayList<DebugItem>();
             addInfoDebugItems();
             addActionDebugItems();
+            LiveNationApplication.get().getApiHelper().bindApi(DebugActivity.this);
         } else {
             actions = (ArrayList<DebugItem>)savedInstanceState.getSerializable(ACTIONS);
         }
@@ -89,13 +93,27 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         return super.onMenuItemSelected(featureId, item);
     }
 
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        if (null != accessTokenItem) {
+            accessTokenItem.setValue(apiService.getApiConfig().getAccessToken());
+        }
+        if (null != deviceIdItem) {
+            deviceIdItem.setValue(apiService.getApiConfig().getDeviceId());
+        }
+        if (null != actionsAdapter) {
+            actionsAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void addInfoDebugItems()
     {
-        actions.add(new DebugItem(getString(R.string.debug_item_device_uuid), Constants.deviceId));
+        deviceIdItem = new DebugItem(getString(R.string.debug_item_device_uuid), "...");
 
-        AccessToken accessToken = LiveNationApplication.get().getApiConfig().getAccessToken().getResult();
-        String accessTokenString = accessToken != null? accessToken.getToken() : "(None)";
-        actions.add(new DebugItem(getString(R.string.debug_item_access_token), accessTokenString));
+        actions.add(deviceIdItem);
+
+        accessTokenItem = new DebugItem(getString(R.string.debug_item_access_token), "...");
+        actions.add(accessTokenItem);
 
         actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
 

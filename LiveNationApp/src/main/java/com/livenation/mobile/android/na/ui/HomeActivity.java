@@ -9,7 +9,6 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
@@ -38,21 +35,16 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoTokenConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.transport.ApiConfigElement;
-import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
 	private FragmentTabHost tabHost;
     private boolean hasUnreadNotifications;
-	private static final int RC_SSO_REPAIR = 0;
+    private static final int RC_SSO_REPAIR = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +88,9 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);
 
-        int providerId = LiveNationApplication.get().getApiConfig().getSsoProvider().getResult().getId();
-        LiveNationApplication.get().getApiConfig().getSsoToken().addListener(new TokenUpdater(providerId));
+        LiveNationApplication.get().getApiHelper().setActivityDependency(this);
+        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
 	}
@@ -105,15 +98,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
     @Override
     protected void onStart() {
         super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        LiveNationApiConfig apiConfig = (LiveNationApiConfig) LiveNationApplication.get().getServiceApi().getApiConfig();
-        WeakReference<Activity> weakActivity = new WeakReference<Activity>(HomeActivity.this);
-        apiConfig.getActivity().setResult(weakActivity);
-        apiConfig.getActivity().notifyReady();
     }
 
     @Override
@@ -179,7 +163,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 					//alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
 					finish();
 				}
-                LiveNationApplication.get().getApiConfig().getSsoToken().setBlocked(false);
 				break;
 		}
 	}
@@ -199,8 +182,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		throw new IllegalStateException("Should not happen..");
 	}
 
-	
-	/**
+    /**
 	 * Here we have to return our own Tab View object to get our desired LiveNation red tab.
 	 * 
 	 * Because Google forgot to make the default tabs in the TabHost XML stylable....
@@ -217,45 +199,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
 	}
-
-    private class TokenUpdater implements ApiConfigElement.ConfigListener<ApiConfigElement<Pair>> {
-        private final int providerId;
-
-        private TokenUpdater(int providerId) {
-            this.providerId = providerId;
-        }
-
-        @Override
-        public void onStart(ApiConfigElement<Pair> element) {
-        }
-
-        @Override
-        public void onReady(ApiConfigElement<Pair> element) {
-            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
-        }
-
-        @Override
-        public void onFailed(ApiConfigElement<Pair> element, int errorCode, String message) {
-            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
-            //set the config element to externally blocked, so config won't try running it until we resolve
-            //this externally
-            element.setBlocked(true);
-			//possible SSO configuration problem.
-			//Lets give control to whatever SSO SDK it is, and allow it to create whatever
-			//foreground windows for user input to resolve.
-			ApiSsoProvider ssoProvider = LiveNationApplication.get().getSsoManager().getSsoProvider(providerId, HomeActivity.this);
-
-            //Lets try again, but this time with foreground activities that may resolve the session error
-            Intent intent = new Intent(HomeActivity.this, SsoActivity.class);
-            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, ssoProvider.getId());
-            startActivityForResult(intent, RC_SSO_REPAIR);
-        }
-
-        @Override
-        public void onInvalidated(ApiConfigElement<Pair> element) {
-            LiveNationApplication.get().getApiConfig().getSsoToken().removeListener(this);
-        }
-    }
 
     private class FavoriteUpdater implements FavoritesView {
         @Override

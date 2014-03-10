@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
@@ -25,21 +25,25 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	private final String USER_NAME = "user_name";
 	private final String USER_EMAIL = "user_email";
 	private final String USER_PIC_URL = "user_pic_url";
-    private LiveNationApiConfig apiConfig;
     private final UiApiSsoProvider defaultProvider;
+    private WeakReference<Activity> weakActivity;
 
     public SsoManager(UiApiSsoProvider defaultProvider) {
         this.defaultProvider = defaultProvider;
     }
 
-    public void setApiConfig(LiveNationApiConfig apiConfig) {
-        this.apiConfig = apiConfig;
-    }
-
     @Override
 	public Activity getActivity() {
-		return apiConfig.getActivity().getResult().get();
+		if (null != weakActivity) {
+            return weakActivity.get();
+        }
+        return null;
 	}
+
+    public void setActivity(Activity activity) {
+        if (null == activity) return;
+        weakActivity = new WeakReference<Activity>(activity);
+    }
 
 	public void logout(Activity activity) {
 		ApiSsoProvider ssoProvider = getConfiguredSsoProvider(activity);
@@ -157,8 +161,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	 */
 	public UiApiSsoProvider getSsoProvider(int ssoProviderId, Context context) {
 		if (context instanceof Activity) {
-            WeakReference<Activity> weakActivity = new WeakReference<Activity>((Activity) context);
-			apiConfig.getActivity().setResult(weakActivity);
+            setActivity((Activity) context);
 		}
 		switch (ssoProviderId) {
 		case SSO_FACEBOOK:

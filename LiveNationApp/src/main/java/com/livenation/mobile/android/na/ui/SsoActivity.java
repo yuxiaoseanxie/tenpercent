@@ -13,9 +13,6 @@ import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
-import com.livenation.mobile.android.platform.util.Logger;
-
-import java.lang.ref.WeakReference;
 
 public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
 	private UiApiSsoProvider ssoProvider;
@@ -65,10 +62,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	@Override
 	public void onSaveUserSuccess(User user) {
         //bring up the new session in the API
-        LiveNationApplication.get().getApiConfig().invalidateApiSession();
-        LiveNationApplication.get().getApiConfig().getSsoProvider().setResult(ssoProvider);
-        LiveNationApplication.get().getApiConfig().run();
-
+        LiveNationApplication.get().getApiHelper().buildWithSsoProvider(ssoProvider);
         setResult(RESULT_OK);
 		finish();
 	}

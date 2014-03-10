@@ -14,7 +14,6 @@ import java.util.List;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.util.Logger;
 
 @SuppressWarnings("rawtypes")
@@ -68,10 +67,6 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
         return activeStates;
     }
 
-	public LiveNationApiService getApiService() {
-		return LiveNationApplication.get().getServiceApi();
-	}
-	
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
 	}
