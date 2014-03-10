@@ -3,13 +3,10 @@ package com.livenation.mobile.android.na.notifications;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.urbanairship.push.PushManager;
 
 /**
@@ -35,16 +32,9 @@ public class PushReceiver extends BroadcastReceiver {
         Log.i(LOG_TAG, "User clicked (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
                 "): " + intent.getExtras());
 
-        Intent outgoingIntent;
-        if(intent.hasExtra(Constants.Notifications.EXTRA_ENTITY_ID)) {
-            outgoingIntent = new Intent(context, ShowActivity.class);
-            Bundle args = SingleEventPresenter.getAruguments(intent.getStringExtra(Constants.Notifications.EXTRA_ENTITY_ID));
-            outgoingIntent.putExtras(args);
-        } else {
-            String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
-            outgoingIntent = new Intent(context, InboxActivity.class);
-            outgoingIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
-        }
+        String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
+        Intent outgoingIntent = new Intent(context, InboxActivity.class);
+        outgoingIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
         outgoingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(outgoingIntent);
     }
