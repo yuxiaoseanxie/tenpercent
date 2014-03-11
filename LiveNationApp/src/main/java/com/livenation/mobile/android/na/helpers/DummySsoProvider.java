@@ -27,7 +27,7 @@ public class DummySsoProvider implements UiApiSsoProvider {
 
 	@Override
 	public int getId() {
-		return -1;
+		return SsoManager.SSO_DUMMY;
 	}
 
 	@Override

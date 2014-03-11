@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
@@ -79,6 +80,7 @@ public class AccountPresenters {
 			
 			if (null == args) {
 				ssoManager.removeAuthConfiguration(context);
+                view.onSaveAuthTokenSuccess();
 				return;			
 			}
 			
@@ -131,7 +133,10 @@ public class AccountPresenters {
 			ssoManager.logout((Activity) context);
 			ssoManager.removeAuthConfiguration(context);
 			ssoManager.removeUser(context);
-			view.onSignOut();
+
+            LiveNationApplication.get().getApiHelper().buildWithSsoProvider(ssoManager.getConfiguredSsoProvider(context));
+
+            view.onSignOut();
 		}
 		
 	}

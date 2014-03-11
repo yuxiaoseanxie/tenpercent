@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
@@ -37,7 +36,6 @@ import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.List;
@@ -46,7 +44,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	private ActionBarDrawerToggle drawerToggle;
 	private FragmentTabHost tabHost;
     private boolean hasUnreadNotifications;
-	private static final int RC_SSO_REPAIR = 0;
+    private static final int RC_SSO_REPAIR = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +87,9 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec = tabHost.newTabSpec("your_shows");
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);
-		
-		ApiSsoProvider ssoProvider = getConfiguredSsoProvider();
-		if (null != ssoProvider) {
-			int providerId = ssoProvider.getId();
-			ssoProvider.openSession(false, new TokenUpdater(providerId));
-		}
+
+        LiveNationApplication.get().getApiHelper().setActivityDependency(this);
+        LiveNationApplication.get().getApiHelper().buildDefaultApi();
 
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
@@ -186,13 +181,8 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	public void onSaveAuthTokenFailure() {
 		throw new IllegalStateException("Should not happen..");
 	}
-	
-	private UiApiSsoProvider getConfiguredSsoProvider() {
-		UiApiSsoProvider provider = LiveNationApplication.get().getSsoManager().getConfiguredSsoProvider(HomeActivity.this);
-		return provider;
-	}
-	
-	/**
+
+    /**
 	 * Here we have to return our own Tab View object to get our desired LiveNation red tab.
 	 * 
 	 * Because Google forgot to make the default tabs in the TabHost XML stylable....
@@ -208,48 +198,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	
 	private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
-	}
-
-	/**
-	 * Token Updater class.
-	 * 
-	 * This ensures that the SSO access token being passed to the LN api is current and correct.
-	 *
-	 */
-	private class TokenUpdater implements ApiSsoProvider.OpenSessionCallback {
-		private final int providerId;
-
-		public TokenUpdater(int providerId) {
-			this.providerId = providerId;
-		}
-		
-		@Override
-		public void onOpenSession(String sessionToken) {
-			Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
-			getAccountPresenters().getSetAuthToken().initialize(HomeActivity.this, args, HomeActivity.this);
-		}
-
-		@Override
-		public void onOpenSessionFailed(Exception exception, boolean allowForeground) {
-			//possible SSO configuration problem. 
-			//Lets give control to whatever SSO SDK it is, and allow it to create whatever
-			//foreground windows for user input to resolve.
-			ApiSsoProvider ssoProvider = getConfiguredSsoProvider();
-			if (null == ssoProvider) return;
-			//if the session failed, and it was only allowed to run in the background..
-			if (!allowForeground) {
-				//Lets try again, but this time with foreground activities that may resolve the session error
-				Intent intent = new Intent(HomeActivity.this, SsoActivity.class);
-				intent.putExtra(SsoActivity.ARG_PROVIDER_ID, ssoProvider.getId());
-				startActivityForResult(intent, RC_SSO_REPAIR);
-			}
-		}
-		
-		@Override
-		public void onNoNetwork() {
-			//do nothing
-		}
-
 	}
 
     private class FavoriteUpdater implements FavoritesView {

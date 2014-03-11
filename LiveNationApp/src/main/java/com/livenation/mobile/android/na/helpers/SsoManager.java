@@ -1,19 +1,23 @@
 package com.livenation.mobile.android.na.helpers;
 
-import java.lang.ref.WeakReference;
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+
+import java.lang.ref.WeakReference;
 
 public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	public static final int SSO_FACEBOOK = 0;
 	public static final int SSO_GOOGLE = 1;
-	private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
+    public static final int SSO_DUMMY = 2;
+
+    private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
 	private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
+    private final DummySsoProvider dummySso = new DummySsoProvider();
 	private final PersistenceProvider<String> persistance = new PreferencePersistence("auth_configuration");
 	private final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
 	private final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
@@ -21,13 +25,26 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	private final String USER_NAME = "user_name";
 	private final String USER_EMAIL = "user_email";
 	private final String USER_PIC_URL = "user_pic_url";
-	private WeakReference<Activity> weakActivity;
-	
-	@Override
+    private final UiApiSsoProvider defaultProvider;
+    private WeakReference<Activity> weakActivity;
+
+    public SsoManager(UiApiSsoProvider defaultProvider) {
+        this.defaultProvider = defaultProvider;
+    }
+
+    @Override
 	public Activity getActivity() {
-		return weakActivity.get();
+		if (null != weakActivity) {
+            return weakActivity.get();
+        }
+        return null;
 	}
-	
+
+    public void setActivity(Activity activity) {
+        if (null == activity) return;
+        weakActivity = new WeakReference<Activity>(activity);
+    }
+
 	public void logout(Activity activity) {
 		ApiSsoProvider ssoProvider = getConfiguredSsoProvider(activity);
 		if (ssoProvider != null) {
@@ -38,7 +55,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	public UiApiSsoProvider getConfiguredSsoProvider(Context context) {
 		AuthConfiguration authConfig = getAuthConfiguration(context);
 		if (null == authConfig) {
-			return null;
+			return defaultProvider;
 		}
 		int ssoProviderId = authConfig.getSsoProviderId();
 		return getSsoProvider(ssoProviderId, context);
@@ -107,6 +124,9 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 		if (provider instanceof GoogleSsoProvider) {
 			return SSO_GOOGLE;
 		}
+        if (provider instanceof DummySsoProvider) {
+            return SSO_DUMMY;
+        }
 		throw new IllegalArgumentException("Unknown provider type");
 	}
 	
@@ -141,13 +161,15 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	 */
 	public UiApiSsoProvider getSsoProvider(int ssoProviderId, Context context) {
 		if (context instanceof Activity) {
-			weakActivity = new WeakReference<Activity>((Activity)context);
+            setActivity((Activity) context);
 		}
 		switch (ssoProviderId) {
 		case SSO_FACEBOOK:
 			return facebookSso;
 		case SSO_GOOGLE:
 			return googleSso;
+        case SSO_DUMMY:
+            return dummySso;
 		default:
 			throw new IllegalArgumentException("Unknown SSO provider id: " + ssoProviderId);
 		}

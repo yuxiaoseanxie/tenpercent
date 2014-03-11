@@ -221,8 +221,10 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 			GoogleApiClient.OnConnectionFailedListener {
 
 		private GoogleApiClient googleApiClient;
-		private boolean intentInProgress = false;
+		private int resolveCount;
+
 		private final int RC_SIGN_IN = 600613;
+        private final int RESOLVE_COUNT_MAX = 2;
 
 		public SessionState(Activity activity, boolean allowForeground,
 				BaseSessionState.SessionPayload<GoogleApiClient> sessionPayload) {
@@ -252,20 +254,18 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 		@Override
 		public void onConnectionFailed(ConnectionResult result) {
 			if (!allowForeground || !result.hasResolution()) {
-				intentInProgress = false;
 				sessionPayload.onSessionFailed();
 				return;
 			}
 
-			if (!intentInProgress) {
+			if (resolveCount < RESOLVE_COUNT_MAX) {
 				if (result.hasResolution()) {
 					try {
-						intentInProgress = true;
+						resolveCount++;
 						activity.startIntentSenderForResult(
 								result.getResolution().getIntentSender(), RC_SIGN_IN,
 								null, 0, 0, 0);
 					} catch (SendIntentException e) {
-						intentInProgress = false;
 						googleApiClient.connect();
 					}
 				} else {
@@ -274,7 +274,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 							new DialogInterface.OnCancelListener() {
 								@Override
 								public void onCancel(DialogInterface dialog) {
-									intentInProgress = false;
 									sessionPayload.onSessionFailed();
 								}
 							});
@@ -292,7 +291,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 						googleApiClient.connect();
 					}
 				} else {
-					intentInProgress = false;
 					sessionPayload.onSessionFailed();				
 				}
 			}

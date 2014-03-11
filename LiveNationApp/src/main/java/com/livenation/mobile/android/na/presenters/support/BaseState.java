@@ -54,11 +54,7 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 		if (null == listener) return;
 		listener.onStateFailed(failureCode, this);
 	}
-	
-	public LiveNationApiService getApiService() {
-		return LiveNationApplication.get().getServiceApi();
-	}
-	
+
 	public LocationHelper getLocationHelper() {
 		return LiveNationApplication.get().getLocationHelper();
 	}

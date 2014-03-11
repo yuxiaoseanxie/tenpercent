@@ -56,6 +56,7 @@
         </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity" >
         </activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.TestActivity"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.DebugActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
