@@ -80,6 +80,7 @@ public class AccountPresenters {
 			
 			if (null == args) {
 				ssoManager.removeAuthConfiguration(context);
+                view.onSaveAuthTokenSuccess();
 				return;			
 			}
 			
