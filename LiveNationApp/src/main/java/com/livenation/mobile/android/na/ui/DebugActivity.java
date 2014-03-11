@@ -265,5 +265,10 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
             builder.create().show();
 
         }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
     }
 }
