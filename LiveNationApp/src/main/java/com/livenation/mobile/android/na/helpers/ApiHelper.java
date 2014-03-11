@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -105,7 +106,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         build();
     }
 
-    public void setActivityDependency(Activity activity) {
+    public void setDependencyActivity(Activity activity) {
         ssoManager.setActivity(activity);
         if (null != apiBuilder) {
             WeakReference<Activity> weakActivity = new WeakReference<Activity>(activity);
@@ -126,12 +127,13 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<ApiSsoProvider> ssoProvider = new SsoProviderConfig();
         ssoProvider.setResult(ssoProviderObject);
 
-        ApiBuilderElement<String> clientId = new StringValueConfig(Constants.clientId);
         ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
         ApiBuilderElement<Context> context = new ContextConfig(appContext);
+        ApiBuilderElement<String> host = new GetHostConfig(appContext);
+        ApiBuilderElement<String> clientId = new GetClientIdConfig(appContext);
 
 
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(clientId, deviceId, ssoProvider, context);
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, context);
         apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
@@ -141,6 +143,22 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         return apiBuilder;
+    }
+
+    public static Constants.Environment getConfiguredEnvironment(Context context) {
+        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        String environmentKey = prefs.read("environment", context);
+
+        try {
+            return Constants.Environment.valueOf(environmentKey);
+        } catch (Exception e) {
+            return Constants.Environment.StagingDirect;
+        }
+    }
+
+    public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
+        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        prefs.write("environment", environment.toString(), context);
     }
 
     private class GetDeviceId extends ApiBuilderElement<String> {
@@ -172,6 +190,38 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
                 }
                 notifyReady();
             }
+        }
+    }
+
+    private class GetHostConfig extends ApiBuilderElement<String> {
+        private final Context appContext;
+
+        private GetHostConfig(Context appContext) {
+            this.appContext = appContext;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            Constants.Environment environment = getConfiguredEnvironment(appContext);
+            setResult(environment.getHost());
+            notifyReady();
+        }
+    }
+
+    private class GetClientIdConfig extends ApiBuilderElement<String> {
+        private final Context appContext;
+
+        private GetClientIdConfig(Context appContext) {
+            this.appContext = appContext;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            Constants.Environment environment = getConfiguredEnvironment(appContext);
+            setResult(environment.getClientId());
+            notifyReady();
         }
     }
 

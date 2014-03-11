@@ -11,18 +11,18 @@ import java.io.Serializable;
 /**
  * Created by cchilton on 2/27/14.
  */
-public abstract class BaseResultState<D extends Serializable, T extends PresenterView> extends BaseState<T> implements ApiServiceBinder {
-    private D result;
+public abstract class BaseResultState<TResult extends Serializable, TView extends PresenterView> extends BaseState<TView> implements ApiServiceBinder {
+    private TResult result;
     private LiveNationApiService apiService;
 
-    protected BaseResultState(StateListener listener, Bundle args, T view) {
+    protected BaseResultState(StateListener listener, Bundle args, TView view) {
         super(listener, args, view);
     }
 
     @Override
     public void applyArgs(Bundle args) {
         if (args.containsKey(getDataKey())) {
-            result = (D) args.getSerializable(getDataKey());
+            result = (TResult) args.getSerializable(getDataKey());
         }
     }
 
@@ -45,11 +45,11 @@ public abstract class BaseResultState<D extends Serializable, T extends Presente
         return apiService;
     }
 
-    public void setResult(D result) {
+    public void setResult(TResult result) {
         this.result = result;
     }
 
-    public D getResult() {
+    public TResult getResult() {
         return result;
     }
 
@@ -59,7 +59,7 @@ public abstract class BaseResultState<D extends Serializable, T extends Presente
 
     public abstract String getDataKey();
 
-    public abstract void onHasResult(D result);
+    public abstract void onHasResult(TResult result);
 
     public abstract void retrieveResult();
 }

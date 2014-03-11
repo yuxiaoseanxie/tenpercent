@@ -88,7 +88,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);
 
-        LiveNationApplication.get().getApiHelper().setActivityDependency(this);
+        LiveNationApplication.get().getApiHelper().setDependencyActivity(this);
         LiveNationApplication.get().getApiHelper().buildDefaultApi();
 
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
