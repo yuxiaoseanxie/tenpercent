@@ -16,7 +16,7 @@ public class Constants {
     public static enum Environment {
         Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
         StagingDirect("https://stg-faceoff.herokuapp.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
-        StagingAkami("https://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
+        StagingAkami("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
         Integration("https://int-faceoff.herokuapp.com", "486e2ff6-98f5-11e3-b37c-ca4ec9c3f32c");
 
         private final String host;
