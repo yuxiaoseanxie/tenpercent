@@ -2,12 +2,14 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
@@ -99,6 +101,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
         apiBuilder = createApiBuilder(ssoManager, appContext);
         apiBuilder.getSsoProvider().setResult(ssoProvider);
+
         build();
     }
 
@@ -127,7 +130,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
         ApiBuilderElement<Context> context = new ContextConfig(appContext);
 
+
         LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(clientId, deviceId, ssoProvider, context);
+        apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
         if (null != activity) {
@@ -167,6 +172,37 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
                 }
                 notifyReady();
             }
+        }
+    }
+
+    private class SsoTokenListener implements ApiBuilderElement.ConfigListener {
+        private final LiveNationApiBuilder apiBuilder;
+
+        private SsoTokenListener(LiveNationApiBuilder apiBuilder) {
+            this.apiBuilder = apiBuilder;
+        }
+
+        @Override
+        public void onStart(ApiBuilderElement element) {
+
+        }
+
+        @Override
+        public void onReady(ApiBuilderElement element) {
+
+        }
+
+        @Override
+        public void onFailed(ApiBuilderElement element, int errorCode, String message) {
+            Activity activity = apiBuilder.getActivity().getResult().get();
+            Intent ssoRepair = new Intent(activity, SsoActivity.class);
+            ssoRepair.putExtra(SsoActivity.ARG_PROVIDER_ID, apiBuilder.getSsoProvider().getResult().getId());
+            activity.startActivity(ssoRepair);
+        }
+
+        @Override
+        public void onInvalidated(ApiBuilderElement element) {
+
         }
     }
 }
