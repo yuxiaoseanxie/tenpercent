@@ -1,7 +1,10 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -12,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
@@ -41,6 +46,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItemsAdapter actionsAdapter;
     private DebugItem deviceIdItem;
     private DebugItem accessTokenItem;
+    private DebugItem environmentItem;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -50,14 +56,9 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         listView = (StickyListHeadersListView)findViewById(R.id.debug_activity_list_view);
 
-        if(savedInstanceState == null) {
-            actions = new ArrayList<DebugItem>();
-            addInfoDebugItems();
-            addActionDebugItems();
-            LiveNationApplication.get().getApiHelper().bindApi(DebugActivity.this);
-        } else {
-            actions = (ArrayList<DebugItem>)savedInstanceState.getSerializable(ACTIONS);
-        }
+        actions = new ArrayList<DebugItem>();
+        addInfoDebugItems();
+        addActionDebugItems();
 
         actionsAdapter = new DebugItemsAdapter(this, actions);
         listView.setAdapter(actionsAdapter);
@@ -65,13 +66,6 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putSerializable(ACTIONS, actions);
     }
 
     @Override
@@ -91,6 +85,18 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         }
 
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LiveNationApplication.get().getApiHelper().persistentBindApi(DebugActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(DebugActivity.this);
     }
 
     @Override
@@ -124,7 +130,8 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
     private void addActionDebugItems()
     {
-
+        environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
+        actions.add(environmentItem);
     }
 
 
@@ -146,6 +153,17 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         DebugItem action = actionsAdapter.getItem(position);
         action.doAction(this);
+    }
+
+    private Constants.Environment getEnvironment() {
+        return ApiHelper.getConfiguredEnvironment(this);
+    }
+
+    private void setEnvironment(Constants.Environment environment) {
+        ApiHelper.setConfiguredEnvironment(environment, this);
+        accessTokenItem.setValue("...");
+        actionsAdapter.notifyDataSetChanged();
+        LiveNationApplication.get().getApiHelper().buildDefaultApi();
     }
 
     private class DebugItemsAdapter extends ArrayAdapter<DebugItem> implements StickyListHeadersAdapter {
@@ -218,6 +236,34 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
             public HeaderViewHolder(View view) {
                 this.text = (TextView)view.findViewById(R.id.list_show_header_textview);
             }
+        }
+    }
+
+    private class HostDebugItem extends DebugItem {
+        private HostDebugItem(String name, String value) {
+            super(name, value);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            final String[] items = new String[Constants.Environment.values().length];
+            for (int i = 0; i < items.length; i++) {
+                items[i] = Constants.Environment.values()[i].toString();
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(DebugActivity.this);
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Constants.Environment environment = Constants.Environment.values()[i];
+                    setEnvironment(environment);
+                    environmentItem.setValue(environment.toString());
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            });
+
+            builder.create().show();
+
         }
     }
 }

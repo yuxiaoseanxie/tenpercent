@@ -53,7 +53,7 @@
     <string name="debug_item_access_token">Access Token</string>
     <string name="debug_item_apid">APID</string>
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
-
+    <string name="debug_item_environment">Environment</string>
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>
