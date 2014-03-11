@@ -63,7 +63,6 @@ public class LiveNationApplication extends Application {
         ssoManager = new SsoManager(new DummySsoProvider());
 
         apiHelper = new ApiHelper(ssoManager, getApplicationContext());
-        //apiHelper.buildDefaultApi();
 
         locationHelper = new LocationHelper();
 
