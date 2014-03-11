@@ -106,7 +106,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         build();
     }
 
-    public void setActivityDependency(Activity activity) {
+    public void setDependencyActivity(Activity activity) {
         ssoManager.setActivity(activity);
         if (null != apiBuilder) {
             WeakReference<Activity> weakActivity = new WeakReference<Activity>(activity);
