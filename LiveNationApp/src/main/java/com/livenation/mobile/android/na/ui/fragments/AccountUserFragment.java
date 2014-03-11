@@ -39,6 +39,10 @@ public class AccountUserFragment extends LiveNationFragment implements
 
 	@Override
 	public void setUser(User user) {
+        if (null == user) {
+            onSignOut();
+            return;
+        }
 		name.setText(user.getDisplayName());
 		email.setText(user.getEmail());
 		image.setImageUrl(user.getUrl(), getImageLoader());
