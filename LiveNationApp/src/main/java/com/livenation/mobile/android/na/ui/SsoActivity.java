@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
@@ -54,7 +55,6 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 	
 	@Override
 	public void onGetUser(User user) {
-        if (null == user) return;
 		Bundle args = getAccountPresenters().getSetUser().getArguments(user);
 		getAccountPresenters().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
 	}
@@ -81,8 +81,7 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 
 	@Override
 	public void onOpenSessionFailed(Exception exception, boolean allowForeground) {
-		setResult(RESULT_CANCELED);
-		finish();
+        getAccountPresenters().getSignOut().initialize(SsoActivity.this, null, SsoActivity.this);
 	}
 	
 	@Override
@@ -93,7 +92,8 @@ public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionC
 
     @Override
     public void onSignOut() {
-
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     private AccountPresenters getAccountPresenters() {
