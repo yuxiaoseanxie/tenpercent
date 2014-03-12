@@ -27,11 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -40,16 +41,17 @@ import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowsListFragment extends LiveNationFragment implements EventsView, OnItemClickListener  {
+public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener  {
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
-	
+    private ScrollPager scrollPager;
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new EventAdapter(getActivity());
+		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
 	}
 	
 	@Override
@@ -61,18 +63,25 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
-				
+
+        scrollPager = new ScrollPager(listView, adapter);
+
 		return view;
 	}
-	
-	@Override
-	public void setEvents(List<Event> events) {
-		adapter.getItems().clear();
-		adapter.getItems().addAll(events);
-		adapter.notifyDataSetChanged();
-	}
 
-	@Override
+    @Override
+    public void onStart() {
+        super.onStart();
+        scrollPager.load();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        scrollPager.stop();
+    }
+
+    @Override
 	public void onSaveInstanceState(Bundle outState) {
 		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
 		outState.putParcelable(getViewKey(listView), listState);
@@ -91,7 +100,7 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
-		Event event = adapter.getItems().get(position);
+		Event event = adapter.getItem(position);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
@@ -101,63 +110,43 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 	}
 	
 	
-	public class EventAdapter extends BaseAdapter implements StickyListHeadersAdapter {
+	public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
 	    private LayoutInflater inflater;
-		private final List<Event> items;
-	
-		public EventAdapter(Context context) {
-			inflater = LayoutInflater.from(context);
-			this.items = new ArrayList<Event>();
-		}
 
-		@Override
-		public int getCount() {
-			return items.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return items.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
+        public EventAdapter(Context context, List<Event> items) {
+            super(context, android.R.layout.simple_list_item_1, items);
+            inflater = LayoutInflater.from(context);
+        }
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder = null;
-			View view = null;
-			
-			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_show_item, null);
-				holder = new ViewHolder(view);
-				view.setTag(holder);
-			} else {
-				view = convertView;
-				holder = (ViewHolder) convertView.getTag();
-			}
-			
-			Event event = items.get(position);
-			holder.getTitle().setText(event.getName());
-			holder.getLocation().setText(event.getVenue().getName());
-			
-			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
-			try {
-				Date date = sdf.parse(event.getStartTime());
-				holder.getDate().setDate(date);
-			} catch (ParseException e) {
-				//wtf'y f.
-				e.printStackTrace();
-			}
-			
-			return view;
-		}
-		
-		public List<Event> getItems() {
-			return items;
-		}
+            ViewHolder holder = null;
+            View view = null;
+
+            if (null == convertView) {
+                view = inflater.inflate(R.layout.list_show_item, null);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            Event event = getItem(position);
+            holder.getTitle().setText(event.getName());
+            holder.getLocation().setText(event.getVenue().getName());
+
+            //TODO: Move date parsing to Data Model Entity helper. This is ugly
+            try {
+                Date date = sdf.parse(event.getStartTime());
+                holder.getDate().setDate(date);
+            } catch (ParseException e) {
+                //wtf'y f.
+                e.printStackTrace();
+            }
+
+            return view;
+        }
 
 		@Override
 		public View getHeaderView(int position, View convertView,
@@ -176,7 +165,7 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 			TextView text = holder.getText();
 			
 			//TODO: refactor this into Model helpers (inline or sub-helper classes?)
-			String dateRaw = items.get(position).getStartTime();
+			String dateRaw = getItem(position).getStartTime();
 			try {
 				Date date = sdf.parse(dateRaw);
 				String dateValue = DateFormat.format("MMMM", date).toString();
@@ -190,7 +179,7 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 
 		@Override
 		public long getHeaderId(int position) {
-			String dateRaw = items.get(position).getStartTime();
+			String dateRaw = getItem(position).getStartTime();
 			try {
 				
 				Date date = sdf.parse(dateRaw);
@@ -238,5 +227,27 @@ public class ShowsListFragment extends LiveNationFragment implements EventsView,
 			}
 		}
 	}
-	
+
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements EventsView {
+
+        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
+            super(listView, 30, adapter);
+        }
+
+        @Override
+        public void fetch(int offset, int limit) {
+            Bundle args = getEventsPresenter().getArgs(offset, limit);
+            getEventsPresenter().initialize(getActivity(), args, ScrollPager.this);
+        }
+
+        @Override
+        public void setEvents(List<Event> events) {
+            onFetchResult(events);
+        }
+
+        @Override
+        public void stop() {
+            getEventsPresenter().cancel(ScrollPager.this);
+        }
+    }
 }

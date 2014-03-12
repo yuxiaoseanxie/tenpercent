@@ -25,12 +25,13 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.helpers.LocationHelper;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -49,11 +50,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements VenuesView, LocationHelper.LocationCallback {
+public class NearbyVenuesFragment extends LiveNationFragment implements LocationHelper.LocationCallback {
 	private StickyListHeadersListView listView;
 	private EventVenueAdapter adapter;
 	private Double lat;
     private Double lng;
+    private ScrollPager pager;
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
     private static float METERS_IN_A_MILE = 1609.34f;
 
@@ -74,7 +77,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
 		listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-		return view;
+
+        pager = new ScrollPager(listView, adapter);
+
+        return view;
 	}
 	
 	@Override
@@ -88,14 +94,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
         super.onStop();
         deinit();
     }
-
-    @Override
-	public void setVenues(List<Venue> venues) {
-		List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
-		adapter.getItems().clear();
-		adapter.getItems().addAll(transformed);
-		adapter.notifyDataSetChanged();
-	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -124,37 +122,19 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
     }
 
     private void init() {
-		Context context = getActivity();
-		Bundle args = getActivity().getIntent().getExtras();
-		getNearbyVenuesPresenter().initialize(context, args, NearbyVenuesFragment.this);
+		pager.load();
 	}
 
     private void deinit() {
-        getNearbyVenuesPresenter().cancel(NearbyVenuesFragment.this);
+        pager.stop();
     }
 
-	private class EventVenueAdapter extends BaseAdapter implements StickyListHeadersAdapter {
+	private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
 	    private LayoutInflater inflater;
-		private final List<Event> items;
-	
+
 		public EventVenueAdapter(Context context) {
-			inflater = LayoutInflater.from(context);
-			this.items = new ArrayList<Event>();
-		}
-
-		@Override
-		public int getCount() {
-			return items.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return items.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
+			super(context, android.R.layout.simple_list_item_1, new ArrayList<Event>());
+            inflater = LayoutInflater.from(context);
 		}
 
 		@Override
@@ -171,7 +151,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 				holder = (ViewHolder) convertView.getTag();
 			}
 			
-			Event event = items.get(position);
+			Event event = getItem(position);
 			holder.getTitle().setText(event.getName());
 			holder.getLocation().setText(event.getVenue().getName());
 			
@@ -187,10 +167,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 			view.setOnClickListener(new OnShowClick(event));
 
 			return view;
-		}
-		
-		public List<Event> getItems() {
-			return items;
 		}
 
 		@Override
@@ -208,7 +184,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 			}
 			
 			TextView title = holder.getVenueTitle();
-			Event event = items.get(position);
+			Event event = getItem(position);
 			title.setText(event.getVenue().getName());
 
             CheckBox checkBox = holder.getFavorite();
@@ -238,7 +214,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
 
 		@Override
 		public long getHeaderId(int position) {
-			Event event = items.get(position);
+			Event event = getItem(position);
 			long venueId = event.getVenue().getNumericId();
 			return venueId;
 		}
@@ -322,6 +298,29 @@ public class NearbyVenuesFragment extends LiveNationFragment implements VenuesVi
         }
 	}
 
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements VenuesView {
+
+        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
+            super(listView, 10, adapter);
+        }
+
+        @Override
+        public void fetch(int offset, int limit) {
+            Bundle args = getNearbyVenuesPresenter().getArgs(offset, limit);
+            getNearbyVenuesPresenter().initialize(getActivity(), args, ScrollPager.this);
+        }
+
+        @Override
+        public void setVenues(List<Venue> venues) {
+            List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
+            onFetchResult(transformed);
+        }
+
+        @Override
+        public void stop() {
+            getNearbyVenuesPresenter().cancel(ScrollPager.this);
+        }
+    }
 
     private class OnShowClick implements View.OnClickListener {
         private final Event event;

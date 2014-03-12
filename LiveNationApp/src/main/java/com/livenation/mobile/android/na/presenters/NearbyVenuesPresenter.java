@@ -52,6 +52,13 @@ public class NearbyVenuesPresenter extends
 		// TODO: This
 	}
 
+    public Bundle getArgs(int offset, int limit) {
+        Bundle args = new Bundle();
+        args.putInt(VenuesState.ARG_OFFSET_KEY, offset);
+        args.putInt(VenuesState.ARG_LIMIT_KEY, limit);
+        return args;
+    }
+
 	static class VenuesState extends BaseResultState<ArrayList<Venue>, VenuesView>
 			implements LocationCallback,
 			LiveNationApiService.GetVenuesApiCallback {
@@ -59,8 +66,12 @@ public class NearbyVenuesPresenter extends
 		private NearbyVenuesWithEventsParameters params;
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;
+        private static final String ARG_OFFSET_KEY = "offset";
+        private static final String ARG_LIMIT_KEY = "limit";
 
-		public VenuesState(StateListener<VenuesState> listener, Bundle args,
+
+
+        public VenuesState(StateListener<VenuesState> listener, Bundle args,
 				VenuesView view, Context context) {
 			super(listener, args, view);
 			this.context = context;
@@ -71,6 +82,11 @@ public class NearbyVenuesPresenter extends
 			super.applyArgs(args);
 			params = ApiParameters.createNearbyVenueEventsParameters();
 			params.setMinimumNumberOfEvents(2);
+            if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
+                int offset = args.getInt(ARG_OFFSET_KEY);
+                int limit = args.getInt(ARG_LIMIT_KEY);
+                params.setPage(offset, limit);
+            }
 		}
 
 		@Override
