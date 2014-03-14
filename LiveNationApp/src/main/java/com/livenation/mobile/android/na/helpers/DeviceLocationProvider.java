@@ -12,6 +12,8 @@ import android.content.Context;
 import android.location.*;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.platform.util.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Handler;
@@ -42,7 +44,12 @@ public class DeviceLocationProvider implements LocationProvider {
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
             criteria.setPowerRequirement(Criteria.POWER_LOW);
             String provider = locationManager.getBestProvider(criteria, false);
-            locationManager.requestLocationUpdates(provider, 1000, 1, this);
+            Location last = locationManager.getLastKnownLocation(provider);
+            if (null != last) {
+                callback.onLocation(last.getLatitude(), last.getLongitude());
+            } else {
+                locationManager.requestLocationUpdates(provider, 1000, 0, this);
+            }
         }
 
         @Override
@@ -52,14 +59,10 @@ public class DeviceLocationProvider implements LocationProvider {
         }
 
         @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
+        public void onStatusChanged(String s, int i, Bundle bundle) {}
 
         @Override
-        public void onProviderEnabled(String s) {
-
-        }
+        public void onProviderEnabled(String s) {}
 
         @Override
         public void onProviderDisabled(String s) {
