@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -15,9 +14,7 @@ import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LocationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -252,7 +249,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
         @Override
         public void onLocationFailure(int failureCode) {
-            notifyFailed(0,"");
+            notifyFailed(0, "");
         }
     }
 
