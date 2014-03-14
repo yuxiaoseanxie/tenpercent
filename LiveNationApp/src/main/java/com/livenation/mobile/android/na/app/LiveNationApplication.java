@@ -16,7 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
-import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -35,7 +35,7 @@ import com.urbanairship.push.PushManager;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
-    private LocationHelper locationHelper;
+    private LocationManager locationManager;
     private ImageLoader imageLoader;
     private RequestQueue requestQueue;
     private EventsPresenter eventsPresenter;
@@ -64,7 +64,7 @@ public class LiveNationApplication extends Application {
 
         apiHelper = new ApiHelper(ssoManager, getApplicationContext());
 
-        locationHelper = new LocationHelper();
+        locationManager = new LocationManager(getApplicationContext());
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
@@ -76,7 +76,6 @@ public class LiveNationApplication extends Application {
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
 
-        locationHelper.prepareCache(getApplicationContext());
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
@@ -98,8 +97,8 @@ public class LiveNationApplication extends Application {
     }
 
 
-    public LocationHelper getLocationHelper() {
-        return locationHelper;
+    public LocationManager getLocationManager() {
+        return locationManager;
     }
 
     public ImageLoader getImageLoader() {

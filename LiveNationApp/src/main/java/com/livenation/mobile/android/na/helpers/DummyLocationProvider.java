@@ -9,7 +9,7 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 
-import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
+import com.livenation.mobile.android.na.helpers.LocationProvider.LocationCallback;
 import com.livenation.mobile.android.platform.util.Logger;
 
 /**
@@ -20,7 +20,7 @@ import com.livenation.mobile.android.platform.util.Logger;
  * @author cchilton
  *
  */
-public class DummyLocationProvider implements LocationHelper.LocationProvider {
+public class DummyLocationProvider implements LocationProvider {
 	private static final Double[] LOCATION_SF = new Double[]{37.7833,-122.4167};
 	private static final String TAG = "DUMMY_LOCATION_PROVIDER";
 
@@ -29,5 +29,5 @@ public class DummyLocationProvider implements LocationHelper.LocationProvider {
 		Logger.log(TAG, "Dummy location provider was invoked");
 		callback.onLocation(LOCATION_SF[0], LOCATION_SF[1]);
 	}
-	
+
 }
