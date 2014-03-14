@@ -1,10 +1,7 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.List;
 
@@ -12,11 +9,12 @@ import java.util.List;
  * Created by cchilton on 3/11/14.
  */
 public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScrollListener {
-    private Loader loading;
+    private Loader loader;
     //limit is final due to the way the API offset parameter behaves as a page
     //if the limit changes from request to request, the api paging data will be inconsistent
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
+    private boolean hasMorePages;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
@@ -33,34 +31,60 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
         }
     }
 
+    public void reset() {
+        if (null != loader) {
+            loader.cancel();
+            loader = null;
+        }
+        adapter.clear();
+        setHasMorePages(true);
+    }
+
     public void load() {
-        loading = new Loader(adapter.getCount(), limit);
-        loading.run();
+        loader = new Loader(getOffset(), limit);
+        loader.run();
         onFetchStarted();
     }
 
-    public void stop() {};
-
     private boolean isLoading() {
-        return null != loading;
+        return null != loader;
     }
 
+    protected int getOffset() {
+        return adapter.getCount();
+    }
+
+    public void onNoMorePages() {
+        onFetchEnded();
+    };
+
     public abstract void fetch(int offset, int limit);
+
 
     public abstract void onFetchStarted();
 
     public abstract void onFetchEnded();
 
     public void onFetchResult(List<? extends TItemType> result) {
-        loading = null;
-        onFetchEnded();
+        if (null != loader && loader.isCancelled()) {
+            loader = null;
+            return;
+        }
+
         adapter.addAll(result);
-        adapter.notifyDataSetChanged();
+        loader = null;
+
+        onFetchEnded();
+    }
+
+    protected void setHasMorePages(boolean value) {
+        hasMorePages = value;
     }
 
     private class Loader implements Runnable {
         private final int offset;
         private final int limit;
+        private boolean cancelled = false;
 
         private Loader(int offset, int limit) {
             this.offset = offset;
@@ -69,7 +93,20 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
 
         @Override
         public void run() {
-            fetch(offset, limit);
+            if (hasMorePages) {
+                fetch(offset, limit);
+            } else {
+                onNoMorePages();
+            }
         }
+
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        public void cancel() {
+            cancelled = true;
+            onFetchEnded();
+         }
     }
 }
