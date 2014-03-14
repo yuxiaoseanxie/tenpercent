@@ -28,13 +28,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.helpers.LocationProvider;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -50,6 +48,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Dat
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.util.Logger;
 
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
@@ -66,7 +65,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		adapter = new EventVenueAdapter(getActivity());
-		setRetainInstance(true);
+        pager = new ScrollPager(adapter);
+
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+
+        setRetainInstance(true);
 	}
 	
 	@Override
@@ -76,29 +79,27 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 		View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
 		listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
 		listView.setAdapter(adapter);
-		listView.setEmptyView(view.findViewById(android.R.id.empty));
+        listView.setEmptyView(view.findViewById(android.R.id.empty));
 		listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-
-        pager = new ScrollPager(listView, adapter);
+        pager.setupListView(listView);
 
         return view;
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 	}
 
     @Override
     public void onStop() {
         super.onStop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
         deinit();
     }
-	
-	@Override
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+    }
+
+    @Override
 	public void onSaveInstanceState(Bundle outState) {
 		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
 		outState.putParcelable(getViewKey(listView), listState);
@@ -114,11 +115,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
+        lat = apiService.getApiConfig().getLat();
+        lng = apiService.getApiConfig().getLng();
         init();
     }
 
     private void init() {
-        adapter.clear();
+        pager.reset();
         pager.load();
 	}
 
@@ -296,9 +299,20 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 	}
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> implements VenuesView {
+        /*
+        We manually track the paging offset value as the adapter's itemCount() value will be incorrect
+        for this purpose (since the size of venue events (adapter) != size of venues (api)
+         */
+        private int offset = 0;
 
-        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
-            super(listView, 10, adapter);
+        private ScrollPager(ArrayAdapter<Event> adapter) {
+            super(10, adapter);
+        }
+
+        @Override
+        public void reset() {
+            super.reset();
+            offset = 0;
         }
 
         @Override
@@ -309,8 +323,14 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         @Override
         public void setVenues(List<Venue> venues) {
+            offset += venues.size();
             List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
             onFetchResult(transformed);
+        }
+
+        @Override
+        protected int getOffset() {
+            return offset;
         }
 
         @Override

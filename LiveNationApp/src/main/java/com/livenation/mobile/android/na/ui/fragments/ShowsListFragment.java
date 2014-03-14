@@ -54,7 +54,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
-	}
+        scrollPager = new ScrollPager(adapter);
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+    }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,22 +67,20 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
-
-        scrollPager = new ScrollPager(listView, adapter);
+        scrollPager.setupListView(listView);
 
 		return view;
 	}
 
     @Override
-    public void onStart() {
-        super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         scrollPager.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
@@ -114,7 +114,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        adapter.clear();
+        scrollPager.reset();
         scrollPager.load();
     }
 
@@ -238,8 +238,8 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> implements EventsView {
 
-        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
-            super(listView, 30, adapter);
+        private ScrollPager(ArrayAdapter<Event> adapter) {
+            super(30, adapter);
         }
 
         @Override
