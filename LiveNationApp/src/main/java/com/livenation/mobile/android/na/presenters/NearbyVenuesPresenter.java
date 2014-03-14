@@ -14,7 +14,7 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
+import com.livenation.mobile.android.na.helpers.LocationProvider.LocationCallback;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -60,16 +60,13 @@ public class NearbyVenuesPresenter extends
     }
 
 	static class VenuesState extends BaseResultState<ArrayList<Venue>, VenuesView>
-			implements LocationCallback,
-			LiveNationApiService.GetVenuesApiCallback {
+			implements LiveNationApiService.GetVenuesApiCallback {
 		private final Context context;
 		private NearbyVenuesWithEventsParameters params;
 		public static final int FAILURE_API_GENERAL = 0;
 		public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
-
-
 
         public VenuesState(StateListener<VenuesState> listener, Bundle args,
 				VenuesView view, Context context) {
@@ -96,15 +93,8 @@ public class NearbyVenuesPresenter extends
 
 		@Override
 		public void retrieveResult() {
-			// TODO: For fun: Allow for lat/lng to be overridden via args bundle
-			getLocationHelper().getLocation(context, VenuesState.this);
-		}
-
-		@Override
-		public void onLocation(double lat, double lng) {
-			params.setLocation(lat, lng);
-			// params.setSortMethod("start_time");
-			getApiService().getNearbyVenuesWithEvents(params, VenuesState.this);
+            params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
+            getApiService().getNearbyVenuesWithEvents(params, VenuesState.this);
 		}
 
 		@Override
@@ -116,11 +106,6 @@ public class NearbyVenuesPresenter extends
 		@Override
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
-		}
-
-		@Override
-		public void onLocationFailure(int failureCode) {
-			notifyFailed(FAILURE_LOCATION);
 		}
 
         @Override

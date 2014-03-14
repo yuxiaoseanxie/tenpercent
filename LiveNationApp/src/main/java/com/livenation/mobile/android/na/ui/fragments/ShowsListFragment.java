@@ -32,6 +32,8 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -41,7 +43,7 @@ import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener  {
+public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
     private ScrollPager scrollPager;
@@ -72,13 +74,14 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     @Override
     public void onStart() {
         super.onStart();
-        scrollPager.load();
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         scrollPager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -108,9 +111,14 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
 		startActivity(intent);
 	}
-	
-	
-	public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        adapter.clear();
+        scrollPager.load();
+    }
+
+    public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
 	    private LayoutInflater inflater;
 
         public EventAdapter(Context context, List<Event> items) {

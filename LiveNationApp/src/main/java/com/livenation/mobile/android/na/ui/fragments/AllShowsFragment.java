@@ -19,15 +19,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.util.Logger;
 
-public class AllShowsFragment extends LiveNationFragment implements FeatureView {
+public class AllShowsFragment extends LiveNationFragment implements FeatureView, ApiServiceBinder {
 	private FeatureView featured = null;
 
 	@Override
@@ -57,16 +61,26 @@ public class AllShowsFragment extends LiveNationFragment implements FeatureView 
 	@Override
 	public void onStart() {
 		super.onStart();
-		init();
+        Logger.log("ApiBind", "All shows start");
+	    LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 	}
 
     @Override
     public void onStop() {
         super.onStop();
+        Logger.log("ApiBind", "All shows stop");
         deinit();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
-	
-	@Override
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+
+        Logger.log("ApiBind", "All shows binded");
+        init();
+    }
+
+    @Override
 	public void setFeatured(List<Chart> features) {	
 		getActivity().getIntent().putExtra(FeaturePresenter.INTENT_DATA_KEY, (Serializable) features);
 		featured.setFeatured(features);
@@ -74,9 +88,9 @@ public class AllShowsFragment extends LiveNationFragment implements FeatureView 
 	
 	private void init() {
 		Context context = getActivity();
-		Bundle args = getActivity().getIntent().getExtras();
+		//Bundle args = getActivity().getIntent().getExtras();
 
-		getFeaturePresenter().initialize(context, args, AllShowsFragment.this);
+		getFeaturePresenter().initialize(context, null, AllShowsFragment.this);
 	}
 
     private void deinit() {

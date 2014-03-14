@@ -31,8 +31,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.helpers.LocationProvider;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -50,7 +52,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements LocationHelper.LocationCallback {
+public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
 	private StickyListHeadersListView listView;
 	private EventVenueAdapter adapter;
 	private Double lat;
@@ -86,12 +88,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements Location
 	@Override
 	public void onStart() {
 		super.onStart();
-        getLocationHelper().getLocation(getActivity(), NearbyVenuesFragment.this);
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 	}
 
     @Override
     public void onStop() {
         super.onStop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
         deinit();
     }
 	
@@ -110,19 +113,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements Location
 	}
 
     @Override
-    public void onLocation(double lat, double lng) {
-        this.lat = lat;
-        this.lng = lng;
+    public void onApiServiceAttached(LiveNationApiService apiService) {
         init();
     }
 
-    @Override
-    public void onLocationFailure(int failureCode) {
-        Toast.makeText(getActivity(), "Failed to get location", Toast.LENGTH_SHORT).show();
-    }
-
     private void init() {
-		pager.load();
+        adapter.clear();
+        pager.load();
 	}
 
     private void deinit() {

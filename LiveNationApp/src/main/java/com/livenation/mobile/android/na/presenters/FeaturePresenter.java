@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.helpers.LocationHelper.LocationCallback;
+import com.livenation.mobile.android.na.helpers.LocationProvider.LocationCallback;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -35,7 +35,7 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 		view.setFeatured(featured);
 	}
 	
-	static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback, LocationCallback {
+	static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements GetTopChartsCallback {
 		private final Context context;
 		
 		public static final int FAILURE_API_GENERAL = 0;
@@ -53,7 +53,7 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 		
 		@Override
 		public void retrieveResult() {
-			getLocationHelper().getLocation(context, FeatureState.this);
+            retrieveCharts(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
 		}
 		
 		@Override
@@ -61,20 +61,10 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 			setResult((ArrayList<Chart>) charts);
 			notifyReady();
 		}
-		
-		@Override
-		public void onLocation(double lat, double lng) {
-			retrieveCharts(lat, lng);
-		}
 
 		@Override
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
-		}
-		
-		@Override
-		public void onLocationFailure(int failureCode) {
-			notifyFailed(FAILURE_LOCATION);
 		}
 
         @Override
