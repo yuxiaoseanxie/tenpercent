@@ -67,6 +67,15 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         Logger.log("ApiHelper", "Already building");
     }
 
+
+    public boolean hasApi() {
+        return (null != apiService);
+    }
+
+    public boolean isBuildingApi() {
+        return (null != apiBuilder);
+    }
+
     public void bindApi(ApiServiceBinder binder) {
         if (null != apiService) {
             binder.onApiServiceAttached(apiService);
