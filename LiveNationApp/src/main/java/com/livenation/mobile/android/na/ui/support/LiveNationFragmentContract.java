@@ -9,17 +9,16 @@
 package com.livenation.mobile.android.na.ui.support;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 public interface LiveNationFragmentContract {
-	LocationHelper getLocationHelper();
+	LocationManager getLocationManager();
 	ImageLoader getImageLoader();
 
     SingleEventPresenter getSingleEventPresenter();

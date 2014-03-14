@@ -13,7 +13,7 @@ import android.support.v4.app.ListFragment;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationHelper;
+import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
@@ -29,8 +29,8 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
 	}
 
 	@Override
-	public LocationHelper getLocationHelper() {
-		return LiveNationApplication.get().getLocationHelper();
+	public LocationManager getLocationManager() {
+		return LiveNationApplication.get().getLocationManager();
 	}
 	
 	@Override

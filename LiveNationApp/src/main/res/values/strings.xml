@@ -38,6 +38,12 @@
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
 
+    <string name="location_automatic_location_text">Automatic location</string>
+    <string name="location_manual_location_text">Allow me to specify my location</string>
+    <string name="location_description_text">Manage your location here. Your location is used for shows nearby.</string>
+    <string name="location_overlay_automatic">Automatic location</string>
+    <string name="location_overlay_manual">Tap to change location</string>
+
     <string name="login_connect_or_create">Connect or Create Account</string>
     <string name="login_facebook_button">Facebook</string>
     <string name="login_google_plus_button">Google</string>
@@ -54,6 +60,10 @@
     <string name="debug_item_apid">APID</string>
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
+
+    <string name="location_control_switch">Automatic Location</string>
+    <string name="location_done_button">Done</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>

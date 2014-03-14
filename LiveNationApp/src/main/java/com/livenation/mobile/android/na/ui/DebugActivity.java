@@ -47,6 +47,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem deviceIdItem;
     private DebugItem accessTokenItem;
     private DebugItem environmentItem;
+    private DebugItem locationItem;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -107,6 +108,9 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         if (null != deviceIdItem) {
             deviceIdItem.setValue(apiService.getApiConfig().getDeviceId());
         }
+        if (null != locationItem) {
+            locationItem.setValue(apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
+        }
         if (null != actionsAdapter) {
             actionsAdapter.notifyDataSetChanged();
         }
@@ -126,6 +130,9 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
         String urbanAirshipUserID = urbanAirshipUser != null? urbanAirshipUser.getId() : "(None)";
         actions.add(new DebugItem(getString(R.string.debug_item_urban_airship_id), urbanAirshipUserID));
+
+        locationItem = new DebugItem("Location", "");
+        actions.add(locationItem);
     }
 
     private void addActionDebugItems()

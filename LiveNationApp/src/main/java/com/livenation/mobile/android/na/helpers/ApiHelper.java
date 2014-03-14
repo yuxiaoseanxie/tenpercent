@@ -3,19 +3,18 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -131,9 +130,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<Context> context = new ContextConfig(appContext);
         ApiBuilderElement<String> host = new GetHostConfig(appContext);
         ApiBuilderElement<String> clientId = new GetClientIdConfig(appContext);
+        ApiBuilderElement<Double[]> location = new LocationConfig(appContext);
 
-
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, context);
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, location, context);
         apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
@@ -225,6 +224,35 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
+
+    private class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProvider.LocationCallback {
+        private final Context appContext;
+
+        private LocationConfig(Context appContext) {
+            this.appContext = appContext;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            LiveNationApplication.get().getLocationManager().getLocation(appContext, this);
+        }
+
+        @Override
+        public void onLocation(double lat, double lng) {
+            Double[] locationValue = new Double[2];
+            locationValue[0] = lat;
+            locationValue[1] = lng;
+            setResult(locationValue);
+            notifyReady();
+        }
+
+        @Override
+        public void onLocationFailure(int failureCode) {
+            notifyFailed(0, "");
+        }
+    }
+
     private class SsoTokenListener implements ApiBuilderElement.ConfigListener {
         private final LiveNationApiBuilder apiBuilder;
 
@@ -255,4 +283,5 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
         }
     }
+
 }

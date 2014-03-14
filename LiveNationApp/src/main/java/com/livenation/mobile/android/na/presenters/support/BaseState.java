@@ -11,8 +11,7 @@ package com.livenation.mobile.android.na.presenters.support;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationHelper;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.na.helpers.LocationManager;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class BaseState<T extends PresenterView> implements Runnable {
@@ -55,8 +54,8 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 		listener.onStateFailed(failureCode, this);
 	}
 
-	public LocationHelper getLocationHelper() {
-		return LiveNationApplication.get().getLocationHelper();
+	public LocationManager getLocationManager() {
+		return LiveNationApplication.get().getLocationManager();
 	}
 
 	public interface StateListener<T1 extends BaseState> {
