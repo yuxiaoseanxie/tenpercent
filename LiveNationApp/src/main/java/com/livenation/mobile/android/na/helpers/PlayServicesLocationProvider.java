@@ -34,7 +34,7 @@ public class PlayServicesLocationProvider implements
 
     @Override
     public void getLocation(Context context, LocationManager.LocationCallback callback) {
-        if (STATUS_GOOGLE_PLAY_SUCCESS == getGooglePlayServiceStatus(context)) {
+        if (STATUS_GOOGLE_PLAY_SUCCESS != getGooglePlayServiceStatus(context)) {
             callback.onLocationFailure(0);
             return;
         }
