@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-
 import java.util.List;
 
 /**
@@ -41,6 +40,9 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
     }
 
     public void load() {
+        if (isLoading()) {
+            loader.cancel();
+        }
         loader = new Loader(getOffset(), limit);
         loader.run();
         onFetchStarted();
