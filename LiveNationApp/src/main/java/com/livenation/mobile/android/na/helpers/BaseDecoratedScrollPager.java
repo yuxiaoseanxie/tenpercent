@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
@@ -41,7 +40,8 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     }
 
     @Override
-    public void onFetchResult(List<? extends TItemType> result) {
+    public void onFetchResult(FetchLoader fetchLoader) {
+        List<TItemType> result = fetchLoader.getResult();
         if (result.size() == 0 || itemHasAlreadyBeenFetched(result)) {
             //end of result list, or
             //found a dupe, abort adding the data to the adapter
@@ -50,7 +50,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
             return;
         }
         lastFetch = result;
-        super.onFetchResult(result);
+        super.onFetchResult(fetchLoader);
     }
 
     @Override
@@ -67,7 +67,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
 
     private boolean itemHasAlreadyBeenFetched(List<? extends TItemType> newFetch) {
         if (null == lastFetch) return false;
-        if (newFetch.size() > 0) return false;
+        if (newFetch.size() == 0) return false;
 
         //The LN API will 'rollover' to the last page of results once paging parameters
         //are exceeded. So we need to check for dupes and stop paging if so.

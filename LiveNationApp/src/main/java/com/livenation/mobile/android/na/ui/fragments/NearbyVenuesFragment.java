@@ -48,7 +48,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Dat
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.util.Logger;
 
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
@@ -298,7 +297,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         }
 	}
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements VenuesView {
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
+
         /*
         We manually track the paging offset value as the adapter's itemCount() value will be incorrect
         for this purpose (since the size of venue events (adapter) != size of venues (api)
@@ -316,16 +316,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         }
 
         @Override
-        public void fetch(int offset, int limit) {
+        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
             Bundle args = getNearbyVenuesPresenter().getArgs(offset, limit);
-            getNearbyVenuesPresenter().initialize(getActivity(), args, ScrollPager.this);
-        }
-
-        @Override
-        public void setVenues(List<Venue> venues) {
-            offset += venues.size();
-            List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
-            onFetchResult(transformed);
+            FetchRequest request = new VenuesFetchRequest(offset, limit, callback);
+            return request;
         }
 
         @Override
@@ -335,7 +329,34 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         @Override
         public void stop() {
-            getNearbyVenuesPresenter().cancel(ScrollPager.this);
+            for (FetchLoader fetchLoader : getFetchLoaders()) {
+                fetchLoader.cancel();
+            }
+        }
+
+        private class VenuesFetchRequest extends FetchRequest<Event> implements VenuesView {
+
+            private VenuesFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
+                super(offset, limit, fetchResultHandler);
+            }
+
+            @Override
+            public void run() {
+                Bundle args = getNearbyVenuesPresenter().getArgs(getOffset(), getLimit());
+                getNearbyVenuesPresenter().initialize(getActivity(), args, this);
+            }
+
+            @Override
+            public void setVenues(List<Venue> venues) {
+                ScrollPager.this.offset += venues.size();
+                List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
+                getFetchResultHandler().deliverResult(transformed);
+            }
+
+            @Override
+            public void cancel() {
+                getNearbyVenuesPresenter().cancel(this);
+            }
         }
     }
 
@@ -344,7 +365,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         private OnShowClick(Event event) {
             this.event = event;
-
         }
 
         @Override

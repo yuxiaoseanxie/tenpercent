@@ -221,8 +221,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 				return date;
 			}
 		}
-		
-		
+
 		private class ViewHeaderHolder {
 			private final TextView text;
 			
@@ -236,26 +235,46 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		}
 	}
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements EventsView {
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 
         private ScrollPager(ArrayAdapter<Event> adapter) {
             super(30, adapter);
         }
 
         @Override
-        public void fetch(int offset, int limit) {
-            Bundle args = getEventsPresenter().getArgs(offset, limit);
-            getEventsPresenter().initialize(getActivity(), args, ScrollPager.this);
-        }
-
-        @Override
-        public void setEvents(List<Event> events) {
-            onFetchResult(events);
+        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
+            FetchRequest request = new EventsFetchRequest(offset, limit, callback);
+            return request;
         }
 
         @Override
         public void stop() {
-            getEventsPresenter().cancel(ScrollPager.this);
+            for (FetchLoader fetchLoader : getFetchLoaders()) {
+                fetchLoader.cancel();
+            }
+        }
+
+        private class EventsFetchRequest extends FetchRequest<Event> implements EventsView {
+
+            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
+                super(offset, limit, fetchResultHandler);
+            }
+
+            @Override
+            public void run() {
+                Bundle args = getEventsPresenter().getArgs(getOffset(), getLimit());
+                getEventsPresenter().initialize(getActivity(), args, this);
+            }
+
+            @Override
+            public void setEvents(List<Event> events) {
+                getFetchResultHandler().deliverResult(events);
+            }
+
+            @Override
+            public void cancel() {
+                getEventsPresenter().cancel(this);
+            }
         }
     }
 }
