@@ -26,7 +26,7 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (!(isLoading()) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
-            if ((firstVisibleItem == 0) && (visibleItemCount <= totalItemCount)) {
+            if ((firstVisibleItem == 0) && (totalItemCount == 1)) {
                 //StickyListViewHeaders bug? (the adapter has no items, yet totalItemCount is 1)
                 //ignore this scroll based load request, as the adapter has just had its items
                 //cleared, and the scroll pager will only start a duplicate non-user-scroll based request
