@@ -43,8 +43,8 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
         }
         FetchLoader fetchLoader = new FetchLoader(getOffset(), limit);
         registerLoader(fetchLoader);
-        fetchLoader.run();
         onFetchStarted();
+        fetchLoader.run();
     }
 
     protected int getOffset() {
