@@ -41,7 +41,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
         footerBugHack = new FrameLayout(context);
     }
 
-    public void setupListView(StickyListHeadersListView listView) {
+    public void connectListView(StickyListHeadersListView listView) {
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
     }

@@ -67,7 +67,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
-        scrollPager.setupListView(listView);
+        scrollPager.connectListView(listView);
 
 		return view;
 	}

@@ -81,7 +81,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         listView.setEmptyView(view.findViewById(android.R.id.empty));
 		listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-        pager.setupListView(listView);
+        pager.connectListView(listView);
 
         return view;
 	}
