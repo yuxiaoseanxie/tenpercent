@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
@@ -88,8 +89,12 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		tabSpec.setIndicator(view);
 		tabHost.addTab(tabSpec, Fragment.class, null);
 
-        LiveNationApplication.get().getApiHelper().setDependencyActivity(this);
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
+
+        apiHelper.setDependencyActivity(this);
+        if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
+            LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        }
 
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());

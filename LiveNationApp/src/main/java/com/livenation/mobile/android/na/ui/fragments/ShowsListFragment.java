@@ -54,7 +54,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
-	}
+        scrollPager = new ScrollPager(adapter);
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+    }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,22 +67,20 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
-
-        scrollPager = new ScrollPager(listView, adapter);
+        scrollPager.connectListView(listView);
 
 		return view;
 	}
 
     @Override
-    public void onStart() {
-        super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         scrollPager.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
@@ -114,7 +114,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        adapter.clear();
+        scrollPager.reset();
         scrollPager.load();
     }
 
@@ -221,8 +221,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 				return date;
 			}
 		}
-		
-		
+
 		private class ViewHeaderHolder {
 			private final TextView text;
 			
@@ -236,26 +235,46 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		}
 	}
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements EventsView {
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 
-        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
-            super(listView, 30, adapter);
+        private ScrollPager(ArrayAdapter<Event> adapter) {
+            super(30, adapter);
         }
 
         @Override
-        public void fetch(int offset, int limit) {
-            Bundle args = getEventsPresenter().getArgs(offset, limit);
-            getEventsPresenter().initialize(getActivity(), args, ScrollPager.this);
-        }
-
-        @Override
-        public void setEvents(List<Event> events) {
-            onFetchResult(events);
+        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
+            FetchRequest request = new EventsFetchRequest(offset, limit, callback);
+            return request;
         }
 
         @Override
         public void stop() {
-            getEventsPresenter().cancel(ScrollPager.this);
+            for (FetchLoader fetchLoader : getFetchLoaders()) {
+                fetchLoader.cancel();
+            }
+        }
+
+        private class EventsFetchRequest extends FetchRequest<Event> implements EventsView {
+
+            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
+                super(offset, limit, fetchResultHandler);
+            }
+
+            @Override
+            public void run() {
+                Bundle args = getEventsPresenter().getArgs(getOffset(), getLimit());
+                getEventsPresenter().initialize(getActivity(), args, this);
+            }
+
+            @Override
+            public void setEvents(List<Event> events) {
+                getFetchResultHandler().deliverResult(events);
+            }
+
+            @Override
+            public void cancel() {
+                getEventsPresenter().cancel(this);
+            }
         }
     }
 }
