@@ -44,6 +44,11 @@ public class DeviceLocationProvider implements LocationProvider {
             criteria.setAccuracy(Criteria.ACCURACY_COARSE);
             criteria.setPowerRequirement(Criteria.POWER_LOW);
             String provider = locationManager.getBestProvider(criteria, false);
+            if (null == provider) {
+                //no location providers, may be an emulator
+                callback.onLocationFailure(0);
+                return;
+            }
             Location last = locationManager.getLastKnownLocation(provider);
             if (null != last) {
                 callback.onLocation(last.getLatitude(), last.getLongitude());
