@@ -55,7 +55,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     @Override
     public void onFetchResult(FetchLoader fetchLoader) {
         List<TItemType> result = fetchLoader.getResult();
-        if (result.size() == 0 || itemHasAlreadyBeenFetched(result)) {
+        if (result.size() == 0 || hasItemAlreadyBeenFetched(result)) {
             //end of result list, or
             //found a dupe, abort adding the data to the adapter
             setHasMorePages(false);
@@ -78,7 +78,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
 
     public abstract void stop();
 
-    private boolean itemHasAlreadyBeenFetched(List<? extends TItemType> newFetch) {
+    private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
         if (null == lastFetch) return false;
         if (newFetch.size() == 0) return false;
 
