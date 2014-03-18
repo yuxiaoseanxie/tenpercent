@@ -36,6 +36,8 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
+import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
+import com.livenation.mobile.android.na.ui.fragments.RecommendationsFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
 
@@ -87,7 +89,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		view = createTab(HomeActivity.this, title);
 		tabSpec = tabHost.newTabSpec("your_shows");
 		tabSpec.setIndicator(view);
-		tabHost.addTab(tabSpec, Fragment.class, null);
+		tabHost.addTab(tabSpec, RecommendationSetsFragment.class, null);
 
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
 
