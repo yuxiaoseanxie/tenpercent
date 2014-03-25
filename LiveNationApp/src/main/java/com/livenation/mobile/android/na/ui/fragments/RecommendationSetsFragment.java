@@ -21,11 +21,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
@@ -33,6 +35,7 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 
@@ -56,7 +59,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
+		adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new ScrollPager(adapter);
 
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
@@ -71,6 +74,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 		listView.setOnItemClickListener(RecommendationSetsFragment.this);
 		listView.setAdapter(adapter);
 		listView.setEmptyView(view.findViewById(android.R.id.empty));
+        listView.setDivider(null);
+        listView.setAreHeadersSticky(false);
         scrollPager.connectListView(listView);
 
 		return view;
@@ -107,7 +112,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
-		Event event = adapter.getItem(position);
+		Event event = adapter.getItem(position).get();
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
@@ -122,10 +127,10 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         scrollPager.load();
     }
 
-    public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
+    public class EventAdapter extends ArrayAdapter<TaggedEvent> implements StickyListHeadersAdapter {
         private LayoutInflater inflater;
 
-        public EventAdapter(Context context, List<Event> items) {
+        public EventAdapter(Context context, List<TaggedEvent> items) {
             super(context, android.R.layout.simple_list_item_1, items);
             inflater = LayoutInflater.from(context);
         }
@@ -136,7 +141,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             View view = null;
 
             if (null == convertView) {
-                view = inflater.inflate(R.layout.list_show_item, null);
+                view = inflater.inflate(R.layout.list_show_item_v2, null);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             } else {
@@ -144,10 +149,16 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Event event = getItem(position);
+            Event event = getItem(position).get();
             holder.getTitle().setText(event.getName());
             holder.getLocation().setText(event.getVenue().getName());
 
+            if (event.getLineup().size() > 0) {
+                String imageKey  = event.getLineup().get(0).getBestImageKey(new String[] {"tap", "mobile_detail"});
+                holder.getImage().setImageUrl(event.getLineup().get(0).getImageURL(imageKey), getImageLoader());
+            } else {
+                holder.getImage().setImageUrl(null, getImageLoader());
+            }
             //TODO: Move date parsing to Data Model Entity helper. This is ugly
             try {
                 Date date = sdf.parse(event.getStartTime());
@@ -166,7 +177,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             View view = null;
             ViewHeaderHolder holder = null;
             if (null == convertView) {
-                view = inflater.inflate(R.layout.list_show_header, null);
+                view = inflater.inflate(R.layout.list_recommended_header, null);
                 holder = new ViewHeaderHolder(view);
                 view.setTag(holder);
             } else {
@@ -176,41 +187,33 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
             TextView text = holder.getText();
 
-            //TODO: refactor this into Model helpers (inline or sub-helper classes?)
-            String dateRaw = getItem(position).getStartTime();
-            try {
-                Date date = sdf.parse(dateRaw);
-                String dateValue = DateFormat.format("MMMM", date).toString();
-                text.setText(dateValue);
-            } catch (ParseException e) {
-                throw new IllegalStateException("Unparsable date: " + dateRaw);
+            if (getItem(position).isPersonal()) {
+                text.setText("RECOMMENDED FOR YOU");
+            } else {
+                text.setText("POPULAR SHOWS");
             }
-
             return view;
         }
 
         @Override
         public long getHeaderId(int position) {
-            String dateRaw = getItem(position).getStartTime();
-            try {
-
-                Date date = sdf.parse(dateRaw);
-                String dateValue = DateFormat.format("yyyyMM", date).toString();
-                return Long.valueOf(dateValue);
-            } catch (ParseException e) {
-                throw new IllegalStateException("Unparsable date: " + dateRaw);
+            if (getItem(position).getTag()) {
+                return 1;
             }
+            return 0;
         }
 
         private class ViewHolder {
             private final TextView title;
             private final TextView location;
             private final VerticalDate date;
+            private final NetworkImageView image;
 
             public ViewHolder(View view) {
                 this.title = (TextView) view.findViewById(id.list_generic_show_title);
                 this.location = (TextView) view.findViewById(id.list_generic_show_location);
                 this.date = (VerticalDate) view.findViewById(id.list_generic_show_date);
+                this.image = (NetworkImageView) view.findViewById(id.list_item_show_image);
             }
 
             public TextView getTitle() {
@@ -224,13 +227,17 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             public VerticalDate getDate() {
                 return date;
             }
+
+            public NetworkImageView getImage() {
+                return image;
+            }
         }
 
         private class ViewHeaderHolder {
             private final TextView text;
 
             public ViewHeaderHolder(View view) {
-                this.text = (TextView) view.findViewById(id.list_show_header_textview);
+                this.text = (TextView) view.findViewById(id.list_recommended_header_textview);
             }
 
             public TextView getText() {
@@ -239,14 +246,14 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         }
     }
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
+    private class ScrollPager extends BaseDecoratedScrollPager<TaggedEvent> {
 
-        private ScrollPager(ArrayAdapter<Event> adapter) {
+        private ScrollPager(ArrayAdapter<TaggedEvent> adapter) {
             super(10, adapter);
         }
 
         @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
+        public FetchRequest<TaggedEvent> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
             FetchRequest request = new EventsFetchRequest(offset, limit, callback);
             return request;
         }
@@ -258,9 +265,9 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             }
         }
 
-        private class EventsFetchRequest extends FetchRequest<Event> implements RecommendationSetsView {
+        private class EventsFetchRequest extends FetchRequest<TaggedEvent> implements RecommendationSetsView {
 
-            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
+            private EventsFetchRequest(int offset, int limit, FetchResultHandler<TaggedEvent> fetchResultHandler) {
                 super(offset, limit, fetchResultHandler);
             }
 
@@ -272,12 +279,17 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
             @Override
             public void setRecommendationSets(List<RecommendationSet> recommendationSets) {
-                List<Event> result = new ArrayList<Event>();
+                List<TaggedEvent> result = new ArrayList<TaggedEvent>();
 
                 for (RecommendationSet set : recommendationSets) {
+                    boolean isPersonal = false;
+                    if ("personal".equalsIgnoreCase(set.getName())) {
+                        isPersonal = true;
+                    }
                     for (Event event : set.getEvents()) {
-                        //event.setTag();
-                        result.add(event);
+                        TaggedEvent taggedEvent = new TaggedEvent(event);
+                        taggedEvent.setTag(isPersonal);
+                        result.add(taggedEvent);
                     }
                 }
 
@@ -288,6 +300,22 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             public void cancel() {
                 getRecommendationSetsPresenter().cancel(this);
             }
+        }
+    }
+
+    private static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
+
+        private TaggedEvent(Event event) {
+            super(event);
+        }
+
+        public boolean isPersonal() {
+            return getTag();
+        }
+
+        @Override
+        public boolean idEquals(TaggedEvent target) {
+            return get().idEquals(target.get());
         }
     }
 }
