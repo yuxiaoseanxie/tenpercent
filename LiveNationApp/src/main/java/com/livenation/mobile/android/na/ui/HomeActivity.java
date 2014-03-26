@@ -233,7 +233,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new Fragment();
+                    return new RecommendationSetsFragment();
                 case 1:
                     return new NearbyVenuesFragment();
                 case 2:
