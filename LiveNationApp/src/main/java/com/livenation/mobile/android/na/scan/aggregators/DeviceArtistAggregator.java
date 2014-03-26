@@ -22,7 +22,7 @@ public class DeviceArtistAggregator implements ArtistAggregator {
                 new String[]{MediaStore.Audio.Media.ARTIST, "artist"}, null, null, null);
 
         Set<String> artistSet = new HashSet<String>();
-        while (cursor.moveToNext()) {
+        while (cursor!= null && cursor.moveToNext()) {
             String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             artistSet.add(artist);
         }

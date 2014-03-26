@@ -23,7 +23,7 @@ public class GooglePlayMusicArtistAggregator implements ArtistAggregator {
                 new String[] {"artist"}, null, null, null);
 
         Set<String> artistSet = new HashSet<String>();
-        while (cursor.moveToNext()) {
+        while (cursor!= null && cursor.moveToNext()) {
             String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
             artistSet.add(artist);
         }
