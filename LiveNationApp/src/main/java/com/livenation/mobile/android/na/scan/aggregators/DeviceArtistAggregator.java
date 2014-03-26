@@ -2,31 +2,23 @@ package com.livenation.mobile.android.na.scan.aggregators;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class DeviceArtistAggregator implements ArtistAggregator {
+/**
+ * Aggregator used to get artist names from music songs stored on the SDCard
+ */
+public class DeviceArtistAggregator extends UriArtistAggregator {
 
-    Context context;
-
-    public DeviceArtistAggregator(Context context) {
-        this.context = context;
+    protected DeviceArtistAggregator(Context context) {
+        super(context);
     }
 
     @Override
-    public Set<String> getArtists() {
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Audio.Media.ARTIST, "artist"}, null, null, null);
-
-        Set<String> artistSet = new HashSet<String>();
-        while (cursor!= null && cursor.moveToNext()) {
-            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-            artistSet.add(artist);
-        }
-
-        return artistSet;
+    protected Uri getUri() {
+        return MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
     }
 }

@@ -1,33 +1,19 @@
 package com.livenation.mobile.android.na.scan.aggregators;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
-import android.provider.MediaStore;
 
-import java.util.HashSet;
-import java.util.Set;
+/**
+ * Aggregator used to get artist names from google play account used on the same device which runs the current app
+ */
+public class GooglePlayMusicArtistAggregator extends UriArtistAggregator {
 
-public class GooglePlayMusicArtistAggregator implements ArtistAggregator {
-
-    Context context;
-
-    public GooglePlayMusicArtistAggregator(Context context) {
-        this.context = context;
+    protected GooglePlayMusicArtistAggregator(Context context) {
+        super(context);
     }
 
     @Override
-    public Set<String> getArtists() {
-        Cursor cursor = context.getContentResolver().query(
-                Uri.parse("content://com.google.android.music.MusicContent/audio"),
-                new String[] {"artist"}, null, null, null);
-
-        Set<String> artistSet = new HashSet<String>();
-        while (cursor!= null && cursor.moveToNext()) {
-            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-            artistSet.add(artist);
-        }
-
-        return artistSet;
+    protected Uri getUri() {
+        return Uri.parse("content://com.google.android.music.MusicContent/audio");
     }
 }
