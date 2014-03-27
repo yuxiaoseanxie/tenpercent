@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.scan.aggregators;
 
-import java.util.Set;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+
+import java.util.List;
 
 /**
  * ArtistAggregator should be implemented by all classes which aggregate artist in order to be used
@@ -11,5 +13,5 @@ public interface ArtistAggregator {
     /**
      * @return a set of artist name
      */
-    public Set<String> getArtists() throws Exception;
+    public List<LibraryEntry> getArtists();
 }
