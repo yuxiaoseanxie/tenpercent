@@ -42,6 +42,11 @@
         <item name="android:textColor">@color/list_show_date_text_highlight</item>
     </style>
 
+    <style name="list_show_nearby_time" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
     <style name="show_artist_title" parent="@style/livenation_app_text">
         <item name="android:textSize">26sp</item>
         <item name="android:textStyle">bold</item>

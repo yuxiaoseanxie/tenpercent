@@ -3,7 +3,8 @@
 
     <string name="mock_venue_title_1">Big Beat Boutique</string>
     <string name="mock_artist_title_1">Fatboy Slim</string>
-    
+    <string name="mock_show_time">8:00 PM PST</string>
+
     <string name="mock_placeholder_venue_title_1">Venue Name</string>
     <string name="mock_placeholder_artist_title_1">Artist Title</string>
 
