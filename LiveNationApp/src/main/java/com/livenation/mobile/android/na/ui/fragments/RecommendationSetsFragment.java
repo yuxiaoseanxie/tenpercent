@@ -61,7 +61,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 		super.onCreate(savedInstanceState);
 		adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new ScrollPager(adapter);
-
+        setRetainInstance(true);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
