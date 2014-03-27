@@ -159,6 +159,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 String startTime = DateFormat.format(START_TIME_FORMAT, date).toString();
 
                 holder.getStartTime().setText(startTime);
+                holder.getDate().setDate(date);
 			} catch (ParseException e) {
 				//wtf'y f.
 				e.printStackTrace();
