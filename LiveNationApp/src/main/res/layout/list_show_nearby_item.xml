@@ -7,14 +7,16 @@
         android:id="@+id/list_nearby_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/nearby_show_date_margin_bottom"
         android:layout_marginLeft="@dimen/nearby_show_date_margin_left"
         android:layout_marginRight="@dimen/nearby_show_date_margin_right"
-        android:layout_marginTop="@dimen/nearby_show_date_margin_top"
-        android:layout_marginBottom="@dimen/nearby_show_date_margin_bottom"/>
+        android:layout_marginTop="@dimen/nearby_show_date_margin_top" />
+
     <View
-        android:layout_below="@id/list_nearby_show_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_nearby_show_date" />
+
     <TextView
         android:id="@+id/list_nearby_show_title"
         android:layout_width="wrap_content"
@@ -32,6 +34,7 @@
         android:layout_below="@id/list_nearby_show_title"
         android:text="@string/mock_show_time"
         android:textAppearance="@style/list_show_nearby_time" />
+
     <View
         android:id="@+id/list_nearby_show_divider"
         android:layout_width="match_parent"
