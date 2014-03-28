@@ -75,8 +75,12 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
         slidingTabLayout.setViewPager(pager);
         slidingTabLayout.setSelectedIndicatorColors(0xffe11d39);
 
-        LiveNationApplication.get().getApiHelper().setDependencyActivity(this);
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
+
+        apiHelper.setDependencyActivity(this);
+        if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
+            LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        }
 
         LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
