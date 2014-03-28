@@ -26,8 +26,14 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -76,6 +82,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private ViewPager mViewPager;
     private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
+
+    private final Set<View> mTabViews = new HashSet<View>();
 
     private final SlidingTabStrip mTabStrip;
 
@@ -198,6 +206,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         final PagerAdapter adapter = mViewPager.getAdapter();
         final OnClickListener tabClickListener = new TabClickListener();
 
+        mTabViews.clear();
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;
             TextView tabTitleView = null;
@@ -220,9 +229,37 @@ public class SlidingTabLayout extends HorizontalScrollView {
             tabTitleView.setText(adapter.getPageTitle(i));
             tabView.setOnClickListener(tabClickListener);
 
-            tabView.setMinimumWidth(315);
+            mTabViews.add(tabView);
 
             mTabStrip.addView(tabView);
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+
+        int totalTabWidth = 0;
+        for (View view : mTabViews) {
+            totalTabWidth += view.getMeasuredWidth();
+        }
+
+        int difference = parentWidth - totalTabWidth;
+
+        Double paddingPrecise = (Double.valueOf(difference) / mTabViews.size()) / 2;
+        int padding = paddingPrecise.intValue();
+
+        if (padding > 0 && mTabViews.size() > 0) {
+            for (View view : mTabViews) {
+                view.setPadding(view.getPaddingLeft() + padding, view.getPaddingTop(), view.getPaddingRight() + padding, view.getPaddingBottom());
+            }
+            View view = mTabViews.iterator().next();
+
+            int extra = difference - (padding * mTabViews.size() * 2);
+            view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight() + extra, view.getPaddingBottom());
+            mTabStrip.invalidate();
         }
     }
 
