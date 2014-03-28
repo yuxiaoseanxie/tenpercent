@@ -6,8 +6,8 @@ import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregatorCallback;
 import com.livenation.mobile.android.na.scan.aggregators.DeviceArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAggregator;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -62,7 +62,7 @@ public class ArtistAggregatorScanner {
     private class ScannerTask implements Runnable {
 
         final private Set<Aggregator> aggregators = new HashSet<Aggregator>();
-        final private LibraryDump libraryDump = new LibraryDump();
+        final private MusicLibrary musicLibrary = new MusicLibrary();
         final private Context context;
         final private ArtistAggregatorScannerCallback callback;
 
@@ -93,9 +93,9 @@ public class ArtistAggregatorScanner {
                 final Aggregator aggregatorFinal = aggregator;
                 artistAggregator.getArtists(new ArtistAggregatorCallback() {
                     @Override
-                    public void onResult(List<LibraryEntry> libraryEntries) {
+                    public void onResult(List<MusicLibraryEntry> libraryEntries) {
                         if (libraryEntries != null) {
-                            libraryDump.addAll(libraryEntries);
+                            musicLibrary.addAll(libraryEntries);
                         }
                         decrementJobCounter(aggregatorFinal);
                     }
@@ -106,7 +106,7 @@ public class ArtistAggregatorScanner {
         private void decrementJobCounter(Aggregator aggregator) {
             aggregators.remove(aggregator);
             if (aggregators.isEmpty()) {
-                callback.onSuccess(libraryDump);
+                callback.onSuccess(musicLibrary);
             }
         }
     }

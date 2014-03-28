@@ -3,12 +3,9 @@ package com.livenation.mobile.android.na.scan.aggregators;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 
-import com.livenation.mobile.android.na.scan.ArtistAggregatorScannerCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +33,12 @@ public abstract class UriArtistAggregator implements ArtistAggregator {
         }
         Cursor cursor = context.getContentResolver().query(getUri(), new String[]{MediaStore.Audio.Media.ARTIST}, null, null, null);
 
-        List<LibraryEntry> libraryEntries = new ArrayList<LibraryEntry>();
+        List<MusicLibraryEntry> libraryEntries = new ArrayList<MusicLibraryEntry>();
         while (cursor != null && cursor.moveToNext()) {
             String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-            LibraryEntry libraryEntry = new LibraryEntry(artist);
+            MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry(artist);
             //TODO see if we can get more information (playCount, totalSong ...)
-            libraryEntries.add(libraryEntry);
+            libraryEntries.add(musicLibraryEntry);
             //TODO can be useful to filter a little bit the output. (Sometime <unknown> is an answer for example)
         }
         cursor.close();
