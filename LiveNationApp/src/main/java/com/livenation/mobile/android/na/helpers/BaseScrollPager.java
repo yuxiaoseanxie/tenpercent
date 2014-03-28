@@ -1,22 +1,18 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-
-import com.livenation.mobile.android.platform.util.Logger;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by cchilton on 3/11/14.
  */
 public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScrollListener {
-    private Loader loading;
-    //limit is final due to the way the API offset parameter behaves as a page
-    //if the limit changes from request to request, the api paging data will be inconsistent
+    private final List<FetchLoader> fetchLoaders = new ArrayList<FetchLoader>();
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
+    private boolean hasMorePages;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
@@ -28,48 +24,150 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (!(isLoading()) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
+        if ((fetchLoaders.size() == 0) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
     }
 
+    public void reset() {
+        for (FetchLoader fetchLoader : fetchLoaders) {
+            fetchLoader.cancel();
+        }
+        adapter.clear();
+        setHasMorePages(true);
+    }
+
     public void load() {
-        loading = new Loader(adapter.getCount(), limit);
-        loading.run();
+        for (FetchLoader fetchLoader : fetchLoaders) {
+            fetchLoader.cancel();
+        }
+        FetchLoader fetchLoader = new FetchLoader(getOffset(), limit);
+        registerLoader(fetchLoader);
         onFetchStarted();
+        fetchLoader.run();
     }
 
-    public void stop() {};
-
-    private boolean isLoading() {
-        return null != loading;
+    protected int getOffset() {
+        return adapter.getCount();
     }
 
-    public abstract void fetch(int offset, int limit);
+    public void onNoMorePages() {
+        onFetchEnded();
+    };
+
+    public List<FetchLoader> getFetchLoaders() {
+        return fetchLoaders;
+    }
+
+    public void registerLoader(FetchLoader fetchLoader) {
+        this.fetchLoaders.add(fetchLoader);
+    }
+
+    public void unregisterLoader(FetchLoader fetchLoader) {
+        fetchLoaders.remove(fetchLoader);
+    }
+
+    public abstract FetchRequest<TItemType> getFetchRequest(int offset, int limit, FetchResultHandler callback);
 
     public abstract void onFetchStarted();
 
     public abstract void onFetchEnded();
 
-    public void onFetchResult(List<? extends TItemType> result) {
-        loading = null;
+    protected void onFetchResult(FetchLoader fetchLoader) {
+        adapter.addAll(fetchLoader.getResult());
         onFetchEnded();
-        adapter.addAll(result);
-        adapter.notifyDataSetChanged();
+        unregisterLoader(fetchLoader);
     }
 
-    private class Loader implements Runnable {
+    protected void onLoaderCancelled(FetchLoader fetchLoader) {
+        onFetchEnded();
+        unregisterLoader(fetchLoader);
+    }
+
+    protected void setHasMorePages(boolean value) {
+        hasMorePages = value;
+    }
+
+    protected class FetchLoader implements Runnable, FetchResultHandler<TItemType> {
+        private boolean cancelled = false;
+        private List<TItemType> result;
         private final int offset;
         private final int limit;
+        private final FetchRequest<TItemType> fetchRequest;
 
-        private Loader(int offset, int limit) {
+        private FetchLoader(int offset, int limit) {
             this.offset = offset;
             this.limit = limit;
+            fetchRequest = BaseScrollPager.this.getFetchRequest(offset, limit, this);
         }
 
         @Override
         public void run() {
-            fetch(offset, limit);
+            if (hasMorePages) {
+                fetchRequest.run();
+            } else {
+                onNoMorePages();
+            }
         }
+
+        @Override
+        public void deliverResult(List<TItemType> result) {
+            this.setResult(result);
+            if (!isCancelled()) {
+                onFetchResult(FetchLoader.this);
+            }
+        }
+
+        public void setResult(List<TItemType> result) {
+            this.result = result;
+        }
+
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        public void cancel() {
+            cancelled = true;
+            getFetchRequest().cancel();
+            onLoaderCancelled(this);
+        }
+
+        public FetchRequest<TItemType> getFetchRequest() {
+            return fetchRequest;
+        }
+
+        public List<TItemType> getResult() {
+            return result;
+        }
+    }
+
+    protected abstract class FetchRequest<TItemType> implements Runnable {
+        private final int offset;
+        private final int limit;
+        private final FetchResultHandler<TItemType> fetchResultHandler;
+
+        protected FetchRequest(int offset, int limit, FetchResultHandler<TItemType> fetchResultHandler) {
+            this.offset = offset;
+            this.limit = limit;
+            this.fetchResultHandler = fetchResultHandler;
+        }
+
+        public int getOffset() {
+            return offset;
+        }
+
+        public int getLimit() {
+            return limit;
+        }
+
+        public FetchResultHandler<TItemType> getFetchResultHandler() {
+            return fetchResultHandler;
+        }
+
+        public abstract void cancel();
+    }
+
+    public static interface FetchResultHandler<TItemType> {
+        void deliverResult(List<TItemType> result);
     }
 }

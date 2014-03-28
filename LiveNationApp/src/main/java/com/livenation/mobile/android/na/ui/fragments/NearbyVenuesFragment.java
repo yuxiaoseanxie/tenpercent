@@ -66,7 +66,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		adapter = new EventVenueAdapter(getActivity());
-		setRetainInstance(true);
+        pager = new ScrollPager(adapter);
+
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+
+        setRetainInstance(true);
 	}
 	
 	@Override
@@ -76,29 +80,27 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 		View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
 		listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
 		listView.setAdapter(adapter);
-		listView.setEmptyView(view.findViewById(android.R.id.empty));
+        listView.setEmptyView(view.findViewById(android.R.id.empty));
 		listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-
-        pager = new ScrollPager(listView, adapter);
+        pager.connectListView(listView);
 
         return view;
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 	}
 
     @Override
     public void onStop() {
         super.onStop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
         deinit();
     }
-	
-	@Override
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+    }
+
+    @Override
 	public void onSaveInstanceState(Bundle outState) {
 		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
 		outState.putParcelable(getViewKey(listView), listState);
@@ -120,7 +122,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     }
 
     private void init() {
-        adapter.clear();
+        pager.reset();
         pager.load();
 	}
 
@@ -299,27 +301,66 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         }
 	}
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> implements VenuesView {
+    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 
-        private ScrollPager(StickyListHeadersListView listView, ArrayAdapter<Event> adapter) {
-            super(listView, 10, adapter);
+        /*
+        We manually track the paging offset value as the adapter's itemCount() value will be incorrect
+        for this purpose (since the size of venue events (adapter) != size of venues (api)
+         */
+        private int offset = 0;
+
+        private ScrollPager(ArrayAdapter<Event> adapter) {
+            super(10, adapter);
         }
 
         @Override
-        public void fetch(int offset, int limit) {
+        public void reset() {
+            super.reset();
+            offset = 0;
+        }
+
+        @Override
+        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
             Bundle args = getNearbyVenuesPresenter().getArgs(offset, limit);
-            getNearbyVenuesPresenter().initialize(getActivity(), args, ScrollPager.this);
+            FetchRequest request = new VenuesFetchRequest(offset, limit, callback);
+            return request;
         }
 
         @Override
-        public void setVenues(List<Venue> venues) {
-            List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
-            onFetchResult(transformed);
+        protected int getOffset() {
+            return offset;
         }
 
         @Override
         public void stop() {
-            getNearbyVenuesPresenter().cancel(ScrollPager.this);
+            for (FetchLoader fetchLoader : getFetchLoaders()) {
+                fetchLoader.cancel();
+            }
+        }
+
+        private class VenuesFetchRequest extends FetchRequest<Event> implements VenuesView {
+
+            private VenuesFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
+                super(offset, limit, fetchResultHandler);
+            }
+
+            @Override
+            public void run() {
+                Bundle args = getNearbyVenuesPresenter().getArgs(getOffset(), getLimit());
+                getNearbyVenuesPresenter().initialize(getActivity(), args, this);
+            }
+
+            @Override
+            public void setVenues(List<Venue> venues) {
+                ScrollPager.this.offset += venues.size();
+                List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
+                getFetchResultHandler().deliverResult(transformed);
+            }
+
+            @Override
+            public void cancel() {
+                getNearbyVenuesPresenter().cancel(this);
+            }
         }
     }
 
@@ -328,7 +369,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         private OnShowClick(Event event) {
             this.event = event;
-
         }
 
         @Override
