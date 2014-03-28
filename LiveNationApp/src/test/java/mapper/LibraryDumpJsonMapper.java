@@ -4,8 +4,8 @@ import android.test.InstrumentationTestCase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,15 +17,15 @@ import org.json.JSONObject;
 public class LibraryDumpJsonMapper  extends InstrumentationTestCase {
 
     public void testLibraryDumpJsonMapperOnSuccess() {
-        LibraryEntry libraryEntry = new LibraryEntry("U2");
-        libraryEntry.setPlayCount(2);
-        libraryEntry.setTotalSongs(3);
-        LibraryDump libraryDump = new LibraryDump();
-        libraryDump.add(libraryEntry);
+        MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");
+        musicLibraryEntry.setPlayCount(2);
+        musicLibraryEntry.setTotalSongs(3);
+        MusicLibrary musicLibrary = new MusicLibrary();
+        musicLibrary.add(musicLibraryEntry);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String output = objectMapper.writeValueAsString(libraryDump);
+            String output = objectMapper.writeValueAsString(musicLibrary);
 
             JSONObject outputJson = new JSONObject(output);
             assertNotNull(outputJson);

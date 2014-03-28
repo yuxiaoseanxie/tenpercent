@@ -5,7 +5,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScannerCallback;
 import com.livenation.mobile.android.na.ui.TestActivity;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -20,7 +20,7 @@ public class ArtistAggregatorScannerTest extends ActivityInstrumentationTestCase
         ArtistAggregatorScanner artistAggregatorScanner = new ArtistAggregatorScanner();
         artistAggregatorScanner.aggregate(getActivity(), new ArtistAggregatorScannerCallback() {
             @Override
-            public void onSuccess(LibraryDump libraryDump) {
+            public void onSuccess(MusicLibrary musicLibrary) {
                 startApiCall.countDown();
             }
 

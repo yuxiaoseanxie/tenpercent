@@ -4,14 +4,16 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
+import com.livenation.mobile.android.na.ui.HomeActivity;
 import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -31,6 +33,12 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2 implement
     }
 
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        apiService = null;
+    }
+
     public void testDefaultConfig() {
         LiveNationApiBuilder builder = getApiBuilder();
         builder.build(SendLibraryTests.this);
@@ -43,16 +51,18 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2 implement
         LiveNationApiBuilder builder = getApiBuilder();
         builder.build(SendLibraryTests.this);
         block();
-        LibraryDump libraryDump = new LibraryDump();
-        LibraryEntry libraryEntry = new LibraryEntry("U2");
-        libraryEntry.setPlayCount(2);
-        libraryEntry.setTotalSongs(3);
-        libraryDump.add(libraryEntry);
+        MusicLibrary musicLibrary = new MusicLibrary();
+        MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");
+        musicLibraryEntry.setPlayCount(2);
+        musicLibraryEntry.setTotalSongs(3);
+        musicLibrary.add(musicLibraryEntry);
+        ApiParameters.LibraryAffinitiesParameters parameters = ApiParameters.createLibraryAffinitiesParameters();
+        parameters.setLibraryDump(musicLibrary);
 
         final CountDownLatch startApiCall = new CountDownLatch(1);
-        apiService.sendLibraryAffinities(libraryDump, new LiveNationApiService.SendLibraryAffinitiesCallback() {
+        apiService.sendLibraryAffinities(parameters, new LiveNationApiService.SendLibraryAffinitiesCallback() {
             @Override
-            public void onSuccess(int artistCount) {
+            public void onSuccess() {
                 startApiCall.countDown();
                 assert true;
             }

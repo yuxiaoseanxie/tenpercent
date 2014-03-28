@@ -4,7 +4,7 @@ import android.test.InstrumentationTestCase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,13 +15,13 @@ import org.json.JSONObject;
 public class LibraryEntryJsonMapper extends InstrumentationTestCase {
 
     public void testLibraryEntryJsonMapperOnSuccess() {
-        LibraryEntry libraryEntry = new LibraryEntry("U2");
-        libraryEntry.setPlayCount(2);
-        libraryEntry.setTotalSongs(3);
+        MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");
+        musicLibraryEntry.setPlayCount(2);
+        musicLibraryEntry.setTotalSongs(3);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String output = objectMapper.writeValueAsString(libraryEntry);
+            String output = objectMapper.writeValueAsString(musicLibraryEntry);
             JSONObject outputJson = new JSONObject(output);
             String name = outputJson.getString("name");
             assertNotNull(name);
