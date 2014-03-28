@@ -16,18 +16,20 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
+import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
@@ -43,7 +45,10 @@ import java.util.List;
 
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
-	private FragmentTabHost tabHost;
+	private ViewPager pager;
+    private FragmentAdapter adapter;
+    private SlidingTabLayout slidingTabLayout;
+
     private boolean hasUnreadNotifications;
     private static final int RC_SSO_REPAIR = 0;
 	
@@ -51,7 +56,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_landing);
-		
+
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
@@ -61,33 +66,14 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 											R.string.actionbar_drawer_open,
 											R.string.actionbar_drawer_close);
 		rootView.setDrawerListener(drawerToggle);
-		tabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
-	    
-		tabHost.setup(this, getSupportFragmentManager(),
-				R.id.activity_landing_container);
-		
-		String title;
-		View view;
-		TabSpec tabSpec;
-		
-		title = getString(R.string.tab_title_all_shows);
-		view = createTab(HomeActivity.this, title);
-		tabSpec = tabHost.newTabSpec("all_shows");
-		tabSpec.setIndicator(view); tabHost.addTab(tabSpec,
-				AllShowsFragment.class, null);
-		
-		title = getString(R.string.tab_title_nearby);
-		view = createTab(HomeActivity.this, title);
-		tabSpec = tabHost.newTabSpec("nearby");
-		tabSpec.setIndicator(view);
-		tabHost.addTab(tabSpec,
-				NearbyVenuesFragment.class, null);
-		
-		title = getString(R.string.tab_title_your_shows);
-		view = createTab(HomeActivity.this, title);
-		tabSpec = tabHost.newTabSpec("your_shows");
-		tabSpec.setIndicator(view);
-		tabHost.addTab(tabSpec, Fragment.class, null);
+        adapter = new FragmentAdapter(getSupportFragmentManager(), getApplicationContext());
+
+        pager = (ViewPager)findViewById(R.id.activity_home_pager);
+        pager.setAdapter(adapter);
+
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
+        slidingTabLayout.setViewPager(pager);
+        slidingTabLayout.setSelectedIndicatorColors(0xffe11d39);
 
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
 
@@ -219,4 +205,41 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
             invalidateOptionsMenu();
         }
     }
+
+    public static class FragmentAdapter extends FragmentPagerAdapter {
+        private final static int TAB_COUNT = 3;
+        private final String[] tabTitles = new String[TAB_COUNT];
+
+        public FragmentAdapter(FragmentManager fm, Context context) {
+            super(fm);
+            tabTitles[0] = context.getString(R.string.tab_title_your_shows);
+            tabTitles[1] = context.getString(R.string.tab_title_nearby);
+            tabTitles[2] = context.getString(R.string.tab_title_all_shows);
+        }
+
+        @Override
+        public int getCount() {
+            return TAB_COUNT;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new Fragment();
+                case 1:
+                    return new NearbyVenuesFragment();
+                case 2:
+                    return new AllShowsFragment();
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+    }
+
 }
