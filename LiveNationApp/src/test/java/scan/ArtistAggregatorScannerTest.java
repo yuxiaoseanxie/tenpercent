@@ -2,7 +2,6 @@ package scan;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.livenation.mobile.android.na.helpers.LibraryHelper;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScannerCallback;
 import com.livenation.mobile.android.na.ui.TestActivity;
@@ -16,9 +15,8 @@ public class ArtistAggregatorScannerTest extends ActivityInstrumentationTestCase
         super(TestActivity.class);
     }
 
-    public void testScan() {
+    public void testAggregate() {
         final CountDownLatch startApiCall = new CountDownLatch(1);
-        final LibraryHelper libraryHelper = new LibraryHelper();
         ArtistAggregatorScanner artistAggregatorScanner = new ArtistAggregatorScanner();
         artistAggregatorScanner.aggregate(getActivity(), new ArtistAggregatorScannerCallback() {
             @Override

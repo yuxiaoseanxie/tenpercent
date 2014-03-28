@@ -18,7 +18,7 @@ public class LibraryHelperTest extends ActivityInstrumentationTestCase2 {
         super(TestActivity.class);
     }
 
-    public void testAggregate() {
+    public void testSendLibraryScan() {
         final CountDownLatch startApiCall = new CountDownLatch(1);
         final LibraryHelper libraryHelper = new LibraryHelper();
         ArtistAggregatorScanner artistAggregatorScanner = new ArtistAggregatorScanner();
