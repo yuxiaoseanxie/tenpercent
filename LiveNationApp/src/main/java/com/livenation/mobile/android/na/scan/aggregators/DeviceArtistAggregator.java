@@ -9,7 +9,7 @@ import android.provider.MediaStore;
  */
 public class DeviceArtistAggregator extends UriArtistAggregator {
 
-    protected DeviceArtistAggregator(Context context) {
+    public DeviceArtistAggregator(Context context) {
         super(context);
     }
 

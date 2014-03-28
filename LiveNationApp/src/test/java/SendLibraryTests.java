@@ -52,16 +52,9 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2 implement
         final CountDownLatch startApiCall = new CountDownLatch(1);
         apiService.sendLibraryAffinities(libraryDump, new LiveNationApiService.SendLibraryAffinitiesCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(int artistCount) {
                 startApiCall.countDown();
                 assert true;
-            }
-
-            @Override
-            public void onFailure() {
-                startApiCall.countDown();
-
-                fail("onFailure method");
             }
 
             @Override

@@ -8,7 +8,7 @@ import android.net.Uri;
  */
 public class GooglePlayMusicArtistAggregator extends UriArtistAggregator {
 
-    protected GooglePlayMusicArtistAggregator(Context context) {
+    public GooglePlayMusicArtistAggregator(Context context) {
         super(context);
     }
 

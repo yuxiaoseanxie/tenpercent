@@ -1,20 +1,22 @@
 package com.livenation.mobile.android.na.scan;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregator;
+import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregatorCallback;
 import com.livenation.mobile.android.na.scan.aggregators.DeviceArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAggregator;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class ArtistAggregatorScanner implements Runnable, ApiServiceBinder, LiveNationApiService.SendLibraryAffinitiesCallback {
+public class ArtistAggregatorScanner {
+
 
     private enum Aggregator {
         DEVICE(DeviceArtistAggregator.class),
@@ -36,61 +38,76 @@ public class ArtistAggregatorScanner implements Runnable, ApiServiceBinder, Live
         }
     }
 
-    private Context context;
-    private LibraryDump libraryDump;
-
-    public ArtistAggregatorScanner(Context context) {
-        this.context = context;
+    public void aggregate(Context context, ArtistAggregatorScannerCallback callback) {
+        ScannerTask task = new ScannerTask(context,callback);
+        new Thread(task).start();
     }
 
-    @Override
-    public void run() {
-        libraryDump = new LibraryDump();
-        for (Aggregator aggregator : Aggregator.values()) {
-            if (aggregator.isScannable()) {
-                try {
-                    Constructor constructor = aggregator.getAggregatorClass().getConstructor(new Class[]{Context.class});
-                    ArtistAggregator artistAggregator = (ArtistAggregator) constructor.newInstance(ArtistAggregatorScanner.this.context);
-                    if (artistAggregator.getArtists() != null) {
-                        libraryDump.addAll(artistAggregator.getArtists());
-                    }
-                } catch (NoSuchMethodException e) {
-                    Log.e(ArtistAggregatorScanner.class.getSimpleName(),
-                            "There is no constructor with a Context as parameter in the class " + aggregator.getAggregatorClass().getSimpleName(), e);
-                } catch (InvocationTargetException e) {
-                    Log.e(ArtistAggregatorScanner.class.getSimpleName(),
-                            "Cannot access to the constructor with a Context as parameter in the class " + aggregator.getAggregatorClass().getSimpleName(), e);
-                } catch (InstantiationException e) {
-                    Log.e(ArtistAggregatorScanner.class.getSimpleName(),
-                            "Cannot access to the constructor with a Context as parameter in the class " + aggregator.getAggregatorClass().getSimpleName(), e);
-                } catch (IllegalAccessException e) {
-                    Log.e(ArtistAggregatorScanner.class.getSimpleName(),
-                            "Cannot access to the constructor with a Context as parameter in the class " + aggregator.getAggregatorClass().getSimpleName(), e);
+    private ArtistAggregator getInstanceOfArtistAggregator(Aggregator aggregator, Context context) {
+        try {
+            Constructor constructor = aggregator.getAggregatorClass().getConstructor(new Class[]{Context.class});
+            ArtistAggregator artistAggregator = (ArtistAggregator) constructor.newInstance(context);
+            return artistAggregator;
+        } catch (NoSuchMethodException e) {
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+        } catch (InvocationTargetException e) {
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+        } catch (InstantiationException e) {
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+        }
+    }
+
+    private class ScannerTask implements Runnable {
+
+        final private Set<Aggregator> aggregators = new HashSet<Aggregator>();
+        final private LibraryDump libraryDump = new LibraryDump();
+        final private Context context;
+        final private ArtistAggregatorScannerCallback callback;
+
+        public ScannerTask(Context context, ArtistAggregatorScannerCallback callback) {
+            if (context == null) {
+                throw new NullPointerException("Context cannot be null");
+            }
+            if (callback == null) {
+                throw new NullPointerException("ArtistAggregatorScannerCallback cannot be null");
+            }
+            this.context = context;
+            this.callback = callback;
+        }
+
+        @Override
+        public void run() {
+            for (Aggregator aggregator : Aggregator.values()) {
+                if (aggregator.isScannable()) {
+                    aggregators.add(aggregator);
                 }
             }
+
+            //Need a copy to be able to remove aggregator from this list when it's done.
+            //If we don't do that, we get an ConcurrentModificationException
+            final Set<Aggregator> aggregatorsCopy = new HashSet<Aggregator>(aggregators);
+            for (Aggregator aggregator : aggregatorsCopy) {
+                ArtistAggregator artistAggregator = getInstanceOfArtistAggregator(aggregator, ScannerTask.this.context);
+                final Aggregator aggregatorFinal = aggregator;
+                artistAggregator.getArtists(new ArtistAggregatorCallback() {
+                    @Override
+                    public void onResult(List<LibraryEntry> libraryEntries) {
+                        if (libraryEntries != null) {
+                            libraryDump.addAll(libraryEntries);
+                        }
+                        decrementJobCounter(aggregatorFinal);
+                    }
+                });
+            }
         }
-        if (!libraryDump.isEmpty()) {
-            LiveNationApplication.get().getApiHelper().bindApi(this);
+
+        private void decrementJobCounter(Aggregator aggregator) {
+            aggregators.remove(aggregator);
+            if (aggregators.isEmpty()) {
+                callback.onSuccess(libraryDump);
+            }
         }
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        apiService.sendLibraryAffinities(libraryDump, this);
-    }
-
-    @Override
-    public void onSuccess() {
-        Log.d(ArtistAggregator.class.getSimpleName(), "LibraryDump send");
-    }
-
-    @Override
-    public void onFailure() {
-        Log.e(ArtistAggregator.class.getSimpleName(), "LibraryDump failure");
-    }
-
-    @Override
-    public void onFailure(int errorCode, String message) {
-        Log.e(ArtistAggregator.class.getSimpleName(), "LibraryDump failure");
     }
 }

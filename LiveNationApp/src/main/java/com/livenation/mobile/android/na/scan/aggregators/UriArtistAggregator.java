@@ -3,8 +3,11 @@ package com.livenation.mobile.android.na.scan.aggregators;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 
+import com.livenation.mobile.android.na.scan.ArtistAggregatorScannerCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryDump;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LibraryEntry;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ public abstract class UriArtistAggregator implements ArtistAggregator {
 
     private Context context;
 
-    protected UriArtistAggregator(Context context) {
+    public UriArtistAggregator(Context context) {
         this.context = context;
     }
 
@@ -27,7 +30,7 @@ public abstract class UriArtistAggregator implements ArtistAggregator {
      * @throws Exception when the context or the uri is null
      */
     @Override
-    public List<LibraryEntry> getArtists() {
+    public void getArtists(ArtistAggregatorCallback callback) {
         if (getUri() == null || context == null) {
             throw new NullPointerException("Make sure that the context and the uri is not null");
         }
@@ -41,8 +44,8 @@ public abstract class UriArtistAggregator implements ArtistAggregator {
             libraryEntries.add(libraryEntry);
             //TODO can be useful to filter a little bit the output. (Sometime <unknown> is an answer for example)
         }
-
-        return libraryEntries;
+        cursor.close();
+        callback.onResult(libraryEntries);
     }
 
     protected abstract Uri getUri();
