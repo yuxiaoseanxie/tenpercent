@@ -19,18 +19,16 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.EventParameters;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecommendationsPresenter extends BasePresenter<EventsView, RecommendationsPresenter.RecommendationsState> implements Presenter<EventsView>, StateListener<RecommendationsPresenter.RecommendationsState> {
 	public static final String INTENT_DATA_KEY = RecommendationsPresenter.class.getName();
-	public static final String PARAMETER_EVENT_ID = "event_id";
 
 	@Override
 	public void initialize(Context context, Bundle args, EventsView view) {
-        RecommendationsState state = new RecommendationsState(RecommendationsPresenter.this, args, view, context);
+        RecommendationsState state = new RecommendationsState(RecommendationsPresenter.this, args, view);
 		state.run(); 
 	}
 	
@@ -57,16 +55,13 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
 
 	static class RecommendationsState extends BaseResultState<ArrayList<Event>, EventsView> implements LiveNationApiService.GetEventsApiCallback {
         private ApiParameters.RecommendationParameters params;
-		private final Context context;
         public static final int FAILURE_API_GENERAL = 0;
-		public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
 
 
-        public RecommendationsState(StateListener<RecommendationsState> listener, Bundle args, EventsView view, Context context) {
+        public RecommendationsState(StateListener<RecommendationsState> listener, Bundle args, EventsView view) {
 			super(listener, args, view);
-			this.context = context;
 		}
 
         @Override
@@ -91,6 +86,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
                 params = ApiParameters.createRecommendationParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
+            //TODO: What is the default/ios radius to use?
             params.setRadius(100);
             getApiService().getRecommendations(params, RecommendationsState.this);
 		}
