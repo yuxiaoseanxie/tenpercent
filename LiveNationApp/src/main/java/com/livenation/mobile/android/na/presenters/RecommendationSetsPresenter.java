@@ -15,10 +15,8 @@ import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 
@@ -93,6 +91,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
                 params = ApiParameters.createRecommendationSetsParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
+            //TODO: What is the default/ios radius to use?
             params.setRadius(100);
             getApiService().getRecommendationSets(params, RecommendationSetsState.this);
 		}
