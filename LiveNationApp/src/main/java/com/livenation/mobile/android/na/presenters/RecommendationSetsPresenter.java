@@ -92,7 +92,6 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
                 params = ApiParameters.createRecommendationSetsParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
-            //TODO: What is the default/ios radius to use?
             params.setRadius(Constants.DEFAULT_RADIUS);
             getApiService().getRecommendationSets(params, RecommendationSetsState.this);
 		}
