@@ -12,6 +12,8 @@ import java.util.UUID;
 
 public class Constants {
 
+    public static final int DEFAULT_RADIUS = 50;
+
     public static enum Environment {
         Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
         StagingDirect("https://stg-faceoff.herokuapp.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),

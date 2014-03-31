@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -87,7 +88,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             //TODO: What is the default/ios radius to use?
-            params.setRadius(100);
+            params.setRadius(Constants.DEFAULT_RADIUS);
             getApiService().getRecommendations(params, RecommendationsState.this);
 		}
 
