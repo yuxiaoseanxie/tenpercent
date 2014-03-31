@@ -164,8 +164,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
                 Date date = sdf.parse(event.getStartTime());
                 holder.getDate().setDate(date);
             } catch (ParseException e) {
-                //wtf'y f.
-                e.printStackTrace();
+                //should never happen, burn everything
+                throw new RuntimeException(e);
             }
 
             return view;
