@@ -64,6 +64,9 @@
     <string name="location_control_switch">Automatic Location</string>
     <string name="location_done_button">Done</string>
 
+    <string name="recommendations_title_personal">Recommended for you</string>
+    <string name="recommendations_title_popular">Popular shows</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>

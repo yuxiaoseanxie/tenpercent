@@ -188,9 +188,9 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             TextView text = holder.getText();
 
             if (getItem(position).isPersonal()) {
-                text.setText("RECOMMENDED FOR YOU");
+                text.setText(getString(R.string.recommendations_title_personal));
             } else {
-                text.setText("POPULAR SHOWS");
+                text.setText(getString(R.string.recommendations_title_popular));
             }
             return view;
         }
