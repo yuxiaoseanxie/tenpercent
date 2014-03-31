@@ -8,9 +8,9 @@
         android:id="@+id/list_generic_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/venue_show_date_margin_left"
-        android:layout_marginRight="@dimen/venue_show_date_margin_right"
-        android:layout_marginTop="24dp" />
+        android:layout_marginLeft="@dimen/list_show_item_v2_date_margin_left"
+        android:layout_marginRight="@dimen/list_show_item_v2_date_margin_right"
+        android:layout_marginTop="@dimen/list_show_item_v2_date_margin_top" />
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/list_item_show_image"
@@ -42,7 +42,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="@dimen/list_show_item_v2_divider_margin_top"
         android:layout_height="1dp"
         android:layout_alignLeft="@id/list_item_show_image"
         android:layout_below="@id/list_item_show_image"
