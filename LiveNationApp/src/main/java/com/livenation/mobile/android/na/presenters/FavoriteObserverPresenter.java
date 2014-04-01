@@ -95,6 +95,8 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     public void onApiServiceAttached(LiveNationApiService apiService) {
         Logger.log("FavoriteObserver", "Attached to API, clearing cache");
         clear();
+        List<Favorite> favorites = apiService.getApiConfig().getAppInitResponse().getData().getFavorites();
+        postAll(favorites);
     }
 
     @Override
