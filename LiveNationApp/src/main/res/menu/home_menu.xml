@@ -7,6 +7,11 @@
         android:icon="@drawable/notifications_normal"
         android:showAsAction="always"/>
     <item
+        android:id="@+id/menu_home_search_item"
+        android:title="@string/home_menu_search"
+        android:icon="@drawable/ic_menu_search_holo_light"
+        android:showAsAction="always"/>
+    <item
         android:id="@+id/menu_home_faq_item"
         android:title="@string/home_menu_faq"
         android:showAsAction="never"/>

@@ -24,6 +24,7 @@
     
     <string name="home">Home</string>
 
+    <string name="home_menu_search">Search</string>
     <string name="home_menu_legal">Legal</string>
     <string name="home_menu_faq">FAQ</string>
     
