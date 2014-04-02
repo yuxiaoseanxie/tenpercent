@@ -62,4 +62,9 @@ public class Constants {
 
         public static final String EXTRA_RICH_MESSAGE_ID = "_uamid";
     }
+
+    public class SharedPreferences {
+        public static final String MUSIC_SYNC_NAME = "music_sync_name";
+        public static final String MUSIC_SYNC_LAST_SYNC_DATE_KEY = "music_sync_last_sync_date_key";
+    }
 }
