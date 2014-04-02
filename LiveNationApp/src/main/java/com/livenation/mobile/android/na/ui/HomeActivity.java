@@ -138,6 +138,10 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
                 startActivity(new Intent(this, DebugActivity.class));
                 return true;
 
+            case R.id.menu_home_search_item:
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
