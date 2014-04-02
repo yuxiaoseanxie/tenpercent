@@ -1,6 +1,5 @@
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.livenation.mobile.android.na.app.Constants;
@@ -12,22 +11,27 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.config
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 /**
- * Created by cchilton on 3/7/14.
+ * Created by elodieferrais on 3/26/14.
  */
-public class ApiBuilderTests extends ActivityInstrumentationTestCase2 implements ApiBuilder.OnBuildListener {
+public class SendLibraryTests extends ActivityInstrumentationTestCase2 implements ApiBuilder.OnBuildListener {
     private LiveNationApiService apiService;
 
-    public ApiBuilderTests() {
+    public SendLibraryTests() {
         super(TestActivity.class);
     }
+
 
     @Override
     protected void setUp() throws Exception {
@@ -35,65 +39,45 @@ public class ApiBuilderTests extends ActivityInstrumentationTestCase2 implements
         apiService = null;
     }
 
-    public void testApiBuilder() {
-        LiveNationApiBuilder builder = getApiBuilder();
-        assertNotNull(builder);
-    }
-
-    public void testSsoProviderFailure() {
-        LiveNationApiBuilder builder = getApiBuilder();
-        builder.getSsoProvider().setResult(null);
-        builder.build(ApiBuilderTests.this);
-        assertTrue(!builder.getSsoProvider().hasResult());
-    }
-
     public void testDefaultConfig() {
         LiveNationApiBuilder builder = getApiBuilder();
-        builder.build(ApiBuilderTests.this);
-        block(builder);
+        builder.build(SendLibraryTests.this);
+        block();
         assertTrue(builder.isConfigured());
+        assertNotNull(apiService);
     }
 
-    public void testGetsAccessToken() {
+    public void testSendAffinitiesWithOnSuccesResponse() {
         LiveNationApiBuilder builder = getApiBuilder();
-        builder.build(ApiBuilderTests.this);
-        block(builder);
-        assertTrue(builder.isConfigured());
-        assertTrue(builder.getAccessToken().hasResult());
-    }
+        builder.build(SendLibraryTests.this);
+        block();
+        MusicLibrary musicLibrary = new MusicLibrary();
+        MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");
+        musicLibraryEntry.setPlayCount(2);
+        musicLibraryEntry.setTotalSongs(3);
+        musicLibrary.add(musicLibraryEntry);
+        ApiParameters.LibraryAffinitiesParameters parameters = ApiParameters.createLibraryAffinitiesParameters();
+        parameters.setLibraryDump(musicLibrary);
 
-    public void testInvalidateSession() {
-        LiveNationApiBuilder builder = getApiBuilder();
-        builder.build(ApiBuilderTests.this);
+        final CountDownLatch startApiCall = new CountDownLatch(1);
+        apiService.sendLibraryAffinities(parameters, new LiveNationApiService.SendLibraryAffinitiesCallback() {
+            @Override
+            public void onSuccess() {
+                startApiCall.countDown();
+                assert true;
+            }
 
-        block(builder);
-        assertTrue(builder.isConfigured());
-        assertTrue(builder.getAccessToken().hasResult());
-        String firstToken = builder.getAccessToken().getResult().getToken();
-        assertTrue(firstToken.equals(apiService.getApiConfig().getAccessToken()));
-
-        builder.invalidateApiSession();
-        builder.getSsoProvider().setResult(new DummySsoProvider());
-        assertFalse(builder.isConfigured());
-        builder.build(ApiBuilderTests.this);
-
-        this.apiService = null;
-        block(builder);
-        assertTrue(builder.isConfigured());
-        assertTrue(builder.getAccessToken().hasResult());
-        String secondToken = builder.getAccessToken().getResult().getToken();
-
-        assertTrue(secondToken.equals(apiService.getApiConfig().getAccessToken()));
-        assertFalse(firstToken.equals(secondToken));
-    }
-
-    public void testSsoProviderDependentsFailure() {
-        LiveNationApiBuilder builder = getApiBuilder();
-        builder.getSsoProvider().setResult(null);
-        builder.build(ApiBuilderTests.this);
-        assertTrue(!builder.getSsoProvider().hasResult());
-        assertFalse(builder.isConfigured());
-        assertTrue(builder.getNotConfigured().contains(builder.getSsoProvider()));
+            @Override
+            public void onFailure(int errorCode, String message) {
+                startApiCall.countDown();
+                fail("onFailure method: error code:" + String.valueOf(errorCode) + "\nmessage: " + message);
+            }
+        });
+        try {
+            startApiCall.await();
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Override
@@ -106,7 +90,7 @@ public class ApiBuilderTests extends ActivityInstrumentationTestCase2 implements
 
     }
 
-    private void block(ApiBuilder builder) {
+    private void block() {
         while (null == apiService) {
             try {
                 Thread.sleep(200);

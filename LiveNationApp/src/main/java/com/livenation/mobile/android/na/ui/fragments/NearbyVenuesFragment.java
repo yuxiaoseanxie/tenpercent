@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +58,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     private Double lng;
     private ScrollPager pager;
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
+	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static float METERS_IN_A_MILE = 1609.34f;
+    private static final String START_TIME_FORMAT = "h:mm a zzz";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -114,8 +116,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        lat = apiService.getApiConfig().getLat();
-        lng = apiService.getApiConfig().getLng();
+        this.lat = apiService.getApiConfig().getLat();
+        this.lng = apiService.getApiConfig().getLng();
         init();
     }
 
@@ -142,7 +144,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 			View view = null;
 			
 			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_show_item, null);
+				view = inflater.inflate(R.layout.list_show_nearby_item, null);
 				holder = new ViewHolder(view);
 				view.setTag(holder);
 			} else {
@@ -152,12 +154,14 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 			
 			Event event = getItem(position);
 			holder.getTitle().setText(event.getName());
-			holder.getLocation().setText(event.getVenue().getName());
-			
+
 			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
 			try {
-				Date date = sdf.parse(event.getStartTime());
-				holder.getDate().setDate(date);
+				Date date = sdf.parse(event.getLocalStartTime());
+                String startTime = DateFormat.format(START_TIME_FORMAT, date).toString();
+
+                holder.getStartTime().setText(startTime);
+                holder.getDate().setDate(date);
 			} catch (ParseException e) {
 				//wtf'y f.
 				e.printStackTrace();
@@ -174,7 +178,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 			View view = null;
 			ViewHeaderHolder holder = null;
 			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_venue_header, null);
+				view = inflater.inflate(R.layout.list_venue_nearby_header, null);
 				holder = new ViewHeaderHolder(view);
 				view.setTag(holder);
 			} else {
@@ -220,27 +224,27 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 		
 		private class ViewHolder {
 			private final TextView title;
-			private final TextView location;
+			private final TextView startTime;
 			private final VerticalDate date;
-			
+
 			public ViewHolder(View view) {
-				this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
-				this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
-				this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
+				this.title = (TextView) view.findViewById(R.id.list_nearby_show_title);
+				this.startTime = (TextView) view.findViewById(R.id.list_nearby_show_time);
+				this.date = (VerticalDate) view.findViewById(R.id.list_nearby_show_date);
 			}
 			
 			public TextView getTitle() {
 				return title;
 			}
-			
-			public TextView getLocation() {
-				return location;
-			}
-			
-			public VerticalDate getDate() {
+
+            public TextView getStartTime() {
+                return startTime;
+            }
+
+            public VerticalDate getDate() {
 				return date;
 			}
-		}
+        }
 		
 		
 		private class ViewHeaderHolder {
