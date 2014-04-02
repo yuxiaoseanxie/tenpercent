@@ -10,6 +10,7 @@ package com.livenation.mobile.android.na.app;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -17,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -28,6 +30,8 @@ import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -82,6 +86,7 @@ public class LiveNationApplication extends Application {
         imageLoader = new ImageLoader(requestQueue, cache);
 
         setupNotifications();
+        syncMusic();
     }
 
 
@@ -96,6 +101,24 @@ public class LiveNationApplication extends Application {
         PushManager.shared().setIntentReceiver(PushReceiver.class);
     }
 
+    private void syncMusic() {
+        Toast.makeText(this, "Music Scan started", Toast.LENGTH_SHORT).show();
+        final Toast successToast = Toast.makeText(LiveNationApplication.this, "Music Scan done! ", Toast.LENGTH_SHORT);
+        final Toast failToast = Toast.makeText(LiveNationApplication.this, "Music Scan has failed! ", Toast.LENGTH_SHORT);
+        MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
+        musicSyncHelper.getMusicDiffSinceLastSync(this, new ApiService.BasicApiCallback<MusicLibrary>() {
+            @Override
+            public void onSuccess(MusicLibrary result) {
+                successToast.setText("Music Scan done! " +String.valueOf(result.getData().size())+ " artist has been synchronyzed");
+                successToast.show();
+            }
+
+            @Override
+            public void onFailure(int errorCode, String message) {
+                failToast.show();
+            }
+        });
+    }
 
     public LocationManager getLocationManager() {
         return locationManager;
