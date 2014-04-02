@@ -14,6 +14,8 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -88,6 +90,7 @@ public class LiveNationApplication extends Application {
         imageLoader = new ImageLoader(requestQueue, cache);
 
         setupNotifications();
+        checkInstalledAppForAnalytics();
     }
 
 
@@ -102,6 +105,13 @@ public class LiveNationApplication extends Application {
         PushManager.shared().setIntentReceiver(PushReceiver.class);
     }
 
+    private void checkInstalledAppForAnalytics() {
+        for (ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
+            boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
+            //TODO send data and remove the log
+            Log.d(LiveNationApplication.class.getSimpleName(), application.getLabel() + ": " + String.valueOf(isInstalled));
+        }
+    }
 
     public LocationManager getLocationManager() {
         return locationManager;
