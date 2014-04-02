@@ -27,6 +27,10 @@ android {
     }
 }
 
+configurations {
+    all*.exclude group: 'com.mcxiaoke.volley', module: 'library'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')

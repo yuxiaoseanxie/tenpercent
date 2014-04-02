@@ -11,11 +11,13 @@ package com.livenation.mobile.android.na.ui.fragments;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
+import com.livenation.mobile.android.ticketing.activities.EventActivity;
+import com.mobilitus.tm.tickets.ResponseListener;
+import com.mobilitus.tm.tickets.TicketLibrary;
+import com.mobilitus.tm.tickets.models.*;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
 	private TextView artistTitle;
@@ -240,7 +246,37 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
+            //TODO: Non-TM ticketing
+            //TODO: Spin this out into a utility
+            List<String> ticketmasterIds = event.getTicketmasterIds();
+            if(ticketmasterIds.size() == 0) {
+                Toast.makeText(getActivity(), "No tickets available", Toast.LENGTH_SHORT).show();
+            } else {
+                String ticketmasterId = ticketmasterIds.get(0);
+                TicketLibrary.getInstance().getEvent(ticketmasterId, true, new ResponseListener() {
+                    @Override
+                    public void onSuccess(int i, Object o) {
+                        Intent intent = new Intent(getActivity(), EventActivity.class);
+                        intent.putExtra(EventActivity.EXTRA_EVENT, (com.mobilitus.tm.tickets.models.Event)o);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onError(int i, com.mobilitus.tm.tickets.models.Error error) {
+                        Log.e("ticketing", "Could not load event " + error);
+                    }
+
+                    @Override
+                    public void onCaptcha(Captcha captcha) {
+
+                    }
+
+                    @Override
+                    public void onPolling(int i, Polling polling) {
+
+                    }
+                });
+            }
 		}
 	}
 
