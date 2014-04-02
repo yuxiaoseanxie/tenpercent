@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.scan;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 
 /**
- * Interface used to give the result of the scan
+ * Interface used to give the result of the com.livenation.mobile.android.na.scan
  */
 public interface ArtistAggregatorScannerCallback {
     void onSuccess(MusicLibrary musicLibrary);
