@@ -23,6 +23,10 @@
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     
     <string name="home">Home</string>
+
+    <string name="home_menu_search">Search</string>
+    <string name="home_menu_legal">Legal</string>
+    <string name="home_menu_faq">FAQ</string>
     
     <string name="actionbar_show_title">Show</string>
     <string name="actionbar_favorites_title">Favorites</string>
