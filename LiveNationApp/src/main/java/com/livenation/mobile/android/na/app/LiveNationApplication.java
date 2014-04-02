@@ -30,9 +30,7 @@ import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
-import com.mobilitus.tm.tickets.TicketLibrary;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -107,17 +105,12 @@ public class LiveNationApplication extends Application {
     }
 
     private void setupTicketing() {
-        TicketLibrary.getInstance().init(getApplicationContext(), "35abec5b15804303aaedbf6bdeb259b2", "tmus");
-
-        //TODO: Kill this image loader crap
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .build();
-
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                .defaultDisplayImageOptions(defaultOptions)
-                .build();
-        com.nostra13.universalimageloader.core.ImageLoader.getInstance().init(config);
+        Ticketing.Config ticketingConfig = new Ticketing.Config();
+        ticketingConfig.setContext(this);
+        ticketingConfig.setApiKey("35abec5b15804303aaedbf6bdeb259b2");
+        ticketingConfig.setClient("tmus");
+        ticketingConfig.setImageLoader(getImageLoader());
+        Ticketing.init(ticketingConfig);
     }
 
 
