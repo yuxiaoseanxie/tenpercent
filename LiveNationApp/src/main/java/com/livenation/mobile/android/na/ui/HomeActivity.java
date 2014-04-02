@@ -84,7 +84,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
             LiveNationApplication.get().getApiHelper().buildDefaultApi();
         }
 
-        LiveNationApplication.get().getFavoritesPresenter().initialize(this, null, new FavoriteUpdater());
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
 	}
 
@@ -192,13 +191,6 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 	private AccountPresenters getAccountPresenters() {
 		return LiveNationApplication.get().getAccountPresenters();
 	}
-
-    private class FavoriteUpdater implements FavoritesView {
-        @Override
-        public void setFavorites(List<Favorite> favorites) {
-            //do nothing, was cached
-        }
-    }
 
     private class InboxStatusUpdater implements InboxStatusView {
         @Override
