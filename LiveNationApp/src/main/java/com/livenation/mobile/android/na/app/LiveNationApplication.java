@@ -25,6 +25,8 @@ import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -48,6 +50,8 @@ public class LiveNationApplication extends Application {
     private FavoritesPresenter favoritesPresenter;
     private SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
+    private RecommendationsPresenter recommendationsPresenter;
+    private RecommendationSetsPresenter recommendationSetsPresenter;
 
     private ApiHelper apiHelper;
 
@@ -75,6 +79,8 @@ public class LiveNationApplication extends Application {
         nearbyVenuesPresenter = new NearbyVenuesPresenter();
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
+        recommendationsPresenter = new RecommendationsPresenter();
+        recommendationSetsPresenter = new RecommendationSetsPresenter();
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -143,6 +149,14 @@ public class LiveNationApplication extends Application {
 
     public InboxStatusPresenter getInboxStatusPresenter() {
         return inboxStatusPresenter;
+    }
+
+    public RecommendationsPresenter getRecommendationsPresenter() {
+        return recommendationsPresenter;
+    }
+
+    public RecommendationSetsPresenter getRecommendationSetsPresenter() {
+        return recommendationSetsPresenter;
     }
 
     public ApiHelper getApiHelper() {

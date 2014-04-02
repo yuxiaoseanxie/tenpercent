@@ -21,8 +21,14 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="list_show_location_v2" parent="@style/livenation_app_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:color">@color/text_secondary</item>
+    </style>
+
     <style name="list_show_date_dotw" parent="@style/livenation_app_text">
         <item name="android:textSize">12sp</item>
+        <item name="android:color">@color/text_secondary</item>
     </style>
 
     <style name="list_show_date_day" parent="@style/livenation_app_text">

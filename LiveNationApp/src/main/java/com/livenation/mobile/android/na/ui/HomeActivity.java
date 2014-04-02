@@ -38,6 +38,8 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
+import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
+import com.livenation.mobile.android.na.ui.fragments.RecommendationsFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
 
@@ -231,7 +233,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new Fragment();
+                    return new RecommendationSetsFragment();
                 case 1:
                     return new NearbyVenuesFragment();
                 case 2:

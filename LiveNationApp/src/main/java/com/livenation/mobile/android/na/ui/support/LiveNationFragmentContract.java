@@ -15,6 +15,8 @@ import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public interface LiveNationFragmentContract {
@@ -27,4 +29,6 @@ public interface LiveNationFragmentContract {
 	NearbyVenuesPresenter getNearbyVenuesPresenter();
 	FavoritesPresenter getFavoritesPresenter();
     AccountPresenters getAccountPresenters();
+    RecommendationsPresenter getRecommendationsPresenter();
+    RecommendationSetsPresenter getRecommendationSetsPresenter();
 }
