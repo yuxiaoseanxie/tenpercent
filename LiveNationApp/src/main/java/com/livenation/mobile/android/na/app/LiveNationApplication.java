@@ -30,6 +30,7 @@ import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.mobilitus.tm.tickets.TicketLibrary;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -88,6 +89,7 @@ public class LiveNationApplication extends Application {
         imageLoader = new ImageLoader(requestQueue, cache);
 
         setupNotifications();
+        setupTicketing();
     }
 
 
@@ -100,6 +102,10 @@ public class LiveNationApplication extends Application {
         BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
         PushManager.shared().setNotificationBuilder(notificationBuilder);
         PushManager.shared().setIntentReceiver(PushReceiver.class);
+    }
+
+    private void setupTicketing() {
+        TicketLibrary.getInstance().init(getApplicationContext(), "35abec5b15804303aaedbf6bdeb259b2", "tmus");
     }
 
 
