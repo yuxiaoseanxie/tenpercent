@@ -14,6 +14,9 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
+    sourceSets {
+        androidTest.setRoot('src/test')
+    }
 
     buildTypes {
         release {
@@ -22,8 +25,15 @@ android {
         }
     }
 
-    sourceSets {
-        androidTest.setRoot('src/test')
+    productFlavors {
+        beta {
+            packageName "com.livenation.mobile.android.na"
+        }
+
+        live {
+            packageName "com.livenation.mobile.android.na"
+
+        }
     }
 }
 
