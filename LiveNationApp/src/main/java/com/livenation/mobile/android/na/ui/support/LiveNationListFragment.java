@@ -19,6 +19,8 @@ import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
@@ -67,4 +69,15 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
     public SingleEventPresenter getSingleEventPresenter() {
         return LiveNationApplication.get().getSingleEventPresenter();
     }
+
+    @Override
+    public RecommendationsPresenter getRecommendationsPresenter() {
+        return LiveNationApplication.get().getRecommendationsPresenter();
+    }
+
+    @Override
+    public RecommendationSetsPresenter getRecommendationSetsPresenter() {
+        return LiveNationApplication.get().getRecommendationSetsPresenter();
+    }
+
 }

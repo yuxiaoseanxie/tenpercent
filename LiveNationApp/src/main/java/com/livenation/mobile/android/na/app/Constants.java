@@ -11,12 +11,14 @@ package com.livenation.mobile.android.na.app;
 import java.util.UUID;
 
 public class Constants {
-	public static final String clientId = "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850";
+
+    public static final int DEFAULT_RADIUS = 50;
 
     public static enum Environment {
         Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
+        ProductionDirect("https://prod-faceoff.herokuapp.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
+        Staging("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
         StagingDirect("https://stg-faceoff.herokuapp.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
-        StagingAkamai("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
         Integration("https://int-faceoff.herokuapp.com", "486e2ff6-98f5-11e3-b37c-ca4ec9c3f32c");
 
         private final String host;

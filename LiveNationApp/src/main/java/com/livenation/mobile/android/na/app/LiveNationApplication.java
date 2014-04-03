@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -27,6 +29,8 @@ import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
+import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -52,6 +56,8 @@ public class LiveNationApplication extends Application {
     private FavoritesPresenter favoritesPresenter;
     private SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
+    private RecommendationsPresenter recommendationsPresenter;
+    private RecommendationSetsPresenter recommendationSetsPresenter;
 
     private ApiHelper apiHelper;
 
@@ -79,6 +85,8 @@ public class LiveNationApplication extends Application {
         nearbyVenuesPresenter = new NearbyVenuesPresenter();
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
+        recommendationsPresenter = new RecommendationsPresenter();
+        recommendationSetsPresenter = new RecommendationSetsPresenter();
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -87,6 +95,7 @@ public class LiveNationApplication extends Application {
 
         setupNotifications();
         syncMusic();
+        checkInstalledAppForAnalytics();
     }
 
 
@@ -109,7 +118,7 @@ public class LiveNationApplication extends Application {
         musicSyncHelper.getMusicDiffSinceLastSync(this, new ApiService.BasicApiCallback<MusicLibrary>() {
             @Override
             public void onSuccess(MusicLibrary result) {
-                successToast.setText("Music Scan done! " +String.valueOf(result.getData().size())+ " artist has been synchronyzed");
+                successToast.setText("Music Scan done! " + String.valueOf(result.getData().size()) + " artist has been synchronyzed");
                 successToast.show();
             }
 
@@ -118,6 +127,15 @@ public class LiveNationApplication extends Application {
                 failToast.show();
             }
         });
+    }
+
+    private void checkInstalledAppForAnalytics() {
+        for (ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
+            boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
+            //TODO send data and remove the log
+            Log.d(LiveNationApplication.class.getSimpleName(), application.getLabel() + ": " + String.valueOf(isInstalled));
+        }
+
     }
 
     public LocationManager getLocationManager() {
@@ -166,6 +184,14 @@ public class LiveNationApplication extends Application {
 
     public InboxStatusPresenter getInboxStatusPresenter() {
         return inboxStatusPresenter;
+    }
+
+    public RecommendationsPresenter getRecommendationsPresenter() {
+        return recommendationsPresenter;
+    }
+
+    public RecommendationSetsPresenter getRecommendationSetsPresenter() {
+        return recommendationSetsPresenter;
     }
 
     public ApiHelper getApiHelper() {

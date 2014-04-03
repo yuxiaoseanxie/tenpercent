@@ -11,7 +11,7 @@
     <string name="show_details">Details</string>
     <string name="venue_upcoming_shows">Upcoming Shows</string>
     
-    <string name="tab_title_your_shows">Your shows</string>
+    <string name="tab_title_your_shows">Recommendations</string>
     <string name="tab_title_all_shows">All shows</string>
     <string name="tab_title_nearby">Nearby</string>
     
@@ -23,6 +23,10 @@
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     
     <string name="home">Home</string>
+
+    <string name="home_menu_search">Search</string>
+    <string name="home_menu_legal">Legal</string>
+    <string name="home_menu_faq">FAQ</string>
     
     <string name="actionbar_show_title">Show</string>
     <string name="actionbar_favorites_title">Favorites</string>
@@ -63,6 +67,9 @@
 
     <string name="location_control_switch">Automatic Location</string>
     <string name="location_done_button">Done</string>
+
+    <string name="recommendations_title_personal">Recommended for you</string>
+    <string name="recommendations_title_popular">Popular shows</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>

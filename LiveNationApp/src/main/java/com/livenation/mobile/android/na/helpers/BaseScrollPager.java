@@ -12,7 +12,7 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
     private final List<FetchLoader> fetchLoaders = new ArrayList<FetchLoader>();
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
-    private boolean hasMorePages;
+    private boolean hasMorePages = false;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
