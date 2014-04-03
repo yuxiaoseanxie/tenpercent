@@ -21,7 +21,7 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowActivity extends FragmentActivity implements SingleEventView  {
+public class ShowActivity extends TrackedFragmentActivity implements SingleEventView  {
 	private SingleEventView singleEventView;
 	
 	@Override

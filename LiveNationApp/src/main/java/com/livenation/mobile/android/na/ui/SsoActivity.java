@@ -15,7 +15,7 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
-public class SsoActivity extends Activity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
+public class SsoActivity extends TrackedFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
 	private UiApiSsoProvider ssoProvider;
 	public static final String ARG_PROVIDER_ID = "provider_id";
 	

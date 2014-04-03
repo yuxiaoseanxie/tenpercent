@@ -8,7 +8,7 @@ import com.livenation.mobile.android.na.R;
 /**
  * Created by cchilton on 3/12/14.
  */
-public class LocationActivity extends FragmentActivity {
+public class LocationActivity extends TrackedFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

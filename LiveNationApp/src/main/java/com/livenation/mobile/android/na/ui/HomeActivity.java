@@ -47,7 +47,7 @@ import java.util.List;
 
 import io.segment.android.TrackedActivity;
 
-public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
+public class HomeActivity extends TrackedFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager pager;
     private FragmentAdapter adapter;

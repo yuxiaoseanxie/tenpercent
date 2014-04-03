@@ -23,7 +23,7 @@ import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
-public class FavoriteActivity extends FragmentActivity implements FavoritesView  {
+public class FavoriteActivity extends TrackedFragmentActivity implements FavoritesView  {
 	private FavoritesView favoritesView;
 	
 	@Override
