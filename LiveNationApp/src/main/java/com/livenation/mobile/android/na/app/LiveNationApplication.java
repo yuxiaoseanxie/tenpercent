@@ -109,6 +109,7 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
+        Analytics.initialize(this);
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
