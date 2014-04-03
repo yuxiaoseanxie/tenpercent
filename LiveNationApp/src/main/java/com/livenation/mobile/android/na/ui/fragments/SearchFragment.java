@@ -31,7 +31,8 @@ import java.util.List;
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, AutoCompleteSearchCallback {
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
-
+    private final String[] SEARCH_INCLUDES = new String[] {"venues", "artists"};
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +53,11 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
+
         ApiParameters.AutoCompleteSearchParameters params = ApiParameters.createAutoCompleteSearchParameters();
+        params.setIncludes(SEARCH_INCLUDES);
         params.setSearchQuery(text);
+
         apiService.autoCompleteSearch(params, this);
     }
 
