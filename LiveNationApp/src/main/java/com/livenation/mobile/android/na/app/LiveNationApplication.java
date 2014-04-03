@@ -41,6 +41,9 @@ import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
 import com.urbanairship.push.PushManager;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
+
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
     private LocationManager locationManager;
@@ -130,12 +133,13 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
-        for (ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
-            boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
-            //TODO send data and remove the log
-            Log.d(LiveNationApplication.class.getSimpleName(), application.getLabel() + ": " + String.valueOf(isInstalled));
+        Analytics.initialize(this);
+        for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
+            final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
+            Props props = new Props();
+            props.put(application.getPackageName(), isInstalled);
+            Analytics.track("Track URL Schemes", props);
         }
-
     }
 
     public LocationManager getLocationManager() {
