@@ -24,17 +24,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
-    productFlavors {
-        beta {
-            packageName "com.livenation.mobile.android.na"
-        }
-
-        live {
-            packageName "com.livenation.mobile.android.na"
-
-        }
-    }
 }
 
 dependencies {
