@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <CheckBox
+    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
         android:id="@+id/list_search_result_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
