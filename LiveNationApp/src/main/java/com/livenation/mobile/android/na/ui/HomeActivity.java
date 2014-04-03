@@ -45,6 +45,8 @@ import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.List;
 
+import io.segment.android.TrackedActivity;
+
 public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager pager;
