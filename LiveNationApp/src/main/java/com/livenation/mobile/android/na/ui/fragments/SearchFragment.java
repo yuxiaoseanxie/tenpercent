@@ -1,11 +1,13 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,12 +16,15 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
+import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
+import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService.AutoCompleteSearchCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 
 import java.util.ArrayList;
@@ -28,11 +33,12 @@ import java.util.List;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, AutoCompleteSearchCallback {
+public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, AutoCompleteSearchCallback, ListView.OnItemClickListener {
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private final String[] SEARCH_INCLUDES = new String[] {"venues", "artists"};
-    
+    private String lateSearchText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +53,17 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         ListView listView = (ListView) view.findViewById(android.R.id.list);
         listView.setAdapter(adapter);
         listView.setDivider(null);
+        listView.setOnItemClickListener(this);
         return view;
     }
 
     @Override
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
-
+        if (null == apiService) {
+            lateSearchText = text;
+            return;
+        }
         ApiParameters.AutoCompleteSearchParameters params = ApiParameters.createAutoCompleteSearchParameters();
         params.setIncludes(SEARCH_INCLUDES);
         params.setSearchQuery(text);
@@ -64,6 +74,10 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         this.apiService = apiService;
+        if (null != lateSearchText) {
+            searchFor(lateSearchText);
+            lateSearchText = null;
+        }
     }
 
     @Override
@@ -75,6 +89,22 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
     @Override
     public void onFailure(int errorCode, String message) {}
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        SearchResult searchResult = adapter.getItem(position);
+
+        switch (searchResult.getSearchResultType()) {
+            case Venue: {
+                Intent intent = new Intent(getActivity(), VenueActivity.class);
+                String entityId = Venue.getAlphaNumbericId(searchResult.getLnid());
+                Bundle args = SingleVenuePresenter.getAruguments(entityId);
+                intent.putExtras(args);
+                startActivity(intent);
+                break;
+            }
+        }
+    }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {
         private LayoutInflater inflater;
@@ -116,6 +146,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 default:
                     holder.getCheckBox().setVisibility(View.INVISIBLE);
             }
+
             return view;
         }
 
@@ -144,6 +175,4 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         }
 
     }
-
-
 }
