@@ -25,6 +25,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -41,6 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -107,11 +110,16 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = adapter.getItem(position);
 
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put("Cell Position", position);
+        Analytics.track("Event Cell Tap");
+
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
 
-		startActivity(intent);
+        startActivity(intent);
 	}
 
     @Override
@@ -191,7 +199,6 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         public long getHeaderId(int position) {
             String dateRaw = getItem(position).getStartTime();
             try {
-
                 Date date = sdf.parse(dateRaw);
                 String dateValue = DateFormat.format("yyyyMM", date).toString();
                 return Long.valueOf(dateValue);

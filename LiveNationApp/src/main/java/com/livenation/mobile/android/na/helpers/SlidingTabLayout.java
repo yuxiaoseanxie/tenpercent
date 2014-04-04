@@ -35,6 +35,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import io.segment.android.Analytics;
+
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
  * the user's scroll progress.
@@ -326,6 +328,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
+            String[] tabsAnalyticsLabel = new String[] {"Your Shows", "Nearby", "All Shows"};
+            Analytics.track(tabsAnalyticsLabel[position] + " Nav Menu Select");
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);

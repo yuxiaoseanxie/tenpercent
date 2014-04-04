@@ -45,6 +45,7 @@ import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.List;
 
+import io.segment.android.Analytics;
 import io.segment.android.TrackedActivity;
 
 public class HomeActivity extends TrackedFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
@@ -68,7 +69,13 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
 		drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
 											R.drawable.ic_drawer, 
 											R.string.actionbar_drawer_open,
-											R.string.actionbar_drawer_close);
+											R.string.actionbar_drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Analytics.track("Account Icon Tap");
+            }
+        };
 		rootView.setDrawerListener(drawerToggle);
         adapter = new FragmentAdapter(getSupportFragmentManager(), getApplicationContext());
 
@@ -133,12 +140,16 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
+                Analytics.track("Notification Icon Tap");
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
             case R.id.menu_home_debug_item:
                 startActivity(new Intent(this, DebugActivity.class));
                 return true;
+
+            case R.id.menu_home_search_item:
+                Analytics.track("Search Icon Tap");
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -237,5 +248,4 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
             }
         }
     }
-
 }

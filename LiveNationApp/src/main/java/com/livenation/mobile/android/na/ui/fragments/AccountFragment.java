@@ -28,6 +28,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.util.Logger;
 
+import io.segment.android.Analytics;
+
 public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
 	private Fragment profileFragment;
 	private TextView locationText;
@@ -111,6 +113,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
 		@Override
 		public void onClick(View v) {
+            Analytics.track("Location Icon Tap");
 			Intent intent = new Intent(getActivity(), FavoriteActivity.class);
 			intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
 			startActivity(intent);
@@ -120,6 +123,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private class OnLocationClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }

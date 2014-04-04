@@ -31,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
@@ -48,6 +49,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
 	private TextView artistTitle;
@@ -240,6 +244,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		
 		@Override
 		public void onClick(View v) {
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            Analytics.track("Find Tickets Tap", props);
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
