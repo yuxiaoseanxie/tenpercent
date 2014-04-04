@@ -23,6 +23,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
+import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
@@ -46,6 +47,7 @@ public class LiveNationApplication extends Application {
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
     private SingleArtistPresenter singleArtistPresenter;
+    private ArtistEventsPresenter artistEventsPresenter;
     private FeaturePresenter featurePresenter;
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
@@ -79,6 +81,7 @@ public class LiveNationApplication extends Application {
         featurePresenter = new FeaturePresenter();
         singleVenuePresenter = new SingleVenuePresenter();
         singleArtistPresenter = new SingleArtistPresenter();
+        artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters(getSsoManager());
         nearbyVenuesPresenter = new NearbyVenuesPresenter();
@@ -130,6 +133,10 @@ public class LiveNationApplication extends Application {
 
     public SingleArtistPresenter getSingleArtistPresenter() {
         return singleArtistPresenter;
+    }
+
+    public ArtistEventsPresenter getArtistEventsPresenter() {
+        return artistEventsPresenter;
     }
 
     public SingleEventPresenter getSingleEventPresenter() {

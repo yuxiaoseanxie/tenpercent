@@ -27,6 +27,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -49,7 +50,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		Fragment showsFragment = new ShowsListNonScrollingFragment();
+		Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.VENUE);
 		addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
 
 		mapFragment = new LiveNationMapFragment();
