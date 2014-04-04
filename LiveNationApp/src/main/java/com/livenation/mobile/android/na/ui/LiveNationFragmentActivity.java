@@ -3,6 +3,8 @@ package com.livenation.mobile.android.na.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+
 import io.segment.android.Analytics;
 
 /**
@@ -16,7 +18,9 @@ public class LiveNationFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Analytics.onCreate(this);
         if (!isMusicSync) {
-
+            isMusicSync = true;
+            MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
+            musicSyncHelper.syncMusic(this);
         }
     }
 

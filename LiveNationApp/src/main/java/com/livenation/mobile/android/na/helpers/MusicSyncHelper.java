@@ -11,7 +11,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
  */
 public class MusicSyncHelper {
 
-    private void syncMusic(Context context) {
+    public void syncMusic(Context context) {
         Toast.makeText(context, "Music Scan started", Toast.LENGTH_SHORT).show();
         final Toast successToast = Toast.makeText(context, "Music Scan done! ", Toast.LENGTH_SHORT);
         final Toast failToast = Toast.makeText(context, "Music Scan has failed! ", Toast.LENGTH_SHORT);
