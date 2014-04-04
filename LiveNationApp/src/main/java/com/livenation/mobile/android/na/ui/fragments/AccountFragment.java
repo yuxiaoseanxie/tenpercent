@@ -113,7 +113,12 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
 		@Override
 		public void onClick(View v) {
-            Analytics.track("Location Icon Tap");
+            if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
+                Analytics.track("Favorite Artists Cell Tap");
+            } else {
+                Analytics.track("Favorite venues Cell Tap");
+            }
+
 			Intent intent = new Intent(getActivity(), FavoriteActivity.class);
 			intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
 			startActivity(intent);
@@ -123,7 +128,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private class OnLocationClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-
+            Analytics.track("Location Icon Tap");
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }

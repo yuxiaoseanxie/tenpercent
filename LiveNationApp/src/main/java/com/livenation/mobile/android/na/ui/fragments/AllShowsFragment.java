@@ -28,12 +28,15 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.util.Logger;
 
+import io.segment.android.models.Props;
+
 public class AllShowsFragment extends LiveNationFragment implements FeatureView, ApiServiceBinder {
 	private FeatureView featured = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        trackScreenWithLocation("User views All Shows screen", new Props());
         
 		Fragment featured = new FeaturedFragment();
 		Fragment showList = new ShowsListFragment();

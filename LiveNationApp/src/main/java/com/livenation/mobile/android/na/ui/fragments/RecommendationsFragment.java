@@ -57,6 +57,8 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        trackScreenWithLocation("User views Your Shows screen", new Props());
+
 		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
         scrollPager = new ScrollPager(adapter);
 

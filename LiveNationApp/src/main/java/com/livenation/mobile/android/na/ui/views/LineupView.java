@@ -24,6 +24,9 @@ import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
+
 public class LineupView extends LinearLayout {
 	private CheckBox favorite;
 	private TextView title;
@@ -99,11 +102,17 @@ public class LineupView extends LinearLayout {
 
         @Override
         public void onFavoriteAdded(Favorite favorite) {
+            Props props = new Props();
+            props.put("Artist Name", favorite.getName());
+            Analytics.track("Favorite Artist Star Tap", props);
             checkBox.setChecked(true);
         }
 
         @Override
         public void onFavoriteRemoved(Favorite favorite) {
+            Props props = new Props();
+            props.put("Artist Name", favorite.getName());
+            Analytics.track("Unfavorite Artist Star Tap", props);
             checkBox.setChecked(false);
         }
     }

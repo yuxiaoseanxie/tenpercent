@@ -75,6 +75,12 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
                 super.onDrawerOpened(drawerView);
                 Analytics.track("Account Icon Tap");
             }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                Analytics.track("X Tap");
+            }
         };
 		rootView.setDrawerListener(drawerToggle);
         adapter = new FragmentAdapter(getSupportFragmentManager(), getApplicationContext());
@@ -150,6 +156,15 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
 
             case R.id.menu_home_search_item:
                 Analytics.track("Search Icon Tap");
+                return true;
+
+            case R.id.menu_home_faq_item:
+                Analytics.track("Help Cell Tap");
+                return true;
+
+            case R.id.menu_home_legal_item:
+                Analytics.track("Legal Cell Tap");
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

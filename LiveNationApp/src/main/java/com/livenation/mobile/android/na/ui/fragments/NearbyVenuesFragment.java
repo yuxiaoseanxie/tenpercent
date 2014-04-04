@@ -68,6 +68,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        trackScreenWithLocation("User views Nearby screen", new Props());
+
 		adapter = new EventVenueAdapter(getActivity());
         pager = new ScrollPager(adapter);
 
@@ -121,6 +123,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     public void onApiServiceAttached(LiveNationApiService apiService) {
         this.lat = apiService.getApiConfig().getLat();
         this.lng = apiService.getApiConfig().getLng();
+
         init();
     }
 
