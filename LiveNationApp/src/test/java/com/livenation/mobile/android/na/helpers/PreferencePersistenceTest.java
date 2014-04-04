@@ -26,14 +26,14 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
         final String VALUE = "value_test";
         preferencePersistence.write(KEY, VALUE, getActivity());
 
-        String readValue = (String) preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.read(KEY, getActivity());
         assertEquals(VALUE, readValue);
     }
 
     public void testReadFailed() {
         final String KEY = "key_test_which_does_not_exist";
 
-        String readValue = (String) preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.read(KEY, getActivity());
         assertNull(readValue);
     }
 
@@ -43,7 +43,7 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
         preferencePersistence.write(KEY, VALUE, getActivity());
         preferencePersistence.reset(getActivity());
 
-        String readValue = (String) preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.read(KEY, getActivity());
         assertNull(null, readValue);
     }
 

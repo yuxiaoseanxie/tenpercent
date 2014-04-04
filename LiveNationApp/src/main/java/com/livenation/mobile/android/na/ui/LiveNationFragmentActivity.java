@@ -9,10 +9,15 @@ import io.segment.android.Analytics;
  * Created by elodieferrais on 4/2/14.
  */
 public class LiveNationFragmentActivity extends FragmentActivity {
+    static boolean isMusicSync = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Analytics.onCreate(this);
+        if (!isMusicSync) {
+
+        }
     }
 
     @Override

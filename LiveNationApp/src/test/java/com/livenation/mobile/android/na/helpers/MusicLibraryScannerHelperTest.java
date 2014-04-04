@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.livenation.mobile.android.na.app.Constants;
@@ -13,23 +15,23 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by elodieferrais on 3/31/14.
  */
-public class MusicSyncHelperTest extends ActivityInstrumentationTestCase2 {
-    private final PreferencePersistence preferencePersistence = new PreferencePersistence(Constants.SharedPreferences.MUSIC_SYNC_NAME);
+public class MusicLibraryScannerHelperTest extends ActivityInstrumentationTestCase2 {
 
-    public MusicSyncHelperTest() {
+    public MusicLibraryScannerHelperTest() {
         super(TestActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preferencePersistence.reset(getActivity());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
+        editor.clear().commit();
     }
 
     public void testGetMusicDiffSinceLastSyncForTheFirstSync() {
         final CountDownLatch startApiCall = new CountDownLatch(1);
-        MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-        musicSyncHelper.getMusicDiffSinceLastSync(getActivity(), new ApiService.BasicApiCallback<MusicLibrary>() {
+        MusicLibraryScannerHelper musicLibraryScannerHelper = new MusicLibraryScannerHelper();
+        musicLibraryScannerHelper.getMusicDiffSinceLastSync(getActivity(), new ApiService.BasicApiCallback<MusicLibrary>() {
             @Override
             public void onSuccess(MusicLibrary result) {
                 startApiCall.countDown();
@@ -52,10 +54,10 @@ public class MusicSyncHelperTest extends ActivityInstrumentationTestCase2 {
         final CountDownLatch startApiCall = new CountDownLatch(1);
         Calendar sinceDate = Calendar.getInstance();
         sinceDate.set(Calendar.YEAR, sinceDate.get(Calendar.YEAR) - 1);
-        preferencePersistence.write(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, sinceDate.getTimeInMillis(), getActivity());
-
-        MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-        musicSyncHelper.getMusicDiffSinceLastSync(getActivity(), new ApiService.BasicApiCallback<MusicLibrary>() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
+        editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, sinceDate.getTimeInMillis());
+        MusicLibraryScannerHelper musicLibraryScannerHelper = new MusicLibraryScannerHelper();
+        musicLibraryScannerHelper.getMusicDiffSinceLastSync(getActivity(), new ApiService.BasicApiCallback<MusicLibrary>() {
             @Override
             public void onSuccess(MusicLibrary result) {
                 startApiCall.countDown();
