@@ -77,17 +77,17 @@ public class LocationManager implements LocationProvider {
     }
 
     private int readLocationMode(Context context) {
-        PersistenceProvider prefs = new PreferencePersistence("location");
-        Integer value = (Integer) prefs.read(LOCATION_MODE, context);
-        if (value == null) {
+        PersistenceProvider<String> prefs = new PreferencePersistence("location");
+        String value = prefs.read(LOCATION_MODE, context);
+        if (TextUtils.isEmpty(value)) {
             return MODE_SYSTEM;
         }
-        return value;
+        return Integer.valueOf(value);
     }
 
     private void saveLocationMode(int mode, Context context) {
-        PersistenceProvider prefs = new PreferencePersistence("location");
-        prefs.write(LOCATION_MODE, mode, context);
+        PersistenceProvider<String> prefs = new PreferencePersistence("location");
+        prefs.write(LOCATION_MODE, Integer.valueOf(mode).toString(), context);
     }
 
     public static interface GetCityCallback {

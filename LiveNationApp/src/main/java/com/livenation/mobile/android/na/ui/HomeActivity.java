@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -35,19 +34,12 @@ import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
-import com.livenation.mobile.android.na.ui.fragments.RecommendationsFragment;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.util.List;
-
-import io.segment.android.TrackedActivity;
-
-public class HomeActivity extends TrackedFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
+public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager pager;
     private FragmentAdapter adapter;

@@ -18,7 +18,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
 	private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
     private final DummySsoProvider dummySso = new DummySsoProvider();
-	private final PersistenceProvider persistance = new PreferencePersistence("auth_configuration");
+	private final PersistenceProvider<String> persistance = new PreferencePersistence("auth_configuration");
 	private final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
 	private final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
 	private final String USER_ID = "user_id";
@@ -68,8 +68,8 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	}
 	
 	public AuthConfiguration getAuthConfiguration(Context context) {
-		String accessToken = (String) persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
-		String ssoId = (String) persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
+		String accessToken = persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
+		String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
 		
 		if (TextUtils.isEmpty(ssoId)) {
 			return null;
@@ -93,11 +93,11 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	}
 	
 	public User readUser(Context context) {
-		String userId = (String) persistance.read(USER_ID, context);
-		String userName = (String) persistance.read(USER_NAME, context);
+		String userId = persistance.read(USER_ID, context);
+		String userName = persistance.read(USER_NAME, context);
 		
-		String userEmail = (String) persistance.read(USER_EMAIL, context);
-		String userPicUrl = (String) persistance.read(USER_PIC_URL, context);
+		String userEmail = persistance.read(USER_EMAIL, context);
+		String userPicUrl = persistance.read(USER_PIC_URL, context);
 		
 		if (null == userId) return null;
 		

@@ -8,7 +8,7 @@ import io.segment.android.Analytics;
 /**
  * Created by elodieferrais on 4/2/14.
  */
-public class TrackedFragmentActivity extends FragmentActivity {
+public class LiveNationFragmentActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

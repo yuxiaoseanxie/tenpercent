@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
@@ -18,18 +19,21 @@ public class MusicSyncHelper {
     private Date sinceDate = null;
 
     public void getMusicDiffSinceLastSync(final Context context, final ApiService.BasicApiCallback<MusicLibrary> callback) {
-        final PreferencePersistence preferencePersistence = new PreferencePersistence(Constants.SharedPreferences.MUSIC_SYNC_NAME);
-        Long sinceDateLong = (Long) preferencePersistence.read(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, context);
-        if (sinceDateLong != null) {
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE);
+        Long sinceDateLong =  sharedPreferences.getLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, -1l);
+
+        if (sinceDateLong != -1l) {
             sinceDate = new Date(sinceDateLong);
+        } else {
+            sinceDate = null;
         }
 
         ArtistAggregatorScanner scanner = new ArtistAggregatorScanner();
-
         scanner.aggregate(context, new ArtistAggregatorScannerCallback() {
             @Override
             public void onSuccess(MusicLibrary musicLibrary) {
-                preferencePersistence.write(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis(), context);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 callback.onSuccess(musicLibrary);
             }
 
