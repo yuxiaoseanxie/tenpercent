@@ -21,8 +21,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.FavoriteObserverPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 
 public class LineupView extends LinearLayout {
 	private CheckBox favorite;
@@ -72,11 +72,11 @@ public class LineupView extends LinearLayout {
 		return favorite;
 	}
 
-    public void setFavoriteObserver(LineupEntry entry) {
+    public void setFavoriteObserver(Artist entry) {
         favoriteObserver = initObserver(entry, favorite);
     }
 
-    private FavoriteArtistObserver initObserver(LineupEntry lineup, CheckBox checkBox) {
+    private FavoriteArtistObserver initObserver(Artist lineup, CheckBox checkBox) {
         FavoriteArtistObserver observer = new FavoriteArtistObserver(favorite);
 
         Bundle args = observerPresenter.getBundleArgs(Favorite.FAVORITE_ARTIST, lineup.getNumericId());

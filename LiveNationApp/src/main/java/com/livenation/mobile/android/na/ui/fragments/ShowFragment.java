@@ -43,9 +43,9 @@ import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVen
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
 
@@ -148,7 +148,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		String imageUrl = null;		
 		//TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
 		lineupContainer.removeAllViews();
-		for (LineupEntry lineup : event.getLineup()) {
+		for (Artist lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
 			view.getTitle().setText(lineup.getName());
 			
