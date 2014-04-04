@@ -2,12 +2,15 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <EditText
         android:id="@+id/view_search_actionbar_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/view_search_actionbar_input_margin_bottom"
+        android:layout_marginRight="@dimen/view_search_actionbar_input_margin_right"
+        android:layout_marginLeft="@dimen/view_search_actionbar_input_margin_left"
         android:hint="@string/search_input_hint" />
 </RelativeLayout>
