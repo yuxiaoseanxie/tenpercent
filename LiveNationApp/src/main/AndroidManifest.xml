@@ -54,6 +54,11 @@
         </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity" >
         </activity>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"
+            android:label="@string/actionbar_artist_title">
+        </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity" >
         </activity>
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity"/>
