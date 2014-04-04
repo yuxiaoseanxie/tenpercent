@@ -31,9 +31,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -151,7 +153,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		for (Artist lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
 			view.getTitle().setText(lineup.getName());
-			
+
 			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			lineupContainer.addView(view, layoutParams);
 			
@@ -159,6 +161,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			view.getFavorite().setOnClickListener(onCheckBoxClick);
 
             view.setFavoriteObserver(lineup);
+
+            view.setOnClickListener(new OnLineupViewClick(lineup));
 
 			if (null == imageUrl) {
 				String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
@@ -243,6 +247,25 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
+
+    private class OnLineupViewClick implements View.OnClickListener {
+        private Artist lineupArtist;
+
+        public OnLineupViewClick(Artist lineupArtist) {
+            this.lineupArtist = lineupArtist;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), ArtistActivity.class);
+
+            Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
+            SingleArtistPresenter.embedResult(args, lineupArtist);
+            intent.putExtras(args);
+
+            startActivity(intent);
+        }
+    }
 
     private class VenueFavoriteObserver implements FavoriteObserverView {
         private final CheckBox checkbox;

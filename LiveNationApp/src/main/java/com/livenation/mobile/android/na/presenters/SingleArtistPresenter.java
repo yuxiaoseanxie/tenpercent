@@ -43,9 +43,9 @@ public class SingleArtistPresenter extends BasePresenter<SingleArtistView, Singl
         return bundle;
     }
 
-    public static void embedResult(Bundle args, Event eventCache) {
-        if (null != eventCache) {
-            args.putSerializable(SingleArtistPresenter.INTENT_DATA_KEY, eventCache);
+    public static void embedResult(Bundle args, Artist artistCache) {
+        if (null != artistCache) {
+            args.putSerializable(SingleArtistPresenter.INTENT_DATA_KEY, artistCache);
         }
     }
 
