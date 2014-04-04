@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
+import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -12,7 +14,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 
-public class SingleArtistPresenter extends BasePresenter<SingleArtistView, SingleArtistPresenter.SingleArtistState> {
+public class SingleArtistPresenter
+        extends BasePresenter<SingleArtistView, SingleArtistPresenter.SingleArtistState>
+        implements Presenter<SingleArtistView>, BaseState.StateListener<SingleArtistPresenter.SingleArtistState> {
     private static final String INTENT_DATA_KEY = SingleArtistPresenter.class.getName();
     private static final String PARAMETER_ARTIST_ID = "artist_id";
 
