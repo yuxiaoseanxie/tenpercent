@@ -29,7 +29,7 @@ public class DeviceArtistAggregator implements ArtistAggregator {
      * @throws Exception when the context or the uri is null
      */
     @Override
-    public void getArtists(Date sinceDate, ArtistAggregatorCallback callback) {
+    public void getArtists(Date sinceDate, ArtistAggregatorCallback callback) throws Exception {
         if (context == null) {
             throw new NullPointerException("Make sure that the context is not null");
         }

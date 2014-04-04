@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
+
 public class ArtistAggregatorScanner {
 
     private enum Aggregator {
@@ -101,15 +104,22 @@ public class ArtistAggregatorScanner {
             for (Aggregator aggregator : aggregatorsCopy) {
                 ArtistAggregator artistAggregator = getInstanceOfArtistAggregator(aggregator, ScannerTask.this.context);
                 final Aggregator aggregatorFinal = aggregator;
-                artistAggregator.getArtists(sinceDate, new ArtistAggregatorCallback() {
-                    @Override
-                    public void onResult(List<MusicLibraryEntry> libraryEntries) {
-                        if (libraryEntries != null) {
-                            musicLibrary.addAll(libraryEntries);
+                try {
+                    artistAggregator.getArtists(sinceDate, new ArtistAggregatorCallback() {
+                        @Override
+                        public void onResult(List<MusicLibraryEntry> libraryEntries) {
+                            if (libraryEntries != null) {
+                                musicLibrary.addAll(libraryEntries);
+                            }
+                            decrementJobCounter(aggregatorFinal);
                         }
-                        decrementJobCounter(aggregatorFinal);
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Props props = new Props();
+                    props.put("Exception", e);
+                    Analytics.track("Unexpected Exception", props);
+                    decrementJobCounter(aggregatorFinal);
+                }
             }
         }
 
