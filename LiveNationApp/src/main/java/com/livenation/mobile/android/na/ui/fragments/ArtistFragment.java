@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         this.artistImageView = (NetworkImageView)view.findViewById(R.id.fragment_show_image);
         this.artistTitle = (TextView)view.findViewById(R.id.fragment_show_artist_title);
 
+        View showMoreView = inflater.inflate(R.layout.list_overflow_item, container, false);
+        showMoreView.setOnClickListener(new ShowMoreOnClickListener());
+
         this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
         shows.setMaxEvents(3);
+        shows.setShowMoreItemsView(showMoreView);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
 
         init();
@@ -93,4 +98,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
     //endregion
+
+
+    private class ShowMoreOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Log.i(getClass().getName(), "onClick");
+        }
+    }
 }

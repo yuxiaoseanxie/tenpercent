@@ -10,6 +10,8 @@
     <string name="show_lineup">Lineup</string>
     <string name="show_details">Details</string>
     <string name="venue_upcoming_shows">Upcoming Shows</string>
+    <string name="artist_nearby_shows">Nearby Shows</string>
+    <string name="artist_all_shows">On Tour</string>
     
     <string name="tab_title_your_shows">Recommendations</string>
     <string name="tab_title_all_shows">All shows</string>
@@ -19,6 +21,7 @@
     <string name="tab_favorites_venues">Venues</string>
     
     <string name="venue_detail_link">+ Venue Info</string>
+    <string name="artist_overflow">+ See All Shows</string>
     
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     

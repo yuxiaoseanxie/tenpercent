@@ -41,6 +41,13 @@
         <item name="android:layout_marginRight">@dimen/ui_lineup_margin_right</item>
         <item name="android:layout_marginBottom">@dimen/ui_lineup_margin_bottom</item>
     </style>
+
+    <style name="ui_overflow" parent="@style/ui_underscore">
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/ui_overflow_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/ui_overflow_padding_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/ui_overflow_margin_bottom</item>
+    </style>
     
     <style name="favorite_item_checkbox">
         <item name="android:layout_marginLeft">@dimen/ui_lineup_margin_left</item>

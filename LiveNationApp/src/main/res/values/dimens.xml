@@ -23,6 +23,8 @@
     <dimen name="ui_lineup_margin_bottom">8dp</dimen>
     <dimen name="ui_lineup_padding_top">10dp</dimen>
     <dimen name="ui_lineup_padding_bottom">16dp</dimen>
+    <dimen name="ui_overflow_padding_vertical">16dp</dimen>
+    <dimen name="ui_overflow_margin_bottom">8dp</dimen>
     <dimen name="ui_header_transparent_min_height">40dp</dimen>
     <dimen name="ui_header_transparent_padding_top">15dp</dimen>
     <dimen name="favorite_item_min_height">60dp</dimen>

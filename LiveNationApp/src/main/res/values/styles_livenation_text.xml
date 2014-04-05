@@ -59,6 +59,12 @@
         <item name="android:textColor">@color/view_artist_title</item>
     </style>
 
+    <style name="view_overflow_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/ui_header1_text</item>
+    </style>
+
     <style name="ui_header1_text" parent="@style/livenation_app_text">
         <item name="android:textSize">15sp</item>
         <item name="android:textAllCaps">true</item>
