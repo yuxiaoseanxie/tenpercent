@@ -68,5 +68,7 @@ public class Constants {
     public class SharedPreferences {
         public static final String MUSIC_SYNC_NAME = "music_sync_name";
         public static final String MUSIC_SYNC_LAST_SYNC_DATE_KEY = "music_sync_last_sync_date_key";
+        public static final String DEBUG_MODE_DATA = "debug_mode_data";
+        public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
     }
 }

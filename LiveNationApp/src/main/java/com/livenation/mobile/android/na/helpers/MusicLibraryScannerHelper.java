@@ -17,6 +17,7 @@ import java.util.Date;
  */
 public class MusicLibraryScannerHelper {
     private Date sinceDate = null;
+    public static int artistNumber = -1;
 
     public void getMusicDiffSinceLastSync(final Context context, final ApiService.BasicApiCallback<MusicLibrary> callback) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE);
@@ -35,6 +36,7 @@ public class MusicLibraryScannerHelper {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 callback.onSuccess(musicLibrary);
+                artistNumber = musicLibrary.getData().size();
             }
 
             @Override
