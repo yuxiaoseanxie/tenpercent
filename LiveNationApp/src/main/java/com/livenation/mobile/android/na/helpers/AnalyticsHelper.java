@@ -31,7 +31,7 @@ public class AnalyticsHelper {
     public static Props getPropsForEvent(Event event) {
         Props props = new Props();
         String eventName = event.getName();
-        if (eventName != null || eventName.isEmpty()) {
+        if (eventName == null || eventName.isEmpty()) {
             eventName = event.getDisplayName();
         }
         String artistName;
