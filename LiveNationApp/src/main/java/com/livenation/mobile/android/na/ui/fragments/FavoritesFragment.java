@@ -27,11 +27,13 @@ import android.widget.CheckBox;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
 public class FavoritesFragment extends LiveNationFragment implements FavoritesView {
@@ -41,8 +43,11 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 	private TabHost tabHost;
 	private StickyListHeadersListView artistList;
 	private StickyListHeadersListView venueList;
-	
-	public static final String ARG_SHOW_TAB = "show_tab";
+    private EmptyListViewControl artistEmptyView;
+    private EmptyListViewControl venueEmptyView;
+
+
+    public static final String ARG_SHOW_TAB = "show_tab";
 	public static final int ARG_VALUE_ARTISTS = 0;
 	public static final int ARG_VALUE_VENUES = 1;	
 	
@@ -84,13 +89,17 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 		tabHost.addTab(tabSpec);	
 
 		artistList = (StickyListHeadersListView) result.findViewById(R.id.fragment_favorite_artists_list);
-		artistList.setEmptyView(result.findViewById(R.id.fragment_favorite_artists_empty));
+        artistEmptyView = (EmptyListViewControl) result.findViewById(R.id.fragment_favorite_artists_empty);
+
+		artistList.setEmptyView(artistEmptyView);
 		artistList.setAdapter(artistAdapter);
 		artistList.setDivider(null);
 		artistList.setAreHeadersSticky(false);
 		
 		venueList = (StickyListHeadersListView) result.findViewById(R.id.fragment_favorite_venues_list);
-		venueList.setEmptyView(result.findViewById(R.id.fragment_favorite_venues_empty));
+        venueEmptyView = (EmptyListViewControl) result.findViewById(R.id.fragment_favorite_venues_empty);
+
+		venueList.setEmptyView(venueEmptyView);
 		venueList.setAdapter(venueAdapter);
 		venueList.setDivider(null);
 		venueList.setAreHeadersSticky(false);
@@ -146,8 +155,16 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 		List<Favorite> venueFavorites = filterFavorites(favorites, "venue");
 		venueAdapter.getItems().clear();
 		venueAdapter.getItems().addAll(venueFavorites);
-		
-		artistAdapter.notifyDataSetChanged();
+
+        if (venueAdapter.getCount() == 0) {
+            venueEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }
+
+        if (artistAdapter.getCount() == 0) {
+            artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }
+
+        artistAdapter.notifyDataSetChanged();
 		venueAdapter.notifyDataSetChanged();
 	}
 	
