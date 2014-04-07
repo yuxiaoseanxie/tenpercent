@@ -18,12 +18,9 @@
         android:text="@string/mock_artist_bio"
         style="@style/ui_long_text"/>
 
-    <TextView
+    <com.livenation.mobile.android.na.ui.views.OverflowView
         android:id="@+id/fragment_artist_bio_overflow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/ui_overflow"
-        android:text="@string/artist_bio_overflow"
-        android:textAppearance="@style/view_overflow_text" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

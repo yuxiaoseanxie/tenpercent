@@ -60,8 +60,8 @@
     </style>
 
     <style name="view_overflow_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold|italic</item>
         <item name="android:textColor">@color/ui_header1_text</item>
     </style>
 

@@ -18,6 +18,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 
@@ -36,7 +37,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     private LinearLayout bioContainer;
     private TextView bioText;
-    private View bioShowMore;
+    private OverflowView bioShowMore;
 
     //region Lifecycle
 
@@ -61,14 +62,16 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         this.showsHeader = (TextView)view.findViewById(R.id.fragment_artist_shows_header);
 
-        View showMoreView = inflater.inflate(R.layout.list_overflow_item, container, false);
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
         showMoreView.setOnClickListener(new ShowMoreOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
         this.bioContainer = (LinearLayout)view.findViewById(R.id.fragment_artist_bio_container);
         this.bioText = (TextView)bioContainer.findViewById(R.id.fragment_artist_bio);
-        this.bioShowMore = bioContainer.findViewById(R.id.fragment_artist_bio_overflow);
-        showMoreView.setOnClickListener(new ShowFullBioOnClickListener());
+        this.bioShowMore = (OverflowView)bioContainer.findViewById(R.id.fragment_artist_bio_overflow);
+        bioShowMore.setTitle(R.string.artist_bio_overflow);
+        bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
 
         return view;
