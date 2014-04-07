@@ -85,6 +85,11 @@
     <dimen name="view_search_actionbar_input_margin_bottom">2dp</dimen>
     <dimen name="view_search_actionbar_input_margin_right">5dp</dimen>
     <dimen name="view_search_actionbar_input_margin_left">5dp</dimen>
+    <dimen name="decorated_edittext_hint_margin_left">5dp</dimen>
+    <dimen name="decorated_edittext_input_margin_right">48dp</dimen>
+    <dimen name="decorated_edittext_hint_image_padding">5dp</dimen>
+    <dimen name="decorated_edittext_clear_width">48dp</dimen>
+
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
 </resources>

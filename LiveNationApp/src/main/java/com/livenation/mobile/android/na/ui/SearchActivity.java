@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.SearchForText;
+import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
 /**
  * Created by cchilton on 4/2/14.
@@ -33,7 +34,9 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);
         getActionBar().setCustomView(view);
 
-        input = (EditText) view.findViewById(R.id.view_search_actionbar_input);
+        DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);
+
+        input = editText.getEditText();
         input.addTextChangedListener(this);
     }
 
