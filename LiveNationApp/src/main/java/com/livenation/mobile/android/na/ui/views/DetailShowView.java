@@ -42,7 +42,11 @@ public class DetailShowView extends LinearLayout {
 	}
 	
 	public void setEvent(Event event) {
-		title.setText(event.getName());
+        if(getDisplayMode() == DisplayMode.VENUE)
+            title.setText(event.getName());
+        else if(getDisplayMode() == DisplayMode.ARTIST)
+            title.setText(event.getVenue().getName());
+
 		Date start;
 		try {
 			start = getDate(event.getLocalStartTime());
@@ -50,7 +54,7 @@ public class DetailShowView extends LinearLayout {
 
             if(getDisplayMode() == DisplayMode.VENUE) {
                 details.setText(getTimeText(start));
-            } else {
+            } else if(getDisplayMode() == DisplayMode.ARTIST) {
                 //TODO: Spin this out
                 Venue venue = event.getVenue();
                 details.setText(String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState()));

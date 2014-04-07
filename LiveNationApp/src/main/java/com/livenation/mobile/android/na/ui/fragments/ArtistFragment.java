@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
+import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -25,6 +27,9 @@ import java.util.List;
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
     private final static int MAX_INLINE_EVENTS = 3;
+
+    private Artist artist;
+    private ArtistEventsPresenter.ArtistEvents artistEvents;
 
     private NetworkImageView artistImageView;
     private TextView artistTitle;
@@ -39,6 +44,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
         shows.setMaxEvents(MAX_INLINE_EVENTS);
+        shows.setDisplayMode(DetailShowView.DisplayMode.ARTIST);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
 
         setRetainInstance(true);
@@ -81,6 +87,11 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setSingleArtist(Artist artist) {
+        if(artist == null)
+            return;
+
+        this.artist = artist;
+
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
@@ -92,6 +103,11 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setArtistEvents(ArtistEventsPresenter.ArtistEvents artistEvents) {
+        if(artistEvents == null)
+            return;
+
+        this.artistEvents = artistEvents;
+
         if(artistEvents.getNearby().isEmpty()) {
             showsHeader.setText(R.string.artist_all_shows);
             shows.setEvents(artistEvents.getAll());
@@ -126,7 +142,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowMoreOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.i(getClass().getName(), "onClick");
+            Intent intent = new Intent(getActivity(), ArtistEventsActivity.class);
+            intent.putExtras(ArtistEventsActivity.getArguments(artist, artistEvents.getAll()));
+            startActivity(intent);
         }
     }
 }

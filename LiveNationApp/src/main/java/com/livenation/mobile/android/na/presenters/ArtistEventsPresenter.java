@@ -69,7 +69,7 @@ public class ArtistEventsPresenter
         public void onGetEvents(List<Event> events) {
             double lat = getApiService().getApiConfig().getLat();
             double lng = getApiService().getApiConfig().getLng();
-            setResult(ArtistEvents.from(events, lat, lng));
+            setResult(ArtistEvents.from((ArrayList<Event>)events, lat, lng));
             notifyReady();
         }
 
@@ -97,10 +97,10 @@ public class ArtistEventsPresenter
         private static final double NEARBY_CUTOFF = 50000.0 /* 50km */;
         private static final int MAX_NEARBY = 3;
 
-        private List<Event> nearby;
-        private List<Event> all;
+        private ArrayList<Event> nearby;
+        private ArrayList<Event> all;
 
-        public static ArtistEvents from(List<Event> all, double userLatitude, double userLongitude) {
+        public static ArtistEvents from(ArrayList<Event> all, double userLatitude, double userLongitude) {
             ArrayList<Event> nearby = new ArrayList<Event>();
             float[] results = new float[1];
             for (Event event : all) {
@@ -117,16 +117,16 @@ public class ArtistEventsPresenter
             return new ArtistEvents(nearby, all);
         }
 
-        public ArtistEvents(List<Event> nearby, List<Event> all) {
+        public ArtistEvents(ArrayList<Event> nearby, ArrayList<Event> all) {
             this.nearby = nearby;
             this.all = all;
         }
 
-        public List<Event> getNearby() {
+        public ArrayList<Event> getNearby() {
             return nearby;
         }
 
-        public List<Event> getAll() {
+        public ArrayList<Event> getAll() {
             return all;
         }
     }

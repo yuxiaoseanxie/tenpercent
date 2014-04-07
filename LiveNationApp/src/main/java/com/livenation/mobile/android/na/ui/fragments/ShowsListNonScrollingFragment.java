@@ -3,13 +3,16 @@ package com.livenation.mobile.android.na.ui.fragments;
 import java.util.List;
 
 import android.app.ActionBar.LayoutParams;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
+import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -62,6 +65,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 			DetailShowView show = new DetailShowView(getActivity());
             show.setDisplayMode(getDisplayMode());
 			show.setEvent(event);
+            show.setOnClickListener(new ShowViewClickListener(event));
 
 			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			showContainer.addView(show, layoutParams);
@@ -115,4 +119,24 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
     //endregion
+
+
+    private class ShowViewClickListener implements View.OnClickListener {
+        private Event event;
+
+        public ShowViewClickListener(Event event) {
+            this.event = event;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), ShowActivity.class);
+
+            Bundle args = SingleEventPresenter.getAruguments(event.getId());
+            SingleEventPresenter.embedResult(args, event);
+            intent.putExtras(args);
+
+            startActivity(intent);
+        }
+    }
 }
