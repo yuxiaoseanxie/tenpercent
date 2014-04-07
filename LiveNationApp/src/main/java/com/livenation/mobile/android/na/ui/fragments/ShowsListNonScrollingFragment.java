@@ -22,6 +22,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     private int maxEvents;
     private View showMoreItemsView;
+    private boolean alwaysShowMoreItemsView;
 
     //region Lifecycle
 
@@ -70,14 +71,14 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
                 break;
 		}
 
-        if(events.size() > getMaxEvents() && getShowMoreItemsView() != null) {
+        if((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getShowMoreItemsView(), layoutParams);
         }
 	}
 
 
-    //region: Properties
+    //region Properties
 
     public DetailShowView.DisplayMode getDisplayMode() {
         return displayMode;
@@ -103,6 +104,14 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     public void setShowMoreItemsView(View showMoreItemsView) {
         this.showMoreItemsView = showMoreItemsView;
+    }
+
+    public boolean alwaysShowMoreItemsView() {
+        return alwaysShowMoreItemsView;
+    }
+
+    public void setAlwaysShowMoreItemsView(boolean alwaysShowMoreItemsView) {
+        this.alwaysShowMoreItemsView = alwaysShowMoreItemsView;
     }
 
     //endregion

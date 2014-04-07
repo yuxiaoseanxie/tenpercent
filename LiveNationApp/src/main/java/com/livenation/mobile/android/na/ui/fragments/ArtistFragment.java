@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
+import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -21,11 +22,12 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-public class ArtistFragment extends LiveNationFragment implements SingleArtistView, EventsView {
+public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
 
     private NetworkImageView artistImageView;
     private TextView artistTitle;
+    private TextView showsHeader;
     private ShowsListNonScrollingFragment shows;
 
     //region Lifecycle
@@ -39,6 +41,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         View showMoreView = inflater.inflate(R.layout.list_overflow_item, container, false);
         showMoreView.setOnClickListener(new ShowMoreOnClickListener());
+
+        this.showsHeader = (TextView)view.findViewById(R.id.fragment_artist_shows_header);
 
         this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
         shows.setMaxEvents(3);
@@ -74,10 +78,16 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
     @Override
-    public void setEvents(List<Event> events) {
-        shows.setEvents(events);
+    public void setArtistEvents(ArtistEventsPresenter.ArtistEvents artistEvents) {
+        if(artistEvents.getNearby().isEmpty()) {
+            showsHeader.setText(R.string.artist_all_shows);
+            shows.setEvents(artistEvents.getAll());
+        } else {
+            showsHeader.setText(R.string.artist_nearby_shows);
+            shows.setAlwaysShowMoreItemsView(true);
+            shows.setEvents(artistEvents.getNearby());
+        }
     }
-
 
     private void init() {
         getSingleArtistPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
