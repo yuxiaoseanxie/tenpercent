@@ -22,7 +22,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-public class VenueActivity extends TrackedFragmentActivity implements SingleVenueView, EventsView {
+
+public class VenueActivity extends LiveNationFragmentActivity implements SingleVenueView, EventsView {
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
     private static final int EVENTS_PER_VENUE_LIMIT = 3;

@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,7 +20,8 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowActivity extends TrackedFragmentActivity implements SingleEventView  {
+public class ShowActivity extends LiveNationFragmentActivity implements SingleEventView  {
+
 	private SingleEventView singleEventView;
 	
 	@Override
