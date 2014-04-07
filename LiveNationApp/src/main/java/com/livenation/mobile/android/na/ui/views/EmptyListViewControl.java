@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +30,16 @@ import com.livenation.mobile.android.na.R;
  */
 public class EmptyListViewControl extends LinearLayout {
     public static enum ViewMode {LOADING, NO_DATA, RETRY};
+    private ViewMode currentMode = ViewMode.LOADING;
 
     private View loading;
     private View retry;
     private View noData;
 
     private final LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+    private static final String VIEW_MODE_STATE_KEY = "viewModeState";
+    private static final String INSTANCE_STATE_KEY = "instanceState";
 
     public EmptyListViewControl(Context context) {
         super(context);
@@ -50,6 +56,26 @@ public class EmptyListViewControl extends LinearLayout {
         initializeViews(context);
     }
 
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(INSTANCE_STATE_KEY, super.onSaveInstanceState());
+        bundle.putInt(VIEW_MODE_STATE_KEY, getViewMode().ordinal());
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            ViewMode viewMode = ViewMode.values()[bundle.getInt(VIEW_MODE_STATE_KEY)];
+            setViewMode(viewMode);
+            state = bundle.getParcelable(INSTANCE_STATE_KEY);
+        }
+        super.onRestoreInstanceState(state);
+    }
+
     /**
      * Changes the display mode of the view.
      * LOADING = show spinning loading wheel
@@ -60,6 +86,7 @@ public class EmptyListViewControl extends LinearLayout {
      * @param mode The view state that this view is meant to represent.
      */
     public void setViewMode(ViewMode mode) {
+        currentMode = mode;
         removeAllViews();
         switch (mode) {
             case LOADING:
@@ -74,6 +101,10 @@ public class EmptyListViewControl extends LinearLayout {
             default:
         }
         invalidate();
+    }
+
+    public ViewMode getViewMode() {
+        return currentMode;
     }
 
     /**
