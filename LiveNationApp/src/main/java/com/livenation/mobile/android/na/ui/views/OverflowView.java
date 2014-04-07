@@ -14,6 +14,8 @@ public class OverflowView extends LinearLayout {
     private ImageView icon;
     private TextView title;
 
+    private boolean expanded;
+
     public OverflowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
@@ -29,6 +31,8 @@ public class OverflowView extends LinearLayout {
         init(context);
     }
 
+    //region Properties
+
     public void setTitle(String title) {
         this.title.setText(title);
     }
@@ -41,6 +45,21 @@ public class OverflowView extends LinearLayout {
         return this.title.getText().toString();
     }
 
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+        if(expanded)
+            icon.setImageResource(R.drawable.overflow_minimize);
+        else
+            icon.setImageResource(R.drawable.overflow_maximize);
+    }
+
+    //endregion
+
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -50,5 +69,7 @@ public class OverflowView extends LinearLayout {
         this.title = (TextView)view.findViewById(R.id.view_overflow_title);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        setExpanded(false);
     }
 }

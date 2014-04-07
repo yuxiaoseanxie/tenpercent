@@ -24,6 +24,7 @@
     <string name="venue_detail_link">+ Venue Info</string>
     <string name="artist_events_overflow">See All Shows</string>
     <string name="artist_bio_overflow">Read Full Bio</string>
+    <string name="artist_bio_overflow_close">Close Full Bio</string>
     
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     

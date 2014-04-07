@@ -96,13 +96,17 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     //region Bios
 
-    private void showBio(String bio) {
-        if(bio.length() <= BIO_TRUNCATION_LENGTH) {
-            bioText.setText(bio);
-            bioShowMore.setVisibility(View.GONE);
+    private void showBio(String bio, boolean truncate) {
+        if(truncate) {
+            if (bio.length() <= BIO_TRUNCATION_LENGTH) {
+                bioText.setText(bio);
+                bioShowMore.setVisibility(View.GONE);
+            } else {
+                bioText.setText(bio.substring(0, BIO_TRUNCATION_LENGTH) + "…");
+                bioShowMore.setVisibility(View.VISIBLE);
+            }
         } else {
-            bioText.setText(bio.substring(0, BIO_TRUNCATION_LENGTH) + "…");
-            bioShowMore.setVisibility(View.VISIBLE);
+            bioText.setText(bio);
         }
         bioContainer.setVisibility(View.VISIBLE);
     }
@@ -133,7 +137,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         String bio = artist.getBio();
         if(bio != null && !bio.isEmpty())
-            showBio(bio);
+            showBio(bio, true);
         else
             suppressBio();
     }
@@ -188,7 +192,15 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowFullBioOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-
+            if(bioShowMore.isExpanded()) {
+                showBio(artist.getBio(), true);
+                bioShowMore.setTitle(R.string.artist_bio_overflow);
+                bioShowMore.setExpanded(false);
+            } else {
+                showBio(artist.getBio(), false);
+                bioShowMore.setTitle(R.string.artist_bio_overflow_close);
+                bioShowMore.setExpanded(true);
+            }
         }
     }
 }

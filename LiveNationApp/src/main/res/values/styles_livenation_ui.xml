@@ -52,6 +52,7 @@
     <style name="ui_long_text" parent="@style/ui_underscore">
         <item name="android:padding">@dimen/ui_long_text_padding</item>
         <item name="android:textAppearance">@style/artist_bio</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
     
     <style name="favorite_item_checkbox">
