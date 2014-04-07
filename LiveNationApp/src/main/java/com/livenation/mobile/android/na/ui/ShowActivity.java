@@ -21,6 +21,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 public class ShowActivity extends LiveNationFragmentActivity implements SingleEventView  {
+
 	private SingleEventView singleEventView;
 	
 	@Override

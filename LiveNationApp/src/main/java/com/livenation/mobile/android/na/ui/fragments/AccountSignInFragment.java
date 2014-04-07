@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+
+import io.segment.android.Analytics;
 
 public class AccountSignInFragment extends Fragment {
 	@Override
@@ -30,6 +33,7 @@ public class AccountSignInFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
+            Analytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP);
 			Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
 			intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_FACEBOOK);
 			startActivity(intent);

@@ -22,6 +22,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
+
 public class VenueActivity extends LiveNationFragmentActivity implements SingleVenueView, EventsView {
     private SingleVenueView singleVenueView;
     private EventsView eventsView;

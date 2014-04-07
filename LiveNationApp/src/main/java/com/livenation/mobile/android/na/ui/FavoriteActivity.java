@@ -22,6 +22,7 @@ import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
+
 public class FavoriteActivity extends LiveNationFragmentActivity implements FavoritesView  {
 	private FavoritesView favoritesView;
 	

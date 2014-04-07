@@ -14,6 +14,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
@@ -114,7 +115,7 @@ public class LiveNationApplication extends Application {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            Analytics.track("Track URL Schemes", props);
+            Analytics.track(AnalyticConstants.TRACK_URL_SHCEMES, props);
         }
     }
 
