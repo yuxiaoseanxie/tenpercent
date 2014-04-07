@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
+    private final static int MAX_INLINE_EVENTS = 3;
 
     private NetworkImageView artistImageView;
     private TextView artistTitle;
@@ -32,6 +33,18 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     //region Lifecycle
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
+        shows.setMaxEvents(MAX_INLINE_EVENTS);
+        addFragment(R.id.fragment_artist_shows_container, shows, "shows");
+
+        setRetainInstance(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
@@ -39,24 +52,25 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         this.artistImageView = (NetworkImageView)view.findViewById(R.id.fragment_show_image);
         this.artistTitle = (TextView)view.findViewById(R.id.fragment_show_artist_title);
 
-        View showMoreView = inflater.inflate(R.layout.list_overflow_item, container, false);
-        showMoreView.setOnClickListener(new ShowMoreOnClickListener());
-
         this.showsHeader = (TextView)view.findViewById(R.id.fragment_artist_shows_header);
 
-        this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
-        shows.setMaxEvents(3);
+        View showMoreView = inflater.inflate(R.layout.list_overflow_item, container, false);
+        showMoreView.setOnClickListener(new ShowMoreOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
-        addFragment(R.id.fragment_artist_shows_container, shows, "shows");
-
-        init();
 
         return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStart() {
+        super.onStart();
+
+        init();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
 
         deinit();
     }
