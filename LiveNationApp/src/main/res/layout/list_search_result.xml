@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
+    android:minHeight="@dimen/list_search_min_height"
     android:orientation="horizontal">
 
     <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
@@ -11,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        android:layout_marginLeft="@dimen/list_search_checkbox_margin_left"
+        android:layout_centerVertical="true"
         android:button="@drawable/checkbox_favorite_padding_selector"
         android:checked="false"
         android:minHeight="@dimen/favorite_checkbox_min_height"
@@ -18,10 +21,11 @@
 
     <TextView
         android:id="@+id/list_search_result_type_box"
-        style="@style/list_search_result"
+        style="@style/list_search_result_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_search_result_margin_top"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/list_search_type_margin_left"
         android:layout_toRightOf="@id/list_search_result_checkbox"
         android:text="@string/mock_artist_type" />
 
@@ -30,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/list_search_result_type_box"
-        android:layout_marginBottom="@dimen/list_search_result_margin_bottom"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/list_search_title_margin_left"
         android:layout_toRightOf="@+id/list_search_result_type_box"
         android:text="@string/mock_artist_title_1"
@@ -40,8 +44,8 @@
         android:id="@+id/list_search_result_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/list_search_result_text"
-        android:layout_toRightOf="@id/list_search_result_checkbox"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/list_search_result_type_box"
         android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>
