@@ -43,6 +43,7 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -53,7 +54,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
 	private StickyListHeadersListView listView;
-	private EventVenueAdapter adapter;
+    private EmptyListViewControl emptyListViewControl;
+
+    private EventVenueAdapter adapter;
 	private Double lat;
     private Double lng;
     private ScrollPager pager;
@@ -80,7 +83,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 		View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
 		listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
 		listView.setAdapter(adapter);
-        listView.setEmptyView(view.findViewById(android.R.id.empty));
+
+        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        listView.setEmptyView(emptyListViewControl);
+
 		listView.setDivider(null);
         listView.setAreHeadersSticky(false);
         pager.connectListView(listView);
@@ -355,6 +361,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 ScrollPager.this.offset += venues.size();
                 List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
                 getFetchResultHandler().deliverResult(transformed);
+                if (venues.size() == 0) {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
             }
 
             @Override
