@@ -20,8 +20,10 @@ public class MusicSyncHelper implements ApiServiceBinder{
     private boolean isToastShowable;
     private Toast successToast;
     private Toast failToast;
+    private Context context;
 
-    public void syncMusic(Context context) {
+    public void syncMusic(Context ctx) {
+        this.context = ctx.getApplicationContext();
         isToastShowable = isToastShowable(context);
         if (isToastShowable) {
             Toast.makeText(context, "Music Scan started", Toast.LENGTH_SHORT).show();
