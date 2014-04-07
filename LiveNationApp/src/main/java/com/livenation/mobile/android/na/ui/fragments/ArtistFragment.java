@@ -33,7 +33,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     //region Lifecycle
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
