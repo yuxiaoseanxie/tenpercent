@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -29,7 +30,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private final static int MAX_INLINE_EVENTS = 3;
 
     private Artist artist;
-    private ArtistEventsPresenter.ArtistEvents artistEvents;
+    private ArtistEvents artistEvents;
 
     private NetworkImageView artistImageView;
     private TextView artistTitle;
@@ -102,7 +103,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
     @Override
-    public void setArtistEvents(ArtistEventsPresenter.ArtistEvents artistEvents) {
+    public void setArtistEvents(ArtistEvents artistEvents) {
         if(artistEvents == null)
             return;
 
