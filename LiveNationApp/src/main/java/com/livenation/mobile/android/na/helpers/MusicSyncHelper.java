@@ -12,6 +12,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 
+import java.util.Calendar;
+
 /**
  * Created by elodieferrais on 4/4/14.
  */
@@ -57,6 +59,8 @@ public class MusicSyncHelper implements ApiServiceBinder{
         apiService.sendLibraryAffinities(ApiParameters.createLibraryAffinitiesParameters().setLibraryDump(musicLibrary), new LiveNationApiService.SendLibraryAffinitiesCallback() {
             @Override
             public void onSuccess() {
+                SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
+                editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 if (isToastShowable) {
                     successToast.setText("Music Scan done! " + String.valueOf(musicLibrary.getData().size()) + " artist has been synchronyzed");
                     successToast.show();

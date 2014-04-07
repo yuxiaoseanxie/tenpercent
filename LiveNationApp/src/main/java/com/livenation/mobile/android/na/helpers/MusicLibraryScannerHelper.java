@@ -33,8 +33,6 @@ public class MusicLibraryScannerHelper {
         scanner.aggregate(context, new ArtistAggregatorScannerCallback() {
             @Override
             public void onSuccess(MusicLibrary musicLibrary) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 callback.onSuccess(musicLibrary);
                 artistNumber = musicLibrary.getData().size();
             }
