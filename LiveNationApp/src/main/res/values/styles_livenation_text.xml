@@ -72,6 +72,10 @@
         <item name="android:textColor">@color/ui_header1_text</item>
     </style>
 
+    <style name="artist_bio" parent="@style/livenation_app_text">
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="show_venue_text" parent="@style/livenation_app_text">
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/show_venue_text</item>

@@ -48,6 +48,11 @@
         <item name="android:paddingBottom">@dimen/ui_overflow_padding_vertical</item>
         <item name="android:layout_marginBottom">@dimen/ui_overflow_margin_bottom</item>
     </style>
+
+    <style name="ui_long_text" parent="@style/ui_underscore">
+        <item name="android:padding">@dimen/list_show_item_padding</item>
+        <item name="android:textAppearance">@style/artist_bio</item>
+    </style>
     
     <style name="favorite_item_checkbox">
         <item name="android:layout_marginLeft">@dimen/ui_lineup_margin_left</item>

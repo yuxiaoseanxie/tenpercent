@@ -27,6 +27,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
+        <include
+            android:id="@+id/fragment_artist_bio_container"
+            layout="@layout/sub_artist_bio"/>
+
     </LinearLayout>
 
 </ScrollView>

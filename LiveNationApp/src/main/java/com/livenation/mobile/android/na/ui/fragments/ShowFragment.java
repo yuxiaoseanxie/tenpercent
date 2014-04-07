@@ -64,7 +64,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
 	
 	private static final float DEFAULT_MAP_ZOOM = 13f;
-	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
+	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
 	private LiveNationMapFragment mapFragment;
 	private VenueFavoriteObserver venueFavoriteObserver;
 

@@ -2,10 +2,10 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -14,18 +14,15 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-
-import java.util.List;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
+    private final static int BIO_TRUNCATION_LENGTH = 300;
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
     private final static int MAX_INLINE_EVENTS = 3;
 
@@ -36,6 +33,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private TextView artistTitle;
     private TextView showsHeader;
     private ShowsListNonScrollingFragment shows;
+
+    private LinearLayout bioContainer;
+    private TextView bioText;
+    private View bioShowMore;
 
     //region Lifecycle
 
@@ -64,6 +65,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         showMoreView.setOnClickListener(new ShowMoreOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
+        this.bioContainer = (LinearLayout)view.findViewById(R.id.fragment_artist_bio_container);
+        this.bioText = (TextView)bioContainer.findViewById(R.id.fragment_artist_bio);
+        this.bioShowMore = bioContainer.findViewById(R.id.fragment_artist_bio_overflow);
+        showMoreView.setOnClickListener(new ShowFullBioOnClickListener());
+        suppressBio();
+
         return view;
     }
 
@@ -79,6 +86,26 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         super.onStop();
 
         deinit();
+    }
+
+    //endregion
+
+
+    //region Bios
+
+    private void showBio(String bio) {
+        if(bio.length() <= BIO_TRUNCATION_LENGTH) {
+            bioText.setText(bio);
+            bioShowMore.setVisibility(View.GONE);
+        } else {
+            bioText.setText(bio.substring(0, BIO_TRUNCATION_LENGTH) + "…");
+            bioShowMore.setVisibility(View.VISIBLE);
+        }
+        bioContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void suppressBio() {
+        bioContainer.setVisibility(View.GONE);
     }
 
     //endregion
@@ -100,6 +127,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             String imageUrl = artist.getImageURL(imageKey);
             artistImageView.setImageUrl(imageUrl, getImageLoader());
         }
+
+        String bio = artist.getBio();
+        if(bio != null && !bio.isEmpty())
+            showBio(bio);
+        else
+            suppressBio();
     }
 
     @Override
@@ -146,6 +179,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             Intent intent = new Intent(getActivity(), ArtistEventsActivity.class);
             intent.putExtras(ArtistEventsActivity.getArguments(artist, artistEvents.getAll()));
             startActivity(intent);
+        }
+    }
+
+    private class ShowFullBioOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+
         }
     }
 }

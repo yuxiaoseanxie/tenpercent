@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/ui_overflow"
-        android:text="@string/artist_overflow"
+        android:text="@string/artist_events_overflow"
         android:textAppearance="@style/view_overflow_text" />
 
 </LinearLayout>
