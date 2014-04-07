@@ -27,7 +27,6 @@ import android.widget.CheckBox;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
