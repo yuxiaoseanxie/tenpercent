@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.FavoriteObserverPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
@@ -104,7 +105,7 @@ public class LineupView extends LinearLayout {
         public void onFavoriteAdded(Favorite favorite) {
             Props props = new Props();
             props.put("Artist Name", favorite.getName());
-            Analytics.track("Favorite Artist Star Tap", props);
+            Analytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, props);
             checkBox.setChecked(true);
         }
 
@@ -112,7 +113,7 @@ public class LineupView extends LinearLayout {
         public void onFavoriteRemoved(Favorite favorite) {
             Props props = new Props();
             props.put("Artist Name", favorite.getName());
-            Analytics.track("Unfavorite Artist Star Tap", props);
+            Analytics.track(AnalyticConstants.UNFAVORITE_ARTIST_STAR_TAP, props);
             checkBox.setChecked(false);
         }
     }

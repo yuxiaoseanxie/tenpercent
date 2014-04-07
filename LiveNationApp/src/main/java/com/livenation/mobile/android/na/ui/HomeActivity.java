@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -73,13 +74,13 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                Analytics.track("Account Icon Tap");
+                Analytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Analytics.track("X Tap");
+                Analytics.track(AnalyticConstants.X_TAP);
             }
         };
 		rootView.setDrawerListener(drawerToggle);
@@ -146,7 +147,7 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
-                Analytics.track("Notification Icon Tap");
+                Analytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -155,15 +156,15 @@ public class HomeActivity extends TrackedFragmentActivity implements AccountSave
                 return true;
 
             case R.id.menu_home_search_item:
-                Analytics.track("Search Icon Tap");
+                Analytics.track(AnalyticConstants.SEARCH_ICON_TAP);
                 return true;
 
             case R.id.menu_home_faq_item:
-                Analytics.track("Help Cell Tap");
+                Analytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
             case R.id.menu_home_legal_item:
-                Analytics.track("Legal Cell Tap");
+                Analytics.track(AnalyticConstants.LEGAL_CELL_TAP);
                 return true;
 
             default:

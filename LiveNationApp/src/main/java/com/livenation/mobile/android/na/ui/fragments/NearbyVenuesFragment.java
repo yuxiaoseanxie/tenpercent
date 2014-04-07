@@ -33,6 +33,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -295,13 +296,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             private class FavoriteListener implements FavoriteObserverView {
                 @Override
                 public void onFavoriteAdded(Favorite favorite) {
-                    Analytics.track("Favorite Venue Star Tap");
+                    Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP);
                     getFavorite().setChecked(true);
                 }
 
                 @Override
                 public void onFavoriteRemoved(Favorite favorite) {
-                    Analytics.track("Unfavorite Venue Star Tap");
+                    Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP);
                     getFavorite().setChecked(false);
                 }
             }
@@ -391,7 +392,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
             props.put("Cell Position", position);
-            Analytics.track("Event Cell Tap");
+            Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
 
             intent.putExtras(args);
             getActivity().startActivity(intent);
@@ -418,7 +419,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             Props props = new Props();
             props.put("Venue Name", venue.getName());
             props.put("Cell Position", position);
-            Analytics.track("Venue Cell Tap");
+            Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
 
             intent.putExtras(args);
             getActivity().startActivity(intent);

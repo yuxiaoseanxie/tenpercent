@@ -31,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
@@ -238,7 +239,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            Analytics.track("Venue Cell Tap", props);
+            Analytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
 
 			startActivity(intent);
 		}
@@ -254,7 +255,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		@Override
 		public void onClick(View v) {
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            Analytics.track("Find Tickets Tap", props);
+            Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -271,7 +272,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Props props = new Props();
             props.put("Venue Name", favorite.getName());
-            Analytics.track("Favorite Venue Star Tap", props);
+            Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(true);
         }
 
@@ -279,7 +280,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         public void onFavoriteRemoved(Favorite favorite) {
             Props props = new Props();
             props.put("Venue Name", favorite.getName());
-            Analytics.track("Unfavorite Venue Star Tap", props);
+            Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(false);
         }
     }
