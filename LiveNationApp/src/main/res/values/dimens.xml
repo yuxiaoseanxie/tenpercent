@@ -79,9 +79,12 @@
     <dimen name="underscore_container_height">5dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
-    <dimen name="list_search_result_margin_top">20dp</dimen>
-    <dimen name="list_search_result_margin_bottom">20dp</dimen>
     <dimen name="list_search_title_margin_left">20dp</dimen>
+    <dimen name="list_search_type_margin_left">4dp</dimen>
+    <dimen name="list_search_min_height">64dp</dimen>
+    <dimen name="list_search_checkbox_margin_left">5dp</dimen>
+    <dimen name="list_search_type_min_width">54dp</dimen>
+    <dimen name="list_search_type_min_height">26dp</dimen>
     <dimen name="view_search_actionbar_input_margin_bottom">2dp</dimen>
     <dimen name="view_search_actionbar_input_margin_right">5dp</dimen>
     <dimen name="view_search_actionbar_input_margin_left">5dp</dimen>
