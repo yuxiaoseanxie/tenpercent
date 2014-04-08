@@ -1,2 +1,3 @@
-include ':facebookSDK', 'LiveNationApp', 'LabsPlatform'
+include ':facebookSDK', 'LiveNationApp', 'LabsPlatform', 'Ticketing'
 project(':LabsPlatform').projectDir = new File(settingsDir, "../adr-libsLabsPlatform/LabsPlatform")
+project(':Ticketing').projectDir = new File(settingsDir, "../adr-libTicketing/Ticketing")

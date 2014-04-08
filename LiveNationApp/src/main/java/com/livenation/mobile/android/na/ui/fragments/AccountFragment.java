@@ -28,6 +28,7 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.util.Logger;
+import com.livenation.mobile.android.ticketing.Ticketing;
 
 import io.segment.android.Analytics;
 
@@ -46,6 +47,10 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 			Bundle savedInstanceState) {
 		View result = inflater.inflate(R.layout.fragment_account, container,
 				false);
+
+        OnOrdersClick ordersClick = new OnOrdersClick();
+        result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
+
 		OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
 		result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
 		
@@ -103,6 +108,13 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     @Override
     public void onGetCityFailure() {
         locationText.setText("Geocode failed!");
+    }
+
+    private class OnOrdersClick implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Ticketing.showOrderHistory(getActivity());
+        }
     }
 
     private class OnFavoriteClick implements View.OnClickListener {

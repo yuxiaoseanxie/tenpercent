@@ -8,10 +8,11 @@ Building
 
 To build the Live Nation app you will need to install [Android Studio](http://developer.android.com/sdk/installing/studio.html).
 
-To begin, you will need to clone two repositories onto your computer:
+To begin, you will need to clone three repositories onto your computer:
 
 	git clone git@github.com:TeamSidewinder/adr-appLiveNation.git adr-appLiveNation
 	git clone git@github.com:TeamSidewinder/adr-libsLabsPlatform.git adr-libsLabsPlatform
+	git clone git@github.com:TeamSidewinder/adr-libTicketing.git adr-libTicketing
 
 Once the repositories have been cloned, you will import the adr-appLiveNation project into Android Studio. After import, you will need to install any required SDK components:
 
