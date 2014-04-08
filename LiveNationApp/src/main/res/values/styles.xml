@@ -18,6 +18,7 @@
     	ActionBar theme here and not via AppBaseTheme.
      -->
     <style name="AppTheme" parent="Theme.Actionbar">
+        <item name="android:editTextBackground">@drawable/livenation_edit_text_holo_light</item>
     </style>
 
 </resources>

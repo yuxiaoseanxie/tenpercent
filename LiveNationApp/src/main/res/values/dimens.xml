@@ -23,8 +23,13 @@
     <dimen name="ui_lineup_margin_bottom">8dp</dimen>
     <dimen name="ui_lineup_padding_top">10dp</dimen>
     <dimen name="ui_lineup_padding_bottom">16dp</dimen>
+    <dimen name="ui_overflow_vertical_padding">16dp</dimen>
+    <dimen name="ui_overflow_icon_margin_left">18dp</dimen>
+    <dimen name="ui_overflow_icon_margin_right">16dp</dimen>
+    <dimen name="ui_overflow_margin_bottom">8dp</dimen>
     <dimen name="ui_header_transparent_min_height">40dp</dimen>
     <dimen name="ui_header_transparent_padding_top">15dp</dimen>
+    <dimen name="ui_long_text_padding">16dp</dimen>
     <dimen name="favorite_item_min_height">60dp</dimen>
     <dimen name="favorite_min_height">38dp</dimen>
     <dimen name="favorite_margin_left">10dp</dimen>
@@ -77,6 +82,21 @@
     <dimen name="account_detail_min_height">59dp</dimen>
     <dimen name="account_footer_change_margin_right">15dp</dimen>
     <dimen name="underscore_container_height">5dp</dimen>
+    <dimen name="favorite_checkbox_min_height">48dp</dimen>
+    <dimen name="favorite_checkbox_min_width">48dp</dimen>
+    <dimen name="list_search_title_margin_left">20dp</dimen>
+    <dimen name="list_search_type_margin_left">4dp</dimen>
+    <dimen name="list_search_min_height">64dp</dimen>
+    <dimen name="list_search_checkbox_margin_left">5dp</dimen>
+    <dimen name="list_search_type_min_width">54dp</dimen>
+    <dimen name="list_search_type_min_height">26dp</dimen>
+    <dimen name="view_search_actionbar_input_margin_bottom">2dp</dimen>
+    <dimen name="view_search_actionbar_input_margin_right">5dp</dimen>
+    <dimen name="view_search_actionbar_input_margin_left">5dp</dimen>
+    <dimen name="decorated_edittext_hint_margin_left">5dp</dimen>
+    <dimen name="decorated_edittext_input_margin_right">48dp</dimen>
+    <dimen name="decorated_edittext_hint_image_padding">5dp</dimen>
+    <dimen name="decorated_edittext_clear_width">48dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

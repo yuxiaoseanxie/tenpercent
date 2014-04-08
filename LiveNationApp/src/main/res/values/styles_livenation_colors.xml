@@ -27,4 +27,6 @@
     <color name="login_google_plus_button_pressed_color">#666666</color>
     <color name="login_sso_button_text">#ffffff</color>
 
+    <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
+
 </resources>

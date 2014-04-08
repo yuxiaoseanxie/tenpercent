@@ -43,6 +43,7 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -51,6 +52,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
     private ScrollPager scrollPager;
+    private EmptyListViewControl emptyListViewControl;
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
 	
@@ -70,7 +72,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 		listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
 		listView.setOnItemClickListener(ShowsListFragment.this);
 		listView.setAdapter(adapter);
-		listView.setEmptyView(view.findViewById(android.R.id.empty));
+
+        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        listView.setEmptyView(emptyListViewControl);
         scrollPager.connectListView(listView);
 
 		return view;
@@ -278,6 +282,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
             @Override
             public void setEvents(List<Event> events) {
                 getFetchResultHandler().deliverResult(events);
+                if (events.size() == 0) {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
             }
 
             @Override

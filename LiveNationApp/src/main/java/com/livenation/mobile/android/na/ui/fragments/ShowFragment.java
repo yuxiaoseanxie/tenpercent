@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import android.content.Intent;
@@ -31,11 +32,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -45,11 +48,12 @@ import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVen
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
+import com.livenation.mobile.android.ticketing.Ticketing;
 
 import io.segment.android.Analytics;
 import io.segment.android.models.Props;
@@ -67,7 +71,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
 	
 	private static final float DEFAULT_MAP_ZOOM = 13f;
-	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"tap"};
+	private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
 	private LiveNationMapFragment mapFragment;
 	private VenueFavoriteObserver venueFavoriteObserver;
 
@@ -157,10 +161,10 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		String imageUrl = null;		
 		//TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
 		lineupContainer.removeAllViews();
-		for (LineupEntry lineup : event.getLineup()) {
+		for (Artist lineup : event.getLineup()) {
 			LineupView view = new LineupView(getActivity());
 			view.getTitle().setText(lineup.getName());
-			
+
 			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			lineupContainer.addView(view, layoutParams);
 			
@@ -168,6 +172,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			view.getFavorite().setOnClickListener(onCheckBoxClick);
 
             view.setFavoriteObserver(lineup);
+
+            view.setOnClickListener(new OnLineupViewClick(lineup));
 
 			if (null == imageUrl) {
 				String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
@@ -257,8 +263,35 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Props props = AnalyticsHelper.getPropsForEvent(event);
             Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
+            //TODO: Non-TM ticketing
+            List<String> ticketmasterIds = event.getTicketmasterIds();
+            if(ticketmasterIds.size() == 0) {
+                Toast.makeText(getActivity(), "No tickets available", Toast.LENGTH_SHORT).show();
+            } else {
+                String ticketmasterId = ticketmasterIds.get(0);
+                Ticketing.showFindTicketsActivity(getActivity(), ticketmasterId);
+            }
 		}
 	}
+
+    private class OnLineupViewClick implements View.OnClickListener {
+        private Artist lineupArtist;
+
+        public OnLineupViewClick(Artist lineupArtist) {
+            this.lineupArtist = lineupArtist;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), ArtistActivity.class);
+
+            Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
+            SingleArtistPresenter.embedResult(args, lineupArtist);
+            intent.putExtras(args);
+
+            startActivity(intent);
+        }
+    }
 
     private class VenueFavoriteObserver implements FavoriteObserverView {
         private final CheckBox checkbox;

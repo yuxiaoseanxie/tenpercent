@@ -11,6 +11,9 @@
     <string name="show_lineup">Lineup</string>
     <string name="show_details">Details</string>
     <string name="venue_upcoming_shows">Upcoming Shows</string>
+    <string name="artist_nearby_shows">Nearby Shows</string>
+    <string name="artist_all_shows">On Tour</string>
+    <string name="artist_bio">Bio</string>
     
     <string name="tab_title_your_shows">Recommendations</string>
     <string name="tab_title_all_shows">All shows</string>
@@ -20,6 +23,9 @@
     <string name="tab_favorites_venues">Venues</string>
     
     <string name="venue_detail_link">+ Venue Info</string>
+    <string name="artist_events_overflow">See All Shows</string>
+    <string name="artist_bio_overflow">Read Full Bio</string>
+    <string name="artist_bio_overflow_close">Close Full Bio</string>
     
     <string name="ticketbar_find_ticket">Find Tickets ></string>
     
@@ -30,6 +36,7 @@
     <string name="home_menu_faq">FAQ</string>
     
     <string name="actionbar_show_title">Show</string>
+    <string name="actionbar_artist_title">Artist</string>
     <string name="actionbar_favorites_title">Favorites</string>
     
     <string name="actionbar_drawer_open">Open</string>
@@ -72,6 +79,9 @@
 
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
+
+    <string name="search_input_hint">Search Artists and Venues</string>
+    <string name="view_empty_list_retry_button">Retry</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
