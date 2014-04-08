@@ -39,17 +39,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  */
 public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
-    private static enum ScanOptions {
-        HIDE_TOAST("Hide toast"),
-        SHOW_TOAST("Show toast");
-        private String message;
-
-        ScanOptions(String message) {
-            this.message = message;
-        }
-    }
     private ArrayList<DebugItem> actions;
-
     private StickyListHeadersListView listView;
     private DebugItemsAdapter actionsAdapter;
     private DebugItem deviceIdItem;
@@ -64,7 +54,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
-        listView = (StickyListHeadersListView)findViewById(R.id.debug_activity_list_view);
+        listView = (StickyListHeadersListView) findViewById(R.id.debug_activity_list_view);
 
         actions = new ArrayList<DebugItem>();
         addInfoDebugItems();
@@ -86,7 +76,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if(item.getItemId() == R.id.debug_activity_menu_item_share) {
+        if (item.getItemId() == R.id.debug_activity_menu_item_share) {
             onShareSelected();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
@@ -125,8 +115,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         }
     }
 
-    private void addInfoDebugItems()
-    {
+    private void addInfoDebugItems() {
         deviceIdItem = new DebugItem(getString(R.string.debug_item_device_uuid), "...");
 
         actions.add(deviceIdItem);
@@ -137,15 +126,14 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
 
         RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
-        String urbanAirshipUserID = urbanAirshipUser != null? urbanAirshipUser.getId() : "(None)";
+        String urbanAirshipUserID = urbanAirshipUser != null ? urbanAirshipUser.getId() : "(None)";
         actions.add(new DebugItem(getString(R.string.debug_item_urban_airship_id), urbanAirshipUserID));
 
         locationItem = new DebugItem("Location", "");
         actions.add(locationItem);
     }
 
-    private void addActionDebugItems()
-    {
+    private void addActionDebugItems() {
         //Environnement Item
         environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
         actions.add(environmentItem);
@@ -161,8 +149,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         actions.add(scanItem);
     }
 
-    public void onShareSelected()
-    {
+    public void onShareSelected() {
         String itemsString = DebugItem.convertListToString(actions);
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -192,6 +179,16 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         LiveNationApplication.get().getApiHelper().buildDefaultApi();
     }
 
+    private static enum ScanOptions {
+        HIDE_TOAST("Hide toast"),
+        SHOW_TOAST("Show toast");
+        private String message;
+
+        ScanOptions(String message) {
+            this.message = message;
+        }
+    }
+
     private class DebugItemsAdapter extends ArrayAdapter<DebugItem> implements StickyListHeadersAdapter {
         public DebugItemsAdapter(Context context, List<DebugItem> debugItems) {
             super(context, R.layout.list_debug_action, debugItems);
@@ -201,13 +198,13 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
-            if(view == null) {
+            if (view == null) {
                 view = getLayoutInflater().inflate(R.layout.list_debug_action, parent, false);
                 view.setTag(new ViewHolder(view));
             }
 
             DebugItem action = getItem(position);
-            ViewHolder holder = (ViewHolder)view.getTag();
+            ViewHolder holder = (ViewHolder) view.getTag();
             holder.actionTitle.setText(action.getName());
             holder.actionDetail.setText(action.getValue());
 
@@ -222,12 +219,12 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         @Override
         public View getHeaderView(int position, View view, ViewGroup viewGroup) {
             View headerView = view;
-            if(headerView == null) {
+            if (headerView == null) {
                 headerView = getLayoutInflater().inflate(R.layout.list_show_header, viewGroup, false);
                 headerView.setTag(new HeaderViewHolder(headerView));
             }
 
-            HeaderViewHolder holder = (HeaderViewHolder)headerView.getTag();
+            HeaderViewHolder holder = (HeaderViewHolder) headerView.getTag();
 
             int type = getItem(position).getType();
             switch (type) {
@@ -251,8 +248,8 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
             TextView actionDetail;
 
             public ViewHolder(View view) {
-                this.actionTitle = (TextView)view.findViewById(R.id.action_title);
-                this.actionDetail = (TextView)view.findViewById(R.id.action_detail);
+                this.actionTitle = (TextView) view.findViewById(R.id.action_title);
+                this.actionDetail = (TextView) view.findViewById(R.id.action_detail);
             }
         }
 
@@ -260,7 +257,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
             TextView text;
 
             public HeaderViewHolder(View view) {
-                this.text = (TextView)view.findViewById(R.id.list_show_header_textview);
+                this.text = (TextView) view.findViewById(R.id.list_show_header_textview);
             }
         }
     }

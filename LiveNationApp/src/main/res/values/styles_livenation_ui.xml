@@ -8,7 +8,7 @@
         <item name="android:paddingTop">@dimen/ui_header1_text_offset_vertical</item>
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
-    
+
     <style name="ui_header_top_accent" parent="@android:style/Widget.Holo.Light.TextView">
         <item name="android:background">@drawable/ui_header_top_accent_background</item>
         <item name="android:minHeight">@dimen/ui_header1_min_height</item>
@@ -22,7 +22,7 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
-    
+
     <style name="ui_header_transparent" parent="@android:style/Widget.Holo.Light.TextView">
         <item name="android:minHeight">@dimen/ui_header_transparent_min_height</item>
         <item name="android:paddingTop">@dimen/ui_header_transparent_padding_top</item>
@@ -54,17 +54,17 @@
         <item name="android:textAppearance">@style/artist_bio</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
-    
+
     <style name="favorite_item_checkbox">
         <item name="android:layout_marginLeft">@dimen/ui_lineup_margin_left</item>
     </style>
-       
+
     <style name="favorite_item_title">
-         <item name="android:layout_marginLeft">@dimen/favorite_margin_left</item>
+        <item name="android:layout_marginLeft">@dimen/favorite_margin_left</item>
         <item name="android:layout_marginRight">@dimen/favorite_margin_right</item>
     </style>
-    
-    
+
+
     <style name="ui_tab" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
         <item name="android:minHeight">@dimen/ui_tab_height</item>
@@ -83,7 +83,7 @@
         <item name="android:textColor">@color/login_sso_button_text</item>
         <item name="android:background">@drawable/account_facebook_sso_button</item>
     </style>
-    
+
     <style name="list_venue_header_miles">
         <item name="android:padding">3dp</item>
         <item name="android:background">@drawable/list_venue_header_miles</item>

@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.scan.aggregators;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
@@ -35,10 +34,10 @@ public class DeviceArtistAggregator implements ArtistAggregator {
         }
         String filter = null;
         if (sinceDate != null) {
-            filter = MediaStore.Audio.Media.DATE_ADDED + ">=" + sinceDate.getTime()/1000;
+            filter = MediaStore.Audio.Media.DATE_ADDED + ">=" + sinceDate.getTime() / 1000;
         }
 
-        Cursor cursorDiff = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{ MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ARTIST}, filter, null, null);
+        Cursor cursorDiff = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ARTIST}, filter, null, null);
 
         //Save artist already processed
         Set<Integer> artistIds = new HashSet<Integer>();
@@ -60,7 +59,7 @@ public class DeviceArtistAggregator implements ArtistAggregator {
             artistIds.add(artistId);
 
             //Get number of tracks of this artist
-            Cursor cursorTracksCount = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Audio.Media.ARTIST_ID, "COUNT("+MediaStore.Audio.Media.TRACK+") AS number_of_track"}, MediaStore.Audio.Media.ARTIST_ID + "=" + artistId, null, null);
+            Cursor cursorTracksCount = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Audio.Media.ARTIST_ID, "COUNT(" + MediaStore.Audio.Media.TRACK + ") AS number_of_track"}, MediaStore.Audio.Media.ARTIST_ID + "=" + artistId, null, null);
             if (cursorTracksCount != null && cursorTracksCount.moveToNext()) {
                 Integer numberOfTracks = cursorTracksCount.getInt(cursorTracksCount.getColumnIndex("number_of_track"));
                 musicLibraryEntry.setTotalSongs(numberOfTracks);

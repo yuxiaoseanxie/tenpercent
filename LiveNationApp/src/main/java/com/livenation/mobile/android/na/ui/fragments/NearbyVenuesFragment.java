@@ -8,17 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -55,50 +44,60 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
-	private StickyListHeadersListView listView;
+    private static final String START_TIME_FORMAT = "h:mm a zzz";
+    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
+    private static float METERS_IN_A_MILE = 1609.34f;
+    private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
-
     private EventVenueAdapter adapter;
-	private Double lat;
+    private Double lat;
     private Double lng;
     private ScrollPager pager;
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
-    private static float METERS_IN_A_MILE = 1609.34f;
-    private static final String START_TIME_FORMAT = "h:mm a zzz";
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         trackScreenWithLocation("User views Nearby screen", new Props());
 
-		adapter = new EventVenueAdapter(getActivity());
+        adapter = new EventVenueAdapter(getActivity());
         pager = new ScrollPager(adapter);
 
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
         setRetainInstance(true);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
-		View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
-		listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
-		listView.setAdapter(adapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
+        listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
+        listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         listView.setEmptyView(emptyListViewControl);
 
-		listView.setDivider(null);
+        listView.setDivider(null);
         listView.setAreHeadersSticky(false);
         pager.connectListView(listView);
 
         return view;
-	}
+    }
 
     @Override
     public void onStop() {
@@ -113,18 +112,18 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     }
 
     @Override
-	public void onSaveInstanceState(Bundle outState) {
-		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-		outState.putParcelable(getViewKey(listView), listState);
-	}	
-	
-	@Override
-	public void applyInstanceState(Bundle state) {
-		Parcelable listState = state.getParcelable(getViewKey(listView));
-		if (null != listState) {
-			listView.getWrappedList().onRestoreInstanceState(listState);
-		}
-	}
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
+        outState.putParcelable(getViewKey(listView), listState);
+    }
+
+    @Override
+    public void applyInstanceState(Bundle state) {
+        Parcelable listState = state.getParcelable(getViewKey(listView));
+        if (null != listState) {
+            listView.getWrappedList().onRestoreInstanceState(listState);
+        }
+    }
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
@@ -137,71 +136,71 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     private void init() {
         pager.reset();
         pager.load();
-	}
+    }
 
     private void deinit() {
         pager.stop();
     }
 
-	private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
-	    private LayoutInflater inflater;
+    private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
+        private LayoutInflater inflater;
 
-		public EventVenueAdapter(Context context) {
-			super(context, android.R.layout.simple_list_item_1, new ArrayList<Event>());
+        public EventVenueAdapter(Context context) {
+            super(context, android.R.layout.simple_list_item_1, new ArrayList<Event>());
             inflater = LayoutInflater.from(context);
-		}
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder = null;
-			View view = null;
-			
-			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_show_nearby_item, null);
-				holder = new ViewHolder(view);
-				view.setTag(holder);
-			} else {
-				view = convertView;
-				holder = (ViewHolder) convertView.getTag();
-			}
-			
-			Event event = getItem(position);
-			holder.getTitle().setText(event.getName());
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            View view = null;
 
-			//TODO: Move date parsing to Data Model Entity helper. This is ugly 
-			try {
-				Date date = sdf.parse(event.getLocalStartTime());
+            if (null == convertView) {
+                view = inflater.inflate(R.layout.list_show_nearby_item, null);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            Event event = getItem(position);
+            holder.getTitle().setText(event.getName());
+
+            //TODO: Move date parsing to Data Model Entity helper. This is ugly
+            try {
+                Date date = sdf.parse(event.getLocalStartTime());
                 String startTime = DateFormat.format(START_TIME_FORMAT, date).toString();
 
                 holder.getStartTime().setText(startTime);
                 holder.getDate().setDate(date);
-			} catch (ParseException e) {
-				//wtf'y f.
-				e.printStackTrace();
-			}
+            } catch (ParseException e) {
+                //wtf'y f.
+                e.printStackTrace();
+            }
 
-			view.setOnClickListener(new OnShowClick(event, position));
+            view.setOnClickListener(new OnShowClick(event, position));
 
-			return view;
-		}
+            return view;
+        }
 
-		@Override
-		public View getHeaderView(int position, View convertView,
-				ViewGroup parent) {
-			View view = null;
-			ViewHeaderHolder holder = null;
-			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_venue_nearby_header, null);
-				holder = new ViewHeaderHolder(view);
-				view.setTag(holder);
-			} else {
-				view = convertView;
-				holder = (ViewHeaderHolder) view.getTag();
-			}
-			
-			TextView title = holder.getVenueTitle();
-			Event event = getItem(position);
-			title.setText(event.getVenue().getName());
+        @Override
+        public View getHeaderView(int position, View convertView,
+                                  ViewGroup parent) {
+            View view = null;
+            ViewHeaderHolder holder = null;
+            if (null == convertView) {
+                view = inflater.inflate(R.layout.list_venue_nearby_header, null);
+                holder = new ViewHeaderHolder(view);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHeaderHolder) view.getTag();
+            }
+
+            TextView title = holder.getVenueTitle();
+            Event event = getItem(position);
+            title.setText(event.getVenue().getName());
 
             CheckBox checkBox = holder.getFavorite();
 
@@ -225,69 +224,77 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
             holder.getVenueTextContainer().setOnClickListener(new OnVenueClick(event.getVenue(), position));
 
-			return view;	
-		}
+            return view;
+        }
 
-		@Override
-		public long getHeaderId(int position) {
-			Event event = getItem(position);
-			long venueId = event.getVenue().getNumericId();
-			return venueId;
-		}
-		
-		private class ViewHolder {
-			private final TextView title;
-			private final TextView startTime;
-			private final VerticalDate date;
+        @Override
+        public long getHeaderId(int position) {
+            Event event = getItem(position);
+            long venueId = event.getVenue().getNumericId();
+            return venueId;
+        }
 
-			public ViewHolder(View view) {
-				this.title = (TextView) view.findViewById(R.id.list_nearby_show_title);
-				this.startTime = (TextView) view.findViewById(R.id.list_nearby_show_time);
-				this.date = (VerticalDate) view.findViewById(R.id.list_nearby_show_date);
-			}
-			
-			public TextView getTitle() {
-				return title;
-			}
+        private class ViewHolder {
+            private final TextView title;
+            private final TextView startTime;
+            private final VerticalDate date;
+
+            public ViewHolder(View view) {
+                this.title = (TextView) view.findViewById(R.id.list_nearby_show_title);
+                this.startTime = (TextView) view.findViewById(R.id.list_nearby_show_time);
+                this.date = (VerticalDate) view.findViewById(R.id.list_nearby_show_date);
+            }
+
+            public TextView getTitle() {
+                return title;
+            }
 
             public TextView getStartTime() {
                 return startTime;
             }
 
             public VerticalDate getDate() {
-				return date;
-			}
+                return date;
+            }
         }
-		
-		
-		private class ViewHeaderHolder {
-			private final TextView venueTitle;
+
+
+        private class ViewHeaderHolder {
+            private final TextView venueTitle;
             private final TextView venueLocation;
             private final CheckBox venueFavorite;
             private final TextView venueDistance;
             private final ViewGroup venueTextContainer;
 
-			private FavoriteListener favoriteListener;
+            private FavoriteListener favoriteListener;
 
-			public ViewHeaderHolder(View view) {
-				this.venueTitle = (TextView) view.findViewById(R.id.list_venue_header_title);
+            public ViewHeaderHolder(View view) {
+                this.venueTitle = (TextView) view.findViewById(R.id.list_venue_header_title);
                 this.venueLocation = (TextView) view.findViewById(R.id.list_venue_header_location);
                 this.venueFavorite = (CheckBox) view.findViewById(R.id.list_venue_header_checkbox);
                 this.venueDistance = (TextView) view.findViewById(R.id.list_venue_header_distance);
                 this.venueTextContainer = (ViewGroup) view.findViewById(R.id.list_venue_header_text_container);
-			}
-			
-			public TextView getVenueTitle() {
-				return venueTitle;
-			}
+            }
 
-            public TextView getLocation() { return venueLocation; }
+            public TextView getVenueTitle() {
+                return venueTitle;
+            }
 
-            public CheckBox getFavorite() { return venueFavorite; }
+            public TextView getLocation() {
+                return venueLocation;
+            }
 
-            public TextView getDistance() { return venueDistance; }
+            public CheckBox getFavorite() {
+                return venueFavorite;
+            }
 
-            public ViewGroup getVenueTextContainer() { return venueTextContainer; }
+            public TextView getDistance() {
+                return venueDistance;
+            }
+
+            public ViewGroup getVenueTextContainer() {
+                return venueTextContainer;
+            }
 
             private void setFavoriteControl(Venue venue, FavoritesPresenter presenter) {
                 if (null != favoriteListener) {
@@ -314,7 +321,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             }
 
         }
-	}
+    }
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 

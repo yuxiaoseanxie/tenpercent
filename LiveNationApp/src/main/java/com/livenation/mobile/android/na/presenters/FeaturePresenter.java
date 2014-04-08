@@ -35,10 +35,9 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
     }
 
     static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements ApiService.BasicApiCallback<List<Chart>> {
-        private final Context context;
-
         public static final int FAILURE_API_GENERAL = 0;
         public static final int FAILURE_LOCATION = 1;
+        private final Context context;
 
         public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
             super(listener, args, view);

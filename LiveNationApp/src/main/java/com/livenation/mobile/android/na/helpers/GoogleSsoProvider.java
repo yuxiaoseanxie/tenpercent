@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.helpers;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -21,280 +19,284 @@ import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
+import java.io.IOException;
+
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
-	private User user;
-	private String accessToken;
+    @SuppressWarnings("unused")
+    private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
+    private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
+    private final String PARAMETER_ACCESS_KEY = "google_plus_code";
+    private User user;
+    private String accessToken;
+    private SessionState currentSession;
 
-	private SessionState currentSession;
-	private final String PARAMETER_ACCESS_KEY = "google_plus_code";
-	@SuppressWarnings("unused")
-	private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
-	private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
-	
-	public GoogleSsoProvider(ActivityProvider activityProvider) {
-		super(activityProvider);
-	}
+    public GoogleSsoProvider(ActivityProvider activityProvider) {
+        super(activityProvider);
+    }
 
-	@Override
-	public void openSession(final boolean allowForeground,
-			final OpenSessionCallback callback) {
-		if (hasSessionCache()) {
-			callback.onOpenSession(accessToken);
-			return;
-		}
+    @Override
+    public void openSession(final boolean allowForeground,
+                            final OpenSessionCallback callback) {
+        if (hasSessionCache()) {
+            callback.onOpenSession(accessToken);
+            return;
+        }
 
-		SessionState.SessionPayload<GoogleApiClient> payload = new GetTokenAndUserPayload(
-				getActivity(), GoogleSsoProvider.this) {
+        SessionState.SessionPayload<GoogleApiClient> payload = new GetTokenAndUserPayload(
+                getActivity(), GoogleSsoProvider.this) {
 
-			@Override
-			public void onComplete(String accessToken, User user) {
-				GoogleSsoProvider.this.accessToken = accessToken;
-				GoogleSsoProvider.this.user = user;
+            @Override
+            public void onComplete(String accessToken, User user) {
+                GoogleSsoProvider.this.accessToken = accessToken;
+                GoogleSsoProvider.this.user = user;
 
-				callback.onOpenSession(accessToken);
-			}
+                callback.onOpenSession(accessToken);
+            }
 
-			@Override
-			public void onSessionFailed() {
-				callback.onOpenSessionFailed(new Exception(), allowForeground);
-			}
-			
-			@Override
-			void onNoNetwork() {
-				callback.onNoNetwork();
-			}
-		};
+            @Override
+            public void onSessionFailed() {
+                callback.onOpenSessionFailed(new Exception(), allowForeground);
+            }
 
-		currentSession = new SessionState(getActivity(), allowForeground, payload);
-		currentSession.open();
-	}
-	
-	@Override
-	public void onPayloadComplete(SessionPayload<GoogleApiClient> payload) {
-		destroySession(payload.getSession());
-	}
+            @Override
+            void onNoNetwork() {
+                callback.onNoNetwork();
+            }
+        };
 
-	@Override
-	public void getUser(GetUserCallback callback) {
-		if (null == user)
-			throw new IllegalStateException("Session must be opened first");
-		callback.onGetUser(user);
-	}
+        currentSession = new SessionState(getActivity(), allowForeground, payload);
+        currentSession.open();
+    }
 
-	@Override
-	public void clearSession() {
-		clearSessionCache();
-		SessionState.SessionPayload<GoogleApiClient> payload = new LogoutPayload(GoogleSsoProvider.this);
-		currentSession = new SessionState(getActivity(), false, payload);
-		currentSession.open();
-	}
+    @Override
+    public void onPayloadComplete(SessionPayload<GoogleApiClient> payload) {
+        destroySession(payload.getSession());
+    }
 
-	@Override
-	public void onActivityResult(Activity activity, int requestCode,
-			int resultCode, Intent data) {
-		if (null == currentSession)
-			return;
-		currentSession
-				.onActivityResult(activity, requestCode, resultCode, data);
-	}
+    @Override
+    public void getUser(GetUserCallback callback) {
+        if (null == user)
+            throw new IllegalStateException("Session must be opened first");
+        callback.onGetUser(user);
+    }
 
-	@Override
-	public String getTokenKey() {
-		return PARAMETER_ACCESS_KEY;
-	}
+    @Override
+    public void clearSession() {
+        clearSessionCache();
+        SessionState.SessionPayload<GoogleApiClient> payload = new LogoutPayload(GoogleSsoProvider.this);
+        currentSession = new SessionState(getActivity(), false, payload);
+        currentSession.open();
+    }
 
-	@Override
-	void destroySession(GoogleApiClient googleApiClient) {
-		if (null != googleApiClient) {
-			googleApiClient.disconnect();
-		}
-		currentSession = null;
-	}
-	
-	@Override
-	public int getId() {
-		return SsoManager.SSO_GOOGLE;
-	}
-	
-	public boolean hasSessionCache() {
-		return user != null && accessToken != null;
-	}
-	
-	public void clearSessionCache() {
-		user = null;
-		accessToken = null;
-	}
+    @Override
+    public void onActivityResult(Activity activity, int requestCode,
+                                 int resultCode, Intent data) {
+        if (null == currentSession)
+            return;
+        currentSession
+                .onActivityResult(activity, requestCode, resultCode, data);
+    }
 
-	private static class LogoutPayload extends
-			SessionState.SessionPayload<GoogleApiClient> {
-		
-		public LogoutPayload(SessionPayloadListener<GoogleApiClient> listener) {
-			super(listener);
-		}
+    @Override
+    public String getTokenKey() {
+        return PARAMETER_ACCESS_KEY;
+    }
 
-		@Override
-		public void run() {
-			if (getSession().isConnected()) {
-				Plus.AccountApi.revokeAccessAndDisconnect(getSession());
-				Plus.AccountApi.clearDefaultAccount(getSession());
-			}
-			getListener().onPayloadComplete(this);
-		}
+    @Override
+    void destroySession(GoogleApiClient googleApiClient) {
+        if (null != googleApiClient) {
+            googleApiClient.disconnect();
+        }
+        currentSession = null;
+    }
 
-		@Override
-		public void onSessionFailed() {
-			getListener().onPayloadComplete(this);
-		}
-		
-		@Override
-		void onNoNetwork() {
-			getListener().onPayloadComplete(this);	
-		}
-		
-	}
+    @Override
+    public int getId() {
+        return SsoManager.SSO_GOOGLE;
+    }
 
-	private abstract static class GetTokenAndUserPayload extends
-			BaseSessionState.SessionPayload<GoogleApiClient> {
+    public boolean hasSessionCache() {
+        return user != null && accessToken != null;
+    }
 
-		private final Activity activity;
-		
-		public GetTokenAndUserPayload(Activity activity, 
-				SessionPayloadListener<GoogleApiClient> listener) {
-			super(listener);
-			this.activity = activity;
-		}
+    public void clearSessionCache() {
+        user = null;
+        accessToken = null;
+    }
 
-		@Override
-		public void run() {
-			String accessToken = null;
-			try {
-				final String SCOPE = String.format("oauth2:%s", PLUS_LOGIN_SCOPE);
+    private static class LogoutPayload extends
+            SessionState.SessionPayload<GoogleApiClient> {
 
-				accessToken = GoogleAuthUtil.getToken(activity,	Plus.AccountApi.getAccountName(getSession()), SCOPE);
-				User user = getProfileInformation(getSession());
+        public LogoutPayload(SessionPayloadListener<GoogleApiClient> listener) {
+            super(listener);
+        }
 
-				onComplete(accessToken, user);
-				
-				getListener().onPayloadComplete(this);
-				
-			} catch (IOException transientEx) {
-				onSessionFailed();
-				return;
-			} catch (UserRecoverableAuthException e) {
-				throw new IllegalStateException("Initial Google Scope was not wide enough");
-			} catch (GoogleAuthException authEx) {
-				return;
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		};
-		
+        @Override
+        public void run() {
+            if (getSession().isConnected()) {
+                Plus.AccountApi.revokeAccessAndDisconnect(getSession());
+                Plus.AccountApi.clearDefaultAccount(getSession());
+            }
+            getListener().onPayloadComplete(this);
+        }
 
-		private User getProfileInformation(GoogleApiClient googleApiClient) {
-			try {
-				if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-					Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-					String email = Plus.AccountApi.getAccountName(googleApiClient);
-					
-					String name = currentPerson.getDisplayName();
+        @Override
+        public void onSessionFailed() {
+            getListener().onPayloadComplete(this);
+        }
 
-					User user = new User();
-					user.setId(currentPerson.getId());
-					user.setDisplayName(name);
-					user.setEmail(email);
-					user.setUrl(currentPerson.getImage().getUrl());
+        @Override
+        void onNoNetwork() {
+            getListener().onPayloadComplete(this);
+        }
 
-					return user;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
+    }
 
-		abstract void onComplete(String accessToken, User user);
+    private abstract static class GetTokenAndUserPayload extends
+            BaseSessionState.SessionPayload<GoogleApiClient> {
 
-	}
+        private final Activity activity;
 
-	private static class SessionState extends BaseSessionState<GoogleApiClient>
-			implements GoogleApiClient.ConnectionCallbacks,
-			GoogleApiClient.OnConnectionFailedListener {
+        public GetTokenAndUserPayload(Activity activity,
+                                      SessionPayloadListener<GoogleApiClient> listener) {
+            super(listener);
+            this.activity = activity;
+        }
 
-		private GoogleApiClient googleApiClient;
-		private int resolveCount;
+        @Override
+        public void run() {
+            String accessToken = null;
+            try {
+                final String SCOPE = String.format("oauth2:%s", PLUS_LOGIN_SCOPE);
 
-		private final int RC_SIGN_IN = 600613;
+                accessToken = GoogleAuthUtil.getToken(activity, Plus.AccountApi.getAccountName(getSession()), SCOPE);
+                User user = getProfileInformation(getSession());
+
+                onComplete(accessToken, user);
+
+                getListener().onPayloadComplete(this);
+
+            } catch (IOException transientEx) {
+                onSessionFailed();
+                return;
+            } catch (UserRecoverableAuthException e) {
+                throw new IllegalStateException("Initial Google Scope was not wide enough");
+            } catch (GoogleAuthException authEx) {
+                return;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        ;
+
+
+        private User getProfileInformation(GoogleApiClient googleApiClient) {
+            try {
+                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                    String email = Plus.AccountApi.getAccountName(googleApiClient);
+
+                    String name = currentPerson.getDisplayName();
+
+                    User user = new User();
+                    user.setId(currentPerson.getId());
+                    user.setDisplayName(name);
+                    user.setEmail(email);
+                    user.setUrl(currentPerson.getImage().getUrl());
+
+                    return user;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        abstract void onComplete(String accessToken, User user);
+
+    }
+
+    private static class SessionState extends BaseSessionState<GoogleApiClient>
+            implements GoogleApiClient.ConnectionCallbacks,
+            GoogleApiClient.OnConnectionFailedListener {
+
+        private final int RC_SIGN_IN = 600613;
         private final int RESOLVE_COUNT_MAX = 2;
+        private GoogleApiClient googleApiClient;
+        private int resolveCount;
 
-		public SessionState(Activity activity, boolean allowForeground,
-				BaseSessionState.SessionPayload<GoogleApiClient> sessionPayload) {
+        public SessionState(Activity activity, boolean allowForeground,
+                            BaseSessionState.SessionPayload<GoogleApiClient> sessionPayload) {
 
-			super(activity, allowForeground, sessionPayload);
-			this.googleApiClient = new GoogleApiClient.Builder(activity)
-					.addConnectionCallbacks(SessionState.this)
-					.addOnConnectionFailedListener(SessionState.this)
-					.addApi(Plus.API, null).addScope(Plus.SCOPE_PLUS_LOGIN)
-					.build();
-		}
-		
-		@Override
-		public void open() {
-			googleApiClient.connect();
-		}
+            super(activity, allowForeground, sessionPayload);
+            this.googleApiClient = new GoogleApiClient.Builder(activity)
+                    .addConnectionCallbacks(SessionState.this)
+                    .addOnConnectionFailedListener(SessionState.this)
+                    .addApi(Plus.API, null).addScope(Plus.SCOPE_PLUS_LOGIN)
+                    .build();
+        }
 
-		@Override
-		public void onConnected(Bundle args) {
-			sessionPayload.setSession(googleApiClient);
-			new Thread(sessionPayload).start();
-		}
-		
-		@Override
-		public void onConnectionSuspended(int arg0) {}
+        @Override
+        public void open() {
+            googleApiClient.connect();
+        }
 
-		@Override
-		public void onConnectionFailed(ConnectionResult result) {
-			if (!allowForeground || !result.hasResolution()) {
-				sessionPayload.onSessionFailed();
-				return;
-			}
+        @Override
+        public void onConnected(Bundle args) {
+            sessionPayload.setSession(googleApiClient);
+            new Thread(sessionPayload).start();
+        }
 
-			if (resolveCount < RESOLVE_COUNT_MAX) {
-				if (result.hasResolution()) {
-					try {
-						resolveCount++;
-						activity.startIntentSenderForResult(
-								result.getResolution().getIntentSender(), RC_SIGN_IN,
-								null, 0, 0, 0);
-					} catch (SendIntentException e) {
-						googleApiClient.connect();
-					}
-				} else {
-					Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-							result.getErrorCode(), activity, RC_SIGN_IN,
-							new DialogInterface.OnCancelListener() {
-								@Override
-								public void onCancel(DialogInterface dialog) {
-									sessionPayload.onSessionFailed();
-								}
-							});
-					dialog.show();
-				}
-			}
-		}
+        @Override
+        public void onConnectionSuspended(int arg0) {
+        }
 
-		public void onActivityResult(Activity activity, int requestCode,
-				int resultCode, Intent data) {
-			
-			if (requestCode == RC_SIGN_IN) {	
-				if (resultCode == Activity.RESULT_OK) {
-					if (!googleApiClient.isConnecting()) {
-						googleApiClient.connect();
-					}
-				} else {
-					sessionPayload.onSessionFailed();				
-				}
-			}
-		}
+        @Override
+        public void onConnectionFailed(ConnectionResult result) {
+            if (!allowForeground || !result.hasResolution()) {
+                sessionPayload.onSessionFailed();
+                return;
+            }
 
-	}
+            if (resolveCount < RESOLVE_COUNT_MAX) {
+                if (result.hasResolution()) {
+                    try {
+                        resolveCount++;
+                        activity.startIntentSenderForResult(
+                                result.getResolution().getIntentSender(), RC_SIGN_IN,
+                                null, 0, 0, 0);
+                    } catch (SendIntentException e) {
+                        googleApiClient.connect();
+                    }
+                } else {
+                    Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+                            result.getErrorCode(), activity, RC_SIGN_IN,
+                            new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    sessionPayload.onSessionFailed();
+                                }
+                            }
+                    );
+                    dialog.show();
+                }
+            }
+        }
+
+        public void onActivityResult(Activity activity, int requestCode,
+                                     int resultCode, Intent data) {
+
+            if (requestCode == RC_SIGN_IN) {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (!googleApiClient.isConnecting()) {
+                        googleApiClient.connect();
+                    }
+                } else {
+                    sessionPayload.onSessionFailed();
+                }
+            }
+        }
+
+    }
 }

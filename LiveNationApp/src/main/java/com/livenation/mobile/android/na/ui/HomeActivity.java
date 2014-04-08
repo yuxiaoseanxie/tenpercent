@@ -40,31 +40,30 @@ import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.platform.util.Logger;
 
-
 import io.segment.android.Analytics;
+
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
-	private ActionBarDrawerToggle drawerToggle;
-	private ViewPager pager;
+    private static final int RC_SSO_REPAIR = 0;
+    private ActionBarDrawerToggle drawerToggle;
+    private ViewPager pager;
     private FragmentAdapter adapter;
     private SlidingTabLayout slidingTabLayout;
-
     private boolean hasUnreadNotifications;
-    private static final int RC_SSO_REPAIR = 0;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_landing);
 
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(true);
-		DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
-		drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
-											R.drawable.ic_drawer, 
-											R.string.actionbar_drawer_open,
-											R.string.actionbar_drawer_close) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_landing);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
+        drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
+                R.drawable.ic_drawer,
+                R.string.actionbar_drawer_open,
+                R.string.actionbar_drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -77,10 +76,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 Analytics.track(AnalyticConstants.X_TAP);
             }
         };
-		rootView.setDrawerListener(drawerToggle);
+        rootView.setDrawerListener(drawerToggle);
         adapter = new FragmentAdapter(getSupportFragmentManager(), getApplicationContext());
 
-        pager = (ViewPager)findViewById(R.id.activity_home_pager);
+        pager = (ViewPager) findViewById(R.id.activity_home_pager);
         pager.setAdapter(adapter);
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
@@ -95,7 +94,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
-	}
+    }
 
     @Override
     protected void onStart() {
@@ -103,16 +102,16 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		drawerToggle.syncState();
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		drawerToggle.syncState();
-	}
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.syncState();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,7 +123,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem notificationsItem = menu.findItem(R.id.menu_home_notifications_item);
-        if(hasUnreadNotifications) {
+        if (hasUnreadNotifications) {
             notificationsItem.setIcon(R.drawable.notifications_unread);
         } else {
             notificationsItem.setIcon(R.drawable.notifications_normal);
@@ -134,10 +133,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (drawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
@@ -165,63 +164,54 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             default:
                 return super.onOptionsItemSelected(item);
         }
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-			case RC_SSO_REPAIR: 
-				if (resultCode != RESULT_OK) {
-					//the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
-					getAccountPresenters().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
-					//finish the app. this will reset any tokens in memory.
-					//alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
-					finish();
-				}
-				break;
-		}
-	}
-	
-	@Override
-	public void onSaveAuthTokenSuccess() {
-		Logger.log("AuthToken", "Updated it");
-	}
-	
-	@Override
-	public void onSignOut() {
-		Logger.log("Account", "Signed out");
-	}
-	
-	@Override
-	public void onSaveAuthTokenFailure() {
-		throw new IllegalStateException("Should not happen..");
-	}
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RC_SSO_REPAIR:
+                if (resultCode != RESULT_OK) {
+                    //the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
+                    getAccountPresenters().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
+                    //finish the app. this will reset any tokens in memory.
+                    //alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
+                    finish();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onSaveAuthTokenSuccess() {
+        Logger.log("AuthToken", "Updated it");
+    }
+
+    @Override
+    public void onSignOut() {
+        Logger.log("Account", "Signed out");
+    }
+
+    @Override
+    public void onSaveAuthTokenFailure() {
+        throw new IllegalStateException("Should not happen..");
+    }
 
     /**
-	 * Here we have to return our own Tab View object to get our desired LiveNation red tab.
-	 * 
-	 * Because Google forgot to make the default tabs in the TabHost XML stylable....
-	 * 
-	 */
-	private View createTab(Context context, String title) {
-		View view = LayoutInflater.from(context).inflate(R.layout.view_tab, null);
-		TextView text = (TextView) view.findViewWithTag("titleText");
-		text.setText(title);
-		return view;
-	}
-	
-	
-	private AccountPresenters getAccountPresenters() {
-		return LiveNationApplication.get().getAccountPresenters();
-	}
+     * Here we have to return our own Tab View object to get our desired LiveNation red tab.
+     * <p/>
+     * Because Google forgot to make the default tabs in the TabHost XML stylable....
+     */
+    private View createTab(Context context, String title) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_tab, null);
+        TextView text = (TextView) view.findViewWithTag("titleText");
+        text.setText(title);
+        return view;
+    }
 
-    private class InboxStatusUpdater implements InboxStatusView {
-        @Override
-        public void setHasUnreadNotifications(boolean hasUnreadNotifications) {
-            HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
-            invalidateOptionsMenu();
-        }
+
+    private AccountPresenters getAccountPresenters() {
+        return LiveNationApplication.get().getAccountPresenters();
     }
 
     public static class FragmentAdapter extends FragmentPagerAdapter {
@@ -257,6 +247,14 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 default:
                     throw new IllegalArgumentException();
             }
+        }
+    }
+
+    private class InboxStatusUpdater implements InboxStatusView {
+        @Override
+        public void setHasUnreadNotifications(boolean hasUnreadNotifications) {
+            HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
+            invalidateOptionsMenu();
         }
     }
 }

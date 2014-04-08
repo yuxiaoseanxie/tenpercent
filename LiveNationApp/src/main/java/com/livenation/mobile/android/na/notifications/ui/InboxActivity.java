@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
@@ -33,7 +34,6 @@ import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
-import com.livenation.mobile.android.na.R;
 import com.urbanairship.util.UAStringUtil;
 
 import java.util.HashSet;
@@ -102,7 +102,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         startActionModeIfNecessary();
 
         // Dismiss any notifications
-        ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     }
 
     @Override
@@ -192,7 +192,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
             public void onClick(View arg0) {
                 android.view.Menu menu = popupMenu.getMenu();
                 menu.findItem(R.id.menu_deselect_all).setVisible(true);
-                menu.findItem(R.id.menu_select_all).setVisible( inbox.getSelectedMessages().size() != messages.size());
+                menu.findItem(R.id.menu_select_all).setVisible(inbox.getSelectedMessages().size() != messages.size());
                 popupMenu.show();
             }
 
@@ -234,14 +234,14 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         Logger.debug("onActionItemClicked");
         switch (item.getItemId()) {
-        case R.id.mark_read:
-            richPushInbox.markMessagesRead(new HashSet<String>(inbox.getSelectedMessages()));
-            break;
-        case R.id.delete:
-            richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));
-            break;
-        default:
-            return false;
+            case R.id.mark_read:
+                richPushInbox.markMessagesRead(new HashSet<String>(inbox.getSelectedMessages()));
+                break;
+            case R.id.delete:
+                richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));
+                break;
+            default:
+                return false;
         }
 
         actionMode.finish();
@@ -290,6 +290,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     /**
      * Shows a activity_message either in the activity_message view pager, or by launching
      * a new MessageActivity
+     *
      * @param messageId the specified activity_message id
      */
     private void showMessage(String messageId) {
@@ -303,7 +304,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         message.markRead();
 
         Bundle extras = message.getExtras();
-        if(extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
+        if (extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
             Intent intent = new Intent(this, ShowActivity.class);
             Bundle args = SingleEventPresenter.getAruguments(extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
             intent.putExtras(args);
@@ -367,16 +368,16 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getActivity())
-            .setIcon(R.drawable.icon_144)
-            .setTitle(R.string.inbox_refresh_failed_dialog_title)
-            .setMessage(R.string.inbox_refresh_failed_dialog_message)
-            .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.dismiss();
-                }
-            })
-            .create();
+                    .setIcon(R.drawable.icon_144)
+                    .setTitle(R.string.inbox_refresh_failed_dialog_title)
+                    .setMessage(R.string.inbox_refresh_failed_dialog_message)
+                    .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
         }
     }
 }

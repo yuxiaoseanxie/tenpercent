@@ -33,37 +33,37 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import io.segment.android.Analytics;
 
 public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
-	private Fragment profileFragment;
-	private TextView locationText;
+    private Fragment profileFragment;
+    private TextView locationText;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View result = inflater.inflate(R.layout.fragment_account, container,
-				false);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_account, container,
+                false);
 
         OnOrdersClick ordersClick = new OnOrdersClick();
         result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
 
-		OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
-		result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
-		
-		OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
-		result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
+        OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
+        result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
+
+        OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
+        result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
 
         View locationContainer = result.findViewById(R.id.fragment_account_footer);
         locationContainer.setOnClickListener(new OnLocationClick());
 
         locationText = (TextView) result.findViewById(R.id.account_footer_location_detail);
 
-		return result;
-	}
+        return result;
+    }
 
     @Override
     public void onStart() {
@@ -85,20 +85,20 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
-	public void setUser(User user) {
-		if (null != profileFragment) {
-			removeFragment(profileFragment);
-			profileFragment = null;
-		}
-		
-		if (null == user) {
-			profileFragment = new AccountSignInFragment();
-		} else {
-			profileFragment = new AccountUserFragment();
-		}
-	
-		addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");
-	}
+    public void setUser(User user) {
+        if (null != profileFragment) {
+            removeFragment(profileFragment);
+            profileFragment = null;
+        }
+
+        if (null == user) {
+            profileFragment = new AccountSignInFragment();
+        } else {
+            profileFragment = new AccountUserFragment();
+        }
+
+        addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");
+    }
 
     @Override
     public void onGetCity(String city) {
@@ -118,25 +118,25 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     private class OnFavoriteClick implements View.OnClickListener {
-		private final int showTab;
-		
-		public OnFavoriteClick(int showTab) {
-			this.showTab = showTab;
-		}
+        private final int showTab;
 
-		@Override
-		public void onClick(View v) {
+        public OnFavoriteClick(int showTab) {
+            this.showTab = showTab;
+        }
+
+        @Override
+        public void onClick(View v) {
             if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
                 Analytics.track(AnalyticConstants.FAVORITES_ARTISTS_CELL_TAP);
             } else {
                 Analytics.track(AnalyticConstants.FAVORITES_VENUES_CELL_TAP);
             }
 
-			Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-			intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
-			startActivity(intent);
-		}
-	}
+            Intent intent = new Intent(getActivity(), FavoriteActivity.class);
+            intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
+            startActivity(intent);
+        }
+    }
 
     private class OnLocationClick implements View.OnClickListener {
         @Override

@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include
+        layout="@layout/sub_fragment_show_content"
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
-        layout="@layout/sub_fragment_show_content" />
+        android:layout_weight="1" />
 
     <include
+        layout="@layout/sub_fragment_show_ticketbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/sub_fragment_show_ticketbar" >
-    </include>
+        android:layout_height="wrap_content"></include>
 
 </LinearLayout>

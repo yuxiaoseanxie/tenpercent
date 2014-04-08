@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    style="@style/ui_underscore"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/ui_overflow_vertical_padding"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/ui_overflow_vertical_padding"
-    style="@style/ui_underscore">
+    android:paddingTop="@dimen/ui_overflow_vertical_padding">
 
     <ImageView
         android:id="@+id/view_overflow_icon"
@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/ui_overflow_icon_margin_left"
         android:layout_marginRight="@dimen/ui_overflow_icon_margin_right"
-        android:src="@drawable/overflow_maximize"/>
+        android:src="@drawable/overflow_maximize" />
 
     <TextView
         android:id="@+id/view_overflow_title"

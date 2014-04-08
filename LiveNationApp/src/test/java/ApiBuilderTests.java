@@ -1,11 +1,9 @@
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
-import com.livenation.mobile.android.na.ui.HomeActivity;
 import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;

@@ -20,28 +20,41 @@ public class DebugItem implements Serializable {
     public DebugItem(String name, String value) {
         this.name = name;
 
-        if(value != null)
+        if (value != null)
             this.value = value;
         else
             this.value = "(None)";
+    }
+
+    public static String convertListToString(List<DebugItem> items) {
+        String string = "";
+        for (DebugItem item : items) {
+            if (item.getType() != TYPE_INFO)
+                continue;
+
+            string += item + "\n";
+        }
+        return string;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public int getType() { return TYPE_INFO; }
-
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public int getType() {
+        return TYPE_INFO;
     }
 
     public void doAction(Context context) {
@@ -53,18 +66,6 @@ public class DebugItem implements Serializable {
         shareIntent.putExtra(Intent.EXTRA_TEXT, getValue());
 
         context.startActivity(Intent.createChooser(shareIntent, "Share debug item"));
-    }
-
-
-    public static String convertListToString(List<DebugItem> items) {
-        String string = "";
-        for (DebugItem item : items) {
-            if(item.getType() != TYPE_INFO)
-                continue;
-
-            string += item + "\n";
-        }
-        return string;
     }
 
     @Override

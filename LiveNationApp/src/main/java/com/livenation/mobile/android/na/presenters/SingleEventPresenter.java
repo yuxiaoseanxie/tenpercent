@@ -27,6 +27,18 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
     private static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
     private static final String PARAMETER_EVENT_ID = "event_id";
 
+    public static Bundle getAruguments(String eventIdRaw) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SingleEventPresenter.PARAMETER_EVENT_ID, eventIdRaw);
+        return bundle;
+    }
+
+    public static void embedResult(Bundle args, Event eventCache) {
+        if (null != eventCache) {
+            args.putSerializable(SingleEventPresenter.INTENT_DATA_KEY, eventCache);
+        }
+    }
+
     @Override
     public void initialize(Context context, Bundle args, SingleEventView view) {
         SingleEventState state = new SingleEventState(SingleEventPresenter.this, args, view);
@@ -48,23 +60,10 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
         // TODO: this
     }
 
-    public static Bundle getAruguments(String eventIdRaw) {
-        Bundle bundle = new Bundle();
-        bundle.putString(SingleEventPresenter.PARAMETER_EVENT_ID, eventIdRaw);
-        return bundle;
-    }
-
-    public static void embedResult(Bundle args, Event eventCache) {
-        if (null != eventCache) {
-            args.putSerializable(SingleEventPresenter.INTENT_DATA_KEY, eventCache);
-        }
-    }
-
     static class SingleEventState extends BaseResultState<Event, SingleEventView>
             implements ApiService.BasicApiCallback<Event> {
-        private SingleEventParameters apiParams;
-
         public static final int FAILURE_API_GENERAL = 0;
+        private SingleEventParameters apiParams;
 
         public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
             super(listener, args, view);

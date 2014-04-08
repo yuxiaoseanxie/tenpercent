@@ -21,28 +21,8 @@ import io.segment.android.models.Props;
 
 public class ArtistAggregatorScanner {
 
-    private enum Aggregator {
-        DEVICE(DeviceArtistAggregator.class),
-        GOOGLE_PLAY_MUSIC(GooglePlayMusicArtistAggregator.class);
-
-        private Class<? extends ArtistAggregator> aggregatorClass;
-
-        Aggregator(Class<? extends ArtistAggregator> aggregatorClass) {
-            this.aggregatorClass = aggregatorClass;
-        }
-
-        public boolean isScannable() {
-            //Can add business rules depending on the type of aggregator
-            return true;
-        }
-
-        public Class<? extends ArtistAggregator> getAggregatorClass() {
-            return aggregatorClass;
-        }
-    }
-
     public void aggregate(Context context, ArtistAggregatorScannerCallback callback, Date sinceDate) {
-        ScannerTask task = new ScannerTask(context,callback, sinceDate);
+        ScannerTask task = new ScannerTask(context, callback, sinceDate);
         new Thread(task).start();
     }
 
@@ -63,6 +43,26 @@ public class ArtistAggregatorScanner {
             throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
         } catch (IllegalAccessException e) {
             throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+        }
+    }
+
+    private enum Aggregator {
+        DEVICE(DeviceArtistAggregator.class),
+        GOOGLE_PLAY_MUSIC(GooglePlayMusicArtistAggregator.class);
+
+        private Class<? extends ArtistAggregator> aggregatorClass;
+
+        Aggregator(Class<? extends ArtistAggregator> aggregatorClass) {
+            this.aggregatorClass = aggregatorClass;
+        }
+
+        public boolean isScannable() {
+            //Can add business rules depending on the type of aggregator
+            return true;
+        }
+
+        public Class<? extends ArtistAggregator> getAggregatorClass() {
+            return aggregatorClass;
         }
     }
 

@@ -126,6 +126,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setImageLoader(getImageLoader());
         Ticketing.init(ticketingConfig);
     }
+
     private void checkInstalledAppForAnalytics() {
         Analytics.initialize(this);
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {

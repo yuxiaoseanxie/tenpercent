@@ -9,17 +9,17 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
-import android.location.*;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
-
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class DeviceLocationProvider implements LocationProvider {
     private List<State> activeStates = new ArrayList<State>();
+
     @Override
     public void getLocation(Context context, LocationCallback callback) {
         State state = new State(context, callback);
@@ -64,10 +64,12 @@ public class DeviceLocationProvider implements LocationProvider {
         }
 
         @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {}
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+        }
 
         @Override
-        public void onProviderEnabled(String s) {}
+        public void onProviderEnabled(String s) {
+        }
 
         @Override
         public void onProviderDisabled(String s) {

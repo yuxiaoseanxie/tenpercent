@@ -10,9 +10,9 @@
         android:orientation="vertical">
 
         <include
+            layout="@layout/fragment_show_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/fragment_show_header" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/fragment_artist_shows_header"
@@ -29,7 +29,7 @@
 
         <include
             android:id="@+id/fragment_artist_bio_container"
-            layout="@layout/sub_artist_bio"/>
+            layout="@layout/sub_artist_bio" />
 
     </LinearLayout>
 

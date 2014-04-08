@@ -8,11 +8,11 @@
 
 package com.livenation.mobile.android.na.presenters.views;
 
-import java.util.List;
-
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import java.util.List;
+
 public interface VenuesView extends PresenterView {
-	void setVenues(List<Venue> venues);
+    void setVenues(List<Venue> venues);
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
@@ -20,7 +19,7 @@ import java.util.Set;
 public class GooglePlayMusicArtistAggregator implements ArtistAggregator {
 
     private Context context;
-    
+
     public GooglePlayMusicArtistAggregator(Context context) {
         this.context = context;
     }
@@ -40,7 +39,7 @@ public class GooglePlayMusicArtistAggregator implements ArtistAggregator {
             filter = "FileDate>=" + sinceDate.getTime();
         }
 
-        Cursor cursorDiff = context.getContentResolver().query(Uri.parse("content://com.google.android.music.MusicContent/audio"), new String[]{ MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ARTIST}, filter, null, null);
+        Cursor cursorDiff = context.getContentResolver().query(Uri.parse("content://com.google.android.music.MusicContent/audio"), new String[]{MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ARTIST}, filter, null, null);
 
         //Save artist already processed
         Set<Integer> artistIds = new HashSet<Integer>();

@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {}
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+    }
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -53,7 +55,9 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
 
     public void onNoMorePages() {
         onFetchEnded();
-    };
+    }
+
+    ;
 
     public List<FetchLoader> getFetchLoaders() {
         return fetchLoaders;
@@ -88,12 +92,16 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
         hasMorePages = value;
     }
 
+    public static interface FetchResultHandler<TItemType> {
+        void deliverResult(List<TItemType> result);
+    }
+
     protected class FetchLoader implements Runnable, FetchResultHandler<TItemType> {
-        private boolean cancelled = false;
-        private List<TItemType> result;
         private final int offset;
         private final int limit;
         private final FetchRequest<TItemType> fetchRequest;
+        private boolean cancelled = false;
+        private List<TItemType> result;
 
         private FetchLoader(int offset, int limit) {
             this.offset = offset;
@@ -118,10 +126,6 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
             }
         }
 
-        public void setResult(List<TItemType> result) {
-            this.result = result;
-        }
-
         public boolean isCancelled() {
             return cancelled;
         }
@@ -138,6 +142,10 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
 
         public List<TItemType> getResult() {
             return result;
+        }
+
+        public void setResult(List<TItemType> result) {
+            this.result = result;
         }
     }
 
@@ -165,9 +173,5 @@ public abstract class BaseScrollPager<TItemType> implements AbsListView.OnScroll
         }
 
         public abstract void cancel();
-    }
-
-    public static interface FetchResultHandler<TItemType> {
-        void deliverResult(List<TItemType> result);
     }
 }

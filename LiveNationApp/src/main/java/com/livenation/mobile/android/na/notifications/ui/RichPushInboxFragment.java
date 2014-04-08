@@ -11,12 +11,12 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.urbanairship.richpush.RichPushMessage;
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,6 @@ import java.util.Locale;
 
 /**
  * Sample implementation of the BaseInboxFragment
- *
  */
 public class RichPushInboxFragment extends BaseInboxFragment {
 
@@ -33,10 +32,9 @@ public class RichPushInboxFragment extends BaseInboxFragment {
     private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
     private static final SimpleDateFormat LONG_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd' at 'h:mm a", Locale.US);
 
-    private int getMessageType(RichPushMessage message)
-    {
+    private int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
-        if(extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
+        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
             String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
             return Integer.valueOf(typeString);
         } else {
@@ -44,8 +42,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         }
     }
 
-    private boolean isMessageForEvent(RichPushMessage message)
-    {
+    private boolean isMessageForEvent(RichPushMessage message) {
         int type = getMessageType(message);
         return (type == Constants.Notifications.TYPE_EVENT_ON_SALE_NOW ||
                 type == Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT ||
@@ -53,13 +50,11 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                 type == Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE);
     }
 
-    private boolean isMessageInVenue(RichPushMessage message)
-    {
+    private boolean isMessageInVenue(RichPushMessage message) {
         return (getMessageType(message) == Constants.Notifications.TYPE_IN_VENUE);
     }
 
-    private Date parseDateString(SimpleDateFormat formatter, String dateTimeString)
-    {
+    private Date parseDateString(SimpleDateFormat formatter, String dateTimeString) {
         Date date;
         try {
             date = formatter.parse(dateTimeString);
@@ -72,8 +67,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         return date;
     }
 
-    private String getNameForType(int type)
-    {
+    private String getNameForType(int type) {
         switch (type) {
             case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
                 return getString(R.string.notif_type_on_sale);
@@ -96,9 +90,8 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         }
     }
 
-    private String getMessageInfoText(RichPushMessage message)
-    {
-        if(isMessageForEvent(message)) {
+    private String getMessageInfoText(RichPushMessage message) {
+        if (isMessageForEvent(message)) {
             Bundle extra = message.getExtras();
 
             int type = getMessageType(message);
@@ -107,8 +100,8 @@ public class RichPushInboxFragment extends BaseInboxFragment {
 
             switch (type) {
                 case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT: {
-                    String onSaleString = (onSaleDate != null)? SHORT_DATE_FORMAT.format(onSaleDate) : null;
-                    if(onSaleString == null)
+                    String onSaleString = (onSaleDate != null) ? SHORT_DATE_FORMAT.format(onSaleDate) : null;
+                    if (onSaleString == null)
                         onSaleString = getString(R.string.notif_date_now);
                     return String.format(getString(R.string.notif_event_info_format), localizedName, onSaleString);
                 }
@@ -116,7 +109,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                 case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
                 case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE: {
                     String onSaleString = LONG_DATE_FORMAT.format(onSaleDate);
-                    if(onSaleString == null)
+                    if (onSaleString == null)
                         onSaleString = getString(R.string.notif_date_now);
                     return String.format(getString(R.string.notif_event_info_format), localizedName, onSaleString);
                 }
@@ -124,7 +117,7 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                 default:
                     return localizedName;
             }
-        } else if(isMessageInVenue(message)) {
+        } else if (isMessageInVenue(message)) {
             String typeName = getNameForType(Constants.Notifications.TYPE_IN_VENUE);
             String artistName = message.getExtras().getString(Constants.Notifications.EXTRA_EVENT_INFO_ARTIST_NAME);
             return String.format(getString(R.string.notif_event_info_format), typeName, artistName);
@@ -133,11 +126,10 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         }
     }
 
-    private String getMessageTitleText(RichPushMessage message)
-    {
-        if(isMessageForEvent(message)) {
+    private String getMessageTitleText(RichPushMessage message) {
+        if (isMessageForEvent(message)) {
             Bundle extras = message.getExtras();
-            if(extras.containsKey(Constants.Notifications.EXTRA_EVENT_INFO_ARTIST_NAME))
+            if (extras.containsKey(Constants.Notifications.EXTRA_EVENT_INFO_ARTIST_NAME))
                 return extras.getString(Constants.Notifications.EXTRA_EVENT_INFO_ARTIST_NAME);
             else
                 return message.getTitle();
@@ -146,12 +138,11 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         }
     }
 
-    private String getMessageDetailText(RichPushMessage message)
-    {
-        if(isMessageForEvent(message)) {
+    private String getMessageDetailText(RichPushMessage message) {
+        if (isMessageForEvent(message)) {
             Bundle extra = message.getExtras();
             Date startTime = parseDateString(INCOMING_FORMAT, extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_LOCAL_START_TIME));
-            String startTimeString = (startTime != null)? SHORT_DATE_FORMAT.format(startTime) : null;
+            String startTimeString = (startTime != null) ? SHORT_DATE_FORMAT.format(startTime) : null;
             String venueName = extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_VENUE_NAME);
             return String.format(getString(R.string.notif_event_details_format), startTimeString, venueName);
         } else {
@@ -175,8 +166,8 @@ public class RichPushInboxFragment extends BaseInboxFragment {
 
             @Override
             public void bindView(View view, final RichPushMessage message) {
-                ViewHolder viewHolder = (ViewHolder)view.getTag();
-                if(viewHolder == null) {
+                ViewHolder viewHolder = (ViewHolder) view.getTag();
+                if (viewHolder == null) {
                     viewHolder = new ViewHolder(view);
                     view.setTag(viewHolder);
                 }
@@ -208,21 +199,19 @@ public class RichPushInboxFragment extends BaseInboxFragment {
     }
 
 
-    private class ViewHolder
-    {
+    private class ViewHolder {
         final View unreadIndicator;
         final TextView info;
         final TextView title;
         final TextView details;
         final CheckBox checkBox;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             this.unreadIndicator = view.findViewById(R.id.unread_indicator);
-            this.info = (TextView)view.findViewById(R.id.message_info);
-            this.title = (TextView)view.findViewById(R.id.message_title);
-            this.details = (TextView)view.findViewById(R.id.message_details);
-            this.checkBox = (CheckBox)view.findViewById(R.id.message_checkbox);
+            this.info = (TextView) view.findViewById(R.id.message_info);
+            this.title = (TextView) view.findViewById(R.id.message_title);
+            this.details = (TextView) view.findViewById(R.id.message_details);
+            this.checkBox = (CheckBox) view.findViewById(R.id.message_checkbox);
         }
     }
 }

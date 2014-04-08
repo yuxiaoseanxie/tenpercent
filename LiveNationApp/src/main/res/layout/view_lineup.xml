@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/view_lineup_favorite_checkbox"
@@ -14,10 +14,10 @@
 
     <TextView
         android:id="@+id/view_lineup_title"
+        style="@style/ui_lineup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-		style="@style/ui_lineup"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/view_lineup_text" />
 

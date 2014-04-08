@@ -47,9 +47,8 @@ public class VenueEventsPresenter extends
 
     static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
             ApiService.BasicApiCallback<List<Event>> {
-        private VenueEventsParameters apiParams;
-
         public static final int FAILURE_API_GENERAL = 0;
+        private VenueEventsParameters apiParams;
 
         public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
             super(listener, args, view);

@@ -16,25 +16,24 @@ import com.livenation.mobile.android.na.R;
 
 /**
  * Created by cchilton on 4/7/14.
- *
+ * <p/>
  * This class provides the business logic for handling an EditText view that is "decorated"
- *
+ * <p/>
  * "Decorated" = 1) has hint text with an image in it, 2) Has a clear text button
- *
+ * <p/>
  * This EditText's UI/UX is modelled after the search edittext found in Google Play Music app.
- *
  */
 public class DecoratedEditText extends LinearLayout implements TextWatcher {
     private EditText editText;
     private View hint;
     private ImageButton clear;
 
-    private enum ViewState {STATE_EMPTY, STATE_TEXT};
-
     public DecoratedEditText(Context context) {
         super(context);
         initializeView(context);
     }
+
+    ;
 
     public DecoratedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,10 +46,12 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
 
     @Override
     public void afterTextChanged(Editable s) {
@@ -68,17 +69,18 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
     }
 
     /**
-    Set the EditText's view state. Here we have two states, STATE_EMPTY for "no text entered",
-    and STATE_TEXT for "there is some text"
-    Depending on the state above, we need to selectively show or hide our decorating views, these
-    are the views that contain the hint text + image, and also the view which contains the
-    "clear text" button
-     @param state The current view state that this decorated-edittext should display, ie:
-                    "has no text" or "has text"
-     **/
+     * Set the EditText's view state. Here we have two states, STATE_EMPTY for "no text entered",
+     * and STATE_TEXT for "there is some text"
+     * Depending on the state above, we need to selectively show or hide our decorating views, these
+     * are the views that contain the hint text + image, and also the view which contains the
+     * "clear text" button
+     *
+     * @param state The current view state that this decorated-edittext should display, ie:
+     *              "has no text" or "has text"
+     */
     private void setViewState(ViewState state) {
         switch (state) {
-            case  STATE_EMPTY:
+            case STATE_EMPTY:
                 clear.setVisibility(View.GONE);
                 hint.setVisibility(View.VISIBLE);
                 break;
@@ -116,4 +118,6 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
             }
         });
     }
+
+    private enum ViewState {STATE_EMPTY, STATE_TEXT}
 }

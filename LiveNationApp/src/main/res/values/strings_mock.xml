@@ -10,7 +10,7 @@
 
     <string name="mock_placeholder_venue_details_1">Venue Details</string>
     <string name="mock_show_venue_details">Venue Details</string>
-    
+
     <string name="mock_venue_telephone">(323) 962-7000</string>
     <string name="mock_venue_location">6215 Sunset Blvd, Los Angeles, California</string>
     <string name="mock_venue_title_linebreak_1">6215 Sunset Blvd \nLos Angeles, California</string>
@@ -19,10 +19,10 @@
     <string name="mock_date_day">18</string>
     <string name="mock_date_dotw">MON</string>
     <string name="mock_date_month">NOV</string>
-    
+
     <string name="mock_show_calendar_date_time">Fri Dec 3. 2013 at 8:00PM</string>
     <string name="mock_account_footer_location_detail">San Francisco, CA</string>
-    
+
     <string name="mock_favorite_title_1">Awesome venue</string>
 
     <string name="mock_overflow">Show All</string>

@@ -57,19 +57,19 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        this.artistImageView = (NetworkImageView)view.findViewById(R.id.fragment_show_image);
-        this.artistTitle = (TextView)view.findViewById(R.id.fragment_show_artist_title);
+        this.artistImageView = (NetworkImageView) view.findViewById(R.id.fragment_show_image);
+        this.artistTitle = (TextView) view.findViewById(R.id.fragment_show_artist_title);
 
-        this.showsHeader = (TextView)view.findViewById(R.id.fragment_artist_shows_header);
+        this.showsHeader = (TextView) view.findViewById(R.id.fragment_artist_shows_header);
 
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
         showMoreView.setOnClickListener(new ShowMoreOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
-        this.bioContainer = (LinearLayout)view.findViewById(R.id.fragment_artist_bio_container);
-        this.bioText = (TextView)bioContainer.findViewById(R.id.fragment_artist_bio);
-        this.bioShowMore = (OverflowView)bioContainer.findViewById(R.id.fragment_artist_bio_overflow);
+        this.bioContainer = (LinearLayout) view.findViewById(R.id.fragment_artist_bio_container);
+        this.bioText = (TextView) bioContainer.findViewById(R.id.fragment_artist_bio);
+        this.bioShowMore = (OverflowView) bioContainer.findViewById(R.id.fragment_artist_bio_overflow);
         bioShowMore.setTitle(R.string.artist_bio_overflow);
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
@@ -97,7 +97,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //region Bios
 
     private void showBio(String bio, boolean truncate) {
-        if(truncate) {
+        if (truncate) {
             if (bio.length() <= BIO_TRUNCATION_LENGTH) {
                 bioText.setText(bio);
                 bioShowMore.setVisibility(View.GONE);
@@ -122,7 +122,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setSingleArtist(Artist artist) {
-        if(artist == null)
+        if (artist == null)
             return;
 
         this.artist = artist;
@@ -130,13 +130,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
-        if(imageKey != null) {
+        if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
             artistImageView.setImageUrl(imageUrl, getImageLoader());
         }
 
         String bio = artist.getBio();
-        if(bio != null && !bio.isEmpty())
+        if (bio != null && !bio.isEmpty())
             showBio(bio, true);
         else
             suppressBio();
@@ -144,12 +144,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setArtistEvents(ArtistEvents artistEvents) {
-        if(artistEvents == null)
+        if (artistEvents == null)
             return;
 
         this.artistEvents = artistEvents;
 
-        if(artistEvents.getNearby().isEmpty()) {
+        if (artistEvents.getNearby().isEmpty()) {
             showsHeader.setText(R.string.artist_all_shows);
             shows.setEvents(artistEvents.getAll());
         } else {
@@ -192,7 +192,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowFullBioOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if(bioShowMore.isExpanded()) {
+            if (bioShowMore.isExpanded()) {
                 showBio(artist.getBio(), true);
                 bioShowMore.setTitle(R.string.artist_bio_overflow);
                 bioShowMore.setExpanded(false);

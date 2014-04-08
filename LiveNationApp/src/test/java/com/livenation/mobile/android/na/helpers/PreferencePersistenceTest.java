@@ -11,6 +11,7 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
 
     private static final String NAME = "test_name";
     private final PreferencePersistence preferencePersistence = new PreferencePersistence(NAME);
+
     public PreferencePersistenceTest() {
         super(TestActivity.class);
     }

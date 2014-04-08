@@ -9,14 +9,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
-import com.urbanairship.UAirship;
-import com.urbanairship.richpush.RichPushManager;
-import com.urbanairship.richpush.RichPushMessage;
 import com.livenation.mobile.android.na.R;
+import com.urbanairship.UAirship;
 
 /**
  * Manages the activity_message view pager and display messages
- *
  */
 public class MessageActivity extends FragmentActivity {
 

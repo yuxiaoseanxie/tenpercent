@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:contentDescription="Inbox message"
     android:gravity="center"
-    android:contentDescription="Inbox message">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <View
         android:id="@+id/unread_indicator"
         android:layout_width="6dp"
         android:layout_height="match_parent"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false" />
 
     <CheckBox
         android:id="@+id/message_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="7dp"
-        android:button="@drawable/ui_checkbox" />
+        android:button="@drawable/ui_checkbox"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/message_info"
             android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="info"
-            android:textAppearance="@style/list_inbox_message_info"/>
+            android:textAppearance="@style/list_inbox_message_info" />
 
         <TextView
             android:id="@+id/message_title"
@@ -45,10 +46,10 @@
             android:ellipsize="end"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="title"
-            android:textAppearance="@style/list_inbox_message_title"
+            android:paddingBottom="3dp"
             android:paddingTop="3dp"
-            android:paddingBottom="3dp" />
+            android:text="title"
+            android:textAppearance="@style/list_inbox_message_title" />
 
         <TextView
             android:id="@+id/message_details"
@@ -57,7 +58,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="detail"
-        android:textAppearance="@style/list_inbox_message_details" />
+            android:textAppearance="@style/list_inbox_message_details" />
     </LinearLayout>
 
 </LinearLayout>

@@ -20,15 +20,14 @@ public class PushReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         Log.i(LOG_TAG, "Incoming notification intent: " + action);
 
-        if(PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
+        if (PushManager.ACTION_REGISTRATION_FINISHED.equals(action)) {
             registrationFinished(context, intent);
-        } else if(PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
+        } else if (PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
             messageClicked(context, intent);
         }
     }
 
-    private void messageClicked(Context context, Intent intent)
-    {
+    private void messageClicked(Context context, Intent intent) {
         Log.i(LOG_TAG, "User clicked (" + intent.getIntExtra(PushManager.EXTRA_NOTIFICATION_ID, 0) +
                 "): " + intent.getExtras());
 
@@ -39,8 +38,7 @@ public class PushReceiver extends BroadcastReceiver {
         context.startActivity(outgoingIntent);
     }
 
-    private void registrationFinished(Context context, Intent intent)
-    {
+    private void registrationFinished(Context context, Intent intent) {
         /* This is where platform registration will occur. -km */
         Log.i(LOG_TAG, "Registration finished with APID: " + intent.getStringExtra(PushManager.EXTRA_APID));
     }

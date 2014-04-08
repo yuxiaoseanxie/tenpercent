@@ -20,6 +20,18 @@ public class SingleVenuePresenter extends
     private static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
     private static final String PARAMETER_VENUE_ID = "venue_id";
 
+    public static Bundle getAruguments(String venueIdRaw) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw);
+        return bundle;
+    }
+
+    public static void embedResult(Bundle args, Venue venueCache) {
+        if (null != venueCache) {
+            args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
+        }
+    }
+
     @Override
     public void initialize(Context context, Bundle args, SingleVenueView view) {
         SingleVenueState state = new SingleVenueState(SingleVenuePresenter.this, args, view);
@@ -41,23 +53,10 @@ public class SingleVenuePresenter extends
         // TODO: this
     }
 
-    public static Bundle getAruguments(String venueIdRaw) {
-        Bundle bundle = new Bundle();
-        bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw);
-        return bundle;
-    }
-
-    public static void embedResult(Bundle args, Venue venueCache) {
-        if (null != venueCache) {
-            args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
-        }
-    }
-
     static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
             ApiService.BasicApiCallback<Venue> {
-        private SingleVenueParameters apiParams;
-
         public static final int FAILURE_API_GENERAL = 0;
+        private SingleVenueParameters apiParams;
 
         public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
             super(listener, args, view);

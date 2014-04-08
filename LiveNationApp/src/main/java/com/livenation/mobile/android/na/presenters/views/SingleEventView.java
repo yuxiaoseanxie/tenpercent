@@ -12,5 +12,5 @@ import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 public interface SingleEventView extends PresenterView {
-	void setEvent(Event event);
+    void setEvent(Event event);
 }

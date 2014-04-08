@@ -30,20 +30,35 @@ import java.util.UUID;
  * Created by cchilton on 3/10/14.
  */
 public class ApiHelper implements ApiBuilder.OnBuildListener {
+    private final SsoManager ssoManager;
+    private final Context appContext;
     private LiveNationApiBuilder apiBuilder;
-
     //pending bindings are those objects who tried to bind to the api before it was created
     private List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
     //persistent bindings are objects who want to be persistently updated of new API objects,
     //eg favoritesObserverPresenter, who will clear its favorite cache when a new API is created
     private List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
-    private final SsoManager ssoManager;
-    private final Context appContext;
 
     public ApiHelper(SsoManager ssoManager, Context appContext) {
         this.ssoManager = ssoManager;
         this.appContext = appContext;
+    }
+
+    public static Constants.Environment getConfiguredEnvironment(Context context) {
+        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        String environmentKey = prefs.read("environment", context);
+
+        try {
+            return Constants.Environment.valueOf(environmentKey);
+        } catch (Exception e) {
+            return Constants.Environment.StagingDirect;
+        }
+    }
+
+    public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
+        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        prefs.write("environment", environment.toString(), context);
     }
 
     @Override
@@ -66,7 +81,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         //do nothing
         Logger.log("ApiHelper", "Already building");
     }
-
 
     public boolean hasApi() {
         return (null != apiService);
@@ -106,7 +120,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public void buildWithSsoProvider(ApiSsoProvider ssoProvider) {
-             createApiBuilder(ssoManager, appContext);
+        createApiBuilder(ssoManager, appContext);
 
         apiBuilder = createApiBuilder(ssoManager, appContext);
         apiBuilder.getSsoProvider().setResult(ssoProvider);
@@ -151,22 +165,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         return apiBuilder;
-    }
-
-    public static Constants.Environment getConfiguredEnvironment(Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        String environmentKey = prefs.read("environment", context);
-
-        try {
-            return Constants.Environment.valueOf(environmentKey);
-        } catch (Exception e) {
-            return Constants.Environment.StagingDirect;
-        }
-    }
-
-    public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        prefs.write("environment", environment.toString(), context);
     }
 
     private class GetDeviceId extends ApiBuilderElement<String> {

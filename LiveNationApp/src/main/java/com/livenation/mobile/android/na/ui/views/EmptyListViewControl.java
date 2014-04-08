@@ -29,18 +29,15 @@ import com.livenation.mobile.android.na.R;
  * retrying the request.
  */
 public class EmptyListViewControl extends LinearLayout {
-    public static enum ViewMode {LOADING, NO_DATA, RETRY};
-    private ViewMode currentMode = ViewMode.LOADING;
+    private static final String VIEW_MODE_STATE_KEY = "viewModeState";
 
+    ;
+    private static final String INSTANCE_STATE_KEY = "instanceState";
+    private final LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    private ViewMode currentMode = ViewMode.LOADING;
     private View loading;
     private View retry;
     private View noData;
-
-    private final LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-    private static final String VIEW_MODE_STATE_KEY = "viewModeState";
-    private static final String INSTANCE_STATE_KEY = "instanceState";
-
     public EmptyListViewControl(Context context) {
         super(context);
         initializeViews(context);
@@ -55,7 +52,6 @@ public class EmptyListViewControl extends LinearLayout {
         super(context, attrs, defStyle);
         initializeViews(context);
     }
-
 
     @Override
     protected Parcelable onSaveInstanceState() {
@@ -74,6 +70,10 @@ public class EmptyListViewControl extends LinearLayout {
             state = bundle.getParcelable(INSTANCE_STATE_KEY);
         }
         super.onRestoreInstanceState(state);
+    }
+
+    public ViewMode getViewMode() {
+        return currentMode;
     }
 
     /**
@@ -103,10 +103,6 @@ public class EmptyListViewControl extends LinearLayout {
         invalidate();
     }
 
-    public ViewMode getViewMode() {
-        return currentMode;
-    }
-
     /**
      * Set the click listener for the Retry button that shows when this View's mode is set to "RETRY"
      *
@@ -126,4 +122,6 @@ public class EmptyListViewControl extends LinearLayout {
 
         setViewMode(ViewMode.LOADING);
     }
+
+    public static enum ViewMode {LOADING, NO_DATA, RETRY}
 }
