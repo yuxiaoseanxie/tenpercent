@@ -17,6 +17,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
@@ -55,7 +56,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         return args;
     }
 
-	static class RecommendationSetsState extends BaseResultState<ArrayList<RecommendationSet>, RecommendationSetsView> implements LiveNationApiService.GetRecommendationSetsApiCallback {
+	static class RecommendationSetsState extends BaseResultState<ArrayList<RecommendationSet>, RecommendationSetsView> implements ApiService.BasicApiCallback<List<RecommendationSet>> {
         private ApiParameters.RecommendationSetsParameters params;
 		private final Context context;
         public static final int FAILURE_API_GENERAL = 0;
@@ -83,7 +84,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
 
         @Override
 		public void onHasResult(ArrayList<RecommendationSet> result) {
-			onGetRecommendationSets(result);
+			onSuccess(result);
 		}
 		
 		@Override
@@ -96,13 +97,6 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
             getApiService().getRecommendationSets(params, RecommendationSetsState.this);
 		}
 
-        @Override
-        public void onGetRecommendationSets(List<RecommendationSet> result) {
-            //The Java List interface does not implement Serializable, but ArrayList does
-            setResult((ArrayList<RecommendationSet>) result);
-            notifyReady();
-        }
-
 		@Override
 		public void onFailure(int failureCode, String message) {
 			notifyFailed(FAILURE_API_GENERAL);
@@ -113,5 +107,11 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
             return INTENT_DATA_KEY;
         }
 
+        @Override
+        public void onSuccess(List<RecommendationSet> result) {
+            //The Java List interface does not implement Serializable, but ArrayList does
+            setResult((ArrayList<RecommendationSet>) result);
+            notifyReady();
+        }
     }
 }

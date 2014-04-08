@@ -8,22 +8,21 @@
 
 package com.livenation.mobile.android.na.presenters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.helpers.LocationProvider.LocationCallback;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.EventParameters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
 	public static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
@@ -56,7 +55,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         return args;
     }
 
-	static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements LiveNationApiService.GetEventsApiCallback {
+	static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
         private EventParameters params;
 		private final Context context;
         public static final int FAILURE_API_GENERAL = 0;
@@ -83,7 +82,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 
         @Override
 		public void onHasResult(ArrayList<Event> result) {
-			onGetEvents(result);
+			onSuccess(result);
 		}
 		
 		@Override
@@ -97,15 +96,8 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 		}
 
 		@Override
-		public void onGetEvents(List<Event> result) {
-			//The Java List interface does not implement Serializable, but ArrayList does
-			setResult((ArrayList<Event>) result);
-			notifyReady();
-		}
-
-		@Override
 		public void onFailure(int failureCode, String message) {
-			notifyFailed(FAILURE_API_GENERAL);
+            notifyFailed(FAILURE_API_GENERAL);
 		}
 
         @Override
@@ -113,5 +105,11 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
             return INTENT_DATA_KEY;
         }
 
+        @Override
+        public void onSuccess(List<Event> result) {
+            //The Java List interface does not implement Serializable, but ArrayList does
+            setResult((ArrayList<Event>) result);
+            notifyReady();
+        }
     }
 }

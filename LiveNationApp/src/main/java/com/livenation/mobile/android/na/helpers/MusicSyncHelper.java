@@ -17,8 +17,8 @@ import java.util.Calendar;
 /**
  * Created by elodieferrais on 4/4/14.
  */
-public class MusicSyncHelper implements ApiServiceBinder{
-    private MusicLibrary  musicLibrary;
+public class MusicSyncHelper implements ApiServiceBinder {
+    private MusicLibrary musicLibrary;
     private boolean isToastShowable;
     private Toast successToast;
     private Toast failToast;
@@ -56,9 +56,9 @@ public class MusicSyncHelper implements ApiServiceBinder{
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        apiService.sendLibraryAffinities(ApiParameters.createLibraryAffinitiesParameters().setLibraryDump(musicLibrary), new LiveNationApiService.SendLibraryAffinitiesCallback() {
+        apiService.sendLibraryAffinities(ApiParameters.createLibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Void result) {
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
                 editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 if (isToastShowable) {
