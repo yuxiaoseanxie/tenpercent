@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
 
         Context context = adapter.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        listLoadingView = inflater.inflate(R.layout.view_loading, null);
+        listLoadingView = new EmptyListViewControl(context);
         footerParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         footerBugHack = new FrameLayout(context);
     }

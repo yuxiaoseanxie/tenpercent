@@ -33,6 +33,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
@@ -53,6 +54,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 	private StickyListHeadersListView listView;
 	private EventAdapter adapter;
     private ScrollPager scrollPager;
+    private EmptyListViewControl emptyListViewControl;
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
 
@@ -73,7 +75,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 		listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
 		listView.setOnItemClickListener(RecommendationSetsFragment.this);
 		listView.setAdapter(adapter);
-		listView.setEmptyView(view.findViewById(android.R.id.empty));
+        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        listView.setEmptyView(emptyListViewControl);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
         scrollPager.connectListView(listView);
@@ -294,6 +297,10 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
                 }
 
                 getFetchResultHandler().deliverResult(result);
+
+                if (result.size() == 0) {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
             }
 
             @Override
