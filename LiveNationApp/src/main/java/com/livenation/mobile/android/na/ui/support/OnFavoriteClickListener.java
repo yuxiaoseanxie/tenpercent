@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.support;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +12,7 @@ import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public class OnFavoriteClickListener {
@@ -47,12 +49,12 @@ public class OnFavoriteClickListener {
 			return favorite;
 		};
 	}
-	
+
 	public static class OnFavoriteClick extends AbstractOnFavoriteClick {
 		private final Favorite favorite;
 			
-		public OnFavoriteClick(Favorite favorite, FavoritesPresenter favoritesPresenter, Activity activity) {
-			super(favoritesPresenter, activity);
+		public OnFavoriteClick(Favorite favorite, FavoritesPresenter favoritesPresenter, Context context) {
+			super(favoritesPresenter, context);
 			this.favorite = favorite;
 		}
 
@@ -64,13 +66,13 @@ public class OnFavoriteClickListener {
 	private static abstract class AbstractOnFavoriteClick implements OnClickListener, FavoriteAddView, FavoriteRemoveView {
 		private boolean inProgress;
 		private final FavoritesPresenter favoritesPresenter;
-		private final Activity activity;
+		private final Context context;
 		
-		public AbstractOnFavoriteClick(FavoritesPresenter favoritesPresenter, Activity activity) {
+		public AbstractOnFavoriteClick(FavoritesPresenter favoritesPresenter, Context context) {
 			this.favoritesPresenter = favoritesPresenter;
-			this.activity = activity;
+			this.context = context;
 			setInProgress(false);
-		}
+        }
 
 		@Override
 		public void onClick(View v) {
@@ -87,10 +89,10 @@ public class OnFavoriteClickListener {
 
             Bundle args = getFavoritesPresenter().getArgsBundle(favorite);
 			if (value) {
-				getFavoritesPresenter().addFavorite(getActivity(), args, AbstractOnFavoriteClick.this);
+				getFavoritesPresenter().addFavorite(getContext(), args, AbstractOnFavoriteClick.this);
 				checkbox.setChecked(value);
 			} else {
-				getFavoritesPresenter().removeFavorite(getActivity(), args, AbstractOnFavoriteClick.this);
+				getFavoritesPresenter().removeFavorite(getContext(), args, AbstractOnFavoriteClick.this);
 				checkbox.setChecked(value);
 			}
 		}
@@ -119,8 +121,8 @@ public class OnFavoriteClickListener {
 			return favoritesPresenter;
 		}
 		
-		public Activity getActivity() {
-			return activity;
+		public Context getContext() {
+			return context;
 		}
 		
 		private void setInProgress(boolean inProgress) {
@@ -130,9 +132,9 @@ public class OnFavoriteClickListener {
 		public boolean isInProgress() {
 			return inProgress;
 		}
-		
+
 		public abstract Favorite getFavorite();
-	
+
 	}
 
 }

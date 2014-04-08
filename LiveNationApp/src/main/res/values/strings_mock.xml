@@ -24,4 +24,6 @@
     <string name="mock_account_footer_location_detail">San Francisco, CA</string>
     
     <string name="mock_favorite_title_1">Awesome venue</string>
+
+    <string name="mock_artist_type">Artist</string>
 </resources>
