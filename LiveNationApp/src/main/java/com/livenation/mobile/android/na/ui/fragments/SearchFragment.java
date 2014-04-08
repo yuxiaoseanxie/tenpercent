@@ -37,7 +37,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private final String[] SEARCH_INCLUDES = new String[] {"venues", "artists"};
-    private String lateSearchText;
+    private String unboundSearchTextBuffer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
         if (null == apiService) {
-            lateSearchText = text;
+            unboundSearchTextBuffer = text;
             return;
         }
         ApiParameters.AutoCompleteSearchParameters params = ApiParameters.createAutoCompleteSearchParameters();
@@ -74,9 +74,9 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         this.apiService = apiService;
-        if (null != lateSearchText) {
-            searchFor(lateSearchText);
-            lateSearchText = null;
+        if (null != unboundSearchTextBuffer) {
+            searchFor(unboundSearchTextBuffer);
+            unboundSearchTextBuffer = null;
         }
     }
 
