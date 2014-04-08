@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
@@ -34,9 +35,9 @@ public class OnFavoriteClickListener {
 	}
 
 	public static class OnArtistFavoriteClick extends AbstractOnFavoriteClick {
-		private final LineupEntry artist;
+		private final Artist artist;
 			
-		public OnArtistFavoriteClick(LineupEntry artist, FavoritesPresenter favoritesPresenter, Activity activity) {
+		public OnArtistFavoriteClick(Artist artist, FavoritesPresenter favoritesPresenter, Activity activity) {
 			super(favoritesPresenter, activity);
 			this.artist = artist;
 		}

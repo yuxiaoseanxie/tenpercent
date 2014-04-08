@@ -25,12 +25,14 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
+import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
 import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -50,6 +52,8 @@ public class LiveNationApplication extends Application {
     private RequestQueue requestQueue;
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
+    private SingleArtistPresenter singleArtistPresenter;
+    private ArtistEventsPresenter artistEventsPresenter;
     private FeaturePresenter featurePresenter;
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
@@ -82,6 +86,8 @@ public class LiveNationApplication extends Application {
         singleEventPresenter = new SingleEventPresenter();
         featurePresenter = new FeaturePresenter();
         singleVenuePresenter = new SingleVenuePresenter();
+        singleArtistPresenter = new SingleArtistPresenter();
+        artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters(getSsoManager());
         nearbyVenuesPresenter = new NearbyVenuesPresenter();
@@ -141,6 +147,14 @@ public class LiveNationApplication extends Application {
 
     public EventsPresenter getEventsPresenter() {
         return eventsPresenter;
+    }
+
+    public SingleArtistPresenter getSingleArtistPresenter() {
+        return singleArtistPresenter;
+    }
+
+    public ArtistEventsPresenter getArtistEventsPresenter() {
+        return artistEventsPresenter;
     }
 
     public SingleEventPresenter getSingleEventPresenter() {
