@@ -25,28 +25,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.EventsState> implements Presenter<EventsView>, StateListener<EventsPresenter.EventsState> {
-	public static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
-	public static final String PARAMETER_EVENT_ID = "event_id";
+    public static final String INTENT_DATA_KEY = EventsPresenter.class.getName();
+    public static final String PARAMETER_EVENT_ID = "event_id";
 
-	@Override
-	public void initialize(Context context, Bundle args, EventsView view) {
-		EventsState state = new EventsState(EventsPresenter.this, args, view, context);
-		state.run(); 
-	}
-	
-	@Override
-	public void onStateReady(EventsState state) {
-		super.onStateReady(state);
-		EventsView view = state.getView();
-		List<Event> events = state.getResult();
-		view.setEvents(events);
-	}
-	
-	@Override
-	public void onStateFailed(int failureCode, EventsState state) {
-		super.onStateFailed(failureCode, state);
-		//TODO: This
-	}
+    @Override
+    public void initialize(Context context, Bundle args, EventsView view) {
+        EventsState state = new EventsState(EventsPresenter.this, args, view, context);
+        state.run();
+    }
+
+    @Override
+    public void onStateReady(EventsState state) {
+        super.onStateReady(state);
+        EventsView view = state.getView();
+        List<Event> events = state.getResult();
+        view.setEvents(events);
+    }
+
+    @Override
+    public void onStateFailed(int failureCode, EventsState state) {
+        super.onStateFailed(failureCode, state);
+        //TODO: This
+    }
 
     public Bundle getArgs(int offset, int limit) {
         Bundle args = new Bundle();
@@ -55,19 +55,19 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         return args;
     }
 
-	static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
+    static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
         private EventParameters params;
-		private final Context context;
+        private final Context context;
         public static final int FAILURE_API_GENERAL = 0;
-		public static final int FAILURE_LOCATION = 1;
+        public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
 
 
         public EventsState(StateListener<EventsState> listener, Bundle args, EventsView view, Context context) {
-			super(listener, args, view);
-			this.context = context;
-		}
+            super(listener, args, view);
+            this.context = context;
+        }
 
         @Override
         public void applyArgs(Bundle args) {
@@ -81,24 +81,24 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         }
 
         @Override
-		public void onHasResult(ArrayList<Event> result) {
-			onSuccess(result);
-		}
-		
-		@Override
-		public void retrieveResult() {
+        public void onHasResult(ArrayList<Event> result) {
+            onSuccess(result);
+        }
+
+        @Override
+        public void retrieveResult() {
             if (null == params) {
                 params = ApiParameters.createEventParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setSortMethod("start_time");
             getApiService().getEvents(params, EventsState.this);
-		}
+        }
 
-		@Override
-		public void onFailure(int failureCode, String message) {
+        @Override
+        public void onFailure(int failureCode, String message) {
             notifyFailed(FAILURE_API_GENERAL);
-		}
+        }
 
         @Override
         public String getDataKey() {
