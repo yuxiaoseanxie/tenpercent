@@ -38,14 +38,7 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
 
         input = editText.getEditText();
         input.addTextChangedListener(this);
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment.getTag().equalsIgnoreCase("search")) {
-            this.fragment = (SearchForText) fragment;
-        }
+        fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
     }
 
     @Override
