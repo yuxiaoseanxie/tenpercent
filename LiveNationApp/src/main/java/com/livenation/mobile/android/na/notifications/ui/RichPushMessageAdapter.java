@@ -18,7 +18,6 @@ import java.util.List;
 
 /**
  * ArrayAdapter for rich push messages
- *
  */
 public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
 
@@ -28,8 +27,9 @@ public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
 
     /**
      * Creates a new RichPushMessageAdapter
+     *
      * @param context Application context
-     * @param layout The layout for the created views
+     * @param layout  The layout for the created views
      * @param mapping The mapping for activity_message value to view
      */
     public RichPushMessageAdapter(Context context, int layout) {
@@ -66,6 +66,7 @@ public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
 
     /**
      * Sets the view binder
+     *
      * @param binder The specified view binder
      */
     public void setViewBinder(ViewBinder binder) {
@@ -74,7 +75,7 @@ public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
 
     /**
      * Sets the current list of rich push messages and notifies data set changed
-     *
+     * <p/>
      * Must be called on the ui thread
      *
      * @param messages Current list of rich push messages
@@ -87,7 +88,6 @@ public class RichPushMessageAdapter extends ArrayAdapter<RichPushMessage> {
 
     /**
      * View binder interface
-     *
      */
     public static interface ViewBinder {
         void bindView(View view, RichPushMessage message);

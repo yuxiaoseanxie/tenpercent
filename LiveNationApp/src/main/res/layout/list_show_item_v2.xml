@@ -42,10 +42,10 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/list_show_item_v2_divider_margin_top"
         android:layout_height="1dp"
         android:layout_alignLeft="@id/list_item_show_image"
         android:layout_below="@id/list_item_show_image"
+        android:layout_marginTop="@dimen/list_show_item_v2_divider_margin_top"
         android:background="@drawable/ui_underscore_background" />
 
 

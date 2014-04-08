@@ -5,7 +5,7 @@
     android:baselineAligned="true"
     android:gravity="center_vertical"
     android:minHeight="@dimen/favorite_min_height"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/favorite_item_checkbox"

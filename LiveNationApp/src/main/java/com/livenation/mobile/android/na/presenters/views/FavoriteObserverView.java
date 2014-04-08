@@ -8,5 +8,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
  */
 public interface FavoriteObserverView extends PresenterView {
     void onFavoriteAdded(Favorite favorite);
+
     void onFavoriteRemoved(Favorite favorite);
 }

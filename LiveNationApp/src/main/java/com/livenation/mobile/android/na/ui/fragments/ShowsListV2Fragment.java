@@ -45,33 +45,32 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class ShowsListV2Fragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
-	private StickyListHeadersListView listView;
-	private EventAdapter adapter;
+    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
+    private StickyListHeadersListView listView;
+    private EventAdapter adapter;
     private ScrollPager scrollPager;
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
         scrollPager = new ScrollPager(adapter);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
-		listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
-		listView.setOnItemClickListener(ShowsListV2Fragment.this);
-		listView.setAdapter(adapter);
-		listView.setEmptyView(view.findViewById(android.R.id.empty));
+        View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
+        listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
+        listView.setOnItemClickListener(ShowsListV2Fragment.this);
+        listView.setAdapter(adapter);
+        listView.setEmptyView(view.findViewById(android.R.id.empty));
         scrollPager.connectListView(listView);
 
-		return view;
-	}
+        return view;
+    }
 
     @Override
     public void onStop() {
@@ -86,32 +85,32 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
     }
 
     @Override
-	public void onSaveInstanceState(Bundle outState) {
-		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-		outState.putParcelable(getViewKey(listView), listState);
-	}
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
+        outState.putParcelable(getViewKey(listView), listState);
+    }
 
-	@Override
-	public void applyInstanceState(Bundle state) {
-		Parcelable listState = state.getParcelable(getViewKey(listView));
-		if (null != listState) {
-			listView.getWrappedList().onRestoreInstanceState(listState);
-		}
-	}
+    @Override
+    public void applyInstanceState(Bundle state) {
+        Parcelable listState = state.getParcelable(getViewKey(listView));
+        if (null != listState) {
+            listView.getWrappedList().onRestoreInstanceState(listState);
+        }
+    }
 
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Intent intent = new Intent(getActivity(), ShowActivity.class);
-		Event event = adapter.getItem(position);
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        Intent intent = new Intent(getActivity(), ShowActivity.class);
+        Event event = adapter.getItem(position);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
 
-		startActivity(intent);
-	}
+        startActivity(intent);
+    }
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
@@ -120,15 +119,15 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
     }
 
     public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
-	    private LayoutInflater inflater;
+        private LayoutInflater inflater;
 
         public EventAdapter(Context context, List<Event> items) {
             super(context, android.R.layout.simple_list_item_1, items);
             inflater = LayoutInflater.from(context);
         }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             View view = null;
 
@@ -157,84 +156,84 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
             return view;
         }
 
-		@Override
-		public View getHeaderView(int position, View convertView,
-				ViewGroup parent) {
-			View view = null;
-			ViewHeaderHolder holder = null;
-			if (null == convertView) {
-				view = inflater.inflate(R.layout.list_show_header, null);
-				holder = new ViewHeaderHolder(view);
-				view.setTag(holder);
-			} else {
-				view = convertView;
-				holder = (ViewHeaderHolder) view.getTag();
-			}
+        @Override
+        public View getHeaderView(int position, View convertView,
+                                  ViewGroup parent) {
+            View view = null;
+            ViewHeaderHolder holder = null;
+            if (null == convertView) {
+                view = inflater.inflate(R.layout.list_show_header, null);
+                holder = new ViewHeaderHolder(view);
+                view.setTag(holder);
+            } else {
+                view = convertView;
+                holder = (ViewHeaderHolder) view.getTag();
+            }
 
-			TextView text = holder.getText();
+            TextView text = holder.getText();
 
-			//TODO: refactor this into Model helpers (inline or sub-helper classes?)
-			String dateRaw = getItem(position).getStartTime();
-			try {
-				Date date = sdf.parse(dateRaw);
-				String dateValue = DateFormat.format("MMMM", date).toString();
-				text.setText(dateValue);
-			} catch (ParseException e) {
-				throw new IllegalStateException("Unparsable date: " + dateRaw);
-			}
+            //TODO: refactor this into Model helpers (inline or sub-helper classes?)
+            String dateRaw = getItem(position).getStartTime();
+            try {
+                Date date = sdf.parse(dateRaw);
+                String dateValue = DateFormat.format("MMMM", date).toString();
+                text.setText(dateValue);
+            } catch (ParseException e) {
+                throw new IllegalStateException("Unparsable date: " + dateRaw);
+            }
 
-			return view;
-		}
+            return view;
+        }
 
-		@Override
-		public long getHeaderId(int position) {
-			String dateRaw = getItem(position).getStartTime();
-			try {
+        @Override
+        public long getHeaderId(int position) {
+            String dateRaw = getItem(position).getStartTime();
+            try {
 
-				Date date = sdf.parse(dateRaw);
-				String dateValue = DateFormat.format("yyyyMM", date).toString();
-				return Long.valueOf(dateValue);
-			} catch (ParseException e) {
-				throw new IllegalStateException("Unparsable date: " + dateRaw);
-			}
-		}
+                Date date = sdf.parse(dateRaw);
+                String dateValue = DateFormat.format("yyyyMM", date).toString();
+                return Long.valueOf(dateValue);
+            } catch (ParseException e) {
+                throw new IllegalStateException("Unparsable date: " + dateRaw);
+            }
+        }
 
-		private class ViewHolder {
-			private final TextView title;
-			private final TextView location;
-			private final VerticalDate date;
+        private class ViewHolder {
+            private final TextView title;
+            private final TextView location;
+            private final VerticalDate date;
 
-			public ViewHolder(View view) {
-				this.title = (TextView) view.findViewById(id.list_generic_show_title);
-				this.location = (TextView) view.findViewById(id.list_generic_show_location);
-				this.date = (VerticalDate) view.findViewById(id.list_generic_show_date);
-			}
+            public ViewHolder(View view) {
+                this.title = (TextView) view.findViewById(id.list_generic_show_title);
+                this.location = (TextView) view.findViewById(id.list_generic_show_location);
+                this.date = (VerticalDate) view.findViewById(id.list_generic_show_date);
+            }
 
-			public TextView getTitle() {
-				return title;
-			}
+            public TextView getTitle() {
+                return title;
+            }
 
-			public TextView getLocation() {
-				return location;
-			}
+            public TextView getLocation() {
+                return location;
+            }
 
-			public VerticalDate getDate() {
-				return date;
-			}
-		}
+            public VerticalDate getDate() {
+                return date;
+            }
+        }
 
-		private class ViewHeaderHolder {
-			private final TextView text;
+        private class ViewHeaderHolder {
+            private final TextView text;
 
-			public ViewHeaderHolder(View view) {
-				this.text = (TextView) view.findViewById(id.list_show_header_textview);
-			}
-			
-			public TextView getText() {
-				return text;
-			}
-		}
-	}
+            public ViewHeaderHolder(View view) {
+                this.text = (TextView) view.findViewById(id.list_show_header_textview);
+            }
+
+            public TextView getText() {
+                return text;
+            }
+        }
+    }
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 

@@ -19,6 +19,7 @@ public class InboxStatusPresenter extends BasePresenter<InboxStatusView, InboxSt
 
     public class InboxStatusState extends BaseState<InboxStatusView> implements RichPushInbox.Listener {
         private RichPushInbox inbox;
+
         public InboxStatusState(StateListener listener, Bundle args, InboxStatusView view) {
             super(listener, args, view);
 

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/widget_margin"
-            android:textAppearance="@style/fragment_message_subject_text"/>
+            android:textAppearance="@style/fragment_message_subject_text" />
 
         <TextView
             android:id="@+id/fragment_message_date"
@@ -37,7 +37,7 @@
         android:id="@+id/fragment_message_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/fragment_message_cta_button"
@@ -45,6 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#0ac600"
-        android:text="@string/message_cta_default"/>
+        android:text="@string/message_cta_default" />
 
 </LinearLayout>

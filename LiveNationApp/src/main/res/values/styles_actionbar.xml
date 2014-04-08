@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -21,15 +20,18 @@
 
     <style name="Theme.Actionbar" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowBackground">@color/windowBackground</item>
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbar</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbar
+        </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbar</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbar</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbar</item>
         <item name="android:actionBarStyle">@style/ActionBar.Transparent.Actionbar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbar</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbar</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbar</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbar
+        </item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbar
+        </item>
         <item name="actionModeCloseDrawable">@drawable/close_action_mode</item>
         <item name="android:actionModeCloseDrawable">@drawable/close_action_mode</item>
     </style>
@@ -47,7 +49,7 @@
     </style>
 
     <style name="PopupMenu.Actionbar" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_actionbar</item>	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_actionbar</item>
     </style>
 
     <style name="DropDownListView.Actionbar" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
@@ -63,11 +65,11 @@
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_actionbar</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_actionbar</item>
     </style>
-    
+
     <style name="ProgressBar.Actionbar" parent="@android:style/Widget.Holo.Light.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_actionbar</item>
     </style>
-    
+
     <style name="ActionButton.CloseMode.Actionbar" parent="@android:style/Widget.Holo.Light.ActionButton.CloseMode">
         <item name="android:background">@drawable/btn_cab_done_actionbar</item>
     </style>

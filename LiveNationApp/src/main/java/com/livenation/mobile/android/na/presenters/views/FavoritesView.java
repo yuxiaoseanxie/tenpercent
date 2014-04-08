@@ -8,11 +8,11 @@
 
 package com.livenation.mobile.android.na.presenters.views;
 
-import java.util.List;
-
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
+import java.util.List;
+
 public interface FavoritesView extends PresenterView {
-	void setFavorites(List<Favorite> favorites);
+    void setFavorites(List<Favorite> favorites);
 }

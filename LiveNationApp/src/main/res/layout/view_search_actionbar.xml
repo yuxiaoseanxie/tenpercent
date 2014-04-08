@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/view_search_actionbar_input_margin_bottom"
-        android:layout_marginRight="@dimen/view_search_actionbar_input_margin_right"
-        android:layout_marginLeft="@dimen/view_search_actionbar_input_margin_left"/>
+        android:layout_marginLeft="@dimen/view_search_actionbar_input_margin_left"
+        android:layout_marginRight="@dimen/view_search_actionbar_input_margin_right" />
 </RelativeLayout>

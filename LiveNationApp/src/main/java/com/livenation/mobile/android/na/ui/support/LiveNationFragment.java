@@ -32,46 +32,46 @@ import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract, StateEnhancer {
-	
-	private Bundle state;
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		if (null != state) {
-			applyInstanceState(state);
-		}
-	}
 
-	@Override
-	public LocationManager getLocationManager() {
-		return LiveNationApplication.get().getLocationManager();
-	}
-	
-	@Override
-	public ImageLoader getImageLoader() {
-		return LiveNationApplication.get().getImageLoader();
-	}
-	
-	@Override
-	public EventsPresenter getEventsPresenter() {
-		return LiveNationApplication.get().getEventsPresenter();
-	}
-	
-	@Override
-	public FeaturePresenter getFeaturePresenter() {
-		return LiveNationApplication.get().getFeaturePresenter();
-	}
-	
-	@Override
-	public NearbyVenuesPresenter getNearbyVenuesPresenter() {
-		return LiveNationApplication.get().getNearbyVenuesPresenter();
-	}
-	
-	@Override
-	public FavoritesPresenter getFavoritesPresenter() {
-		return LiveNationApplication.get().getFavoritesPresenter();
-	}
+    private Bundle state;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (null != state) {
+            applyInstanceState(state);
+        }
+    }
+
+    @Override
+    public LocationManager getLocationManager() {
+        return LiveNationApplication.get().getLocationManager();
+    }
+
+    @Override
+    public ImageLoader getImageLoader() {
+        return LiveNationApplication.get().getImageLoader();
+    }
+
+    @Override
+    public EventsPresenter getEventsPresenter() {
+        return LiveNationApplication.get().getEventsPresenter();
+    }
+
+    @Override
+    public FeaturePresenter getFeaturePresenter() {
+        return LiveNationApplication.get().getFeaturePresenter();
+    }
+
+    @Override
+    public NearbyVenuesPresenter getNearbyVenuesPresenter() {
+        return LiveNationApplication.get().getNearbyVenuesPresenter();
+    }
+
+    @Override
+    public FavoritesPresenter getFavoritesPresenter() {
+        return LiveNationApplication.get().getFavoritesPresenter();
+    }
 
     @Override
     public AccountPresenters getAccountPresenters() {
@@ -94,33 +94,34 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     }
 
     @Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		state = new Bundle();
-		onSaveInstanceState(state);
-	}
-	
-	@Override
-	public void applyInstanceState(Bundle state) {}
-	
-		
-	public void addFragment(int containerId, Fragment fragment, String tag) {
-		FragmentManager fragmentManager = getChildFragmentManager();
-		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.add(containerId, fragment, tag);
-		transaction.commit();
-	}
-	
-	public void removeFragment(Fragment fragment) {
-		FragmentManager fragmentManager = getChildFragmentManager();
-		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.remove(fragment);
-		transaction.commit();
-	}
-	
-	public String getViewKey(View view) {
-		return Integer.valueOf(view.getId()).toString();
-	}
+    public void onDestroyView() {
+        super.onDestroyView();
+        state = new Bundle();
+        onSaveInstanceState(state);
+    }
+
+    @Override
+    public void applyInstanceState(Bundle state) {
+    }
+
+
+    public void addFragment(int containerId, Fragment fragment, String tag) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(containerId, fragment, tag);
+        transaction.commit();
+    }
+
+    public void removeFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.remove(fragment);
+        transaction.commit();
+    }
+
+    public String getViewKey(View view) {
+        return Integer.valueOf(view.getId()).toString();
+    }
 
     public void trackScreenWithLocation(final String screenName, final Props props) {
         LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {

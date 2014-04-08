@@ -41,10 +41,10 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container);
 
-        browser = (RichPushMessageView)view.findViewById(R.id.fragment_message_view);
-        subjectText = (TextView)view.findViewById(R.id.fragment_message_subject);
-        dateReceivedText = (TextView)view.findViewById(R.id.fragment_message_date);
-        callToActionButton = (Button)view.findViewById(R.id.fragment_message_cta_button);
+        browser = (RichPushMessageView) view.findViewById(R.id.fragment_message_view);
+        subjectText = (TextView) view.findViewById(R.id.fragment_message_subject);
+        dateReceivedText = (TextView) view.findViewById(R.id.fragment_message_date);
+        callToActionButton = (Button) view.findViewById(R.id.fragment_message_cta_button);
         callToActionButton.setOnClickListener(new CallToActionClickListener());
 
         return view;
@@ -63,9 +63,9 @@ public class MessageFragment extends Fragment {
             dateReceivedText.setText(DATE_RECEIVED_FORMAT.format(message.getSentDate()));
 
             Bundle messageExtras = message.getExtras();
-            if(messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
+            if (messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
                 String title = messageExtras.getString(Constants.Notifications.EXTRA_MESSAGE_ACTION_NAME,
-                                                       getString(R.string.message_cta_default));
+                        getString(R.string.message_cta_default));
                 callToActionButton.setText(title);
             } else {
                 callToActionButton.setVisibility(View.GONE);
@@ -102,7 +102,7 @@ public class MessageFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Bundle messageExtras = message.getExtras();
-            if(!messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
+            if (!messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
                 throw new IllegalStateException("CallToActionClickListener.onClick should never be called without an EXTRA_MESSAGE_ACTION_URL");
             }
 

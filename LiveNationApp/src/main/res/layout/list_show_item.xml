@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/list_show_item_min_height" >
+    android:minHeight="@dimen/list_show_item_min_height">
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
         android:id="@+id/list_generic_show_date"
@@ -11,7 +11,7 @@
         android:layout_marginLeft="@dimen/venue_show_date_margin_left"
         android:layout_marginRight="@dimen/venue_show_date_margin_right"
         android:layout_marginTop="@dimen/venue_show_date_margin_top" />
-       />
+    />
 
     <TextView
         android:id="@+id/list_generic_show_title"

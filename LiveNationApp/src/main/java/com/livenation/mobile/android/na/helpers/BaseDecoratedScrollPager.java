@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 
-import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 
@@ -20,7 +19,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * Created by cchilton on 3/12/14.
  */
 public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemType>> extends BaseScrollPager<TItemType> {
-    private List<? extends TItemType> lastFetch;
     private final View listLoadingView;
     /*
     Use a frame layout to contain our loading view. This is necessary since Android doesn't like direct
@@ -31,6 +29,7 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
      */
     private final ViewGroup footerBugHack;
     private final FrameLayout.LayoutParams footerParams;
+    private List<? extends TItemType> lastFetch;
 
     protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         super(limit, adapter);

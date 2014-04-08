@@ -29,38 +29,38 @@ import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 
 public class LineupView extends LinearLayout {
-	private CheckBox favorite;
-	private TextView title;
-	private FavoriteArtistObserver favoriteObserver;
+    private CheckBox favorite;
+    private TextView title;
+    private FavoriteArtistObserver favoriteObserver;
     private FavoriteObserverPresenter observerPresenter = LiveNationApplication.get().getFavoritesPresenter().getObserverPresenter();
 
     public LineupView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init(context);
-	}
-	
-	public LineupView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init(context);
-	}
+        super(context, attrs, defStyle);
+        init(context);
+    }
 
-	public LineupView(Context context) {
-		super(context);
-		init(context);
-	}
-	
-	private void init(Context context) {
-		LayoutInflater inflater = LayoutInflater.from(context);
+    public LineupView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
 
-		//TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
-		//No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-		View view = inflater.inflate(R.layout.view_lineup, null);
-		
-		favorite = (CheckBox) view.findViewById(R.id.view_lineup_favorite_checkbox);
-		title = (TextView) view.findViewById(R.id.view_lineup_title);
+    public LineupView(Context context) {
+        super(context);
+        init(context);
+    }
 
-		addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-	}
+    private void init(Context context) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        //TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
+        //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
+        View view = inflater.inflate(R.layout.view_lineup, null);
+
+        favorite = (CheckBox) view.findViewById(R.id.view_lineup_favorite_checkbox);
+        title = (TextView) view.findViewById(R.id.view_lineup_title);
+
+        addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+    }
 
     @Override
     protected void onDetachedFromWindow() {
@@ -69,12 +69,12 @@ public class LineupView extends LinearLayout {
     }
 
     public TextView getTitle() {
-		return title;
-	}
-	
-	public CheckBox getFavorite() {
-		return favorite;
-	}
+        return title;
+    }
+
+    public CheckBox getFavorite() {
+        return favorite;
+    }
 
     public void setFavoriteObserver(Artist entry) {
         favoriteObserver = initObserver(entry, favorite);
@@ -91,7 +91,7 @@ public class LineupView extends LinearLayout {
     }
 
     private void deinitObserver(FavoriteArtistObserver observer) {
-       observerPresenter.cancel(observer);
+        observerPresenter.cancel(observer);
     }
 
     private class FavoriteArtistObserver implements FavoriteObserverView {

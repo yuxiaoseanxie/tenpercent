@@ -2,18 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_show_header"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/fragment_venue_map_height" >
+        android:layout_height="@dimen/fragment_venue_map_height">
 
         <FrameLayout
             android:id="@+id/fragment_venue_map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/venue_map_foreground" >
-        </FrameLayout>
+            android:foreground="@drawable/venue_map_foreground"></FrameLayout>
 
         <TextView
             android:id="@+id/fragment_venue_title"
@@ -22,8 +21,7 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:textAppearance="@style/venue_venue_title" >
-        </TextView>
+            android:textAppearance="@style/venue_venue_title"></TextView>
     </FrameLayout>
 
 </RelativeLayout>

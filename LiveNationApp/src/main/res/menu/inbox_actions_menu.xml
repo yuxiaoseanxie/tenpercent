@@ -6,12 +6,11 @@
         android:icon="@drawable/inbox_mark_read"
         android:showAsAction="ifRoom|withText"
         android:title="@string/mark_read" />
-    
+
     <item
         android:id="@+id/delete"
         android:icon="@drawable/inbox_delete"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/delete"
-    />
+        android:title="@string/delete" />
 
 </menu>

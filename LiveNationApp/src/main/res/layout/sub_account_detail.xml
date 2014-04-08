@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/account_detail_order_history_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height"
-        android:id="@+id/account_detail_order_history_container" >
+        android:layout_height="@dimen/account_detail_min_height">
 
         <ImageView
             android:id="@+id/account_detail_image_your_orders"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/account_detail_image_your_orders"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/account_detail_text_your_orders_title"
@@ -50,9 +50,9 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/account_detail_favorite_artists_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height"
-        android:id="@+id/account_detail_favorite_artists_container" >
+        android:layout_height="@dimen/account_detail_min_height">
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_artists"
@@ -73,17 +73,17 @@
             android:textAppearance="@style/account_detail_header" />
 
         <View
+            style="@style/ui_underscore"
             android:layout_width="match_parent"
             android:layout_height="@dimen/underscore_container_height"
             android:layout_alignLeft="@id/account_detail_text_favorite_artists_title"
-            android:layout_alignParentBottom="true"
-            style="@style/ui_underscore" />
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/account_detail_favorite_venues_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height" 
-        android:id="@+id/account_detail_favorite_venues_container">
+        android:layout_height="@dimen/account_detail_min_height">
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_venues"
@@ -104,11 +104,11 @@
             android:textAppearance="@style/account_detail_header" />
 
         <View
+            style="@style/ui_underscore"
             android:layout_width="match_parent"
             android:layout_height="@dimen/underscore_container_height"
             android:layout_alignLeft="@id/account_detail_text_favorite_venues_title"
-            android:layout_alignParentBottom="true"
-            style="@style/ui_underscore" />
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 </LinearLayout>

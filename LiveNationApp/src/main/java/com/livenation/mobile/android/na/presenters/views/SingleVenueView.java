@@ -12,5 +12,5 @@ import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public interface SingleVenueView extends PresenterView {
-	void setVenue(Venue venue);
+    void setVenue(Venue venue);
 }

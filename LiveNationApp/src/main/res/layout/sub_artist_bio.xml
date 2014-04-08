@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         style="@style/ui_header_top_accent"
@@ -13,14 +13,14 @@
 
     <TextView
         android:id="@+id/fragment_artist_bio"
+        style="@style/ui_long_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/mock_artist_bio"
-        style="@style/ui_long_text"/>
+        android:text="@string/mock_artist_bio" />
 
     <com.livenation.mobile.android.na.ui.views.OverflowView
         android:id="@+id/fragment_artist_bio_overflow"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

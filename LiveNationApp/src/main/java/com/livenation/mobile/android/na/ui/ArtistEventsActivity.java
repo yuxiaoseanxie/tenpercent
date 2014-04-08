@@ -33,10 +33,10 @@ public class ArtistEventsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_events);
 
-        this.artist = (Artist)getIntent().getSerializableExtra(EXTRA_ARTIST);
-        this.events = (ArrayList<Event>)getIntent().getSerializableExtra(EXTRA_EVENTS);
+        this.artist = (Artist) getIntent().getSerializableExtra(EXTRA_ARTIST);
+        this.events = (ArrayList<Event>) getIntent().getSerializableExtra(EXTRA_EVENTS);
 
-        this.shows = (ShowsListNonScrollingFragment)getSupportFragmentManager().findFragmentById(R.id.activity_artist_events_shows_fragment);
+        this.shows = (ShowsListNonScrollingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_events_shows_fragment);
         shows.setDisplayMode(DetailShowView.DisplayMode.ARTIST);
         shows.setEvents(events);
 

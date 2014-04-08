@@ -2,39 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/account_placeholder_avatars" />
+
     <LinearLayout
         android:layout_width="@dimen/account_header_container_width"
         android:layout_height="wrap_content"
 
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <View
             android:layout_width="0dip"
             android:layout_height="1dip"
-            android:background="@color/ui_header1_accent"
             android:layout_marginRight="@dimen/account_header_divider_margin"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:background="@color/ui_header1_accent" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_connect_or_create"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/login_connect_or_create"
             android:textAppearance="@style/account_detail_detail" />
+
         <View
             android:layout_width="0dip"
             android:layout_height="1dip"
             android:layout_marginLeft="@dimen/account_header_divider_margin"
-            android:background="@color/ui_header1_accent"
-            android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_weight="1"
+            android:background="@color/ui_header1_accent" />
+    </LinearLayout>
 
 
     <LinearLayout
@@ -44,12 +48,12 @@
 
         <Button
             android:id="@+id/fragment_account_facebook_sign_in_button"
+            style="@style/account_facebook_login_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
-            android:minWidth="@dimen/account_header_sso_button_width"
-            android:drawablePadding="8dp"
             android:drawableLeft="@drawable/login_facebook_logo"
-            style="@style/account_facebook_login_button"
+            android:drawablePadding="8dp"
+            android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/account_header_sso_button_padding"
             android:paddingRight="@dimen/account_header_sso_button_padding"
             android:text="@string/login_facebook_button" />
@@ -57,23 +61,23 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="30dp"
             android:gravity="center"
-            android:textAppearance="@style/account_detail_detail"
-            android:text="@string/login_button_or" />
+            android:minWidth="30dp"
+            android:text="@string/login_button_or"
+            android:textAppearance="@style/account_detail_detail" />
 
         <Button
             android:id="@+id/fragment_account_google_sign_in_button"
 
+            style="@style/account_google_plus_login_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
-            android:minWidth="@dimen/account_header_sso_button_width"
-            android:drawablePadding="8dp"
             android:drawableLeft="@drawable/login_google_plus_logo"
-            style="@style/account_google_plus_login_button"
-            android:text="@string/login_google_plus_button"
+            android:drawablePadding="8dp"
+            android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/account_header_sso_button_padding"
-            android:paddingRight="@dimen/account_header_sso_button_padding" />
+            android:paddingRight="@dimen/account_header_sso_button_padding"
+            android:text="@string/login_google_plus_button" />
 
     </LinearLayout>
 

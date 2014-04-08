@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.livenation.mobile.android.na"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -20,24 +20,27 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <permission
         android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
-    <permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" android:protectionLevel="signature" />
+    <permission
+        android:name="com.livenation.mobile.android.na.permission.UA_DATA"
+        android:protectionLevel="signature" />
     <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
     <!-- Begin segment.io Permissions -->
     <!-- Allow you to get LOGCAT information when a crash occurs. -->
-    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <!-- Allow you to see which activity was active when a crash occurs. -->
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- Allows location to be tracked. -->
     <!-- android.permission.ACCESS_COARSE_LOCATION already there -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- End segment.io Permissions -->
 
 
@@ -50,34 +53,30 @@
         android:allowBackup="true"
         android:icon="@drawable/icon_144"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.HomeActivity"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity" >
-        </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity" >
-        </activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity"></activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistEventsActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"></activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"
-            android:label="@string/actionbar_artist_title">
-        </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity" >
-        </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.TestActivity"/>
+            android:label="@string/actionbar_artist_title"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"></activity>
+        <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.DebugActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
@@ -88,14 +87,15 @@
         <activity
             android:name="com.livenation.mobile.android.na.ui.SsoActivity"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
-        <activity android:name="com.livenation.mobile.android.na.ui.LocationActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"/>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.LocationActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
 
-        <activity android:name="com.livenation.mobile.android.na.ui.SearchActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"/>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.SearchActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
 
         <activity android:name="com.facebook.LoginActivity" />
 
@@ -143,18 +143,17 @@
 
 
         <!-- Urban Airship config -->
-        <activity
-            android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
-        <activity
-            android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver
             android:name="com.urbanairship.push.GCMPushReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.livenation.mobile.android.na" />
             </intent-filter>
             <intent-filter>
@@ -173,11 +172,13 @@
         <service
             android:name="com.urbanairship.analytics.EventService"
             android:label="Event Service" />
-        <provider android:name="com.urbanairship.UrbanAirshipProvider"
+
+        <provider
+            android:name="com.urbanairship.UrbanAirshipProvider"
             android:authorities="com.livenation.mobile.android.na.urbanairship.provider"
-            android:permission="com.livenation.mobile.android.na.permission.UA_DATA"
             android:exported="true"
-            android:multiprocess="true" />
+            android:multiprocess="true"
+            android:permission="com.livenation.mobile.android.na.permission.UA_DATA" />
 
         <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
     </application>

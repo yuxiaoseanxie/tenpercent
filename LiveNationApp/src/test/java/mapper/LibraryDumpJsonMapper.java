@@ -14,7 +14,7 @@ import org.json.JSONObject;
 /**
  * Created by elodieferrais on 3/26/14.
  */
-public class LibraryDumpJsonMapper  extends InstrumentationTestCase {
+public class LibraryDumpJsonMapper extends InstrumentationTestCase {
 
     public void testLibraryDumpJsonMapperOnSuccess() {
         MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");

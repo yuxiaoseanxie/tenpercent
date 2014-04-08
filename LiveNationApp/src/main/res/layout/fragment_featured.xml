@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_gray"
     android:orientation="vertical"
-    android:padding="@dimen/featured_layout_padding" >
+    android:padding="@dimen/featured_layout_padding">
 
     <TextView
         android:id="@+id/featured_title_text"
@@ -26,9 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/featured_title_text"
-        android:minHeight="@dimen/fragment_featured_container_min_height"
         android:layout_marginTop="@dimen/featured_layout_padding"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:minHeight="@dimen/fragment_featured_container_min_height"
+        android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

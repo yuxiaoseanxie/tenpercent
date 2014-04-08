@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters.views;
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 
 public interface FavoriteRemoveView extends PresenterView {
-	void onFavoriteRemoveSuccess();
-	void onFavoriteRemoveFailed();
+    void onFavoriteRemoveSuccess();
+
+    void onFavoriteRemoveFailed();
 }

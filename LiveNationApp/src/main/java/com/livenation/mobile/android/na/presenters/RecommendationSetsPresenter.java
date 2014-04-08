@@ -56,12 +56,12 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
     }
 
     static class RecommendationSetsState extends BaseResultState<ArrayList<RecommendationSet>, RecommendationSetsView> implements ApiService.BasicApiCallback<List<RecommendationSet>> {
-        private ApiParameters.RecommendationSetsParameters params;
-        private final Context context;
         public static final int FAILURE_API_GENERAL = 0;
         public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
+        private final Context context;
+        private ApiParameters.RecommendationSetsParameters params;
 
 
         public RecommendationSetsState(StateListener<RecommendationSetsState> listener, Bundle args, RecommendationSetsView view, Context context) {

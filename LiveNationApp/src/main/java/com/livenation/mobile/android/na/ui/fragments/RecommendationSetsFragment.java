@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -51,38 +49,37 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
-	private StickyListHeadersListView listView;
-	private EventAdapter adapter;
+    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
+    private StickyListHeadersListView listView;
+    private EventAdapter adapter;
     private ScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new ScrollPager(adapter);
         setRetainInstance(true);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
-		listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
-		listView.setOnItemClickListener(RecommendationSetsFragment.this);
-		listView.setAdapter(adapter);
+        View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
+        listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
+        listView.setOnItemClickListener(RecommendationSetsFragment.this);
+        listView.setAdapter(adapter);
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         listView.setEmptyView(emptyListViewControl);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
         scrollPager.connectListView(listView);
 
-		return view;
-	}
+        return view;
+    }
 
     @Override
     public void onDestroy() {
@@ -97,37 +94,53 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     }
 
     @Override
-	public void onSaveInstanceState(Bundle outState) {
-		Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-		outState.putParcelable(getViewKey(listView), listState);
-	}
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
+        outState.putParcelable(getViewKey(listView), listState);
+    }
 
-	@Override
-	public void applyInstanceState(Bundle state) {
-		Parcelable listState = state.getParcelable(getViewKey(listView));
-		if (null != listState) {
-			listView.getWrappedList().onRestoreInstanceState(listState);
-		}
-	}
+    @Override
+    public void applyInstanceState(Bundle state) {
+        Parcelable listState = state.getParcelable(getViewKey(listView));
+        if (null != listState) {
+            listView.getWrappedList().onRestoreInstanceState(listState);
+        }
+    }
 
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Intent intent = new Intent(getActivity(), ShowActivity.class);
-		Event event = adapter.getItem(position).get();
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        Intent intent = new Intent(getActivity(), ShowActivity.class);
+        Event event = adapter.getItem(position).get();
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
 
-		startActivity(intent);
-	}
+        startActivity(intent);
+    }
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         scrollPager.reset();
         scrollPager.load();
+    }
+
+    private static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
+
+        private TaggedEvent(Event event) {
+            super(event);
+        }
+
+        public boolean isPersonal() {
+            return getTag();
+        }
+
+        @Override
+        public boolean idEquals(TaggedEvent target) {
+            return get().idEquals(target.get());
+        }
     }
 
     public class EventAdapter extends ArrayAdapter<TaggedEvent> implements StickyListHeadersAdapter {
@@ -157,7 +170,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             holder.getLocation().setText(event.getVenue().getName());
 
             if (event.getLineup().size() > 0) {
-                String imageKey  = event.getLineup().get(0).getBestImageKey(new String[] {"tap", "mobile_detail"});
+                String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
                 holder.getImage().setImageUrl(event.getLineup().get(0).getImageURL(imageKey), getImageLoader());
             } else {
                 holder.getImage().setImageUrl(null, getImageLoader());
@@ -307,22 +320,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             public void cancel() {
                 getRecommendationSetsPresenter().cancel(this);
             }
-        }
-    }
-
-    private static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
-
-        private TaggedEvent(Event event) {
-            super(event);
-        }
-
-        public boolean isPersonal() {
-            return getTag();
-        }
-
-        @Override
-        public boolean idEquals(TaggedEvent target) {
-            return get().idEquals(target.get());
         }
     }
 }

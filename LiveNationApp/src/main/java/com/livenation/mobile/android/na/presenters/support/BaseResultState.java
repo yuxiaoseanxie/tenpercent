@@ -45,12 +45,12 @@ public abstract class BaseResultState<TResult extends Serializable, TView extend
         return apiService;
     }
 
-    public void setResult(TResult result) {
-        this.result = result;
-    }
-
     public TResult getResult() {
         return result;
+    }
+
+    public void setResult(TResult result) {
+        this.result = result;
     }
 
     public boolean hasResult() {

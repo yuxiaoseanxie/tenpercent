@@ -2,11 +2,10 @@ package com.livenation.mobile.android.na.helpers;
 
 /**
  * Created by cchilton on 3/25/14.
- *
+ * <p/>
  * A wrapper class to wrap some object and then provide a tagging mechanism.
- *
+ * <p/>
  * It's usage/design/philosophy has been modeled on the usage of WeakReference<T>
- *    
  */
 public class TaggedReference<TReference, TTag> {
     private final TReference target;

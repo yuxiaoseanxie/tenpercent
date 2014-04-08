@@ -9,17 +9,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <TextView
-        style="@style/ui_header_top_accent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/artist_all_shows" />
+        <TextView
+            style="@style/ui_header_top_accent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/artist_all_shows" />
 
-    <fragment
-        android:id="@+id/activity_artist_events_shows_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment" />
+        <fragment
+            android:id="@+id/activity_artist_events_shows_fragment"
+            android:name="com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

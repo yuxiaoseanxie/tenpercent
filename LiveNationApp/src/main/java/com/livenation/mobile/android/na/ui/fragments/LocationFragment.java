@@ -29,17 +29,117 @@ import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
  * Created by cchilton on 3/12/14.
  */
 public class LocationFragment extends LiveNationFragment implements LiveNationMapFragment.MapReadyListener, GoogleMap.OnMapClickListener {
+    private static final float DEFAULT_MAP_ZOOM = 8f;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
     private ActionMode actionMode;
     private LatLng locationCache;
+    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            setMapEnabled(true);
+
+            setMapMarker(locationCache.latitude, locationCache.longitude, true, -2);
+
+            MenuInflater inflater = actionMode.getMenuInflater();
+
+            inflater.inflate(R.menu.location_set_menu, menu);
+
+            mapContainerForeground.setVisibility(View.INVISIBLE);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            LocationFragment.this.actionMode = null;
+            setMapEnabled(false);
+
+            if (null != locationCache) {
+                getLocationManager().getUserLocationProvider().setLocation(locationCache.latitude, locationCache.longitude, getActivity());
+                setMapMarker(locationCache.latitude, locationCache.longitude, true);
+            }
+
+            mapContainerForeground.setVisibility(View.VISIBLE);
+        }
+    };
+    private View.OnClickListener onTapToChangeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (null == actionMode) {
+                actionMode = getActivity().startActionMode(actionModeCallback);
+            }
+            ;
+        }
+    };
+    private LocationProvider.LocationCallback configuredLocationCallback = new LocationProvider.LocationCallback() {
+        @Override
+        public void onLocation(double lat, double lng) {
+            locationCache = new LatLng(lat, lng);
+            if (null != map) {
+                setMapMarker(lat, lng, true);
+            }
+        }
+
+        @Override
+        public void onLocationFailure(int failureCode) {
+        }
+    };
+    private LocationProvider.LocationCallback initialUserLocationCallback = new LocationProvider.LocationCallback() {
+        @Override
+        public void onLocation(double lat, double lng) {
+            locationCache = new LatLng(lat, lng);
+            if (null != map) {
+                setMapMarker(lat, lng, true);
+            }
+        }
+
+        @Override
+        public void onLocationFailure(int failureCode) {
+            if (failureCode == UserLocationProvider.FAILURE_NO_USER_LOCATION_SET) {
+                getLocationManager().getSystemLocationProvider().getLocation(getActivity(), this);
+            }
+        }
+    };
     private FrameLayout mapContainer;
     private FrameLayout mapContainerForeground;
     private View overlayTapToChange;
     private View overlayAutomaticLocation;
+    private RadioGroup.OnCheckedChangeListener radioListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, int i) {
+            switch (i) {
+                case R.id.fragment_location_automatic_radio:
+                    getLocationManager().setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
+                    if (null != actionMode) {
+                        actionMode.finish();
+                    }
+                    mapContainerForeground.removeAllViews();
+                    mapContainerForeground.addView(overlayAutomaticLocation);
+                    break;
+                case R.id.fragment_location_manual_radio:
+                    getLocationManager().setLocationMode(LocationManager.MODE_USER, getActivity());
+                    mapContainerForeground.removeAllViews();
+                    mapContainerForeground.addView(overlayTapToChange);
+                    break;
+                default:
+                    throw new IllegalArgumentException();
 
+            }
+            centerMapWithConfiguredLocation();
 
-    private static final float DEFAULT_MAP_ZOOM = 8f;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +203,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
     }
 
     private void setMapMarker(double lat, double lng, boolean center) {
-       setMapMarker(lat, lng, center, 0);
+        setMapMarker(lat, lng, center, 0);
     }
 
     private void setMapMarker(double lat, double lng, boolean center, int zoomModifier) {
@@ -129,112 +229,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
         map.getUiSettings().setZoomGesturesEnabled(enabled);
     }
 
-    private View.OnClickListener onTapToChangeListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        if (null == actionMode) {
-            actionMode = getActivity().startActionMode(actionModeCallback);
-        };
-        }
-    };
-
-    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            setMapEnabled(true);
-
-            setMapMarker(locationCache.latitude, locationCache.longitude, true, -2);
-
-            MenuInflater inflater = actionMode.getMenuInflater();
-
-            inflater.inflate(R.menu.location_set_menu, menu);
-
-            mapContainerForeground.setVisibility(View.INVISIBLE);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode actionMode) {
-            LocationFragment.this.actionMode = null;
-            setMapEnabled(false);
-
-            if (null != locationCache) {
-                getLocationManager().getUserLocationProvider().setLocation(locationCache.latitude, locationCache.longitude, getActivity());
-                setMapMarker(locationCache.latitude, locationCache.longitude, true);
-            }
-
-            mapContainerForeground.setVisibility(View.VISIBLE);
-        }
-    };
-
     private void centerMapWithConfiguredLocation() {
         getLocationManager().getLocation(getActivity(), configuredLocationCallback);
     }
-
-    private RadioGroup.OnCheckedChangeListener radioListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-            switch (i) {
-                case R.id.fragment_location_automatic_radio:
-                    getLocationManager().setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
-                    if (null != actionMode) {
-                        actionMode.finish();
-                    }
-                    mapContainerForeground.removeAllViews();
-                    mapContainerForeground.addView(overlayAutomaticLocation);
-                    break;
-                case R.id.fragment_location_manual_radio:
-                    getLocationManager().setLocationMode(LocationManager.MODE_USER, getActivity());
-                    mapContainerForeground.removeAllViews();
-                    mapContainerForeground.addView(overlayTapToChange);
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-
-            }
-            centerMapWithConfiguredLocation();
-
-        }
-    };
-
-    private LocationProvider.LocationCallback configuredLocationCallback = new LocationProvider.LocationCallback() {
-        @Override
-        public void onLocation(double lat, double lng) {
-            locationCache = new LatLng(lat, lng);
-            if (null != map) {
-                setMapMarker(lat, lng, true);
-            }
-        }
-
-        @Override
-        public void onLocationFailure(int failureCode) {}
-    };
-
-    private LocationProvider.LocationCallback initialUserLocationCallback = new LocationProvider.LocationCallback() {
-        @Override
-        public void onLocation(double lat, double lng) {
-            locationCache = new LatLng(lat, lng);
-            if (null != map) {
-                setMapMarker(lat, lng, true);
-            }
-        }
-
-        @Override
-        public void onLocationFailure(int failureCode) {
-            if (failureCode == UserLocationProvider.FAILURE_NO_USER_LOCATION_SET) {
-                getLocationManager().getSystemLocationProvider().getLocation(getActivity(), this);
-            }
-        }
-    };
 }

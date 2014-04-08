@@ -12,7 +12,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 /**
  * Created by cchilton on 4/3/14.
- *
+ * <p/>
  * An extended CheckBox class that encapsulates the mapping a Favorite Checkbox's state to the User's favorites
  */
 public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {

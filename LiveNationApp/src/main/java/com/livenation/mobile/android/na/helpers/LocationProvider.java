@@ -10,6 +10,7 @@ public interface LocationProvider {
 
     public static interface LocationCallback {
         void onLocation(double lat, double lng);
+
         void onLocationFailure(int failureCode);
     }
 }

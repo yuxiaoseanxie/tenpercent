@@ -15,7 +15,7 @@ public class AnalyticConstants {
     public static final String SEARCH_ICON_TAP = "Search Icon Tap";
     public static final String HELP_CELL_TAP = "Help Cell Tap";
     public static final String LEGAL_CELL_TAP = "Legal Cell Tap";
-    public static final String LOCATION_ICON_TAP= "Location Icon Tap";
+    public static final String LOCATION_ICON_TAP = "Location Icon Tap";
     public static final String FAVORITES_ARTISTS_CELL_TAP = "Favorite Artists Cell Tap";
     public static final String FAVORITES_VENUES_CELL_TAP = "Favorite venues Cell Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";

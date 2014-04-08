@@ -25,40 +25,40 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
 
-	@Override
-	public LocationManager getLocationManager() {
-		return LiveNationApplication.get().getLocationManager();
-	}
-	
-	@Override
-	public ImageLoader getImageLoader() {
-		return LiveNationApplication.get().getImageLoader();
-	}
-	
-	@Override
-	public EventsPresenter getEventsPresenter() {
-		return LiveNationApplication.get().getEventsPresenter();
-	}
-	
-	@Override
-	public FeaturePresenter getFeaturePresenter() {
-		return LiveNationApplication.get().getFeaturePresenter();
-	}
-	
-	@Override
-	public NearbyVenuesPresenter getNearbyVenuesPresenter() {
-		return LiveNationApplication.get().getNearbyVenuesPresenter();
-	}
-	
-	@Override
-	public FavoritesPresenter getFavoritesPresenter() {
-		return LiveNationApplication.get().getFavoritesPresenter();
-	}
+    @Override
+    public LocationManager getLocationManager() {
+        return LiveNationApplication.get().getLocationManager();
+    }
+
+    @Override
+    public ImageLoader getImageLoader() {
+        return LiveNationApplication.get().getImageLoader();
+    }
+
+    @Override
+    public EventsPresenter getEventsPresenter() {
+        return LiveNationApplication.get().getEventsPresenter();
+    }
+
+    @Override
+    public FeaturePresenter getFeaturePresenter() {
+        return LiveNationApplication.get().getFeaturePresenter();
+    }
+
+    @Override
+    public NearbyVenuesPresenter getNearbyVenuesPresenter() {
+        return LiveNationApplication.get().getNearbyVenuesPresenter();
+    }
+
+    @Override
+    public FavoritesPresenter getFavoritesPresenter() {
+        return LiveNationApplication.get().getFavoritesPresenter();
+    }
 
     @Override
     public AccountPresenters getAccountPresenters() {

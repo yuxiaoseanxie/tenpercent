@@ -22,12 +22,11 @@ import java.util.List;
 public class FavoritesPresenter extends
         BasePresenter<FavoritesView, FavoritesPresenter.FavoritesState> implements Presenter<FavoritesView>,
         StateListener<FavoritesPresenter.FavoritesState> {
+    public static final String INTENT_DATA_KEY = FavoritesPresenter.class.getName();
+    public static final String PARAMETER_EVENT_ID = "item_id";
     private AddFavoritePresenter addFavoritePresenter = new AddFavoritePresenter();
     private RemoveFavoritePresenter removeFavoritePresenter = new RemoveFavoritePresenter();
     private FavoriteObserverPresenter favoriteObserverPresenter = new FavoriteObserverPresenter();
-
-    public static final String INTENT_DATA_KEY = FavoritesPresenter.class.getName();
-    public static final String PARAMETER_EVENT_ID = "item_id";
 
     @Override
     public void initialize(Context context, Bundle args, FavoritesView view) {
@@ -86,9 +85,8 @@ public class FavoritesPresenter extends
 
     static class FavoritesState extends BaseResultState<ArrayList<Favorite>, FavoritesView> implements
             ApiService.BasicApiCallback<List<Favorite>> {
-        private SingleVenueParameters apiParams;
-
         public static final int FAILURE_API_GENERAL = 0;
+        private SingleVenueParameters apiParams;
 
         public FavoritesState(StateListener<FavoritesState> listener, Bundle args, FavoritesView view) {
             super(listener, args, view);
@@ -173,9 +171,8 @@ public class FavoritesPresenter extends
 
         class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
                 ApiService.BasicApiCallback<Void> {
-            private ApiParameters.FavoriteWithNameParameters apiParams;
-
             public static final int FAILURE_API_GENERAL = 0;
+            private ApiParameters.FavoriteWithNameParameters apiParams;
 
             public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
                 super(listener, args, view);
@@ -262,9 +259,8 @@ public class FavoritesPresenter extends
         class RemoveFavoriteState extends
                 BaseResultState<Favorite, FavoriteRemoveView> implements
                 ApiService.BasicApiCallback<Void> {
-            private ApiParameters.FavoriteParameters apiParams;
-
             public static final int FAILURE_API_GENERAL = 0;
+            private ApiParameters.FavoriteParameters apiParams;
 
             public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,
                                        Bundle args, FavoriteRemoveView view) {

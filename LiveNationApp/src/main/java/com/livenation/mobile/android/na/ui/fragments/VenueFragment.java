@@ -8,8 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,118 +30,120 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import java.util.List;
+
 import io.segment.android.models.Props;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
-	public static final String PARAMETER_VENUE_ID = "venue_id";
-	
-	private TextView venueTitle;
-	private TextView location;
-	private TextView telephone;
-	private View link;
-	private EventsView shows;
-	private LiveNationMapFragment mapFragment;
-	private GoogleMap map;
+    public static final String PARAMETER_VENUE_ID = "venue_id";
+    private static final float DEFAULT_MAP_ZOOM = 13f;
+    private TextView venueTitle;
+    private TextView location;
+    private TextView telephone;
+    private View link;
+    private EventsView shows;
+    private LiveNationMapFragment mapFragment;
+    private GoogleMap map;
 
-	private static final float DEFAULT_MAP_ZOOM = 13f;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		
-		Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.VENUE);
-		addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
 
-		mapFragment = new LiveNationMapFragment();
-		mapFragment.setMapReadyListener(this);
-	
-		addFragment(R.id.fragment_venue_map_container, mapFragment, "map");
-		
-		shows = (EventsView) showsFragment;
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View result = inflater.inflate(R.layout.fragment_venue, container,
-				false);
-		venueTitle = (TextView) result.findViewById(R.id.fragment_venue_title);
+        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.VENUE);
+        addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
 
-		location = (TextView) result.findViewById(R.id.venue_detail_location);
-		telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
-		link = result.findViewById(R.id.venue_detail_venue_info_link);
-		
-		return result;
-	}
+        mapFragment = new LiveNationMapFragment();
+        mapFragment.setMapReadyListener(this);
 
-	@Override
-	public void setVenue(Venue venue) {
+        addFragment(R.id.fragment_venue_map_container, mapFragment, "map");
+
+        shows = (EventsView) showsFragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_venue, container,
+                false);
+        venueTitle = (TextView) result.findViewById(R.id.fragment_venue_title);
+
+        location = (TextView) result.findViewById(R.id.venue_detail_location);
+        telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
+        link = result.findViewById(R.id.venue_detail_venue_info_link);
+
+        return result;
+    }
+
+    @Override
+    public void setVenue(Venue venue) {
         //Analytics
         Props props = new Props();
         props.put("Venue Name", venue.getName());
         trackScreenWithLocation("User views VDP screen", props);
 
-		venueTitle.setText(venue.getName());
-		if (null != venue.getAddress()) {
-			Address address = venue.getAddress();
-			location.setText(address.getSmallFriendlyAddress(true));
-		} else {
-			location.setText("");
-		}
-		
-		telephone.setText(venue.getFormattedPhoneNumber());
-		OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
-		link.setOnClickListener(onVenueClick);
-		
-		double lat = Double.valueOf(venue.getLat());
-		double lng = Double.valueOf(venue.getLng());
-		setMapLocation(lat, lng);
-		
-	}
-	
-	@Override
-	public void setEvents(List<Event> events) {
-		shows.setEvents(events);
-	}
-	
-	@Override
-	public void onMapReady(GoogleMap map) {
-		this.map = map;
+        venueTitle.setText(venue.getName());
+        if (null != venue.getAddress()) {
+            Address address = venue.getAddress();
+            location.setText(address.getSmallFriendlyAddress(true));
+        } else {
+            location.setText("");
+        }
 
-		if (map != null) {
-			map.getUiSettings().setZoomControlsEnabled(false);
-			map.getUiSettings().setAllGesturesEnabled(false);
-		} else {
-			//TODO: Possible No Google play services installed
-		}
+        telephone.setText(venue.getFormattedPhoneNumber());
+        OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
+        link.setOnClickListener(onVenueClick);
 
-	};
-	
-	private void setMapLocation(double lat, double lng) {
-		if (null == map) return;
-		
-		LatLng latLng = new LatLng(lat, lng);
+        double lat = Double.valueOf(venue.getLat());
+        double lng = Double.valueOf(venue.getLng());
+        setMapLocation(lat, lng);
 
-		MarkerOptions marker = new MarkerOptions();
-		marker.position(latLng);
+    }
 
-		map.clear();
-		map.addMarker(marker);
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
-	}
-	
-	
-	private class OnVenueDetailClick implements View.OnClickListener {
-		private String venueId;
-		
-		public OnVenueDetailClick(String venueId) {
-			this.venueId = venueId;
-		}
-		
-		@Override
-		public void onClick(View v) {
-			Toast.makeText(getActivity(), "Herro: " + venueId, Toast.LENGTH_SHORT).show();
-		}
-	}
+    @Override
+    public void setEvents(List<Event> events) {
+        shows.setEvents(events);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        this.map = map;
+
+        if (map != null) {
+            map.getUiSettings().setZoomControlsEnabled(false);
+            map.getUiSettings().setAllGesturesEnabled(false);
+        } else {
+            //TODO: Possible No Google play services installed
+        }
+
+    }
+
+    ;
+
+    private void setMapLocation(double lat, double lng) {
+        if (null == map) return;
+
+        LatLng latLng = new LatLng(lat, lng);
+
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(latLng);
+
+        map.clear();
+        map.addMarker(marker);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+    }
+
+
+    private class OnVenueDetailClick implements View.OnClickListener {
+        private String venueId;
+
+        public OnVenueDetailClick(String venueId) {
+            this.venueId = venueId;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "Herro: " + venueId, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

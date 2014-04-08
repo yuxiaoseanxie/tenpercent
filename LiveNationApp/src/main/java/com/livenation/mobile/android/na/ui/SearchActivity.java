@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,11 +17,17 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class SearchActivity extends FragmentActivity implements TextWatcher {
-    private SearchForText fragment;
-    private EditText input;
     //The delay to wait for next keystroke before sending user text to the API
     //This number is made up, but feels right
     private static int TEXT_CHANGED_POST_DELAY = 667;
+    private SearchForText fragment;
+    private EditText input;
+    private Handler limiter = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            fragment.searchFor(input.getText().toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +47,12 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+    }
 
     @Override
     public void afterTextChanged(final Editable editable) {
@@ -53,11 +60,4 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
         limiter.removeMessages(0);
         limiter.sendEmptyMessageDelayed(0, TEXT_CHANGED_POST_DELAY);
     }
-
-    private Handler limiter = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-        fragment.searchFor(input.getText().toString());
-        }
-    };
 }

@@ -34,9 +34,9 @@ import java.util.List;
  * Created by cchilton on 4/2/14.
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
+    private final String[] SEARCH_INCLUDES = new String[]{"venues", "artists"};
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
-    private final String[] SEARCH_INCLUDES = new String[] {"venues", "artists"};
     private String unboundSearchTextBuffer;
 
     @Override
@@ -88,7 +88,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     }
 
     @Override
-    public void onFailure(int errorCode, String message) {}
+    public void onFailure(int errorCode, String message) {
+    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {

@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer>, ApiServiceBinder {
 
-    private final List<Favorite> favorites = new ArrayList<Favorite>();
     private final static String ARG_FAVORITE_KEY = "favorite";
+    private final List<Favorite> favorites = new ArrayList<Favorite>();
 
     public FavoriteObserverPresenter() {
         LiveNationApplication.get().getApiHelper().persistentBindApi(FavoriteObserverPresenter.this);

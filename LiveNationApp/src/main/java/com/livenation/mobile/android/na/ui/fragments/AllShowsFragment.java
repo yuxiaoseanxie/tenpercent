@@ -8,9 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import java.io.Serializable;
-import java.util.List;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,42 +25,45 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.util.Logger;
 
+import java.io.Serializable;
+import java.util.List;
+
 import io.segment.android.models.Props;
 
 public class AllShowsFragment extends LiveNationFragment implements FeatureView, ApiServiceBinder {
-	private FeatureView featured = null;
+    private FeatureView featured = null;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         trackScreenWithLocation("User views All Shows screen", new Props());
-        
-		Fragment featured = new FeaturedFragment();
-		Fragment showList = new ShowsListFragment();
-	
-		addFragment(R.id.fragment_all_shows_container_featured, featured, "featured");
-		addFragment(R.id.fragment_all_shows_container_list, showList, "show_list");
 
-		this.featured = (FeatureView) featured;
-		
-		setRetainInstance(true);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
-		View view = inflater.inflate(R.layout.fragment_all_shows, container, false);
+        Fragment featured = new FeaturedFragment();
+        Fragment showList = new ShowsListFragment();
 
-		return view;
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
+        addFragment(R.id.fragment_all_shows_container_featured, featured, "featured");
+        addFragment(R.id.fragment_all_shows_container_list, showList, "show_list");
+
+        this.featured = (FeatureView) featured;
+
+        setRetainInstance(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_all_shows, container, false);
+
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         Logger.log("ApiBind", "All shows start");
-	    LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-	}
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+    }
 
     @Override
     public void onStop() {
@@ -81,20 +81,20 @@ public class AllShowsFragment extends LiveNationFragment implements FeatureView,
     }
 
     @Override
-	public void setFeatured(List<Chart> features) {	
-		getActivity().getIntent().putExtra(FeaturePresenter.INTENT_DATA_KEY, (Serializable) features);
-		featured.setFeatured(features);
-	}
-	
-	private void init() {
-		Context context = getActivity();
-		//Bundle args = getActivity().getIntent().getExtras();
+    public void setFeatured(List<Chart> features) {
+        getActivity().getIntent().putExtra(FeaturePresenter.INTENT_DATA_KEY, (Serializable) features);
+        featured.setFeatured(features);
+    }
 
-		getFeaturePresenter().initialize(context, null, AllShowsFragment.this);
-	}
+    private void init() {
+        Context context = getActivity();
+        //Bundle args = getActivity().getIntent().getExtras();
+
+        getFeaturePresenter().initialize(context, null, AllShowsFragment.this);
+    }
 
     private void deinit() {
         getFeaturePresenter().cancel(AllShowsFragment.this);
     }
-	
+
 }

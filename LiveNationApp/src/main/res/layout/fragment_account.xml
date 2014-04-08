@@ -2,29 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/fragment_account_header"
+                layout="@layout/sub_account_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/sub_account_header" />
+                android:layout_height="wrap_content" />
 
             <include
                 android:id="@+id/fragment_account_detail"
+                layout="@layout/sub_account_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/sub_account_detail" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
@@ -32,13 +32,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <include
             android:id="@+id/fragment_account_footer"
+            layout="@layout/sub_account_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/sub_account_footer" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

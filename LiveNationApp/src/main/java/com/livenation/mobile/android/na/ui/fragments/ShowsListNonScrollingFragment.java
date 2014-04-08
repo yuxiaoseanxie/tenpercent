@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import java.util.List;
-
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,23 +15,19 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
+import java.util.List;
+
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
 
     private DetailShowView.DisplayMode displayMode;
-	private ViewGroup showContainer;
+    private ViewGroup showContainer;
 
     private int maxEvents;
     private View showMoreItemsView;
     private boolean alwaysShowMoreItemsView;
 
     //region Lifecycle
-
-    public static ShowsListNonScrollingFragment newInstance(DetailShowView.DisplayMode displayMode) {
-        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
-        instance.setDisplayMode(displayMode);
-        return instance;
-    }
 
     public ShowsListNonScrollingFragment() {
         super();
@@ -42,44 +36,50 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         this.maxEvents = MAX_EVENTS_INFINITE;
     }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View result = inflater.inflate(R.layout.fragment_show_fixed, container,
-				false);
-		
-		showContainer = (ViewGroup) result;
+    public static ShowsListNonScrollingFragment newInstance(DetailShowView.DisplayMode displayMode) {
+        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
+        instance.setDisplayMode(displayMode);
+        return instance;
+    }
 
-		return result;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_show_fixed, container,
+                false);
+
+        showContainer = (ViewGroup) result;
+
+        return result;
+    }
 
     //endregion
 
 
-	@Override
-	public void setEvents(List<Event> events) {
-		showContainer.removeAllViews();
+    @Override
+    public void setEvents(List<Event> events) {
+        showContainer.removeAllViews();
 
         int position = 0;
-		for (Event event : events) {
-			DetailShowView show = new DetailShowView(getActivity());
+        for (Event event : events) {
+            DetailShowView show = new DetailShowView(getActivity());
             show.setDisplayMode(getDisplayMode());
-			show.setEvent(event);
+            show.setEvent(event);
             show.setOnClickListener(new ShowViewClickListener(event));
 
-			LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			showContainer.addView(show, layoutParams);
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            showContainer.addView(show, layoutParams);
 
             position++;
-            if(position >= getMaxEvents())
+            if (position >= getMaxEvents())
                 break;
-		}
+        }
 
-        if((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
+        if ((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getShowMoreItemsView(), layoutParams);
         }
-	}
+    }
 
 
     //region Properties

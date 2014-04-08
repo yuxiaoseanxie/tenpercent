@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingBottom="15dp"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:paddingTop="15dp">
 
     <TextView
         android:id="@+id/action_title"
@@ -21,10 +21,10 @@
         android:id="@+id/action_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="Action"
-        android:textAppearance="@style/list_show_location"
         android:layout_gravity="center"
-        android:gravity="right"/>
+        android:layout_marginLeft="8dp"
+        android:gravity="right"
+        android:text="Action"
+        android:textAppearance="@style/list_show_location" />
 
 </LinearLayout>

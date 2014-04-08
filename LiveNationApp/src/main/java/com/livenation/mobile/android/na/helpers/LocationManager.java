@@ -6,12 +6,9 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Handler;
 
 /**
  * Created by cchilton on 3/13/14.
@@ -92,6 +89,7 @@ public class LocationManager implements LocationProvider {
 
     public static interface GetCityCallback {
         void onGetCity(String city);
+
         void onGetCityFailure();
     }
 
@@ -115,7 +113,8 @@ public class LocationManager implements LocationProvider {
                 if (!matches.isEmpty()) {
                     return matches.get(0).getLocality();
                 }
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
 
             return null;
         }

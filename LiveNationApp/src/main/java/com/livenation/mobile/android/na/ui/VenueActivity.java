@@ -24,9 +24,9 @@ import java.util.List;
 
 
 public class VenueActivity extends LiveNationFragmentActivity implements SingleVenueView, EventsView {
+    private static final int EVENTS_PER_VENUE_LIMIT = 3;
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
-    private static final int EVENTS_PER_VENUE_LIMIT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

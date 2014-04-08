@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/fragment_account_user_image"
@@ -16,24 +16,23 @@
             android:layout_height="120dp"
             android:background="#ff777777"
             android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop" >
-        </com.android.volley.toolbox.NetworkImageView>
+            android:scaleType="centerCrop"></com.android.volley.toolbox.NetworkImageView>
 
         <TextView
             android:id="@+id/fragment_account_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/account_detail_header"
-            android:text="123" />
+            android:text="123"
+            android:textAppearance="@style/account_detail_header" />
 
         <TextView
             android:id="@+id/fragment_account_user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/account_detail_detail"
             android:drawableLeft="@drawable/facebook_logo"
             android:drawablePadding="5dp"
-            android:text="456789" />
+            android:text="456789"
+            android:textAppearance="@style/account_detail_detail" />
     </LinearLayout>
 
 </RelativeLayout>

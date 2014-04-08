@@ -6,7 +6,6 @@ import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 public class ArtistAggregatorScannerTest extends ActivityInstrumentationTestCase2 {

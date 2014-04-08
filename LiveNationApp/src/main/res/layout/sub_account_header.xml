@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ui_underscore_background"
     android:minHeight="180dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/account_header_provider_container"

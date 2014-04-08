@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * A list fragment that shows rich push messages.
- *
  */
 public abstract class BaseInboxFragment extends ListFragment {
     private OnMessageListener listener;
@@ -58,6 +57,7 @@ public abstract class BaseInboxFragment extends ListFragment {
 
     /**
      * Sets the rich push messages to display
+     *
      * @param messages Current list of rich push messages
      */
     public void setMessages(List<RichPushMessage> messages) {
@@ -105,6 +105,7 @@ public abstract class BaseInboxFragment extends ListFragment {
 
     /**
      * Tries to set the activity as an OnMessageListener
+     *
      * @param activity The specified activity
      */
     private void setActivityAsListener(Activity activity) {
@@ -117,17 +118,8 @@ public abstract class BaseInboxFragment extends ListFragment {
     }
 
     /**
-     * Listens for activity_message selection and selection changes
-     *
-     */
-    public interface OnMessageListener {
-        void onMessageOpen(RichPushMessage message);
-        void onSelectionChanged();
-    }
-
-
-    /**
      * Sets a activity_message is selected or not
+     *
      * @param messageId The id of the activity_message
      * @param isChecked Boolean indicating if the activity_message is selected or not
      */
@@ -143,6 +135,7 @@ public abstract class BaseInboxFragment extends ListFragment {
 
     /**
      * Returns if a activity_message is selected
+     *
      * @param messageId The id of the activity_message
      * @return <code>true</code> If the activity_message is selected, <code>false</code> otherwise.
      */
@@ -156,7 +149,14 @@ public abstract class BaseInboxFragment extends ListFragment {
      */
     protected abstract RichPushMessageAdapter.ViewBinder createMessageBinder();
 
+    /**
+     * Listens for activity_message selection and selection changes
+     */
+    public interface OnMessageListener {
+        void onMessageOpen(RichPushMessage message);
 
+        void onSelectionChanged();
+    }
 
 
 }
