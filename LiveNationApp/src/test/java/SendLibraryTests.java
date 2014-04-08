@@ -101,9 +101,10 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2 implement
     }
 
     private LiveNationApiBuilder getApiBuilder() {
-        ApiBuilderElement<String> host = new StringValueConfig("http://stg.api.livenation.com");
+        Constants.Environment environment = Constants.Environment.StagingDirect;
+        ApiBuilderElement<String> host = new StringValueConfig(environment.getHost());
         ApiBuilderElement<String> deviceId = new StringValueConfig(UUID.randomUUID().toString());
-        ApiBuilderElement<String> clientId = new StringValueConfig(Constants.clientId);
+        ApiBuilderElement<String> clientId = new StringValueConfig(environment.getClientId());
         ApiBuilderElement<Context> appContext = new ContextConfig(getInstrumentation().getContext());
         ApiBuilderElement<ApiSsoProvider> ssoProvider = new SsoProviderConfig();
         ApiBuilderElement<Double[]> location = new ApiBuilderElement<Double[]>() {

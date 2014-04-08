@@ -31,6 +31,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import io.segment.android.models.Props;
+
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
 	public static final String PARAMETER_VENUE_ID = "venue_id";
 	
@@ -76,6 +78,11 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
 	@Override
 	public void setVenue(Venue venue) {
+        //Analytics
+        Props props = new Props();
+        props.put("Venue Name", venue.getName());
+        trackScreenWithLocation("User views VDP screen", props);
+
 		venueTitle.setText(venue.getName());
 		if (null != venue.getAddress()) {
 			Address address = venue.getAddress();

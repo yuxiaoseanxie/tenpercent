@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
+import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.urbanairship.push.PushManager;
@@ -37,6 +39,15 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  */
 public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
+    private static enum ScanOptions {
+        HIDE_TOAST("Hide toast"),
+        SHOW_TOAST("Show toast");
+        private String message;
+
+        ScanOptions(String message) {
+            this.message = message;
+        }
+    }
     private ArrayList<DebugItem> actions;
 
     private StickyListHeadersListView listView;
@@ -45,6 +56,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem accessTokenItem;
     private DebugItem environmentItem;
     private DebugItem locationItem;
+    private DebugItem scanItem;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -134,10 +146,20 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
     private void addActionDebugItems()
     {
+        //Environnement Item
         environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
         actions.add(environmentItem);
-    }
 
+        //Scan Item
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferences.DEBUG_MODE_DATA, MODE_PRIVATE);
+        Boolean isDebugModeActivited = sharedPreferences.getBoolean(Constants.SharedPreferences.DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED, false);
+        String scanValue = ScanOptions.HIDE_TOAST.message;
+        if (isDebugModeActivited) {
+            scanValue = ScanOptions.SHOW_TOAST.message;
+        }
+        scanItem = new ScanItem(getString(R.string.debug_item_scan, MusicLibraryScannerHelper.artistNumber), scanValue);
+        actions.add(scanItem);
+    }
 
     public void onShareSelected()
     {
@@ -263,6 +285,49 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
                     setEnvironment(environment);
                     environmentItem.setValue(environment.toString());
                     actionsAdapter.notifyDataSetChanged();
+                }
+            });
+
+            builder.create().show();
+
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class ScanItem extends DebugItem {
+        private ScanItem(String name, String value) {
+            super(name, value);
+        }
+
+        @Override
+        public void doAction(final Context context) {
+            String[] items = new String[ScanOptions.values().length];
+            for (int i = 0; i < ScanOptions.values().length; i++) {
+                items[i] = ScanOptions.values()[i].message;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(DebugActivity.this);
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ScanOptions scanOption = ScanOptions.values()[i];
+                    SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.DEBUG_MODE_DATA, MODE_PRIVATE).edit();
+                    switch (scanOption) {
+                        case SHOW_TOAST:
+                            editor.putBoolean(Constants.SharedPreferences.DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED, true);
+                            break;
+                        case HIDE_TOAST:
+                            editor.putBoolean(Constants.SharedPreferences.DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED, false);
+                            break;
+
+                    }
+                    scanItem.setValue(scanOption.message);
+                    actionsAdapter.notifyDataSetChanged();
+                    editor.commit();
                 }
             });
 

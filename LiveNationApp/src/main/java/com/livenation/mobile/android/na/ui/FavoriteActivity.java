@@ -13,7 +13,6 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,7 +22,8 @@ import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
-public class FavoriteActivity extends FragmentActivity implements FavoritesView  {
+
+public class FavoriteActivity extends LiveNationFragmentActivity implements FavoritesView  {
 	private FavoritesView favoritesView;
 	
 	@Override

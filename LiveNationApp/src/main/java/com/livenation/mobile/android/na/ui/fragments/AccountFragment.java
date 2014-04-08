@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -28,6 +29,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
+
+import io.segment.android.Analytics;
 
 public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
 	private Fragment profileFragment;
@@ -123,6 +126,12 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
 		@Override
 		public void onClick(View v) {
+            if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
+                Analytics.track(AnalyticConstants.FAVORITES_ARTISTS_CELL_TAP);
+            } else {
+                Analytics.track(AnalyticConstants.FAVORITES_VENUES_CELL_TAP);
+            }
+
 			Intent intent = new Intent(getActivity(), FavoriteActivity.class);
 			intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
 			startActivity(intent);
@@ -132,6 +141,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private class OnLocationClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            Analytics.track(AnalyticConstants.LOCATION_ICON_TAP);
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }

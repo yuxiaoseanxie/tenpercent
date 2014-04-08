@@ -31,9 +31,13 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import io.segment.android.Analytics;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -326,6 +330,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
+            String[] tabsAnalyticsLabel = new String[] {AnalyticConstants.NAV_MENU_YOUR_SHOWS_ITEM, AnalyticConstants.NAV_MENU_NEARBY_ITEM, AnalyticConstants.NAV_MENU_ALL_SHOWS_ITEM};
+            Analytics.track(tabsAnalyticsLabel[position] + " " + AnalyticConstants.NAV_MENU_SELECTED);
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);

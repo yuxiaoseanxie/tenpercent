@@ -28,6 +28,19 @@
     <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
+    <!-- Begin segment.io Permissions -->
+    <!-- Allow you to get LOGCAT information when a crash occurs. -->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+    <!-- Allow you to see which activity was active when a crash occurs. -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <!-- Allows location to be tracked. -->
+    <!-- android.permission.ACCESS_COARSE_LOCATION already there -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- End segment.io Permissions -->
+
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />

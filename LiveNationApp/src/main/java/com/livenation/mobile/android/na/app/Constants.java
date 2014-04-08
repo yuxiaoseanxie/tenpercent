@@ -16,8 +16,9 @@ public class Constants {
 
     public static enum Environment {
         Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
+        ProductionDirect("https://prod-faceoff.herokuapp.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
+        Staging("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
         StagingDirect("https://stg-faceoff.herokuapp.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
-        StagingAkamai("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
         Integration("https://int-faceoff.herokuapp.com", "486e2ff6-98f5-11e3-b37c-ca4ec9c3f32c");
 
         private final String host;
@@ -62,5 +63,12 @@ public class Constants {
         public static final String EXTRA_EVENT_INFO_LOCAL_START_TIME = "local_start_time";
 
         public static final String EXTRA_RICH_MESSAGE_ID = "_uamid";
+    }
+
+    public class SharedPreferences {
+        public static final String MUSIC_SYNC_NAME = "music_sync_name";
+        public static final String MUSIC_SYNC_LAST_SYNC_DATE_KEY = "music_sync_last_sync_date_key";
+        public static final String DEBUG_MODE_DATA = "debug_mode_data";
+        public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
     }
 }
