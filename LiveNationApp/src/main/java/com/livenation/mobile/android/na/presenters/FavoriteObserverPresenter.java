@@ -48,7 +48,7 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     public void post(Favorite target) {
         Favorite existing = getExisting(target);
         if (null == existing) {
-             //new favorite
+            //new favorite
             favorites.add(target);
         } else {
             //existing favorite
@@ -71,7 +71,7 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
         if (null == favorite) return false;
         boolean result = favorites.remove(favorite);
         if (result) {
-           notifyObservers(favorite, true);
+            notifyObservers(favorite, true);
         }
         return result;
     }
@@ -142,12 +142,13 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
         private Favorite target;
 
         public Observer(StateListener<Observer> listener,
-                                   Bundle args, FavoriteObserverView view) {
+                        Bundle args, FavoriteObserverView view) {
             super(listener, args, view);
         }
 
         @Override
-        public void run() {}
+        public void run() {
+        }
 
         @Override
         public void applyArgs(Bundle args) {

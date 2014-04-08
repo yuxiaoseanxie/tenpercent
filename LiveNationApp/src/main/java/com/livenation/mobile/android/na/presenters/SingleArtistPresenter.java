@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -53,7 +54,7 @@ public class SingleArtistPresenter
         }
     }
 
-    public static class SingleArtistState extends BaseResultState<Artist, SingleArtistView> implements LiveNationApiService.GetSingleArtistApiCallback {
+    public static class SingleArtistState extends BaseResultState<Artist, SingleArtistView> implements ApiService.BasicApiCallback<Artist> {
         private ApiParameters.SingleArtistParameters apiParams;
 
         public static final int FAILURE_API_GENERAL = 0;
@@ -64,7 +65,7 @@ public class SingleArtistPresenter
 
         @Override
         public void onHasResult(Artist artist) {
-            onGetArtist(artist);
+            onSuccess(artist);
         }
 
         @Override
@@ -84,12 +85,6 @@ public class SingleArtistPresenter
         }
 
         @Override
-        public void onGetArtist(Artist artist) {
-            setResult(artist);
-            notifyReady();
-        }
-
-        @Override
         public void onFailure(int errorCode, String message) {
             notifyFailed(FAILURE_API_GENERAL);
         }
@@ -97,6 +92,12 @@ public class SingleArtistPresenter
         @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
+        }
+
+        @Override
+        public void onSuccess(Artist result) {
+            setResult(result);
+            notifyReady();
         }
     }
 }
