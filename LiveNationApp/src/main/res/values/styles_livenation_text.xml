@@ -194,4 +194,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="decorated_edittext_hint_text" parent="@style/livenation_app_text">
+        <item name="android:textColor">@color/decorated_edittext_hint_text_color</item>
+    </style>
 </resources>

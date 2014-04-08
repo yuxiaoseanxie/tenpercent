@@ -80,7 +80,7 @@
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
 
-    <string name="search_input_hint">Search</string>
+    <string name="search_input_hint">Search Artists and Venues</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
