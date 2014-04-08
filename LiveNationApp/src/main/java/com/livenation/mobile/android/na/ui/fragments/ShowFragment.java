@@ -31,6 +31,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
@@ -48,6 +50,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
 	private TextView artistTitle;
@@ -72,7 +77,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		
 		mapFragment = new LiveNationMapFragment();
 		mapFragment.setMapReadyListener(this);
-	
+
 		addFragment(R.id.fragment_show_map_container, mapFragment, "map");
 	}
 	
@@ -100,6 +105,10 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
     @Override
 	public void setEvent(Event event) {
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        trackScreenWithLocation("User views SDP screen", props);
+
 		artistTitle.setText(event.getName());
 		
 		try {
@@ -126,7 +135,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 			 
 			venueDetails.getTelephone().setText(venue.getFormattedPhoneNumber());
 			
-			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(venue);
+			OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event);
 			venueDetails.setOnClickListener(onVenueClick);
 			
 			OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity());
@@ -213,19 +222,24 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 	}
 
 	private class OnVenueDetailsClick implements View.OnClickListener {
-		private final Venue venue;
+        private final Event event;
 		
-		public OnVenueDetailsClick(Venue venue) {
-			this.venue = venue;
+		public OnVenueDetailsClick(Event event) {
+            this.event = event;
 		}
 
 		@Override
 		public void onClick(View v) {
+            Venue venue = event.getVenue();
 			Intent intent = new Intent(getActivity(), VenueActivity.class);
 
             Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
             SingleVenuePresenter.embedResult(args, venue);
             intent.putExtras(args);
+
+            //Analytics
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            Analytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
 
 			startActivity(intent);
 		}
@@ -240,6 +254,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 		
 		@Override
 		public void onClick(View v) {
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
 			Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -253,11 +269,18 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onFavoriteAdded(Favorite favorite) {
+
+            Props props = new Props();
+            props.put("Venue Name", favorite.getName());
+            Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(true);
         }
 
         @Override
         public void onFavoriteRemoved(Favorite favorite) {
+            Props props = new Props();
+            props.put("Venue Name", favorite.getName());
+            Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(false);
         }
     }
