@@ -8,7 +8,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ArtistEventsPresenter
         extends BasePresenter<ArtistEventsView, ArtistEventsPresenter.ArtistEventsState>
-        implements Presenter<ArtistEventsView>, BaseState.StateListener<ArtistEventsPresenter.ArtistEventsState>{
+        implements Presenter<ArtistEventsView>, BaseState.StateListener<ArtistEventsPresenter.ArtistEventsState> {
     private static final String INTENT_DATA_KEY = ArtistEventsPresenter.class.getName();
     private static final String PARAMETER_ARTIST_ID = "artist_id";
     private static final String PARAMETER_LIMIT = "limit";
@@ -41,7 +41,7 @@ public class ArtistEventsPresenter
 
     public static class ArtistEventsState
             extends BaseResultState<ArtistEvents, ArtistEventsView>
-            implements LiveNationApiService.GetEventsApiCallback {
+            implements ApiService.BasicApiCallback<List<Event>> {
         private ApiParameters.ArtistEventsParameters apiParams;
 
         public ArtistEventsState(StateListener<ArtistEventsState> listener, Bundle args, ArtistEventsView view) {
@@ -65,14 +65,6 @@ public class ArtistEventsPresenter
         }
 
         @Override
-        public void onGetEvents(List<Event> events) {
-            double lat = getApiService().getApiConfig().getLat();
-            double lng = getApiService().getApiConfig().getLng();
-            setResult(ArtistEvents.from((ArrayList<Event>) events, lat, lng));
-            notifyReady();
-        }
-
-        @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
             apiParams = ApiParameters.createArtistEventsParameters();
@@ -89,6 +81,14 @@ public class ArtistEventsPresenter
         @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
+        }
+
+        @Override
+        public void onSuccess(List<Event> result) {
+            double lat = getApiService().getApiConfig().getLat();
+            double lng = getApiService().getApiConfig().getLng();
+            setResult(ArtistEvents.from((ArrayList<Event>) result, lat, lng));
+            notifyReady();
         }
     }
 }

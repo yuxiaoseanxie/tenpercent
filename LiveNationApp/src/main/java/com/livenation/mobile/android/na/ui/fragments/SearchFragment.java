@@ -20,8 +20,8 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService.AutoCompleteSearchCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, AutoCompleteSearchCallback, ListView.OnItemClickListener {
+public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private final String[] SEARCH_INCLUDES = new String[] {"venues", "artists"};
