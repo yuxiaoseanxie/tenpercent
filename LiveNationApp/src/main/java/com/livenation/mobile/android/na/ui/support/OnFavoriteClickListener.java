@@ -12,8 +12,6 @@ import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.LineupEntry;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public class OnFavoriteClickListener {
