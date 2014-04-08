@@ -68,7 +68,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 	}
 	
 	public AuthConfiguration getAuthConfiguration(Context context) {
-		String accessToken = (String) persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
+		String accessToken = persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
 		String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
 		
 		if (TextUtils.isEmpty(ssoId)) {
