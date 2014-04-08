@@ -9,6 +9,8 @@
         android:layout_height="match_parent"
         android:layout_marginRight="@dimen/decorated_edittext_input_margin_right"
         android:singleLine="true"
+        android:imeOptions="actionGo"
+        android:inputType="textAutoCorrect"
         android:background="@null"/>
     <TextView
         android:id="@android:id/hint"
