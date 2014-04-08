@@ -14,6 +14,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -114,7 +115,7 @@ public class LiveNationApplication extends Application {
     private void setupTicketing() {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
-        ticketingConfig.setApiKey("35abec5b15804303aaedbf6bdeb259b2");
+        ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
         ticketingConfig.setClient("tmus");
         ticketingConfig.setImageLoader(getImageLoader());
         Ticketing.init(ticketingConfig);
