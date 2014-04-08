@@ -99,6 +99,41 @@
             android:value="@string/facebook_app_id" />
 
 
+        <!-- begin auto-generated activities -->
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.LoadEventActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.BarcodeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.CaptchaActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.ConfirmActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.EventActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
+            android:screenOrientation="portrait" />
+        <!-- end auto-generated activities -->
+
+
         <!-- Urban Airship config -->
         <activity
             android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />

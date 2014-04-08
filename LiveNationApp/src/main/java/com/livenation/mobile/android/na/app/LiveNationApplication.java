@@ -14,6 +14,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -33,6 +34,7 @@ import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -94,6 +96,7 @@ public class LiveNationApplication extends Application {
         imageLoader = new ImageLoader(requestQueue, cache);
 
         setupNotifications();
+        setupTicketing();
         checkInstalledAppForAnalytics();
     }
 
@@ -109,6 +112,14 @@ public class LiveNationApplication extends Application {
         PushManager.shared().setIntentReceiver(PushReceiver.class);
     }
 
+    private void setupTicketing() {
+        Ticketing.Config ticketingConfig = new Ticketing.Config();
+        ticketingConfig.setContext(this);
+        ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
+        ticketingConfig.setClient("tmus");
+        ticketingConfig.setImageLoader(getImageLoader());
+        Ticketing.init(ticketingConfig);
+    }
     private void checkInstalledAppForAnalytics() {
         Analytics.initialize(this);
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
@@ -118,6 +129,7 @@ public class LiveNationApplication extends Application {
             Analytics.track(AnalyticConstants.TRACK_URL_SHCEMES, props);
         }
     }
+
 
     public LocationManager getLocationManager() {
         return locationManager;
