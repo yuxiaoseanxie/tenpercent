@@ -22,7 +22,6 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:text="@string/mock_placeholder_artist_title_1"
             android:textAppearance="@style/venue_venue_title" >
         </TextView>
     </FrameLayout>

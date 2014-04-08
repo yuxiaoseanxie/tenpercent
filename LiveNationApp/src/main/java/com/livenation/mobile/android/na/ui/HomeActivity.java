@@ -151,6 +151,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
             case R.id.menu_home_search_item:
                 Analytics.track(AnalyticConstants.SEARCH_ICON_TAP);
+                startActivity(new Intent(this, SearchActivity.class));
                 return true;
 
             case R.id.menu_home_faq_item:
