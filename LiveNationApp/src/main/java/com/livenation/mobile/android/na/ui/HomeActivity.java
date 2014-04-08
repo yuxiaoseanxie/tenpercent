@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +26,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -35,17 +35,15 @@ import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
-import com.livenation.mobile.android.na.ui.fragments.RecommendationsFragment;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.util.List;
 
-public class HomeActivity extends FragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
+import io.segment.android.Analytics;
+public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
+
 	private ActionBarDrawerToggle drawerToggle;
 	private ViewPager pager;
     private FragmentAdapter adapter;
@@ -66,7 +64,19 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 		drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
 											R.drawable.ic_drawer, 
 											R.string.actionbar_drawer_open,
-											R.string.actionbar_drawer_close);
+											R.string.actionbar_drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Analytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                Analytics.track(AnalyticConstants.X_TAP);
+            }
+        };
 		rootView.setDrawerListener(drawerToggle);
         adapter = new FragmentAdapter(getSupportFragmentManager(), getApplicationContext());
 
@@ -131,6 +141,7 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
+                Analytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -139,7 +150,16 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
                 return true;
 
             case R.id.menu_home_search_item:
+                Analytics.track(AnalyticConstants.SEARCH_ICON_TAP);
                 startActivity(new Intent(this, SearchActivity.class));
+                return true;
+
+            case R.id.menu_home_faq_item:
+                Analytics.track(AnalyticConstants.HELP_CELL_TAP);
+                return true;
+
+            case R.id.menu_home_legal_item:
+                Analytics.track(AnalyticConstants.LEGAL_CELL_TAP);
                 return true;
 
             default:
@@ -239,5 +259,4 @@ public class HomeActivity extends FragmentActivity implements AccountSaveAuthTok
             }
         }
     }
-
 }
