@@ -23,8 +23,10 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -41,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -54,6 +58,8 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        trackScreenWithLocation("User views Your Shows screen", new Props());
+
 		adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
         scrollPager = new ScrollPager(adapter);
 
@@ -107,11 +113,16 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 		Intent intent = new Intent(getActivity(), ShowActivity.class);
 		Event event = adapter.getItem(position);
 
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put("Cell Position", position);
+        Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
 
-		startActivity(intent);
+        startActivity(intent);
 	}
 
     @Override
@@ -191,7 +202,6 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         public long getHeaderId(int position) {
             String dateRaw = getItem(position).getStartTime();
             try {
-
                 Date date = sdf.parse(dateRaw);
                 String dateValue = DateFormat.format("yyyyMM", date).toString();
                 return Long.valueOf(dateValue);

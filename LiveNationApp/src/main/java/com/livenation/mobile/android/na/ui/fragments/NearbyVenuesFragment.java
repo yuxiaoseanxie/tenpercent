@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 import android.content.Context;
@@ -31,8 +33,10 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -65,6 +69,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        trackScreenWithLocation("User views Nearby screen", new Props());
+
 		adapter = new EventVenueAdapter(getActivity());
         pager = new ScrollPager(adapter);
 
@@ -118,6 +124,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
     public void onApiServiceAttached(LiveNationApiService apiService) {
         this.lat = apiService.getApiConfig().getLat();
         this.lng = apiService.getApiConfig().getLng();
+
         init();
     }
 
@@ -167,7 +174,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 				e.printStackTrace();
 			}
 
-			view.setOnClickListener(new OnShowClick(event));
+			view.setOnClickListener(new OnShowClick(event, position));
 
 			return view;
 		}
@@ -210,7 +217,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             holder.getFavorite().setChecked(false);
             holder.setFavoriteControl(event.getVenue(), getFavoritesPresenter());
 
-            holder.getVenueTextContainer().setOnClickListener(new OnVenueClick(event.getVenue()));
+            holder.getVenueTextContainer().setOnClickListener(new OnVenueClick(event.getVenue(), position));
 
 			return view;	
 		}
@@ -289,11 +296,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             private class FavoriteListener implements FavoriteObserverView {
                 @Override
                 public void onFavoriteAdded(Favorite favorite) {
+                    Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP);
                     getFavorite().setChecked(true);
                 }
 
                 @Override
                 public void onFavoriteRemoved(Favorite favorite) {
+                    Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP);
                     getFavorite().setChecked(false);
                 }
             }
@@ -366,9 +375,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
     private class OnShowClick implements View.OnClickListener {
         private final Event event;
+        private final int position;
 
-        private OnShowClick(Event event) {
+        private OnShowClick(Event event, int position) {
             this.event = event;
+            this.position = position;
         }
 
         @Override
@@ -378,6 +389,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             Bundle args = SingleEventPresenter.getAruguments(event.getId());
             SingleEventPresenter.embedResult(args, event);
 
+            //Analytics
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            props.put("Cell Position", position);
+            Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+
             intent.putExtras(args);
             getActivity().startActivity(intent);
         }
@@ -385,9 +401,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
     private class OnVenueClick implements View.OnClickListener {
         private final Venue venue;
+        private final int position;
 
-        private OnVenueClick(Venue venue) {
+        private OnVenueClick(Venue venue, int position) {
             this.venue = venue;
+            this.position = position;
         }
 
         @Override
@@ -396,6 +414,12 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
             Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
             SingleVenuePresenter.embedResult(args, venue);
+
+            //Analytics
+            Props props = new Props();
+            props.put("Venue Name", venue.getName());
+            props.put("Cell Position", position);
+            Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
 
             intent.putExtras(args);
             getActivity().startActivity(intent);

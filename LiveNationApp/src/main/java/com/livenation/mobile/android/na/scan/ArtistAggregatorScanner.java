@@ -11,12 +11,15 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ArtistAggregatorScanner {
+import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 
+public class ArtistAggregatorScanner {
 
     private enum Aggregator {
         DEVICE(DeviceArtistAggregator.class),
@@ -38,9 +41,13 @@ public class ArtistAggregatorScanner {
         }
     }
 
-    public void aggregate(Context context, ArtistAggregatorScannerCallback callback) {
-        ScannerTask task = new ScannerTask(context,callback);
+    public void aggregate(Context context, ArtistAggregatorScannerCallback callback, Date sinceDate) {
+        ScannerTask task = new ScannerTask(context,callback, sinceDate);
         new Thread(task).start();
+    }
+
+    public void aggregate(Context context, ArtistAggregatorScannerCallback callback) {
+        aggregate(context, callback, null);
     }
 
     private ArtistAggregator getInstanceOfArtistAggregator(Aggregator aggregator, Context context) {
@@ -65,8 +72,13 @@ public class ArtistAggregatorScanner {
         final private MusicLibrary musicLibrary = new MusicLibrary();
         final private Context context;
         final private ArtistAggregatorScannerCallback callback;
+        final private Date sinceDate;
 
         public ScannerTask(Context context, ArtistAggregatorScannerCallback callback) {
+            this(context, callback, null);
+        }
+
+        public ScannerTask(Context context, ArtistAggregatorScannerCallback callback, Date sinceDate) {
             if (context == null) {
                 throw new NullPointerException("Context cannot be null");
             }
@@ -75,6 +87,7 @@ public class ArtistAggregatorScanner {
             }
             this.context = context;
             this.callback = callback;
+            this.sinceDate = sinceDate;
         }
 
         @Override
@@ -91,15 +104,22 @@ public class ArtistAggregatorScanner {
             for (Aggregator aggregator : aggregatorsCopy) {
                 ArtistAggregator artistAggregator = getInstanceOfArtistAggregator(aggregator, ScannerTask.this.context);
                 final Aggregator aggregatorFinal = aggregator;
-                artistAggregator.getArtists(new ArtistAggregatorCallback() {
-                    @Override
-                    public void onResult(List<MusicLibraryEntry> libraryEntries) {
-                        if (libraryEntries != null) {
-                            musicLibrary.addAll(libraryEntries);
+                try {
+                    artistAggregator.getArtists(sinceDate, new ArtistAggregatorCallback() {
+                        @Override
+                        public void onResult(List<MusicLibraryEntry> libraryEntries) {
+                            if (libraryEntries != null) {
+                                musicLibrary.addAll(libraryEntries);
+                            }
+                            decrementJobCounter(aggregatorFinal);
                         }
-                        decrementJobCounter(aggregatorFinal);
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Props props = new Props();
+                    props.put("Exception", e);
+                    Analytics.track("Unexpected Exception", props);
+                    decrementJobCounter(aggregatorFinal);
+                }
             }
         }
 

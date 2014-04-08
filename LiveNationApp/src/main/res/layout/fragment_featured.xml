@@ -29,7 +29,6 @@
         android:minHeight="@dimen/fragment_featured_container_min_height"
         android:layout_marginTop="@dimen/featured_layout_padding"
         android:orientation="horizontal" >
-
     </LinearLayout>
 
 </RelativeLayout>
