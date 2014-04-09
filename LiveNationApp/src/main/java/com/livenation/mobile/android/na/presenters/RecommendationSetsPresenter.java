@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
@@ -72,7 +73,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createRecommendationSetsParameters();
+            params = new ApiParameters.RecommendationSetsParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -83,22 +84,17 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
 
         @Override
         public void onHasResult(ArrayList<RecommendationSet> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = ApiParameters.createRecommendationSetsParameters();
+                params = new ApiParameters.RecommendationSetsParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);
             getApiService().getRecommendationSets(params, RecommendationSetsState.this);
-        }
-
-        @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
         }
 
         @Override
@@ -107,9 +103,14 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         }
 
         @Override
-        public void onSuccess(List<RecommendationSet> result) {
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
+        }
+
+        @Override
+        public void onResponse(List<RecommendationSet> response) {
             //The Java List interface does not implement Serializable, but ArrayList does
-            setResult((ArrayList<RecommendationSet>) result);
+            setResult((ArrayList<RecommendationSet>) response);
             notifyReady();
         }
     }

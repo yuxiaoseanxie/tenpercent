@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -94,7 +95,7 @@ public class FavoritesPresenter extends
 
         @Override
         public void onHasResult(ArrayList<Favorite> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
@@ -105,16 +106,11 @@ public class FavoritesPresenter extends
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createSingleVenueParameters();
+            apiParams = new SingleVenueParameters();
 
             String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
             long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
             apiParams.setVenueId(venueId);
-        }
-
-        @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
         }
 
         @Override
@@ -123,8 +119,13 @@ public class FavoritesPresenter extends
         }
 
         @Override
-        public void onSuccess(List<Favorite> result) {
-            setResult((ArrayList<Favorite>) result);
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
+        }
+
+        @Override
+        public void onResponse(List<Favorite> response) {
+            setResult((ArrayList<Favorite>) response);
             notifyReady();
         }
     }
@@ -191,16 +192,11 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = ApiParameters.createFavoriteWithNameParameters();
+                apiParams = new ApiParameters.FavoriteWithNameParameters();
                 Favorite favorite = (Favorite) args.getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();
                 apiParams.setId(idValue, favorite.getType());
                 apiParams.setName(favorite.getName());
-            }
-
-            @Override
-            public void onFailure(int failureCode, String message) {
-                notifyFailed(FAILURE_API_GENERAL);
             }
 
             @Override
@@ -209,7 +205,12 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onSuccess(Void result) {
+            public void onErrorResponse(VolleyError error) {
+                notifyFailed(FAILURE_API_GENERAL);
+            }
+
+            @Override
+            public void onResponse(Void response) {
                 notifyReady();
             }
         }
@@ -280,16 +281,11 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = ApiParameters.createFavoriteParameters();
+                apiParams = new ApiParameters.FavoriteParameters();
                 Favorite favorite = (Favorite) args
                         .getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();
                 apiParams.setId(idValue, favorite.getType());
-            }
-
-            @Override
-            public void onFailure(int failureCode, String message) {
-                notifyFailed(FAILURE_API_GENERAL);
             }
 
             @Override
@@ -298,7 +294,12 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onSuccess(Void result) {
+            public void onErrorResponse(VolleyError error) {
+                notifyFailed(FAILURE_API_GENERAL);
+            }
+
+            @Override
+            public void onResponse(Void response) {
                 notifyReady();
             }
         }

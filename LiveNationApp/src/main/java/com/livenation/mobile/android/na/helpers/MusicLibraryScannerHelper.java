@@ -3,9 +3,9 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
-import com.livenation.mobile.android.na.scan.ArtistAggregatorScannerCallback;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 
@@ -29,16 +29,16 @@ public class MusicLibraryScannerHelper {
         }
 
         ArtistAggregatorScanner scanner = new ArtistAggregatorScanner();
-        scanner.aggregate(context, new ArtistAggregatorScannerCallback() {
+        scanner.aggregate(context, new ApiService.BasicApiCallback<MusicLibrary>() {
             @Override
-            public void onSuccess(MusicLibrary musicLibrary) {
-                callback.onSuccess(musicLibrary);
+            public void onResponse(MusicLibrary musicLibrary) {
+                callback.onResponse(musicLibrary);
                 artistNumber = musicLibrary.getData().size();
             }
 
             @Override
-            public void onError(int errorCode, String message) {
-                callback.onFailure(errorCode, message);
+            public void onErrorResponse(VolleyError error) {
+                callback.onErrorResponse(error);
             }
         }, sinceDate);
     }

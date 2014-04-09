@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -76,7 +77,7 @@ public class NearbyVenuesPresenter extends
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createNearbyVenueEventsParameters();
+            params = new NearbyVenuesWithEventsParameters();
             params.setMinimumNumberOfEvents(2);
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
@@ -87,7 +88,7 @@ public class NearbyVenuesPresenter extends
 
         @Override
         public void onHasResult(ArrayList<Venue> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
@@ -97,18 +98,18 @@ public class NearbyVenuesPresenter extends
         }
 
         @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
-        }
-
-        @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
         }
 
         @Override
-        public void onSuccess(List<Venue> result) {
-            setResult((ArrayList<Venue>) result);
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
+        }
+
+        @Override
+        public void onResponse(List<Venue> response) {
+            setResult((ArrayList<Venue>) response);
             notifyReady();
         }
     }

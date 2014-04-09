@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -35,13 +36,13 @@ public class MusicSyncHelper implements ApiServiceBinder {
         MusicLibraryScannerHelper musicLibraryScannerHelper = new MusicLibraryScannerHelper();
         musicLibraryScannerHelper.getMusicDiffSinceLastSync(context, new ApiService.BasicApiCallback<MusicLibrary>() {
             @Override
-            public void onSuccess(MusicLibrary result) {
+            public void onResponse(MusicLibrary result) {
                 musicLibrary = result;
                 LiveNationApplication.get().getApiHelper().bindApi(MusicSyncHelper.this);
             }
 
             @Override
-            public void onFailure(int errorCode, String message) {
+            public void onErrorResponse(VolleyError error) {
                 if (isToastShowable) {
                     failToast.show();
                 }
@@ -56,9 +57,9 @@ public class MusicSyncHelper implements ApiServiceBinder {
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        apiService.sendLibraryAffinities(ApiParameters.createLibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
+        apiService.sendLibraryAffinities(new ApiParameters.LibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
             @Override
-            public void onSuccess(Void result) {
+            public void onResponse(Void result) {
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
                 editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 if (isToastShowable) {
@@ -68,7 +69,7 @@ public class MusicSyncHelper implements ApiServiceBinder {
             }
 
             @Override
-            public void onFailure(int errorCode, String message) {
+            public void onErrorResponse(VolleyError error) {
                 if (isToastShowable) {
                     failToast.show();
                 }

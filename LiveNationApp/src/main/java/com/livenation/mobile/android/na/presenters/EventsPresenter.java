@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -72,7 +73,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createEventParameters();
+            params = new EventParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -82,22 +83,17 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 
         @Override
         public void onHasResult(ArrayList<Event> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = ApiParameters.createEventParameters();
+                params = new EventParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setSortMethod("start_time");
             getApiService().getEvents(params, EventsState.this);
-        }
-
-        @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
         }
 
         @Override
@@ -106,10 +102,15 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         }
 
         @Override
-        public void onSuccess(List<Event> result) {
+        public void onResponse(List<Event> result) {
             //The Java List interface does not implement Serializable, but ArrayList does
             setResult((ArrayList<Event>) result);
             notifyReady();
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
         }
     }
 }
