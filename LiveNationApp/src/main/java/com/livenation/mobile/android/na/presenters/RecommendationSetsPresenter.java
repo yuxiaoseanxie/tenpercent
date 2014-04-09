@@ -73,7 +73,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createRecommendationSetsParameters();
+            params = new ApiParameters.RecommendationSetsParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -90,7 +90,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = ApiParameters.createRecommendationSetsParameters();
+                params = new ApiParameters.RecommendationSetsParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);
@@ -109,7 +109,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
 
         @Override
         public void onResponse(List<RecommendationSet> response) {
-//The Java List interface does not implement Serializable, but ArrayList does
+            //The Java List interface does not implement Serializable, but ArrayList does
             setResult((ArrayList<RecommendationSet>) response);
             notifyReady();
         }

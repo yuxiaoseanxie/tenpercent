@@ -68,7 +68,7 @@ public class VenueEventsPresenter extends
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createVenueEventsParameters();
+            apiParams = new VenueEventsParameters();
 
             String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
             apiParams.setVenueId(DataModelHelper.getNumericEntityId(venueIdRaw));

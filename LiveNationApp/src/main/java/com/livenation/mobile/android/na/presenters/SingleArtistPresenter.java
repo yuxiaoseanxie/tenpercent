@@ -74,7 +74,7 @@ public class SingleArtistPresenter
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createSingleArtistParameters();
+            apiParams = new ApiParameters.SingleArtistParameters();
             if (args.containsKey(PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
                 long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
