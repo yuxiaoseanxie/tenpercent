@@ -46,8 +46,8 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public static Constants.Environment getConfiguredEnvironment(Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        String environmentKey = prefs.read("environment", context);
+        PersistenceProvider<String> prefs = new PreferencePersistence(Constants.SharedPreferences.ENVIRONMENT);
+        String environmentKey = prefs.read(Constants.SharedPreferences.ENVIRONMENT, context);
 
         try {
             return Constants.Environment.valueOf(environmentKey);
@@ -57,8 +57,8 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        prefs.write("environment", environment.toString(), context);
+        PersistenceProvider<String> prefs = new PreferencePersistence(Constants.SharedPreferences.ENVIRONMENT);
+        prefs.write(Constants.SharedPreferences.ENVIRONMENT, environment.toString(), context);
     }
 
     @Override
