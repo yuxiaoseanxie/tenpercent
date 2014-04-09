@@ -19,12 +19,14 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
+import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.FeaturePresenter;
 import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
 import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
 import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
@@ -56,6 +58,16 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     @Override
     public EventsPresenter getEventsPresenter() {
         return LiveNationApplication.get().getEventsPresenter();
+    }
+
+    @Override
+    public SingleArtistPresenter getSingleArtistPresenter() {
+        return LiveNationApplication.get().getSingleArtistPresenter();
+    }
+
+    @Override
+    public ArtistEventsPresenter getArtistEventsPresenter() {
+        return LiveNationApplication.get().getArtistEventsPresenter();
     }
 
     @Override

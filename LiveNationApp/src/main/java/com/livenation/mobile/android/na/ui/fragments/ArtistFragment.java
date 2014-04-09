@@ -18,9 +18,11 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
@@ -31,6 +33,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private ArtistEvents artistEvents;
 
     private NetworkImageView artistImageView;
+    private FavoriteCheckBox favoriteCheckBox;
     private TextView artistTitle;
     private TextView showsHeader;
     private ShowsListNonScrollingFragment shows;
@@ -57,8 +60,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        this.artistImageView = (NetworkImageView) view.findViewById(R.id.fragment_show_image);
-        this.artistTitle = (TextView) view.findViewById(R.id.fragment_show_artist_title);
+        this.artistImageView = (NetworkImageView) view.findViewById(R.id.fragment_artist_image);
+        this.favoriteCheckBox = (FavoriteCheckBox) view.findViewById(R.id.fragment_artist_favorite_checkbox);
+        this.artistTitle = (TextView) view.findViewById(R.id.fragment_artist_title);
 
         this.showsHeader = (TextView) view.findViewById(R.id.fragment_artist_shows_header);
 
@@ -162,19 +166,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private void init() {
         getSingleArtistPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
         getArtistEventsPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
+
+        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
     }
 
     private void deinit() {
         getSingleArtistPresenter().cancel(this);
         getArtistEventsPresenter().cancel(this);
-    }
-
-    private SingleArtistPresenter getSingleArtistPresenter() {
-        return LiveNationApplication.get().getSingleArtistPresenter();
-    }
-
-    private ArtistEventsPresenter getArtistEventsPresenter() {
-        return LiveNationApplication.get().getArtistEventsPresenter();
     }
 
     //endregion
