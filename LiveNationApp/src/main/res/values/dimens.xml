@@ -63,6 +63,7 @@
     <dimen name="nearby_show_date_margin_right">15dp</dimen>
     <dimen name="nearby_show_date_margin_top">20dp</dimen>
     <dimen name="nearby_show_date_margin_bottom">15dp</dimen>
+    <dimen name="nearby_show_header_checkbox_margin_left">8dp</dimen>
     <dimen name="show_calendar_margin_left">10dp</dimen>
     <dimen name="show_calendar_margin_right">10dp</dimen>
     <dimen name="show_calendar_margin_top">10dp</dimen>
