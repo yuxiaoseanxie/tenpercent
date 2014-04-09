@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -64,7 +65,7 @@ public class SingleVenuePresenter extends
 
         @Override
         public void onHasResult(Venue result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
@@ -83,19 +84,19 @@ public class SingleVenuePresenter extends
         }
 
         @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
-        }
-
-        @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
         }
 
         @Override
-        public void onSuccess(Venue result) {
+        public void onResponse(Venue result) {
             setResult(result);
             notifyReady();
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
         }
     }
 }

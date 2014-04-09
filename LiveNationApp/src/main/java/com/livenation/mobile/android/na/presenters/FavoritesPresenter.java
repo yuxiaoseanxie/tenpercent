@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -94,7 +95,7 @@ public class FavoritesPresenter extends
 
         @Override
         public void onHasResult(ArrayList<Favorite> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
@@ -113,18 +114,18 @@ public class FavoritesPresenter extends
         }
 
         @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
-        }
-
-        @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
         }
 
         @Override
-        public void onSuccess(List<Favorite> result) {
-            setResult((ArrayList<Favorite>) result);
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
+        }
+
+        @Override
+        public void onResponse(List<Favorite> response) {
+            setResult((ArrayList<Favorite>) response);
             notifyReady();
         }
     }
@@ -199,17 +200,17 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onFailure(int failureCode, String message) {
-                notifyFailed(FAILURE_API_GENERAL);
-            }
-
-            @Override
             public String getDataKey() {
                 return INTENT_DATA_KEY;
             }
 
             @Override
-            public void onSuccess(Void result) {
+            public void onErrorResponse(VolleyError error) {
+                notifyFailed(FAILURE_API_GENERAL);
+            }
+
+            @Override
+            public void onResponse(Void response) {
                 notifyReady();
             }
         }
@@ -288,17 +289,17 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onFailure(int failureCode, String message) {
-                notifyFailed(FAILURE_API_GENERAL);
-            }
-
-            @Override
             public String getDataKey() {
                 return INTENT_DATA_KEY;
             }
 
             @Override
-            public void onSuccess(Void result) {
+            public void onErrorResponse(VolleyError error) {
+                notifyFailed(FAILURE_API_GENERAL);
+            }
+
+            @Override
+            public void onResponse(Void response) {
                 notifyReady();
             }
         }
