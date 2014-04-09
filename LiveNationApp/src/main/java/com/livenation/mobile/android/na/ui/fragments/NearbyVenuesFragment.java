@@ -17,8 +17,10 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -57,7 +59,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
+public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
     private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static float METERS_IN_A_MILE = 1609.34f;
@@ -94,6 +96,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
+
+        listView.setOnItemClickListener(this);
+        listView.setOnHeaderClickListener(this);
+
         pager.connectListView(listView);
 
         return view;
@@ -131,6 +137,42 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         this.lng = apiService.getApiConfig().getLng();
 
         init();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Event event = adapter.getItem(position);
+        Intent intent = new Intent(getActivity(), ShowActivity.class);
+
+        Bundle args = SingleEventPresenter.getAruguments(event.getId());
+        SingleEventPresenter.embedResult(args, event);
+
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put("Cell Position", position);
+        Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+
+        intent.putExtras(args);
+        getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onHeaderClick(StickyListHeadersListView stickyListHeadersListView, View view, int position, long id, boolean b) {
+        Venue venue = adapter.getItem(position).getVenue();
+
+        Intent intent = new Intent(getActivity(), VenueActivity.class);
+
+        Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
+        SingleVenuePresenter.embedResult(args, venue);
+
+        //Analytics
+        Props props = new Props();
+        props.put("Venue Name", venue.getName());
+        props.put("Cell Position", position);
+        Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
+
+        intent.putExtras(args);
+        getActivity().startActivity(intent);
     }
 
     private void init() {
@@ -179,8 +221,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 e.printStackTrace();
             }
 
-            view.setOnClickListener(new OnShowClick(event, position));
-
             return view;
         }
 
@@ -202,8 +242,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             Event event = getItem(position);
             title.setText(event.getVenue().getName());
 
-            CheckBox checkBox = holder.getFavorite();
-
             TextView location = holder.getLocation();
             location.setText(event.getVenue().getAddress().getSmallFriendlyAddress(false));
             TextView distance = holder.getDistance();
@@ -221,9 +259,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             }
             holder.getFavorite().setChecked(false);
             holder.setFavoriteControl(event.getVenue(), getFavoritesPresenter());
-
-            holder.getVenueTextContainer().setOnClickListener(new OnVenueClick(event.getVenue(), position));
-
             return view;
         }
 
@@ -386,59 +421,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             public void cancel() {
                 getNearbyVenuesPresenter().cancel(this);
             }
-        }
-    }
-
-    private class OnShowClick implements View.OnClickListener {
-        private final Event event;
-        private final int position;
-
-        private OnShowClick(Event event, int position) {
-            this.event = event;
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), ShowActivity.class);
-
-            Bundle args = SingleEventPresenter.getAruguments(event.getId());
-            SingleEventPresenter.embedResult(args, event);
-
-            //Analytics
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            props.put("Cell Position", position);
-            Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
-
-            intent.putExtras(args);
-            getActivity().startActivity(intent);
-        }
-    }
-
-    private class OnVenueClick implements View.OnClickListener {
-        private final Venue venue;
-        private final int position;
-
-        private OnVenueClick(Venue venue, int position) {
-            this.venue = venue;
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), VenueActivity.class);
-
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
-
-            //Analytics
-            Props props = new Props();
-            props.put("Venue Name", venue.getName());
-            props.put("Cell Position", position);
-            Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
-
-            intent.putExtras(args);
-            getActivity().startActivity(intent);
         }
     }
 }
