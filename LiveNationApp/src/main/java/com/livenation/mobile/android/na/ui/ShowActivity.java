@@ -35,6 +35,7 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
         getActionBar().setDisplayShowCustomEnabled(true);
 
         getActionBar().setCustomView(R.layout.actionbar_show_custom);
+        singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
     }
 
     @Override
@@ -48,14 +49,6 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
     protected void onStop() {
         super.onStop();
         deinit();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (null == singleEventView) {
-            singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
-        }
     }
 
     @Override

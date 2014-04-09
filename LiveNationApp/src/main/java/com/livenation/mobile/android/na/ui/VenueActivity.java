@@ -35,6 +35,8 @@ public class VenueActivity extends LiveNationFragmentActivity implements SingleV
         if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
             getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
         }
+        singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
+        eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
     }
 
     @Override
@@ -47,17 +49,6 @@ public class VenueActivity extends LiveNationFragmentActivity implements SingleV
     protected void onStop() {
         super.onStop();
         deinit();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (null == singleVenueView) {
-            singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-        }
-        if (null == eventsView) {
-            eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-        }
     }
 
     @Override
