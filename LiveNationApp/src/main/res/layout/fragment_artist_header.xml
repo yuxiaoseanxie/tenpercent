@@ -30,7 +30,7 @@
         android:layout_gravity="top"
         android:layout_marginLeft="@dimen/artist_header_checkbox_margin_left"
         android:layout_marginTop="@dimen/artist_header_checkbox_margin_top"
-        android:button="@drawable/checkbox_favorite_padding_selector"
+        android:button="@drawable/checkbox_favorite_disc_selector"
         android:checked="false"
         android:minHeight="@dimen/favorite_checkbox_min_height"
         android:minWidth="@dimen/favorite_checkbox_min_width" />
