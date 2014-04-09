@@ -36,8 +36,6 @@ import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
-import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnArtistFavoriteClick;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
@@ -166,10 +164,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            OnArtistFavoriteClick onCheckBoxClick = new OnFavoriteClickListener.OnArtistFavoriteClick(lineup, getFavoritesPresenter(), getActivity());
-            view.getFavorite().setOnClickListener(onCheckBoxClick);
-
-            view.setFavoriteObserver(lineup);
+            view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
 
             view.setOnClickListener(new OnLineupViewClick(lineup));
 
