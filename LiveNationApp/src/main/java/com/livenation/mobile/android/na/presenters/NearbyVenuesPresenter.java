@@ -77,7 +77,7 @@ public class NearbyVenuesPresenter extends
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createNearbyVenueEventsParameters();
+            params = new NearbyVenuesWithEventsParameters();
             params.setMinimumNumberOfEvents(2);
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);

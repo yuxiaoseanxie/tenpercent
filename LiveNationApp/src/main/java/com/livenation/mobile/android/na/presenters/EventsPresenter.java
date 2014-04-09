@@ -73,7 +73,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createEventParameters();
+            params = new EventParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -89,7 +89,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = ApiParameters.createEventParameters();
+                params = new EventParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setSortMethod("start_time");

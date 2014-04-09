@@ -57,7 +57,7 @@ public class MusicSyncHelper implements ApiServiceBinder {
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        apiService.sendLibraryAffinities(ApiParameters.createLibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
+        apiService.sendLibraryAffinities(new ApiParameters.LibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
             @Override
             public void onResponse(Void result) {
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();

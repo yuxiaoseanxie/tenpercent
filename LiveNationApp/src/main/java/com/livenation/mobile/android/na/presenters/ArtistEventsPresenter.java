@@ -63,7 +63,7 @@ public class ArtistEventsPresenter
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createArtistEventsParameters();
+            apiParams = new ApiParameters.ArtistEventsParameters();
 
             String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
             apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));

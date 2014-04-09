@@ -106,7 +106,7 @@ public class FavoritesPresenter extends
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createSingleVenueParameters();
+            apiParams = new SingleVenueParameters();
 
             String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
             long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
@@ -192,7 +192,7 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = ApiParameters.createFavoriteWithNameParameters();
+                apiParams = new ApiParameters.FavoriteWithNameParameters();
                 Favorite favorite = (Favorite) args.getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();
                 apiParams.setId(idValue, favorite.getType());
@@ -281,7 +281,7 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = ApiParameters.createFavoriteParameters();
+                apiParams = new ApiParameters.FavoriteParameters();
                 Favorite favorite = (Favorite) args
                         .getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();

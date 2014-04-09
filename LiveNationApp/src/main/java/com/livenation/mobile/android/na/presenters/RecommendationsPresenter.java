@@ -69,7 +69,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = ApiParameters.createRecommendationParameters();
+            params = new ApiParameters.RecommendationParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -85,7 +85,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = ApiParameters.createRecommendationParameters();
+                params = new ApiParameters.RecommendationParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);

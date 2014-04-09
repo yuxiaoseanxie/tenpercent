@@ -65,7 +65,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             unboundSearchTextBuffer = text;
             return;
         }
-        ApiParameters.AutoCompleteSearchParameters params = ApiParameters.createAutoCompleteSearchParameters();
+        ApiParameters.AutoCompleteSearchParameters params = new ApiParameters.AutoCompleteSearchParameters();
         params.setIncludes(SEARCH_INCLUDES);
         params.setSearchQuery(text);
 

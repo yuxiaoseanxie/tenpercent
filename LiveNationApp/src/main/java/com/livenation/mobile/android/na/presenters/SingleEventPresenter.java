@@ -83,7 +83,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = ApiParameters.createSingleEventParameters();
+            apiParams = new SingleEventParameters();
             if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
                 String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
                 long eventId = DataModelHelper.getNumericEntityId(eventIdRaw);

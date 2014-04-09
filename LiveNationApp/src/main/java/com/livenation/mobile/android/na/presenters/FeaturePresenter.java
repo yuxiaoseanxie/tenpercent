@@ -61,7 +61,7 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
         }
 
         private void retrieveCharts(double lat, double lng) {
-            TopChartParameters params = ApiParameters.createChartParameters();
+            TopChartParameters params = new TopChartParameters();
             params.setLocation(lat, lng);
             getApiService().getTopCharts(params, FeatureState.this);
         }
