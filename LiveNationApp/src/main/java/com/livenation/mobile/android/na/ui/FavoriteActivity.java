@@ -10,7 +10,6 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,6 +36,7 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
         getActionBar().setDisplayShowCustomEnabled(true);
 
         getActionBar().setCustomView(R.layout.actionbar_favorite_custom);
+        favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
     }
 
     @Override
@@ -49,14 +49,6 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
     protected void onStop() {
         super.onStop();
         deinit();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (null == favoritesView) {
-            favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
-        }
     }
 
     @Override
