@@ -138,6 +138,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 case Artist: {
                     int favoriteTypeId = Favorite.FAVORITE_ARTIST;
                     holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter());
+                    break;
                 }
                 case Venue: {
                     int favoriteTypeId = Favorite.FAVORITE_VENUE;
