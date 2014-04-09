@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
@@ -62,7 +63,7 @@ public class SingleArtistPresenter
 
         @Override
         public void onHasResult(Artist artist) {
-            onSuccess(artist);
+            onResponse(artist);
         }
 
         @Override
@@ -82,19 +83,19 @@ public class SingleArtistPresenter
         }
 
         @Override
-        public void onFailure(int errorCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
-        }
-
-        @Override
         public String getDataKey() {
             return INTENT_DATA_KEY;
         }
 
         @Override
-        public void onSuccess(Artist result) {
+        public void onResponse(Artist result) {
             setResult(result);
             notifyReady();
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
         }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -81,17 +82,6 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     }
 
     @Override
-    public void onSuccess(List<SearchResult> results) {
-        adapter.clear();
-        adapter.addAll(results);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onFailure(int errorCode, String message) {
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         SearchResult searchResult = adapter.getItem(position);
 
@@ -105,6 +95,17 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 break;
             }
         }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+    }
+
+    @Override
+    public void onResponse(List<SearchResult> response) {
+        adapter.clear();
+        adapter.addAll(response);
+        adapter.notifyDataSetChanged();
     }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {

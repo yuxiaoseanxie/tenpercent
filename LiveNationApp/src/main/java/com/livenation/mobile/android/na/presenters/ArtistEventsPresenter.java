@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
@@ -60,11 +61,6 @@ public class ArtistEventsPresenter
         }
 
         @Override
-        public void onFailure(int errorCode, String message) {
-            notifyFailed(errorCode);
-        }
-
-        @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
             apiParams = ApiParameters.createArtistEventsParameters();
@@ -84,11 +80,16 @@ public class ArtistEventsPresenter
         }
 
         @Override
-        public void onSuccess(List<Event> result) {
+        public void onResponse(List<Event> result) {
             double lat = getApiService().getApiConfig().getLat();
             double lng = getApiService().getApiConfig().getLng();
             setResult(ArtistEvents.from((ArrayList<Event>) result, lat, lng));
             notifyReady();
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(error.networkResponse.statusCode);
         }
     }
 }

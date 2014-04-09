@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
@@ -78,7 +79,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
 
         @Override
         public void onHasResult(ArrayList<Event> result) {
-            onSuccess(result);
+            onResponse(result);
         }
 
         @Override
@@ -91,10 +92,6 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
             getApiService().getRecommendations(params, RecommendationsState.this);
         }
 
-        @Override
-        public void onFailure(int failureCode, String message) {
-            notifyFailed(FAILURE_API_GENERAL);
-        }
 
         @Override
         public String getDataKey() {
@@ -102,9 +99,14 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         }
 
         @Override
-        public void onSuccess(List<Event> result) {
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(FAILURE_API_GENERAL);
+        }
+
+        @Override
+        public void onResponse(List<Event> response) {
             //The Java List interface does not implement Serializable, but ArrayList does
-            setResult((ArrayList<Event>) result);
+            setResult((ArrayList<Event>) response);
             notifyReady();
         }
     }
