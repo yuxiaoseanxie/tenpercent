@@ -39,6 +39,7 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -258,7 +259,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
                 distance.setVisibility(View.GONE);
             }
             holder.getFavorite().setChecked(false);
-            holder.setFavoriteControl(event.getVenue(), getFavoritesPresenter());
+
+            Venue venue = event.getVenue();
+            holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter());
+
             return view;
         }
 
@@ -297,16 +301,14 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         private class ViewHeaderHolder {
             private final TextView venueTitle;
             private final TextView venueLocation;
-            private final CheckBox venueFavorite;
+            private final FavoriteCheckBox venueFavorite;
             private final TextView venueDistance;
             private final ViewGroup venueTextContainer;
-
-            private FavoriteListener favoriteListener;
 
             public ViewHeaderHolder(View view) {
                 this.venueTitle = (TextView) view.findViewById(R.id.list_venue_header_title);
                 this.venueLocation = (TextView) view.findViewById(R.id.list_venue_header_location);
-                this.venueFavorite = (CheckBox) view.findViewById(R.id.list_venue_header_checkbox);
+                this.venueFavorite = (FavoriteCheckBox) view.findViewById(R.id.list_venue_header_checkbox);
                 this.venueDistance = (TextView) view.findViewById(R.id.list_venue_header_distance);
                 this.venueTextContainer = (ViewGroup) view.findViewById(R.id.list_venue_header_text_container);
             }
@@ -319,7 +321,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
                 return venueLocation;
             }
 
-            public CheckBox getFavorite() {
+            public FavoriteCheckBox getFavorite() {
                 return venueFavorite;
             }
 
@@ -329,30 +331,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
             public ViewGroup getVenueTextContainer() {
                 return venueTextContainer;
-            }
-
-            private void setFavoriteControl(Venue venue, FavoritesPresenter presenter) {
-                if (null != favoriteListener) {
-                    presenter.getObserverPresenter().cancel(favoriteListener);
-                }
-                favoriteListener = new FavoriteListener();
-                Bundle args = presenter.getObserverPresenter().getBundleArgs(Favorite.FAVORITE_VENUE, venue.getNumericId());
-                presenter.getObserverPresenter().initialize(getActivity(), args, favoriteListener);
-                getFavorite().setOnClickListener(new OnFavoriteClickListener.OnVenueFavoriteClick(venue, presenter, getActivity()));
-            }
-
-            private class FavoriteListener implements FavoriteObserverView {
-                @Override
-                public void onFavoriteAdded(Favorite favorite) {
-                    Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP);
-                    getFavorite().setChecked(true);
-                }
-
-                @Override
-                public void onFavoriteRemoved(Favorite favorite) {
-                    Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP);
-                    getFavorite().setChecked(false);
-                }
             }
 
         }
