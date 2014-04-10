@@ -181,6 +181,7 @@
             android:permission="com.livenation.mobile.android.na.permission.UA_DATA" />
 
         <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6"/>
     </application>
 
 </manifest>
