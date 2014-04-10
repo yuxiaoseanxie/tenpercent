@@ -257,7 +257,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         public void onClick(View v) {
             Props props = AnalyticsHelper.getPropsForEvent(event);
             Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
-            Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
+
             //TODO: Non-TM ticketing
             List<String> ticketmasterIds = event.getTicketmasterIds();
             if (ticketmasterIds.size() == 0) {
