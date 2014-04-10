@@ -31,7 +31,7 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
 
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle(R.string.actionbar_show_title);
+
         singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
     }
 

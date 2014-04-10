@@ -33,7 +33,6 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getActionBar().setTitle(R.string.actionbar_favorites_title);
         favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
     }
 

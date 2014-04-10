@@ -35,10 +35,10 @@
     <string name="home_menu_legal">Legal</string>
     <string name="home_menu_faq">FAQ</string>
 
-    <string name="actionbar_show_title">Show</string>
-    <string name="actionbar_artist_title">Artist</string>
-    <string name="actionbar_favorites_title">Favorites</string>
-    <string name="actionbar_venue_title">Venue</string>
+    <string name="activity_label_show">Show</string>
+    <string name="activity_label_artist">Artist</string>
+    <string name="activity_label_favorites">Favorites</string>
+    <string name="activity_label_venue">Venue</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
