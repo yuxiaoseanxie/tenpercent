@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -21,10 +22,14 @@ import java.util.Locale;
 public class ShowView extends LinearLayout {
     //TODO: Move date parsing to Data Model Entity helper. This is ugly
     private final static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
+
     private DisplayMode displayMode;
+
     private TextView title;
     private TextView details;
     private VerticalDate date;
+    private NetworkImageView imageView;
+    private View bottomLine;
 
     public ShowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -88,6 +93,35 @@ public class ShowView extends LinearLayout {
 
     public void setDisplayMode(DisplayMode displayMode) {
         this.displayMode = displayMode;
+
+        if(displayMode != DisplayMode.EVENT)
+            setImageVisible(false);
+    }
+
+    public boolean isBottomLineVisible() {
+        return (bottomLine.getVisibility() == View.VISIBLE);
+    }
+
+    public void setBottomLineVisible(Boolean bottomLineVisible) {
+        if (bottomLineVisible)
+            bottomLine.setVisibility(View.VISIBLE);
+        else
+            bottomLine.setVisibility(View.GONE);
+    }
+
+    public boolean isImageVisible() {
+        return (imageView.getVisibility() == View.VISIBLE);
+    }
+
+    public void setImageVisible(boolean imageVisible) {
+        if(imageVisible)
+            imageView.setVisibility(View.VISIBLE);
+        else
+            imageView.setVisibility(View.GONE);
+    }
+
+    public NetworkImageView getImageView() {
+        return imageView;
     }
 
     private Date getDate(String dateRaw) throws ParseException {
@@ -101,19 +135,19 @@ public class ShowView extends LinearLayout {
     }
 
     private void init(Context context) {
-        this.displayMode = DisplayMode.VENUE;
-
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        //TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
-        //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-        View view = inflater.inflate(R.layout.view_detail_show, null);
+        View view = inflater.inflate(R.layout.view_show, isInEditMode()? null : this, false);
 
-        title = (TextView) view.findViewById(R.id.view_detail_show_title);
-        details = (TextView) view.findViewById(R.id.view_detail_show_details);
-        date = (VerticalDate) view.findViewById(R.id.view_detail_show_date);
+        this.title = (TextView) view.findViewById(R.id.view_show_title);
+        this.details = (TextView) view.findViewById(R.id.view_show_details);
+        this.date = (VerticalDate) view.findViewById(R.id.view_show_date);
+        this.imageView = (NetworkImageView) view.findViewById(R.id.view_show_image);
+        this.bottomLine = view.findViewById(R.id.view_show_bottom_line);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        setDisplayMode(DisplayMode.VENUE);
     }
 
 

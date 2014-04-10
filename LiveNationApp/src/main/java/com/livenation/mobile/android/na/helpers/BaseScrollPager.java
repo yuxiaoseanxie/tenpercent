@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 

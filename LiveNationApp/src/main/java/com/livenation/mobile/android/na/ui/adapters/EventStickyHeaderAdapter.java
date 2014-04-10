@@ -14,6 +14,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +27,7 @@ public class EventStickyHeaderAdapter extends EventAdapter implements StickyList
     private LayoutInflater inflater;
 
     public EventStickyHeaderAdapter(Context context, ShowView.DisplayMode displayMode) {
-        this(context, displayMode, null);
+        this(context, displayMode, new ArrayList<Event>());
     }
 
     public EventStickyHeaderAdapter(Context context, ShowView.DisplayMode displayMode, List<Event> events) {
