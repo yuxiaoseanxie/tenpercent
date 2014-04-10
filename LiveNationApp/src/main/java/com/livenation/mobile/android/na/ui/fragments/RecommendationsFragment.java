@@ -135,13 +135,6 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
             return request;
         }
 
-        @Override
-        public void stop() {
-            for (FetchLoader fetchLoader : getFetchLoaders()) {
-                fetchLoader.cancel();
-            }
-        }
-
         private class EventsFetchRequest extends FetchRequest<Event> implements EventsView {
 
             private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {

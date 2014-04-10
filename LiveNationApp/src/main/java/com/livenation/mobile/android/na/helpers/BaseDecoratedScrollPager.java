@@ -76,7 +76,11 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
         footerBugHack.removeAllViews();
     }
 
-    public abstract void stop();
+    public void stop() {
+        for (FetchLoader fetchLoader : getFetchLoaders()) {
+            fetchLoader.cancel();
+        }
+    }
 
     private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
         if (null == lastFetch) return false;
