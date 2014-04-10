@@ -10,6 +10,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
@@ -43,22 +44,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     public ApiHelper(SsoManager ssoManager, Context appContext) {
         this.ssoManager = ssoManager;
         this.appContext = appContext;
-    }
-
-    public static Constants.Environment getConfiguredEnvironment(Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence(Constants.SharedPreferences.ENVIRONMENT);
-        String environmentKey = prefs.read(Constants.SharedPreferences.ENVIRONMENT, context);
-
-        try {
-            return Constants.Environment.valueOf(environmentKey);
-        } catch (Exception e) {
-            return Constants.Environment.StagingDirect;
-        }
-    }
-
-    public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence(Constants.SharedPreferences.ENVIRONMENT);
-        prefs.write(Constants.SharedPreferences.ENVIRONMENT, environment.toString(), context);
     }
 
     @Override
@@ -209,7 +194,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         @Override
         public void run() {
             super.run();
-            Constants.Environment environment = getConfiguredEnvironment(appContext);
+            Constants.Environment environment = EnvironmentPreferences.getConfiguredEnvironment(appContext);
             setResult(environment.getHost());
             notifyReady();
         }
@@ -225,12 +210,11 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         @Override
         public void run() {
             super.run();
-            Constants.Environment environment = getConfiguredEnvironment(appContext);
+            Constants.Environment environment = EnvironmentPreferences.getConfiguredEnvironment(appContext);
             setResult(environment.getClientId());
             notifyReady();
         }
     }
-
 
     private class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProvider.LocationCallback {
         private final Context appContext;
