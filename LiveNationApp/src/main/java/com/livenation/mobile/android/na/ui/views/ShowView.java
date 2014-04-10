@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DetailShowView extends LinearLayout {
+public class ShowView extends LinearLayout {
     //TODO: Move date parsing to Data Model Entity helper. This is ugly
     private final static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private DisplayMode displayMode;
@@ -26,38 +26,55 @@ public class DetailShowView extends LinearLayout {
     private TextView details;
     private VerticalDate date;
 
-    public DetailShowView(Context context, AttributeSet attrs, int defStyle) {
+    public ShowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
 
-    public DetailShowView(Context context, AttributeSet attrs) {
+    public ShowView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public DetailShowView(Context context) {
+    public ShowView(Context context) {
         super(context);
         init(context);
     }
 
     public void setEvent(Event event) {
-        if (getDisplayMode() == DisplayMode.VENUE)
-            title.setText(event.getName());
-        else if (getDisplayMode() == DisplayMode.ARTIST)
-            title.setText(event.getVenue().getName());
+        switch (getDisplayMode()) {
+            case VENUE:
+                title.setText(event.getName());
+                break;
+
+            case ARTIST:
+                title.setText(event.getVenue().getName());
+                break;
+
+            case EVENT:
+                title.setText(event.getDisplayName());
+                break;
+        }
 
         Date start;
         try {
             start = getDate(event.getLocalStartTime());
             date.setDate(start);
 
-            if (getDisplayMode() == DisplayMode.VENUE) {
-                details.setText(getTimeText(start));
-            } else if (getDisplayMode() == DisplayMode.ARTIST) {
-                //TODO: Spin this out
-                Venue venue = event.getVenue();
-                details.setText(String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState()));
+            switch (getDisplayMode()) {
+                case VENUE:
+                    details.setText(getTimeText(start));
+                    break;
+
+                case ARTIST:
+                    //TODO: Spin this out
+                    Venue venue = event.getVenue();
+                    details.setText(String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState()));
+                    break;
+
+                case EVENT:
+                    details.setText(event.getVenue().getName());
+                    break;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -103,5 +120,6 @@ public class DetailShowView extends LinearLayout {
     public static enum DisplayMode {
         VENUE,
         ARTIST,
+        EVENT,
     }
 }
