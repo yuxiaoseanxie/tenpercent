@@ -45,40 +45,13 @@ public class ShowView extends LinearLayout {
     }
 
     public void setEvent(Event event) {
-        switch (getDisplayMode()) {
-            case VENUE:
-                title.setText(event.getName());
-                break;
-
-            case ARTIST:
-                title.setText(event.getVenue().getName());
-                break;
-
-            case EVENT:
-                title.setText(event.getDisplayName());
-                break;
-        }
+        title.setText(getDisplayMode().getTitle(event));
 
         Date start;
         try {
             start = getDate(event.getLocalStartTime());
             date.setDate(start);
-
-            switch (getDisplayMode()) {
-                case VENUE:
-                    details.setText(getTimeText(start));
-                    break;
-
-                case ARTIST:
-                    //TODO: Spin this out
-                    Venue venue = event.getVenue();
-                    details.setText(String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState()));
-                    break;
-
-                case EVENT:
-                    details.setText(event.getVenue().getName());
-                    break;
-            }
+            details.setText(getDisplayMode().getDetails(event, start));
         } catch (ParseException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Invalid start time: " + event.getLocalStartTime());
@@ -109,11 +82,6 @@ public class ShowView extends LinearLayout {
         return date;
     }
 
-    private String getTimeText(Date date) {
-        String timeValue = DateFormat.format("h:mm aa zzz", date).toString();
-        return timeValue;
-    }
-
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -131,8 +99,42 @@ public class ShowView extends LinearLayout {
 
 
     public static enum DisplayMode {
-        VENUE,
-        ARTIST,
-        EVENT,
+        VENUE {
+            @Override
+            String getTitle(Event event) {
+                return event.getName();
+            }
+
+            @Override
+            String getDetails(Event event, Date localStartTime) {
+                return DateFormat.format("h:mm aa zzz", localStartTime).toString();
+            }
+        },
+        ARTIST {
+            @Override
+            String getTitle(Event event) {
+                return event.getVenue().getName();
+            }
+
+            @Override
+            String getDetails(Event event, Date localStartTime) {
+                Venue venue = event.getVenue();
+                return String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState());
+            }
+        },
+        EVENT {
+            @Override
+            String getTitle(Event event) {
+                return event.getDisplayName();
+            }
+
+            @Override
+            String getDetails(Event event, Date localStartTime) {
+                return event.getVenue().getName();
+            }
+        };
+
+        abstract String getTitle(Event event);
+        abstract String getDetails(Event event, Date localStartTime);
     }
 }
