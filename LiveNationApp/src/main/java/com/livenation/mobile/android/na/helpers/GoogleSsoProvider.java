@@ -17,6 +17,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 import java.io.IOException;
@@ -74,10 +75,10 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
     }
 
     @Override
-    public void getUser(GetUserCallback callback) {
+    public void getUser(ApiService.BasicApiCallback<User> callback) {
         if (null == user)
             throw new IllegalStateException("Session must be opened first");
-        callback.onGetUser(user);
+        callback.onResponse(user);
     }
 
     @Override

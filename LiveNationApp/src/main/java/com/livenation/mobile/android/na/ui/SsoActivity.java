@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.UiApiSsoProvider;
@@ -10,10 +11,11 @@ import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
-public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
+public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiService.BasicApiCallback<User>, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
     public static final String ARG_PROVIDER_ID = "provider_id";
     private UiApiSsoProvider ssoProvider;
 
@@ -52,9 +54,13 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
     }
 
     @Override
-    public void onGetUser(User user) {
+    public void onResponse(User user) {
         Bundle args = getAccountPresenters().getSetUser().getArguments(user);
         getAccountPresenters().getSetUser().initialize(SsoActivity.this, args, SsoActivity.this);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
     }
 
     @Override

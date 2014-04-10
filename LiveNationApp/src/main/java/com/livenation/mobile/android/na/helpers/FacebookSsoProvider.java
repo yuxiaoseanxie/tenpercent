@@ -12,6 +12,7 @@ import com.facebook.SessionLoginBehavior;
 import com.facebook.model.GraphUser;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 import java.util.Arrays;
@@ -82,9 +83,9 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
     }
 
     @Override
-    public void getUser(GetUserCallback callback) {
+    public void getUser(ApiService.BasicApiCallback<User> callback) {
         if (null == user) throw new IllegalStateException("Session must be opened first");
-        callback.onGetUser(user);
+        callback.onResponse(user);
     }
 
     @Override

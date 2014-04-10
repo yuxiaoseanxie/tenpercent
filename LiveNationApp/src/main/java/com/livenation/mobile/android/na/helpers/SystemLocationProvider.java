@@ -2,6 +2,11 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 
+import com.android.volley.VolleyError;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
+
+
 /**
  * Created by cchilton on 3/13/14.
  */
@@ -11,7 +16,7 @@ public class SystemLocationProvider implements LocationProvider {
     private final LocationProvider dummy = new DummyLocationProvider();
 
     @Override
-    public void getLocation(Context context, LocationManager.LocationCallback callback) {
+    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
         playServices.getLocation(context, new LocationProxy(callback, playServices, context));
     }
 
@@ -19,35 +24,35 @@ public class SystemLocationProvider implements LocationProvider {
         LocationProvider provider = locationProxy.getLocationProvider();
         if (provider == playServices) {
             Context context = locationProxy.getContext();
-            LocationCallback callback = locationProxy.getCallback();
+            ApiService.BasicApiCallback<Double[]> callback = locationProxy.getCallback();
             device.getLocation(context, new LocationProxy(callback, device, context));
         }
 
         if (provider == device) {
             Context context = locationProxy.getContext();
-            LocationCallback callback = locationProxy.getCallback();
+            ApiService.BasicApiCallback<Double[]> callback = locationProxy.getCallback();
             dummy.getLocation(context, new LocationProxy(callback, dummy, context));
         }
     }
 
-    private class LocationProxy implements LocationCallback {
-        private final LocationCallback callback;
+    private class LocationProxy implements ApiService.BasicApiCallback<Double[]> {
+        private final ApiService.BasicApiCallback<Double[]> callback;
         private final LocationProvider locationProvider;
         private final Context context;
 
-        private LocationProxy(LocationCallback callback, LocationProvider locationProvider, Context context) {
+        private LocationProxy(ApiService.BasicApiCallback<Double[]> callback, LocationProvider locationProvider, Context context) {
             this.callback = callback;
             this.locationProvider = locationProvider;
             this.context = context;
         }
 
         @Override
-        public void onLocation(double lat, double lng) {
-            callback.onLocation(lat, lng);
+        public void onResponse(Double[] location) {
+            callback.onResponse(location);
         }
 
         @Override
-        public void onLocationFailure(int failureCode) {
+        public void onErrorResponse(VolleyError error) {
             onProviderFailed(LocationProxy.this);
         }
 
@@ -59,7 +64,7 @@ public class SystemLocationProvider implements LocationProvider {
             return context;
         }
 
-        public LocationCallback getCallback() {
+        public ApiService.BasicApiCallback<Double[]> getCallback() {
             return callback;
         }
     }

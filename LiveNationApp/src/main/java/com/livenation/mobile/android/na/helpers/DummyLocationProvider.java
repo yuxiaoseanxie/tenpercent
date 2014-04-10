@@ -9,6 +9,8 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
 /**
@@ -23,9 +25,9 @@ public class DummyLocationProvider implements LocationProvider {
     private static final String TAG = "DUMMY_LOCATION_PROVIDER";
 
     @Override
-    public void getLocation(Context context, LocationCallback callback) {
+    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
         Logger.log(TAG, "Dummy location provider was invoked");
-        callback.onLocation(LOCATION_SF[0], LOCATION_SF[1]);
+        callback.onResponse(LOCATION_SF);
     }
 
 }

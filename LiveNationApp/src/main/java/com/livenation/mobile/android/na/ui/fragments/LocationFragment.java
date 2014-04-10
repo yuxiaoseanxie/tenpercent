@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +22,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
-import com.livenation.mobile.android.na.helpers.LocationProvider;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
 import com.livenation.mobile.android.na.helpers.UserLocationProvider;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -82,31 +86,30 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
             ;
         }
     };
-    private LocationProvider.LocationCallback configuredLocationCallback = new LocationProvider.LocationCallback() {
+    private ApiService.BasicApiCallback<Double[]> configuredLocationCallback = new ApiService.BasicApiCallback<Double[]>() {
         @Override
-        public void onLocation(double lat, double lng) {
-            locationCache = new LatLng(lat, lng);
-            if (null != map) {
-                setMapMarker(lat, lng, true);
-            }
-        }
+        public void onErrorResponse(VolleyError error) {}
 
         @Override
-        public void onLocationFailure(int failureCode) {
+        public void onResponse(Double[] response) {
+            locationCache = new LatLng(response[0], response[1]);
+            if (null != map) {
+                setMapMarker(response[0], response[1], true);
+            }
         }
     };
-    private LocationProvider.LocationCallback initialUserLocationCallback = new LocationProvider.LocationCallback() {
+    private ApiService.BasicApiCallback<Double[]> initialUserLocationCallback = new ApiService.BasicApiCallback<Double[]>() {
         @Override
-        public void onLocation(double lat, double lng) {
-            locationCache = new LatLng(lat, lng);
+        public void onResponse(Double[] response) {
+            locationCache = new LatLng(response[0], response[1]);
             if (null != map) {
-                setMapMarker(lat, lng, true);
+                setMapMarker(response[0], response[1], true);
             }
         }
 
         @Override
-        public void onLocationFailure(int failureCode) {
-            if (failureCode == UserLocationProvider.FAILURE_NO_USER_LOCATION_SET) {
+        public void onErrorResponse(VolleyError error) {
+            if (error.networkResponse.statusCode == ErrorDictionnary.ERROR_NO_USER_LOCATION_SET) {
                 getLocationManager().getSystemLocationProvider().getLocation(getActivity(), this);
             }
         }

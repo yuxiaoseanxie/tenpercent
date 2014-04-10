@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.android.volley.VolleyError;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -216,7 +219,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
-    private class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProvider.LocationCallback {
+    private class LocationConfig extends ApiBuilderElement<Double[]> implements ApiService.BasicApiCallback<Double[]> {
         private final Context appContext;
 
         private LocationConfig(Context appContext) {
@@ -230,17 +233,14 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         @Override
-        public void onLocation(double lat, double lng) {
-            Double[] locationValue = new Double[2];
-            locationValue[0] = lat;
-            locationValue[1] = lng;
-            setResult(locationValue);
-            notifyReady();
+        public void onErrorResponse(VolleyError error) {
+            notifyFailed(0, "");
         }
 
         @Override
-        public void onLocationFailure(int failureCode) {
-            notifyFailed(0, "");
+        public void onResponse(Double[] response) {
+            setResult(response);
+            notifyReady();
         }
     }
 

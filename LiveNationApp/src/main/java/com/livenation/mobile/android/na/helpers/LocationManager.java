@@ -6,6 +6,9 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -28,13 +31,9 @@ public class LocationManager implements LocationProvider {
     }
 
     @Override
-    public void getLocation(Context context, LocationCallback callback) {
+    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
         if (null == locationProvider) throw new IllegalStateException();
         locationProvider.getLocation(context, callback);
-    }
-
-    public void setUserLocation(double lat, double lng, Context context) {
-        userLocationProvider.setLocation(lat, lng, context);
     }
 
     public void setLocationMode(int mode, Context context) {

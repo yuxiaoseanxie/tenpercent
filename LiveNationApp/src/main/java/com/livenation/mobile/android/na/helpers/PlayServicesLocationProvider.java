@@ -17,7 +17,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
 import com.livenation.mobile.android.platform.util.Logger;
+import com.livenation.mobile.android.proxy.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +48,9 @@ public class PlayServicesLocationProvider implements
     }
 
     @Override
-    public void getLocation(Context context, LocationManager.LocationCallback callback) {
+    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
         if (STATUS_GOOGLE_PLAY_SUCCESS != getGooglePlayServiceStatus(context)) {
-            callback.onLocationFailure(0);
+            callback.onErrorResponse(ErrorDictionnary.getUnknownError());
             return;
         }
         State state = new State(callback, context);
@@ -59,12 +62,12 @@ public class PlayServicesLocationProvider implements
     private class State implements GooglePlayServicesClient.ConnectionCallbacks,
             GooglePlayServicesClient.OnConnectionFailedListener, Runnable {
         private final LocationClient client;
-        private final LocationProvider.LocationCallback callback;
+        private final ApiService.BasicApiCallback<Double[]> callback;
         private final int RETRY_LIMIT = 3;
         private Handler handler;
         private int retryCount;
 
-        private State(LocationCallback callback, Context context) {
+        private State(ApiService.BasicApiCallback<Double[]> callback, Context context) {
             this.callback = callback;
             this.client = new LocationClient(context, this, this);
         }
@@ -77,7 +80,7 @@ public class PlayServicesLocationProvider implements
         @Override
         public void onConnectionFailed(ConnectionResult result) {
             Logger.log("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
-            callback.onLocationFailure(0);
+            callback.onErrorResponse(ErrorDictionnary.getUnknownError());
         }
 
         @Override
@@ -86,7 +89,8 @@ public class PlayServicesLocationProvider implements
             if (null != location) {
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
-                callback.onLocation(lat, lng);
+                Double[] locationArray = new Double[] {lat, lng};
+                callback.onResponse(locationArray);
                 cleanUp();
             } else {
                 handler = new Handler();
@@ -95,7 +99,7 @@ public class PlayServicesLocationProvider implements
                     handler.postDelayed(this, 1000);
                     retryCount++;
                 } else {
-                    callback.onLocationFailure(0);
+                    callback.onErrorResponse(ErrorDictionnary.getUnknownError());
                     cleanUp();
                 }
             }

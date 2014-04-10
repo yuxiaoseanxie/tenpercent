@@ -3,6 +3,9 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+
 public class DummySsoProvider implements UiApiSsoProvider {
 
     @Override
@@ -12,8 +15,8 @@ public class DummySsoProvider implements UiApiSsoProvider {
     }
 
     @Override
-    public void getUser(GetUserCallback callback) {
-        callback.onGetUser(null);
+    public void getUser(ApiService.BasicApiCallback<User> callback) {
+        callback.onResponse(null);
     }
 
     @Override
