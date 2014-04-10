@@ -35,6 +35,7 @@ public class VenueActivity extends LiveNationFragmentActivity implements SingleV
         if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
             getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
         }
+
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
     }

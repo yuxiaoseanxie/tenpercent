@@ -8,18 +8,15 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
@@ -29,31 +26,25 @@ import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
+import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.VerticalDate;
+import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class ShowsListV2Fragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
-    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
     private StickyListHeadersListView listView;
-    private EventAdapter adapter;
+    private EventStickyHeaderAdapter adapter;
     private ScrollPager scrollPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new EventAdapter(getActivity(), new ArrayList<Event>());
+        adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new ScrollPager(adapter);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
@@ -118,122 +109,6 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
         scrollPager.load();
     }
 
-    public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
-        private LayoutInflater inflater;
-
-        public EventAdapter(Context context, List<Event> items) {
-            super(context, android.R.layout.simple_list_item_1, items);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            View view = null;
-
-            if (null == convertView) {
-                view = inflater.inflate(R.layout.list_show_item, null);
-                holder = new ViewHolder(view);
-                view.setTag(holder);
-            } else {
-                view = convertView;
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            Event event = getItem(position);
-            holder.getTitle().setText(event.getName());
-            holder.getLocation().setText(event.getVenue().getName());
-
-            //TODO: Move date parsing to Data Model Entity helper. This is ugly
-            try {
-                Date date = sdf.parse(event.getStartTime());
-                holder.getDate().setDate(date);
-            } catch (ParseException e) {
-                //should never happen, burn everything
-                throw new RuntimeException(e);
-            }
-
-            return view;
-        }
-
-        @Override
-        public View getHeaderView(int position, View convertView,
-                                  ViewGroup parent) {
-            View view = null;
-            ViewHeaderHolder holder = null;
-            if (null == convertView) {
-                view = inflater.inflate(R.layout.list_show_header, null);
-                holder = new ViewHeaderHolder(view);
-                view.setTag(holder);
-            } else {
-                view = convertView;
-                holder = (ViewHeaderHolder) view.getTag();
-            }
-
-            TextView text = holder.getText();
-
-            //TODO: refactor this into Model helpers (inline or sub-helper classes?)
-            String dateRaw = getItem(position).getStartTime();
-            try {
-                Date date = sdf.parse(dateRaw);
-                String dateValue = DateFormat.format("MMMM", date).toString();
-                text.setText(dateValue);
-            } catch (ParseException e) {
-                throw new IllegalStateException("Unparsable date: " + dateRaw);
-            }
-
-            return view;
-        }
-
-        @Override
-        public long getHeaderId(int position) {
-            String dateRaw = getItem(position).getStartTime();
-            try {
-
-                Date date = sdf.parse(dateRaw);
-                String dateValue = DateFormat.format("yyyyMM", date).toString();
-                return Long.valueOf(dateValue);
-            } catch (ParseException e) {
-                throw new IllegalStateException("Unparsable date: " + dateRaw);
-            }
-        }
-
-        private class ViewHolder {
-            private final TextView title;
-            private final TextView location;
-            private final VerticalDate date;
-
-            public ViewHolder(View view) {
-                this.title = (TextView) view.findViewById(id.list_generic_show_title);
-                this.location = (TextView) view.findViewById(id.list_generic_show_location);
-                this.date = (VerticalDate) view.findViewById(id.list_generic_show_date);
-            }
-
-            public TextView getTitle() {
-                return title;
-            }
-
-            public TextView getLocation() {
-                return location;
-            }
-
-            public VerticalDate getDate() {
-                return date;
-            }
-        }
-
-        private class ViewHeaderHolder {
-            private final TextView text;
-
-            public ViewHeaderHolder(View view) {
-                this.text = (TextView) view.findViewById(id.list_show_header_textview);
-            }
-
-            public TextView getText() {
-                return text;
-            }
-        }
-    }
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 

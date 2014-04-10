@@ -101,16 +101,6 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="view_venue_show_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="view_venue_show_time" parent="@style/livenation_app_text">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/view_venue_show_time</item>
-    </style>
-
     <style name="ticketbar_text" parent="@style/livenation_app_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>

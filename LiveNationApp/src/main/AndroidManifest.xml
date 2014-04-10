@@ -66,16 +66,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity"></activity>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.ShowActivity"
+            android:label="@string/activity_label_show"/>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.VenueActivity"
+            android:label="@string/activity_label_venue"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistEventsActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"></activity>
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
-            android:label="@string/actionbar_artist_title"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"></activity>
+            android:label="@string/activity_label_artist"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"/>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
+            android:label="@string/activity_label_favorites"/>
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.DebugActivity"
