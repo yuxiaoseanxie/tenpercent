@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ui_underscore"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/ui_overflow_vertical_padding"
-    android:paddingTop="@dimen/ui_overflow_vertical_padding">
+    android:background="@drawable/livenation_selector_pressable_background">
 
     <ImageView
         android:id="@+id/view_overflow_icon"
@@ -15,6 +12,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/ui_overflow_icon_margin_left"
         android:layout_marginRight="@dimen/ui_overflow_icon_margin_right"
+        android:paddingBottom="@dimen/ui_overflow_vertical_padding"
+        android:paddingTop="@dimen/ui_overflow_vertical_padding"
         android:src="@drawable/overflow_maximize" />
 
     <TextView
@@ -25,5 +24,11 @@
         android:layout_toRightOf="@id/view_overflow_icon"
         android:text="@string/mock_overflow"
         android:textAppearance="@style/view_overflow_text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>
