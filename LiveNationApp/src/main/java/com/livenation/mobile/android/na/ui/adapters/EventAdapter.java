@@ -8,11 +8,17 @@ import android.widget.ArrayAdapter;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
+import java.util.List;
+
 public class EventAdapter extends ArrayAdapter<Event> {
     private ShowView.DisplayMode displayMode;
 
     public EventAdapter(Context context, ShowView.DisplayMode displayMode) {
-        super(context, android.R.layout.simple_list_item_1);
+        this(context, displayMode, null);
+    }
+
+    public EventAdapter(Context context, ShowView.DisplayMode displayMode, List<Event> events) {
+        super(context, android.R.layout.simple_list_item_1, events);
 
         this.displayMode = displayMode;
     }
@@ -41,7 +47,6 @@ public class EventAdapter extends ArrayAdapter<Event> {
     public ShowView.DisplayMode getDisplayMode() {
         return displayMode;
     }
-
 
     //endregion
 }

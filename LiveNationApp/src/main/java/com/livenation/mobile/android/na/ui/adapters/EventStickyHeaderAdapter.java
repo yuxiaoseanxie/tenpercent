@@ -10,10 +10,12 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -24,7 +26,11 @@ public class EventStickyHeaderAdapter extends EventAdapter implements StickyList
     private LayoutInflater inflater;
 
     public EventStickyHeaderAdapter(Context context, ShowView.DisplayMode displayMode) {
-        super(context, displayMode);
+        this(context, displayMode, null);
+    }
+
+    public EventStickyHeaderAdapter(Context context, ShowView.DisplayMode displayMode, List<Event> events) {
+        super(context, displayMode, events);
 
         this.inflater = LayoutInflater.from(context);
     }
