@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.DetailShowView;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -48,9 +49,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.shows = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.ARTIST);
+        this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST);
         shows.setMaxEvents(MAX_INLINE_EVENTS);
-        shows.setDisplayMode(DetailShowView.DisplayMode.ARTIST);
+        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
 
         setRetainInstance(true);

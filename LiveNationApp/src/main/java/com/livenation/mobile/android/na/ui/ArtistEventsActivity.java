@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment;
-import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -37,7 +37,7 @@ public class ArtistEventsActivity extends FragmentActivity {
         this.events = (ArrayList<Event>) getIntent().getSerializableExtra(EXTRA_EVENTS);
 
         this.shows = (ShowsListNonScrollingFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_events_shows_fragment);
-        shows.setDisplayMode(DetailShowView.DisplayMode.ARTIST);
+        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
         shows.setEvents(events);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
