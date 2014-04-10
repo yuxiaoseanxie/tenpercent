@@ -1,14 +1,12 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
@@ -91,13 +89,11 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
             public void run() {
                 String artistId = getActivity().getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
                 Bundle args = getArtistEventsPresenter().getArgs(artistId, getOffset(), getLimit());
-                Log.i(getClass().getName(), "args: " + args);
                 getArtistEventsPresenter().initialize(getActivity(), args, this);
             }
 
             @Override
             public void setArtistEvents(ArtistEvents artistEvents) {
-                Log.i(getClass().getName(), "artistEvents: " + artistEvents.getAll());
                 getFetchResultHandler().deliverResult(artistEvents.getAll());
             }
 
