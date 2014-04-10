@@ -24,6 +24,7 @@ public class ArtistEventsPresenter
     private static final String INTENT_DATA_KEY = ArtistEventsPresenter.class.getName();
     private static final String PARAMETER_ARTIST_ID = "artist_id";
     private static final String PARAMETER_LIMIT = "limit";
+    private static final String PARAMETER_OFFSET = "offset";
 
     @Override
     public void initialize(Context context, Bundle args, ArtistEventsView view) {
@@ -38,6 +39,14 @@ public class ArtistEventsPresenter
         ArtistEventsView view = state.getView();
         ArtistEvents events = state.getResult();
         view.setArtistEvents(events);
+    }
+
+    public Bundle getArgs(String artistId, int offset, int limit) {
+        Bundle args = new Bundle();
+        args.putString(PARAMETER_ARTIST_ID, artistId);
+        args.putInt(PARAMETER_OFFSET, offset);
+        args.putInt(PARAMETER_LIMIT, limit);
+        return args;
     }
 
     public static class ArtistEventsState
@@ -68,10 +77,15 @@ public class ArtistEventsPresenter
             String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
             apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
 
-            if (args.containsKey(PARAMETER_LIMIT)) {
-                int limit = args.getInt(PARAMETER_LIMIT);
-                apiParams.setPage(0, limit);
-            }
+            int limit = 30;
+            if (args.containsKey(PARAMETER_LIMIT))
+                limit = args.getInt(PARAMETER_LIMIT);
+
+            int offset = 0;
+            if (args.containsKey(PARAMETER_OFFSET))
+                offset = args.getInt(PARAMETER_OFFSET);
+
+            apiParams.setPage(offset, limit);
         }
 
         @Override

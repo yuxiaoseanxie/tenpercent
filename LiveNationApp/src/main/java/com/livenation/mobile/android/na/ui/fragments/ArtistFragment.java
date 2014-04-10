@@ -12,7 +12,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
-import com.livenation.mobile.android.na.ui.ArtistEventsActivity;
+import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -178,8 +178,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowMoreOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), ArtistEventsActivity.class);
-            intent.putExtras(ArtistEventsActivity.getArguments(artist, artistEvents.getAll()));
+            Intent intent = new Intent(getActivity(), ArtistShowsActivity.class);
+            intent.putExtras(ArtistShowsActivity.getArguments(artist));
             startActivity(intent);
         }
     }

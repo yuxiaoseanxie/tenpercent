@@ -73,7 +73,7 @@
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue"/>
         <activity
-            android:name="com.livenation.mobile.android.na.ui.ArtistEventsActivity"
+            android:name=".ui.ArtistShowsActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
