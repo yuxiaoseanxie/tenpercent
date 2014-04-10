@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/livenation_selector_pressable_background"
     android:minHeight="@dimen/list_show_item_min_height">
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
@@ -32,7 +33,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="1dp"
         android:layout_alignLeft="@id/view_detail_show_title"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/view_detail_show_details"
