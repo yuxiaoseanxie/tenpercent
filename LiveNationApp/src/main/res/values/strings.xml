@@ -38,6 +38,7 @@
     <string name="actionbar_show_title">Show</string>
     <string name="actionbar_artist_title">Artist</string>
     <string name="actionbar_favorites_title">Favorites</string>
+    <string name="actionbar_venue_title">Venue</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
