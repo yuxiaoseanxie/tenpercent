@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -28,7 +27,6 @@ public class ShowView extends LinearLayout {
     private TextView title;
     private TextView details;
     private VerticalDate date;
-    private NetworkImageView imageView;
     private View bottomLine;
 
     public ShowView(Context context, AttributeSet attrs, int defStyle) {
@@ -93,9 +91,6 @@ public class ShowView extends LinearLayout {
 
     public void setDisplayMode(DisplayMode displayMode) {
         this.displayMode = displayMode;
-
-        if(displayMode != DisplayMode.EVENT)
-            setImageVisible(false);
     }
 
     public boolean isBottomLineVisible() {
@@ -107,21 +102,6 @@ public class ShowView extends LinearLayout {
             bottomLine.setVisibility(View.VISIBLE);
         else
             bottomLine.setVisibility(View.GONE);
-    }
-
-    public boolean isImageVisible() {
-        return (imageView.getVisibility() == View.VISIBLE);
-    }
-
-    public void setImageVisible(boolean imageVisible) {
-        if(imageVisible)
-            imageView.setVisibility(View.VISIBLE);
-        else
-            imageView.setVisibility(View.GONE);
-    }
-
-    public NetworkImageView getImageView() {
-        return imageView;
     }
 
     private Date getDate(String dateRaw) throws ParseException {
@@ -142,7 +122,6 @@ public class ShowView extends LinearLayout {
         this.title = (TextView) view.findViewById(R.id.view_show_title);
         this.details = (TextView) view.findViewById(R.id.view_show_details);
         this.date = (VerticalDate) view.findViewById(R.id.view_show_date);
-        this.imageView = (NetworkImageView) view.findViewById(R.id.view_show_image);
         this.bottomLine = view.findViewById(R.id.view_show_bottom_line);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));

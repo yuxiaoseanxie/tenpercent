@@ -13,22 +13,12 @@
         android:layout_marginRight="@dimen/venue_show_date_margin_right"
         android:layout_marginTop="@dimen/venue_show_date_margin_top" />
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/view_show_image"
-        android:layout_width="96dp"
-        android:layout_height="72dp"
-        android:layout_alignTop="@id/view_show_date"
-        android:layout_marginRight="@dimen/venue_show_date_margin_left"
-        android:layout_toRightOf="@id/view_show_date"
-        android:background="#ff777777"
-        android:scaleType="centerCrop"/>
-
     <TextView
         android:id="@+id/view_show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/view_show_date"
-        android:layout_toRightOf="@id/view_show_image"
+        android:layout_toRightOf="@id/view_show_date"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/list_show_title" />
 
@@ -45,9 +35,9 @@
         android:id="@+id/view_show_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:layout_alignLeft="@id/view_show_image"
+        android:layout_alignLeft="@id/view_show_title"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/view_show_image"
+        android:layout_below="@id/view_show_date"
         android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>
