@@ -8,15 +8,13 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
@@ -138,12 +136,11 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ssoProvider.setResult(ssoProviderObject);
 
         ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
-        ApiBuilderElement<Context> context = new ContextConfig(appContext);
         ApiBuilderElement<String> host = new GetHostConfig(appContext);
         ApiBuilderElement<String> clientId = new GetClientIdConfig(appContext);
         ApiBuilderElement<Double[]> location = new LocationConfig(appContext);
 
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, location, context);
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, location);
         apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
