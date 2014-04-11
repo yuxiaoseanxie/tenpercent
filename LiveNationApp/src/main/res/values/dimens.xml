@@ -82,7 +82,7 @@
     <dimen name="account_detail_image_min_width">56dp</dimen>
     <dimen name="account_detail_min_height">59dp</dimen>
     <dimen name="account_footer_change_margin_right">15dp</dimen>
-    <dimen name="underscore_container_height">5dp</dimen>
+    <dimen name="underscore_container_height">1dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
     <dimen name="artist_header_checkbox_margin_left">10dp</dimen>

@@ -9,6 +9,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import io.segment.android.Analytics;
@@ -258,13 +258,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Props props = AnalyticsHelper.getPropsForEvent(event);
             Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
 
-            //TODO: Non-TM ticketing
-            List<String> ticketmasterIds = event.getTicketmasterIds();
-            if (ticketmasterIds.size() == 0) {
-                Toast.makeText(getActivity(), "No tickets available", Toast.LENGTH_SHORT).show();
+            String buyLink = event.getBuyLink();
+            if (Ticketing.isTicketmasterUrl(buyLink)) {
+                Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
             } else {
-                String ticketmasterId = ticketmasterIds.get(0);
-                Ticketing.showFindTicketsActivity(getActivity(), ticketmasterId);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
+                Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }

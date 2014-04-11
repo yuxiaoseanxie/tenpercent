@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
+    android:background="@drawable/livenation_selector_pressable_background"
     android:minHeight="@dimen/list_show_item_min_height">
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
@@ -34,7 +35,7 @@
     <View
         android:id="@+id/view_show_bottom_line"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="1dp"
         android:layout_alignLeft="@id/view_show_title"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/view_show_date"

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/account_detail_min_height">
+    android:minHeight="@dimen/account_detail_min_height"
+    android:background="@drawable/livenation_selector_pressable_background">
 
     <ImageView
         android:id="@+id/account_footer_location_image"
