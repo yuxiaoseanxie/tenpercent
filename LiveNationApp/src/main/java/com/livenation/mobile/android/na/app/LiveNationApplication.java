@@ -14,6 +14,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
@@ -74,6 +75,7 @@ public class LiveNationApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Crashlytics.start(this);
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
