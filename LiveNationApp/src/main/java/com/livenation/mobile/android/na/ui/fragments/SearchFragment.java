@@ -91,7 +91,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         switch (searchResult.getSearchResultType()) {
             case Venue: {
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
-                String entityId = Venue.getAlphaNumbericId(searchResult.getLnid());
+                String entityId = Venue.getAlphanumericId(searchResult.getLnid());
                 Bundle args = SingleVenuePresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
@@ -100,7 +100,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             case Artist: {
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
-                String entityId = Artist.getAlphaNumbericId(searchResult.getLnid());
+                String entityId = Artist.getAlphanumericId(searchResult.getLnid());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
