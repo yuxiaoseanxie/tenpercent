@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
+import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -51,7 +52,6 @@ public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
     private LocationManager locationManager;
     private ImageLoader imageLoader;
-    private RequestQueue requestQueue;
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
     private SingleArtistPresenter singleArtistPresenter;
@@ -77,7 +77,7 @@ public class LiveNationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
-        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment());
+        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this));
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
@@ -100,10 +100,9 @@ public class LiveNationApplication extends Application {
         recommendationsPresenter = new RecommendationsPresenter();
         recommendationSetsPresenter = new RecommendationSetsPresenter();
 
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
-        imageLoader = new ImageLoader(requestQueue, cache);
+        imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
 
         setupNotifications();
         setupTicketing();

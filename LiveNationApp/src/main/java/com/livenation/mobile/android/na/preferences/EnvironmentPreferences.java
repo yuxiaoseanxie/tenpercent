@@ -18,19 +18,22 @@ public class EnvironmentPreferences {
 
 
     public EnvironmentPreferences(Context context) {
-        context.getApplicationContext().getSharedPreferences(Constants.SharedPreferences.ENVIRONMENT, Context.MODE_PRIVATE);
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(Constants.SharedPreferences.ENVIRONMENT, Context.MODE_PRIVATE);
     }
 
     public Environment getConfiguredEnvironment() {
         String environmentSerialize = sharedPreferences.getString(Constants.SharedPreferences.ENVIRONMENT, null);
-        Environment env;
-        try {
-            env = (Environment) SerializableHelper.fromString(environmentSerialize);
-        } catch (IOException e) {
-            return Environment.StagingDirect;
-        } catch (ClassNotFoundException e) {
-            return Environment.StagingDirect;
+        Environment env = Environment.Production;
+        if (environmentSerialize != null && !environmentSerialize.isEmpty()) {
+            try {
+                env = (Environment) SerializableHelper.fromString(environmentSerialize);
+            } catch (IOException e) {
+                return Environment.Production;
+            } catch (ClassNotFoundException e) {
+                return Environment.Production;
+            }
         }
+
         return env;
     }
 
