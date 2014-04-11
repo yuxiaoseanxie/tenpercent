@@ -5,23 +5,40 @@
 package com.livenation.mobile.android.na.notifications.ui;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.widget.RichPushMessageView;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 
@@ -32,7 +49,7 @@ public class MessageFragment extends Fragment {
     private static final SimpleDateFormat DATE_RECEIVED_FORMAT = new SimpleDateFormat("MMM d, yyyy  h:mm a");
 
     private RichPushMessage message;
-    private RichPushMessageView browser;
+    private TextView browser;
     private TextView subjectText;
     private TextView dateReceivedText;
     private Button callToActionButton;
@@ -41,7 +58,7 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container);
 
-        browser = (RichPushMessageView) view.findViewById(R.id.fragment_message_view);
+        browser = (TextView) view.findViewById(R.id.fragment_message_view);
         subjectText = (TextView) view.findViewById(R.id.fragment_message_subject);
         dateReceivedText = (TextView) view.findViewById(R.id.fragment_message_date);
         callToActionButton = (Button) view.findViewById(R.id.fragment_message_cta_button);
@@ -61,40 +78,52 @@ public class MessageFragment extends Fragment {
         if (message != null) {
             subjectText.setText(message.getTitle());
             dateReceivedText.setText(DATE_RECEIVED_FORMAT.format(message.getSentDate()));
+            loadAndCustomizeMessage();
 
             Bundle messageExtras = message.getExtras();
             if (messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
-                String title = messageExtras.getString(Constants.Notifications.EXTRA_MESSAGE_ACTION_NAME,
-                        getString(R.string.message_cta_default));
+                String title = messageExtras.getString(Constants.Notifications.EXTRA_MESSAGE_ACTION_NAME, getString(R.string.message_cta_default));
                 callToActionButton.setText(title);
             } else {
                 callToActionButton.setVisibility(View.GONE);
             }
 
-            browser.loadRichPushMessage(message);
         } else {
             Logger.info("Couldn't retrieve activity_message for ID: " + messageId);
         }
+    }
+
+    private void loadAndCustomizeMessage() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        UrbanAirshipRequest urbanAirshipRequest = new UrbanAirshipRequest(Request.Method.GET, message.getMessageUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String message = response.optString("message");
+                if (message != null) {
+                    Spannable sp = new SpannableString(Html.fromHtml(message));
+                    Linkify.addLinks(sp, Linkify.ALL);
+                    browser.setText(sp);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO define wording https://www.pivotaltracker.com/story/show/69382014
+            }
+        }, RichPushManager.shared().getRichPushUser().getId(),  RichPushManager.shared().getRichPushUser().getPassword());
+        requestQueue.add(urbanAirshipRequest);
     }
 
     @SuppressLint("NewApi")
     @Override
     public void onPause() {
         super.onPause();
-
-        if (Build.VERSION.SDK_INT >= 11) {
-            browser.onPause();
-        }
     }
 
     @SuppressLint("NewApi")
     @Override
     public void onResume() {
         super.onResume();
-
-        if (Build.VERSION.SDK_INT >= 11) {
-            browser.onResume();
-        }
     }
 
 

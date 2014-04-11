@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/widget_margin">
+        android:paddingRight="@dimen/widget_margin"
+        android:paddingLeft="@dimen/widget_margin"
+        android:paddingTop="@dimen/widget_margin">
 
         <TextView
             android:id="@+id/fragment_message_subject"
@@ -33,11 +35,18 @@
 
     </LinearLayout>
 
-    <com.urbanairship.widget.RichPushMessageView
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1"
+       >
+    <TextView
         android:id="@+id/fragment_message_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:textColorLink="@color/notification_link_color"
+        android:padding="@dimen/widget_margin"
+        android:layout_height="fill_parent"
+        android:layout_width="match_parent"/>
+    </ScrollView>
 
     <Button
         android:id="@+id/fragment_message_cta_button"
