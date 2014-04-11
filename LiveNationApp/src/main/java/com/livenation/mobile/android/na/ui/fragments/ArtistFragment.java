@@ -141,6 +141,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             showBio(bio, true);
         else
             suppressBio();
+
+        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
     }
 
     @Override
@@ -163,8 +165,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private void init() {
         getSingleArtistPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
         getArtistEventsPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
-
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
     }
 
     private void deinit() {
