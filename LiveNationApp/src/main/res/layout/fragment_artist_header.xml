@@ -26,8 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="top"
         android:layout_marginLeft="@dimen/artist_header_checkbox_margin_left"
         android:layout_marginTop="@dimen/artist_header_checkbox_margin_top"
         android:button="@drawable/checkbox_favorite_disc_selector"
