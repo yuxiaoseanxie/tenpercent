@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,6 +103,7 @@ public class MessageFragment extends Fragment {
                 if (message != null) {
                     Spannable sp = new SpannableString(Html.fromHtml(message));
                     Linkify.addLinks(sp, Linkify.ALL);
+                    browser.setMovementMethod(LinkMovementMethod.getInstance());
                     browser.setText(sp);
                 }
             }
