@@ -25,6 +25,7 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -99,7 +100,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             case Artist: {
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
-                String entityId = Venue.getAlphaNumbericId(searchResult.getLnid());
+                String entityId = Artist.getAlphaNumbericId(searchResult.getLnid());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
