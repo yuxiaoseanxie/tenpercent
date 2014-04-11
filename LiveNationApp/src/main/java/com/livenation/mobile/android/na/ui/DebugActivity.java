@@ -25,6 +25,8 @@ import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.init.Environment;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -135,7 +137,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private void addActionDebugItems() {
-        //Environnement Item
+        //Environment Item
         environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
         actions.add(environmentItem);
 
@@ -169,15 +171,17 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         action.doAction(this);
     }
 
-    private Constants.Environment getEnvironment() {
-        return EnvironmentPreferences.getConfiguredEnvironment(this);
+    private Environment getEnvironment() {
+        EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
+        return environmentPreferences.getConfiguredEnvironment();
     }
 
-    private void setEnvironment(Constants.Environment environment) {
-        EnvironmentPreferences.setConfiguredEnvironment(environment, this);
+    private void setEnvironment(Environment environment) {
+        EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
+        environmentPreferences.setConfiguredEnvironment(environment);
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        LiveNationLibrary.setEnvironment(environment);
     }
 
     private static enum ScanOptions {
@@ -270,16 +274,16 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         @Override
         public void doAction(Context context) {
-            final String[] items = new String[Constants.Environment.values().length];
+            final String[] items = new String[Environment.values().length];
             for (int i = 0; i < items.length; i++) {
-                items[i] = Constants.Environment.values()[i].toString();
+                items[i] = Environment.values()[i].toString();
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(DebugActivity.this);
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Constants.Environment environment = Constants.Environment.values()[i];
+                    Environment environment = Environment.values()[i];
                     setEnvironment(environment);
                     environmentItem.setValue(environment.toString());
                     actionsAdapter.notifyDataSetChanged();

@@ -136,11 +136,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ssoProvider.setResult(ssoProviderObject);
 
         ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
-        ApiBuilderElement<String> host = new GetHostConfig(appContext);
-        ApiBuilderElement<String> clientId = new GetClientIdConfig(appContext);
         ApiBuilderElement<Double[]> location = new LocationConfig(appContext);
 
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, location);
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(deviceId, ssoProvider, location);
         apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
@@ -181,38 +179,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
                 }
                 notifyReady();
             }
-        }
-    }
-
-    private class GetHostConfig extends ApiBuilderElement<String> {
-        private final Context appContext;
-
-        private GetHostConfig(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            Constants.Environment environment = EnvironmentPreferences.getConfiguredEnvironment(appContext);
-            setResult(environment.getHost());
-            notifyReady();
-        }
-    }
-
-    private class GetClientIdConfig extends ApiBuilderElement<String> {
-        private final Context appContext;
-
-        private GetClientIdConfig(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            Constants.Environment environment = EnvironmentPreferences.getConfiguredEnvironment(appContext);
-            setResult(environment.getClientId());
-            notifyReady();
         }
     }
 
