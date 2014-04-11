@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_show_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/fragment_artist_frame_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/show_image_foreground">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/fragment_artist_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff777777"
+            android:minHeight="@dimen/fragment_show_image_height"
+            android:scaleType="centerCrop"/>
+
+    </FrameLayout>
+
+    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+        android:id="@+id/fragment_artist_favorite_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/artist_header_checkbox_margin_left"
+        android:layout_marginTop="@dimen/artist_header_checkbox_margin_top"
+        android:button="@drawable/checkbox_favorite_disc_selector"
+        android:checked="false"
+        android:minHeight="@dimen/favorite_checkbox_min_height"
+        android:minWidth="@dimen/favorite_checkbox_min_width" />
+
+    <TextView
+        android:id="@+id/fragment_artist_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/fragment_artist_frame_foreground"
+        android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
+        android:layout_marginLeft="@dimen/show_artist_title_margin_left"
+        android:text="@string/mock_placeholder_artist_title_1"
+        android:textAppearance="@style/show_artist_title"/>
+
+</RelativeLayout>

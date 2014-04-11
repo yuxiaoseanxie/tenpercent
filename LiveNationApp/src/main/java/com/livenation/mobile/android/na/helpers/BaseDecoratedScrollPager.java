@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
@@ -46,6 +47,11 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
         listView.addFooterView(footerBugHack);
     }
 
+    public void connectListView(ListView listView) {
+        listView.setOnScrollListener(this);
+        listView.addFooterView(footerBugHack);
+    }
+
     @Override
     public void reset() {
         super.reset();
@@ -76,7 +82,11 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
         footerBugHack.removeAllViews();
     }
 
-    public abstract void stop();
+    public void stop() {
+        for (FetchLoader fetchLoader : getFetchLoaders()) {
+            fetchLoader.cancel();
+        }
+    }
 
     private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
         if (null == lastFetch) return false;
