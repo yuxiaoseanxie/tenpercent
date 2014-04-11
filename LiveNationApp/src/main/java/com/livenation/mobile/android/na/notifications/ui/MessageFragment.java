@@ -5,11 +5,8 @@
 package com.livenation.mobile.android.na.notifications.ui;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -17,12 +14,9 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,7 +31,6 @@ import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
-import com.urbanairship.widget.RichPushMessageView;
 
 import org.json.JSONObject;
 
@@ -112,7 +105,7 @@ public class MessageFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 //TODO define wording https://www.pivotaltracker.com/story/show/69382014
             }
-        }, RichPushManager.shared().getRichPushUser().getId(),  RichPushManager.shared().getRichPushUser().getPassword());
+        }, RichPushManager.shared().getRichPushUser().getId(), RichPushManager.shared().getRichPushUser().getPassword());
         requestQueue.add(urbanAirshipRequest);
     }
 
