@@ -26,15 +26,15 @@ android {
     }
 }
 
-configurations {
-    all*.exclude group: 'com.mcxiaoke.volley', module: 'library'
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    compile project(':LabsPlatform')
+    compile(project(':LabsPlatform')) {
+        exclude group: 'com.mcxiaoke.volley', module: 'library'
+    }
     compile project(':facebookSDK')
-    compile project(':Ticketing')
+    compile(project(':Ticketing')) {
+        exclude group: 'com.mcxiaoke.volley', module: 'library'
+    }
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.google.android.gms:play-services:+'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
