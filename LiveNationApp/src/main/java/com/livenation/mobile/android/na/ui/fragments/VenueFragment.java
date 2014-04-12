@@ -26,6 +26,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -93,6 +94,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         telephone.setText(venue.getFormattedPhoneNumber());
         OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
         link.setOnClickListener(onVenueClick);
+        telephone.setOnClickListener(new OnPhoneNumberClick());
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
@@ -144,6 +146,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(), "Herro: " + venueId, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class OnPhoneNumberClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            String phoneNumber = (String) VenueFragment.this.telephone.getText();
+            phoneNumber.replace("-","");
+            if (phoneNumber != null || !phoneNumber.trim().isEmpty())
+                PhoneUtils.call(phoneNumber, VenueFragment.this.getActivity());
         }
     }
 }
