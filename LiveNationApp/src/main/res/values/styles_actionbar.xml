@@ -20,6 +20,7 @@
 
     <style name="Theme.Actionbar" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbar
         </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbar</item>
