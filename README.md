@@ -29,3 +29,15 @@ b) That the following items are selected:
 For good luck, select Tools->Android->Sync project with Gradle Files, close and re-open Android Studio, and/or select the File->Synchronize menu option.
 
 It will then be possible to build and run the project.
+
+
+Running UIAutomator tests
+=========================
+
+Experimental: UIAutomator tests can be run from the root of the app folder (adr-appLiveNation/) via the command line, eg:
+
+./gradlew uiRun
+
+Will run the UIAutomator tests specified by the 'UiAutomator/build.gradle' file
+
+
