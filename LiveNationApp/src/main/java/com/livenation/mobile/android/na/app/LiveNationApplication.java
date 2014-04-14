@@ -24,6 +24,7 @@ import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
+import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
@@ -118,6 +119,10 @@ public class LiveNationApplication extends Application {
         BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
         PushManager.shared().setNotificationBuilder(notificationBuilder);
         PushManager.shared().setIntentReceiver(PushReceiver.class);
+
+        NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
+        if(notificationsRegistrationManager.shouldRegister())
+            notificationsRegistrationManager.register();
     }
 
     private void setupTicketing() {
