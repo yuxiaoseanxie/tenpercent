@@ -84,6 +84,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
         slidingTabLayout.setViewPager(pager);
+        slidingTabLayout.setBottomBorderColor(0xffe11d39);
         slidingTabLayout.setSelectedIndicatorColors(0xffe11d39);
 
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
