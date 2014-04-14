@@ -43,7 +43,7 @@ public class MessageFragment extends Fragment {
     private static final SimpleDateFormat DATE_RECEIVED_FORMAT = new SimpleDateFormat("MMM d, yyyy  h:mm a");
 
     private RichPushMessage message;
-    private TextView browser;
+    private TextView messageView;
     private TextView subjectText;
     private TextView dateReceivedText;
     private Button callToActionButton;
@@ -52,7 +52,7 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container);
 
-        browser = (TextView) view.findViewById(R.id.fragment_message_view);
+        messageView = (TextView) view.findViewById(R.id.fragment_message_view);
         subjectText = (TextView) view.findViewById(R.id.fragment_message_subject);
         dateReceivedText = (TextView) view.findViewById(R.id.fragment_message_date);
         callToActionButton = (Button) view.findViewById(R.id.fragment_message_cta_button);
@@ -96,8 +96,8 @@ public class MessageFragment extends Fragment {
                 if (message != null) {
                     Spannable sp = new SpannableString(Html.fromHtml(message));
                     Linkify.addLinks(sp, Linkify.ALL);
-                    browser.setMovementMethod(LinkMovementMethod.getInstance());
-                    browser.setText(sp);
+                    messageView.setMovementMethod(LinkMovementMethod.getInstance());
+                    messageView.setText(sp);
                 }
             }
         }, new Response.ErrorListener() {
