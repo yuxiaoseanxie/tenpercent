@@ -47,7 +47,7 @@ public class NotificationsRegistrationManager implements ApiServiceBinder {
         return new PreferencePersistence("notifications");
     }
 
-    private void savedApid(String apid) {
+    private void saveApid(String apid) {
         Log.i(getClass().getName(), "saved apid");
         getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, applicationContext);
     }
@@ -96,12 +96,12 @@ public class NotificationsRegistrationManager implements ApiServiceBinder {
         apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(getClass().getName(), "Could not register with platform: " + error);
+                Log.e(getClass().getName(), "Could not register with platform: " + new String(error.networkResponse.data));
             }
 
             @Override
             public void onResponse(Void response) {
-                savedApid(apid);
+                saveApid(apid);
                 Log.i(getClass().getName(), "Completed platform registration");
             }
         });
