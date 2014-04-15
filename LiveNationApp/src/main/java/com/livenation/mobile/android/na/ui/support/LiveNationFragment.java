@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -135,6 +136,7 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         return Integer.valueOf(view.getId()).toString();
     }
 
+
     public void trackScreenWithLocation(final String screenName, final Props props) {
         LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
@@ -144,16 +146,8 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
                     properties = new Props();
                 }
                 properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
-                Analytics.screen(screenName, properties);
+                LiveNationAnalytics.screen(screenName, properties);
             }
         });
-    }
-
-    public void trackScreen(final String screenName, final Props props) {
-        Props properties = props;
-        if (properties == null) {
-            properties = new Props();
-        }
-        Analytics.screen(screenName, properties);
     }
 }

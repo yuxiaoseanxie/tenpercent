@@ -13,6 +13,12 @@ public class LiveNationAnalytics {
     }
 
     static public void track(String eventTitle) {
-        Analytics.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX);
+        Props props = new Props();
+        track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
+    }
+
+    static public void screen(String screenTitle, Props props) {
+        props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
+        Analytics.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
     }
 }
