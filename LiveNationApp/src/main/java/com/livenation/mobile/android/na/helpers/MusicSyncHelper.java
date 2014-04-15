@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.LibraryAffinitiesParameters;
 
 import java.util.Calendar;
 
@@ -57,7 +57,7 @@ public class MusicSyncHelper implements ApiServiceBinder {
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        apiService.sendLibraryAffinities(new ApiParameters.LibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
+        apiService.sendLibraryAffinities(new LibraryAffinitiesParameters().setLibraryDump(musicLibrary), new ApiService.BasicApiCallback<Void>() {
             @Override
             public void onResponse(Void result) {
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
