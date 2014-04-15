@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 
@@ -69,7 +69,7 @@ public class NotificationsRegistrationManager {
 
                 Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
 
-                ApiParameters.RegisterForNotificationsParameters params = new ApiParameters.RegisterForNotificationsParameters();
+                RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
                 params.setDeviceId(apiService.getApiConfig().getDeviceId());
                 params.setTokens(apid, userId);
                 apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
