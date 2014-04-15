@@ -98,11 +98,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
