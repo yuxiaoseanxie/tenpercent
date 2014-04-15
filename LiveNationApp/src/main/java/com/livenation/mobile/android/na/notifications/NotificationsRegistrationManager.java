@@ -76,7 +76,7 @@ public class NotificationsRegistrationManager implements ApiServiceBinder {
     public boolean shouldRegister() {
         String apid = PushManager.shared().getAPID();
         String userId = RichPushManager.shared().getRichPushUser().getId();
-        return ((apid != null && !userId.equals(getSavedApid())) && userId != null);
+        return ((apid != null && !apid.equals(getSavedApid())) && userId != null);
     }
 
     public void register() {
