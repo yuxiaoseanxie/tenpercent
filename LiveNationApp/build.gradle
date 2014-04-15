@@ -26,6 +26,11 @@ android {
     }
 
     signingConfigs {
+        def LNStorePassword = LNStorePassword != null ?: "livenationlabs"
+        def LNKeyAlias = LNKeyAlias != null ?: "livenationlabs"
+        def LNKeyPassword = LNKeyPassword != null ?: "livenationlabs"
+
+
         debug {
             storeFile file('../docs/keystore/debug.keystore')
         }
@@ -57,6 +62,7 @@ android {
         debug {
             packageNameSuffix ".debug"
             versionNameSuffix " debug"
+            signingConfig signingConfigs.debug
         }
     }
 }
