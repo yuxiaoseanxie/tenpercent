@@ -21,6 +21,21 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 18
+        versionCode 12
+        versionName "2.0"
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file(LNDebugStoreFile)
+        }
+
+        release {
+            storeFile file(LNReleaseStoreFile)
+            storePassword LNStorePassword
+            keyAlias LNKeyAlias
+            keyPassword LNKeyPassword
+        }
     }
 
     packagingOptions {
@@ -36,6 +51,12 @@ android {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            packageNameSuffix ".debug"
+            versionNameSuffix " debug"
         }
     }
 }
