@@ -201,7 +201,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
                         //store new UUID
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(PREFS_DEVICE_UUID, uuid);
-                        editor.commit();
+                        editor.apply();
                     }
                     setResult(uuid);
                 }
