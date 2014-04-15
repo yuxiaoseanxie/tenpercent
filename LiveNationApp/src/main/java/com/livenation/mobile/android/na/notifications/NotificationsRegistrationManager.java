@@ -16,18 +16,12 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 
-public class NotificationsRegistrationManager implements ApiServiceBinder {
-    private Context applicationContext;
-    private LiveNationApiService apiService;
-    private boolean registerAfterServiceBind;
-
+public class NotificationsRegistrationManager {
     //region Lifecycle
 
     private static final NotificationsRegistrationManager instance = new NotificationsRegistrationManager();
 
     private NotificationsRegistrationManager() {
-        this.applicationContext = LiveNationApplication.get();
-        getApiHelper().persistentBindApi(this);
     }
 
     public static NotificationsRegistrationManager getInstance() {
@@ -49,23 +43,11 @@ public class NotificationsRegistrationManager implements ApiServiceBinder {
 
     private void saveApid(String apid) {
         Log.i(getClass().getName(), "saved apid");
-        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, applicationContext);
+        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, LiveNationApplication.get());
     }
 
     private String getSavedApid() {
-        return getPreferences().read(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, applicationContext);
-    }
-
-    //endregion
-
-
-    //region ApiServiceBinder
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.apiService = apiService;
-        if(registerAfterServiceBind)
-            register();
+        return getPreferences().read(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
     }
 
     //endregion
@@ -80,29 +62,29 @@ public class NotificationsRegistrationManager implements ApiServiceBinder {
     }
 
     public void register() {
-        if (apiService == null) {
-            registerAfterServiceBind = true;
-            return;
-        }
-
-        final String apid = PushManager.shared().getAPID();
-        final String userId = RichPushManager.shared().getRichPushUser().getId();
-
-        Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
-
-        ApiParameters.RegisterForNotificationsParameters params = new ApiParameters.RegisterForNotificationsParameters();
-        params.setDeviceId(apiService.getApiConfig().getDeviceId());
-        params.setTokens(apid, userId);
-        apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
+        getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(getClass().getName(), "Could not register with platform: " + new String(error.networkResponse.data));
-            }
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                final String apid = PushManager.shared().getAPID();
+                final String userId = RichPushManager.shared().getRichPushUser().getId();
 
-            @Override
-            public void onResponse(Void response) {
-                saveApid(apid);
-                Log.i(getClass().getName(), "Completed platform registration");
+                Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
+
+                ApiParameters.RegisterForNotificationsParameters params = new ApiParameters.RegisterForNotificationsParameters();
+                params.setDeviceId(apiService.getApiConfig().getDeviceId());
+                params.setTokens(apid, userId);
+                apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(getClass().getName(), "Could not register with platform: " + new String(error.networkResponse.data));
+                    }
+
+                    @Override
+                    public void onResponse(Void response) {
+                        saveApid(apid);
+                        Log.i(getClass().getName(), "Completed platform registration");
+                    }
+                });
             }
         });
     }
