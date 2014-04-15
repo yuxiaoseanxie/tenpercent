@@ -38,7 +38,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 

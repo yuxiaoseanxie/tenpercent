@@ -41,8 +41,6 @@ import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import io.segment.android.Analytics;
-
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
     private static final int RC_SSO_REPAIR = 0;

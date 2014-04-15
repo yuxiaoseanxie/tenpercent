@@ -46,9 +46,9 @@
 
         <TextView
             android:id="@+id/venue_detail_telephone"
-            android:background="@drawable/livenation_selector_pressable_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/livenation_selector_pressable_background"
             android:text="@string/mock_venue_telephone"
             android:textAppearance="@style/venue_detail_text" />
     </LinearLayout>

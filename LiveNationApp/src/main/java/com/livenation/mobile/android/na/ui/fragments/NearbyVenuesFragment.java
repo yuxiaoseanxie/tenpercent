@@ -51,7 +51,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;

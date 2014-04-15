@@ -35,11 +35,8 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 

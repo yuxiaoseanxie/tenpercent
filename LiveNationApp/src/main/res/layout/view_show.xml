@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
     android:background="@drawable/livenation_selector_pressable_background"
+    android:descendantFocusability="blocksDescendants"
     android:minHeight="@dimen/list_show_item_min_height">
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate

@@ -31,7 +31,6 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract, StateEnhancer {

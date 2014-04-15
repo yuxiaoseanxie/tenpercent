@@ -68,21 +68,21 @@
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ShowActivity"
-            android:launchMode="singleTop"
-            android:label="@string/activity_label_show"/>
+            android:label="@string/activity_label_show"
+            android:launchMode="singleTop" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
-            android:label="@string/activity_label_venue"/>
+            android:label="@string/activity_label_venue" />
         <activity
             android:name=".ui.ArtistShowsActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"/>
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
             android:label="@string/activity_label_artist"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"/>
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
-            android:label="@string/activity_label_favorites"/>
+            android:label="@string/activity_label_favorites" />
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.DebugActivity"
@@ -188,7 +188,9 @@
             android:permission="com.livenation.mobile.android.na.permission.UA_DATA" />
 
         <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
-        <meta-data android:name="com.crashlytics.ApiKey" android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6"/>
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />
     </application>
 
 </manifest>

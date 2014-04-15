@@ -38,6 +38,7 @@ public class EmptyListViewControl extends LinearLayout {
     private View loading;
     private View retry;
     private View noData;
+
     public EmptyListViewControl(Context context) {
         super(context);
         initializeViews(context);
