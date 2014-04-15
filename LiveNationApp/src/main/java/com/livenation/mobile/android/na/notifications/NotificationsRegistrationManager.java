@@ -1,6 +1,5 @@
 package com.livenation.mobile.android.na.notifications;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
