@@ -18,6 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
@@ -121,7 +122,7 @@ public class LiveNationApplication extends Application {
         PushManager.shared().setIntentReceiver(PushReceiver.class);
 
         NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
-        if(notificationsRegistrationManager.shouldRegister())
+        if (notificationsRegistrationManager.shouldRegister())
             notificationsRegistrationManager.register();
     }
 
@@ -140,7 +141,7 @@ public class LiveNationApplication extends Application {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            Analytics.track(AnalyticConstants.TRACK_URL_SHCEMES, props);
+            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, props);
         }
     }
 

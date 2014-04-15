@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -107,7 +108,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put("Cell Position", position);
-        Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
