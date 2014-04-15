@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Specific to its build variant-->
+    <string name="app_name">Live Nation Debug</string>
+</resources>
