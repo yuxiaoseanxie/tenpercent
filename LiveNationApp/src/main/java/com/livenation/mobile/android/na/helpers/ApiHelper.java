@@ -284,11 +284,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             ssoRepair.putExtra(SsoActivity.ARG_PROVIDER_ID, apiBuilder.getSsoProvider().getResult().getId());
             activity.startActivity(ssoRepair);
         }
-
-        @Override
-        public void onInvalidated(ApiBuilderElement element) {
-
-        }
     }
 
 }
