@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_api_key">AIzaSyAvrAEFr9l3O6Rvb8R2i-acnhrAgOV5mBo</string>
+    <string name="facebook_app_id">387261387994194</string>
+
+    <string name="urbanairship_permission">com.livenation.mobile.android.na.debug.permission.UA_DATA</string>
+    <string name="urbanairship_authorities">com.livenation.mobile.android.na.debug.urbanairship.provider</string>
+    <string name="urbanairship_category">com.livenation.mobile.android.na.debug</string>
+</resources>

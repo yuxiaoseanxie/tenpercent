@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.VenueEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueEventsParameters;
 
 import java.util.ArrayList;
 import java.util.List;

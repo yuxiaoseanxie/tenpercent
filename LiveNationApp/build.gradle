@@ -21,6 +21,26 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 18
+        versionCode 12
+        versionName "2.0"
+    }
+
+    signingConfigs {
+        def LNStorePassword = LNStorePassword != null ?: "livenationlabs"
+        def LNKeyAlias = LNKeyAlias != null ?: "livenationlabs"
+        def LNKeyPassword = LNKeyPassword != null ?: "livenationlabs"
+
+
+        debug {
+            storeFile file('../docs/keystore/debug.keystore')
+        }
+
+        release {
+            storeFile file(LNReleaseStoreFile)
+            storePassword LNStorePassword
+            keyAlias LNKeyAlias
+            keyPassword LNKeyPassword
+        }
     }
 
     packagingOptions {
@@ -36,6 +56,13 @@ android {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            packageNameSuffix ".debug"
+            versionNameSuffix " debug"
+            signingConfig signingConfigs.debug
         }
     }
 }
