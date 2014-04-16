@@ -146,6 +146,10 @@
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.UserActivity"
+            android:screenOrientation="portrait" />
         <!-- end auto-generated activities -->
 
 
