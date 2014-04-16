@@ -22,6 +22,7 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
+import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.urbanairship.push.PushManager;
@@ -177,6 +178,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
         LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        NotificationsRegistrationManager.getInstance().register();
     }
 
     private static enum ScanOptions {

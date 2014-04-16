@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.notifications;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -54,6 +55,10 @@ public class NotificationsRegistrationManager {
 
     //region Registration
 
+    private boolean isHostSafe(String host) {
+        return (!BuildConfig.DEBUG || (!"https://api.livenation.com".equals(host) && !"https://prod-faceoff.herokuapp.com".equals(host)));
+    }
+
     public boolean shouldRegister() {
         String apid = PushManager.shared().getAPID();
         String userId = RichPushManager.shared().getRichPushUser().getId();
@@ -64,6 +69,11 @@ public class NotificationsRegistrationManager {
         getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
+                if(!isHostSafe(apiService.getApiConfig().getHost())) {
+                    Log.e(getClass().getName(), "Ignoring unsafe host: " + apiService.getApiConfig().getHost());
+                    return;
+                }
+
                 final String apid = PushManager.shared().getAPID();
                 final String userId = RichPushManager.shared().getRichPushUser().getId();
 
