@@ -43,7 +43,7 @@
     <View
         android:id="@+id/list_search_result_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/underscore_container_height"
         android:layout_alignLeft="@id/list_search_result_type_box"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
