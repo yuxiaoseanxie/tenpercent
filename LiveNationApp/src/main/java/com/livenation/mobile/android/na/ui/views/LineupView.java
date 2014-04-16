@@ -23,6 +23,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 public class LineupView extends LinearLayout {
     private FavoriteCheckBox favorite;
     private TextView title;
+    private View divider;
 
     public LineupView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -48,12 +49,17 @@ public class LineupView extends LinearLayout {
 
         favorite = (FavoriteCheckBox) view.findViewById(R.id.view_lineup_favorite_checkbox);
         title = (TextView) view.findViewById(R.id.view_lineup_title);
+        divider = view.findViewById(R.id.view_lineup_divider);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
     }
 
     public TextView getTitle() {
         return title;
+    }
+
+    public View getDivider() {
+        return divider;
     }
 
     public void bindToFavoriteArtist(Artist artist, FavoritesPresenter favoritesPresenter) {

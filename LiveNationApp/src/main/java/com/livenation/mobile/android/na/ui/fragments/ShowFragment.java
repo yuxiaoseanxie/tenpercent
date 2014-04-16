@@ -171,10 +171,16 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             if (null == imageUrl) {
                 String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
 
-                if (null == imageKey) continue;
-
-                imageUrl = lineup.getImageURL(imageKey);
+                if (null != imageKey) {
+                    imageUrl = lineup.getImageURL(imageKey);
+                }
             }
+
+            boolean lastItem = (event.getLineup().indexOf(lineup) == event.getLineup().size() - 1);
+            if (lastItem) {
+                view.getDivider().setVisibility(View.GONE);
+            }
+
         }
         if (null != imageUrl) {
             artistImage.setImageUrl(imageUrl, getImageLoader());
