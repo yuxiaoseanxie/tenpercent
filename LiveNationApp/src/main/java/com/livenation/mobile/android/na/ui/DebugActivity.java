@@ -177,7 +177,8 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         ApiHelper.setConfiguredEnvironment(environment, this);
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
+        apiHelper.buildDefaultApi();
         NotificationsRegistrationManager.getInstance().register();
     }
 
