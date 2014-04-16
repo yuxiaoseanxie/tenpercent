@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="mock_venue_title_1"/>
+    <string name="mock_artist_title_1"/>
+    <string name="mock_show_time"/>
+
+    <string name="mock_placeholder_venue_title_1"/>
+    <string name="mock_placeholder_artist_title_1"/>
+
+    <string name="mock_placeholder_venue_details_1"/>
+    <string name="mock_show_venue_details"/>
+
+    <string name="mock_venue_telephone"/>
+    <string name="mock_venue_location"/>
+    <string name="mock_venue_title_linebreak_1"/>
+    <string name="mock_venue_distance"/>
+
+    <string name="mock_date_day"/>
+    <string name="mock_date_dotw"/>
+    <string name="mock_date_month"/>
+
+    <string name="mock_show_calendar_date_time"/>
+    <string name="mock_account_footer_location_detail"/>
+
+    <string name="mock_favorite_title_1"/>
+
+    <string name="mock_overflow"/>
+    <string name="mock_artist_bio"/>
+    <string name="mock_artist_type"/>
+</resources>
