@@ -21,6 +21,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -153,7 +153,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             String phoneNumber = (String) VenueFragment.this.telephone.getText();
-            phoneNumber.replace("[^0-9+]","");
+            phoneNumber.replace("[^0-9+]", "");
             if (phoneNumber != null || !phoneNumber.trim().isEmpty())
                 PhoneUtils.dial(phoneNumber, VenueFragment.this.getActivity());
         }

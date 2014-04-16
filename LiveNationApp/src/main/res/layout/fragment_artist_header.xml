@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:background="#ff777777"
             android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
     </FrameLayout>
 
@@ -41,6 +41,6 @@
         android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
         android:layout_marginLeft="@dimen/show_artist_title_margin_left"
         android:text="@string/mock_placeholder_artist_title_1"
-        android:textAppearance="@style/show_artist_title"/>
+        android:textAppearance="@style/show_artist_title" />
 
 </RelativeLayout>

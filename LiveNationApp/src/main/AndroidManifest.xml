@@ -68,8 +68,8 @@
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ShowActivity"
-            android:launchMode="singleTop"
-            android:label="@string/activity_label_show"/>
+            android:label="@string/activity_label_show"
+            android:launchMode="singleTop" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue" />

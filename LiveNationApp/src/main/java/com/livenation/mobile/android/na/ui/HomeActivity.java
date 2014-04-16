@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -40,8 +41,6 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.platform.util.Logger;
-
-import io.segment.android.Analytics;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -68,13 +67,13 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                Analytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Analytics.track(AnalyticConstants.X_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.X_TAP);
             }
         };
         rootView.setDrawerListener(drawerToggle);
@@ -140,7 +139,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
-                Analytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -149,16 +148,16 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_search_item:
-                Analytics.track(AnalyticConstants.SEARCH_ICON_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
 
             case R.id.menu_home_faq_item:
-                Analytics.track(AnalyticConstants.HELP_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
             case R.id.menu_home_legal_item:
-                Analytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
                 return true;
 
             default:

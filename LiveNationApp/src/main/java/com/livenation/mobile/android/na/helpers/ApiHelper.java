@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -22,7 +20,6 @@ import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +169,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     private class GetDeviceId extends ApiBuilderElement<String> {
         private final Context appContext;
         private final String PREFS_DEVICE_UUID = "device_uuid";
+
         private GetDeviceId(Context appContext) {
             this.appContext = appContext;
         }
