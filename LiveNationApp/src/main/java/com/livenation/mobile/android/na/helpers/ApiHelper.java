@@ -51,7 +51,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         try {
             return Constants.Environment.valueOf(environmentKey);
         } catch (Exception e) {
-            return Constants.Environment.StagingDirect;
+            return Constants.Environment.Staging;
         }
     }
 
