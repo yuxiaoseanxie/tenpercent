@@ -28,6 +28,17 @@ b) That the following items are selected:
 
 For good luck, select Tools->Android->Sync project with Gradle Files, close and re-open Android Studio, and/or select the File->Synchronize menu option.
 
+Now you need to update your properties to be able to build in debug and releae mode.
+Go to Users/username/.gradle
+Open the gradle.properties file. If it does not exist create it.
+
+Copy and paste the following variable names and update paths and passwords.
+
+	LNReleaseStoreFile= .../livenation-release-key.keystore
+	LNStorePassword=
+	LNKeyAlias=livenation_alias
+	LNKeyPassword= ...
+
 It will then be possible to build and run the project.
 
 

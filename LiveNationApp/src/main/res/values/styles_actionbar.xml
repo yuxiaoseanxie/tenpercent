@@ -20,13 +20,14 @@
 
     <style name="Theme.Actionbar" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbar
         </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbar</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbar</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbar</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Transparent.Actionbar</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbar</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbar
         </item>
@@ -34,6 +35,7 @@
         </item>
         <item name="actionModeCloseDrawable">@drawable/close_action_mode</item>
         <item name="android:actionModeCloseDrawable">@drawable/close_action_mode</item>
+        <item name="android:actionOverflowButtonStyle">@style/ActionBar.Overflow</item>
     </style>
 
     <style name="ActionBar.Solid.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
@@ -58,6 +60,10 @@
 
     <style name="ActionBarTabStyle.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
+    </style>
+
+    <style name="ActionBar.Overflow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ab_overflow</item>
     </style>
 
     <style name="DropDownNav.Actionbar" parent="@android:style/Widget.Holo.Light.Spinner">

@@ -33,18 +33,12 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         init();
     }
 
-
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         deinit();
     }
 

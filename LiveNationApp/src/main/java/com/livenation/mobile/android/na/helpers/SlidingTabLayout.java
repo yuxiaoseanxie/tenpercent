@@ -114,6 +114,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
         mTabStrip.setDividerColors(colors);
     }
 
+    public void setBottomBorderColor(int color) {
+        mTabStrip.setBottomBorderColor(color);
+    }
+
     /**
      * Set the {@link android.support.v4.view.ViewPager.OnPageChangeListener}. When using {@link com.livenation.mobile.android.na.helpers.SlidingTabLayout} you are
      * required to set any {@link android.support.v4.view.ViewPager.OnPageChangeListener} through this method. This is so

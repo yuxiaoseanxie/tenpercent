@@ -14,8 +14,9 @@ import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,7 +174,7 @@ public class FavoritesPresenter extends
         class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
                 ApiService.BasicApiCallback<Void> {
             public static final int FAILURE_API_GENERAL = 0;
-            private ApiParameters.FavoriteWithNameParameters apiParams;
+            private FavoriteWithNameParameters apiParams;
 
             public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
                 super(listener, args, view);
@@ -192,7 +193,7 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = new ApiParameters.FavoriteWithNameParameters();
+                apiParams = new FavoriteWithNameParameters();
                 Favorite favorite = (Favorite) args.getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();
                 apiParams.setId(idValue, favorite.getType());
@@ -261,7 +262,7 @@ public class FavoritesPresenter extends
                 BaseResultState<Favorite, FavoriteRemoveView> implements
                 ApiService.BasicApiCallback<Void> {
             public static final int FAILURE_API_GENERAL = 0;
-            private ApiParameters.FavoriteParameters apiParams;
+            private FavoriteParameters apiParams;
 
             public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,
                                        Bundle args, FavoriteRemoveView view) {
@@ -281,7 +282,7 @@ public class FavoritesPresenter extends
             @Override
             public void applyArgs(Bundle args) {
                 super.applyArgs(args);
-                apiParams = new ApiParameters.FavoriteParameters();
+                apiParams = new FavoriteParameters();
                 Favorite favorite = (Favorite) args
                         .getSerializable(INTENT_DATA_KEY);
                 String idValue = Long.valueOf(favorite.getId()).toString();

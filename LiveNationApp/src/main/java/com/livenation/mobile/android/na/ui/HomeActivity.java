@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -84,6 +85,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
         slidingTabLayout.setViewPager(pager);
+        slidingTabLayout.setBottomBorderColor(0xffe11d39);
         slidingTabLayout.setSelectedIndicatorColors(0xffe11d39);
 
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
@@ -94,11 +96,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -128,6 +125,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         } else {
             notificationsItem.setIcon(R.drawable.notifications_normal);
         }
+
+        MenuItem debug = menu.findItem(R.id.menu_home_debug_item);
+        debug.setVisible(BuildConfig.DEBUG);
 
         return true;
     }
