@@ -42,7 +42,7 @@ public class NotificationsRegistrationManager {
     }
 
     private void saveApid(String apid) {
-        Log.i(getClass().getName(), "saved apid");
+        Log.i(getClass().getName(), "saved apid:" + apid);
         getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, LiveNationApplication.get());
     }
 
