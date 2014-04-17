@@ -85,6 +85,8 @@
     <string name="search_input_hint">Search Artists and Venues</string>
     <string name="view_empty_list_retry_button">Retry</string>
 
+    <string name="youtube_video_play">Play Video</string>
+
     <string name="tickets_third_party_toast">Transferring you to a third party website that sells tickets for this event.</string>
 
     <!-- Notifications -->

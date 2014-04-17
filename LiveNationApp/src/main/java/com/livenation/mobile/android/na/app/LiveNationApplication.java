@@ -39,6 +39,7 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -104,6 +105,8 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(requestQueue, cache);
+
+        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
         setupNotifications();
         setupTicketing();
