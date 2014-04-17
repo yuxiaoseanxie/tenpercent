@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Debug;
 import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -45,6 +47,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public static Constants.Environment getConfiguredEnvironment(Context context) {
+        if (!BuildConfig.DEBUG) {
+            return Constants.Environment.Production;
+        }
         PersistenceProvider<String> prefs = new PreferencePersistence("environment");
         String environmentKey = prefs.read("environment", context);
 
