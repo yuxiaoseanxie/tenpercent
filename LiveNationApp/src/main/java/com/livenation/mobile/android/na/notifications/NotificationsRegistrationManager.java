@@ -66,9 +66,12 @@ public class NotificationsRegistrationManager {
     }
 
     public void register() {
+        Log.d("ELODIE", "register has been called");
+
         getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
+                Log.d("ELODIE", "onApiServiceAttached has been called");
                 if(!isHostSafe(apiService.getApiConfig().getHost())) {
                     Log.e(getClass().getName(), "Ignoring unsafe host: " + apiService.getApiConfig().getHost());
                     return;
@@ -85,11 +88,13 @@ public class NotificationsRegistrationManager {
                 apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("ELODIE", "onErrorResponse has been called");
                         Log.e(getClass().getName(), "Could not register with platform: " + new String(error.networkResponse.data));
                     }
 
                     @Override
                     public void onResponse(Void response) {
+                        Log.d("ELODIE", "onResponse has been called");
                         saveApid(apid);
                         Log.i(getClass().getName(), "Completed platform registration");
                     }
