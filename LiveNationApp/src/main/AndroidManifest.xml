@@ -150,6 +150,10 @@
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.AccountActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.TMPlusActivity"
+            android:screenOrientation="portrait" />
         <!-- end auto-generated activities -->
 
 
