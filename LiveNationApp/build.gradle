@@ -26,8 +26,9 @@ android {
     }
 
     signingConfigs {
+        
         debug {
-            storeFile file(LNDebugStoreFile)
+            storeFile file('../docs/keystore/debug.keystore')
         }
 
         release {
@@ -57,6 +58,7 @@ android {
         debug {
             packageNameSuffix ".debug"
             versionNameSuffix " debug"
+            signingConfig signingConfigs.debug
         }
     }
 }

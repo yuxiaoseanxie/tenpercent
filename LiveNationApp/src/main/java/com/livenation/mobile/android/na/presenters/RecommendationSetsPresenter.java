@@ -19,7 +19,7 @@ import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private final Context context;
-        private ApiParameters.RecommendationSetsParameters params;
+        private RecommendationSetsParameters params;
 
 
         public RecommendationSetsState(StateListener<RecommendationSetsState> listener, Bundle args, RecommendationSetsView view, Context context) {
@@ -73,7 +73,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = new ApiParameters.RecommendationSetsParameters();
+            params = new RecommendationSetsParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -90,7 +90,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = new ApiParameters.RecommendationSetsParameters();
+                params = new RecommendationSetsParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);

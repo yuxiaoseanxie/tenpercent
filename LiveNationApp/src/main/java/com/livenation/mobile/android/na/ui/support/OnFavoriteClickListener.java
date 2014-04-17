@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
@@ -15,7 +16,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 
 public class OnFavoriteClickListener {
@@ -147,17 +147,17 @@ public class OnFavoriteClickListener {
                 case Favorite.FAVORITE_ARTIST:
                     props.put("Artist Name", favorite.getName());
                     if (added) {
-                        Analytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, props);
+                        LiveNationAnalytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, props);
                     } else {
-                        Analytics.track(AnalyticConstants.UNFAVORITE_ARTIST_STAR_TAP, props);
+                        LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_ARTIST_STAR_TAP, props);
                     }
                     break;
                 case Favorite.FAVORITE_VENUE:
                     props.put("Venue Name", favorite.getName());
                     if (added) {
-                        Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
+                        LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
                     } else {
-                        Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
+                        LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
                     }
                     break;
                 default:

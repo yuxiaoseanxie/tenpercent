@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 public class SingleArtistPresenter
@@ -55,7 +55,7 @@ public class SingleArtistPresenter
 
     public static class SingleArtistState extends BaseResultState<Artist, SingleArtistView> implements ApiService.BasicApiCallback<Artist> {
         public static final int FAILURE_API_GENERAL = 0;
-        private ApiParameters.SingleArtistParameters apiParams;
+        private SingleArtistParameters apiParams;
 
         public SingleArtistState(StateListener<SingleArtistState> listener, Bundle args, SingleArtistView view) {
             super(listener, args, view);
@@ -74,7 +74,7 @@ public class SingleArtistPresenter
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = new ApiParameters.SingleArtistParameters();
+            apiParams = new SingleArtistParameters();
             if (args.containsKey(PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
                 long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);

@@ -30,8 +30,8 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ShowView view = (ShowView)convertView;
-        if(view == null) {
+        ShowView view = (ShowView) convertView;
+        if (view == null) {
             view = new ShowView(getContext());
             view.setDisplayMode(getDisplayMode());
             view.setBottomLineVisible(isBottomLineVisible());

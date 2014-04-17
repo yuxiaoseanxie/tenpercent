@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -50,7 +51,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -147,7 +147,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put("Cell Position", position);
-        Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
 
         intent.putExtras(args);
         getActivity().startActivity(intent);
@@ -166,7 +166,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         Props props = new Props();
         props.put("Venue Name", venue.getName());
         props.put("Cell Position", position);
-        Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
+        LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP);
 
         intent.putExtras(args);
         getActivity().startActivity(intent);

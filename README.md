@@ -34,7 +34,6 @@ Open the gradle.properties file. If it does not exist create it.
 
 Copy and paste the following variable names and update paths and passwords.
 
-	LNDebugStoreFile= .../adr-appLiveNation/docs/cert/debug.keystore	
 	LNReleaseStoreFile= .../livenation-release-key.keystore
 	LNStorePassword=
 	LNKeyAlias=livenation_alias

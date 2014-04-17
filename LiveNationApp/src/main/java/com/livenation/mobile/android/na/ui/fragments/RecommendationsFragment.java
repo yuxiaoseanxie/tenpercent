@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -34,11 +35,8 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -108,7 +106,7 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put("Cell Position", position);
-        Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);

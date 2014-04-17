@@ -18,12 +18,14 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
+import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
@@ -118,6 +120,10 @@ public class LiveNationApplication extends Application {
         BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
         PushManager.shared().setNotificationBuilder(notificationBuilder);
         PushManager.shared().setIntentReceiver(PushReceiver.class);
+
+        NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
+        if (notificationsRegistrationManager.shouldRegister())
+            notificationsRegistrationManager.register();
     }
 
     private void setupTicketing() {
@@ -135,7 +141,7 @@ public class LiveNationApplication extends Application {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            Analytics.track(AnalyticConstants.TRACK_URL_SHCEMES, props);
+            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, props);
         }
     }
 

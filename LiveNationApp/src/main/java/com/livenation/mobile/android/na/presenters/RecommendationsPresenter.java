@@ -19,7 +19,7 @@ import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         public static final int FAILURE_API_GENERAL = 0;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
-        private ApiParameters.RecommendationParameters params;
+        private RecommendationParameters params;
 
 
         public RecommendationsState(StateListener<RecommendationsState> listener, Bundle args, EventsView view) {
@@ -69,7 +69,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            params = new ApiParameters.RecommendationParameters();
+            params = new RecommendationParameters();
             if (args.containsKey(ARG_OFFSET_KEY) && args.containsKey(ARG_LIMIT_KEY)) {
                 int offset = args.getInt(ARG_OFFSET_KEY);
                 int limit = args.getInt(ARG_LIMIT_KEY);
@@ -85,7 +85,7 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         @Override
         public void retrieveResult() {
             if (null == params) {
-                params = new ApiParameters.RecommendationParameters();
+                params = new RecommendationParameters();
             }
             params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);

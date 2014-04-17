@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="release_cert_api_key"></string>
+    <string name="google_api_key"></string>
+    <string name="facebook_app_id"></string>
+
+    <string name="urbanairship_permission"></string>
+    <string name="urbanairship_authorities"></string>
+    <string name="urbanairship_category"></string>
     <string name="mtopia_api_key">35abec5b15804303aaedbf6bdeb259b2</string>
 </resources>

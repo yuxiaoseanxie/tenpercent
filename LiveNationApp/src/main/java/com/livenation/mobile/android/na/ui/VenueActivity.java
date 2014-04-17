@@ -9,7 +9,6 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;

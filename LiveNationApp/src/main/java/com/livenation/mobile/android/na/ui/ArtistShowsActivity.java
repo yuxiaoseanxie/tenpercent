@@ -5,12 +5,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.fragments.ArtistShowsListFragment;
-import com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment;
-import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-
-import java.util.ArrayList;
 
 public class ArtistShowsActivity extends FragmentActivity {
     public static final String EXTRA_ARTIST_ID = "com.livenation.mobile.android.na.ui.ArtistShowsActivity.EXTRA_ARTIST_ID";

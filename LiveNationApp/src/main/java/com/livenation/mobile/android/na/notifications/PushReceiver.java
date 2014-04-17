@@ -9,11 +9,10 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.urbanairship.push.PushManager;
 
-/**
- * Created by km on 2/27/14.
- */
 public class PushReceiver extends BroadcastReceiver {
     private static final String LOG_TAG = "Live Nation Notifications";
+
+    //region Reception
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,7 +38,11 @@ public class PushReceiver extends BroadcastReceiver {
     }
 
     private void registrationFinished(Context context, Intent intent) {
-        /* This is where platform registration will occur. -km */
-        Log.i(LOG_TAG, "Registration finished with APID: " + intent.getStringExtra(PushManager.EXTRA_APID));
+        String apid = intent.getStringExtra(PushManager.EXTRA_APID);
+        Log.i(LOG_TAG, "Registration finished with APID: " + apid);
+
+        NotificationsRegistrationManager.getInstance().register();
     }
+
+    //endregion
 }

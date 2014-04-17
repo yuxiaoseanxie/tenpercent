@@ -85,7 +85,7 @@ public class ShowView extends LinearLayout {
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.view_show, isInEditMode()? null : this, false);
+        View view = inflater.inflate(R.layout.view_show, isInEditMode() ? null : this, false);
 
         this.title = (TextView) view.findViewById(R.id.view_show_title);
         this.details = (TextView) view.findViewById(R.id.view_show_details);
@@ -135,6 +135,7 @@ public class ShowView extends LinearLayout {
         };
 
         abstract String getTitle(Event event);
+
         abstract String getDetails(Event event, Date localStartTime);
     }
 }

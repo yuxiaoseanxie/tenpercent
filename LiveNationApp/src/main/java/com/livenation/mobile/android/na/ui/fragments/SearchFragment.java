@@ -28,7 +28,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.AutoCompleteSearchParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             unboundSearchTextBuffer = text;
             return;
         }
-        ApiParameters.AutoCompleteSearchParameters params = new ApiParameters.AutoCompleteSearchParameters();
+        AutoCompleteSearchParameters params = new AutoCompleteSearchParameters();
         params.setIncludes(SEARCH_INCLUDES);
         params.setSearchQuery(text);
 

@@ -11,6 +11,6 @@ public class ApiConfigErrorTracker implements ErrorTracker {
 
     @Override
     public void track(String logTitle, Map<String, String> properties) {
-        
+
     }
 }

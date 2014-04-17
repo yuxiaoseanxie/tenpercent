@@ -12,7 +12,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class ArtistEventsPresenter
     public static class ArtistEventsState
             extends BaseResultState<ArtistEvents, ArtistEventsView>
             implements ApiService.BasicApiCallback<List<Event>> {
-        private ApiParameters.ArtistEventsParameters apiParams;
+        private ArtistEventsParameters apiParams;
 
         public ArtistEventsState(StateListener<ArtistEventsState> listener, Bundle args, ArtistEventsView view) {
             super(listener, args, view);
@@ -72,7 +72,7 @@ public class ArtistEventsPresenter
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = new ApiParameters.ArtistEventsParameters();
+            apiParams = new ArtistEventsParameters();
 
             String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
             apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
