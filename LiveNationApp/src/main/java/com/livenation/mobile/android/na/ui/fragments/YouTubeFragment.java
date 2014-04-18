@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.app.ActionBar.LayoutParams;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +12,8 @@ import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.YouTubeVideoView;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
-import com.livenation.mobile.android.na.youtube.YouTubeSearchRequest;
 import com.livenation.mobile.android.na.youtube.YouTubeVideo;
 
 import java.util.List;
@@ -20,24 +21,12 @@ import java.util.List;
 public class YouTubeFragment extends LiveNationFragment implements Response.Listener<List<YouTubeVideo>>, Response.ErrorListener {
     private YouTubeClient.Cancelable currentSearchRequest;
     private String artistName;
+    private int maxVideos;
 
     private ViewGroup videoContainer;
     private EmptyListViewControl empty;
 
     //region Lifecycle
-
-    public static YouTubeFragment newInstance(String artistName) {
-        YouTubeFragment fragment = new YouTubeFragment();
-        fragment.setArtistName(artistName);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +34,14 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
 
         videoContainer = (ViewGroup) view;
         empty = (EmptyListViewControl) videoContainer.findViewById(R.id.fragment_youtube_empty);
+        empty.setRetryOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                load();
+            }
+        });
+        if(getArtistName() == null)
+            empty.setVisibility(View.GONE);
 
         return view;
     }
@@ -60,17 +57,46 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     //endregion
 
 
-    //region Properties
-
     public String getArtistName() {
         return artistName;
     }
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
+
+        load();
     }
 
-    //endregion
+    public int getMaxVideos() {
+        return maxVideos;
+    }
+
+    public void setMaxVideos(int maxVideos) {
+        this.maxVideos = maxVideos;
+    }
+
+    private void showVideos(List<YouTubeVideo> videos) {
+        if(videos.isEmpty()) {
+            empty.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+            return;
+        }
+
+        empty.setVisibility(View.GONE);
+
+        int position = 0;
+        for (YouTubeVideo video : videos) {
+            YouTubeVideoView view = new YouTubeVideoView(getActivity());
+            view.displayVideo(video);
+
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            videoContainer.addView(view, layoutParams);
+
+            position++;
+
+            if(position >= getMaxVideos())
+                break;
+        }
+    }
 
 
     //region Loading
@@ -79,6 +105,9 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         if(currentSearchRequest != null)
             return;
 
+        empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        empty.setVisibility(View.VISIBLE);
+
         YouTubeClient.search(getArtistName(), 30, this, this);
     }
 
@@ -86,11 +115,15 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     public void onResponse(List<YouTubeVideo> response) {
         currentSearchRequest = null;
 
+        showVideos(response);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         currentSearchRequest = null;
+
+        empty.setVisibility(View.VISIBLE);
+        empty.setViewMode(EmptyListViewControl.ViewMode.RETRY);
         Log.e(getClass().getName(), "Could not load YouTube videos. " + error.getLocalizedMessage());
     }
 

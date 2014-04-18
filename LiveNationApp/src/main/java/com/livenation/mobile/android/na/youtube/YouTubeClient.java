@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class YouTubeClient {
@@ -17,29 +18,63 @@ public class YouTubeClient {
         apiKey = inApiKey;
     }
 
-    public static RequestQueue getRequestQueue() {
-        if(requestQueue == null)
-            throw new IllegalStateException("Must call YouTubeClient.initialize");
 
+    //region Getters
+
+    private static void checkInitialized() {
+        if(requestQueue == null || apiKey == null)
+            throw new IllegalStateException("Must call YouTubeClient.initialize");
+    }
+
+    public static RequestQueue getRequestQueue() {
+        checkInitialized();
         return requestQueue;
     }
 
     public static String getApiKey() {
-        if(apiKey == null)
-            throw new IllegalStateException("Must call YouTubeClient.initialize");
-
+        checkInitialized();
         return apiKey;
     }
 
+    //endregion
+
+
+    //region Searching
 
     public static Cancelable search(String query,
                                     int limit,
                                     Response.Listener<List<YouTubeVideo>> success,
                                     Response.ErrorListener failure) {
+        checkInitialized();
+
         YouTubeSearchRequest searchRequest = new YouTubeSearchRequest(getApiKey(), query, limit, success, failure);
+        searchRequest.setFilterResults(true);
         getRequestQueue().add(searchRequest);
         return new RequestCancelable(searchRequest);
     }
+
+    //endregion
+
+
+    //region Utils
+
+    private static boolean shouldFilterVideo(YouTubeVideo video, String query) {
+        String title = video.getTitle();
+        String queryWithoutSpaces = query.replace(" ", "");
+        return (!title.regionMatches(true, 0, query, 0, query.length()) &&
+                !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length()));
+    }
+
+    public static void filterVideos(List<YouTubeVideo> videos, String query) {
+        Iterator<YouTubeVideo> videoIterator = videos.iterator();
+        while (videoIterator.hasNext()) {
+            YouTubeVideo video = videoIterator.next();
+            if(shouldFilterVideo(video, query))
+                videoIterator.remove();
+        }
+    }
+
+    //endregion
 
 
     public interface Cancelable {

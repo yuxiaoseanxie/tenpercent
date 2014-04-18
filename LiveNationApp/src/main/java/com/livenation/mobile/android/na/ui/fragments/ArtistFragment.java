@@ -24,7 +24,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
-    private final static int MAX_INLINE_EVENTS = 3;
+    private final static int MAX_INLINE = 3;
 
     private Artist artist;
     private ArtistEvents artistEvents;
@@ -39,6 +39,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private TextView bioText;
     private OverflowView bioShowMore;
 
+    private YouTubeFragment youTube;
+
     //region Lifecycle
 
     @Override
@@ -46,9 +48,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         super.onCreate(savedInstanceState);
 
         this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST);
-        shows.setMaxEvents(MAX_INLINE_EVENTS);
+        shows.setMaxEvents(MAX_INLINE);
         shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
+
+        this.youTube = new YouTubeFragment();
+        youTube.setMaxVideos(MAX_INLINE);
+        addFragment(R.id.fragment_artist_youtube_container, youTube, "shows");
 
         setRetainInstance(true);
     }
@@ -143,6 +149,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             suppressBio();
 
         favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
+
+        youTube.setArtistName(artist.getName());
     }
 
     @Override

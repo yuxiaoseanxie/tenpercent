@@ -20,6 +20,10 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
     private static final String API_HOST = "www.googleapis.com";
     private static final String API_PATH = "/youtube/v3/search";
 
+    private String query;
+    private boolean filterResults;
+
+
     private static String generateUrl(String apiKey, String query, int limit) {
         Uri.Builder builder = new Uri.Builder();
 
@@ -40,9 +44,33 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
         return builder.build().toString();
     }
 
-    public YouTubeSearchRequest(String apiKey, String query, int limit, Response.Listener<List<YouTubeVideo>> success, Response.ErrorListener failure) {
+    public YouTubeSearchRequest(String apiKey,
+                                String query,
+                                int limit,
+                                Response.Listener<List<YouTubeVideo>> success,
+                                Response.ErrorListener failure) {
         super(Method.GET, generateUrl(apiKey, query, limit), null, success, failure);
+
+        this.query = query;
     }
+
+
+    //region Properties
+
+    public boolean shouldFilterResults() {
+        return filterResults;
+    }
+
+    public void setFilterResults(boolean filterResults) {
+        this.filterResults = filterResults;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    //endregion
+
 
     @Override
     protected Response<List<YouTubeVideo>> parseNetworkResponse(NetworkResponse response) {
@@ -54,18 +82,16 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
                 return Response.error(new VolleyError("YouTube returned error code: " + errorCode));
             }
 
-            List<YouTubeVideo> videos = new ArrayList<YouTubeVideo>();
             JSONArray rawVideos = json.getJSONArray("items");
-            for (int i = 0; i < rawVideos.length(); i++) {
-                JSONObject rawVideo = rawVideos.getJSONObject(i);
-                videos.add(new YouTubeVideo(rawVideo));
+            List<YouTubeVideo> videos = YouTubeVideo.processJsonItems(rawVideos);
+            if(shouldFilterResults()) {
+                YouTubeClient.filterVideos(videos, getQuery());
             }
-
             return Response.success(videos, HttpHeaderParser.parseCacheHeaders(response));
         } catch (JSONException e) {
-            return Response.error(new VolleyError("JSONException", e));
+            return Response.error(new VolleyError("JSONException: " + e.getMessage(), e));
         } catch (UnsupportedEncodingException e) {
-            return Response.error(new VolleyError("UnsupportedEncodingException", e));
+            return Response.error(new VolleyError("UnsupportedEncodingException: " + e.getMessage(), e));
         }
     }
 }
