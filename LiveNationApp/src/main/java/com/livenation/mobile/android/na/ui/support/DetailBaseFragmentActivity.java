@@ -11,11 +11,15 @@ import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 
 public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
+    private MenuItem shareItem;
+
     //region Menus
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_base_menu, menu);
+
+        shareItem = menu.findItem(R.id.action_share);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -34,6 +38,13 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        shareItem.setEnabled(isShareAvailable());
+
+        return true;
     }
 
     //endregion
@@ -59,8 +70,9 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     //region Sharing Overrides
 
     protected String getShareIntentChooserTitle() {
-        return null;
+        return getString(R.string.share_chooser_title);
     }
+    protected abstract boolean isShareAvailable();
     protected abstract String getShareTitle();
     protected abstract String getShareText();
 
