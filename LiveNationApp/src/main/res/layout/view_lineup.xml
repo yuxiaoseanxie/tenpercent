@@ -29,7 +29,7 @@
     <View
         android:id="@+id/view_lineup_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/underscore_container_height"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox"
         android:background="@drawable/ui_underscore_background" />

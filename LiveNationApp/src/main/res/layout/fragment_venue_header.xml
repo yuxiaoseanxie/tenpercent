@@ -12,7 +12,7 @@
             android:id="@+id/fragment_venue_map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/venue_map_foreground"></FrameLayout>
+            android:foreground="@drawable/venue_map_foreground"/>
 
         <TextView
             android:id="@+id/fragment_venue_title"
@@ -21,7 +21,21 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
             android:layout_marginLeft="@dimen/show_artist_title_margin_left"
-            android:textAppearance="@style/venue_venue_title"></TextView>
+            android:textAppearance="@style/venue_venue_title"/>
+
     </FrameLayout>
+
+    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+        android:id="@+id/fragment_venue_favorite_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/favorite_checkbox_header_margin_left"
+        android:layout_marginTop="@dimen/favorite_checkbox_header_margin_top"
+        android:button="@drawable/checkbox_favorite_disc_selector"
+        android:checked="false"
+        android:minHeight="@dimen/favorite_checkbox_min_height"
+        android:minWidth="@dimen/favorite_checkbox_min_width" />
 
 </RelativeLayout>
