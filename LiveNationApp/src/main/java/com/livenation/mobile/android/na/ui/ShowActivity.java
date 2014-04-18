@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
-    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
 
     private Event event;
@@ -104,17 +103,9 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
     @Override
     protected String getShareText() {
-        Date localStartTime = null;
-        try {
-            localStartTime = sdf.parse(event.getLocalStartTime());
-        } catch (ParseException e) {
-            Log.e(getClass().getName(), "Date parsing failed. " + e);
-            localStartTime = new Date();
-        }
-
         String eventTemplate = getString(R.string.share_template_show);
         return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
-                            .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(localStartTime))
+                            .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
                             .replace("$VENUE", event.getVenue().getName())
                             .replace("$LINK", event.getWebUrl());
     }
