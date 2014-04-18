@@ -42,6 +42,8 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if(shareItem == null)
+            throw new IllegalStateException("Subclasses of DetailBaseFragmentActivity must call super.onCreateOptionsMenu");
         shareItem.setEnabled(isShareAvailable());
 
         return true;
@@ -54,6 +56,7 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
 
     protected void onShare() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TITLE, getShareText());
         shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
         startActivity(Intent.createChooser(shareIntent, getShareIntentChooserTitle()));
