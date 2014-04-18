@@ -41,7 +41,7 @@ import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -58,7 +58,6 @@ import io.segment.android.models.Props;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
-    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private TextView artistTitle;
@@ -111,15 +110,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         artistTitle.setText(event.getName());
 
-        try {
-            Date date = DATE_FORMATTER.parse(event.getLocalStartTime());
-            String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, date).toString();
-            calendarText.setText(calendarValue);
-        } catch (ParseException e) {
-            calendarText.setText("");
-            Logger.log("ShowFragment", "Error parsing date", e);
-            e.printStackTrace();
-        }
+        String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, event.getLocalStartTime()).toString();
+        calendarText.setText(calendarValue);
 
         if (null != event.getVenue()) {
             Venue venue = event.getVenue();
