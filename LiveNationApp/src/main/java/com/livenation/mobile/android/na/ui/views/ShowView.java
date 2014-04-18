@@ -68,11 +68,6 @@ public class ShowView extends LinearLayout {
             bottomLine.setVisibility(View.GONE);
     }
 
-    private Date getDate(String dateRaw) throws ParseException {
-        Date date = DATE_FORMATTER.parse(dateRaw);
-        return date;
-    }
-
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
