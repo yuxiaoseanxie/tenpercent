@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.app.ActionBar.LayoutParams;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +50,15 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(videos != null) {
+            displayVideos(videos);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -93,7 +103,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     public int getVideoCount() {
-        if(videos != null)
+        if (videos != null)
             return videos.size();
         else
             return 0;
@@ -105,7 +115,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     //region Loading
 
     private void displayVideos(List<YouTubeVideo> videos) {
-        if(videos.isEmpty()) {
+        if (videos.isEmpty()) {
             empty.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
             return;
         }
@@ -119,6 +129,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         for (YouTubeVideo video : videos) {
             YouTubeVideoView view = new YouTubeVideoView(getActivity());
             view.displayVideo(video);
+            view.setOnClickListener(new VideoOnClickListener(video));
 
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             videoContainer.addView(view, layoutParams);
@@ -136,8 +147,9 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     private void load() {
-        if(currentSearchRequest != null)
+        if(currentSearchRequest != null) {
             return;
+        }
 
         empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         empty.setVisibility(View.VISIBLE);
@@ -164,4 +176,19 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     //endregion
+
+
+    private class VideoOnClickListener implements View.OnClickListener {
+        private YouTubeVideo video;
+
+        public VideoOnClickListener(YouTubeVideo video) {
+            this.video = video;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, video.getViewUri());
+            startActivity(intent);
+        }
+    }
 }

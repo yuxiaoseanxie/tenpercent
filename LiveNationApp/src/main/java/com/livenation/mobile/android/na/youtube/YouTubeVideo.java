@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.youtube;
 
+import android.net.Uri;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +60,10 @@ public class YouTubeVideo implements Serializable {
 
     public List<String> getThumbnailURLs() {
         return thumbnailURLs;
+    }
+
+    public Uri getViewUri() {
+        return Uri.parse("http://www.youtube.com/watch?v=" + Uri.encode(getIdentifier()));
     }
 
     //endregion
