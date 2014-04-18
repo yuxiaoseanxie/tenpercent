@@ -1,0 +1,68 @@
+package com.livenation.mobile.android.na.ui.support;
+
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import com.livenation.mobile.android.na.ui.SearchActivity;
+
+public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
+    //region Menus
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_base_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                onSearch();
+                return true;
+
+            case R.id.action_share:
+                onShare();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //endregion
+
+
+    //region Actions
+
+    protected void onShare() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TITLE, getShareText());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+        startActivity(Intent.createChooser(shareIntent, getShareIntentChooserTitle()));
+    }
+
+    protected void onSearch() {
+        LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
+        startActivity(new Intent(this, SearchActivity.class));
+    }
+
+    //endregion
+
+
+    //region Sharing Overrides
+
+    protected String getShareIntentChooserTitle() {
+        return null;
+    }
+    protected abstract String getShareTitle();
+    protected abstract String getShareText();
+
+    //endregion
+}
