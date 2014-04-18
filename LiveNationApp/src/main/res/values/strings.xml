@@ -40,6 +40,7 @@
     <string name="activity_label_artist">Artist</string>
     <string name="activity_label_favorites">Favorites</string>
     <string name="activity_label_venue">Venue</string>
+    <string name="activity_label_location">Your Location</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
@@ -52,11 +53,12 @@
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
 
-    <string name="location_automatic_location_text">Automatic location</string>
-    <string name="location_manual_location_text">Allow me to specify my location</string>
-    <string name="location_description_text">Manage your location here. Your location is used for shows nearby.</string>
-    <string name="location_overlay_automatic">Automatic location</string>
-    <string name="location_overlay_manual">Tap to change location</string>
+    <string name="location_ui_no_location_set">No location set</string>
+    <string name="location_ui_previous_locations">Previous Locations</string>
+    <string name="location_ui_youre_nearby">You\'re Nearby</string>
+    <string name="location_ui_mi_away">mi away</string>
+
+    <string name="location_switch">Current Location</string>
 
     <string name="login_connect_or_create">Connect or Create Account</string>
     <string name="login_facebook_button">Facebook</string>
