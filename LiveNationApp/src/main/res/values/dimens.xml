@@ -30,6 +30,7 @@
     <dimen name="ui_header_transparent_min_height">40dp</dimen>
     <dimen name="ui_header_transparent_padding_top">15dp</dimen>
     <dimen name="ui_long_text_padding">16dp</dimen>
+    <dimen name="ui_overflow_view_min_height">55dp</dimen>
     <dimen name="favorite_item_min_height">60dp</dimen>
     <dimen name="favorite_min_height">38dp</dimen>
     <dimen name="favorite_margin_left">10dp</dimen>
