@@ -105,7 +105,9 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
 
     @Override
     protected String getShareText() {
-        return "Check out upcoming shows at " + venue.getName() + " on Live Nation! " + venue.getWebUrl();
+        String venueTemplate = getString(R.string.share_template_venue);
+        return venueTemplate.replace("$VENUE", venue.getName())
+                            .replace("$LINK", venue.getWebUrl());
     }
 
     //endregion

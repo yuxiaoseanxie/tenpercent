@@ -71,7 +71,7 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     //endregion
 
 
-    //region Sharing Overrides
+    //region Sharing
 
     protected String getShareIntentChooserTitle() {
         return getString(R.string.share_chooser_title);

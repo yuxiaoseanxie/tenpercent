@@ -40,7 +40,9 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     @Override
     protected String getShareText() {
         Artist artist = artistFragment.getArtist();
-        return "Check out upcoming shows from " + artist.getName() + " on Live Nation! " + artist.getWebUrl();
+        String artistTemplate = getString(R.string.share_template_artist);
+        return artistTemplate.replace("$ARTIST", artist.getName())
+                             .replace("$LINK", artist.getWebUrl());
     }
 
     //endregion

@@ -112,10 +112,11 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
             localStartTime = new Date();
         }
 
-        return (event.getDisplayName() + " is playing " +
-                event.getVenue().getName() + " on " +
-                SHORT_DATE_FORMATTER.format(localStartTime) + ". Who's coming with me? " +
-                event.getWebUrl());
+        String eventTemplate = getString(R.string.share_template_show);
+        return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
+                            .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(localStartTime))
+                            .replace("$VENUE", event.getVenue().getName())
+                            .replace("$LINK", event.getWebUrl());
     }
 
     //endregion
