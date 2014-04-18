@@ -20,7 +20,7 @@ import com.google.android.gms.location.LocationClient;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.util.Logger;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.List;

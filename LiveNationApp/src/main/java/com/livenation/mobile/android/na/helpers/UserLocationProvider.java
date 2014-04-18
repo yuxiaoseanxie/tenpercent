@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 /**
  * Created by cchilton on 3/13/14.

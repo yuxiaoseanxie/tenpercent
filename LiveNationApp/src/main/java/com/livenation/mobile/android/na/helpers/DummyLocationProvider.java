@@ -10,7 +10,7 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
 /**

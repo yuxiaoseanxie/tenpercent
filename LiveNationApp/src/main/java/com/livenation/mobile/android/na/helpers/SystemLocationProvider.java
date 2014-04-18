@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 
 /**

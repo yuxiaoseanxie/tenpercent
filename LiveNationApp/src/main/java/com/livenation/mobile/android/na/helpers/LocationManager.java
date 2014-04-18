@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.io.IOException;
 import java.util.List;
