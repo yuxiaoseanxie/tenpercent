@@ -33,14 +33,14 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     @Override
-    protected String getShareTitle() {
-        return "Artist";
+    protected String getShareSubject() {
+        return artistFragment.getArtist().getName();
     }
 
     @Override
     protected String getShareText() {
         Artist artist = artistFragment.getArtist();
-        return "Check out " + artist.getName();
+        return "Check out upcoming shows from " + artist.getName() + " on Live Nation! " + artist.getWebUrl();
     }
 
     //endregion

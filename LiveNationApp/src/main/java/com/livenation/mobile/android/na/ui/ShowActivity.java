@@ -10,6 +10,7 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,9 +19,17 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
+    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
+    private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
 
     private Event event;
     private SingleEventView singleEventView;
@@ -89,13 +98,24 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     }
 
     @Override
-    protected String getShareTitle() {
-        return "Show";
+    protected String getShareSubject() {
+        return event.getName();
     }
 
     @Override
     protected String getShareText() {
-        return "Check out " + event.getName();
+        Date localStartTime = null;
+        try {
+            localStartTime = sdf.parse(event.getLocalStartTime());
+        } catch (ParseException e) {
+            Log.e(getClass().getName(), "Date parsing failed. " + e);
+            localStartTime = new Date();
+        }
+
+        return (event.getDisplayName() + " is playing " +
+                event.getVenue().getName() + " on " +
+                SHORT_DATE_FORMATTER.format(localStartTime) + ". Who's coming with me? " +
+                event.getWebUrl());
     }
 
     //endregion

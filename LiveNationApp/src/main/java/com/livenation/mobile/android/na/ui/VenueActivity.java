@@ -99,13 +99,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     }
 
     @Override
-    protected String getShareTitle() {
-        return "Venue";
+    protected String getShareSubject() {
+        return venue.getName();
     }
 
     @Override
     protected String getShareText() {
-        return "Check out " + venue.getName();
+        return "Check out upcoming shows at " + venue.getName() + " on Live Nation! " + venue.getWebUrl();
     }
 
     //endregion
