@@ -175,6 +175,16 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //endregion
 
 
+    //region Getters
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+
+    //endregion
+
+
     private class ShowMoreOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {

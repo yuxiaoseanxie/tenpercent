@@ -85,8 +85,8 @@
     <dimen name="underscore_container_height">1dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
-    <dimen name="artist_header_checkbox_margin_left">10dp</dimen>
-    <dimen name="artist_header_checkbox_margin_top">10dp</dimen>
+    <dimen name="favorite_checkbox_header_margin_left">10dp</dimen>
+    <dimen name="favorite_checkbox_header_margin_top">10dp</dimen>
     <dimen name="list_search_title_margin_left">20dp</dimen>
     <dimen name="list_search_type_margin_left">4dp</dimen>
     <dimen name="list_search_min_height">64dp</dimen>

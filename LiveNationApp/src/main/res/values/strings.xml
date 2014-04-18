@@ -87,6 +87,11 @@
 
     <string name="tickets_third_party_toast">Transferring you to a third party website that sells tickets for this event.</string>
 
+    <string name="share_chooser_title">Share</string>
+    <string name="share_template_show">$HEADLINE_ARTIST is playing $VENUE on $SHORT_DATE. Who\'s coming with me? $LINK</string>
+    <string name="share_template_venue">Check out upcoming shows at $VENUE on Live Nation! $LINK</string>
+    <string name="share_template_artist">Check out upcoming shows from $ARTIST on Live Nation! $LINK</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>
