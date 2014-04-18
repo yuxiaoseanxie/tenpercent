@@ -22,7 +22,9 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     private YouTubeClient.Cancelable currentSearchRequest;
     private String artistName;
     private int maxVideos;
+    private View showMoreItemsView;
 
+    private List<YouTubeVideo> videos;
     private ViewGroup videoContainer;
     private EmptyListViewControl empty;
 
@@ -57,11 +59,16 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     //endregion
 
 
+    //region Properties
+
     public String getArtistName() {
         return artistName;
     }
 
     public void setArtistName(String artistName) {
+        if(this.artistName != null && this.artistName.equals(artistName))
+            return;
+
         this.artistName = artistName;
 
         load();
@@ -73,15 +80,40 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
 
     public void setMaxVideos(int maxVideos) {
         this.maxVideos = maxVideos;
+        if (videos != null)
+            displayVideos(videos);
     }
 
-    private void showVideos(List<YouTubeVideo> videos) {
+    public View getShowMoreItemsView() {
+        return showMoreItemsView;
+    }
+
+    public void setShowMoreItemsView(View showMoreItemsView) {
+        this.showMoreItemsView = showMoreItemsView;
+    }
+
+    public int getVideoCount() {
+        if(videos != null)
+            return videos.size();
+        else
+            return 0;
+    }
+
+    //endregion
+
+
+    //region Loading
+
+    private void displayVideos(List<YouTubeVideo> videos) {
         if(videos.isEmpty()) {
             empty.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
             return;
         }
 
         empty.setVisibility(View.GONE);
+        while (videoContainer.getChildCount() > 1) {
+            videoContainer.removeViewAt(videoContainer.getChildCount() - 1);
+        }
 
         int position = 0;
         for (YouTubeVideo video : videos) {
@@ -96,10 +128,12 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
             if(position >= getMaxVideos())
                 break;
         }
+
+        if (getShowMoreItemsView() != null && position >= getMaxVideos()) {
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            videoContainer.addView(getShowMoreItemsView(), layoutParams);
+        }
     }
-
-
-    //region Loading
 
     private void load() {
         if(currentSearchRequest != null)
@@ -111,11 +145,13 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         YouTubeClient.search(getArtistName(), 30, this, this);
     }
 
+
     @Override
     public void onResponse(List<YouTubeVideo> response) {
         currentSearchRequest = null;
 
-        showVideos(response);
+        this.videos = response;
+        displayVideos(response);
     }
 
     @Override

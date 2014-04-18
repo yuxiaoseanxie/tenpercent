@@ -4,11 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class YouTubeVideo {
+public class YouTubeVideo implements Serializable {
     private final String identifier;
     private final String published;
     private final String title;

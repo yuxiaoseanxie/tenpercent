@@ -40,6 +40,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private OverflowView bioShowMore;
 
     private YouTubeFragment youTube;
+    private OverflowView showMoreVideos;
 
     //region Lifecycle
 
@@ -71,7 +72,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowMoreOnClickListener());
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
         this.bioContainer = (LinearLayout) view.findViewById(R.id.fragment_artist_bio_container);
@@ -80,6 +81,16 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         bioShowMore.setTitle(R.string.artist_bio_overflow);
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
+
+        this.showMoreVideos = new OverflowView(getActivity());
+        if(youTube.getMaxVideos() > MAX_INLINE) {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
+            showMoreVideos.setExpanded(true);
+        } else {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow);
+        }
+        showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
+        youTube.setShowMoreItemsView(showMoreVideos);
 
         return view;
     }
@@ -183,12 +194,27 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //endregion
 
 
-    private class ShowMoreOnClickListener implements View.OnClickListener {
+    private class ShowAllEventsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), ArtistShowsActivity.class);
             intent.putExtras(ArtistShowsActivity.getArguments(artist));
             startActivity(intent);
+        }
+    }
+
+    private class ShowAllVideosOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (showMoreVideos.isExpanded()) {
+                youTube.setMaxVideos(MAX_INLINE);
+                showMoreVideos.setTitle(R.string.artist_videos_overflow);
+                showMoreVideos.setExpanded(false);
+            } else {
+                youTube.setMaxVideos(youTube.getVideoCount());
+                showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
+                showMoreVideos.setExpanded(true);
+            }
         }
     }
 
