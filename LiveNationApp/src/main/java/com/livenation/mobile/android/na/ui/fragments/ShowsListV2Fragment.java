@@ -109,6 +109,10 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
         scrollPager.load();
     }
 
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 

@@ -81,6 +81,11 @@ public class AllShowsFragment extends LiveNationFragment implements FeatureView,
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void setFeatured(List<Chart> features) {
         getActivity().getIntent().putExtra(FeaturePresenter.INTENT_DATA_KEY, (Serializable) features);
         featured.setFeatured(features);

@@ -116,6 +116,11 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         }
     }
 
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
     private void addInfoDebugItems() {
         deviceIdItem = new DebugItem(getString(R.string.debug_item_device_uuid), "...");
 

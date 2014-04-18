@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
@@ -33,10 +36,12 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -125,6 +130,11 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public void onApiServiceAttached(LiveNationApiService apiService) {
         scrollPager.reset();
         scrollPager.load();
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
     private static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
@@ -281,7 +291,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             }
         }
 
-        private class EventsFetchRequest extends FetchRequest<TaggedEvent> implements RecommendationSetsView {
+        private class EventsFetchRequest extends FetchRequest<TaggedEvent> implements ApiService.BasicApiCallback<List<RecommendationSet>> {
 
             private EventsFetchRequest(int offset, int limit, FetchResultHandler<TaggedEvent> fetchResultHandler) {
                 super(offset, limit, fetchResultHandler);
@@ -289,15 +299,40 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
             @Override
             public void run() {
-                Bundle args = getRecommendationSetsPresenter().getArgs(getOffset(), getLimit());
-                getRecommendationSetsPresenter().initialize(getActivity(), args, this);
+                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                    @Override
+                    public void onApiServiceAttached(LiveNationApiService apiService) {
+                        RecommendationSetsParameters params = new RecommendationSetsParameters();
+                        params.setPage(getOffset(), getLimit());
+                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                        params.setIncludes(new String[]{"personal", "popular"});
+                        params.setRadius(Constants.DEFAULT_RADIUS);
+                        apiService.getRecommendationSets(params, EventsFetchRequest.this);
+                    }
+
+                    @Override
+                    public void onApiServiceNotAvailable() {
+                        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                    }
+                });
             }
 
             @Override
-            public void setRecommendationSets(List<RecommendationSet> recommendationSets) {
+            public void cancel() {
+                //TODO: cancel any inprogress API request here
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("fail", "fail");
+                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            }
+
+            @Override
+            public void onResponse(List<RecommendationSet> response) {
                 List<TaggedEvent> result = new ArrayList<TaggedEvent>();
 
-                for (RecommendationSet set : recommendationSets) {
+                for (RecommendationSet set : response) {
                     boolean isPersonal = false;
                     if ("personal".equalsIgnoreCase(set.getName())) {
                         isPersonal = true;
@@ -314,11 +349,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
                 if (result.size() == 0) {
                     emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
                 }
-            }
-
-            @Override
-            public void cancel() {
-                getRecommendationSetsPresenter().cancel(this);
             }
         }
     }

@@ -84,6 +84,11 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void setUser(User user) {
         if (null != profileFragment) {
             removeFragment(profileFragment);

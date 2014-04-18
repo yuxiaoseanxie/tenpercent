@@ -121,6 +121,11 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         scrollPager.load();
     }
 
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
 
         private ScrollPager(ArrayAdapter<Event> adapter) {

@@ -69,6 +69,12 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         scrollPager.load();
     }
 
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+
     //endregion
 
 

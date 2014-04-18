@@ -137,6 +137,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event event = adapter.getItem(position);
         Intent intent = new Intent(getActivity(), ShowActivity.class);
