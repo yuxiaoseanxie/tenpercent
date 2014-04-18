@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
@@ -19,9 +19,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ShowView extends LinearLayout {
-    //TODO: Move date parsing to Data Model Entity helper. This is ugly
-    private final static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
-
     private DisplayMode displayMode;
 
     private TextView title;
@@ -47,15 +44,9 @@ public class ShowView extends LinearLayout {
     public void setEvent(Event event) {
         title.setText(getDisplayMode().getTitle(event));
 
-        Date start;
-        try {
-            start = getDate(event.getLocalStartTime());
-            date.setDate(start);
-            details.setText(getDisplayMode().getDetails(event, start));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Invalid start time: " + event.getLocalStartTime());
-        }
+        Date start = event.getLocalStartTime();
+        date.setDate(start);
+        details.setText(getDisplayMode().getDetails(event, start));
     }
 
     public DisplayMode getDisplayMode() {

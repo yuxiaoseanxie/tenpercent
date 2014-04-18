@@ -58,7 +58,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
-    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static float METERS_IN_A_MILE = 1609.34f;
     private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
@@ -206,17 +205,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
             Event event = getItem(position);
             holder.getTitle().setText(event.getName());
 
-            //TODO: Move date parsing to Data Model Entity helper. This is ugly
-            try {
-                Date date = sdf.parse(event.getLocalStartTime());
-                String startTime = DateFormat.format(START_TIME_FORMAT, date).toString();
+            String startTime = DateFormat.format(START_TIME_FORMAT, event.getLocalStartTime()).toString();
 
-                holder.getStartTime().setText(startTime);
-                holder.getDate().setDate(date);
-            } catch (ParseException e) {
-                //wtf'y f.
-                e.printStackTrace();
-            }
+            holder.getStartTime().setText(startTime);
+            holder.getDate().setDate(event.getLocalStartTime());
 
             return view;
         }
