@@ -87,6 +87,8 @@
 
     <string name="tickets_third_party_toast">Transferring you to a third party website that sells tickets for this event.</string>
 
+    <string name="share_chooser_title">Share</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>

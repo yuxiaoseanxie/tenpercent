@@ -17,10 +17,12 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowActivity extends LiveNationFragmentActivity implements SingleEventView {
+public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
 
+    private Event event;
     private SingleEventView singleEventView;
 
     @Override
@@ -42,19 +44,13 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_show, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 navigateUp();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -63,6 +59,7 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
             //TODO: Possible race condition?
             return;
         }
+        this.event = event;
         singleEventView.setEvent(event);
     }
 
@@ -84,4 +81,22 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
         startActivity(intent);
     }
 
+    //region Share Overrides
+
+    @Override
+    protected boolean isShareAvailable() {
+        return (event != null);
+    }
+
+    @Override
+    protected String getShareTitle() {
+        return "Show";
+    }
+
+    @Override
+    protected String getShareText() {
+        return "Check out " + event.getName();
+    }
+
+    //endregion
 }
