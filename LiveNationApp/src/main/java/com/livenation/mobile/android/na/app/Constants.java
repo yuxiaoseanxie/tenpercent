@@ -45,5 +45,7 @@ public class Constants {
         public static final String DEBUG_MODE_DATA = "debug_mode_data";
         public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
         public static final String ENVIRONMENT = "environment";
+        public static final String DEVICE_UUID = "device_uuid";
+        public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
     }
 }

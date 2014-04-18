@@ -18,7 +18,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.proxy.provider.LocationProvider;
 
@@ -50,7 +50,7 @@ public class PlayServicesLocationProvider implements
     @Override
     public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
         if (STATUS_GOOGLE_PLAY_SUCCESS != getGooglePlayServiceStatus(context)) {
-            callback.onErrorResponse(ErrorDictionnary.getUnknownError());
+            callback.onErrorResponse(ErrorDictionary.getUnknownError());
             return;
         }
         State state = new State(callback, context);
@@ -80,7 +80,7 @@ public class PlayServicesLocationProvider implements
         @Override
         public void onConnectionFailed(ConnectionResult result) {
             Logger.log("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
-            callback.onErrorResponse(ErrorDictionnary.getUnknownError());
+            callback.onErrorResponse(ErrorDictionary.getUnknownError());
         }
 
         @Override
@@ -89,7 +89,7 @@ public class PlayServicesLocationProvider implements
             if (null != location) {
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
-                Double[] locationArray = new Double[] {lat, lng};
+                Double[] locationArray = new Double[]{lat, lng};
                 callback.onResponse(locationArray);
                 cleanUp();
             } else {
@@ -99,7 +99,7 @@ public class PlayServicesLocationProvider implements
                     handler.postDelayed(this, 1000);
                     retryCount++;
                 } else {
-                    callback.onErrorResponse(ErrorDictionnary.getUnknownError());
+                    callback.onErrorResponse(ErrorDictionary.getUnknownError());
                     cleanUp();
                 }
             }

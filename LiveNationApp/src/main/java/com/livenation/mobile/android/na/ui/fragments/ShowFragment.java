@@ -9,6 +9,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -36,8 +38,6 @@ import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
-import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnArtistFavoriteClick;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
@@ -52,10 +52,8 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
@@ -166,10 +164,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            OnArtistFavoriteClick onCheckBoxClick = new OnFavoriteClickListener.OnArtistFavoriteClick(lineup, getFavoritesPresenter(), getActivity());
-            view.getFavorite().setOnClickListener(onCheckBoxClick);
-
-            view.setFavoriteObserver(lineup);
+            view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
 
             view.setOnClickListener(new OnLineupViewClick(lineup));
 
@@ -245,7 +240,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            Analytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
 
             startActivity(intent);
         }
@@ -261,15 +256,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         @Override
         public void onClick(View v) {
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            Analytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
-            Toast.makeText(getActivity(), "Find tickets: " + event.getId(), Toast.LENGTH_SHORT).show();
-            //TODO: Non-TM ticketing
-            List<String> ticketmasterIds = event.getTicketmasterIds();
-            if (ticketmasterIds.size() == 0) {
-                Toast.makeText(getActivity(), "No tickets available", Toast.LENGTH_SHORT).show();
+            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
+
+            String buyLink = event.getBuyLink();
+            if (Ticketing.isTicketmasterUrl(buyLink)) {
+                Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
             } else {
-                String ticketmasterId = ticketmasterIds.get(0);
-                Ticketing.showFindTicketsActivity(getActivity(), ticketmasterId);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
+                Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -305,7 +299,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Props props = new Props();
             props.put("Venue Name", favorite.getName());
-            Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
+            LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(true);
         }
 
@@ -313,7 +307,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         public void onFavoriteRemoved(Favorite favorite) {
             Props props = new Props();
             props.put("Venue Name", favorite.getName());
-            Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
+            LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
             checkbox.setChecked(false);
         }
     }

@@ -28,5 +28,7 @@
     <color name="login_sso_button_text">#ffffff</color>
 
     <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
+    <color name="view_pressed_background">#11dd1f3b</color>
 
+    <color name="notification_link_color">#E51837</color>
 </resources>

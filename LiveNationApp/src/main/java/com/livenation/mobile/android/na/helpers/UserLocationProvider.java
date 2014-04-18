@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.proxy.provider.LocationProvider;
 
 /**
@@ -20,7 +20,7 @@ public class UserLocationProvider implements LocationProvider {
         String latValue = prefs.read(KEY_LAT, context);
         String lngValue = prefs.read(KEY_LNG, context);
         if (TextUtils.isEmpty(latValue) || TextUtils.isEmpty(lngValue)) {
-            callback.onErrorResponse(ErrorDictionnary.getError(ErrorDictionnary.ERROR_NO_USER_LOCATION_SET));
+            callback.onErrorResponse(ErrorDictionary.getError(ErrorDictionary.ERROR_NO_USER_LOCATION_SET));
         } else {
             callback.onResponse(new Double[]{ Double.valueOf(latValue), Double.valueOf(lngValue)});
         }

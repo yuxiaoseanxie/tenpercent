@@ -51,7 +51,7 @@
     <application
         android:name="com.livenation.mobile.android.na.app.LiveNationApplication"
         android:allowBackup="true"
-        android:icon="@drawable/icon_144"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <meta-data
@@ -66,16 +66,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.VenueActivity"></activity>
         <activity
-            android:name="com.livenation.mobile.android.na.ui.ArtistEventsActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity"></activity>
+            android:name="com.livenation.mobile.android.na.ui.ShowActivity"
+            android:label="@string/activity_label_show"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.VenueActivity"
+            android:label="@string/activity_label_venue" />
+        <activity
+            android:name=".ui.ArtistShowsActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
-            android:label="@string/actionbar_artist_title"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"></activity>
-        <activity android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"></activity>
+            android:label="@string/activity_label_artist"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity" />
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
+            android:label="@string/activity_label_favorites" />
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.DebugActivity"
@@ -101,7 +108,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/charlies_debug_cert_api_key_na" />
+            android:value="@string/google_api_key" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -139,6 +146,14 @@
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.AccountActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.livenation.mobile.android.ticketing.activities.TMPlusActivity"
+            android:screenOrientation="portrait" />
         <!-- end auto-generated activities -->
 
 
@@ -154,7 +169,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="@string/urbanairship_category" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -175,12 +190,15 @@
 
         <provider
             android:name="com.urbanairship.UrbanAirshipProvider"
-            android:authorities="com.livenation.mobile.android.na.urbanairship.provider"
+            android:authorities="@string/urbanairship_authorities"
             android:exported="true"
             android:multiprocess="true"
-            android:permission="com.livenation.mobile.android.na.permission.UA_DATA" />
+            android:permission="@string/urbanairship_permission" />
 
         <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />
     </application>
 
 </manifest>

@@ -3,12 +3,15 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Debug;
+import android.text.TextUtils;
 
 import com.android.volley.VolleyError;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.ApiService;
@@ -20,7 +23,6 @@ import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +77,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public void bindApi(ApiServiceBinder binder) {
-        if (null != apiService) {
+        if (null != apiService && !isBuildingApi()) {
             binder.onApiServiceAttached(apiService);
         } else {
             pendingBindings.add(binder);
@@ -150,6 +152,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
     private class GetDeviceId extends ApiBuilderElement<String> {
         private final Context appContext;
+        private final String PREFS_DEVICE_UUID = "device_uuid";
 
         private GetDeviceId(Context appContext) {
             this.appContext = appContext;
@@ -168,12 +171,21 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
                     adInfo = AdvertisingIdClient.getAdvertisingIdInfo(appContext);
                     final String id = adInfo.getId();
                     setResult(id);
-                } catch (IOException e) {
-                    setResult(UUID.randomUUID().toString());
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    setResult(UUID.randomUUID().toString());
-                } catch (GooglePlayServicesRepairableException e) {
-                    setResult(UUID.randomUUID().toString());
+
+                } catch (Exception e) {
+                    //Getting the Google Play Services Advertising ID Failed.
+                    //Retrieve a UUID from preferences
+                    SharedPreferences prefs = appContext.getSharedPreferences(Constants.SharedPreferences.DEVICE_UUID, Context.MODE_PRIVATE);
+                    String uuid = prefs.getString(PREFS_DEVICE_UUID, null);
+                    if (TextUtils.isEmpty(uuid)) {
+                        //no existing UUID, generate and save a new one.
+                        uuid = UUID.randomUUID().toString();
+                        //store new UUID
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(PREFS_DEVICE_UUID, uuid);
+                        editor.apply();
+                    }
+                    setResult(uuid);
                 }
                 notifyReady();
             }
@@ -228,11 +240,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             Intent ssoRepair = new Intent(activity, SsoActivity.class);
             ssoRepair.putExtra(SsoActivity.ARG_PROVIDER_ID, apiBuilder.getSsoProvider().getResult().getId());
             activity.startActivity(ssoRepair);
-        }
-
-        @Override
-        public void onInvalidated(ApiBuilderElement element) {
-
         }
     }
 

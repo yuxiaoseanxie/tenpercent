@@ -63,6 +63,7 @@
     <dimen name="nearby_show_date_margin_right">15dp</dimen>
     <dimen name="nearby_show_date_margin_top">20dp</dimen>
     <dimen name="nearby_show_date_margin_bottom">15dp</dimen>
+    <dimen name="nearby_show_header_checkbox_margin_left">8dp</dimen>
     <dimen name="show_calendar_margin_left">10dp</dimen>
     <dimen name="show_calendar_margin_right">10dp</dimen>
     <dimen name="show_calendar_margin_top">10dp</dimen>
@@ -81,9 +82,11 @@
     <dimen name="account_detail_image_min_width">56dp</dimen>
     <dimen name="account_detail_min_height">59dp</dimen>
     <dimen name="account_footer_change_margin_right">15dp</dimen>
-    <dimen name="underscore_container_height">5dp</dimen>
+    <dimen name="underscore_container_height">1dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
+    <dimen name="artist_header_checkbox_margin_left">10dp</dimen>
+    <dimen name="artist_header_checkbox_margin_top">10dp</dimen>
     <dimen name="list_search_title_margin_left">20dp</dimen>
     <dimen name="list_search_type_margin_left">4dp</dimen>
     <dimen name="list_search_min_height">64dp</dimen>

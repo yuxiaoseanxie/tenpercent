@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,12 +21,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
-import com.livenation.mobile.android.proxy.provider.LocationProvider;
-import com.livenation.mobile.android.na.helpers.UserLocationProvider;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 
 /**
  * Created by cchilton on 3/12/14.
@@ -88,7 +85,8 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
     };
     private ApiService.BasicApiCallback<Double[]> configuredLocationCallback = new ApiService.BasicApiCallback<Double[]>() {
         @Override
-        public void onErrorResponse(VolleyError error) {}
+        public void onErrorResponse(VolleyError error) {
+        }
 
         @Override
         public void onResponse(Double[] response) {
@@ -109,7 +107,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            if (error.networkResponse.statusCode == ErrorDictionnary.ERROR_NO_USER_LOCATION_SET) {
+            if (error.networkResponse.statusCode == ErrorDictionary.ERROR_NO_USER_LOCATION_SET) {
                 getLocationManager().getSystemLocationProvider().getLocation(getActivity(), this);
             }
         }

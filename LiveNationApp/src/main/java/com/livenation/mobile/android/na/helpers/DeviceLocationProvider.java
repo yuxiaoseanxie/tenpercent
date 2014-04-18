@@ -15,7 +15,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionnary;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.proxy.provider.LocationProvider;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class DeviceLocationProvider implements LocationProvider {
             String provider = locationManager.getBestProvider(criteria, false);
             if (null == provider) {
                 //no location providers, may be an emulator
-                callback.onErrorResponse(ErrorDictionnary.getUnknownError());
+                callback.onErrorResponse(ErrorDictionary.getUnknownError());
                 return;
             }
             Location last = locationManager.getLastKnownLocation(provider);
@@ -77,7 +77,7 @@ public class DeviceLocationProvider implements LocationProvider {
 
         @Override
         public void onProviderDisabled(String s) {
-            callback.onErrorResponse(ErrorDictionnary.getUnknownError());
+            callback.onErrorResponse(ErrorDictionary.getUnknownError());
         }
     }
 }

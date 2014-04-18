@@ -25,7 +25,8 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -50,7 +51,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
-        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(DetailShowView.DisplayMode.VENUE);
+        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE);
         addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
 
         mapFragment = new LiveNationMapFragment();
@@ -93,6 +94,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         telephone.setText(venue.getFormattedPhoneNumber());
         OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
         link.setOnClickListener(onVenueClick);
+        telephone.setOnClickListener(new OnPhoneNumberClick());
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
@@ -144,6 +146,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(), "Herro: " + venueId, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class OnPhoneNumberClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            String phoneNumber = (String) VenueFragment.this.telephone.getText();
+            phoneNumber.replace("[^0-9+]", "");
+            if (phoneNumber != null || !phoneNumber.trim().isEmpty())
+                PhoneUtils.dial(phoneNumber, VenueFragment.this.getActivity());
         }
     }
 }

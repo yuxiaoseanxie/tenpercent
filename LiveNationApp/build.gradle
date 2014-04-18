@@ -1,4 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'http://download.crashlytics.com/maven' }
+    }
+
+    dependencies {
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+    }
+}
 apply plugin: 'android'
+apply plugin: 'crashlytics'
+repositories {
+    maven { url 'http://download.crashlytics.com/maven' }
+}
+
 
 android {
     compileSdkVersion 19
@@ -7,6 +21,26 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 18
+        versionCode 12
+        versionName "2.0"
+    }
+
+    signingConfigs {
+        def LNStorePassword = LNStorePassword != null ?: "livenationlabs"
+        def LNKeyAlias = LNKeyAlias != null ?: "livenationlabs"
+        def LNKeyPassword = LNKeyPassword != null ?: "livenationlabs"
+
+
+        debug {
+            storeFile file('../docs/keystore/debug.keystore')
+        }
+
+        release {
+            storeFile file(LNReleaseStoreFile)
+            storePassword LNStorePassword
+            keyAlias LNKeyAlias
+            keyPassword LNKeyPassword
+        }
     }
 
     packagingOptions {
@@ -22,12 +56,15 @@ android {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            packageNameSuffix ".debug"
+            versionNameSuffix " debug"
+            signingConfig signingConfigs.debug
         }
     }
-}
-
-configurations {
-    all*.exclude group: 'com.mcxiaoke.volley', module: 'library'
 }
 
 dependencies {
@@ -38,4 +75,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.google.android.gms:play-services:+'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
+    compile 'com.crashlytics.android:crashlytics:1.+'
+
 }

@@ -7,7 +7,8 @@
     <RelativeLayout
         android:id="@+id/account_detail_order_history_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height">
+        android:layout_height="@dimen/account_detail_min_height"
+        android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
             android:id="@+id/account_detail_image_your_orders"
@@ -52,7 +53,8 @@
     <RelativeLayout
         android:id="@+id/account_detail_favorite_artists_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height">
+        android:layout_height="@dimen/account_detail_min_height"
+        android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_artists"
@@ -83,7 +85,8 @@
     <RelativeLayout
         android:id="@+id/account_detail_favorite_venues_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height">
+        android:layout_height="@dimen/account_detail_min_height"
+        android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
             android:id="@+id/account_detail_image_favorite_venues"

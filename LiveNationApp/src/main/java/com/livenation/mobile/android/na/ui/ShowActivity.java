@@ -10,7 +10,6 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,31 +30,15 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
 
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setDisplayShowTitleEnabled(false);
-        getActionBar().setDisplayShowCustomEnabled(true);
 
-        getActionBar().setCustomView(R.layout.actionbar_show_custom);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+        singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
         init();
     }
 
-
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         deinit();
-    }
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (null == singleEventView) {
-            singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
-        }
     }
 
     @Override

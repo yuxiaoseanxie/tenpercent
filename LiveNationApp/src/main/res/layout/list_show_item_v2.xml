@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/venue_show_date_margin_left"
         android:layout_toRightOf="@id/list_generic_show_date"
         android:background="#ff777777"
-        android:scaleType="centerCrop"></com.android.volley.toolbox.NetworkImageView>
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/list_generic_show_title"

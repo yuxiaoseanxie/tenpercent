@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.DetailShowView;
+import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
 
-    private DetailShowView.DisplayMode displayMode;
+    private ShowView.DisplayMode displayMode;
     private ViewGroup showContainer;
 
     private int maxEvents;
@@ -32,11 +32,11 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     public ShowsListNonScrollingFragment() {
         super();
 
-        this.displayMode = DetailShowView.DisplayMode.VENUE;
+        this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
     }
 
-    public static ShowsListNonScrollingFragment newInstance(DetailShowView.DisplayMode displayMode) {
+    public static ShowsListNonScrollingFragment newInstance(ShowView.DisplayMode displayMode) {
         ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
         instance.setDisplayMode(displayMode);
         return instance;
@@ -62,7 +62,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
         int position = 0;
         for (Event event : events) {
-            DetailShowView show = new DetailShowView(getActivity());
+            ShowView show = new ShowView(getActivity());
             show.setDisplayMode(getDisplayMode());
             show.setEvent(event);
             show.setOnClickListener(new ShowViewClickListener(event));
@@ -84,11 +84,11 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     //region Properties
 
-    public DetailShowView.DisplayMode getDisplayMode() {
+    public ShowView.DisplayMode getDisplayMode() {
         return displayMode;
     }
 
-    public void setDisplayMode(DetailShowView.DisplayMode displayMode) {
+    public void setDisplayMode(ShowView.DisplayMode displayMode) {
         this.displayMode = displayMode;
     }
 

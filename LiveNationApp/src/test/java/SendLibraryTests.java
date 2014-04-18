@@ -12,7 +12,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.config
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameters;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;

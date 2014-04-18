@@ -4,7 +4,10 @@ package com.livenation.mobile.android.na.analytics;
  * Created by elodieferrais on 4/7/14.
  */
 public class AnalyticConstants {
-    public static final String TRACK_URL_SHCEMES = "Track URL Schemes";
+    public static final String PLATFORM_VALUE = "LNANDROID";
+    public static final String PLATFORM_EVENT_SUFFIX = " (LN_ANDROID)";
+
+    public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
     public static final String NAV_MENU_SELECTED = "Nav Menu Select";
     public static final String NAV_MENU_YOUR_SHOWS_ITEM = "Your Shows";
     public static final String NAV_MENU_NEARBY_ITEM = "Nearby";

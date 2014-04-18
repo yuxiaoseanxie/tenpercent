@@ -368,7 +368,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getActivity())
-                    .setIcon(R.drawable.icon_144)
+                    .setIcon(R.drawable.icon)
                     .setTitle(R.string.inbox_refresh_failed_dialog_title)
                     .setMessage(R.string.inbox_refresh_failed_dialog_message)
                     .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {

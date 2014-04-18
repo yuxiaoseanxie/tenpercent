@@ -17,26 +17,26 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.VenuesView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -51,13 +51,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.segment.android.Analytics;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements ApiServiceBinder {
+public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
     private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
     private static float METERS_IN_A_MILE = 1609.34f;
@@ -94,6 +93,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
+
+        listView.setOnItemClickListener(this);
+        listView.setOnHeaderClickListener(this);
+
         pager.connectListView(listView);
 
         return view;
@@ -131,6 +134,42 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         this.lng = apiService.getApiConfig().getLng();
 
         init();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Event event = adapter.getItem(position);
+        Intent intent = new Intent(getActivity(), ShowActivity.class);
+
+        Bundle args = SingleEventPresenter.getAruguments(event.getId());
+        SingleEventPresenter.embedResult(args, event);
+
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put("Cell Position", position);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+
+        intent.putExtras(args);
+        getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onHeaderClick(StickyListHeadersListView stickyListHeadersListView, View view, int position, long id, boolean b) {
+        Venue venue = adapter.getItem(position).getVenue();
+
+        Intent intent = new Intent(getActivity(), VenueActivity.class);
+
+        Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
+        SingleVenuePresenter.embedResult(args, venue);
+
+        //Analytics
+        Props props = new Props();
+        props.put("Venue Name", venue.getName());
+        props.put("Cell Position", position);
+        LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP);
+
+        intent.putExtras(args);
+        getActivity().startActivity(intent);
     }
 
     private void init() {
@@ -179,8 +218,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 e.printStackTrace();
             }
 
-            view.setOnClickListener(new OnShowClick(event, position));
-
             return view;
         }
 
@@ -202,8 +239,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             Event event = getItem(position);
             title.setText(event.getVenue().getName());
 
-            CheckBox checkBox = holder.getFavorite();
-
             TextView location = holder.getLocation();
             location.setText(event.getVenue().getAddress().getSmallFriendlyAddress(false));
             TextView distance = holder.getDistance();
@@ -220,9 +255,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 distance.setVisibility(View.GONE);
             }
             holder.getFavorite().setChecked(false);
-            holder.setFavoriteControl(event.getVenue(), getFavoritesPresenter());
 
-            holder.getVenueTextContainer().setOnClickListener(new OnVenueClick(event.getVenue(), position));
+            Venue venue = event.getVenue();
+            holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter());
 
             return view;
         }
@@ -262,16 +297,14 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
         private class ViewHeaderHolder {
             private final TextView venueTitle;
             private final TextView venueLocation;
-            private final CheckBox venueFavorite;
+            private final FavoriteCheckBox venueFavorite;
             private final TextView venueDistance;
             private final ViewGroup venueTextContainer;
-
-            private FavoriteListener favoriteListener;
 
             public ViewHeaderHolder(View view) {
                 this.venueTitle = (TextView) view.findViewById(R.id.list_venue_header_title);
                 this.venueLocation = (TextView) view.findViewById(R.id.list_venue_header_location);
-                this.venueFavorite = (CheckBox) view.findViewById(R.id.list_venue_header_checkbox);
+                this.venueFavorite = (FavoriteCheckBox) view.findViewById(R.id.list_venue_header_checkbox);
                 this.venueDistance = (TextView) view.findViewById(R.id.list_venue_header_distance);
                 this.venueTextContainer = (ViewGroup) view.findViewById(R.id.list_venue_header_text_container);
             }
@@ -284,7 +317,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
                 return venueLocation;
             }
 
-            public CheckBox getFavorite() {
+            public FavoriteCheckBox getFavorite() {
                 return venueFavorite;
             }
 
@@ -294,30 +327,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
 
             public ViewGroup getVenueTextContainer() {
                 return venueTextContainer;
-            }
-
-            private void setFavoriteControl(Venue venue, FavoritesPresenter presenter) {
-                if (null != favoriteListener) {
-                    presenter.getObserverPresenter().cancel(favoriteListener);
-                }
-                favoriteListener = new FavoriteListener();
-                Bundle args = presenter.getObserverPresenter().getBundleArgs(Favorite.FAVORITE_VENUE, venue.getNumericId());
-                presenter.getObserverPresenter().initialize(getActivity(), args, favoriteListener);
-                getFavorite().setOnClickListener(new OnFavoriteClickListener.OnVenueFavoriteClick(venue, presenter, getActivity()));
-            }
-
-            private class FavoriteListener implements FavoriteObserverView {
-                @Override
-                public void onFavoriteAdded(Favorite favorite) {
-                    Analytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP);
-                    getFavorite().setChecked(true);
-                }
-
-                @Override
-                public void onFavoriteRemoved(Favorite favorite) {
-                    Analytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP);
-                    getFavorite().setChecked(false);
-                }
             }
 
         }
@@ -386,59 +395,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ApiServi
             public void cancel() {
                 getNearbyVenuesPresenter().cancel(this);
             }
-        }
-    }
-
-    private class OnShowClick implements View.OnClickListener {
-        private final Event event;
-        private final int position;
-
-        private OnShowClick(Event event, int position) {
-            this.event = event;
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), ShowActivity.class);
-
-            Bundle args = SingleEventPresenter.getAruguments(event.getId());
-            SingleEventPresenter.embedResult(args, event);
-
-            //Analytics
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            props.put("Cell Position", position);
-            Analytics.track(AnalyticConstants.EVENT_CELL_TYPE);
-
-            intent.putExtras(args);
-            getActivity().startActivity(intent);
-        }
-    }
-
-    private class OnVenueClick implements View.OnClickListener {
-        private final Venue venue;
-        private final int position;
-
-        private OnVenueClick(Venue venue, int position) {
-            this.venue = venue;
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), VenueActivity.class);
-
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
-
-            //Analytics
-            Props props = new Props();
-            props.put("Venue Name", venue.getName());
-            props.put("Cell Position", position);
-            Analytics.track(AnalyticConstants.VENUE_CELL_TAP);
-
-            intent.putExtras(args);
-            getActivity().startActivity(intent);
         }
     }
 }

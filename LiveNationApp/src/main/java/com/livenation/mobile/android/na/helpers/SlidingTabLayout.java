@@ -30,11 +30,10 @@ import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import io.segment.android.Analytics;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -112,6 +111,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
      */
     public void setDividerColors(int... colors) {
         mTabStrip.setDividerColors(colors);
+    }
+
+    public void setBottomBorderColor(int color) {
+        mTabStrip.setBottomBorderColor(color);
     }
 
     /**
@@ -323,7 +326,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.NAV_MENU_YOUR_SHOWS_ITEM, AnalyticConstants.NAV_MENU_NEARBY_ITEM, AnalyticConstants.NAV_MENU_ALL_SHOWS_ITEM};
-            Analytics.track(tabsAnalyticsLabel[position] + " " + AnalyticConstants.NAV_MENU_SELECTED);
+            LiveNationAnalytics.track(tabsAnalyticsLabel[position] + " " + AnalyticConstants.NAV_MENU_SELECTED);
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
