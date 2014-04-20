@@ -106,9 +106,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        deinit();
+    public void onDestroyView() {
+        super.onDestroyView();
+        pager.stop();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
     @Override
     public void onApiServiceNotAvailable() {
-
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
     @Override
@@ -183,10 +183,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     private void init() {
         pager.reset();
         pager.load();
-    }
-
-    private void deinit() {
-        pager.stop();
     }
 
     private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
@@ -353,7 +349,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         @Override
         public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            Bundle args = getNearbyVenuesPresenter().getArgs(offset, limit);
             FetchRequest request = new VenuesFetchRequest(offset, limit, callback);
             return request;
         }

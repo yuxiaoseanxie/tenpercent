@@ -76,9 +76,10 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        super.onDestroyView();
         scrollPager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
     @Override
     public void onApiServiceNotAvailable() {
-
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {
