@@ -7,5 +7,10 @@
         android:icon="@drawable/ic_action_share"
         android:showAsAction="always"
         android:title="@string/action_share" />
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_menu_search_holo_light"
+        android:showAsAction="always"
+        android:title="@string/home_menu_search" />
 
 </menu>

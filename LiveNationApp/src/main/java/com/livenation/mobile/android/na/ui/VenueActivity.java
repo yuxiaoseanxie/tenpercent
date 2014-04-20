@@ -16,14 +16,16 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 import java.util.List;
 
 
-public class VenueActivity extends LiveNationFragmentActivity implements SingleVenueView, EventsView {
+public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
     private static final int EVENTS_PER_VENUE_LIMIT = 3;
+    private Venue venue;
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
 
@@ -57,6 +59,7 @@ public class VenueActivity extends LiveNationFragmentActivity implements SingleV
             //TODO: this
             throw new RuntimeException("TODO: investigate possible race condition here");
         }
+        this.venue = venue;
         singleVenueView.setVenue(venue);
     }
 
@@ -87,4 +90,25 @@ public class VenueActivity extends LiveNationFragmentActivity implements SingleV
         return LiveNationApplication.get().getVenueEventsPresenter();
     }
 
+
+    //region Share Overrides
+
+    @Override
+    protected boolean isShareAvailable() {
+        return (venue != null);
+    }
+
+    @Override
+    protected String getShareSubject() {
+        return venue.getName();
+    }
+
+    @Override
+    protected String getShareText() {
+        String venueTemplate = getString(R.string.share_template_venue);
+        return venueTemplate.replace("$VENUE", venue.getName())
+                            .replace("$LINK", venue.getWebUrl());
+    }
+
+    //endregion
 }

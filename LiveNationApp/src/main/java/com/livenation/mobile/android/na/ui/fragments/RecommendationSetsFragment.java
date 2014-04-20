@@ -38,6 +38,7 @@ import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
@@ -54,7 +55,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
-    private static SimpleDateFormat sdf = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
     private StickyListHeadersListView listView;
     private EventAdapter adapter;
     private ScrollPager scrollPager;
@@ -180,14 +180,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             } else {
                 holder.getImage().setImageUrl(null, getImageLoader());
             }
-            //TODO: Move date parsing to Data Model Entity helper. This is ugly
-            try {
-                Date date = sdf.parse(event.getStartTime());
-                holder.getDate().setDate(date);
-            } catch (ParseException e) {
-                //should never happen, burn everything
-                throw new RuntimeException(e);
-            }
+
+            holder.getDate().setDate(event.getLocalStartTime());
 
             return view;
         }
