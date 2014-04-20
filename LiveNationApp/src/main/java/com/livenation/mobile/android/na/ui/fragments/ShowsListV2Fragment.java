@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
@@ -28,9 +30,12 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 
 import java.util.List;
 
@@ -126,7 +131,7 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
             return request;
         }
 
-        private class EventsFetchRequest extends FetchRequest<Event> implements EventsView {
+        private class EventsFetchRequest extends FetchRequest<Event> implements ApiService.BasicApiCallback<List<Event>> {
 
             private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
                 super(offset, limit, fetchResultHandler);
@@ -134,18 +139,41 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
 
             @Override
             public void run() {
-                Bundle args = getEventsPresenter().getArgs(getOffset(), getLimit());
-                getEventsPresenter().initialize(getActivity(), args, this);
-            }
+                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                    @Override
+                    public void onApiServiceAttached(LiveNationApiService apiService) {
+                        EventParameters params = new EventParameters();
+                        params.setPage(getOffset(), getLimit());
+                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                        params.setSortMethod("start_time");
+                        apiService.getEvents(params, EventsFetchRequest.this);
+                    }
 
-            @Override
-            public void setEvents(List<Event> events) {
-                getFetchResultHandler().deliverResult(events);
+                    @Override
+                    public void onApiServiceNotAvailable() {
+                        //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                    }
+                });
             }
 
             @Override
             public void cancel() {
-                getEventsPresenter().cancel(this);
+                //TODO: cancel any inprogress API request here
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("fail", "fail");
+                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            }
+
+            @Override
+            public void onResponse(List<Event> response) {
+                getFetchResultHandler().deliverResult(response);
+                if (response.size() == 0) {
+                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
+
             }
         }
     }

@@ -89,13 +89,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
         scrollPager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -38,11 +40,13 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.NearbyVenuesWithEventsParameters;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -374,7 +378,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
             }
         }
 
-        private class VenuesFetchRequest extends FetchRequest<Event> implements VenuesView {
+        private class VenuesFetchRequest extends FetchRequest<Event> implements ApiService.BasicApiCallback<List<Venue>> {
 
             private VenuesFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
                 super(offset, limit, fetchResultHandler);
@@ -382,23 +386,42 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
             @Override
             public void run() {
-                Bundle args = getNearbyVenuesPresenter().getArgs(getOffset(), getLimit());
-                getNearbyVenuesPresenter().initialize(getActivity(), args, this);
-            }
+                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                    @Override
+                    public void onApiServiceAttached(LiveNationApiService apiService) {
+                        NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
+                        params.setMinimumNumberOfEvents(2);
+                        params.setPage(offset, getLimit());
+                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                        apiService.getNearbyVenuesWithEvents(params, VenuesFetchRequest.this);
+                    }
 
-            @Override
-            public void setVenues(List<Venue> venues) {
-                ScrollPager.this.offset += venues.size();
-                List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
-                getFetchResultHandler().deliverResult(transformed);
-                if (venues.size() == 0) {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                }
+                    @Override
+                    public void onApiServiceNotAvailable() {
+                        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                    }
+                });
             }
 
             @Override
             public void cancel() {
-                getNearbyVenuesPresenter().cancel(this);
+                //TODO: cancel any inprogress API request here
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("fail", "fail");
+                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            }
+
+            @Override
+            public void onResponse(List<Venue> response) {
+                ScrollPager.this.offset += response.size();
+                List<Event> transformed = DataModelHelper.flattenVenueEvents(response);
+                getFetchResultHandler().deliverResult(transformed);
+                if (response.size() == 0) {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
             }
         }
     }
