@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -257,82 +256,54 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
     private class ScrollPager extends BaseDecoratedScrollPager<TaggedEvent> {
 
-        private ScrollPager(ArrayAdapter<TaggedEvent> adapter) {
-            super(10, adapter);
+        protected ScrollPager(ArrayAdapter<TaggedEvent> adapter) {
+            super(adapter);
         }
 
         @Override
-        public FetchRequest<TaggedEvent> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            FetchRequest request = new EventsFetchRequest(offset, limit, callback);
-            return request;
-        }
+        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<TaggedEvent>> callback) {
+            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                @Override
+                public void onApiServiceAttached(LiveNationApiService apiService) {
+                    RecommendationSetsParameters params = new RecommendationSetsParameters();
+                    params.setPage(offset, limit);
+                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                    params.setIncludes(new String[]{"personal", "popular"});
+                    params.setRadius(Constants.DEFAULT_RADIUS);
+                    apiService.getRecommendationSets(params, new ApiService.BasicApiCallback<List<RecommendationSet>>() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            callback.onErrorResponse(error);
+                        }
 
-        @Override
-        public void stop() {
-            for (FetchLoader fetchLoader : getFetchLoaders()) {
-                fetchLoader.cancel();
-            }
-        }
+                        @Override
+                        public void onResponse(List<RecommendationSet> response) {
+                            List<TaggedEvent> result = new ArrayList<TaggedEvent>();
+                            for (RecommendationSet set : response) {
+                                boolean isPersonal = false;
+                                if ("personal".equalsIgnoreCase(set.getName())) {
+                                    isPersonal = true;
+                                }
+                                for (Event event : set.getEvents()) {
+                                    TaggedEvent taggedEvent = new TaggedEvent(event);
+                                    taggedEvent.setTag(isPersonal);
+                                    result.add(taggedEvent);
+                                }
+                            }
+                            callback.onResponse(result);
 
-        private class EventsFetchRequest extends FetchRequest<TaggedEvent> implements ApiService.BasicApiCallback<List<RecommendationSet>> {
-
-            private EventsFetchRequest(int offset, int limit, FetchResultHandler<TaggedEvent> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
-
-            @Override
-            public void run() {
-                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                    @Override
-                    public void onApiServiceAttached(LiveNationApiService apiService) {
-                        RecommendationSetsParameters params = new RecommendationSetsParameters();
-                        params.setPage(getOffset(), getLimit());
-                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                        params.setIncludes(new String[]{"personal", "popular"});
-                        params.setRadius(Constants.DEFAULT_RADIUS);
-                        apiService.getRecommendationSets(params, EventsFetchRequest.this);
-                    }
-
-                    @Override
-                    public void onApiServiceNotAvailable() {
-                        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                    }
-                });
-            }
-
-            @Override
-            public void cancel() {
-                //TODO: cancel any inprogress API request here
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("fail", "fail");
-                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-            }
-
-            @Override
-            public void onResponse(List<RecommendationSet> response) {
-                List<TaggedEvent> result = new ArrayList<TaggedEvent>();
-
-                for (RecommendationSet set : response) {
-                    boolean isPersonal = false;
-                    if ("personal".equalsIgnoreCase(set.getName())) {
-                        isPersonal = true;
-                    }
-                    for (Event event : set.getEvents()) {
-                        TaggedEvent taggedEvent = new TaggedEvent(event);
-                        taggedEvent.setTag(isPersonal);
-                        result.add(taggedEvent);
-                    }
+                            if (result.size() == 0) {
+                                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                            }
+                        }
+                    });
                 }
 
-                getFetchResultHandler().deliverResult(result);
-
-                if (result.size() == 0) {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                @Override
+                public void onApiServiceNotAvailable() {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
                 }
-            }
+            });
         }
     }
 }

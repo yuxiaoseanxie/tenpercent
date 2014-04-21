@@ -101,60 +101,44 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         }
 
         @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            return new EventsFetchRequest(offset, limit, callback);
-        }
+        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
+            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                @Override
+                public void onApiServiceAttached(LiveNationApiService apiService) {
+                    ArtistEventsParameters params = new ArtistEventsParameters();
+                    params.setPage(offset, limit);
+                    apiService.getArtistEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                        }
 
-        private class EventsFetchRequest extends FetchRequest<Event> implements ApiService.BasicApiCallback<List<Event>> {
+                        @Override
+                        public void onResponse(final List<Event> response) {
+                            //TODO remove that. Should be able to access location without binding the API
+                            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                                @Override
+                                public void onApiServiceAttached(LiveNationApiService apiService) {
+                                    double lat = apiService.getApiConfig().getLat();
+                                    double lng = apiService.getApiConfig().getLng();
+                                    ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
+                                    callback.onResponse(artistEvents.getAll());
+                                }
 
-            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
+                                @Override
+                                public void onApiServiceNotAvailable() {
+                                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                                }
+                            });
+                        }
+                    });
+                }
 
-            @Override
-            public void run() {
-                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                    @Override
-                    public void onApiServiceAttached(LiveNationApiService apiService) {
-                        ArtistEventsParameters params = new ArtistEventsParameters();
-                        params.setPage(getOffset(), getLimit());
-                        apiService.getArtistEvents(params, EventsFetchRequest.this);
-                    }
-
-                    @Override
-                    public void onApiServiceNotAvailable() {
-                        //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                    }
-                });
-            }
-
-            @Override
-            public void cancel() {
-                //TODO: cancel any inprogress API request here
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-
-            @Override
-            public void onResponse(final List<Event> response) {
-                //TODO remove that. Should be able to access location without binding the API
-                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                    @Override
-                    public void onApiServiceAttached(LiveNationApiService apiService) {
-                        double lat = apiService.getApiConfig().getLat();
-                        double lng = apiService.getApiConfig().getLng();
-                        ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
-                        getFetchResultHandler().deliverResult(artistEvents.getAll());
-                    }
-
-                    @Override
-                    public void onApiServiceNotAvailable() {
-                    }
-                });
-            }
+                @Override
+                public void onApiServiceNotAvailable() {
+                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
+            });
         }
     }
 }

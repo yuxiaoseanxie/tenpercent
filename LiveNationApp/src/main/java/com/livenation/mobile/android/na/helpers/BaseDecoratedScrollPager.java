@@ -29,16 +29,21 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     http://stackoverflow.com/questions/7576099/hiding-footer-in-listview
      */
     private final ViewGroup footerBugHack;
-    private final FrameLayout.LayoutParams footerParams;
-    private List<? extends TItemType> lastFetch;
+    private static final int DEFAULT_LIMIT = 10;
+
+    protected BaseDecoratedScrollPager(ArrayAdapter<TItemType> adapter) {
+        super(DEFAULT_LIMIT, adapter);
+
+        Context context = adapter.getContext();
+        listLoadingView = new EmptyListViewControl(context);
+        footerBugHack = new FrameLayout(context);
+    }
 
     protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         super(limit, adapter);
 
         Context context = adapter.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
         listLoadingView = new EmptyListViewControl(context);
-        footerParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         footerBugHack = new FrameLayout(context);
     }
 
@@ -53,26 +58,6 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        lastFetch = null;
-    }
-
-    @Override
-    public void onFetchResult(FetchLoader fetchLoader) {
-        List<TItemType> result = fetchLoader.getResult();
-        if (result.size() == 0 || hasItemAlreadyBeenFetched(result)) {
-            //end of result list, or
-            //found a dupe, abort adding the data to the adapter
-            setHasMorePages(false);
-            onNoMorePages();
-            return;
-        }
-        lastFetch = result;
-        super.onFetchResult(fetchLoader);
-    }
-
-    @Override
     public void onFetchStarted() {
         footerBugHack.addView(listLoadingView);
     }
@@ -82,25 +67,9 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
         footerBugHack.removeAllViews();
     }
 
-    public void stop() {
-        for (FetchLoader fetchLoader : getFetchLoaders()) {
-            fetchLoader.cancel();
-        }
+    @Override
+    public void onFetchError() {
+        footerBugHack.removeAllViews();
+        //TODO find a way to notify the user an error occurred
     }
-
-    private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
-        if (null == lastFetch) return false;
-        if (newFetch.size() == 0) return false;
-
-        //The LN API will 'rollover' to the last page of results once paging parameters
-        //are exceeded. So we need to check for dupes and stop paging if so.
-        TItemType first = newFetch.get(0);
-        for (TItemType existing : lastFetch) {
-            if (first.idEquals(existing)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

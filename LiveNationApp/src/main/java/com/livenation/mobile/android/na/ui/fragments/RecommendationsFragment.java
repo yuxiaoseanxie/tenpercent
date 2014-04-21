@@ -137,54 +137,38 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         }
 
         @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            FetchRequest request = new EventsFetchRequest(offset, limit, callback);
-            return request;
-        }
+        public void fetch(final int offset,final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
+            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                @Override
+                public void onApiServiceAttached(LiveNationApiService apiService) {
+                    RecommendationParameters params = new RecommendationParameters();
+                    params.setPage(offset, limit);
+                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                    params.setRadius(Constants.DEFAULT_RADIUS);
+                    apiService.getRecommendations(params, new ApiService.BasicApiCallback<List<Event>>() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("fail", "fail");
+                            //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                        }
 
-        private class EventsFetchRequest extends FetchRequest<Event> implements ApiService.BasicApiCallback<List<Event>> {
+                        @Override
+                        public void onResponse(List<Event> response) {
+                            callback.onResponse(response);
+                            if (response.size() == 0) {
+                                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                            }
+                        }
+                    });
 
-            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
-
-            @Override
-            public void run() {
-                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                    @Override
-                    public void onApiServiceAttached(LiveNationApiService apiService) {
-                        RecommendationParameters params = new RecommendationParameters();
-                        params.setPage(getOffset(), getLimit());
-                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                        params.setRadius(Constants.DEFAULT_RADIUS);
-
-                    }
-
-                    @Override
-                    public void onApiServiceNotAvailable() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void cancel() {
-                //TODO: cancel any inprogress API request here
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("fail", "fail");
-                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-            }
-
-            @Override
-            public void onResponse(List<Event> response) {
-                getFetchResultHandler().deliverResult(response);
-                if (response.size() == 0) {
-                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
                 }
-            }
+
+                @Override
+                public void onApiServiceNotAvailable() {
+                    Log.e("fail", "fail");
+                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
+            });
         }
     }
 }

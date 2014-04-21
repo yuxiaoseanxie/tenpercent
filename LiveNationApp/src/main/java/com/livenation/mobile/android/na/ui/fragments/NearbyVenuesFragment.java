@@ -348,68 +348,43 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         }
 
         @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            FetchRequest request = new VenuesFetchRequest(offset, limit, callback);
-            return request;
-        }
-
-        @Override
         protected int getOffset() {
             return offset;
         }
 
         @Override
-        public void stop() {
-            for (FetchLoader fetchLoader : getFetchLoaders()) {
-                fetchLoader.cancel();
-            }
-        }
+        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
+            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+                @Override
+                public void onApiServiceAttached(LiveNationApiService apiService) {
+                    NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
+                    params.setMinimumNumberOfEvents(2);
+                    params.setPage(offset, limit);
+                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+                    apiService.getNearbyVenuesWithEvents(params, new ApiService.BasicApiCallback<List<Venue>>() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("fail", "fail");
+                            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                        }
 
-        private class VenuesFetchRequest extends FetchRequest<Event> implements ApiService.BasicApiCallback<List<Venue>> {
-
-            private VenuesFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
-
-            @Override
-            public void run() {
-                LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                    @Override
-                    public void onApiServiceAttached(LiveNationApiService apiService) {
-                        NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
-                        params.setMinimumNumberOfEvents(2);
-                        params.setPage(offset, getLimit());
-                        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                        apiService.getNearbyVenuesWithEvents(params, VenuesFetchRequest.this);
-                    }
-
-                    @Override
-                    public void onApiServiceNotAvailable() {
-                        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                    }
-                });
-            }
-
-            @Override
-            public void cancel() {
-                //TODO: cancel any inprogress API request here
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("fail", "fail");
-                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-            }
-
-            @Override
-            public void onResponse(List<Venue> response) {
-                ScrollPager.this.offset += response.size();
-                List<Event> transformed = DataModelHelper.flattenVenueEvents(response);
-                getFetchResultHandler().deliverResult(transformed);
-                if (response.size() == 0) {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                        @Override
+                        public void onResponse(List<Venue> response) {
+                            ScrollPager.this.offset += response.size();
+                            List<Event> transformed = DataModelHelper.flattenVenueEvents(response);
+                            callback.onResponse(transformed);
+                            if (response.size() == 0) {
+                                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                            }
+                        }
+                    });
                 }
-            }
+
+                @Override
+                public void onApiServiceNotAvailable() {
+                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
+            });
         }
     }
 }
