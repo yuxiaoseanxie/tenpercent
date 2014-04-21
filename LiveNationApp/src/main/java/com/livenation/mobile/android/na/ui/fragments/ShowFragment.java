@@ -69,6 +69,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
     private VenueFavoriteObserver venueFavoriteObserver;
+    private LatLng mapLocationCache = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         if (map != null) {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setAllGesturesEnabled(false);
+            if (null != mapLocationCache) {
+                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
+            }
         } else {
             //TODO: Possible No Google play services installed
         }
@@ -208,16 +212,15 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     private void setMapLocation(double lat, double lng) {
+        mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
 
-        LatLng latLng = new LatLng(lat, lng);
-
         MarkerOptions marker = new MarkerOptions();
-        marker.position(latLng);
+        marker.position(mapLocationCache);
 
         map.clear();
         map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
 
     private class OnVenueDetailsClick implements View.OnClickListener {
