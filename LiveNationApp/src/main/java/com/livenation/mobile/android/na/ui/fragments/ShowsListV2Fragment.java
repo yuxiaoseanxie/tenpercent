@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +23,12 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -44,13 +42,13 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class ShowsListV2Fragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
-    private ScrollPager scrollPager;
+    private AllShowsScrollPager scrollPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
-        scrollPager = new ScrollPager(adapter);
+        scrollPager = new AllShowsScrollPager(adapter);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
@@ -117,44 +115,5 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
     @Override
     public void onApiServiceNotAvailable() {
 
-    }
-
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
-
-        private ScrollPager(ArrayAdapter<Event> adapter) {
-            super(30, adapter);
-        }
-
-        @Override
-        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
-            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    EventParameters params = new EventParameters();
-                    params.setPage(offset, limit);
-                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                    params.setSortMethod("start_time");
-                    apiService.getEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                        }
-
-                        @Override
-                        public void onResponse(List<Event> response) {
-                            callback.onResponse(response);
-                            if (response.size() == 0) {
-                                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                }
-            });
-        }
     }
 }

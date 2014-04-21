@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.pagination;
 
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -128,7 +128,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     //Paginated Fetcher
 
-    protected class PaginatedFetcher implements Runnable {
+    private class PaginatedFetcher implements Runnable {
         private final int offset;
         private final int limit;
         private boolean isCanceled = false;

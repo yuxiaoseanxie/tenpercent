@@ -1,17 +1,15 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.pagination;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.livenation.mobile.android.na.pagination.BaseScrollPager;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
-
-import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 

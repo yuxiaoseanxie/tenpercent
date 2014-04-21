@@ -28,7 +28,7 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;

@@ -20,26 +20,21 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
+import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +45,13 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
     private StickyListHeadersListView listView;
     private EventAdapter adapter;
-    private ScrollPager scrollPager;
+    private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
-        scrollPager = new ScrollPager(adapter);
         setRetainInstance(true);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
@@ -74,6 +68,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         listView.setEmptyView(emptyListViewControl);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
+        scrollPager = new RecommendationSetsScrollPager(adapter, emptyListViewControl);
         scrollPager.connectListView(listView);
 
         return view;
@@ -125,9 +120,9 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
-    private static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
+    public static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {
 
-        private TaggedEvent(Event event) {
+        public TaggedEvent(Event event) {
             super(event);
         }
 
@@ -251,59 +246,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
             public TextView getText() {
                 return text;
             }
-        }
-    }
-
-    private class ScrollPager extends BaseDecoratedScrollPager<TaggedEvent> {
-
-        protected ScrollPager(ArrayAdapter<TaggedEvent> adapter) {
-            super(adapter);
-        }
-
-        @Override
-        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<TaggedEvent>> callback) {
-            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    RecommendationSetsParameters params = new RecommendationSetsParameters();
-                    params.setPage(offset, limit);
-                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                    params.setIncludes(new String[]{"personal", "popular"});
-                    params.setRadius(Constants.DEFAULT_RADIUS);
-                    apiService.getRecommendationSets(params, new ApiService.BasicApiCallback<List<RecommendationSet>>() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            callback.onErrorResponse(error);
-                        }
-
-                        @Override
-                        public void onResponse(List<RecommendationSet> response) {
-                            List<TaggedEvent> result = new ArrayList<TaggedEvent>();
-                            for (RecommendationSet set : response) {
-                                boolean isPersonal = false;
-                                if ("personal".equalsIgnoreCase(set.getName())) {
-                                    isPersonal = true;
-                                }
-                                for (Event event : set.getEvents()) {
-                                    TaggedEvent taggedEvent = new TaggedEvent(event);
-                                    taggedEvent.setTag(isPersonal);
-                                    result.add(taggedEvent);
-                                }
-                            }
-                            callback.onResponse(result);
-
-                            if (result.size() == 0) {
-                                emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                }
-            });
         }
     }
 }
