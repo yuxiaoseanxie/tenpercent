@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -16,7 +18,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-public class TicketOfferingsDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+public class TicketOfferingsDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener {
+    private ListView listView;
     private TicketOfferingsAdapter adapter;
     private List<TicketOffering> offerings;
     private OnTicketOfferingClickedListener onTicketOfferingClickedListener;
@@ -40,10 +43,14 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Dia
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.ticket_offerings);
-        builder.setAdapter(adapter, this);
-        return builder.create();
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_ticket_offerings, null);
+        this.listView = (ListView) view.findViewById(R.id.dialog_ticket_offerings_list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(view, 0, 0, 0, 0);
+        return dialog;
     }
 
     //endregion
@@ -71,7 +78,7 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Dia
 
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int position) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         if(getOnTicketOfferingClickedListener() != null) {
             TicketOffering offering = adapter.getItem(position);
             getOnTicketOfferingClickedListener().ticketOfferingClicked(offering);
@@ -81,7 +88,7 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Dia
 
     private class TicketOfferingsAdapter extends ArrayAdapter<TicketOffering> {
         public TicketOfferingsAdapter(Context context, List<TicketOffering> offerings) {
-            super(context, android.R.layout.simple_expandable_list_item_1, offerings);
+            super(context, R.layout.list_item_ticket_offering, offerings);
         }
 
         @Override
@@ -89,7 +96,7 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Dia
             TextView text = (TextView) super.getView(position, convertView, parent);
 
             TicketOffering offering = getItem(position);
-            text.setText(offering.getName());
+            text.setText(offering.getDisplayType());
 
             return text;
         }
