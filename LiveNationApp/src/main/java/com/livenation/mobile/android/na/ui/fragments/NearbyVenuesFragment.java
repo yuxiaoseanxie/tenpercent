@@ -63,10 +63,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         trackScreenWithLocation("User views Nearby screen", new Props());
-
-        adapter = new EventVenueAdapter(getActivity());
-        pager = new NearbyVenuesScrollPager(adapter, emptyListViewControl);
-
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
         setRetainInstance(true);
@@ -82,6 +78,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         listView.setEmptyView(emptyListViewControl);
+
+        adapter = new EventVenueAdapter(getActivity());
+        pager = new NearbyVenuesScrollPager(adapter,emptyListViewControl);
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
