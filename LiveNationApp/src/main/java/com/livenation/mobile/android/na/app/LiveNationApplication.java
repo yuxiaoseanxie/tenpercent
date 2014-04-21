@@ -41,6 +41,7 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -110,6 +111,8 @@ public class LiveNationApplication extends Application {
         //Start and setup the library
         LivenationLib.start();
         LivenationLib.setErrorTracker(new LibraryErrorTracker());
+
+        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
         setupNotifications();
         setupTicketing();
