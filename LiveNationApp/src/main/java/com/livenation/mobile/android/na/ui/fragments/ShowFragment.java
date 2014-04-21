@@ -45,6 +45,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Dat
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -52,6 +53,7 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import io.segment.android.models.Props;
@@ -256,7 +258,15 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
 
-            String buyLink = event.getBuyLink();
+            List<TicketOffering> offerings = event.getTicketOfferings();
+            if(offerings.isEmpty()) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                               R.string.no_available_tickets,
+                               Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String buyLink = offerings.get(0).getPurchaseUrl();
             if (Ticketing.isTicketmasterUrl(buyLink)) {
                 Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
             } else {
