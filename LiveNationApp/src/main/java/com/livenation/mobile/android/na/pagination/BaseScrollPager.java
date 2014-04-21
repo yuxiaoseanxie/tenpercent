@@ -19,7 +19,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private final ArrayAdapter<TItemType> adapter;
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
-
+    private boolean isFirstPage = false;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
@@ -38,10 +38,10 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     public void reset() {
         lastFetch = null;
+        isFirstPage = true;
         for (PaginatedFetcher paginatedFetcher : paginatedFetchers) {
             paginatedFetcher.cancel();
         }
-        adapter.clear();
         setHasMorePages(true);
     }
 
@@ -82,6 +82,13 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
             return;
         }
         lastFetch = result;
+
+        //Clear the adapter here insteadof the reset method to avoid the few seconds with a blank page during the loading
+        if (isFirstPage) {
+            adapter.clear();
+        }
+        isFirstPage = false;
+
         adapter.addAll(result);
         onFetchEnded();
         paginatedFetchers.clear();
@@ -132,7 +139,6 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         private final int offset;
         private final int limit;
         private boolean isCanceled = false;
-        private ApiService.BasicApiCallback<Void> callback;
 
         private PaginatedFetcher(int offset, int limit) {
             this.offset = offset;

@@ -55,8 +55,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
 
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-
         setRetainInstance(true);
 
     }
@@ -70,6 +68,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
         listView.setAdapter(adapter);
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         listView.setEmptyView(emptyListViewControl);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -80,10 +79,17 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        //If I use persistentApi in the on create() method, I would need to click on every single retry button
+        LiveNationApplication.get().getApiHelper().bindApi(this);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -122,7 +128,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
     public static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {

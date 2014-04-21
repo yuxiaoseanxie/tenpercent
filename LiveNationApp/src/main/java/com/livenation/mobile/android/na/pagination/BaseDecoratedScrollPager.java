@@ -45,10 +45,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     };
     protected static final int DEFAULT_LIMIT = 10;
 
-    protected BaseDecoratedScrollPager(ArrayAdapter<TItemTypeOutput> adapter) {
-        this(DEFAULT_LIMIT, adapter);
-    }
-
     protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter) {
         super(limit, adapter);
 
@@ -86,6 +82,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     @Override
     public void fetch(final int offset,final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
         this.callback = callback;
+        if (emptyView != null) {
+            emptyView.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        }
         LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
@@ -108,7 +107,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         List<TItemTypeOutput> result = (List<TItemTypeOutput>) response;
         callback.onResponse(result);
 
-        if (result.size() == 0 && emptyView != null) {
+        if (emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
     }

@@ -58,7 +58,6 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new AllShowsScrollPager(adapter);
 
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 
     @Override
@@ -71,6 +70,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         scrollPager.setEmptyView(emptyListViewControl);
         
         listView.setEmptyView(emptyListViewControl);
@@ -80,16 +80,17 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        scrollPager.stop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+      public void onStart() {
+        super.onStart();
+
+        //If I use persistentApi in the on create() method, I would need to click on every single retry button
+        LiveNationApplication.get().getApiHelper().bindApi(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        scrollPager.stop();
     }
 
     @Override
@@ -133,6 +134,5 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 }

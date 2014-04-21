@@ -67,8 +67,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         adapter = new EventVenueAdapter(getActivity());
         pager = new NearbyVenuesScrollPager(adapter);
 
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-
         setRetainInstance(true);
     }
 
@@ -81,6 +79,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         listView.setEmptyView(emptyListViewControl);
 
         pager.setEmptyView(emptyListViewControl);
@@ -97,15 +96,17 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        pager.stop();
+    public void onStart() {
+        super.onStart();
+
+        //If I use persistentApi in the on create() method, I would need to click on every single retry button
+        LiveNationApplication.get().getApiHelper().bindApi(this);
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        super.onDestroyView();
+        pager.stop();
     }
 
     @Override
@@ -127,12 +128,12 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         this.lat = apiService.getApiConfig().getLat();
         this.lng = apiService.getApiConfig().getLng();
 
-        init();
+        pager.reset();
+        pager.load();
     }
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
     @Override
@@ -169,11 +170,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         intent.putExtras(args);
         getActivity().startActivity(intent);
-    }
-
-    private void init() {
-        pager.reset();
-        pager.load();
     }
 
     private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {
