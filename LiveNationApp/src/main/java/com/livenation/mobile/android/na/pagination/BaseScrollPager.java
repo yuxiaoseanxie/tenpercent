@@ -17,7 +17,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private final List<PaginatedFetcher> paginatedFetchers = new ArrayList<PaginatedFetcher>();
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
-    private boolean hasMorePages = false;
+    private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
 
 

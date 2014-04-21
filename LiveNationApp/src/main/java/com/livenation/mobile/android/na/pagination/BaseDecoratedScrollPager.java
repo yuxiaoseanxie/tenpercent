@@ -60,7 +60,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     protected  BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter, EmptyListViewControl emptyView) {
         this(limit, adapter);
         this.emptyView = emptyView;
-        this.emptyView.setOnClickListener(retryClickListener);
+        this.emptyView.setRetryOnClickListener(retryClickListener);
     }
 
     public void connectListView(StickyListHeadersListView listView) {

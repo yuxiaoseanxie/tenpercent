@@ -52,12 +52,6 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     private EmptyListViewControl emptyListViewControl;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -70,9 +64,12 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new AllShowsScrollPager(adapter, emptyListViewControl);
-        
+
         listView.setEmptyView(emptyListViewControl);
         scrollPager.connectListView(listView);
+
+        // bind the api after instanciate the scrollPager, otherwise might create a null pointer exception
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
         return view;
     }

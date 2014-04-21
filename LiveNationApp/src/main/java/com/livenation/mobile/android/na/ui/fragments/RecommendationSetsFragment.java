@@ -53,7 +53,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         super.onCreate(savedInstanceState);
         adapter = new EventAdapter(getActivity(), new ArrayList<TaggedEvent>());
         setRetainInstance(true);
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+
     }
 
     @Override
@@ -70,6 +70,9 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         listView.setAreHeadersSticky(false);
         scrollPager = new RecommendationSetsScrollPager(adapter, emptyListViewControl);
         scrollPager.connectListView(listView);
+
+        // bind the api after instanciate the scrollPager, otherwise might create a null pointer exception
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
         return view;
     }
