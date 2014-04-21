@@ -40,6 +40,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     //eg favoritesObserverPresenter, who will clear its favorite cache when a new API is created
     private List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
+    private boolean lastBuildFailed = false;
 
     public ApiHelper(SsoManager ssoManager, Context appContext) {
         this.ssoManager = ssoManager;
@@ -69,6 +70,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     public void onApiBuilt(LiveNationApiService apiService) {
         this.apiBuilder = null;
         this.apiService = apiService;
+        this.lastBuildFailed = false;
 
         for (ApiServiceBinder binder : pendingBindings) {
             binder.onApiServiceAttached(apiService);
@@ -90,6 +92,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     public void onBuildFailed() {
         this.apiBuilder = null;
         this.apiService = null;
+        this.lastBuildFailed = true;
 
         for (ApiServiceBinder binder : pendingBindings) {
             binder.onApiServiceNotAvailable();
@@ -113,7 +116,11 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         if (null != apiService && !isBuildingApi()) {
             binder.onApiServiceAttached(apiService);
         } else {
-            pendingBindings.add(binder);
+            if (lastBuildFailed && !isBuildingApi()) {
+                binder.onApiServiceNotAvailable();
+            } else {
+                pendingBindings.add(binder);
+            }
         }
     }
 
@@ -121,6 +128,10 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         persistentBindings.add(binder);
         if (null != apiService) {
             binder.onApiServiceAttached(apiService);
+        } else {
+            if (lastBuildFailed && !isBuildingApi()) {
+                binder.onApiServiceNotAvailable();
+            }
         }
     }
 
