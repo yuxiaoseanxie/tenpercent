@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -47,7 +45,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class RecommendationsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
-    private ScrollPager scrollPager;
+    private RecommendationsScrollPager recommendationsScrollPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,7 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         trackScreenWithLocation("User views Your Shows screen", new Props());
 
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
-        scrollPager = new ScrollPager(adapter);
+        recommendationsScrollPager = new RecommendationsScrollPager(adapter);
 
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
@@ -69,7 +67,7 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
         listView.setOnItemClickListener(RecommendationsFragment.this);
         listView.setAdapter(adapter);
         listView.setEmptyView(view.findViewById(android.R.id.empty));
-        scrollPager.connectListView(listView);
+        recommendationsScrollPager.connectListView(listView);
 
         return view;
     }
@@ -83,7 +81,7 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
     @Override
     public void onStop() {
         super.onStop();
-        scrollPager.stop();
+        recommendationsScrollPager.stop();
     }
 
     @Override
@@ -121,8 +119,8 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
+        recommendationsScrollPager.reset();
+        recommendationsScrollPager.load();
     }
 
     @Override
@@ -130,45 +128,19 @@ public class RecommendationsFragment extends LiveNationFragment implements OnIte
 
     }
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
+    private class RecommendationsScrollPager extends BaseDecoratedScrollPager<Event, List<Event>> {
 
-        private ScrollPager(ArrayAdapter<Event> adapter) {
+        private RecommendationsScrollPager(ArrayAdapter<Event> adapter) {
             super(10, adapter);
         }
 
         @Override
-        public void fetch(final int offset,final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
-            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    RecommendationParameters params = new RecommendationParameters();
-                    params.setPage(offset, limit);
-                    params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-                    params.setRadius(Constants.DEFAULT_RADIUS);
-                    apiService.getRecommendations(params, new ApiService.BasicApiCallback<List<Event>>() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("fail", "fail");
-                            //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                        }
-
-                        @Override
-                        public void onResponse(List<Event> response) {
-                            callback.onResponse(response);
-                            if (response.size() == 0) {
-                                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                            }
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    Log.e("fail", "fail");
-                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                }
-            });
+        protected void fetch(LiveNationApiService apiService, int offset, int limit, ApiService.BasicApiCallback callback) {
+            RecommendationParameters params = new RecommendationParameters();
+            params.setPage(offset, limit);
+            params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
+            params.setRadius(Constants.DEFAULT_RADIUS);
+            apiService.getRecommendations(params, RecommendationsScrollPager.this);
         }
     }
 }

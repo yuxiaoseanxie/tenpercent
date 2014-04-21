@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class ArtistShowsListFragment extends LiveNationListFragment implements ApiServiceBinder {
     private EventAdapter adapter;
-    private ScrollPager scrollPager;
+    private ArtistShowsScrollPager artistShowsScrollPager;
 
     //region Lifecycle
 
@@ -37,7 +38,7 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         this.adapter = new EventAdapter(getActivity(), ShowView.DisplayMode.ARTIST);
         setListAdapter(adapter);
 
-        this.scrollPager = new ScrollPager(adapter);
+        this.artistShowsScrollPager = new ArtistShowsScrollPager(adapter);
 
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
@@ -46,13 +47,13 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        scrollPager.connectListView(getListView());
+        artistShowsScrollPager.connectListView(getListView());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        scrollPager.stop();
+        artistShowsScrollPager.stop();
     }
 
     @Override
@@ -69,8 +70,8 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
+        artistShowsScrollPager.reset();
+        artistShowsScrollPager.load();
     }
 
     @Override
@@ -88,54 +89,5 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         Bundle arguments = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(arguments, event);
         startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
-    }
-
-
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
-
-        private ScrollPager(ArrayAdapter<Event> adapter) {
-            super(30, adapter);
-        }
-
-        @Override
-        public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<Event>> callback) {
-            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    ArtistEventsParameters params = new ArtistEventsParameters();
-                    params.setPage(offset, limit);
-                    apiService.getArtistEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                        }
-
-                        @Override
-                        public void onResponse(final List<Event> response) {
-                            //TODO remove that. Should be able to access location without binding the API
-                            LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
-                                @Override
-                                public void onApiServiceAttached(LiveNationApiService apiService) {
-                                    double lat = apiService.getApiConfig().getLat();
-                                    double lng = apiService.getApiConfig().getLng();
-                                    ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
-                                    callback.onResponse(artistEvents.getAll());
-                                }
-
-                                @Override
-                                public void onApiServiceNotAvailable() {
-                                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                                }
-                            });
-                        }
-                    });
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                }
-            });
-        }
     }
 }

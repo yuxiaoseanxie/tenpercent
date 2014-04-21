@@ -7,9 +7,17 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.livenation.mobile.android.na.pagination.BaseScrollPager;
+import com.android.volley.VolleyError;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
+
+import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -17,7 +25,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by cchilton on 3/12/14.
  */
-public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemType>> extends BaseScrollPager<TItemType> {
+public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<TItemTypeOutput>, TItemTypeInput> extends BaseScrollPager<TItemTypeOutput> implements ApiService.BasicApiCallback<TItemTypeInput> {
     private final View listLoadingView;
     /*
     Use a frame layout to contain our loading view. This is necessary since Android doesn't like direct
@@ -27,22 +35,32 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     http://stackoverflow.com/questions/7576099/hiding-footer-in-listview
      */
     private final ViewGroup footerBugHack;
-    private static final int DEFAULT_LIMIT = 10;
+    protected ApiService.BasicApiCallback<List<TItemTypeOutput>> callback;
+    protected EmptyListViewControl emptyView;
+    private View.OnClickListener retryClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            load();
+        }
+    };
+    protected static final int DEFAULT_LIMIT = 10;
 
-    protected BaseDecoratedScrollPager(ArrayAdapter<TItemType> adapter) {
-        super(DEFAULT_LIMIT, adapter);
+    protected BaseDecoratedScrollPager(ArrayAdapter<TItemTypeOutput> adapter) {
+        this(DEFAULT_LIMIT, adapter);
+    }
+
+    protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter) {
+        super(limit, adapter);
 
         Context context = adapter.getContext();
         listLoadingView = new EmptyListViewControl(context);
         footerBugHack = new FrameLayout(context);
     }
 
-    protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
-        super(limit, adapter);
-
-        Context context = adapter.getContext();
-        listLoadingView = new EmptyListViewControl(context);
-        footerBugHack = new FrameLayout(context);
+    protected  BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter, EmptyListViewControl emptyView) {
+        this(limit, adapter);
+        this.emptyView = emptyView;
+        this.emptyView.setOnClickListener(retryClickListener);
     }
 
     public void connectListView(StickyListHeadersListView listView) {
@@ -69,5 +87,43 @@ public abstract class BaseDecoratedScrollPager<TItemType extends IdEquals<TItemT
     public void onFetchError() {
         footerBugHack.removeAllViews();
         //TODO find a way to notify the user an error occurred
+    }
+
+    @Override
+    public void fetch(final int offset,final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
+        this.callback = callback;
+        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                fetch(apiService, offset, limit, callback);
+            }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+                if (emptyView != null) {
+                    emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
+            }
+        });
+    }
+
+    protected abstract void fetch(LiveNationApiService apiService, final int offset,final int limit, ApiService.BasicApiCallback<List<TItemTypeOutput>> callback);
+
+    @Override
+    public void onResponse(TItemTypeInput response) {
+        List<TItemTypeOutput> result = (List<TItemTypeOutput>) response;
+        callback.onResponse(result);
+
+        if (result.size() == 0 && emptyView != null) {
+            emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        callback.onErrorResponse(error);
+        if (emptyView != null) {
+            emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 }
