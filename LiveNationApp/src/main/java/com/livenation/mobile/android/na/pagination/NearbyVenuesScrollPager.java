@@ -27,8 +27,8 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
      */
     private int offset = 0;
 
-    public NearbyVenuesScrollPager(ArrayAdapter<Event> adapter, EmptyListViewControl emptyView) {
-        super(DEFAULT_LIMIT, adapter, emptyView);
+    public NearbyVenuesScrollPager(ArrayAdapter<Event> adapter) {
+        super(DEFAULT_LIMIT, adapter);
     }
 
 

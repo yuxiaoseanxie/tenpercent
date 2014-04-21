@@ -64,6 +64,11 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         super.onCreate(savedInstanceState);
         trackScreenWithLocation("User views Nearby screen", new Props());
 
+        adapter = new EventVenueAdapter(getActivity());
+        pager = new NearbyVenuesScrollPager(adapter);
+
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+
         setRetainInstance(true);
     }
 
@@ -78,8 +83,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         listView.setEmptyView(emptyListViewControl);
 
-        adapter = new EventVenueAdapter(getActivity());
-        pager = new NearbyVenuesScrollPager(adapter, emptyListViewControl);
+        pager.setEmptyView(emptyListViewControl);
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -88,9 +92,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         listView.setOnHeaderClickListener(this);
 
         pager.connectListView(listView);
-
-        // bind the api after instanciate the scrollPager, otherwise might create a null pointer exception
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
         return view;
     }

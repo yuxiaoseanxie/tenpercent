@@ -15,9 +15,8 @@ import java.util.List;
  */
 public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Event>> {
 
-    public AllShowsScrollPager(ArrayAdapter<Event> adapter, EmptyListViewControl emptyView) {
+    public AllShowsScrollPager(ArrayAdapter<Event> adapter) {
         super(30, adapter);
-        this.emptyView = emptyView;
     }
 
     @Override

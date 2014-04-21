@@ -48,7 +48,7 @@ public class ShowsListV2Fragment extends LiveNationFragment implements OnItemCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
-        scrollPager = new AllShowsScrollPager(adapter, null);
+        scrollPager = new AllShowsScrollPager(adapter);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }
 

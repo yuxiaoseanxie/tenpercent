@@ -57,12 +57,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         footerBugHack = new FrameLayout(context);
     }
 
-    protected  BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter, EmptyListViewControl emptyView) {
-        this(limit, adapter);
-        this.emptyView = emptyView;
-        this.emptyView.setRetryOnClickListener(retryClickListener);
-    }
-
     public void connectListView(StickyListHeadersListView listView) {
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
@@ -125,5 +119,10 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         if (emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
         }
+    }
+
+    public void setEmptyView(EmptyListViewControl emptyView) {
+        this.emptyView = emptyView;
+        this.emptyView.setRetryOnClickListener(retryClickListener);
     }
 }

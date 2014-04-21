@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<TaggedEvent, List<RecommendationSet>> {
 
-    public RecommendationSetsScrollPager(ArrayAdapter<TaggedEvent> adapter, EmptyListViewControl emptyView) {
-        super(DEFAULT_LIMIT, adapter, emptyView);
+    public RecommendationSetsScrollPager(ArrayAdapter<TaggedEvent> adapter) {
+        super(DEFAULT_LIMIT, adapter);
     }
 
     @Override
