@@ -141,7 +141,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             venueDetails.setOnClickListener(null);
         }
 
-        if (event.getTicketOfferings().isEmpty())
+        if (event.getTicketOfferings().size() < 2)
             findTicketsOptions.setVisibility(View.GONE);
         else
             findTicketsOptions.setVisibility(View.VISIBLE);
@@ -224,6 +224,66 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
     }
 
+
+    //region Find Tickets
+
+    protected void showTicketOffering(TicketOffering offering) {
+        String buyLink = offering.getPurchaseUrl();
+        if (Ticketing.isTicketmasterUrl(buyLink)) {
+            Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
+        } else {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
+            Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class OnFindTicketsOptionsClick implements View.OnClickListener, TicketOfferingsDialogFragment.OnTicketOfferingClickedListener {
+        private final Event event;
+
+        private OnFindTicketsOptionsClick(Event event) {
+            this.event = event;
+        }
+
+        @Override
+        public void onClick(View view) {
+            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event.getTicketOfferings());
+            dialogFragment.setOnTicketOfferingClickedListener(this);
+            dialogFragment.show(getFragmentManager(), "TicketOfferingsDialogFragment");
+        }
+
+        @Override
+        public void onTicketOfferingClicked(TicketOffering offering) {
+            showTicketOffering(offering);
+        }
+    }
+
+    private class OnFindTicketsClick implements View.OnClickListener {
+        private final Event event;
+
+        public OnFindTicketsClick(Event event) {
+            this.event = event;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
+
+            List<TicketOffering> offerings = event.getTicketOfferings();
+            if(offerings.isEmpty()) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        R.string.no_ticket_offerings,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            showTicketOffering(offerings.get(0));
+        }
+    }
+
+    //endregion
+
+
     private class OnVenueDetailsClick implements View.OnClickListener {
         private final Event event;
 
@@ -245,50 +305,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
 
             startActivity(intent);
-        }
-    }
-
-    private class OnFindTicketsOptionsClick implements View.OnClickListener {
-        private final Event event;
-
-        private OnFindTicketsOptionsClick(Event event) {
-            this.event = event;
-        }
-
-        @Override
-        public void onClick(View view) {
-            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event.getTicketOfferings());
-            dialogFragment.show(getFragmentManager(), "TicketOfferingsDialogFragment");
-        }
-    }
-
-    private class OnFindTicketsClick implements View.OnClickListener {
-        private final Event event;
-
-        public OnFindTicketsClick(Event event) {
-            this.event = event;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
-
-            List<TicketOffering> offerings = event.getTicketOfferings();
-            if(offerings.isEmpty()) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                               R.string.no_ticket_offerings,
-                               Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String buyLink = offerings.get(0).getPurchaseUrl();
-            if (Ticketing.isTicketmasterUrl(buyLink)) {
-                Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
-            } else {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
-                Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
-            }
         }
     }
 

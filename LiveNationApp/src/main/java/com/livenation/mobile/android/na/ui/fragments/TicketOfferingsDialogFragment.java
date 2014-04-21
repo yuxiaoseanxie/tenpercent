@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
@@ -81,7 +80,7 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Ada
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         if(getOnTicketOfferingClickedListener() != null) {
             TicketOffering offering = adapter.getItem(position);
-            getOnTicketOfferingClickedListener().ticketOfferingClicked(offering);
+            getOnTicketOfferingClickedListener().onTicketOfferingClicked(offering);
         }
         dismissAllowingStateLoss();
     }
@@ -104,6 +103,6 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Ada
 
 
     public interface OnTicketOfferingClickedListener {
-        void ticketOfferingClicked(TicketOffering offering);
+        void onTicketOfferingClicked(TicketOffering offering);
     }
 }
