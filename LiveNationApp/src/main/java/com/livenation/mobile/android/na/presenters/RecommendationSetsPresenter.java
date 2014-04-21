@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
@@ -21,6 +20,7 @@ import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +103,7 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
+        public void onErrorResponse(LiveNationError error) {
             notifyFailed(FAILURE_API_GENERAL);
         }
 
