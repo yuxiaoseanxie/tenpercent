@@ -27,7 +27,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if ((paginatedFetcher == null) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
+        if ((totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
     }
@@ -47,11 +47,8 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void load() {
-
-        //Clear pending fetcherLoader
         if (paginatedFetcher != null) {
-            paginatedFetcher.cancel();
-            paginatedFetcher = null;
+            return;
         }
 
         //Create a new fetcherLoader
@@ -88,8 +85,9 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         //Clear the adapter here insteadof the reset method to avoid the few seconds with a blank page during the loading
         if (isFirstPage) {
             adapter.clear();
+            isFirstPage = false;
         }
-        isFirstPage = false;
+
 
         adapter.addAll(result);
         onFetchEnded();
