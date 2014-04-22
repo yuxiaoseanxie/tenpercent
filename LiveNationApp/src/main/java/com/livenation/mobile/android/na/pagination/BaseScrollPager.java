@@ -7,14 +7,13 @@ import com.android.volley.VolleyError;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by cchilton on 3/11/14.
  */
 public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> implements AbsListView.OnScrollListener {
-    private final List<PaginatedFetcher> paginatedFetchers = new ArrayList<PaginatedFetcher>();
+    private PaginatedFetcher paginatedFetcher = null;
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
     private boolean hasMorePages = true;
@@ -28,10 +27,11 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if ((paginatedFetchers.size() == 0) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
+        if ((paginatedFetcher == null) && (totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
     }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
@@ -39,8 +39,9 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     public void reset() {
         lastFetch = null;
         isFirstPage = true;
-        for (PaginatedFetcher paginatedFetcher : paginatedFetchers) {
+        if (paginatedFetcher != null) {
             paginatedFetcher.cancel();
+            paginatedFetcher = null;
         }
         setHasMorePages(true);
     }
@@ -48,20 +49,21 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     public void load() {
 
         //Clear pending fetcherLoader
-        for (PaginatedFetcher paginatedFetcher : paginatedFetchers) {
+        if (paginatedFetcher != null) {
             paginatedFetcher.cancel();
+            paginatedFetcher = null;
         }
 
         //Create a new fetcherLoader
-        PaginatedFetcher paginatedFetcher = new PaginatedFetcher(getOffset(), limit);
-        paginatedFetchers.add(paginatedFetcher);
+        paginatedFetcher = new PaginatedFetcher(getOffset(), limit);
         onFetchStarted();
         paginatedFetcher.run();
     }
 
     public void stop() {
-        for (PaginatedFetcher paginatedFetcher : paginatedFetchers) {
+        if (paginatedFetcher != null) {
             paginatedFetcher.cancel();
+            paginatedFetcher = null;
         }
     }
 
@@ -91,17 +93,17 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
         adapter.addAll(result);
         onFetchEnded();
-        paginatedFetchers.clear();
+        paginatedFetcher = null;
     }
 
     protected void onFetchCancelled() {
         onFetchEnded();
-        paginatedFetchers.clear();
+        paginatedFetcher = null;
     }
 
     protected void onFetchFailed() {
         onFetchError();
-        paginatedFetchers.clear();
+        paginatedFetcher = null;
     }
 
     private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
@@ -119,7 +121,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         return false;
     }
 
-    protected void setHasMorePages(boolean value) {
+    private void setHasMorePages(boolean value) {
         hasMorePages = value;
     }
 

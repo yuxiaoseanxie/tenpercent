@@ -42,7 +42,7 @@ import java.util.List;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
+public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener {
     private StickyListHeadersListView listView;
     private EventAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
@@ -75,15 +75,9 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         scrollPager.setEmptyView(emptyListViewControl);
         scrollPager.connectListView(listView);
 
+        scrollPager.load();
+
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        //If I use persistentApi in the on create() method, I would need to click on every single retry button
-        LiveNationApplication.get().getApiHelper().bindApi(this);
     }
 
     @Override
@@ -118,16 +112,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         intent.putExtras(args);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
     }
 
     public static class TaggedEvent extends TaggedReference<Event, Boolean> implements IdEquals<TaggedEvent> {

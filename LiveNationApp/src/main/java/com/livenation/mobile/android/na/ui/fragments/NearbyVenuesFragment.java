@@ -92,6 +92,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         pager.connectListView(listView);
 
+        pager.load();
+
         return view;
     }
 
@@ -127,9 +129,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     public void onApiServiceAttached(LiveNationApiService apiService) {
         this.lat = apiService.getApiConfig().getLat();
         this.lng = apiService.getApiConfig().getLng();
-
-        pager.reset();
-        pager.load();
     }
 
     @Override

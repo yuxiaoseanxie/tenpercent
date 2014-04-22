@@ -11,41 +11,30 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
-import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
-
-import java.util.List;
 
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
+public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener {
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
     private AllShowsScrollPager scrollPager;
@@ -72,19 +61,13 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         scrollPager.setEmptyView(emptyListViewControl);
-        
+
         listView.setEmptyView(emptyListViewControl);
         scrollPager.connectListView(listView);
 
+        scrollPager.load();
+
         return view;
-    }
-
-    @Override
-      public void onStart() {
-        super.onStart();
-
-        //If I use persistentApi in the on create() method, I would need to click on every single retry button
-        LiveNationApplication.get().getApiHelper().bindApi(this);
     }
 
     @Override
@@ -124,15 +107,5 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         intent.putExtras(args);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
     }
 }
