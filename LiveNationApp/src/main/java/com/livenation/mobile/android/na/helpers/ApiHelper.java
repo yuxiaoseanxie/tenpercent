@@ -112,8 +112,11 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     public void bindApi(ApiServiceBinder binder) {
         if (null != apiService && !isBuildingApi()) {
             binder.onApiServiceAttached(apiService);
+        } else if (isBuildingApi()) {
+            pendingBindings.add(binder);
         } else {
             pendingBindings.add(binder);
+            buildDefaultApi();
         }
     }
 

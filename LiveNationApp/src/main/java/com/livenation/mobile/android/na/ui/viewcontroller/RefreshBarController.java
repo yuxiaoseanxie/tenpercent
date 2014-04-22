@@ -17,13 +17,9 @@ public class RefreshBarController {
     private ViewPropertyAnimator animator;
     private Handler handler = new Handler();
 
-    private RefreshListener refreshListener;
+    private View.OnClickListener refreshListener;
 
-    public interface RefreshListener {
-        void onRefresh();
-    }
-
-    public RefreshBarController(View refreshView, final RefreshListener refreshListener) {
+    public RefreshBarController(View refreshView, final View.OnClickListener refreshListener) {
         this.refreshView = refreshView;
         this.animator = refreshView.animate();
         this.refreshListener = refreshListener;
@@ -33,7 +29,7 @@ public class RefreshBarController {
                     @Override
                     public void onClick(View view) {
                         hideUndoBar(false);
-                        refreshListener.onRefresh();
+                        refreshListener.onClick(view);
                     }
                 });
         hideUndoBar(true);

@@ -29,6 +29,7 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
@@ -76,6 +77,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         listView.setOnItemClickListener(this);
         listView.setOnHeaderClickListener(this);
+
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_nearby_venues_refresh_bar);
+        pager.setRefreshBarView(refreshBar);
 
         pager.load();
 

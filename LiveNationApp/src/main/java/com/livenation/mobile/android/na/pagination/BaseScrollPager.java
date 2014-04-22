@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private final ArrayAdapter<TItemType> adapter;
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
-    private boolean isFirstPage = false;
+    protected boolean isFirstPage = true;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
@@ -150,7 +151,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
             if (hasMorePages) {
                 fetch(offset, limit, new ApiService.BasicApiCallback<List<TItemType>>() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onErrorResponse(LiveNationError error) {
                         if (!isCanceled()) {
                             onFetchFailed();
                         }

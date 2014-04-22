@@ -26,6 +26,7 @@ import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.TaggedEvent;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.ArrayList;
@@ -36,7 +37,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     private StickyListHeadersListView listView;
     private RecommendationsAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
-    private EmptyListViewControl emptyListViewControl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +59,16 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         //Important: connect the listview (which set a footer) before to set the adapter
         scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
-        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        listView.setDivider(null);
+        listView.setAreHeadersSticky(false);
+
+        EmptyListViewControl emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         scrollPager.setEmptyView(emptyListViewControl);
         listView.setEmptyView(emptyListViewControl);
-        listView.setDivider(null);
-        listView.setAreHeadersSticky(false);
+
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
+        scrollPager.setRefreshBarView(refreshBar);
 
         scrollPager.load();
 

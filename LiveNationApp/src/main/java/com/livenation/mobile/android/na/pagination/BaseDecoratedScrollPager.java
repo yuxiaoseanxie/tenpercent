@@ -11,11 +11,14 @@ import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -37,6 +40,8 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     private final ViewGroup footerBugHack;
     protected ApiService.BasicApiCallback<List<TItemTypeOutput>> callback;
     protected EmptyListViewControl emptyView;
+    private RefreshBar refreshBar;
+    private RefreshBarController refreshBarController;
     private View.OnClickListener retryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -56,7 +61,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     public void connectListView(StickyListHeadersListView listView) {
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
-
     }
 
     public void connectListView(ListView listView) {
@@ -114,7 +118,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
+    public void onErrorResponse(LiveNationError error) {
         callback.onErrorResponse(error);
         if (emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
@@ -124,5 +128,18 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     public void setEmptyView(EmptyListViewControl emptyView) {
         this.emptyView = emptyView;
         this.emptyView.setRetryOnClickListener(retryClickListener);
+    }
+
+    public void setRefreshBarView(RefreshBar refreshBar) {
+        this.refreshBar = refreshBar;
+        refreshBarController = new RefreshBarController(refreshBar, retryClickListener);
+    }
+
+    @Override
+    protected void onFetchFailed() {
+        super.onFetchFailed();
+        if (!isFirstPage && refreshBarController != null) {
+            refreshBarController.showRefreshBar(true);
+        }
     }
 }
