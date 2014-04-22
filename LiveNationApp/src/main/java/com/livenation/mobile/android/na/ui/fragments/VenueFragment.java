@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -96,7 +98,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         telephone.setText(venue.getFormattedPhoneNumber());
-        OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
+        OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue);
         link.setOnClickListener(onVenueClick);
         telephone.setOnClickListener(new OnPhoneNumberClick());
 
@@ -142,15 +144,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
 
     private class OnVenueDetailClick implements View.OnClickListener {
-        private String venueId;
+        private Venue venue;
 
-        public OnVenueDetailClick(String venueId) {
-            this.venueId = venueId;
+        public OnVenueDetailClick(Venue venue) {
+            this.venue = venue;
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(getActivity(), "Herro: " + venueId, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), VenueBoxOfficeActivity.class);
+            intent.putExtras(VenueBoxOfficeActivity.getArguments(venue));
+            startActivity(intent);
         }
     }
 

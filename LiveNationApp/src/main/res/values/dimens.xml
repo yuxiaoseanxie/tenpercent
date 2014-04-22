@@ -109,6 +109,9 @@
     <dimen name="view_youtube_video_image_height">60dp</dimen>
     <dimen name="view_youtube_video_padding">10dp</dimen>
     <dimen name="view_youtube_video_title_left_margin">10dp</dimen>
+    
+    <dimen name="box_office_max_height">450dp</dimen>
+    <dimen name="box_office_min_height">150dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

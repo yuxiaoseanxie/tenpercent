@@ -74,6 +74,9 @@
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue" />
         <activity
+            android:name="com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
+        <activity
             android:name=".ui.ArtistShowsActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity" />
         <activity
