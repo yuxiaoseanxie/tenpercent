@@ -3,11 +3,11 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.Date;
 
@@ -37,7 +37,7 @@ public class MusicLibraryScannerHelper {
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(LiveNationError error) {
                 callback.onErrorResponse(error);
             }
         }, sinceDate);

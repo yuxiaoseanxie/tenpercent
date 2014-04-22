@@ -30,6 +30,7 @@
     <dimen name="ui_header_transparent_min_height">40dp</dimen>
     <dimen name="ui_header_transparent_padding_top">15dp</dimen>
     <dimen name="ui_long_text_padding">16dp</dimen>
+    <dimen name="ui_overflow_view_min_height">55dp</dimen>
     <dimen name="favorite_item_min_height">60dp</dimen>
     <dimen name="favorite_min_height">38dp</dimen>
     <dimen name="favorite_margin_left">10dp</dimen>
@@ -85,8 +86,8 @@
     <dimen name="underscore_container_height">1dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
-    <dimen name="artist_header_checkbox_margin_left">10dp</dimen>
-    <dimen name="artist_header_checkbox_margin_top">10dp</dimen>
+    <dimen name="favorite_checkbox_header_margin_left">10dp</dimen>
+    <dimen name="favorite_checkbox_header_margin_top">10dp</dimen>
     <dimen name="list_search_title_margin_left">20dp</dimen>
     <dimen name="list_search_type_margin_left">4dp</dimen>
     <dimen name="list_search_min_height">64dp</dimen>
@@ -100,6 +101,11 @@
     <dimen name="decorated_edittext_input_margin_right">48dp</dimen>
     <dimen name="decorated_edittext_hint_image_padding">5dp</dimen>
     <dimen name="decorated_edittext_clear_width">48dp</dimen>
+
+    <dimen name="view_youtube_video_image_width">106dp</dimen>
+    <dimen name="view_youtube_video_image_height">60dp</dimen>
+    <dimen name="view_youtube_video_padding">10dp</dimen>
+    <dimen name="view_youtube_video_title_left_margin">10dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

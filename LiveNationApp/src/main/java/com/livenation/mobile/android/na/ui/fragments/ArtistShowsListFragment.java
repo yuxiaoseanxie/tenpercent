@@ -1,14 +1,18 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
+import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -66,6 +70,15 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
     }
 
     //endregion
+
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Event event = adapter.getItem(position);
+        Bundle arguments = SingleEventPresenter.getAruguments(event.getId());
+        SingleEventPresenter.embedResult(arguments, event);
+        startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
+    }
 
 
     private class ScrollPager extends BaseDecoratedScrollPager<Event> {

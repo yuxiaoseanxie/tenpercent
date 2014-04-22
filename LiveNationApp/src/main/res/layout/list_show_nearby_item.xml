@@ -38,7 +38,7 @@
     <View
         android:id="@+id/list_nearby_show_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/underscore_container_height"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/list_nearby_show_date"
         android:background="@drawable/ui_underscore_background" />
