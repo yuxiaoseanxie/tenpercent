@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,7 +44,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView venueTitle;
     private TextView location;
     private TextView telephone;
-    private View link;
+    private View venueInfo;
     private EventsView shows;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
@@ -76,7 +75,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         location = (TextView) result.findViewById(R.id.venue_detail_location);
         telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
-        link = result.findViewById(R.id.venue_detail_venue_info_link);
+        venueInfo = result.findViewById(R.id.venue_detail_venue_info_link);
         favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
 
         return result;
@@ -98,8 +97,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         telephone.setText(venue.getFormattedPhoneNumber());
-        OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue);
-        link.setOnClickListener(onVenueClick);
+
+        if(venue == null || venue.getBoxOffice() == null || venue.getBoxOffice().isEmpty()) {
+            venueInfo.setVisibility(View.GONE);
+            venueInfo.setOnClickListener(null);
+        } else {
+            venueInfo.setVisibility(View.VISIBLE);
+
+            OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue);
+            venueInfo.setOnClickListener(onVenueClick);
+        }
         telephone.setOnClickListener(new OnPhoneNumberClick());
 
         double lat = Double.valueOf(venue.getLat());
