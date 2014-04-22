@@ -55,30 +55,28 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
 
     public void connectListView(StickyListHeadersListView listView) {
         listView.setOnScrollListener(this);
-        footerBugHack.addView(listLoadingView);
         listView.addFooterView(footerBugHack);
 
     }
 
     public void connectListView(ListView listView) {
         listView.setOnScrollListener(this);
-        footerBugHack.addView(listLoadingView);
         listView.addFooterView(footerBugHack);
     }
 
     @Override
     public void onFetchStarted() {
-        //footerBugHack.addView(listLoadingView);
+        footerBugHack.addView(listLoadingView);
     }
 
     @Override
     public void onFetchEnded() {
-        //footerBugHack.removeAllViews();
+        footerBugHack.removeAllViews();
     }
 
     @Override
     public void onFetchError() {
-        //footerBugHack.removeAllViews();
+        footerBugHack.removeAllViews();
         //TODO find a way to notify the user an error occurred
     }
 
