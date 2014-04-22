@@ -81,7 +81,6 @@ public class NotificationsRegistrationManager {
                 Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
 
                 RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
-                params.setDeviceId(apiService.getApiConfig().getDeviceId());
                 params.setTokens(apid, userId);
                 apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
                     @Override

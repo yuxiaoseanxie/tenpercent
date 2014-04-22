@@ -28,6 +28,9 @@ import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.provider.ProviderCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -41,7 +44,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder {
+public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder, ProviderCallback<LiveNationConfig> {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
     private StickyListHeadersListView listView;
@@ -52,12 +55,15 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem locationItem;
     private DebugItem scanItem;
 
+    private ProviderManager providerManager;
+
     @Override
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
+        providerManager = new ProviderManager();
         listView = (StickyListHeadersListView) findViewById(R.id.debug_activity_list_view);
 
         actions = new ArrayList<DebugItem>();
@@ -95,6 +101,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     protected void onResume() {
         super.onResume();
         LiveNationApplication.get().getApiHelper().persistentBindApi(DebugActivity.this);
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID);
     }
 
     @Override
@@ -108,15 +115,18 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         if (null != accessTokenItem) {
             accessTokenItem.setValue(apiService.getApiConfig().getAccessToken());
         }
-        if (null != deviceIdItem) {
-            deviceIdItem.setValue(apiService.getApiConfig().getDeviceId());
-        }
         if (null != locationItem) {
             locationItem.setValue(apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
         }
-        if (null != actionsAdapter) {
-            actionsAdapter.notifyDataSetChanged();
-        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void addInfoDebugItems() {
@@ -186,6 +196,22 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
         apiHelper.buildDefaultApi();
         NotificationsRegistrationManager.getInstance().register();
+    }
+
+    @Override
+    public void onResponse(LiveNationConfig response) {
+        if (null != deviceIdItem) {
+            deviceIdItem.setValue(response.getDeviceId());
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private static enum ScanOptions {
