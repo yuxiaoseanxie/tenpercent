@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment.TaggedEvent;
+import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.TaggedEvent;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
