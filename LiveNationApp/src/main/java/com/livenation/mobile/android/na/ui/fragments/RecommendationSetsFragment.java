@@ -66,14 +66,15 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
+        //Important: connect the listview (which set a footer) before to set the adapter
+        scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        scrollPager.setEmptyView(emptyListViewControl);
         listView.setEmptyView(emptyListViewControl);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-        scrollPager.setEmptyView(emptyListViewControl);
-        scrollPager.connectListView(listView);
 
         scrollPager.load();
 

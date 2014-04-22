@@ -76,6 +76,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
         listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
+
+        //Important: connect the listview (which set a footer) before to set the adapter
+        pager.connectListView(listView);
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
@@ -89,8 +92,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         listView.setOnItemClickListener(this);
         listView.setOnHeaderClickListener(this);
-
-        pager.connectListView(listView);
 
         pager.load();
 
