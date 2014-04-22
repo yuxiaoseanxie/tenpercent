@@ -100,6 +100,19 @@
     <string name="share_template_venue">Check out upcoming shows at $VENUE on Live Nation! $LINK</string>
     <string name="share_template_artist">Check out upcoming shows from $ARTIST on Live Nation! $LINK</string>
 
+    <string name="box_office_tab_transit">Parking &amp; Transit</string>
+    <string name="box_office_tab_general">Box Office</string>
+
+    <string name="box_office_directions">Directions</string>
+    <string name="box_office_parking_info">Parking Info</string>
+    <string name="box_office_public_transit_info">Public Transit Info</string>
+
+    <string name="box_office_general_info">General Info</string>
+    <string name="box_office_misc_info">Misc</string>
+    <string name="box_office_will_call_info">Will Call</string>
+    <string name="box_office_general_rules">General Rules</string>
+    <string name="box_office_child_rules">Child Rules</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>

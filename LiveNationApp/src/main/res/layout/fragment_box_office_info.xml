@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         style="@style/ui_long_text"
         android:background="@null"
+        android:autoLink="all"
         android:text="@string/mock_artist_bio" />
 
 </ScrollView>

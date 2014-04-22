@@ -3,12 +3,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,15 +39,15 @@ public class BoxOfficeInfoFragment extends Fragment {
 
         this.itemsToStrings = new HashMap<String, String>();
 
-        itemsToStrings.put("directions", "Directions");
-        itemsToStrings.put("parking_info", "Parking Info");
-        itemsToStrings.put("public_transit_info", "Public Transit Info");
+        itemsToStrings.put("directions", getString(R.string.box_office_directions));
+        itemsToStrings.put("parking_info", getString(R.string.box_office_parking_info));
+        itemsToStrings.put("public_transit_info", getString(R.string.box_office_public_transit_info));
 
-        itemsToStrings.put("general_info", "General Info");
-        itemsToStrings.put("misc_info", "Misc");
-        itemsToStrings.put("will_call_info", "Will Call");
-        itemsToStrings.put("general_rules", "General Rules");
-        itemsToStrings.put("child_rules", "Child Rules");
+        itemsToStrings.put("general_info", getString(R.string.box_office_general_info));
+        itemsToStrings.put("misc_info", getString(R.string.box_office_misc_info));
+        itemsToStrings.put("will_call_info", getString(R.string.box_office_will_call_info));
+        itemsToStrings.put("general_rules", getString(R.string.box_office_general_rules));
+        itemsToStrings.put("child_rules", getString(R.string.box_office_child_rules));
     }
 
     @Override
@@ -105,21 +99,6 @@ public class BoxOfficeInfoFragment extends Fragment {
             content += "<br><br>\n";
         }
 
-        text.setText(linkifyHtml(content, Linkify.ALL));
-    }
-
-    public static Spannable linkifyHtml(String html, int linkifyMask) {
-        Spanned text = Html.fromHtml(html);
-        URLSpan[] currentSpans = text.getSpans(0, text.length(), URLSpan.class);
-
-        SpannableString buffer = new SpannableString(text);
-        Linkify.addLinks(buffer, linkifyMask);
-
-        for (URLSpan span : currentSpans) {
-            int end = text.getSpanEnd(span);
-            int start = text.getSpanStart(span);
-            buffer.setSpan(span, start, end, 0);
-        }
-        return buffer;
+        text.setText(Html.fromHtml(content));
     }
 }

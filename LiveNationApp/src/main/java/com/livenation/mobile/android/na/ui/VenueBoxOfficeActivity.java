@@ -6,16 +6,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.ui.fragments.BoxOfficeInfoFragment;
-import com.livenation.mobile.android.na.ui.support.BoxOfficeMappings;
+import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-
-import java.util.HashMap;
 
 public class VenueBoxOfficeActivity extends FragmentActivity {
     private SlidingTabLayout tabs;
@@ -58,7 +55,7 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
         public FragmentAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
 
-            this.items = new String[] { "Parking & Transit", "Box Office" };
+            this.items = new String[] { getString(R.string.box_office_tab_transit), getString(R.string.box_office_tab_general) };
         }
 
         @Override
@@ -73,8 +70,8 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            BoxOfficeMappings mapping = BoxOfficeMappings.values()[position];
-            return BoxOfficeInfoFragment.newInstance(boxOfficeInfo, mapping.getItems());
+            BoxOfficeTabs mapping = BoxOfficeTabs.values()[position];
+            return BoxOfficeInfoFragment.newInstance(boxOfficeInfo, mapping.getFields());
         }
     }
 }
