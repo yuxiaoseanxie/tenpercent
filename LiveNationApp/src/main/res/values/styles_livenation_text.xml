@@ -101,9 +101,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ticketbar_text" parent="@style/livenation_app_text">
+    <style name="ticketbar_find_text" parent="@style/livenation_app_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
+    </style>
+
+    <style name="ticketbar_options_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
     </style>
 
@@ -187,5 +192,11 @@
 
     <style name="decorated_edittext_hint_text" parent="@style/livenation_app_text">
         <item name="android:textColor">@color/decorated_edittext_hint_text_color</item>
+    </style>
+
+    <style name="dialog_title" parent="@style/livenation_app_text">
+        <item name="android:textColor">@color/ui_header1_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>
