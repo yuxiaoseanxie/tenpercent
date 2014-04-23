@@ -115,7 +115,7 @@ public class BoxOfficeTabFragment extends Fragment {
             if(value == null)
                 continue;
 
-            content += "<h3>" + itemsToStrings.get(item) + "</h3><br>\n";
+            content += "<h3>" + itemsToStrings.get(item) + "</h3>\n";
             content += value.replace("\n", "<br>\n");
             content += "<br><br>\n";
         }
