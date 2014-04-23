@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class BoxOfficeTabFragment extends Fragment {
 
     private ScrollView scrollView;
     private TextView text;
+    private int textScrollY;
 
     public static BoxOfficeTabFragment newInstance(BoxOffice boxOfficeInfo, String[] displayedItems) {
         BoxOfficeTabFragment fragment = new BoxOfficeTabFragment();
@@ -61,7 +63,23 @@ public class BoxOfficeTabFragment extends Fragment {
         this.text = (TextView) view.findViewById(R.id.fragment_box_office_info_text);
         render();
 
+        if (textScrollY != 0) {
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.scrollTo(0, textScrollY);
+                }
+            });
+        }
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        textScrollY = scrollView.getScrollY();
     }
 
     //endregion
@@ -97,7 +115,7 @@ public class BoxOfficeTabFragment extends Fragment {
             if(value == null)
                 continue;
 
-            content += "<b>" + itemsToStrings.get(item) + "</b><br>\n";
+            content += "<h3>" + itemsToStrings.get(item) + "</h3><br>\n";
             content += value.replace("\n", "<br>\n");
             content += "<br><br>\n";
         }
