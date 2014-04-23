@@ -48,6 +48,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
+    private LatLng mapLocationCache = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,25 +120,25 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         if (map != null) {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setAllGesturesEnabled(false);
+            if (null != mapLocationCache) {
+                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
+            }
         } else {
             //TODO: Possible No Google play services installed
         }
 
     }
 
-    ;
-
     private void setMapLocation(double lat, double lng) {
+        mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
 
-        LatLng latLng = new LatLng(lat, lng);
-
         MarkerOptions marker = new MarkerOptions();
-        marker.position(latLng);
+        marker.position(mapLocationCache);
 
         map.clear();
         map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
 
 
