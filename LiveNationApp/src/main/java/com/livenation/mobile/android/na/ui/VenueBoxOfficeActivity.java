@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
-import com.livenation.mobile.android.na.ui.fragments.BoxOfficeTabFragment;
+import com.livenation.mobile.android.na.ui.fragments.VenueBoxOfficeTabFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -69,7 +69,7 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             BoxOfficeTabs mapping = BoxOfficeTabs.values()[position];
-            return BoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getFields());
+            return VenueBoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getSections());
         }
     }
 }
