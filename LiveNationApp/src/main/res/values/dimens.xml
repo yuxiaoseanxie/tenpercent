@@ -112,6 +112,10 @@
 
     <!-- Refresh bar -->
     <dimen name="view_refresh_bar_margin">28dp</dimen>
+    <dimen name="view_refresh_bar_padding">8dp</dimen>
+    <dimen name="view_refresh_bar_separator_margin">8dp</dimen>
+    <dimen name="view_refresh_bar_message_size">16sp</dimen>
+    <dimen name="view_refresh_bar_refresh_size">13sp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

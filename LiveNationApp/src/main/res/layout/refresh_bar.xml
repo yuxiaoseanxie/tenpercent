@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/holo_red_dark"
-    android:id="@+id/refreshbar_rootview">
+    android:background="@drawable/refresh_bar_background"
+    android:padding="@dimen/view_refresh_bar_padding"
+    android:gravity="center">
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_weight="1">
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="@string/refresh_bar_message"
+        android:fontFamily="sans-serif-light"
+        android:textSize="@dimen/view_refresh_bar_message_size"
+        />
+    </RelativeLayout>
     <View
-        android:layout_height="60dip"
-        android:layout_width="60dip"
-        android:background="@android:color/holo_red_light"/>
+        android:layout_width="@dimen/ui_underscore_height"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/view_refresh_bar_separator_margin"
+        android:background="@color/refresh_bar_separator"/>
+
     <Button
         android:id="@+id/refreshbar_button"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Click"/>
+        android:textAllCaps="true"
+        android:text="@string/refresh_label"
+        android:background="@android:color/transparent"
+        android:textColor="@color/white"
+        android:drawableLeft="@drawable/refresh_white"
+        android:fontFamily="sans-serif-light-bold"
+        android:textSize="@dimen/view_refresh_bar_refresh_size"
+        android:drawablePadding="@dimen/view_refresh_bar_separator_margin"/>
 
 </LinearLayout>

@@ -81,6 +81,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     @Override
     public void onFetchError() {
         footerBugHack.removeAllViews();
+        if (!isFirstPage && refreshBarController != null) {
+            refreshBarController.showRefreshBar(false);
+        }
         //TODO find a way to notify the user an error occurred
     }
 
@@ -133,13 +136,5 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     public void setRefreshBarView(RefreshBar refreshBar) {
         this.refreshBar = refreshBar;
         refreshBarController = new RefreshBarController(refreshBar, retryClickListener);
-    }
-
-    @Override
-    protected void onFetchFailed() {
-        super.onFetchFailed();
-        if (!isFirstPage && refreshBarController != null) {
-            refreshBarController.showRefreshBar(true);
-        }
     }
 }

@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.R;
  * Created by elodieferrais on 4/22/14.
  */
 public class RefreshBarController {
-    private static final int HIDE_DELAY = 3000;
+    private static final int HIDE_DELAY = 10000;
     private View refreshView;
     private ViewPropertyAnimator animator;
     private Handler handler = new Handler();
