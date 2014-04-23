@@ -19,6 +19,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -27,13 +29,14 @@ import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.Tagge
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener {
+public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
     private StickyListHeadersListView listView;
     private RecommendationsAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
@@ -44,7 +47,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
         adapter = new RecommendationsAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
-
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
         setRetainInstance(true);
 
     }
@@ -70,8 +73,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
 
-        scrollPager.load();
-
         return view;
     }
 
@@ -79,6 +80,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -107,5 +109,15 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         intent.putExtras(args);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        scrollPager.reset();
+        scrollPager.load();
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
     }
 }
