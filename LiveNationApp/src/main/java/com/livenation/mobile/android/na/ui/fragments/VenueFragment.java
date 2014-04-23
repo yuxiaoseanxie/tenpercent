@@ -25,10 +25,12 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 import java.util.List;
@@ -45,6 +47,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private EventsView shows;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
+    private FavoriteCheckBox favoriteCheckBox;
+    private LatLng mapLocationCache = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         location = (TextView) result.findViewById(R.id.venue_detail_location);
         telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
         link = result.findViewById(R.id.venue_detail_venue_info_link);
+        favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
 
         return result;
     }
@@ -100,6 +105,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         double lng = Double.valueOf(venue.getLng());
         setMapLocation(lat, lng);
 
+        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter());
     }
 
     @Override
@@ -114,25 +120,25 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         if (map != null) {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setAllGesturesEnabled(false);
+            if (null != mapLocationCache) {
+                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
+            }
         } else {
             //TODO: Possible No Google play services installed
         }
 
     }
 
-    ;
-
     private void setMapLocation(double lat, double lng) {
+        mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
 
-        LatLng latLng = new LatLng(lat, lng);
-
         MarkerOptions marker = new MarkerOptions();
-        marker.position(latLng);
+        marker.position(mapLocationCache);
 
         map.clear();
         map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
 
 

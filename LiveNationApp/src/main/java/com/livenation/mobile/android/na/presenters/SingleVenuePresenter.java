@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -13,6 +12,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 public class SingleVenuePresenter extends
         BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
@@ -94,7 +94,7 @@ public class SingleVenuePresenter extends
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
+        public void onErrorResponse(LiveNationError error) {
             notifyFailed(FAILURE_API_GENERAL);
         }
     }

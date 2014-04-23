@@ -35,7 +35,7 @@
     <View
         android:id="@+id/view_show_bottom_line"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/underscore_container_height"
         android:layout_alignLeft="@id/view_show_title"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/view_show_date"

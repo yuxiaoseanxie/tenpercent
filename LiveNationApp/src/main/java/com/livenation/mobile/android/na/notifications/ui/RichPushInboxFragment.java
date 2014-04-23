@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.urbanairship.richpush.RichPushMessage;
 
@@ -28,7 +28,7 @@ import java.util.Locale;
  */
 public class RichPushInboxFragment extends BaseInboxFragment {
 
-    private static final SimpleDateFormat INCOMING_FORMAT = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
+    private static final SimpleDateFormat INCOMING_FORMAT = new SimpleDateFormat(DataModelHelper.LOCAL_START_TIME_FORMAT, Locale.US);
     private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
     private static final SimpleDateFormat LONG_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd' at 'h:mm a", Locale.US);
 

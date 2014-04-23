@@ -40,3 +40,15 @@ Copy and paste the following variable names and update paths and passwords.
 	LNKeyPassword= ...
 
 It will then be possible to build and run the project.
+
+
+Running UIAutomator tests
+=========================
+
+Experimental: UIAutomator tests can be run from the root of the app folder (adr-appLiveNation/) via the command line, eg:
+
+./gradlew uiRun
+
+Will run the UIAutomator tests specified by the 'UiAutomator/build.gradle' file
+
+

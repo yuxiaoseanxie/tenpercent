@@ -20,6 +20,7 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -42,6 +43,8 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -107,6 +110,12 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
+
+        //Start and setup the library
+        LivenationLib.start();
+        LivenationLib.setErrorTracker(new LibraryErrorTracker());
+
+        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
         setupNotifications();
         setupTicketing();
