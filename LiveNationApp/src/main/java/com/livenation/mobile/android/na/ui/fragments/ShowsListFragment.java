@@ -21,6 +21,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -29,12 +31,13 @@ import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener {
+public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder{
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
     private AllShowsScrollPager scrollPager;
@@ -46,6 +49,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new AllShowsScrollPager(adapter);
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
 
     }
 
@@ -66,8 +70,6 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
         listView.setEmptyView(emptyListViewControl);
 
-        scrollPager.load();
-
         return view;
     }
 
@@ -75,6 +77,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -108,5 +111,16 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         intent.putExtras(args);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        scrollPager.reset();
+        scrollPager.load();
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 }

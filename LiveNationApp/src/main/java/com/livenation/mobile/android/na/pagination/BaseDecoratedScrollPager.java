@@ -7,15 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -81,7 +79,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     @Override
-    public void fetch(final int offset,final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
+    public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
         this.callback = callback;
         if (emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.LOADING);
@@ -101,7 +99,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         });
     }
 
-    protected abstract void fetch(LiveNationApiService apiService, final int offset,final int limit, ApiService.BasicApiCallback<List<TItemTypeOutput>> callback);
+    protected abstract void fetch(LiveNationApiService apiService, final int offset, final int limit, ApiService.BasicApiCallback<List<TItemTypeOutput>> callback);
 
     @Override
     public void onResponse(TItemTypeInput response) {
@@ -114,15 +112,24 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
+    public void onErrorResponse(LiveNationError error) {
         callback.onErrorResponse(error);
         if (emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
         }
     }
 
-    public void setEmptyView(EmptyListViewControl emptyView) {
+    public void setEmptyView(final EmptyListViewControl emptyView) {
         this.emptyView = emptyView;
         this.emptyView.setRetryOnClickListener(retryClickListener);
+        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {}
+
+            @Override
+            public void onApiServiceNotAvailable() {
+                emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            }
+        });
     }
 }

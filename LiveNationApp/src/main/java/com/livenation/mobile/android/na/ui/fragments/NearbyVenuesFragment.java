@@ -20,6 +20,8 @@ import android.widget.ListView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -29,6 +31,7 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
@@ -36,7 +39,7 @@ import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener {
+public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
 
     private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
@@ -50,7 +53,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         adapter = new EventVenueAdapter(getActivity());
         pager = new NearbyVenuesScrollPager(adapter);
-
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
         setRetainInstance(true);
     }
 
@@ -77,8 +80,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         listView.setOnItemClickListener(this);
         listView.setOnHeaderClickListener(this);
 
-        pager.load();
-
         return view;
     }
 
@@ -86,6 +87,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     public void onDestroy() {
         super.onDestroyView();
         pager.stop();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
     @Override
@@ -136,5 +138,16 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         intent.putExtras(args);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        pager.reset();
+        pager.load();
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 }
