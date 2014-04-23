@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
@@ -29,10 +32,14 @@ import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.PhoneUtils;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -98,15 +105,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         telephone.setText(venue.getFormattedPhoneNumber());
 
-        if (venue == null || venue.getBoxOffice() == null || venue.getBoxOffice().isEmpty()) {
-            venueInfo.setVisibility(View.GONE);
-            venueInfo.setOnClickListener(null);
+        if(venue.getBoxOffice() == null) {
+            loadBoxOfficeInfo(venue.getNumericId());
         } else {
-            venueInfo.setVisibility(View.VISIBLE);
-
-            OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue);
-            venueInfo.setOnClickListener(onVenueClick);
+            displayBoxOfficeInfo(venue);
         }
+
         telephone.setOnClickListener(new OnPhoneNumberClick());
 
         double lat = Double.valueOf(venue.getLat());
@@ -135,6 +139,39 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     ;
+
+    private void loadBoxOfficeInfo(final long venueId) {
+        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                SingleVenueParameters parameters = new SingleVenueParameters();
+                parameters.setVenueId(venueId);
+                apiService.getSingleVenue(parameters, new ApiService.BasicApiCallback<Venue>() {
+                    @Override
+                    public void onResponse(Venue fullVenue) {
+                        displayBoxOfficeInfo(fullVenue);
+                    }
+
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        Log.e(getClass().getName(), "Could not load box office info. " + error);
+                    }
+                });
+            }
+        });
+    }
+
+    private void displayBoxOfficeInfo(Venue venue) {
+        if (venue.getBoxOffice() == null || venue.getBoxOffice().isEmpty()) {
+            venueInfo.setVisibility(View.GONE);
+            venueInfo.setOnClickListener(null);
+        } else {
+            venueInfo.setVisibility(View.VISIBLE);
+
+            OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue);
+            venueInfo.setOnClickListener(onVenueClick);
+        }
+    }
 
     private void setMapLocation(double lat, double lng) {
         if (null == map) return;
