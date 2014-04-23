@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
-import com.livenation.mobile.android.na.ui.fragments.BoxOfficeInfoFragment;
+import com.livenation.mobile.android.na.ui.fragments.BoxOfficeTabFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -49,7 +49,7 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
     //endregion
 
 
-    private class FragmentAdapter extends FragmentPagerAdapter {
+    private class FragmentAdapter extends FragmentStatePagerAdapter {
         private final String[] items;
 
         public FragmentAdapter(FragmentManager fragmentManager) {
@@ -71,7 +71,7 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             BoxOfficeTabs mapping = BoxOfficeTabs.values()[position];
-            return BoxOfficeInfoFragment.newInstance(boxOfficeInfo, mapping.getFields());
+            return BoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getFields());
         }
     }
 }

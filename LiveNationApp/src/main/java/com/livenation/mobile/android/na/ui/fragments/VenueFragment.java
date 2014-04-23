@@ -98,7 +98,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         telephone.setText(venue.getFormattedPhoneNumber());
 
-        if(venue == null || venue.getBoxOffice() == null || venue.getBoxOffice().isEmpty()) {
+        if (venue == null || venue.getBoxOffice() == null || venue.getBoxOffice().isEmpty()) {
             venueInfo.setVisibility(View.GONE);
             venueInfo.setOnClickListener(null);
         } else {
