@@ -109,6 +109,7 @@ public class BoxOfficeTabFragment extends Fragment {
     private void render() {
         Map<String, String> values = getBoxOfficeInfo().getValues();
 
+        final String sectionTerminator = "<br><br>\n";
         String content = "";
         for (String item : getDisplayedItems()) {
             String value = values.get(item);
@@ -117,8 +118,11 @@ public class BoxOfficeTabFragment extends Fragment {
 
             content += "<h3>" + itemsToStrings.get(item) + "</h3>\n";
             content += value.replace("\n", "<br>\n");
-            content += "<br><br>\n";
+            content += sectionTerminator;
         }
+
+        if(text.length() > 0)
+            content = content.substring(0, content.length() - sectionTerminator.length());
 
         text.setText(Html.fromHtml(content));
     }
