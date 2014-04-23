@@ -36,12 +36,13 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
         setContentView(R.layout.activity_venue_box_office);
 
         this.pager = (ViewPager) findViewById(R.id.activity_venue_box_pager);
-        pager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
+        pager.setAdapter(new TabFragmentAdapter(getSupportFragmentManager()));
 
         this.tabs = (SlidingTabLayout) findViewById(R.id.activity_venue_box_office_tabs);
         tabs.setViewPager(pager);
-        tabs.setBottomBorderColor(0xffe11d39);
-        tabs.setSelectedIndicatorColors(0xffe11d39);
+        int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
+        tabs.setBottomBorderColor(tabAccentColor);
+        tabs.setSelectedIndicatorColors(tabAccentColor);
 
         this.boxOfficeInfo = (BoxOffice) getIntent().getSerializableExtra(EXTRA_BOX_OFFICE);
     }
@@ -49,8 +50,8 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
     //endregion
 
 
-    private class FragmentAdapter extends FragmentStatePagerAdapter {
-        public FragmentAdapter(FragmentManager fragmentManager) {
+    private class TabFragmentAdapter extends FragmentStatePagerAdapter {
+        public TabFragmentAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
 
