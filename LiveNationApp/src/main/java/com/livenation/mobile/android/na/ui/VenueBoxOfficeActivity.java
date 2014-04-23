@@ -50,22 +50,19 @@ public class VenueBoxOfficeActivity extends FragmentActivity {
 
 
     private class FragmentAdapter extends FragmentStatePagerAdapter {
-        private final String[] items;
-
         public FragmentAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
-
-            this.items = new String[] { getString(R.string.box_office_tab_transit), getString(R.string.box_office_tab_general) };
         }
 
         @Override
         public int getCount() {
-            return items.length;
+            return BoxOfficeTabs.values().length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return items[position];
+            BoxOfficeTabs mapping = BoxOfficeTabs.values()[position];
+            return getString(mapping.getTitleResId());
         }
 
         @Override
