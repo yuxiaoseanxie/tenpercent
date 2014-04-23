@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="@dimen/ui_ticket_offering_padding_left">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/underscore"/>
+        </shape>
+    </item>
+</layer-list>

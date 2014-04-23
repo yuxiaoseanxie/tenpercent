@@ -13,7 +13,6 @@ repositories {
     maven { url 'http://download.crashlytics.com/maven' }
 }
 
-
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.1"
@@ -26,9 +25,27 @@ android {
     }
 
     signingConfigs {
-        def LNStorePassword = LNStorePassword != null ?: "livenationlabs"
-        def LNKeyAlias = LNKeyAlias != null ?: "livenationlabs"
-        def LNKeyPassword = LNKeyPassword != null ?: "livenationlabs"
+
+        def mLNStorePassword
+        def mLNKeyAlias
+        def mLNKeyPassword
+
+        if (!project.hasProperty('LNStorePassword')) {
+            mLNStorePassword = "default"
+        } else {
+            mLNStorePassword = LNStorePassword
+        }
+
+        if (!project.hasProperty('LNKeyAlias')) {
+            mLNKeyAlias = "default"
+        } else {
+            mLNKeyAlias = LNKeyAlias
+        }
+        if (!project.hasProperty('LNKeyPassword')) {
+            mLNKeyPassword = "default"
+        } else {
+            mLNKeyPassword = LNKeyPassword
+        }
 
 
         debug {
@@ -37,9 +54,9 @@ android {
 
         release {
             storeFile file(LNReleaseStoreFile)
-            storePassword LNStorePassword
-            keyAlias LNKeyAlias
-            keyPassword LNKeyPassword
+            storePassword mLNStorePassword
+            keyAlias mLNKeyAlias
+            keyPassword mLNKeyPassword
         }
     }
 

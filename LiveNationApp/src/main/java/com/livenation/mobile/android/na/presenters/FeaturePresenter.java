@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -12,7 +11,7 @@ import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
-
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
+        public void onErrorResponse(LiveNationError error) {
             notifyFailed(FAILURE_API_GENERAL);
         }
 
