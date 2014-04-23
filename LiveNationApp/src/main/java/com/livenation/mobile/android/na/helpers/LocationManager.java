@@ -6,6 +6,8 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -20,11 +22,15 @@ public class LocationManager implements LocationProvider {
 
     private final UserLocationProvider userLocationProvider = new UserLocationProvider();
     private final LocationProvider systemLocationProvider = new SystemLocationProvider();
-    LocationProvider locationProvider;
+
+    private final LocationHistoryManager locationHistory;
+
+    private LocationProvider locationProvider;
 
     public LocationManager(Context context) {
         int locationMode = readLocationMode(context);
         applyLocationMode(locationMode);
+        locationHistory = new LocationHistoryManager(context);
     }
 
     @Override
@@ -53,6 +59,14 @@ public class LocationManager implements LocationProvider {
     public void reverseGeocodeCity(final double lat, final double lng, final Context context, final GetCityCallback callback) {
         ReverseGeocode task = new ReverseGeocode(context, callback);
         task.execute(lat, lng);
+    }
+
+    public void addLocationHistory(City city, Context context) {
+        locationHistory.addLocationHistory(city, context);
+    }
+
+    public List<City> getLocationHistory() {
+        return locationHistory.getLocationHistory();
     }
 
     private void applyLocationMode(int mode) {

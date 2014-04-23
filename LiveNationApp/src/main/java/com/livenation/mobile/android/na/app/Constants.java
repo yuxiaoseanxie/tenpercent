@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.app;
 public class Constants {
 
     public static final int DEFAULT_RADIUS = 50;
+    public static float METERS_IN_A_MILE = 1609.34f;
 
     public static enum Environment {
         Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),

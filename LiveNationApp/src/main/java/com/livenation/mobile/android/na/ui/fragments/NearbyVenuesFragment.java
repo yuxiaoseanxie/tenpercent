@@ -26,6 +26,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
@@ -44,12 +45,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -58,7 +55,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
-    private static float METERS_IN_A_MILE = 1609.34f;
     private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
     private EventVenueAdapter adapter;
@@ -241,7 +237,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
                 double venueLat = Double.valueOf(event.getVenue().getLat());
                 double venueLng = Double.valueOf(event.getVenue().getLng());
                 Location.distanceBetween(lat, lng, venueLat, venueLng, result);
-                float miles = result[0] / METERS_IN_A_MILE;
+                float miles = result[0] / Constants.METERS_IN_A_MILE;
                 distance.setText(String.format("%.1f mi", miles));
             } else {
                 distance.setVisibility(View.GONE);

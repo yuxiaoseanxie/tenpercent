@@ -24,8 +24,6 @@ public class LocationActivity extends LiveNationFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        getActionBar().setDisplayShowCustomEnabled(true);
-        getActionBar().setCustomView(R.layout.actionbar_location_custom);
         fragment = (LocationFragment) getSupportFragmentManager().findFragmentByTag("location");
     }
 
@@ -39,8 +37,7 @@ public class LocationActivity extends LiveNationFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home_search_item:
-                Intent intent = new Intent(this, CitySearchActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_CITY_SEARCH);
+                startCitySearchActivity();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -48,14 +45,20 @@ public class LocationActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case REQUEST_CODE_CITY_SEARCH:
-                City city = (City) data.getSerializableExtra(CitySearchFragment.DATA_RESULT_KEY);
-                fragment.setCity(city);
+                if (resultCode == Activity.RESULT_OK) {
+                    City city = (City) data.getSerializableExtra(CitySearchFragment.DATA_RESULT_KEY);
+                    fragment.setConfiguredLocation(city);
+                }
                 break;
             default:
 
         }
+    }
+
+    private void startCitySearchActivity() {
+        Intent intent = new Intent(this, CitySearchActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_CITY_SEARCH);
     }
 }
