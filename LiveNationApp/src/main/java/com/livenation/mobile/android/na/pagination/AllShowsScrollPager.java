@@ -25,6 +25,6 @@ public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Ev
         params.setPage(offset, limit);
         params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
         params.setSortMethod("start_time");
-        apiService.getEvents(params, AllShowsScrollPager.this);
+        apiService.getEvents(params, callback);
     }
 }

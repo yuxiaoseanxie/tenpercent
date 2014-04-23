@@ -9,6 +9,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,12 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
     }
 
     @Override
-    protected void fetch(LiveNationApiService apiService, int offset, int limit, ApiService.BasicApiCallback callback) {
+    protected void fetch(final LiveNationApiService apiService, int offset, int limit, final ApiService.BasicApiCallback callback) {
         ArtistEventsParameters params = new ArtistEventsParameters();
         params.setPage(offset, limit);
-        apiService.getArtistEvents(params, ArtistShowsScrollPager.this);
-    }
-
-    @Override
-    public void onResponse(final List<Event> response) {
-        //TODO remove that. Should be able to access location without binding the API
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        apiService.getArtistEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
+            public void onResponse(List<Event> response) {
                 double lat = apiService.getApiConfig().getLat();
                 double lng = apiService.getApiConfig().getLng();
                 ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
@@ -42,10 +37,12 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
-                //emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            public void onErrorResponse(LiveNationError error) {
+                callback.onErrorResponse(error);
             }
         });
     }
+
+
 }
 
