@@ -34,7 +34,7 @@ public class CitySearchActivity extends FragmentActivity implements TextWatcher 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
-        View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);
+        View view = getLayoutInflater().inflate(R.layout.view_city_search_actionbar, null);
         getActionBar().setCustomView(view);
 
         DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);

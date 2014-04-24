@@ -89,6 +89,8 @@
     <string name="recommendations_title_popular">Popular shows</string>
 
     <string name="search_input_hint">Search Artists and Venues</string>
+    <string name="city_search_input_hint">Search cities by name</string>
+
     <string name="view_empty_list_retry_button">Retry</string>
 
     <string name="youtube_video_play">Play Video</string>

@@ -25,7 +25,6 @@
         android:drawableLeft="@drawable/edittext_search"
         android:drawablePadding="@dimen/decorated_edittext_hint_image_padding"
         android:focusable="false"
-        android:text="@string/search_input_hint"
         android:textAppearance="@style/decorated_edittext_hint_text" />
 
     <ImageButton
