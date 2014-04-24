@@ -93,7 +93,6 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
     public void onResponse(List<City> response) {
         adapter.clear();
         adapter.addAll(response);
-        adapter.notifyDataSetChanged();
     }
 
     public class SearchAdapter extends ArrayAdapter<City> {
