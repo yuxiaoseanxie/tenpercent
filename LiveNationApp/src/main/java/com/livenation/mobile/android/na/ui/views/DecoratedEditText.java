@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 
@@ -25,24 +27,25 @@ import com.livenation.mobile.android.na.R;
  */
 public class DecoratedEditText extends LinearLayout implements TextWatcher {
     private EditText editText;
-    private View hint;
+    private TextView hint;
     private ImageButton clear;
 
     public DecoratedEditText(Context context) {
         super(context);
-        initializeView(context);
+        initializeView(context, null);
     }
 
     ;
 
     public DecoratedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initializeView(context);
+        initializeView(context, attrs);
+
     }
 
     public DecoratedEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initializeView(context);
+        initializeView(context, attrs);
     }
 
     @Override
@@ -93,13 +96,21 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
         }
     }
 
-    private void initializeView(Context context) {
+    private void initializeView(Context context, AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.view_decorated_edittext, this, false);
 
         editText = (EditText) view.findViewById(android.R.id.edit);
         clear = (ImageButton) view.findViewById(android.R.id.button1);
-        hint = view.findViewById(android.R.id.hint);
+        hint = (TextView) view.findViewById(android.R.id.hint);
+
+        if (null != attrs) {
+            TypedArray a = context.obtainStyledAttributes(attrs,
+                    R.styleable.DecoratedEditText, 0, 0);
+            String hintText = a.getString(R.styleable.DecoratedEditText_hint);
+            hint.setText(hintText);
+            a.recycle();
+        }
 
         editText.addTextChangedListener(this);
         if (TextUtils.isEmpty(editText.getText())) {

@@ -44,6 +44,7 @@
     <string name="activity_label_artist">Artist</string>
     <string name="activity_label_favorites">Favorites</string>
     <string name="activity_label_venue">Venue</string>
+    <string name="activity_label_location">Your Location</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
@@ -56,11 +57,15 @@
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
 
-    <string name="location_automatic_location_text">Automatic location</string>
-    <string name="location_manual_location_text">Allow me to specify my location</string>
-    <string name="location_description_text">Manage your location here. Your location is used for shows nearby.</string>
-    <string name="location_overlay_automatic">Automatic location</string>
-    <string name="location_overlay_manual">Tap to change location</string>
+    <string name="location_no_location_set">No location set</string>
+    <string name="location_current">Currently Set Location</string>
+    <string name="location_previous_locations">Previous Locations</string>
+    <string name="location_youre_nearby">You\'re Nearby</string>
+    <string name="location_mode_automatic">Automatic location</string>
+    <string name="location_mode_manual">Manual location</string>
+    <string name="location_switch">Use Current Location</string>
+    <string name="location_unknown">Unknown</string>
+    <string name="location_miles_away">%.1f mi away</string>
 
     <string name="login_connect_or_create">Connect or Create Account</string>
     <string name="login_facebook_button">Facebook</string>
@@ -80,13 +85,12 @@
     <string name="debug_item_environment">Environment</string>
     <string name="debug_item_scan">Scan: %s artist(s)</string>
 
-    <string name="location_control_switch">Automatic Location</string>
-    <string name="location_done_button">Done</string>
-
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
 
     <string name="search_input_hint">Search Artists and Venues</string>
+    <string name="city_search_input_hint">Search cities by name</string>
+
     <string name="view_empty_list_retry_button">Retry</string>
 
     <string name="youtube_video_play">Play Video</string>
