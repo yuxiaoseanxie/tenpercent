@@ -228,6 +228,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
     private class LocationAdapter extends ArrayAdapter<City> {
         private final LayoutInflater inflater;
+        private final String MILES_AWAY = getString(R.string.location_miles_away);
 
         private LocationAdapter(Context context, int resource, List<City> objects) {
             super(context, resource, objects);
@@ -252,7 +253,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 float[] result = new float[1];
                 Location.distanceBetween(actualLocation.getLat(), actualLocation.getLng(), city.getLat(), city.getLng(), result);
                 float miles = result[0] / Constants.METERS_IN_A_MILE;
-                holder.getText2().setText(String.format("%.1f mi away", miles));
+                holder.getText2().setText(String.format(MILES_AWAY, miles));
 
             } else {
                 holder.getText2().setText("");

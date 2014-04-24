@@ -61,11 +61,11 @@
     <string name="location_current">Currently Set Location</string>
     <string name="location_previous_locations">Previous Locations</string>
     <string name="location_youre_nearby">You\'re Nearby</string>
-    <string name="location_mi_away">mi away</string>
     <string name="location_mode_automatic">Automatic location</string>
     <string name="location_mode_manual">Manual location</string>
     <string name="location_switch">Use Current Location</string>
     <string name="location_unknown">Unknown</string>
+    <string name="location_miles_away">%.1f mi away</string>
 
     <string name="login_connect_or_create">Connect or Create Account</string>
     <string name="login_facebook_button">Facebook</string>
