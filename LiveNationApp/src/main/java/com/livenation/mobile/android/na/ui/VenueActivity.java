@@ -37,6 +37,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
             getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
         }
 
+        getActionBar().setHomeButtonEnabled(true);
+
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
     }

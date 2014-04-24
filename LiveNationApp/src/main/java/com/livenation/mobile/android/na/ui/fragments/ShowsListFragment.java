@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
@@ -25,34 +24,34 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-import java.util.List;
-
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder {
+public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder{
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
-    private ScrollPager scrollPager;
+    private AllShowsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
-        scrollPager = new ScrollPager(adapter);
+        scrollPager = new AllShowsScrollPager(adapter);
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+
     }
 
     @Override
@@ -62,24 +61,26 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
         listView.setOnItemClickListener(ShowsListFragment.this);
+        //Important: connect the listview (which set a footer) before to set the adapter
+        scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        scrollPager.setEmptyView(emptyListViewControl);
+
         listView.setEmptyView(emptyListViewControl);
-        scrollPager.connectListView(listView);
+
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
+        scrollPager.setRefreshBarView(refreshBar);
 
         return view;
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        scrollPager.stop();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        scrollPager.stop();
         LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
     }
 
@@ -122,42 +123,8 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         scrollPager.load();
     }
 
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
-
-        private ScrollPager(ArrayAdapter<Event> adapter) {
-            super(30, adapter);
-        }
-
-        @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            FetchRequest request = new EventsFetchRequest(offset, limit, callback);
-            return request;
-        }
-
-        private class EventsFetchRequest extends FetchRequest<Event> implements EventsView {
-
-            private EventsFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
-
-            @Override
-            public void run() {
-                Bundle args = getEventsPresenter().getArgs(getOffset(), getLimit());
-                getEventsPresenter().initialize(getActivity(), args, this);
-            }
-
-            @Override
-            public void setEvents(List<Event> events) {
-                getFetchResultHandler().deliverResult(events);
-                if (events.size() == 0) {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                }
-            }
-
-            @Override
-            public void cancel() {
-                getEventsPresenter().cancel(this);
-            }
-        }
+    @Override
+    public void onApiServiceNotAvailable() {
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 }

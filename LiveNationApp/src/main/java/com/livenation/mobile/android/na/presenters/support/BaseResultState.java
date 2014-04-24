@@ -41,6 +41,11 @@ public abstract class BaseResultState<TResult extends Serializable, TView extend
         }
     }
 
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
     public LiveNationApiService getApiService() {
         return apiService;
     }

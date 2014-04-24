@@ -85,6 +85,11 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         SearchResult searchResult = adapter.getItem(position);
 
