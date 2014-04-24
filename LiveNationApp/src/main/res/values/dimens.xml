@@ -97,6 +97,8 @@
     <dimen name="list_search_checkbox_margin_left">5dp</dimen>
     <dimen name="list_search_type_min_width">54dp</dimen>
     <dimen name="list_search_type_min_height">26dp</dimen>
+    <dimen name="list_search_city_item_margin_left">15dp</dimen>
+    <dimen name="list_search_city_item_drawable_padding">15dp</dimen>
     <dimen name="view_search_actionbar_input_margin_bottom">2dp</dimen>
     <dimen name="view_search_actionbar_input_margin_right">5dp</dimen>
     <dimen name="view_search_actionbar_input_margin_left">5dp</dimen>

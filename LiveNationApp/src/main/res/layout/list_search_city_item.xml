@@ -15,8 +15,8 @@
         android:drawableLeft="@drawable/your_location_pin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:drawablePadding="15dp"
+        android:layout_marginLeft="@dimen/list_search_city_item_margin_left"
+        android:drawablePadding="@dimen/list_search_city_item_drawable_padding"
         android:textAppearance="@style/list_previous_location_text_primary"
         android:text="@string/mock_artist_type" />
 
