@@ -76,6 +76,11 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void onErrorResponse(LiveNationError error) {
 
     }
