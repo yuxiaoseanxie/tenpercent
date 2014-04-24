@@ -248,7 +248,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             ViewHolder holder = (ViewHolder) view.getTag();
             holder.getText1().setText(city.getName());
 
-            if (actualLocation != null && (city.getLat() != null && city.getLng() != null)) {
+            if (actualLocation != null) {
                 float[] result = new float[1];
                 Location.distanceBetween(actualLocation.getLat(), actualLocation.getLng(), city.getLat(), city.getLng(), result);
                 float miles = result[0] / Constants.METERS_IN_A_MILE;
