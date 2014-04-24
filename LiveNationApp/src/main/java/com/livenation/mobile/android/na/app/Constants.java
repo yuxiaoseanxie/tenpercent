@@ -48,4 +48,8 @@ public class Constants {
         public static final String DEVICE_UUID = "device_uuid";
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
     }
+
+    public class Receiver {
+        public static final String LOCATION_UPDATE_INTENT_FILTER = "location_update_intent_filter";
+    }
 }

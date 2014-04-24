@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,13 +24,14 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
-import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
+import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
+import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
-import com.livenation.mobile.android.platform.init.provider.ProviderCallback;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 import com.urbanairship.push.PushManager;
@@ -44,7 +47,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder, ProviderCallback<LiveNationConfig> {
+public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
     private StickyListHeadersListView listView;
@@ -56,6 +59,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem scanItem;
 
     private ProviderManager providerManager;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
 
     @Override
     @SuppressWarnings("unchecked")
@@ -76,6 +80,8 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
     }
 
     @Override
@@ -101,7 +107,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     protected void onResume() {
         super.onResume();
         LiveNationApplication.get().getApiHelper().persistentBindApi(DebugActivity.this);
-        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID);
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID, ProviderManager.ProviderType.LOCATION);
     }
 
     @Override
@@ -111,12 +117,15 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationUpdateReceiver);
+    }
+
+    @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         if (null != accessTokenItem) {
             accessTokenItem.setValue(apiService.getApiConfig().getAccessToken());
-        }
-        if (null != locationItem) {
-            locationItem.setValue(apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
         }
 
         runOnUiThread(new Runnable() {
@@ -202,6 +211,30 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     public void onResponse(LiveNationConfig response) {
         if (null != deviceIdItem) {
             deviceIdItem.setValue(response.getDeviceId());
+        }
+
+        if (null != locationItem) {
+            locationItem.setValue(response.getLat() + "," + response.getLng());
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {
+    }
+
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        if (null != locationItem) {
+            locationItem.setValue(lat + "," + lng);
         }
 
         runOnUiThread(new Runnable() {

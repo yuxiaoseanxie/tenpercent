@@ -16,9 +16,7 @@ import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
@@ -29,7 +27,10 @@ import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
 import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 
 import io.segment.android.models.Props;
 
@@ -43,11 +44,6 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         if (null != state) {
             applyInstanceState(state);
         }
-    }
-
-    @Override
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
     }
 
     @Override
@@ -137,16 +133,22 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 
 
     public void trackScreenWithLocation(final String screenName, final Props props) {
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.getProviderManager().getConfigReadyFor(new ConfigCallback() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
+            public void onResponse(LiveNationConfig response) {
                 Props properties = props;
                 if (properties == null) {
                     properties = new Props();
                 }
-                properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
+                properties.put("Location", response.getLat() + "," + response.getLng());
                 LiveNationAnalytics.screen(screenName, properties);
             }
-        });
+
+            @Override
+            public void onErrorResponse(int errorCode) {
+
+            }
+        }, ProviderManager.ProviderType.LOCATION);
+
     }
 }

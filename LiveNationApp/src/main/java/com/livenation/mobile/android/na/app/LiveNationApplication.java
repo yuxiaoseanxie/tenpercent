@@ -11,17 +11,13 @@ package com.livenation.mobile.android.na.app;
 import android.app.Application;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
-import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
-import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
@@ -31,6 +27,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
+import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
@@ -43,8 +40,12 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
-import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -56,7 +57,6 @@ import io.segment.android.models.Props;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
-    private LocationManager locationManager;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
@@ -72,6 +72,8 @@ public class LiveNationApplication extends Application {
     private InboxStatusPresenter inboxStatusPresenter;
     private RecommendationsPresenter recommendationsPresenter;
     private RecommendationSetsPresenter recommendationSetsPresenter;
+    private static LocationManager locationProvider;
+    private static ProviderManager providerManager = new ProviderManager();;
 
     private ApiHelper apiHelper;
 
@@ -83,15 +85,14 @@ public class LiveNationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
-        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this));
+        locationProvider = new LocationManager(this);
+        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this), locationProvider);
         Crashlytics.start(this);
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
 
         apiHelper = new ApiHelper(ssoManager, getApplicationContext());
-
-        locationManager = new LocationManager(getApplicationContext());
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
@@ -155,11 +156,6 @@ public class LiveNationApplication extends Application {
             props.put(application.getPackageName(), isInstalled);
             LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, props);
         }
-    }
-
-
-    public LocationManager getLocationManager() {
-        return locationManager;
     }
 
     public ImageLoader getImageLoader() {
@@ -226,4 +222,11 @@ public class LiveNationApplication extends Application {
         return apiHelper;
     }
 
+    public static LocationManager getLocationProvider() {
+        return locationProvider;
+    }
+
+    public static ProviderManager getProviderManager() {
+        return providerManager;
+    }
 }

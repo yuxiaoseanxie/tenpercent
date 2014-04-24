@@ -87,7 +87,6 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
             if (null == params) {
                 params = new RecommendationParameters();
             }
-            params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);
             getApiService().getRecommendations(params, RecommendationsState.this);
         }

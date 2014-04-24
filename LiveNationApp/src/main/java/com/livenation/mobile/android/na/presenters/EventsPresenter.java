@@ -90,7 +90,6 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
             if (null == params) {
                 params = new EventParameters();
             }
-            params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setSortMethod("start_time");
             getApiService().getEvents(params, EventsState.this);
         }

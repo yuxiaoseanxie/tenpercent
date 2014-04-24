@@ -55,10 +55,6 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
         listener.onStateFailed(failureCode, this);
     }
 
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
-    }
-
     public interface StateListener<T1 extends BaseState> {
         void onNewState(T1 state);
 

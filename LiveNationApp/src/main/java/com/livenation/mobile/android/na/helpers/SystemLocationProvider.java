@@ -2,9 +2,9 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 
-import com.android.volley.VolleyError;
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 
 /**
@@ -16,31 +16,35 @@ public class SystemLocationProvider implements LocationProvider {
     private final LocationProvider dummy = new DummyLocationProvider();
 
     @Override
-    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
-        playServices.getLocation(context, new LocationProxy(callback, playServices, context));
+    public void getLocation(ProviderCallback<Double[]> callback) {
+        playServices.getLocation(new LocationProxy(callback, playServices, LiveNationApplication.get().getApplicationContext()));
     }
 
     private void onProviderFailed(LocationProxy locationProxy) {
         LocationProvider provider = locationProxy.getLocationProvider();
         if (provider == playServices) {
             Context context = locationProxy.getContext();
-            ApiService.BasicApiCallback<Double[]> callback = locationProxy.getCallback();
-            device.getLocation(context, new LocationProxy(callback, device, context));
+            ProviderCallback<Double[]> callback = locationProxy.getCallback();
+            device.getLocation(new LocationProxy(callback, device, context));
         }
 
         if (provider == device) {
             Context context = locationProxy.getContext();
-            ApiService.BasicApiCallback<Double[]> callback = locationProxy.getCallback();
-            dummy.getLocation(context, new LocationProxy(callback, dummy, context));
+            ProviderCallback<Double[]> callback = locationProxy.getCallback();
+            dummy.getLocation(new LocationProxy(callback, dummy, context));
+        }
+
+        if (provider == dummy) {
+            locationProxy.getCallback().onErrorResponse();
         }
     }
 
-    private class LocationProxy implements ApiService.BasicApiCallback<Double[]> {
-        private final ApiService.BasicApiCallback<Double[]> callback;
+    private class LocationProxy implements ProviderCallback<Double[]> {
+        private final ProviderCallback<Double[]> callback;
         private final LocationProvider locationProvider;
         private final Context context;
 
-        private LocationProxy(ApiService.BasicApiCallback<Double[]> callback, LocationProvider locationProvider, Context context) {
+        private LocationProxy(ProviderCallback<Double[]> callback, LocationProvider locationProvider, Context context) {
             this.callback = callback;
             this.locationProvider = locationProvider;
             this.context = context;
@@ -52,7 +56,7 @@ public class SystemLocationProvider implements LocationProvider {
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
+        public void onErrorResponse() {
             onProviderFailed(LocationProxy.this);
         }
 
@@ -64,7 +68,7 @@ public class SystemLocationProvider implements LocationProvider {
             return context;
         }
 
-        public ApiService.BasicApiCallback<Double[]> getCallback() {
+        public ProviderCallback<Double[]> getCallback() {
             return callback;
         }
     }

@@ -92,7 +92,6 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
             if (null == params) {
                 params = new RecommendationSetsParameters();
             }
-            params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             params.setRadius(Constants.DEFAULT_RADIUS);
             getApiService().getRecommendationSets(params, RecommendationSetsState.this);
         }

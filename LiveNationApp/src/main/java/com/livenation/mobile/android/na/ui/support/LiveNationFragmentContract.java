@@ -22,7 +22,6 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public interface LiveNationFragmentContract {
-    LocationManager getLocationManager();
 
     ImageLoader getImageLoader();
 

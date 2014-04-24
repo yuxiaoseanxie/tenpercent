@@ -51,7 +51,7 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 
         @Override
         public void retrieveResult() {
-            retrieveCharts(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
+            retrieveCharts();
         }
 
         @Override
@@ -59,9 +59,8 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
             return INTENT_DATA_KEY;
         }
 
-        private void retrieveCharts(double lat, double lng) {
+        private void retrieveCharts() {
             TopChartParameters params = new TopChartParameters();
-            params.setLocation(lat, lng);
             getApiService().getTopCharts(params, FeatureState.this);
         }
 

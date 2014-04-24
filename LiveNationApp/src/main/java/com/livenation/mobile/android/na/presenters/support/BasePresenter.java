@@ -67,10 +67,6 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
         return activeStates;
     }
 
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
-    }
-
     public String getTag() {
         return this.getClass().getSimpleName();
     }

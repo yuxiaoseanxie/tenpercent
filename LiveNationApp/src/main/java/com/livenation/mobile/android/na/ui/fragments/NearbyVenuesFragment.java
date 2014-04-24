@@ -10,9 +10,11 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,38 +27,37 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.VenuesView;
+import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
+public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
     private static float METERS_IN_A_MILE = 1609.34f;
     private StickyListHeadersListView listView;
@@ -65,6 +66,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     private Double lat;
     private Double lng;
     private ScrollPager pager;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         adapter = new EventVenueAdapter(getActivity());
         pager = new ScrollPager(adapter);
 
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
 
         setRetainInstance(true);
     }
@@ -98,6 +100,9 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         pager.connectListView(listView);
 
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
+
         return view;
     }
 
@@ -108,9 +113,12 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+    public void onDestroyView() {
+        super.onDestroyView();
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
+
+
     }
 
     @Override
@@ -125,14 +133,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         if (null != listState) {
             listView.getWrappedList().onRestoreInstanceState(listState);
         }
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.lat = apiService.getApiConfig().getLat();
-        this.lng = apiService.getApiConfig().getLng();
-
-        init();
     }
 
     @Override
@@ -178,6 +178,23 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
     private void deinit() {
         pager.stop();
+    }
+
+    //Get config for starting the screen
+    @Override
+    public void onResponse(LiveNationConfig response) {
+        this.lat = response.getLat();
+        this.lng = response.getLng();
+        init();
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {}
+
+    //Location update
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        init();
     }
 
     private class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter {

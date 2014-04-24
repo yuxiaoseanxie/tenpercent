@@ -135,10 +135,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<ApiSsoProvider> ssoProvider = new SsoProviderConfig();
         ssoProvider.setResult(ssoProviderObject);
 
-        ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
-        ApiBuilderElement<Double[]> location = new LocationConfig(appContext);
-
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(deviceId, ssoProvider, location);
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(ssoProvider);
         apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
 
         Activity activity = ssoManager.getActivity();
@@ -148,73 +145,6 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         return apiBuilder;
-    }
-
-    private class GetDeviceId extends ApiBuilderElement<String> {
-        private final Context appContext;
-        private final String PREFS_DEVICE_UUID = "device_uuid";
-
-        private GetDeviceId(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            new Thread(new GetAdvertisingId()).start();
-        }
-
-        private class GetAdvertisingId implements Runnable {
-            @Override
-            public void run() {
-                AdvertisingIdClient.Info adInfo = null;
-                try {
-                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(appContext);
-                    final String id = adInfo.getId();
-                    setResult(id);
-
-                } catch (Exception e) {
-                    //Getting the Google Play Services Advertising ID Failed.
-                    //Retrieve a UUID from preferences
-                    SharedPreferences prefs = appContext.getSharedPreferences(Constants.SharedPreferences.DEVICE_UUID, Context.MODE_PRIVATE);
-                    String uuid = prefs.getString(PREFS_DEVICE_UUID, null);
-                    if (TextUtils.isEmpty(uuid)) {
-                        //no existing UUID, generate and save a new one.
-                        uuid = UUID.randomUUID().toString();
-                        //store new UUID
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(PREFS_DEVICE_UUID, uuid);
-                        editor.apply();
-                    }
-                    setResult(uuid);
-                }
-                notifyReady();
-            }
-        }
-    }
-
-    private class LocationConfig extends ApiBuilderElement<Double[]> implements ApiService.BasicApiCallback<Double[]> {
-        private final Context appContext;
-
-        private LocationConfig(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            LiveNationApplication.get().getLocationManager().getLocation(appContext, this);
-        }
-
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(0, "");
-        }
-
-        @Override
-        public void onResponse(Double[] response) {
-            setResult(response);
-            notifyReady();
-        }
     }
 
     private class SsoTokenListener implements ApiBuilderElement.ConfigListener {

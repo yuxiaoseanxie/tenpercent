@@ -8,9 +8,12 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +23,27 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
+import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
-public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
+public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private Fragment profileFragment;
     private TextView locationText;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +52,10 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.fragment_account, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_account, container, false);
 
+        //Views and click listeners
         OnOrdersClick ordersClick = new OnOrdersClick();
         result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
 
@@ -61,26 +70,25 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
         locationText = (TextView) result.findViewById(R.id.account_footer_location_detail);
 
+        //Get location for update the screen
+        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+        //Register for being notify when the location change
+        registerBroadcastReceiverForUpdate();
+
         return result;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+    private void registerBroadcastReceiverForUpdate() {
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
-    }
 
     @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        Logger.log("Accounts", "API binded");
-        getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
-        getLocationManager().reverseGeocodeCity(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng(), getActivity(), this);
+    public void onDestroyView() {
+        super.onDestroyView();
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
     }
 
     @Override
@@ -108,6 +116,26 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     public void onGetCityFailure() {
         locationText.setText("Geocode failed!");
     }
+
+    //Get location for display data
+
+    @Override
+    public void onResponse(LiveNationConfig response) {
+        getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
+        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(), getActivity(), this);
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {}
+
+    //Location update
+
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        LiveNationApplication.getLocationProvider().reverseGeocodeCity(lat, lng, getActivity(), this);
+    }
+
+    //Click listener
 
     private class OnOrdersClick implements View.OnClickListener {
         @Override

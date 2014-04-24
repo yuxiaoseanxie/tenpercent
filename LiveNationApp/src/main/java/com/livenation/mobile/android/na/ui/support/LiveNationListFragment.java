@@ -33,11 +33,6 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
     }
 
     @Override
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
-    }
-
-    @Override
     public ImageLoader getImageLoader() {
         return LiveNationApplication.get().getImageLoader();
     }

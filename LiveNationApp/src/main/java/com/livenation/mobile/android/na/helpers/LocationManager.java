@@ -1,12 +1,17 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.io.IOException;
@@ -22,7 +27,7 @@ public class LocationManager implements LocationProvider {
     public static final String LOCATION_MODE = "location_mode";
 
     private final UserLocationProvider userLocationProvider = new UserLocationProvider();
-    private final LocationProvider systemLocationProvider = new SystemLocationProvider();
+    private final SystemLocationProvider systemLocationProvider = new SystemLocationProvider();
     LocationProvider locationProvider;
 
     public LocationManager(Context context) {
@@ -31,14 +36,20 @@ public class LocationManager implements LocationProvider {
     }
 
     @Override
-    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
+    public void getLocation(ProviderCallback<Double[]> callback) {
         if (null == locationProvider) throw new IllegalStateException();
-        locationProvider.getLocation(context, callback);
+        locationProvider.getLocation(callback);
     }
 
     public void setLocationMode(int mode, Context context) {
         saveLocationMode(mode, context);
         applyLocationMode(mode);
+        sendBroadcastForLocation();
+    }
+
+    public void setUserLocation(double lat, double lng, Context context) {
+        userLocationProvider.setLocation(lat, lng, context);
+        sendBroadcastForLocation();
     }
 
     public LocationProvider getSystemLocationProvider() {
@@ -126,5 +137,26 @@ public class LocationManager implements LocationProvider {
                 callback.onGetCityFailure();
             }
         }
+    }
+
+    private void sendBroadcastForLocation() {
+        final Intent intent = new Intent(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER);
+        locationProvider.getLocation(new ProviderCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                int mode = MODE_USER;;
+                if (locationProvider instanceof SystemLocationProvider) {
+                    mode = MODE_SYSTEM;
+                }
+                intent.putExtra(LocationUpdateReceiver.EXTRA_MODE_KEY, mode);
+                intent.putExtra(LocationUpdateReceiver.EXTRA_LAT_KEY, response[0]);
+                intent.putExtra(LocationUpdateReceiver.EXTRA_LNG_KEY, response[1]);
+                LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).sendBroadcast(intent);
+            }
+
+            @Override
+            public void onErrorResponse() {}
+        });
+
     }
 }

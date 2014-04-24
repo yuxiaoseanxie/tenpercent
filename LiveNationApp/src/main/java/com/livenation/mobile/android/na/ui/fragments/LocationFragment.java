@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,8 +22,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 /**
  * Created by cchilton on 3/12/14.
@@ -35,6 +33,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
     private GoogleMap map;
     private ActionMode actionMode;
     private LatLng locationCache;
+    private LocationManager locationManager;
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -67,7 +66,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
             setMapEnabled(false);
 
             if (null != locationCache) {
-                getLocationManager().getUserLocationProvider().setLocation(locationCache.latitude, locationCache.longitude, getActivity());
+                locationManager.setUserLocation(locationCache.latitude, locationCache.longitude, getActivity());
                 setMapMarker(locationCache.latitude, locationCache.longitude, true);
             }
 
@@ -83,9 +82,9 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
             ;
         }
     };
-    private ApiService.BasicApiCallback<Double[]> configuredLocationCallback = new ApiService.BasicApiCallback<Double[]>() {
+    private ProviderCallback<Double[]> configuredLocationCallback = new ProviderCallback<Double[]>() {
         @Override
-        public void onErrorResponse(VolleyError error) {
+        public void onErrorResponse() {
         }
 
         @Override
@@ -96,7 +95,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
             }
         }
     };
-    private ApiService.BasicApiCallback<Double[]> initialUserLocationCallback = new ApiService.BasicApiCallback<Double[]>() {
+    private ProviderCallback<Double[]> initialUserLocationCallback = new ProviderCallback<Double[]>() {
         @Override
         public void onResponse(Double[] response) {
             locationCache = new LatLng(response[0], response[1]);
@@ -106,10 +105,8 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            if (error.networkResponse.statusCode == ErrorDictionary.ERROR_NO_USER_LOCATION_SET) {
-                getLocationManager().getSystemLocationProvider().getLocation(getActivity(), this);
-            }
+        public void onErrorResponse() {
+            LiveNationApplication.get().getLocationProvider().getSystemLocationProvider().getLocation(this);
         }
     };
     private FrameLayout mapContainer;
@@ -121,7 +118,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
             switch (i) {
                 case R.id.fragment_location_automatic_radio:
-                    getLocationManager().setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
+                    LiveNationApplication.get().getLocationProvider().setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
                     if (null != actionMode) {
                         actionMode.finish();
                     }
@@ -129,7 +126,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
                     mapContainerForeground.addView(overlayAutomaticLocation);
                     break;
                 case R.id.fragment_location_manual_radio:
-                    getLocationManager().setLocationMode(LocationManager.MODE_USER, getActivity());
+                    LiveNationApplication.get().getLocationProvider().setLocationMode(LocationManager.MODE_USER, getActivity());
                     mapContainerForeground.removeAllViews();
                     mapContainerForeground.addView(overlayTapToChange);
                     break;
@@ -147,9 +144,10 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
         super.onCreate(savedInstanceState);
         mapFragment = new LiveNationMapFragment();
         mapFragment.setMapReadyListener(this);
+        locationManager = LiveNationApplication.get().getLocationProvider();
 
         addFragment(R.id.fragment_location_map_container, mapFragment, "location_map");
-        getLocationManager().getUserLocationProvider().getLocation(getActivity(), initialUserLocationCallback);
+        locationManager.getLocation(initialUserLocationCallback);
     }
 
     @Override
@@ -168,7 +166,7 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
 
         RadioButton manualRadio = (RadioButton) view.findViewById(R.id.fragment_location_manual_radio);
         RadioButton autoRadio = (RadioButton) view.findViewById(R.id.fragment_location_automatic_radio);
-        switch (getLocationManager().getLocationMode(getActivity())) {
+        switch (locationManager.getLocationMode(getActivity())) {
             case LocationManager.MODE_USER:
                 manualRadio.setChecked(true);
                 break;
@@ -231,6 +229,6 @@ public class LocationFragment extends LiveNationFragment implements LiveNationMa
     }
 
     private void centerMapWithConfiguredLocation() {
-        getLocationManager().getLocation(getActivity(), configuredLocationCallback);
+        locationManager.getLocation(configuredLocationCallback);
     }
 }

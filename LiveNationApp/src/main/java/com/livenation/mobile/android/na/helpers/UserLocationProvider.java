@@ -3,9 +3,9 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 /**
  * Created by cchilton on 3/13/14.
@@ -15,12 +15,12 @@ public class UserLocationProvider implements LocationProvider {
     private static final String KEY_LNG = "lng";
 
     @Override
-    public void getLocation(Context context, ApiService.BasicApiCallback<Double[]> callback) {
+    public void getLocation(ProviderCallback<Double[]> callback) {
         PersistenceProvider<String> prefs = new PreferencePersistence("user_location");
-        String latValue = prefs.read(KEY_LAT, context);
-        String lngValue = prefs.read(KEY_LNG, context);
+        String latValue = prefs.read(KEY_LAT, LiveNationApplication.get().getApplicationContext());
+        String lngValue = prefs.read(KEY_LNG, LiveNationApplication.get().getApplicationContext());
         if (TextUtils.isEmpty(latValue) || TextUtils.isEmpty(lngValue)) {
-            callback.onErrorResponse(ErrorDictionary.getError(ErrorDictionary.ERROR_NO_USER_LOCATION_SET));
+            callback.onErrorResponse();
         } else {
             callback.onResponse(new Double[]{ Double.valueOf(latValue), Double.valueOf(lngValue)});
         }

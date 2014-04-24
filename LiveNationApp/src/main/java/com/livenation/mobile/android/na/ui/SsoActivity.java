@@ -14,6 +14,7 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiService.BasicApiCallback<User>, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
     public static final String ARG_PROVIDER_ID = "provider_id";
@@ -60,7 +61,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
+    public void onErrorResponse(LiveNationError error) {
     }
 
     @Override

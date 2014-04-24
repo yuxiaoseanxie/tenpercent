@@ -92,7 +92,6 @@ public class NearbyVenuesPresenter extends
 
         @Override
         public void retrieveResult() {
-            params.setLocation(getApiService().getApiConfig().getLat(), getApiService().getApiConfig().getLng());
             getApiService().getNearbyVenuesWithEvents(params, VenuesState.this);
         }
 
