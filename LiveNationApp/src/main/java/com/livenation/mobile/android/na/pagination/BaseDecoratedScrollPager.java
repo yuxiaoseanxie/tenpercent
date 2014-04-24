@@ -42,7 +42,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     private View.OnClickListener retryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setBlocked(false);
             load();
         }
     };
