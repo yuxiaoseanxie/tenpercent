@@ -72,14 +72,15 @@
             android:launchMode="singleTop" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
-            android:label="@string/activity_label_venue" />
+            android:label="@string/activity_label_venue"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"/>
         <activity
             android:name=".ui.ArtistShowsActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ArtistActivity" />
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
             android:label="@string/activity_label_artist"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity" />
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
             android:label="@string/activity_label_favorites" />
