@@ -270,8 +270,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             //add the location to our "location history" list
             LiveNationApplication.get().getLocationManager().reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
                 @Override
-                public void onGetCity(String cityName) {
-                    City city = new City(cityName, lat, lng);
+                public void onGetCity(City city) {
                     LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
                 }
 

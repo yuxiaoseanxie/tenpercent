@@ -56,9 +56,9 @@ public class LocationManager implements LocationProvider {
         return userLocationProvider;
     }
 
-    public void reverseGeocodeCity(final double lat, final double lng, final Context context, final GetCityCallback callback) {
-        ReverseGeocode task = new ReverseGeocode(context, callback);
-        task.execute(lat, lng);
+    public void reverseGeocodeCity(double lat, double lng, Context context, GetCityCallback callback) {
+        ReverseGeocode task = new ReverseGeocode(context, lat, lng, callback);
+        task.execute();
     }
 
     public void addLocationHistory(City city, Context context) {
@@ -102,25 +102,27 @@ public class LocationManager implements LocationProvider {
     }
 
     public static interface GetCityCallback {
-        void onGetCity(String city);
+        void onGetCity(City city);
 
         void onGetCityFailure();
     }
 
-    private class ReverseGeocode extends AsyncTask<Double, Void, String> {
+    private class ReverseGeocode extends AsyncTask<Void, Void, String> {
         private final Context context;
         private final GetCityCallback callback;
+        private final double lat;
+        private final double lng;
 
-        private ReverseGeocode(Context context, GetCityCallback callback) {
+        private ReverseGeocode(Context context, double lat, double lng, GetCityCallback callback) {
             this.context = context;
             this.callback = callback;
+            this.lat = lat;
+            this.lng = lng;
         }
 
         @Override
-        protected String doInBackground(Double... params) {
+        protected String doInBackground(Void... params) {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            double lat = params[0];
-            double lng = params[1];
 
             try {
                 List<Address> matches = geocoder.getFromLocation(lat, lng, 1);
@@ -136,7 +138,8 @@ public class LocationManager implements LocationProvider {
         @Override
         protected void onPostExecute(String value) {
             if (null != value) {
-                callback.onGetCity(value);
+                City city = new City(value, lat, lng);
+                callback.onGetCity(city);
             } else {
                 callback.onGetCityFailure();
             }

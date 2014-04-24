@@ -62,8 +62,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 //we now have our actual location, lets get a name for it.
                 locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
                     @Override
-                    public void onGetCity(String label) {
-                        actualLocation = new City(label, lat, lng);
+                    public void onGetCity(City city) {
+                        actualLocation = city;
                         adapter.notifyDataSetChanged();
                     }
 
@@ -122,8 +122,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 final double lng = apiService.getApiConfig().getLng();
                 locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
                     @Override
-                    public void onGetCity(String city) {
-                        City apiLocation = new City(city, lat, lng);
+                    public void onGetCity(City apiLocation) {
                         showActiveLocation(apiLocation);
                     }
 
