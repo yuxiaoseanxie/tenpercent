@@ -30,6 +30,7 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -69,6 +70,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
         scrollPager.setEmptyView(emptyListViewControl);
 
         listView.setEmptyView(emptyListViewControl);
+
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
+        scrollPager.setRefreshBarView(refreshBar);
 
         return view;
     }

@@ -19,8 +19,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private final ArrayAdapter<TItemType> adapter;
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
-    private boolean isFirstPage = false;
-    private boolean blocked;
+    protected boolean isFirstPage = true;
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
         this.limit = limit;
@@ -28,8 +27,6 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (blocked) return;
-
         if ((totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
@@ -106,10 +103,6 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     protected void onFetchFailed() {
         onFetchError();
         paginatedFetcher = null;
-    }
-
-    protected void setBlocked(boolean blocked) {
-        this.blocked = blocked;
     }
 
     public ArrayAdapter<TItemType> getAdapter() {
