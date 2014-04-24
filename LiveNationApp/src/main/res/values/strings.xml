@@ -65,6 +65,7 @@
     <string name="location_mode_automatic">Automatic location</string>
     <string name="location_mode_manual">Manual location</string>
     <string name="location_switch">Use Current Location</string>
+    <string name="location_unknown">Unknown</string>
 
     <string name="login_connect_or_create">Connect or Create Account</string>
     <string name="login_facebook_button">Facebook</string>

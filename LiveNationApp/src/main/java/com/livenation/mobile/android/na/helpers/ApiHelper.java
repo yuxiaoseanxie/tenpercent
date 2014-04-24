@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.livenation.mobile.android.na.BuildConfig;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -276,7 +277,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
                 @Override
                 public void onGetCityFailure() {
-                    String label = String.format("%s, %s", lat, lng);
+                    String label = appContext.getString(R.string.location_unknown);
                     City city = new City(label, lat, lng);
                     LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
                 }
