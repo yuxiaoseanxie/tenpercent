@@ -114,5 +114,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     }
 
     @Override
-    public void onApiServiceNotAvailable() {}
+    public void onApiServiceNotAvailable() {
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+    }
 }

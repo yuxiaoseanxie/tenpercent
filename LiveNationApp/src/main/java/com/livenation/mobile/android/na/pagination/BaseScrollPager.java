@@ -20,7 +20,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
     private boolean isFirstPage = false;
-
+    private boolean blocked;
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
         this.limit = limit;
@@ -28,6 +28,8 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (blocked) return;
+
         if ((totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
@@ -71,6 +73,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     public void onNoMorePages() {
         onFetchEnded();
+        paginatedFetcher = null;
     }
 
     protected void onFetchResult(List<TItemType> result) {
@@ -105,6 +108,14 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         paginatedFetcher = null;
     }
 
+    protected void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public ArrayAdapter<TItemType> getAdapter() {
+        return adapter;
+    }
+
     private boolean hasItemAlreadyBeenFetched(List<? extends TItemType> newFetch) {
         if (null == lastFetch) return false;
         if (newFetch.size() == 0) return false;
@@ -136,7 +147,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     //Paginated Fetcher
 
-    private class PaginatedFetcher implements Runnable {
+    private class PaginatedFetcher implements Runnable, ApiService.BasicApiCallback<List<TItemType>> {
         private final int offset;
         private final int limit;
         private boolean isCanceled = false;
@@ -149,23 +160,23 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         @Override
         public void run() {
             if (hasMorePages) {
-                fetch(offset, limit, new ApiService.BasicApiCallback<List<TItemType>>() {
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-                        if (!isCanceled()) {
-                            onFetchFailed();
-                        }
-                    }
-
-                    @Override
-                    public void onResponse(List<TItemType> response) {
-                        if (!isCanceled()) {
-                            onFetchResult(response);
-                        }
-                    }
-                });
+                fetch(offset, limit, this);
             } else {
                 onNoMorePages();
+            }
+        }
+
+        @Override
+        public void onResponse(List<TItemType> response) {
+            if (!isCanceled()) {
+                onFetchResult(response);
+            }
+        }
+
+        @Override
+        public void onErrorResponse(LiveNationError error) {
+            if (!isCanceled()) {
+                onFetchFailed();
             }
         }
 

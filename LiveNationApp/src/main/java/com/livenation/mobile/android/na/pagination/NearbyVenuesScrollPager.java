@@ -13,6 +13,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Dat
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.NearbyVenuesWithEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -44,21 +45,27 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
     }
 
     @Override
-    protected void fetch(LiveNationApiService apiService, int offset, int limit, ApiService.BasicApiCallback callback) {
+    protected void fetch(LiveNationApiService apiService, int offset, int limit, final ApiService.BasicApiCallback callback) {
         NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
         params.setMinimumNumberOfEvents(2);
         params.setPage(offset, limit);
         params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-        apiService.getNearbyVenuesWithEvents(params, NearbyVenuesScrollPager.this);
+        apiService.getNearbyVenuesWithEvents(params, new ApiService.BasicApiCallback<List<Venue>>() {
+            @Override
+            public void onResponse(List<Venue> response) {
+                NearbyVenuesScrollPager.this.offset += response.size();
+                List<Event> transformed = DataModelHelper.flattenVenueEvents(response);
+                callback.onResponse(transformed);
+                if (response.size() == 0 && emptyView != null) {
+                    emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                callback.onErrorResponse(error);
+            }
+        });
     }
 
-    @Override
-    public void onResponse(List<Venue> response) {
-        NearbyVenuesScrollPager.this.offset += response.size();
-        List<Event> transformed = DataModelHelper.flattenVenueEvents(response);
-        callback.onResponse(transformed);
-        if (response.size() == 0 && emptyView != null) {
-            emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-        }
-    }
 }
