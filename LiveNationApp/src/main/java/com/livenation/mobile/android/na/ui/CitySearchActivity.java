@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
@@ -17,9 +18,6 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class CitySearchActivity extends FragmentActivity implements TextWatcher {
-    //The delay to wait for next keystroke before sending user text to the API
-    //This number is made up, but feels right
-    private static int TEXT_CHANGED_POST_DELAY = 667;
     private SearchForText fragment;
     private EditText input;
     private Handler limiter = new Handler() {
@@ -58,6 +56,6 @@ public class CitySearchActivity extends FragmentActivity implements TextWatcher 
     public void afterTextChanged(final Editable editable) {
         //Buffer user keypresses within Xmilliseconds so that we don't hit the API on every keystroke
         limiter.removeMessages(0);
-        limiter.sendEmptyMessageDelayed(0, TEXT_CHANGED_POST_DELAY);
+        limiter.sendEmptyMessageDelayed(0, Constants.TEXT_CHANGED_POST_DELAY);
     }
 }
