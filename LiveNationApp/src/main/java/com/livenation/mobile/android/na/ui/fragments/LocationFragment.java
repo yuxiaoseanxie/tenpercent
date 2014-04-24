@@ -21,6 +21,7 @@ import com.livenation.mobile.android.na.helpers.LocationProvider;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         setRetainInstance(true);
         locationManager = LiveNationApplication.get().getLocationManager();
 
-        List<City> previousLocations = locationManager.getLocationHistory();
+        List<City> previousLocations = new ArrayList<City>(locationManager.getLocationHistory());
 
         if (previousLocations.size() > 0) {
             //Item 0 on the location history list will be our current location, chop it off.
