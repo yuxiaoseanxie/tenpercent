@@ -86,6 +86,21 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         Logger.log("ApiHelper", "Already building");
     }
 
+    @Override
+    public void onBuildFailed() {
+        this.apiBuilder = null;
+        this.apiService = null;
+
+        for (ApiServiceBinder binder : pendingBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+        pendingBindings.clear();
+
+        for (ApiServiceBinder binder : persistentBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+    }
+
     public boolean hasApi() {
         return (null != apiService);
     }
@@ -99,6 +114,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             binder.onApiServiceAttached(apiService);
         } else {
             pendingBindings.add(binder);
+            if (!isBuildingApi()) {
+                buildDefaultApi();
+            }
         }
     }
 
@@ -299,5 +317,4 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             activity.startActivity(ssoRepair);
         }
     }
-
 }

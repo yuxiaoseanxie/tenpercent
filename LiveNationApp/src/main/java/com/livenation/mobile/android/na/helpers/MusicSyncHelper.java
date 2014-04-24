@@ -76,4 +76,9 @@ public class MusicSyncHelper implements ApiServiceBinder {
             }
         });
     }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
 }

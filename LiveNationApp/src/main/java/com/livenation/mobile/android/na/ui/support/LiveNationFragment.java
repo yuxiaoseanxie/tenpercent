@@ -147,6 +147,11 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
                 properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
                 LiveNationAnalytics.screen(screenName, properties);
             }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+
+            }
         });
     }
 }
