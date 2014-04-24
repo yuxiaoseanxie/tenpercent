@@ -31,7 +31,8 @@
     <string name="artist_bio_overflow">Read Full Bio</string>
     <string name="artist_bio_overflow_close">Close Full Bio</string>
 
-    <string name="ticketbar_find_ticket">Find Tickets ></string>
+    <string name="ticketbar_options">Options</string>
+    <string name="ticketbar_find_ticket">Find Tickets</string>
 
     <string name="home">Home</string>
 
@@ -94,6 +95,8 @@
 
     <string name="youtube_video_play">Play Video</string>
 
+    <string name="no_ticket_offerings">No Tickets Available...</string>
+    <string name="ticket_offerings">Ticket Options</string>
     <string name="tickets_third_party_toast">Transferring you to a third party website that sells tickets for this event.</string>
 
     <string name="share_chooser_title">Share</string>

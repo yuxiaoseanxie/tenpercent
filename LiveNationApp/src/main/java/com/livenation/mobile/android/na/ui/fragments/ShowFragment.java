@@ -41,18 +41,14 @@ import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import io.segment.android.models.Props;
 
@@ -65,10 +61,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private ViewGroup lineupContainer;
     private NetworkImageView artistImage;
     private ShowVenueView venueDetails;
+    private Button findTicketsOptions;
     private Button findTickets;
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
     private VenueFavoriteObserver venueFavoriteObserver;
+    private LatLng mapLocationCache = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +89,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
 
-        findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_button);
+        findTicketsOptions = (Button) result.findViewById(R.id.fragment_show_ticketbar_options);
+        findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_find);
 
         return result;
     }
@@ -143,6 +142,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             venueDetails.setOnClickListener(null);
         }
 
+        if (event.getTicketOfferings().size() < 2)
+            findTicketsOptions.setVisibility(View.GONE);
+        else
+            findTicketsOptions.setVisibility(View.VISIBLE);
+        findTicketsOptions.setOnClickListener(new OnFindTicketsOptionsClick(event));
+
         OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
         findTickets.setOnClickListener(onFindTicketsClick);
 
@@ -185,6 +190,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         if (map != null) {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setAllGesturesEnabled(false);
+            if (null != mapLocationCache) {
+                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
+            }
         } else {
             //TODO: Possible No Google play services installed
         }
@@ -208,17 +216,76 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     private void setMapLocation(double lat, double lng) {
+        mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
 
-        LatLng latLng = new LatLng(lat, lng);
-
         MarkerOptions marker = new MarkerOptions();
-        marker.position(latLng);
+        marker.position(mapLocationCache);
 
         map.clear();
         map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
+
+
+    //region Find Tickets
+
+    protected void showTicketOffering(TicketOffering offering) {
+        String buyLink = offering.getPurchaseUrl();
+        if (Ticketing.isTicketmasterUrl(buyLink)) {
+            Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
+        } else {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
+            Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class OnFindTicketsOptionsClick implements View.OnClickListener, TicketOfferingsDialogFragment.OnTicketOfferingClickedListener {
+        private final Event event;
+
+        private OnFindTicketsOptionsClick(Event event) {
+            this.event = event;
+        }
+
+        @Override
+        public void onClick(View view) {
+            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event.getTicketOfferings());
+            dialogFragment.setOnTicketOfferingClickedListener(this);
+            dialogFragment.show(getFragmentManager(), "TicketOfferingsDialogFragment");
+        }
+
+        @Override
+        public void onTicketOfferingClicked(TicketOffering offering) {
+            showTicketOffering(offering);
+        }
+    }
+
+    private class OnFindTicketsClick implements View.OnClickListener {
+        private final Event event;
+
+        public OnFindTicketsClick(Event event) {
+            this.event = event;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
+
+            List<TicketOffering> offerings = event.getTicketOfferings();
+            if(offerings.isEmpty()) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        R.string.no_ticket_offerings,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            showTicketOffering(offerings.get(0));
+        }
+    }
+
+    //endregion
+
 
     private class OnVenueDetailsClick implements View.OnClickListener {
         private final Event event;
@@ -241,28 +308,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
 
             startActivity(intent);
-        }
-    }
-
-    private class OnFindTicketsClick implements View.OnClickListener {
-        private final Event event;
-
-        public OnFindTicketsClick(Event event) {
-            this.event = event;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
-
-            String buyLink = event.getBuyLink();
-            if (Ticketing.isTicketmasterUrl(buyLink)) {
-                Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
-            } else {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
-                Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
