@@ -16,25 +16,61 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class FeaturedFragment extends LiveNationFragment implements FeatureView {
+public class FeaturedFragment extends LiveNationFragment implements FeatureView, ApiServiceBinder {
     private ViewGroup chartingContainer;
+    private List<Chart> featured;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        featured = new ArrayList<Chart>();
+        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_featured, container, false);
         chartingContainer = (ViewGroup) result.findViewById(R.id.featured_charting_container);
+        setFeatured(featured);
         return result;
     }
 
     @Override
     public void setFeatured(List<Chart> featured) {
+        this.featured = featured;
+        if (null != chartingContainer) {
+            setFeaturedView(featured);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+    }
+
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        getFeaturePresenter().initialize(getActivity(), null, this);
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    private void setFeaturedView(List<Chart> featured) {
         chartingContainer.removeAllViews();
 
         if (featured == null || featured.size() < 3) {
