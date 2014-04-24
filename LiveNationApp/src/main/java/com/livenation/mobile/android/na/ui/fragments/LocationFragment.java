@@ -14,13 +14,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LocationProvider;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 import java.util.List;
@@ -114,12 +112,10 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         //isChecked() == false and then you setChecked(false);
         onCheckedChanged(autoLocationSwitch, autoLocationSwitch.isChecked());
 
-        //retrieve a city for where the API is currently pointing
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        //retrieve a city for where the API is currently configured
+        locationManager.getLocation(getActivity(), new LocationProvider.LocationCallback() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                final double lat = apiService.getApiConfig().getLat();
-                final double lng = apiService.getApiConfig().getLng();
+            public void onLocation(final double lat, final double lng) {
                 locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City apiLocation) {
@@ -132,11 +128,14 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                         City apiLocation = new City(label, lat, lng);
                         showActiveLocation(apiLocation);
                     }
-
                 });
             }
-        });
 
+            @Override
+            public void onLocationFailure(int failureCode) {
+
+            }
+        });
 
         return view;
     }
@@ -247,7 +246,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             City city = getItem(position);
             ViewHolder holder = (ViewHolder) view.getTag();
             holder.getText1().setText(city.getName());
-            
+
             String distance = null;
             if (actualLocation != null) {
                 float[] result = new float[1];
