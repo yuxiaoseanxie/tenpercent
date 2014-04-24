@@ -39,11 +39,16 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
     private LocationManager locationManager;
 
+    private String UNKNOWN_LOCATION;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         locationManager = LiveNationApplication.get().getLocationManager();
+
+        //would be final, but need a context to set it, so CAPS are preserved...
+        UNKNOWN_LOCATION = getActivity().getString(R.string.location_unknown);
 
         List<City> previousLocations = new ArrayList<City>(locationManager.getLocationHistory());
 
@@ -55,11 +60,12 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         this.adapter = new LocationAdapter(getActivity().getApplicationContext(), 0, previousLocations);
 
         //get our actual location, so that we can show valid "distance from you in miles" values.
+        final Context appContext = getActivity().getApplicationContext();
         locationManager.getSystemLocationProvider().getLocation(getActivity(), new LocationProvider.LocationCallback() {
             @Override
             public void onLocation(final double lat, final double lng) {
                 //we now have our actual location, lets get a name for it.
-                locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
+                locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City city) {
                         actualLocation = city;
@@ -69,8 +75,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                     @Override
                     public void onGetCityFailure() {
                         //reverse geocode failed, make up an "unknown" label name
-                        String label = getActivity().getString(R.string.location_unknown);
-                        actualLocation = new City(label, lat, lng);
+                        actualLocation = new City(UNKNOWN_LOCATION, lat, lng);
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -113,11 +118,13 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         //isChecked() == false and then you setChecked(false);
         onCheckedChanged(autoLocationSwitch, autoLocationSwitch.isChecked());
 
+        final Context appContext = getActivity().getApplicationContext();
+
         //retrieve a city for where the API is currently configured
         locationManager.getLocation(getActivity(), new LocationProvider.LocationCallback() {
             @Override
             public void onLocation(final double lat, final double lng) {
-                locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
+                locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City apiLocation) {
                         showActiveLocation(apiLocation);
@@ -125,8 +132,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
                     @Override
                     public void onGetCityFailure() {
-                        String label = getActivity().getString(R.string.location_unknown);
-                        City apiLocation = new City(label, lat, lng);
+                        City apiLocation = new City(UNKNOWN_LOCATION, lat, lng);
                         showActiveLocation(apiLocation);
                     }
                 });
