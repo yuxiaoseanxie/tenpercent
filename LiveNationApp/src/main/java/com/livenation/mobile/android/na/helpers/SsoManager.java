@@ -80,7 +80,6 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     }
 
     public AuthConfiguration getAuthConfiguration(Context context) {
-        String accessToken = persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
         String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
 
         if (TextUtils.isEmpty(ssoId)) {
@@ -88,7 +87,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         }
 
         Integer ssoIdValue = Integer.valueOf(ssoId);
-        return new AuthConfiguration(ssoIdValue, accessToken);
+        return new AuthConfiguration(ssoIdValue);
     }
 
     public void removeAuthConfiguration(Context context) {
@@ -157,19 +156,13 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 
     public static class AuthConfiguration {
         private final int ssoProviderId;
-        private final String accessToken;
 
-        public AuthConfiguration(int ssoProviderId, String accessToken) {
+        public AuthConfiguration(int ssoProviderId) {
             this.ssoProviderId = ssoProviderId;
-            this.accessToken = accessToken;
         }
 
         public int getSsoProviderId() {
             return ssoProviderId;
-        }
-
-        public String getAccessToken() {
-            return accessToken;
         }
     }
 
