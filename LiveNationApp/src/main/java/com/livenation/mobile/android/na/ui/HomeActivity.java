@@ -196,18 +196,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         throw new IllegalStateException("Should not happen..");
     }
 
-    /**
-     * Here we have to return our own Tab View object to get our desired LiveNation red tab.
-     * <p/>
-     * Because Google forgot to make the default tabs in the TabHost XML stylable....
-     */
-    private View createTab(Context context, String title) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_tab, null);
-        TextView text = (TextView) view.findViewWithTag("titleText");
-        text.setText(title);
-        return view;
-    }
-
 
     private AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
