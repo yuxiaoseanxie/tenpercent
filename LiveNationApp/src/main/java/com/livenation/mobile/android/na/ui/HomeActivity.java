@@ -152,12 +152,15 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
 
-            case R.id.menu_home_faq_item:
+            case R.id.menu_home_help_item:
                 LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
             case R.id.menu_home_legal_item:
                 LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                return true;
+
+            case R.id.menu_home_contact_item:
                 return true;
 
             default:
