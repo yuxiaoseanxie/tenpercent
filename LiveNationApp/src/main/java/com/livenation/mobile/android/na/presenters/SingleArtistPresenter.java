@@ -54,7 +54,6 @@ public class SingleArtistPresenter
     }
 
     public static class SingleArtistState extends BaseResultState<Artist, SingleArtistView> implements ApiService.BasicApiCallback<Artist> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleArtistParameters apiParams;
 
         public SingleArtistState(StateListener<SingleArtistState> listener, Bundle args, SingleArtistView view) {
@@ -95,7 +94,8 @@ public class SingleArtistPresenter
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }
