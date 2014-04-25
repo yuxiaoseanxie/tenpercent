@@ -9,23 +9,31 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
+import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
+import com.livenation.mobile.android.na.ui.ArtistActivity;
+import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
 import java.util.ArrayList;
@@ -62,8 +70,9 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        artistAdapter = new FavoritesAdapter(getActivity());
-        venueAdapter = new FavoritesAdapter(getActivity());
+
+        artistAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
+        venueAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
         setRetainInstance(true);
     }
 
@@ -101,6 +110,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         artistList.setAdapter(artistAdapter);
         artistList.setDivider(null);
         artistList.setAreHeadersSticky(false);
+        artistList.setOnItemClickListener(artistListClickListener);
 
         venueList = (StickyListHeadersListView) result.findViewById(R.id.fragment_favorite_venues_list);
         venueEmptyView = (EmptyListViewControl) result.findViewById(R.id.fragment_favorite_venues_empty);
@@ -109,6 +119,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         venueList.setAdapter(venueAdapter);
         venueList.setDivider(null);
         venueList.setAreHeadersSticky(false);
+        venueList.setOnItemClickListener(venueListClickListener);
 
         if (getActivity().getIntent().hasExtra(ARG_SHOW_TAB)) {
             int showTab = getActivity().getIntent().getIntExtra(ARG_SHOW_TAB, -1);
@@ -155,12 +166,12 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         Collections.sort(favorites, favoriteComparator);
 
         List<Favorite> artistFavorites = filterFavorites(favorites, "artist");
-        artistAdapter.getItems().clear();
-        artistAdapter.getItems().addAll(artistFavorites);
+        artistAdapter.clear();
+        artistAdapter.addAll(artistFavorites);
 
         List<Favorite> venueFavorites = filterFavorites(favorites, "venue");
-        venueAdapter.getItems().clear();
-        venueAdapter.getItems().addAll(venueFavorites);
+        venueAdapter.clear();
+        venueAdapter.addAll(venueFavorites);
 
         if (venueAdapter.getCount() == 0) {
             venueEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
@@ -170,8 +181,6 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
 
-        artistAdapter.notifyDataSetChanged();
-        venueAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -186,6 +195,30 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         return view;
     }
 
+    private ListView.OnItemClickListener artistListClickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Favorite favorite = artistAdapter.getItem(position);
+            Intent intent = new Intent(getActivity(), ArtistActivity.class);
+            String entityId = Artist.getAlphanumericId(favorite.getId());
+            Bundle args = SingleArtistPresenter.getAruguments(entityId);
+            intent.putExtras(args);
+            startActivity(intent);
+        }
+    };
+
+    private ListView.OnItemClickListener venueListClickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Favorite favorite = venueAdapter.getItem(position);
+            Intent intent = new Intent(getActivity(), VenueActivity.class);
+            String entityId = Artist.getAlphanumericId(favorite.getId());
+            Bundle args = SingleVenuePresenter.getAruguments(entityId);
+            intent.putExtras(args);
+            startActivity(intent);
+        }
+    };
+
     private static class FavoriteComparator implements Comparator<Favorite> {
 
         @Override
@@ -197,28 +230,12 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
     }
 
-    private class FavoritesAdapter extends BaseAdapter implements StickyListHeadersAdapter {
-        private final List<Favorite> items;
+    private class FavoritesAdapter extends ArrayAdapter<Favorite> implements StickyListHeadersAdapter {
         private LayoutInflater inflater;
 
-        public FavoritesAdapter(Context context) {
-            inflater = LayoutInflater.from(context);
-            this.items = new ArrayList<Favorite>();
-        }
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
+        private FavoritesAdapter(Context context) {
+            super(context, 0, 0, new ArrayList<Favorite>());
+            this.inflater = LayoutInflater.from(context);
         }
 
         @Override
@@ -236,15 +253,11 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Favorite favorite = items.get(position);
+            Favorite favorite = getItem(position);
             holder.getTitle().setText(favorite.getName());
             holder.getCheckbox().setChecked(true);
             holder.getCheckbox().setOnClickListener(new OnFavoriteClickListener.OnFavoriteClick(favorite, getFavoritesPresenter(), getActivity()));
             return view;
-        }
-
-        public List<Favorite> getItems() {
-            return items;
         }
 
         @Override
@@ -262,7 +275,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             }
 
             TextView text = holder.getText();
-            Favorite favorite = items.get(position);
+            Favorite favorite = getItem(position);
             String textValue = "-";
             if (!TextUtils.isEmpty(favorite.getName())) {
                 textValue = "" + favorite.getName().charAt(0);
@@ -274,7 +287,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
         @Override
         public long getHeaderId(int position) {
-            Favorite favorite = items.get(position);
+            Favorite favorite = getItem(position);
             if (null == favorite.getName()) {
                 return 0;
             }
