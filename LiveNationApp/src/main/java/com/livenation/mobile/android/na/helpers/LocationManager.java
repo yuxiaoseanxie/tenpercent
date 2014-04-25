@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
@@ -27,12 +28,17 @@ public class LocationManager implements LocationProvider {
     public static final String LOCATION_MODE = "location_mode";
 
     private final UserLocationProvider userLocationProvider = new UserLocationProvider();
-    private final SystemLocationProvider systemLocationProvider = new SystemLocationProvider();
-    LocationProvider locationProvider;
+
+    private final LocationProvider systemLocationProvider = new SystemLocationProvider();
+
+    private final LocationHistoryManager locationHistory;
+
+    private LocationProvider locationProvider;
 
     public LocationManager(Context context) {
         int locationMode = readLocationMode(context);
         applyLocationMode(locationMode);
+        locationHistory = new LocationHistoryManager(context);
     }
 
     @Override
@@ -60,9 +66,17 @@ public class LocationManager implements LocationProvider {
         return userLocationProvider;
     }
 
-    public void reverseGeocodeCity(final double lat, final double lng, final Context context, final GetCityCallback callback) {
-        ReverseGeocode task = new ReverseGeocode(context, callback);
-        task.execute(lat, lng);
+    public void reverseGeocodeCity(double lat, double lng, Context context, GetCityCallback callback) {
+        ReverseGeocode task = new ReverseGeocode(context, lat, lng, callback);
+        task.execute();
+    }
+
+    public void addLocationHistory(City city, Context context) {
+        locationHistory.addLocationHistory(city, context);
+    }
+
+    public List<City> getLocationHistory() {
+        return locationHistory.getLocationHistory();
     }
 
     private void applyLocationMode(int mode) {
@@ -98,25 +112,27 @@ public class LocationManager implements LocationProvider {
     }
 
     public static interface GetCityCallback {
-        void onGetCity(String city);
+        void onGetCity(City city);
 
         void onGetCityFailure();
     }
 
-    private class ReverseGeocode extends AsyncTask<Double, Void, String> {
+    private class ReverseGeocode extends AsyncTask<Void, Void, String> {
         private final Context context;
         private final GetCityCallback callback;
+        private final double lat;
+        private final double lng;
 
-        private ReverseGeocode(Context context, GetCityCallback callback) {
+        private ReverseGeocode(Context context, double lat, double lng, GetCityCallback callback) {
             this.context = context;
             this.callback = callback;
+            this.lat = lat;
+            this.lng = lng;
         }
 
         @Override
-        protected String doInBackground(Double... params) {
+        protected String doInBackground(Void... params) {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            double lat = params[0];
-            double lng = params[1];
 
             try {
                 List<Address> matches = geocoder.getFromLocation(lat, lng, 1);
@@ -132,7 +148,8 @@ public class LocationManager implements LocationProvider {
         @Override
         protected void onPostExecute(String value) {
             if (null != value) {
-                callback.onGetCity(value);
+                City city = new City(value, lat, lng);
+                callback.onGetCity(city);
             } else {
                 callback.onGetCityFailure();
             }
@@ -144,7 +161,8 @@ public class LocationManager implements LocationProvider {
         locationProvider.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                int mode = MODE_USER;;
+                int mode = MODE_USER;
+                ;
                 if (locationProvider instanceof SystemLocationProvider) {
                     mode = MODE_SYSTEM;
                 }
@@ -155,7 +173,8 @@ public class LocationManager implements LocationProvider {
             }
 
             @Override
-            public void onErrorResponse() {}
+            public void onErrorResponse() {
+            }
         });
 
     }

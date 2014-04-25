@@ -30,18 +30,17 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.na.presenters.views.VenuesView;
 import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -50,7 +49,6 @@ import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -60,13 +58,13 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
     private static float METERS_IN_A_MILE = 1609.34f;
+    private Double lat;
+    private Double lng;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
     private EventVenueAdapter adapter;
-    private Double lat;
-    private Double lng;
-    private ScrollPager pager;
-    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
+    private NearbyVenuesScrollPager pager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,8 +72,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         trackScreenWithLocation("User views Nearby screen", new Props());
 
         adapter = new EventVenueAdapter(getActivity());
-        pager = new ScrollPager(adapter);
-
+        pager = new NearbyVenuesScrollPager(adapter);
         LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
 
         setRetainInstance(true);
@@ -87,10 +84,16 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
         listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
+
+        //Important: connect the listview (which set a footer) before to set the adapter
+        pager.connectListView(listView);
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         listView.setEmptyView(emptyListViewControl);
+
+        pager.setEmptyView(emptyListViewControl);
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -98,11 +101,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         listView.setOnItemClickListener(this);
         listView.setOnHeaderClickListener(this);
 
-        pager.connectListView(listView);
 
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
 
+
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_nearby_venues_refresh_bar);
+        pager.setRefreshBarView(refreshBar);
         return view;
     }
 
@@ -113,12 +118,12 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroy() {
         super.onDestroyView();
+        pager.stop();
+
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
-
-
     }
 
     @Override
@@ -171,13 +176,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         getActivity().startActivity(intent);
     }
 
+    private void deinit() {
+        pager.stop();
+    }
+
     private void init() {
         pager.reset();
         pager.load();
-    }
-
-    private void deinit() {
-        pager.stop();
     }
 
     //Get config for starting the screen
@@ -189,7 +194,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     }
 
     @Override
-    public void onErrorResponse(int errorCode) {}
+    public void onErrorResponse(int errorCode) {
+    }
 
     //Location update
     @Override
@@ -338,72 +344,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
                 return venueTextContainer;
             }
 
-        }
-    }
-
-    private class ScrollPager extends BaseDecoratedScrollPager<Event> {
-
-        /*
-        We manually track the paging offset value as the adapter's itemCount() value will be incorrect
-        for this purpose (since the size of venue events (adapter) != size of venues (api)
-         */
-        private int offset = 0;
-
-        private ScrollPager(ArrayAdapter<Event> adapter) {
-            super(10, adapter);
-        }
-
-        @Override
-        public void reset() {
-            super.reset();
-            offset = 0;
-        }
-
-        @Override
-        public FetchRequest<Event> getFetchRequest(int offset, int limit, FetchResultHandler callback) {
-            Bundle args = getNearbyVenuesPresenter().getArgs(offset, limit);
-            FetchRequest request = new VenuesFetchRequest(offset, limit, callback);
-            return request;
-        }
-
-        @Override
-        protected int getOffset() {
-            return offset;
-        }
-
-        @Override
-        public void stop() {
-            for (FetchLoader fetchLoader : getFetchLoaders()) {
-                fetchLoader.cancel();
-            }
-        }
-
-        private class VenuesFetchRequest extends FetchRequest<Event> implements VenuesView {
-
-            private VenuesFetchRequest(int offset, int limit, FetchResultHandler<Event> fetchResultHandler) {
-                super(offset, limit, fetchResultHandler);
-            }
-
-            @Override
-            public void run() {
-                Bundle args = getNearbyVenuesPresenter().getArgs(getOffset(), getLimit());
-                getNearbyVenuesPresenter().initialize(getActivity(), args, this);
-            }
-
-            @Override
-            public void setVenues(List<Venue> venues) {
-                ScrollPager.this.offset += venues.size();
-                List<Event> transformed = DataModelHelper.flattenVenueEvents(venues);
-                getFetchResultHandler().deliverResult(transformed);
-                if (venues.size() == 0) {
-                    emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-                }
-            }
-
-            @Override
-            public void cancel() {
-                getNearbyVenuesPresenter().cancel(this);
-            }
         }
     }
 }

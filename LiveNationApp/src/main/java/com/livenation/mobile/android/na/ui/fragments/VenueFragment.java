@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,12 +22,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.MapUtils;
 import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -100,6 +103,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         OnVenueDetailClick onVenueClick = new OnVenueDetailClick(venue.getId());
         link.setOnClickListener(onVenueClick);
         telephone.setOnClickListener(new OnPhoneNumberClick());
+        location.setOnClickListener(new OnAddressClick(Double.parseDouble(venue.getLat()), Double.parseDouble(venue.getLng()), LiveNationApplication.get().getApplicationContext()));
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
@@ -162,6 +166,23 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             phoneNumber.replace("[^0-9+]", "");
             if (phoneNumber != null || !phoneNumber.trim().isEmpty())
                 PhoneUtils.dial(phoneNumber, VenueFragment.this.getActivity());
+        }
+    }
+
+    private class OnAddressClick implements View.OnClickListener {
+        private double lat;
+        private double lng;
+        private Context context;
+
+        private OnAddressClick(double lat, double lng, Context context) {
+            this.lat = lat;
+            this.lng = lng;
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            MapUtils.redirectToMapApplication(lat, lng, context);
         }
     }
 }

@@ -1,234 +1,291 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cchilton on 3/12/14.
  */
-public class LocationFragment extends LiveNationFragment implements LiveNationMapFragment.MapReadyListener, GoogleMap.OnMapClickListener {
-    private static final float DEFAULT_MAP_ZOOM = 8f;
-    private LiveNationMapFragment mapFragment;
-    private GoogleMap map;
-    private ActionMode actionMode;
-    private LatLng locationCache;
+public class LocationFragment extends LiveNationFragment implements ListView.OnItemClickListener, CompoundButton.OnCheckedChangeListener {
+    private Switch autoLocationSwitch;
+    private LocationAdapter adapter;
+
+    private TextView currentPrimaryText;
+    private TextView currentSecondaryText;
+
+    private City actualLocation;
+    private City configuredLocation;
+
     private LocationManager locationManager;
-    private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            setMapEnabled(true);
 
-            setMapMarker(locationCache.latitude, locationCache.longitude, true, -2);
-
-            MenuInflater inflater = actionMode.getMenuInflater();
-
-            inflater.inflate(R.menu.location_set_menu, menu);
-
-            mapContainerForeground.setVisibility(View.INVISIBLE);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode actionMode) {
-            LocationFragment.this.actionMode = null;
-            setMapEnabled(false);
-
-            if (null != locationCache) {
-                locationManager.setUserLocation(locationCache.latitude, locationCache.longitude, getActivity());
-                setMapMarker(locationCache.latitude, locationCache.longitude, true);
-            }
-
-            mapContainerForeground.setVisibility(View.VISIBLE);
-        }
-    };
-    private View.OnClickListener onTapToChangeListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (null == actionMode) {
-                actionMode = getActivity().startActionMode(actionModeCallback);
-            }
-            ;
-        }
-    };
-    private ProviderCallback<Double[]> configuredLocationCallback = new ProviderCallback<Double[]>() {
-        @Override
-        public void onErrorResponse() {
-        }
-
-        @Override
-        public void onResponse(Double[] response) {
-            locationCache = new LatLng(response[0], response[1]);
-            if (null != map) {
-                setMapMarker(response[0], response[1], true);
-            }
-        }
-    };
-    private ProviderCallback<Double[]> initialUserLocationCallback = new ProviderCallback<Double[]>() {
-        @Override
-        public void onResponse(Double[] response) {
-            locationCache = new LatLng(response[0], response[1]);
-            if (null != map) {
-                setMapMarker(response[0], response[1], true);
-            }
-        }
-
-        @Override
-        public void onErrorResponse() {
-            LiveNationApplication.get().getLocationProvider().getSystemLocationProvider().getLocation(this);
-        }
-    };
-    private FrameLayout mapContainer;
-    private FrameLayout mapContainerForeground;
-    private View overlayTapToChange;
-    private View overlayAutomaticLocation;
-    private RadioGroup.OnCheckedChangeListener radioListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-            switch (i) {
-                case R.id.fragment_location_automatic_radio:
-                    LiveNationApplication.get().getLocationProvider().setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
-                    if (null != actionMode) {
-                        actionMode.finish();
-                    }
-                    mapContainerForeground.removeAllViews();
-                    mapContainerForeground.addView(overlayAutomaticLocation);
-                    break;
-                case R.id.fragment_location_manual_radio:
-                    LiveNationApplication.get().getLocationProvider().setLocationMode(LocationManager.MODE_USER, getActivity());
-                    mapContainerForeground.removeAllViews();
-                    mapContainerForeground.addView(overlayTapToChange);
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-
-            }
-            centerMapWithConfiguredLocation();
-
-        }
-    };
+    private String UNKNOWN_LOCATION;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapFragment = new LiveNationMapFragment();
-        mapFragment.setMapReadyListener(this);
-        locationManager = LiveNationApplication.get().getLocationProvider();
+        setRetainInstance(true);
+        locationManager = LiveNationApplication.getLocationProvider();
 
-        addFragment(R.id.fragment_location_map_container, mapFragment, "location_map");
-        locationManager.getLocation(initialUserLocationCallback);
+        //would be final, but need a context to set it, so CAPS are preserved...
+        UNKNOWN_LOCATION = getActivity().getString(R.string.location_unknown);
+
+        List<City> previousLocations = new ArrayList<City>(locationManager.getLocationHistory());
+
+        if (previousLocations.size() > 0) {
+            //Item 0 on the location history list will be our current location, chop it off.
+            previousLocations = previousLocations.subList(1, previousLocations.size());
+        }
+
+        this.adapter = new LocationAdapter(getActivity().getApplicationContext(), 0, previousLocations);
+
+        //get our actual location, so that we can show valid "distance from you in miles" values.
+        final Context appContext = getActivity().getApplicationContext();
+        locationManager.getSystemLocationProvider().getLocation(new ProviderCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                //we now have our actual location, lets get a name for it.
+                final double lat = response[0];
+                final double lng = response[1];
+                locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
+                    @Override
+                    public void onGetCity(City city) {
+                        actualLocation = city;
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onGetCityFailure() {
+                        //reverse geocode failed, make up an "unknown" label name
+                        actualLocation = new City(UNKNOWN_LOCATION, lat, lng);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse() {
+                //todo: need comps: bug user with modal dialog screaming "WHERE ARE YOU!?!"
+            }
+        });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location, container, false);
 
-        mapContainer = (FrameLayout) view.findViewById(R.id.fragment_location_map_container);
-        mapContainerForeground = (FrameLayout) view.findViewById(R.id.fragment_location_map_container_foreground);
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        listView.setAdapter(adapter);
 
-        RadioGroup locationGroup = (RadioGroup) view.findViewById(R.id.fragment_location_radio_group);
-        locationGroup.setOnCheckedChangeListener(radioListener);
+        currentPrimaryText = (TextView) view.findViewById(R.id.fragment_location_current_primary_text);
+        currentSecondaryText = (TextView) view.findViewById(R.id.fragment_location_current_secondary_text);
 
-        overlayAutomaticLocation = inflater.inflate(R.layout.view_location_overlay_automatic, null);
-        overlayTapToChange = inflater.inflate(R.layout.view_location_overlay_manual, null);
-        overlayTapToChange.setOnClickListener(onTapToChangeListener);
+        listView.setOnItemClickListener(this);
 
-        RadioButton manualRadio = (RadioButton) view.findViewById(R.id.fragment_location_manual_radio);
-        RadioButton autoRadio = (RadioButton) view.findViewById(R.id.fragment_location_automatic_radio);
-        switch (locationManager.getLocationMode(getActivity())) {
+        autoLocationSwitch = (Switch) view.findViewById(R.id.fragment_location_current_location);
+
+        int mode = locationManager.getLocationMode(getActivity());
+        switch (mode) {
+            case LocationManager.MODE_SYSTEM:
+                autoLocationSwitch.setChecked(true);
+                break;
             case LocationManager.MODE_USER:
-                manualRadio.setChecked(true);
+                autoLocationSwitch.setChecked(false);
                 break;
-            default:
-                autoRadio.setChecked(true);
-                break;
+
         }
+        autoLocationSwitch.setOnCheckedChangeListener(this);
+        //manually trip the onCheckedChanged listener for the UI, as the switch above wont trip it if
+        //isChecked() == false and then you setChecked(false);
+        onCheckedChanged(autoLocationSwitch, autoLocationSwitch.isChecked());
+
+        final Context appContext = getActivity().getApplicationContext();
+
+        //retrieve a city for where the API is currently configured
+        locationManager.getLocation(new ProviderCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                final double lat = response[0];
+                final double lng = response[1];
+                locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
+                    @Override
+                    public void onGetCity(City apiLocation) {
+                        showActiveLocation(apiLocation);
+                    }
+
+                    @Override
+                    public void onGetCityFailure() {
+                        City apiLocation = new City(UNKNOWN_LOCATION, lat, lng);
+                        showActiveLocation(apiLocation);
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse() {
+            }
+        });
 
         return view;
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
-        this.map = map;
-        this.map.setOnMapClickListener(this);
-        setMapEnabled(false);
-        if (null != locationCache) {
-            setMapMarker(locationCache.latitude, locationCache.longitude, true);
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        City activeLocation = null;
+
+        if (isChecked) {
+            currentPrimaryText.setText(R.string.location_mode_automatic);
+            activeLocation = actualLocation;
+        } else {
+            currentPrimaryText.setText(R.string.location_mode_manual);
+            if (null == configuredLocation) {
+                //no initial manual location!
+                if (null != actualLocation) {
+                    //set initial manual location to our actual location
+                    setConfiguredLocation(actualLocation);
+                }
+            }
+            activeLocation = configuredLocation;
+        }
+
+        if (null != activeLocation) {
+            showActiveLocation(activeLocation);
         }
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
-        if (null == actionMode) return;
-        setMapMarker(latLng.latitude, latLng.longitude, false);
-        locationCache = latLng;
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        City city = adapter.getItem(position);
+        setConfiguredLocation(city);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        //persist the location mode changes to preferences
+        if (isLocationAutomatic()) {
+            //automatic location
+            locationManager.setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
+        } else {
+            //manual location
+            if (configuredLocation != null) {
+                //manual location set, and we have a manual location specified.
+                locationManager.setLocationMode(LocationManager.MODE_USER, getActivity());
+                locationManager.setUserLocation(configuredLocation.getLat(), configuredLocation.getLng(), getActivity());
+            } else {
+                //manual location was set, but there is no manual location specified
+                //fallback to automatic location
+                locationManager.setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
+            }
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onPause();
+        //build a new API on exiting
         LiveNationApplication.get().getApiHelper().buildDefaultApi();
     }
 
-    private void setMapMarker(double lat, double lng, boolean center) {
-        setMapMarker(lat, lng, center, 0);
+    /**
+     * set the configuredLocation pointer to some city.
+     * The value of this member field will be used as the manual location when the fragment/activity
+     * finishes.
+     *
+     * @param city The location to track as the user's manual location
+     */
+    public void setConfiguredLocation(City city) {
+        if (null == city) throw new NullPointerException();
+        if (isLocationAutomatic()) {
+            //if we're going to set a manual/configured city, then force auto location mode to off
+            //...Is this smelly?...
+            autoLocationSwitch.setChecked(false);
+        }
+        configuredLocation = city;
+        showActiveLocation(city);
     }
 
-    private void setMapMarker(double lat, double lng, boolean center, int zoomModifier) {
-        LatLng latLng = new LatLng(lat, lng);
+    private void showActiveLocation(City city) {
+        currentSecondaryText.setText(city.getName());
+    }
 
-        MarkerOptions marker = new MarkerOptions();
-        marker.position(latLng);
+    private boolean isLocationAutomatic() {
+        return autoLocationSwitch.isChecked();
+    }
 
-        map.clear();
-        map.addMarker(marker);
+    private class LocationAdapter extends ArrayAdapter<City> {
+        private final LayoutInflater inflater;
+        private final String MILES_AWAY = getString(R.string.location_miles_away);
 
-        if (center) {
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM + zoomModifier);
-            map.animateCamera(update);
+        private LocationAdapter(Context context, int resource, List<City> objects) {
+            super(context, resource, objects);
+            this.inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+
+            if (null == view) {
+                view = inflater.inflate(R.layout.list_previous_location_item, parent, false);
+                ViewHolder holder = new ViewHolder(view);
+                view.setTag(holder);
+            }
+
+            City city = getItem(position);
+            ViewHolder holder = (ViewHolder) view.getTag();
+            holder.getText1().setText(city.getName());
+
+            String distance = null;
+            if (actualLocation != null) {
+                float[] result = new float[1];
+                Location.distanceBetween(actualLocation.getLat(), actualLocation.getLng(), city.getLat(), city.getLng(), result);
+                float miles = result[0] / Constants.METERS_IN_A_MILE;
+                distance = String.format(MILES_AWAY, miles);
+            }
+            holder.getText2().setText(distance);
+
+            return view;
+        }
+
+        private class ViewHolder {
+            private final TextView text1;
+            private final TextView text2;
+
+            private ViewHolder(View view) {
+                this.text1 = (TextView) view.findViewById(android.R.id.text1);
+                this.text2 = (TextView) view.findViewById(android.R.id.text2);
+            }
+
+            public TextView getText1() {
+                return text1;
+            }
+
+            public TextView getText2() {
+                return text2;
+            }
         }
     }
 
-    private void setMapEnabled(boolean enabled) {
-        map.getUiSettings().setMyLocationButtonEnabled(enabled);
-        map.getUiSettings().setAllGesturesEnabled(enabled);
-        map.getUiSettings().setZoomControlsEnabled(enabled);
-        map.getUiSettings().setMyLocationButtonEnabled(enabled);
-        map.getUiSettings().setZoomGesturesEnabled(enabled);
-    }
-
-    private void centerMapWithConfiguredLocation() {
-        locationManager.getLocation(configuredLocationCallback);
-    }
 }

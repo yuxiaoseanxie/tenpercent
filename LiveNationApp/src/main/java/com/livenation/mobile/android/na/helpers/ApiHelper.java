@@ -3,18 +3,9 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Debug;
-import android.text.TextUtils;
 
-import com.android.volley.VolleyError;
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.SsoActivity;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
@@ -26,7 +17,6 @@ import com.livenation.mobile.android.platform.util.Logger;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by cchilton on 3/10/14.
@@ -68,6 +58,21 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         Logger.log("ApiHelper", "Already building");
     }
 
+    @Override
+    public void onBuildFailed() {
+        this.apiBuilder = null;
+        this.apiService = null;
+
+        for (ApiServiceBinder binder : pendingBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+        pendingBindings.clear();
+
+        for (ApiServiceBinder binder : persistentBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+    }
+
     public boolean hasApi() {
         return (null != apiService);
     }
@@ -81,6 +86,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             binder.onApiServiceAttached(apiService);
         } else {
             pendingBindings.add(binder);
+            if (!isBuildingApi()) {
+                buildDefaultApi();
+            }
         }
     }
 
@@ -172,5 +180,4 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             activity.startActivity(ssoRepair);
         }
     }
-
 }

@@ -28,7 +28,6 @@ import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 
@@ -146,9 +145,7 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 
             @Override
             public void onErrorResponse(int errorCode) {
-
             }
         }, ProviderManager.ProviderType.LOCATION);
-
     }
 }

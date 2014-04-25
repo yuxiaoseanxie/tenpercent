@@ -100,6 +100,11 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void clear() {
         ArrayList<Favorite> copy = new ArrayList<Favorite>();
         copy.addAll(favorites);

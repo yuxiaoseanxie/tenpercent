@@ -95,6 +95,11 @@ public class NotificationsRegistrationManager {
                     }
                 });
             }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+
+            }
         });
     }
 
