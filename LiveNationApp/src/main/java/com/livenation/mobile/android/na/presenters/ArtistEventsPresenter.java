@@ -103,7 +103,8 @@ public class ArtistEventsPresenter
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(error.networkResponse.statusCode);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

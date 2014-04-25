@@ -62,7 +62,6 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 
     static class SingleEventState extends BaseResultState<Event, SingleEventView>
             implements ApiService.BasicApiCallback<Event> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleEventParameters apiParams;
 
         public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
@@ -103,7 +102,8 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

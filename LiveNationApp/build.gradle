@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         maven { url 'http://download.crashlytics.com/maven' }
@@ -7,8 +9,10 @@ buildscript {
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
+
 apply plugin: 'android'
 apply plugin: 'crashlytics'
+
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
 }
@@ -20,8 +24,6 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 18
-        versionCode 12
-        versionName "2.0"
     }
 
     signingConfigs {
@@ -82,6 +84,29 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+}
+
+task('bumpVersion') << {
+    def versionMajor = 2
+    def versionMinor = 0
+
+    def manifestFile = file("src/main/AndroidManifest.xml")
+    def pattern = Pattern.compile("versionCode=\"(\\d+)\"")
+    def manifestText = manifestFile.getText()
+    def matcher = pattern.matcher(manifestText)
+    matcher.find()
+
+    def versionCode = Integer.parseInt(matcher.group(1))
+    versionCode++
+    manifestText = matcher.replaceAll("versionCode=\"" + versionCode + "\"")
+
+    def versionName = versionMajor + "." + versionMinor + "." + versionCode
+    pattern = Pattern.compile("versionName=\"[\\d\\.]+\"")
+    matcher = pattern.matcher(manifestText)
+    matcher.find()
+    manifestText = matcher.replaceAll("versionName=\"" + versionName + "\"")
+
+    manifestFile.write(manifestText)
 }
 
 dependencies {

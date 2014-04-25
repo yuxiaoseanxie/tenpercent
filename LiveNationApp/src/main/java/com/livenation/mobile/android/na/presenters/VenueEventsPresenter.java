@@ -47,7 +47,6 @@ public class VenueEventsPresenter extends
 
     static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
             ApiService.BasicApiCallback<List<Event>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private VenueEventsParameters apiParams;
 
         public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
@@ -86,7 +85,8 @@ public class VenueEventsPresenter extends
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override
