@@ -234,7 +234,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         private LayoutInflater inflater;
 
         private FavoritesAdapter(Context context) {
-            super(context, 0, 0, new ArrayList<Favorite>());
+            super(context, 0, new ArrayList<Favorite>());
             this.inflater = LayoutInflater.from(context);
         }
 
