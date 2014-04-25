@@ -10,7 +10,7 @@ import io.segment.android.Logger;
 /**
  * Created by elodieferrais on 4/11/14.
  */
-public class PhoneUtils {
+public class ContactUtils {
     public static void dial(String phoneNumber, Activity activity) {
         try {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -19,5 +19,15 @@ public class PhoneUtils {
         } catch (ActivityNotFoundException e) {
             Logger.e(activity.getClass().getSimpleName() + " Call failed", e);
         }
+    }
+
+    public static void emailTo(String emailAddress, String subject, String message, Activity activity) {
+        Intent it = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        it.putExtra(Intent.EXTRA_EMAIL, new String[] {emailAddress});
+        it.putExtra(Intent.EXTRA_SUBJECT, subject);
+        it.putExtra(Intent.EXTRA_TEXT, message);
+        //it.setType("text/plain");
+        it.setType("message/rfc822");
+        activity.startActivity(it);
     }
 }
