@@ -140,7 +140,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
                 break;
         }
 
-        if (getShowMoreItemsView() != null && position >= getMaxVideos()) {
+        if (getShowMoreItemsView() != null && position >= getMaxVideos() && position < videos.size()) {
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             videoContainer.addView(getShowMoreItemsView(), layoutParams);
         }
