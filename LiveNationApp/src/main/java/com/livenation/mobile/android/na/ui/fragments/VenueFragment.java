@@ -29,8 +29,8 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
-import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -165,7 +165,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             String phoneNumber = (String) VenueFragment.this.telephone.getText();
             phoneNumber.replace("[^0-9+]", "");
             if (phoneNumber != null || !phoneNumber.trim().isEmpty())
-                PhoneUtils.dial(phoneNumber, VenueFragment.this.getActivity());
+                ContactUtils.dial(phoneNumber, VenueFragment.this.getActivity());
         }
     }
 
