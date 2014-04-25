@@ -11,7 +11,9 @@ package com.livenation.mobile.android.na.ui;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -29,6 +31,7 @@ import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -40,7 +43,13 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
+import com.livenation.mobile.android.na.utils.ContactUtils;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -153,6 +162,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_faq_item:
+                buildAndOpenContactEmail();
                 LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
@@ -163,6 +173,33 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void buildAndOpenContactEmail() {
+
+        final String emailAddress = getString(R.string.contact_email_address);
+        final String subject = getString(R.string.contact_email_subject);
+        final String message = "\n\n" + getString(R.string.contact_email_signature_message)
+                + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
+                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER +"  " + Build.MODEL
+                + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
+        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
+                String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
+                String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
+                ContactUtils.emailTo(emailAddress, subject,  signature, HomeActivity.this);
+            }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+                ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
+            }
+        });
+
+
+
     }
 
     @Override

@@ -136,12 +136,12 @@
     <string name="refresh_label">Retry</string>
 
     <!-- Contact -->
-    <string name="contact_email_address">Could not load more.\nCheck your connectivity.</string>
-    <string name="contact_email_subject">Could not load more.\nCheck your connectivity.</string>
-    <string name="contact_email_signature_message">- \n The following details will help our customer service team troubleshoot any potential issues:</string>
-    <string name="contact_email_signature_message_appversion">App Version:</string>
-    <string name="contact_email_signature_message_userid">User ID:</string>
-    <string name="contact_email_signature_message_device">Device Model:</string>
-    <string name="contact_email_signature_message_platform">Android Platform:</string>
+    <string name="contact_email_address">mobilefeedback@livenation.com</string>
+    <string name="contact_email_subject">Live Nation Android App: Contact US.</string>
+    <string name="contact_email_signature_message">-\nThe following details will help our customer service team troubleshoot any potential issues:</string>
+    <string name="contact_email_signature_message_appversion">\nApp Version:</string>
+    <string name="contact_email_signature_message_userid">\nUser ID:</string>
+    <string name="contact_email_signature_message_device">\nDevice Model:</string>
+    <string name="contact_email_signature_message_platform">\nAndroid Platform:</string>
 
 </resources>
