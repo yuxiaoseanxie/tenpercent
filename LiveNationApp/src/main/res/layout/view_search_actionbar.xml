@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.livenation.mobile.android.na.ui.views.DecoratedEditText
+        custom:hint="@string/search_input_hint"
         android:id="@+id/view_search_actionbar_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -27,6 +27,7 @@ import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -84,6 +85,11 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
+    public void onApiServiceNotAvailable() {
+
+    }
+
+    @Override
     public void setUser(User user) {
         if (null != profileFragment) {
             removeFragment(profileFragment);
@@ -100,8 +106,8 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
-    public void onGetCity(String city) {
-        locationText.setText(city);
+    public void onGetCity(City city) {
+        locationText.setText(city.getName());
     }
 
     @Override

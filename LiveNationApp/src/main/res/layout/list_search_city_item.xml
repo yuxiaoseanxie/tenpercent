@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:minHeight="@dimen/list_search_min_height"
+    android:orientation="horizontal">
+
+
+
+    <TextView
+        android:layout_gravity="center_vertical"
+        android:id="@+id/list_search_city_title"
+        android:drawableLeft="@drawable/your_location_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_search_city_item_margin_left"
+        android:drawablePadding="@dimen/list_search_city_item_drawable_padding"
+        android:textAppearance="@style/list_previous_location_text_primary"
+        android:text="@string/mock_artist_type" />
+
+
+</LinearLayout>

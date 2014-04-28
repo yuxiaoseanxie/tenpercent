@@ -4,71 +4,55 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/fragment_location_header"
+    <TextView
+        style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="@string/location_current" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/location_description_text" />
 
-        <RadioGroup
-            android:id="@+id/fragment_location_radio_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/location_overlay_manual_text_background">
+    <TextView
+        android:id="@+id/fragment_location_current_primary_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/fragment_location_automatic_radio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:text="@string/location_automatic_location_text" />
+    <TextView
+        android:id="@+id/fragment_location_current_secondary_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
-            <RadioButton
-                android:id="@+id/fragment_location_manual_radio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
-                android:text="@string/location_manual_location_text" />
-        </RadioGroup>
-    </LinearLayout>
+    <TextView
+        style="@style/ui_header_transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/location_previous_locations" />
 
-    <FrameLayout
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:background="@drawable/location_overlay_manual_text_background"
-        android:padding="5dp">
+        android:layout_weight="1" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/windowBackground" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underscore_container_height"
+        android:layout_marginBottom="@dimen/fragment_location_auto_switch_margin_bottom"
+        android:layout_marginTop="@dimen/fragment_location_auto_switch_margin_top"
+        android:background="@drawable/ui_underscore_background" />
 
-        <FrameLayout
-            android:id="@+id/fragment_location_map_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-
-        <FrameLayout
-            android:id="@+id/fragment_location_map_container_foreground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-    </FrameLayout>
-
+    <Switch
+        android:id="@+id/fragment_location_current_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/your_location"
+        android:drawablePadding="@dimen/fragment_location_auto_switch_drawable_padding"
+        android:text="@string/location_switch"
+        android:thumb="@drawable/livenation_switch_inner_holo_light"
+        android:track="@drawable/livenation_switch_track_holo_light" />
 
 </LinearLayout>
