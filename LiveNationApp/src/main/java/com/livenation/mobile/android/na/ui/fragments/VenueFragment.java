@@ -165,6 +165,11 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     }
                 });
             }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+                Log.e(getClass().getName(), "Could not load box office info. Api error");
+            }
         });
     }
 
