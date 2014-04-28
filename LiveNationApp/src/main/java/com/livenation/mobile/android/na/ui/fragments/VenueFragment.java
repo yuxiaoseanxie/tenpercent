@@ -8,8 +8,8 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,8 +32,8 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
-import com.livenation.mobile.android.na.utils.PhoneUtils;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
@@ -108,7 +108,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         telephone.setText(venue.getFormattedPhoneNumber());
 
-        if(venue.getBoxOffice() == null) {
+        if (venue.getBoxOffice() == null) {
             loadBoxOfficeInfo(venue.getNumericId());
         } else {
             displayBoxOfficeInfo(venue);
@@ -219,7 +219,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             String phoneNumber = (String) VenueFragment.this.telephone.getText();
             phoneNumber.replace("[^0-9+]", "");
             if (phoneNumber != null || !phoneNumber.trim().isEmpty())
-                PhoneUtils.dial(phoneNumber, VenueFragment.this.getActivity());
+                ContactUtils.dial(phoneNumber, VenueFragment.this.getActivity());
         }
     }
 
