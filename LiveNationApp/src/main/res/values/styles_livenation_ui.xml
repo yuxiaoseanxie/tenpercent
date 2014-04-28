@@ -49,7 +49,7 @@
         <item name="android:layout_marginBottom">@dimen/ui_overflow_margin_bottom</item>
     </style>
 
-    <style name="ui_long_text" parent="@style/ui_underscore">
+    <style name="ui_long_text">
         <item name="android:padding">@dimen/ui_long_text_padding</item>
         <item name="android:textAppearance">@style/artist_bio</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
