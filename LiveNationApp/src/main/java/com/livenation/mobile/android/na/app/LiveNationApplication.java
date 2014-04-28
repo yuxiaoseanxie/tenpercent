@@ -139,7 +139,6 @@ public class LiveNationApplication extends Application {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
         ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
-        ticketingConfig.setClient("tmus");
         ticketingConfig.setImageLoader(getImageLoader());
         Ticketing.init(ticketingConfig);
     }
