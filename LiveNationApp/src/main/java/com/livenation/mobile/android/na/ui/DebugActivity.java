@@ -146,7 +146,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         versionName = new DebugItem("Version", BuildConfig.VERSION_NAME);
         actions.add(versionName);
 
-        gitSha = new DebugItem("GitSha", BuildConfig.GIT_SHA);
+        gitSha = new DebugItem("GIT SHA-1", BuildConfig.GIT_SHA);
         actions.add(gitSha);
     }
 
