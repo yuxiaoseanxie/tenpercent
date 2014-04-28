@@ -22,12 +22,12 @@ public class ContactUtils {
     }
 
     public static void emailTo(String emailAddress, String subject, String message, Activity activity) {
-        Intent it = new Intent(Intent.ACTION_SEND_MULTIPLE);
-        it.putExtra(Intent.EXTRA_EMAIL, new String[] {emailAddress});
+
+        //This solution is the only one which work for every platforms
+        //If we set the uri after instantiate the intent, it won't work on 4.1.2
+        Intent it = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", emailAddress, null));
         it.putExtra(Intent.EXTRA_SUBJECT, subject);
         it.putExtra(Intent.EXTRA_TEXT, message);
-        //it.setType("text/plain");
-        it.setType("message/rfc822");
         activity.startActivity(it);
     }
 }
