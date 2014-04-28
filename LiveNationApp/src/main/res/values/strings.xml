@@ -135,4 +135,10 @@
     <!-- Refresh bar -->
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
     <string name="refresh_label">Retry</string>
+
+    <!-- Legal and credit-->
+    <string name="terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
+    <string name="privacy_policy_url">https://s3.amazonaws.com/adr-static-content/en_US/privacy_policy.html</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>
