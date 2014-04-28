@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_box_office_info_scroll_view">
+
+    <TextView
+        android:id="@+id/fragment_box_office_info_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ui_long_text"
+        android:background="@null"
+        android:autoLink="all"
+        android:textColorLink="@color/ui_header1_text"
+        android:text="@string/mock_artist_bio" />
+
+</ScrollView>

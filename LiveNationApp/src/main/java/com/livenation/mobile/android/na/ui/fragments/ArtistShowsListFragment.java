@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
+import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
@@ -19,6 +20,7 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 
@@ -38,7 +40,9 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         this.adapter = new EventAdapter(getActivity(), ShowView.DisplayMode.ARTIST);
         setListAdapter(adapter);
 
-        this.artistShowsScrollPager = new ArtistShowsScrollPager(adapter);
+        String entityId = getActivity().getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
+        long artistId = DataModelHelper.getNumericEntityId(entityId);
+        this.artistShowsScrollPager = new ArtistShowsScrollPager(artistId, adapter);
 
         LiveNationApplication.get().getApiHelper().persistentBindApi(this);
     }

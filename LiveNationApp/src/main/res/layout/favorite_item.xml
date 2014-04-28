@@ -5,6 +5,7 @@
     android:baselineAligned="true"
     android:gravity="center_vertical"
     android:minHeight="@dimen/favorite_min_height"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
 
     <CheckBox

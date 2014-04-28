@@ -76,7 +76,12 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     protected String getShareIntentChooserTitle() {
         return getString(R.string.share_chooser_title);
     }
+
     protected abstract boolean isShareAvailable();
+    public void invalidateIsShareAvailable() {
+        invalidateOptionsMenu();
+    }
+
     protected abstract String getShareSubject();
     protected abstract String getShareText();
 

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
@@ -48,6 +51,8 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem environmentItem;
     private DebugItem locationItem;
     private DebugItem scanItem;
+    private DebugItem versionName;
+    private DebugItem gitSha;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -137,6 +142,12 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         locationItem = new DebugItem("Location", "");
         actions.add(locationItem);
+
+        versionName = new DebugItem("Version", BuildConfig.VERSION_NAME);
+        actions.add(versionName);
+
+        gitSha = new DebugItem("GIT SHA-1", BuildConfig.GIT_SHA);
+        actions.add(gitSha);
     }
 
     private void addActionDebugItems() {
