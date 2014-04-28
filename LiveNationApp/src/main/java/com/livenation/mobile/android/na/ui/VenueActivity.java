@@ -72,6 +72,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
             throw new RuntimeException("TODO: investigate possible race condition here");
         }
         eventsView.setEvents(events);
+
+        invalidateIsShareAvailable();
     }
 
     private void init() {
