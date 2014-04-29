@@ -27,6 +27,7 @@ public class HelpMenuActivity extends LiveNationFragmentActivity implements Resp
     private final static String TOPICS_KEY = "topics";
     private final static String SLUG_KEY = "slug";
     private final static String NAME_KEY = "name";
+
     private final static String DESCRIPTION_KEY = "description";
 
     private RequestQueue queue;

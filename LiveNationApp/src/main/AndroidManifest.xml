@@ -113,6 +113,11 @@
             android:name="com.livenation.mobile.android.na.ui.CitySearchActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.LocationActivity" />
 
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.LegalActivity"
+            android:label="@string/home_menu_legal"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.LocationActivity" />
+
 
         <activity
             android:name=".ui.HelpMenuActivity"

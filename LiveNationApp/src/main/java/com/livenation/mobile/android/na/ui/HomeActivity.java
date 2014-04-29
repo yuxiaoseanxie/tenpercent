@@ -164,6 +164,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
             case R.id.menu_home_legal_item:
                 LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                startActivity(new Intent(this, LegalActivity.class));
                 return true;
 
             case R.id.menu_home_contact_item:
