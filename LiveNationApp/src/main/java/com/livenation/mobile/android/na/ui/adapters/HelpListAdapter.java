@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.HelpMenuActivity;
 import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 
@@ -28,13 +29,13 @@ public class HelpListAdapter extends ArrayAdapter<HelpMenuFragment.HelpMenuItem>
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = mInflater.inflate(android.R.layout.two_line_list_item, parent, false);
+            view = mInflater.inflate(R.layout.help_menu_item, parent, false);
         } else {
             view = convertView;
         }
 
-        titleTv = (TextView) view.findViewById(android.R.id.text1);
-        descriptionTv = (TextView) view.findViewById(android.R.id.text2);
+        titleTv = (TextView) view.findViewById(R.id.help_menu_item_name);
+        descriptionTv = (TextView) view.findViewById(R.id.help_menu_item_description);
 
         titleTv.setText(getItem(position).name);
         descriptionTv.setText(getItem(position).description);

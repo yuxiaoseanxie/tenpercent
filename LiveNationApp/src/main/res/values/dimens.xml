@@ -124,6 +124,9 @@
     <dimen name="view_refresh_bar_message_size">16sp</dimen>
     <dimen name="view_refresh_bar_refresh_size">13sp</dimen>
 
+    <!-- Help -->
+    <dimen name="help_menu_item_margin">10dip</dimen>
+
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
 </resources>
