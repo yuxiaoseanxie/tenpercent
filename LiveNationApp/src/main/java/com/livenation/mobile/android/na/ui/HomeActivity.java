@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,11 +20,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
@@ -49,7 +46,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -162,6 +158,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_home_help_item:
+                startActivity(new Intent(this, HelpMenuActivity.class));
                 LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
