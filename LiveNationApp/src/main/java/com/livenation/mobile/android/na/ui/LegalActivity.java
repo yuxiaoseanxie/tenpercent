@@ -4,14 +4,9 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 /**
  * Created by elodieferrais on 4/25/14.
@@ -26,8 +21,8 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        FragmentTab termOfUseTabFragment = FragmentTab.newInstance(getString(R.string.terms_of_use_url));
-        FragmentTab privacyPolicyTabFragment = FragmentTab.newInstance(getString(R.string.privacy_policy_url));
+        WebViewFragment termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.terms_of_use_url));
+        WebViewFragment privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.privacy_policy_url));
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -84,38 +79,6 @@ public class LegalActivity extends LiveNationFragmentActivity {
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-        }
-    }
-
-
-    private static class FragmentTab extends Fragment {
-
-        private static final String ARG_URL = "arg_url";
-        private WebView webView;
-
-        public static FragmentTab newInstance(String url) {
-            FragmentTab fragment = new FragmentTab();
-            Bundle args = new Bundle();
-            args.putString(ARG_URL, url);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            View view = inflater.inflate(R.layout.fragment_webview, container, false);
-            webView = (WebView) view.findViewById(R.id.webview);
-            WebSettings webSettings = webView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webView.setWebViewClient(new WebViewClient());
-
-            String url = getArguments().getString(ARG_URL);
-            webView.loadUrl(url);
-
-            setRetainInstance(true);
-
-            return view;
         }
     }
 }

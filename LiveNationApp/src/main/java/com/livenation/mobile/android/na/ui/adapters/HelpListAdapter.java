@@ -8,14 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.ui.HelpMenuActivity;
+import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 
 import java.util.List;
 
 /**
  * Created by elodieferrais on 4/28/14.
  */
-public class HelpListAdapter extends ArrayAdapter<HelpMenuActivity.HelpMenuItem> {
-    public HelpListAdapter(Context context, List<HelpMenuActivity.HelpMenuItem> objects) {
+public class HelpListAdapter extends ArrayAdapter<HelpMenuFragment.HelpMenuItem> {
+    public HelpListAdapter(Context context, List<HelpMenuFragment.HelpMenuItem> objects) {
         super(context, 0, objects);
     }
 

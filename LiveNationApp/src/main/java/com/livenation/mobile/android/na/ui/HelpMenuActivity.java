@@ -1,103 +1,54 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.AdapterView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.adapters.HelpListAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
+import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 /**
  * Created by elodieferrais on 4/28/14.
  */
-public class HelpMenuActivity extends LiveNationFragmentActivity implements Response.ErrorListener, Response.Listener<JSONObject> {
+public class HelpMenuActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener {
 
-    private final static String TOPICS_KEY = "topics";
-    private final static String SLUG_KEY = "slug";
-    private final static String NAME_KEY = "name";
-
-    private final static String DESCRIPTION_KEY = "description";
-
-    private RequestQueue queue;
-    private ListView listView;
+    private WebViewFragment currentfragment;
+    private HelpMenuFragment helpMenuFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        queue = Volley.newRequestQueue(this);
+        setContentView(R.layout.activity_help_menu);
 
-        listView = new ListView(this);
-        setContentView(listView);
-
-        loadHelpJson();
+        helpMenuFragment = (HelpMenuFragment) getFragmentManager().findFragmentById(R.id.activity_menu_fragment);
+        helpMenuFragment.setOnItemClickListener(this);
 
     }
 
-    private void loadHelpJson() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getString(R.string.help_url_json), null, this, this);
-        queue.add(request);
-    }
 
-    private void buildList(JSONArray items) {
-        List<HelpMenuItem> itemList = new ArrayList<HelpMenuItem>(items.length());
-        try {
-            for (int i = 0; i < items.length(); i++) {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        HelpListAdapter adapter = (HelpListAdapter) helpMenuFragment.getListAdapter();
+        String slug = adapter.getItem(position).slug;
+        String url = getString(R.string.help_base_url_section) + slug;
+        currentfragment = WebViewFragment.newInstance(url);
+        getFragmentManager().beginTransaction().add(android.R.id.content, currentfragment)
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
 
-                JSONObject item = items.getJSONObject(i);
-                String slug = item.getString(SLUG_KEY);
-                String name = item.getString(NAME_KEY);
-                String description = item.getString(DESCRIPTION_KEY);
-
-                HelpMenuItem helpMenuItem = new HelpMenuItem(slug, name, description);
-                itemList.add(helpMenuItem);
-            }
-
-            HelpListAdapter adapter = new HelpListAdapter(this, itemList);
-            listView.setAdapter(adapter);
-
-
-        } catch (JSONException e) {
-            onErrorResponse(new VolleyError(e));
-        }
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
-        //TODO https://www.pivotaltracker.com/story/show/70329394
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            JSONArray helpMenuItem = response.getJSONArray(TOPICS_KEY);
-            buildList(helpMenuItem);
-
-        } catch (JSONException e) {
-            onErrorResponse(new VolleyError(e));
-        }
-    }
-
-    public class HelpMenuItem {
-        public final String slug;
-        public final String name;
-        public final String description;
-
-        private HelpMenuItem(String slug, String name, String description) {
-            this.slug = slug;
-            this.name = name;
-            this.description = description;
+    public void onBackPressed() {
+        if (currentfragment != null) {
+            getFragmentManager().popBackStack();
+            currentfragment = null;
+        } else {
+            super.onBackPressed();
         }
     }
 }
