@@ -18,7 +18,6 @@ public class WebViewFragment extends Fragment {
 
     private static final String ARG_URL = "arg_url";
     private WebView webView;
-    private Bundle viewState = null;
 
     public static WebViewFragment newInstance(String url) {
         WebViewFragment fragment = new WebViewFragment();
@@ -31,7 +30,6 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setRetainInstance(true);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +37,7 @@ public class WebViewFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_webview, container, false);
         webView = (WebView) view.findViewById(R.id.webview);
-        if (viewState == null) {
+        if (savedInstanceState == null) {
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webView.setWebViewClient(new WebViewClient());
@@ -47,7 +45,7 @@ public class WebViewFragment extends Fragment {
             String url = getArguments().getString(ARG_URL);
             webView.loadUrl(url);
         } else {
-            webView.restoreState(viewState);
+            webView.restoreState(savedInstanceState);
         }
 
         return view;
@@ -55,9 +53,9 @@ public class WebViewFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        webView.saveState(outState);
         super.onSaveInstanceState(outState);
-        viewState = new Bundle();
-        webView.saveState(viewState);
+
     }
 
 }
