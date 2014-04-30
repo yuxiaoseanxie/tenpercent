@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.adapters.CalendarStickyListHeaderAdapter;
+import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Presale;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
@@ -17,14 +17,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-
 /**
  * Created by elodieferrais on 4/29/14.
  */
 public class CalendarDialogFragment extends DialogFragment {
-    private StickyListHeadersListView listView;
-    private CalendarStickyListHeaderAdapter adapter;
+    private ListView listView;
+    private CalendarAdapter adapter;
     private Event event;
 
     public static CalendarDialogFragment newInstance(Event event) {
@@ -43,7 +41,7 @@ public class CalendarDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_calendar_list, null);
-        this.listView = (StickyListHeadersListView) view.findViewById(R.id.dialog_ticket_offerings_list);
+        this.listView = (ListView) view.findViewById(R.id.calendar_dialog_list);
         listView.setAdapter(adapter);
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
@@ -58,19 +56,18 @@ public class CalendarDialogFragment extends DialogFragment {
     private void init(Event event) {
         List<CalendarItem> calendarItemList = new ArrayList<CalendarItem>();
         //Add Show date item
-        CalendarItem showDate = new CalendarItem("Show Date");
+        CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
         showDate.setStartDate(event.getLocalStartTime());
         calendarItemList.add(showDate);
 
         //Add Genaral onSale items
-        List<TicketOffering> ticketOfferingList = event.getTicketOfferings();
-        for (int i = 0; i < ticketOfferingList.size(); i++) {
-            TicketOffering ticketOffering = ticketOfferingList.get(i);
-            CalendarItem generalOnSale = new CalendarItem(ticketOffering.getName());
-            generalOnSale.setStartDate(ticketOffering.getOnSaleAt());
-            calendarItemList.add(generalOnSale);
+        CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
+        generalOnSale.setStartDate(event.getOnSaleDate());
+        calendarItemList.add(generalOnSale);
 
-            //Add presale items
+        //Add Presale items
+        List<TicketOffering> ticketOfferingList = event.getTicketOfferings();
+        for (TicketOffering ticketOffering : ticketOfferingList) {
             List<Presale> presales = ticketOffering.getPresales();
             if (presales != null) {
                 for (Presale presale : presales) {
@@ -82,7 +79,7 @@ public class CalendarDialogFragment extends DialogFragment {
             }
         }
 
-        adapter = new CalendarStickyListHeaderAdapter(getActivity(), calendarItemList);
+        adapter = new CalendarAdapter(getActivity(), calendarItemList);
     }
 
     public static class CalendarItem {

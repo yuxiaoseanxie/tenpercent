@@ -160,5 +160,12 @@
 
     <!-- Calendar dialog -->
     <string name="calendar_dialog_title">Dates</string>
+    <string name="calendar_dialog_show_date_header_title">Show Date</string>
+    <string name="calendar_dialog_on_sale_general_title">On Sale to General Public</string>
+    <string name="calendar_dialog_start_date_prefix_future">Starts</string>
+    <string name="calendar_dialog_start_date_prefix_past">Began</string>
+    <string name="calendar_dialog_end_date_prefix_future">Ends</string>
+    <string name="calendar_dialog_end_date_prefix_past">Ended</string>
+
 
 </resources>
