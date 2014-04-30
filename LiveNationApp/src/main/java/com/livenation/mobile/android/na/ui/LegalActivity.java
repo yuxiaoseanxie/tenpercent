@@ -26,14 +26,14 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        FragmentTab termOfUseTabFragment = FragmentTab.newInstance(getString(R.string.terms_of_use_url));
-        FragmentTab privacyPolicyTabFragment = FragmentTab.newInstance(getString(R.string.privacy_policy_url));
+        FragmentTab termOfUseTabFragment = FragmentTab.newInstance(getString(R.string.legal_terms_of_use_url));
+        FragmentTab privacyPolicyTabFragment = FragmentTab.newInstance(getString(R.string.legal_privacy_policy_url));
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        termOfUseTab = actionBar.newTab().setText(getString(R.string.terms_of_use));
-        privacyPolicyTab = actionBar.newTab().setText(getString(R.string.privacy_policy));
+        termOfUseTab = actionBar.newTab().setText(getString(R.string.legal_terms_of_use));
+        privacyPolicyTab = actionBar.newTab().setText(getString(R.string.legal_privacy_policy));
 
         termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment));
         privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment));
@@ -69,7 +69,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (!fragment.isAdded()) {
-                getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
             }
@@ -91,7 +91,6 @@ public class LegalActivity extends LiveNationFragmentActivity {
     private static class FragmentTab extends Fragment {
 
         private static final String ARG_URL = "arg_url";
-        private WebView webView;
 
         public static FragmentTab newInstance(String url) {
             FragmentTab fragment = new FragmentTab();
@@ -103,9 +102,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
-            View view = inflater.inflate(R.layout.fragment_webview, container, false);
-            webView = (WebView) view.findViewById(R.id.webview);
+            WebView webView = new WebView(getActivity());
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webView.setWebViewClient(new WebViewClient());
@@ -115,7 +112,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
             setRetainInstance(true);
 
-            return view;
+            return webView;
         }
     }
 }
