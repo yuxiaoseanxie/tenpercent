@@ -21,14 +21,14 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        WebViewFragment termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.terms_of_use_url));
-        WebViewFragment privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.privacy_policy_url));
+        WebViewFragment termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.legal_terms_of_use_url));
+        WebViewFragment privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        termOfUseTab = actionBar.newTab().setText(getString(R.string.terms_of_use));
-        privacyPolicyTab = actionBar.newTab().setText(getString(R.string.privacy_policy));
+        termOfUseTab = actionBar.newTab().setText(getString(R.string.legal_terms_of_use));
+        privacyPolicyTab = actionBar.newTab().setText(getString(R.string.legal_privacy_policy));
 
         termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment));
         privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment));
@@ -39,6 +39,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         // Restore the previously serialized current tab position.
         if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
             getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
@@ -48,8 +49,8 @@ public class LegalActivity extends LiveNationFragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Serialize the current tab position.
-        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
-                .getSelectedNavigationIndex());
+        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar().getSelectedNavigationIndex());
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -64,7 +65,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (!fragment.isAdded()) {
-                getFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, fragment.getClass().getSimpleName()).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
             }
