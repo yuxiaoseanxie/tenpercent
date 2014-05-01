@@ -213,7 +213,7 @@
 
     <style name="calendar_dialog_cell_title" >
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingBottom">@dimen/calendar_dialog_cell_title_padding_bottom</item>
     </style>
