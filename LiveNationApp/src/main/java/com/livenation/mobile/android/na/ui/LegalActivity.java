@@ -3,7 +3,10 @@ package com.livenation.mobile.android.na.ui;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
@@ -14,7 +17,7 @@ import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 public class LegalActivity extends LiveNationFragmentActivity {
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     private static final String TERMS_OF_USE_FRAGMENT_TAG = "terms_of_use_fragment_tab";
-    private static final String PRIVACY_POLICY_FRAGMENT_TAG = "terms_of_use_fragment_tab";
+    private static final String PRIVACY_POLICY_FRAGMENT_TAG = "privacy_policy_tab";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +88,11 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
         @Override
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            ft.hide(fragment);
+            getFragmentManager().beginTransaction().hide(fragment).commit();
         }
 
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
         }
     }
 }
