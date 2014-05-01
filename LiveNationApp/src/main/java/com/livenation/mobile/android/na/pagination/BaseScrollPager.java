@@ -27,6 +27,13 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (getAdapter().getCount() == 0) {
+            //onScroll will be triggered when adapter.clear() is invoked.
+            //we need to guard against on scrolling triggering a duplicate/unnecessary reload on this occasion,
+            //as a separate load() call should have been invoked.
+            return;
+        }
+
         if ((totalItemCount - visibleItemCount) <= (firstVisibleItem)) {
             load();
         }
