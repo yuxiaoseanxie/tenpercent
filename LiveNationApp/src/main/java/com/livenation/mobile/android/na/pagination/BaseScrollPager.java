@@ -44,6 +44,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void reset() {
+        adapter.clear();
         lastFetch = null;
         isFirstPage = true;
         if (paginatedFetcher != null) {
@@ -90,12 +91,9 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         }
         lastFetch = result;
 
-        //Clear the adapter here insteadof the reset method to avoid the few seconds with a blank page during the loading
         if (isFirstPage) {
-            adapter.clear();
             isFirstPage = false;
         }
-
 
         adapter.addAll(result);
         onFetchEnded();
