@@ -4,20 +4,17 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 /**
  * Created by elodieferrais on 4/25/14.
  */
 public class LegalActivity extends LiveNationFragmentActivity {
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+    private static final String TERMS_OF_USE_FRAGMENT_TAG = "terms_of_use_fragment_tab";
+    private static final String PRIVACY_POLICY_FRAGMENT_TAG = "terms_of_use_fragment_tab";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +23,15 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        FragmentTab termOfUseTabFragment = FragmentTab.newInstance(getString(R.string.legal_terms_of_use_url));
-        FragmentTab privacyPolicyTabFragment = FragmentTab.newInstance(getString(R.string.legal_privacy_policy_url));
+        WebViewFragment termOfUseTabFragment;
+        WebViewFragment privacyPolicyTabFragment;
+        if (savedInstanceState != null) {
+            termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAG);
+            privacyPolicyTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(PRIVACY_POLICY_FRAGMENT_TAG);
+        } else {
+            termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.legal_terms_of_use_url));
+            privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
+        }
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -35,8 +39,8 @@ public class LegalActivity extends LiveNationFragmentActivity {
         termOfUseTab = actionBar.newTab().setText(getString(R.string.legal_terms_of_use));
         privacyPolicyTab = actionBar.newTab().setText(getString(R.string.legal_privacy_policy));
 
-        termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment));
-        privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment));
+        termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment, TERMS_OF_USE_FRAGMENT_TAG));
+        privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment, PRIVACY_POLICY_FRAGMENT_TAG));
 
         actionBar.addTab(termOfUseTab);
         actionBar.addTab(privacyPolicyTab);
@@ -62,15 +66,17 @@ public class LegalActivity extends LiveNationFragmentActivity {
     private class WebViewTabListener implements ActionBar.TabListener {
 
         private Fragment fragment;
+        private String tag;
 
-        private WebViewTabListener(Fragment fragment) {
+        private WebViewTabListener(Fragment fragment, String tag) {
             this.fragment = fragment;
+            this.tag = tag;
         }
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (!fragment.isAdded()) {
-                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, fragment.getClass().getSimpleName()).commit();
+                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, tag).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
             }
@@ -85,35 +91,6 @@ public class LegalActivity extends LiveNationFragmentActivity {
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
-        }
-    }
-
-
-    private static class FragmentTab extends Fragment {
-
-        private static final String ARG_URL = "arg_url";
-
-        public static FragmentTab newInstance(String url) {
-            FragmentTab fragment = new FragmentTab();
-            Bundle args = new Bundle();
-            args.putString(ARG_URL, url);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            WebView webView = new WebView(getActivity());
-            WebSettings webSettings = webView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webView.setWebViewClient(new WebViewClient());
-
-            String url = getArguments().getString(ARG_URL);
-            webView.loadUrl(url);
-
-            setRetainInstance(true);
-
-            return webView;
         }
     }
 }
