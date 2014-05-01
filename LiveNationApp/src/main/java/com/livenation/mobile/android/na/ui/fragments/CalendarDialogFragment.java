@@ -5,22 +5,26 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
+import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Presale;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by elodieferrais on 4/29/14.
  */
-public class CalendarDialogFragment extends DialogFragment {
+public class CalendarDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener{
     private ListView listView;
     private CalendarAdapter adapter;
     private Event event;
@@ -43,6 +47,7 @@ public class CalendarDialogFragment extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_calendar_list, null);
         this.listView = (ListView) view.findViewById(R.id.calendar_dialog_list);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         dialog.setView(view, 0, 0, 0, 0);
@@ -80,6 +85,23 @@ public class CalendarDialogFragment extends DialogFragment {
         }
 
         adapter = new CalendarAdapter(getActivity(), calendarItemList);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        CalendarItem item = adapter.getItem(position);
+        if (item.getStartDate().compareTo(Calendar.getInstance().getTime()) > 0) {
+            CalendarUtils.addEventToCalendar(item, event, getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.calendar_add_event_not_possible_message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null && getRetainInstance())
+            getDialog().setDismissMessage(null);
+        super.onDestroyView();
     }
 
     public static class CalendarItem {
