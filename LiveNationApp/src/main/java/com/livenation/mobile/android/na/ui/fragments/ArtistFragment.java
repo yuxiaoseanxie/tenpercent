@@ -12,6 +12,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
+import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -162,6 +163,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
 
         youTube.setArtistName(artist.getName());
+
+        ((ArtistActivity) getActivity()).invalidateIsShareAvailable();
     }
 
     @Override

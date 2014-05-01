@@ -10,8 +10,6 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
@@ -19,12 +17,9 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
@@ -69,6 +64,8 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
         }
         this.event = event;
         singleEventView.setEvent(event);
+
+        invalidateIsShareAvailable();
     }
 
     private void init() {

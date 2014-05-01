@@ -27,6 +27,9 @@ public class SingleVenuePresenter extends
     }
 
     public static void embedResult(Bundle args, Venue venueCache) {
+        //It's possible to have a venue without box office info. If
+        //handed one of those, we ignore it so that we'll load the
+        //full entity from platform.
         if (null != venueCache) {
             args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
         }
