@@ -116,7 +116,7 @@
         <activity
             android:name="com.livenation.mobile.android.na.ui.LegalActivity"
             android:label="@string/home_menu_legal"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.LocationActivity" />
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"  />
 
 
         <activity
