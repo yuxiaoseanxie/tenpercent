@@ -70,6 +70,7 @@
             android:name="com.livenation.mobile.android.na.ui.ShowActivity"
             android:label="@string/activity_label_show"
             android:launchMode="singleTop" />
+
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue"
@@ -99,6 +100,20 @@
             android:name="com.livenation.mobile.android.na.ui.SsoActivity"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.UrlActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar.MinWidth">
+
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="livenation" android:host="*" />
+            </intent-filter>
+
+        </activity>
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.LocationActivity"
