@@ -24,6 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="@dimen/ui_underscore_height"
-        android:layout_marginLeft="@dimen/calendar_dialog_list_margin_left"
+        android:divider="@drawable/ticket_offering_list_divider"
         android:scrollbars="none" />
 </LinearLayout>

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/calendar_dialog_cell_padding_vertically"
     android:paddingBottom="@dimen/calendar_dialog_cell_padding_vertically"
-    android:paddingRight="@dimen/calendar_dialog_cell_padding_right">
+    android:paddingRight="@dimen/calendar_dialog_cell_padding_right"
+    android:paddingLeft="@dimen/ui_dialog_list_separator_padding_left">
 
     <TextView
         android:layout_height="wrap_content"
