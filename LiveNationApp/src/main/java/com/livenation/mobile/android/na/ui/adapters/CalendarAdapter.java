@@ -62,6 +62,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarDialogFragment.Calenda
 
         //Start Date
         startLabel.setText(getLabelByDate(SELL_STATUS.START, item.getStartDate()));
+
         startDate.setText(dateFormat.format(item.getStartDate()));
         startTime.setText(timeFormat.format(item.getStartDate()));
 

@@ -61,9 +61,11 @@ public class CalendarDialogFragment extends DialogFragment implements AdapterVie
     private void init(Event event) {
         List<CalendarItem> calendarItemList = new ArrayList<CalendarItem>();
         //Add Show date item
+        if (!event.getIsMegaticket()) {
         CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
         showDate.setStartDate(event.getLocalStartTime());
         calendarItemList.add(showDate);
+        }
 
         //Add Genaral onSale items
         CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_on_sale_general_title));
@@ -132,6 +134,10 @@ public class CalendarDialogFragment extends DialogFragment implements AdapterVie
 
         public void setEndDate(Date endDate) {
             this.endDate = endDate;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
