@@ -44,6 +44,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         // Restore the previously serialized current tab position.
         if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
             getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
@@ -53,8 +54,8 @@ public class LegalActivity extends LiveNationFragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Serialize the current tab position.
-        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
-                .getSelectedNavigationIndex());
+        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar().getSelectedNavigationIndex());
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -69,7 +70,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (!fragment.isAdded()) {
-                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment).commit();
+                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, fragment.getClass().getSimpleName()).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
             }
