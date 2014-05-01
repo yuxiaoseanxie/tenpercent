@@ -149,6 +149,12 @@
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
     <string name="refresh_label">Retry</string>
 
+    <!-- Legal and credit-->
+    <string name="legal_terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
+    <string name="legal_privacy_policy_url">https://s3.amazonaws.com/adr-static-content/en_US/privacy_policy.html</string>
+    <string name="legal_terms_of_use">Terms of Use</string>
+    <string name="legal_privacy_policy">Privacy Policy</string>
+
     <!-- Contact -->
     <string name="contact_email_address">mobilefeedback@livenation.com</string>
     <string name="contact_email_subject">Live Nation Android App: Contact US.</string>
