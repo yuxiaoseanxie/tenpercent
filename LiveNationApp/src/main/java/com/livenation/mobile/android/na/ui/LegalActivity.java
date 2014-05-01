@@ -13,6 +13,8 @@ import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
  */
 public class LegalActivity extends LiveNationFragmentActivity {
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+    private static final String TERMS_OF_USE_FRAGMENT_TAG = "terms_of_use_fragment_tab";
+    private static final String PRIVACY_POLICY_FRAGMENT_TAG = "terms_of_use_fragment_tab";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +23,15 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        WebViewFragment termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.legal_terms_of_use_url));
-        WebViewFragment privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
+        WebViewFragment termOfUseTabFragment;
+        WebViewFragment privacyPolicyTabFragment;
+        if (savedInstanceState != null) {
+            termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAG);
+            privacyPolicyTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(PRIVACY_POLICY_FRAGMENT_TAG);
+        } else {
+            termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.legal_terms_of_use_url));
+            privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
+        }
 
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -30,8 +39,8 @@ public class LegalActivity extends LiveNationFragmentActivity {
         termOfUseTab = actionBar.newTab().setText(getString(R.string.legal_terms_of_use));
         privacyPolicyTab = actionBar.newTab().setText(getString(R.string.legal_privacy_policy));
 
-        termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment));
-        privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment));
+        termOfUseTab.setTabListener(new WebViewTabListener(termOfUseTabFragment, TERMS_OF_USE_FRAGMENT_TAG));
+        privacyPolicyTab.setTabListener(new WebViewTabListener(privacyPolicyTabFragment, PRIVACY_POLICY_FRAGMENT_TAG));
 
         actionBar.addTab(termOfUseTab);
         actionBar.addTab(privacyPolicyTab);
@@ -57,15 +66,17 @@ public class LegalActivity extends LiveNationFragmentActivity {
     private class WebViewTabListener implements ActionBar.TabListener {
 
         private Fragment fragment;
+        private String tag;
 
-        private WebViewTabListener(Fragment fragment) {
+        private WebViewTabListener(Fragment fragment, String tag) {
             this.fragment = fragment;
+            this.tag = tag;
         }
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             if (!fragment.isAdded()) {
-                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, fragment.getClass().getSimpleName()).commit();
+                getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, tag).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
             }

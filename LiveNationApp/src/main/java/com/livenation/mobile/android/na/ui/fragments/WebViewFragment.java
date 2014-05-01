@@ -35,8 +35,7 @@ public class WebViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_webview, container, false);
-        webView = (WebView) view.findViewById(R.id.webview);
+        webView = new WebView(getActivity());
         if (savedInstanceState == null) {
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
@@ -48,14 +47,13 @@ public class WebViewFragment extends Fragment {
             webView.restoreState(savedInstanceState);
         }
 
-        return view;
+        return webView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         webView.saveState(outState);
         super.onSaveInstanceState(outState);
-
     }
 
 }
