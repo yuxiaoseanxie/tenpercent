@@ -69,7 +69,6 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         return date;
     }
 
-
     private Date parseDateString(DateTimeFormatter formatter, String dateTimeString) {
         Date date;
         try {
