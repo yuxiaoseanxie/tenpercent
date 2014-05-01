@@ -61,7 +61,7 @@ public class CalendarDialogFragment extends DialogFragment {
         calendarItemList.add(showDate);
 
         //Add Genaral onSale items
-        CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
+        CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_on_sale_general_title));
         generalOnSale.setStartDate(event.getOnSaleDate());
         calendarItemList.add(generalOnSale);
 
