@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
@@ -62,6 +63,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         if (ssoProvider != null) {
             ssoProvider.clearSession();
         }
+        LiveNationApplication.get().getApiHelper().clearAccessToken(activity);
     }
 
     public UiApiSsoProvider getConfiguredSsoProvider(Context context) {

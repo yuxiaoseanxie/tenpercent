@@ -95,7 +95,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
 
-        apiHelper.setDependencyActivity(this);
         if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
             LiveNationApplication.get().getApiHelper().buildDefaultApi();
         }

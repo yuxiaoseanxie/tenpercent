@@ -194,6 +194,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
+        apiHelper.clearAccessToken(getApplicationContext());
         apiHelper.buildDefaultApi();
         NotificationsRegistrationManager.getInstance().register();
     }
