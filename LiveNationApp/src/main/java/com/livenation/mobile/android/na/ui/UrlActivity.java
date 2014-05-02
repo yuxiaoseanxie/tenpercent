@@ -179,6 +179,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
             intent.putExtras(SingleVenuePresenter.getAruguments(id));
         } else {
             Log.i(getClass().getName(), "Unhandled incoming url " + data);
+            displayError(R.string.url_error_bad_url);
+
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -205,6 +207,11 @@ public class UrlActivity extends LiveNationFragmentActivity {
                         dispatchEvent(apiService, data);
                     } else if (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists")) {
                         dispatchArtist(apiService, data);
+                    } else {
+                        displayError(R.string.url_error_bad_url);
+
+                        setResult(RESULT_CANCELED);
+                        finish();
                     }
                 }
 
