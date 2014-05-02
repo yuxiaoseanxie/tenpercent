@@ -85,6 +85,9 @@
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
     <string name="debug_item_scan">Scan: %s artist(s)</string>
+    <string name="debug_item_commerce_qa_mode">Commerce QA Mode</string>
+    <string name="debug_item_commerce_qa_mode_on">On</string>
+    <string name="debug_item_commerce_qa_mode_off">Off</string>
 
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
