@@ -117,6 +117,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
 
+    // Handles Urls of forms livenation:///event/:id
+    //                       livenation:///events/:id
     public void dispatchEvent(LiveNationApiService service, Uri data) {
         String id = Event.makeTypedId(data.getLastPathSegment());
 
@@ -131,6 +133,10 @@ public class UrlActivity extends LiveNationFragmentActivity {
         });
     }
 
+    // Handles Urls of forms livenation:///artist/:id
+    //                       livenation:///artist/:id/events
+    //                       livenation:///artists/:id
+    //                       livenation:///artists/:id/events
     public void dispatchArtist(LiveNationApiService service, Uri data) {
         List<String> pathSegments = data.getPathSegments();
         String id = Artist.makeTypedId(data.getLastPathSegment());
@@ -164,6 +170,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
             return false;
     }
 
+    // Handles Urls of forms livenation:///navigate/:typed_id
     public void dispatchNavigate(Uri data) {
         String id = data.getLastPathSegment();
 
