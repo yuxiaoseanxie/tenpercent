@@ -267,26 +267,10 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         @Override
         public void run() {
             super.run();
-            LiveNationApiBuilder builder = (LiveNationApiBuilder) getApiBuilder();
-            Context context = builder.getContext().getResult();
-
             String accessToken = readAccessToken(context);
 
             if (TextUtils.isEmpty(accessToken)) {
-                String host = builder.getHost().getResult();
-                String clientId = builder.getClientId().getResult();
-                String deviceId = builder.getDeviceId().getResult();
-                Pair<String, String> ssoParams = getSsoParams();
-
-                LiveNationApiConfig quick = new LiveNationApiConfig(
-                        host, clientId, deviceId,
-                        null,
-                        0, 0,
-                        builder.getContext().getResult());
-
-                LiveNationApiService apiService = new LiveNationApiServiceImpl(quick);
-                apiService.getToken(clientId, deviceId, ssoParams.first, ssoParams.second, AccessTokenConfig.this);
-
+                retrieveToken();
             } else {
                 setResult(accessToken);
                 notifyReady();
@@ -303,7 +287,25 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(0, "Api Access token:" + error.getMessage());
+            notifyFailed(error.getErrorCode(), error.getMessage());
+        }
+
+        private void retrieveToken() {
+            LiveNationApiBuilder builder = (LiveNationApiBuilder) getApiBuilder();
+
+            String host = builder.getHost().getResult();
+            String clientId = builder.getClientId().getResult();
+            String deviceId = builder.getDeviceId().getResult();
+            Pair<String, String> ssoParams = getSsoParams();
+
+            LiveNationApiConfig quick = new LiveNationApiConfig(
+                    host, clientId, deviceId,
+                    null,
+                    0, 0,
+                    builder.getContext().getResult());
+
+            LiveNationApiService apiService = new LiveNationApiServiceImpl(quick);
+            apiService.getToken(clientId, deviceId, ssoParams.first, ssoParams.second, AccessTokenConfig.this);
         }
 
         private Pair<String, String> getSsoParams() {
