@@ -118,6 +118,10 @@
     <string name="box_office_general_rules">General Rules</string>
     <string name="box_office_child_rules">Child Rules</string>
 
+    <string name="url_error_bad_entity">Item not found</string>
+    <string name="url_error_no_conneciton">Internet connection required</string>
+    <string name="url_error_platform">Please try again later</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>

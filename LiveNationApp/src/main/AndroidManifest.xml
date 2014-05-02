@@ -104,7 +104,7 @@
         <activity
             android:name="com.livenation.mobile.android.na.ui.UrlActivity"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar.MinWidth">
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
 
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />

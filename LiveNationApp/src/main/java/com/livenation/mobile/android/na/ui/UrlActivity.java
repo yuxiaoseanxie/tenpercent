@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -38,7 +40,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
             hasHandledUrl = savedInstanceState.getBoolean(EXTRA_HAS_HANDLED_URL, false);
 
         if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
-            handleUrlIntent(getIntent());
+            dispatchLiveNationIntent(getIntent());
         }
     }
 
@@ -47,7 +49,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         super.onNewIntent(intent);
 
         if (intent.getAction().equals(Intent.ACTION_VIEW)) {
-            handleUrlIntent(intent);
+            dispatchLiveNationIntent(intent);
         }
     }
 
@@ -67,78 +69,102 @@ public class UrlActivity extends LiveNationFragmentActivity {
         }
     }
 
-    public void handleTicketmasterEvent(LiveNationApiService service, Uri data) {
-        String id = data.getLastPathSegment();
-        String typedId = "evt_" + id;
 
+    //region Error Handling
+
+    public void displayError(int reasonStringId) {
+        Toast.makeText(getApplicationContext(), reasonStringId, Toast.LENGTH_SHORT).show();
+    }
+
+    //endregion
+
+
+    //region Ticketmaster Urls
+
+    public MultiGetParameters buildMultiGetParameters(String typedId) {
         MultiGetParameters multiGetParameters = new MultiGetParameters();
         multiGetParameters.setType(ApiParameterDefinitions.MultiGet.IdType.TICKETMASTER);
         multiGetParameters.addId(typedId);
+        return multiGetParameters;
+    }
+
+    public <T> void fetchEntity(LiveNationApiService service, final String id, final Response.Listener<T> success) {
+        MultiGetParameters multiGetParameters = buildMultiGetParameters(id);
         service.multiGet(multiGetParameters, new ApiService.BasicApiCallback<List<Entity>>() {
             @Override
             public void onResponse(List<Entity> response) {
                 if (response.size() == 0) {
+                    displayError(R.string.url_error_bad_entity);
+
                     setResult(RESULT_CANCELED);
                     finish();
                     return;
                 }
 
-                Event event = (Event) response.get(0);
+                T entity = (T) response.get(0);
+                success.onResponse(entity);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                Log.e(getClass().getName(), "multi-get failed: " + error);
+                displayError(R.string.url_error_platform);
+
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+    }
+
+
+    public void dispatchEvent(LiveNationApiService service, Uri data) {
+        String id = Event.makeTypedId(data.getLastPathSegment());
+
+        fetchEntity(service, id, new Response.Listener<Event>() {
+            @Override
+            public void onResponse(Event event) {
                 Intent intent = new Intent(UrlActivity.this, ShowActivity.class);
                 intent.putExtras(SingleEventPresenter.getAruguments(event.getId()));
                 SingleEventPresenter.embedResult(intent.getExtras(), event);
                 startActivityForResult(intent, REQUEST_CODE);
             }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                Log.e(getClass().getName(), "multi-get failed: " + error);
-
-                setResult(RESULT_CANCELED);
-                finish();
-            }
         });
     }
 
-    public void handleTicketmasterArtist(LiveNationApiService service, Uri data) {
+    public void dispatchArtist(LiveNationApiService service, Uri data) {
         List<String> pathSegments = data.getPathSegments();
-        String id = data.getLastPathSegment();
+        String id = Artist.makeTypedId(data.getLastPathSegment());
+
+        // Handle paths like `/artist/:id/events`
         if (pathSegments.size() == 3) {
-            id = pathSegments.get(1);
+            id = Artist.makeTypedId(pathSegments.get(1));
         }
 
-        String typedId = "art_" + id;
-        MultiGetParameters multiGetParameters = new MultiGetParameters();
-        multiGetParameters.setType(ApiParameterDefinitions.MultiGet.IdType.TICKETMASTER);
-        multiGetParameters.addId(typedId);
-        service.multiGet(multiGetParameters, new ApiService.BasicApiCallback<List<Entity>>() {
+        fetchEntity(service, id, new Response.Listener<Artist>() {
             @Override
-            public void onResponse(List<Entity> response) {
-                if (response.size() == 0) {
-                    setResult(RESULT_CANCELED);
-                    finish();
-
-                    return;
-                }
-
-                Artist artist = (Artist) response.get(0);
-                Intent intent = new Intent(UrlActivity.this, ShowActivity.class);
+            public void onResponse(Artist artist) {
+                Intent intent = new Intent(UrlActivity.this, ArtistActivity.class);
                 intent.putExtras(SingleArtistPresenter.getAruguments(artist.getId()));
                 SingleArtistPresenter.embedResult(intent.getExtras(), artist);
                 startActivityForResult(intent, REQUEST_CODE);
             }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                Log.e(getClass().getName(), "multi-get failed: " + error);
-
-                setResult(RESULT_CANCELED);
-                finish();
-            }
         });
     }
 
-    public void handleNavigate(LiveNationApiService service, Uri data) {
+    //endregion
+
+
+    //region Navigate Urls
+
+    public boolean isNavigate(Uri data) {
+        List<String> pathSegments = data.getPathSegments();
+        if (pathSegments.size() > 0)
+            return pathSegments.get(0).equals("navigate");
+        else
+            return false;
+    }
+
+    public void dispatchNavigate(Uri data) {
         String id = data.getLastPathSegment();
 
         Intent intent = null;
@@ -160,32 +186,39 @@ public class UrlActivity extends LiveNationFragmentActivity {
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    public void handleUrlIntent(Intent intent) {
+    //endregion
+
+
+    public void dispatchLiveNationIntent(Intent intent) {
         if (hasHandledUrl)
             return;
 
         final Uri data = intent.getData();
-        getApiHelper().bindApi(new ApiServiceBinder() {
-            @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                List<String> pathSegments = data.getPathSegments();
-                if (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events")) {
-                    handleTicketmasterEvent(apiService, data);
-                } else if (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists")) {
-                    handleTicketmasterArtist(apiService, data);
-                } else if (pathSegments.get(0).equals("navigate")) {
-                    handleNavigate(apiService, data);
+        if (isNavigate(data)) {
+            dispatchNavigate(data);
+        } else {
+            getApiHelper().bindApi(new ApiServiceBinder() {
+                @Override
+                public void onApiServiceAttached(LiveNationApiService apiService) {
+                    List<String> pathSegments = data.getPathSegments();
+                    if (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events")) {
+                        dispatchEvent(apiService, data);
+                    } else if (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists")) {
+                        dispatchArtist(apiService, data);
+                    }
                 }
 
-                hasHandledUrl = true;
-            }
+                @Override
+                public void onApiServiceNotAvailable() {
+                    displayError(R.string.url_error_no_conneciton);
 
-            @Override
-            public void onApiServiceNotAvailable() {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+            });
+        }
+
+        hasHandledUrl = true;
     }
 
 
