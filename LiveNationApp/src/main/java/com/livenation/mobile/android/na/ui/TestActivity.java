@@ -15,6 +15,6 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
 
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        LiveNationApplication.get().getApiHelper().buildApi();
     }
 }

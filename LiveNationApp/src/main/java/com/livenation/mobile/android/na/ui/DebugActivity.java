@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -195,7 +193,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         actionsAdapter.notifyDataSetChanged();
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
         apiHelper.clearAccessToken(getApplicationContext());
-        apiHelper.buildDefaultApi();
+        apiHelper.buildApi();
         NotificationsRegistrationManager.getInstance().register();
     }
 

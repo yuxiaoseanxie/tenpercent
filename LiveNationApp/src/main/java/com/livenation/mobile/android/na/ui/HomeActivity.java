@@ -96,7 +96,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
 
         if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
-            LiveNationApplication.get().getApiHelper().buildDefaultApi();
+            LiveNationApplication.get().getApiHelper().buildApi();
         }
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());

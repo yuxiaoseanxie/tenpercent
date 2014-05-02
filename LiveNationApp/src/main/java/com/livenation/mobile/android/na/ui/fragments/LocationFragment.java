@@ -202,7 +202,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     public void onDestroy() {
         super.onPause();
         //build a new API on exiting
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        LiveNationApplication.get().getApiHelper().buildApi();
     }
 
     /**

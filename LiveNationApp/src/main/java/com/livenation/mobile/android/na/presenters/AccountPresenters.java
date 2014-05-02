@@ -134,7 +134,7 @@ public class AccountPresenters {
             ssoManager.removeAuthConfiguration(context);
             ssoManager.removeUser(context);
 
-            LiveNationApplication.get().getApiHelper().buildDefaultApi();
+            LiveNationApplication.get().getApiHelper().buildApi();
             view.onSignOut();
         }
 

@@ -114,7 +114,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         } else {
             pendingBindings.add(binder);
             if (!isBuildingApi()) {
-                buildDefaultApi();
+                buildApi();
             }
         }
     }
@@ -135,7 +135,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
-    public void buildDefaultApi() {
+    public void buildApi() {
         apiBuilder = createApiBuilder();
         apiBuilder.build(ApiHelper.this);
     }

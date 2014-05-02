@@ -61,7 +61,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
     public void onSaveUserSuccess(User user) {
         //bring up the new session in the API
         LiveNationApplication.get().getApiHelper().clearAccessToken(this);
-        LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        LiveNationApplication.get().getApiHelper().buildApi();
         setResult(RESULT_OK);
         finish();
     }
