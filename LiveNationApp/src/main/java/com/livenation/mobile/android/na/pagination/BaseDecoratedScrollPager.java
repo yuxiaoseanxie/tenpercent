@@ -89,8 +89,11 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         footerBugHack.removeAllViews();
         if (!isFirstPage && refreshBarController != null) {
             refreshBarController.showRefreshBar(false);
+        } else {
+            if (isFirstPage) {
+                emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+            }
         }
-        //TODO find a way to notify the user an error occurred
     }
 
     @Override

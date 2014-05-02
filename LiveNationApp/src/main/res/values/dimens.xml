@@ -127,6 +127,9 @@
     <dimen name="view_refresh_bar_message_size">16sp</dimen>
     <dimen name="view_refresh_bar_refresh_size">13sp</dimen>
 
+    <!-- Help -->
+    <dimen name="help_menu_item_margin">10dip</dimen>
+
     <!-- Calendar dialog -->
     <dimen name="calendar_dialog_cell_padding_right">26dp</dimen>
     <dimen name="calendar_dialog_cell_padding_vertically">20dp</dimen>
@@ -135,7 +138,5 @@
 
 
     <!-- Urban Airship -->
-    <dimen name="widget_margin">12dp</dimen>
-
-
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

@@ -108,8 +108,11 @@ public class VenueBoxOfficeTabFragment extends Fragment {
             content += SECTION_TERMINATOR;
         }
 
-        if(text.length() > 0)
+        if (content.length() > 0) {
             content = content.substring(0, content.length() - SECTION_TERMINATOR.length());
+        } else {
+            content = "<i>No Info</i>";
+        }
 
         text.setText(Html.fromHtml(content));
     }

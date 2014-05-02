@@ -85,6 +85,9 @@
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
     <string name="debug_item_scan">Scan: %s artist(s)</string>
+    <string name="debug_item_commerce_qa_mode">Commerce QA Mode</string>
+    <string name="debug_item_commerce_qa_mode_on">On</string>
+    <string name="debug_item_commerce_qa_mode_off">Off</string>
 
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
@@ -118,6 +121,11 @@
     <string name="box_office_general_rules">General Rules</string>
     <string name="box_office_child_rules">Child Rules</string>
 
+    <string name="url_error_bad_entity">Item not found</string>
+    <string name="url_error_no_conneciton">Internet connection required</string>
+    <string name="url_error_platform">Please try again later</string>
+    <string name="url_error_bad_url">Bad URL</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">NOTIFICATIONS</string>
@@ -149,6 +157,12 @@
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
     <string name="refresh_label">Retry</string>
 
+    <!-- Legal and credit-->
+    <string name="legal_terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
+    <string name="legal_privacy_policy_url">https://s3.amazonaws.com/adr-static-content/en_US/privacy_policy.html</string>
+    <string name="legal_terms_of_use">Terms of Use</string>
+    <string name="legal_privacy_policy">Privacy Policy</string>
+
     <!-- Contact -->
     <string name="contact_email_address">mobilefeedback@livenation.com</string>
     <string name="contact_email_subject">Live Nation Android App: Contact US.</string>
@@ -157,6 +171,10 @@
     <string name="contact_email_signature_message_userid">\nUser ID:</string>
     <string name="contact_email_signature_message_device">\nDevice Model:</string>
     <string name="contact_email_signature_message_platform">\nAndroid Platform:</string>
+
+    <!-- Help -->
+    <string name="help_url_json">https://s3.amazonaws.com/ios-static-content/en_US/help/manifest.json</string>
+    <string name="help_base_url_section">https://s3.amazonaws.com/ios-static-content/en_US/help/topics/</string>
 
     <!-- Calendar dialog -->
     <string name="calendar_dialog_title">Dates</string>
