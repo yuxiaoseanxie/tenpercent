@@ -26,18 +26,10 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import java.util.List;
 
 public class UrlActivity extends LiveNationFragmentActivity {
-    private static final int REQUEST_CODE = 42;
-
-    private static final String EXTRA_HAS_HANDLED_URL = "com.livenation.mobile.android.na.ui.UrlActivity.EXTRA_HAS_HANDLED_URL";
-    private boolean hasHandledUrl;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_url);
-
-        if (savedInstanceState != null)
-            hasHandledUrl = savedInstanceState.getBoolean(EXTRA_HAS_HANDLED_URL, false);
 
         if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
             dispatchLiveNationIntent(getIntent());
@@ -50,22 +42,6 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
         if (intent.getAction().equals(Intent.ACTION_VIEW)) {
             dispatchLiveNationIntent(intent);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(EXTRA_HAS_HANDLED_URL, hasHandledUrl);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-            setResult(resultCode);
-            finish();
         }
     }
 
@@ -96,7 +72,6 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 if (response.size() == 0) {
                     displayError(R.string.url_error_bad_entity);
 
-                    setResult(RESULT_CANCELED);
                     finish();
                     return;
                 }
@@ -110,7 +85,6 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 Log.e(getClass().getName(), "multi-get failed: " + error);
                 displayError(R.string.url_error_platform);
 
-                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -128,7 +102,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 Intent intent = new Intent(UrlActivity.this, ShowActivity.class);
                 intent.putExtras(SingleEventPresenter.getAruguments(event.getId()));
                 SingleEventPresenter.embedResult(intent.getExtras(), event);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -152,7 +127,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 Intent intent = new Intent(UrlActivity.this, ArtistActivity.class);
                 intent.putExtras(SingleArtistPresenter.getAruguments(artist.getId()));
                 SingleArtistPresenter.embedResult(intent.getExtras(), artist);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -188,20 +164,17 @@ public class UrlActivity extends LiveNationFragmentActivity {
             Log.i(getClass().getName(), "Unhandled incoming url " + data);
             displayError(R.string.url_error_bad_url);
 
-            setResult(RESULT_CANCELED);
             finish();
         }
 
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivity(intent);
+        finish();
     }
 
     //endregion
 
 
     public void dispatchLiveNationIntent(Intent intent) {
-        if (hasHandledUrl)
-            return;
-
         final Uri data = intent.getData();
         if (isNavigate(data)) {
             dispatchNavigate(data);
@@ -217,7 +190,6 @@ public class UrlActivity extends LiveNationFragmentActivity {
                     } else {
                         displayError(R.string.url_error_bad_url);
 
-                        setResult(RESULT_CANCELED);
                         finish();
                     }
                 }
@@ -226,13 +198,10 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 public void onApiServiceNotAvailable() {
                     displayError(R.string.url_error_no_conneciton);
 
-                    setResult(RESULT_CANCELED);
                     finish();
                 }
             });
         }
-
-        hasHandledUrl = true;
     }
 
 
