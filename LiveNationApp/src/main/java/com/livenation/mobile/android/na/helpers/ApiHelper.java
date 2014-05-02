@@ -176,7 +176,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
-    class ClientIdConfig extends ApiBuilderElement<String> {
+    private class ClientIdConfig extends ApiBuilderElement<String> {
 
         @Override
         public void run() {
