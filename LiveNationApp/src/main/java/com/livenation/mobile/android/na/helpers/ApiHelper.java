@@ -1,10 +1,9 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.livenation.mobile.android.na.BuildConfig;
@@ -12,18 +11,19 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.LiveNationApiServiceImpl;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
-import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.util.Logger;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,8 +32,7 @@ import java.util.UUID;
  * Created by cchilton on 3/10/14.
  */
 public class ApiHelper implements ApiBuilder.OnBuildListener {
-    private final SsoManager ssoManager;
-    private final Context appContext;
+    private final Context context;
     private LiveNationApiBuilder apiBuilder;
     //pending bindings are those objects who tried to bind to the api before it was created
     private List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
@@ -42,9 +41,8 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     private List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
 
-    public ApiHelper(SsoManager ssoManager, Context appContext) {
-        this.ssoManager = ssoManager;
-        this.appContext = appContext;
+    public ApiHelper(Context context) {
+        this.context = context.getApplicationContext();
     }
 
     public static Constants.Environment getConfiguredEnvironment(Context context) {
@@ -138,65 +136,59 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     public void buildDefaultApi() {
-        apiBuilder = createApiBuilder(ssoManager, appContext);
-        build();
-    }
-
-    public void buildWithSsoProvider(ApiSsoProvider ssoProvider) {
-        createApiBuilder(ssoManager, appContext);
-
-        apiBuilder = createApiBuilder(ssoManager, appContext);
-        apiBuilder.getSsoProvider().setResult(ssoProvider);
-
-        build();
-    }
-
-    public void setDependencyActivity(Activity activity) {
-        ssoManager.setActivity(activity);
-        if (null != apiBuilder) {
-            WeakReference<Activity> weakActivity = new WeakReference<Activity>(activity);
-            apiBuilder.getActivity().setResult(weakActivity);
-            build();
-        }
-    }
-
-    private void build() {
-        if (null == apiBuilder) return;
+        apiBuilder = createApiBuilder();
         apiBuilder.build(ApiHelper.this);
     }
 
-    private LiveNationApiBuilder createApiBuilder(SsoManager ssoManager, Context appContext) {
+    public void clearAccessToken(Context context) {
+        AccessTokenPersistenceHelper.clearAccessToken(context);
+    }
 
-        ApiSsoProvider ssoProviderObject = ssoManager.getConfiguredSsoProvider(appContext);
+    private void saveAccessToken(String accessToken, Context context) {
+        AccessTokenPersistenceHelper.saveAccessToken(accessToken, context);
+    }
 
-        ApiBuilderElement<ApiSsoProvider> ssoProvider = new SsoProviderConfig();
-        ssoProvider.setResult(ssoProviderObject);
+    private String readAccessToken(Context context) {
+        return AccessTokenPersistenceHelper.readAccessToken(context);
+    }
 
-        ApiBuilderElement<String> deviceId = new GetDeviceId(appContext);
-        ApiBuilderElement<Context> context = new ContextConfig(appContext);
-        ApiBuilderElement<String> host = new GetHostConfig(appContext);
-        ApiBuilderElement<String> clientId = new GetClientIdConfig(appContext);
-        ApiBuilderElement<Double[]> location = new LocationConfig(appContext);
+    private LiveNationApiBuilder createApiBuilder() {
+        ApiBuilderElement<String> deviceId = new DeviceIdConfig();
+        ApiBuilderElement<Context> context = new ContextConfig(this.context);
+        ApiBuilderElement<String> host = new HostConfig();
+        ApiBuilderElement<String> clientId = new ClientIdConfig();
+        ApiBuilderElement<Double[]> location = new LocationConfig();
+        ApiBuilderElement<String> accessToken = new AccessTokenConfig();
 
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, ssoProvider, location, context);
-        apiBuilder.getSsoToken().addListener(new SsoTokenListener(apiBuilder));
-
-        Activity activity = ssoManager.getActivity();
-        if (null != activity) {
-            WeakReference<Activity> weakActivity = new WeakReference<Activity>(activity);
-            apiBuilder.getActivity().setResult(weakActivity);
-        }
+        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, accessToken, location, context);
 
         return apiBuilder;
     }
 
-    private class GetDeviceId extends ApiBuilderElement<String> {
-        private final Context appContext;
-        private final String PREFS_DEVICE_UUID = "device_uuid";
+    private class HostConfig extends ApiBuilderElement<String> {
 
-        private GetDeviceId(Context appContext) {
-            this.appContext = appContext;
+        @Override
+        public void run() {
+            super.run();
+            Constants.Environment environment = ApiHelper.getConfiguredEnvironment(context);
+            setResult(environment.getHost());
+            notifyReady();
         }
+    }
+
+    class ClientIdConfig extends ApiBuilderElement<String> {
+
+        @Override
+        public void run() {
+            super.run();
+            Constants.Environment environment = ApiHelper.getConfiguredEnvironment(context);
+            setResult(environment.getClientId());
+            notifyReady();
+        }
+    }
+
+    private class DeviceIdConfig extends ApiBuilderElement<String> {
+        private final String PREFS_DEVICE_UUID = "device_uuid";
 
         @Override
         public void run() {
@@ -208,14 +200,14 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             public void run() {
                 AdvertisingIdClient.Info adInfo = null;
                 try {
-                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(appContext);
+                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
                     final String id = adInfo.getId();
                     setResult(id);
 
                 } catch (Exception e) {
                     //Getting the Google Play Services Advertising ID Failed.
                     //Retrieve a UUID from preferences
-                    SharedPreferences prefs = appContext.getSharedPreferences(Constants.SharedPreferences.DEVICE_UUID, Context.MODE_PRIVATE);
+                    SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.DEVICE_UUID, Context.MODE_PRIVATE);
                     String uuid = prefs.getString(PREFS_DEVICE_UUID, null);
                     if (TextUtils.isEmpty(uuid)) {
                         //no existing UUID, generate and save a new one.
@@ -232,50 +224,13 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
-    private class GetHostConfig extends ApiBuilderElement<String> {
-        private final Context appContext;
-
-        private GetHostConfig(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            Constants.Environment environment = getConfiguredEnvironment(appContext);
-            setResult(environment.getHost());
-            notifyReady();
-        }
-    }
-
-    private class GetClientIdConfig extends ApiBuilderElement<String> {
-        private final Context appContext;
-
-        private GetClientIdConfig(Context appContext) {
-            this.appContext = appContext;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            Constants.Environment environment = getConfiguredEnvironment(appContext);
-            setResult(environment.getClientId());
-            notifyReady();
-        }
-    }
-
 
     private class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProvider.LocationCallback {
-        private final Context appContext;
-
-        private LocationConfig(Context appContext) {
-            this.appContext = appContext;
-        }
 
         @Override
         public void run() {
             super.run();
-            LiveNationApplication.get().getLocationManager().getLocation(appContext, this);
+            LiveNationApplication.get().getLocationManager().getLocation(context, this);
         }
 
         @Override
@@ -286,17 +241,17 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             setResult(locationValue);
             notifyReady();
             //add the location to our "location history" list
-            LiveNationApplication.get().getLocationManager().reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
+            LiveNationApplication.get().getLocationManager().reverseGeocodeCity(lat, lng, context, new LocationManager.GetCityCallback() {
                 @Override
                 public void onGetCity(City city) {
-                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
+                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, context);
                 }
 
                 @Override
                 public void onGetCityFailure() {
-                    String label = appContext.getString(R.string.location_unknown);
+                    String label = context.getString(R.string.location_unknown);
                     City city = new City(label, lat, lng);
-                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
+                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, context);
                 }
             });
         }
@@ -307,29 +262,80 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
     }
 
-    private class SsoTokenListener implements ApiBuilderElement.ConfigListener {
-        private final LiveNationApiBuilder apiBuilder;
+    private class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.BasicApiCallback<AccessToken> {
 
-        private SsoTokenListener(LiveNationApiBuilder apiBuilder) {
-            this.apiBuilder = apiBuilder;
+        @Override
+        public void run() {
+            super.run();
+            LiveNationApiBuilder builder = (LiveNationApiBuilder) getApiBuilder();
+            Context context = builder.getContext().getResult();
+
+            String accessToken = readAccessToken(context);
+
+            if (TextUtils.isEmpty(accessToken)) {
+                String host = builder.getHost().getResult();
+                String clientId = builder.getClientId().getResult();
+                String deviceId = builder.getDeviceId().getResult();
+                Pair<String, String> ssoParams = getSsoParams();
+
+                LiveNationApiConfig quick = new LiveNationApiConfig(
+                        host, clientId, deviceId,
+                        null,
+                        0, 0,
+                        builder.getContext().getResult());
+
+                LiveNationApiService apiService = new LiveNationApiServiceImpl(quick);
+                apiService.getToken(clientId, deviceId, ssoParams.first, ssoParams.second, AccessTokenConfig.this);
+
+            } else {
+                setResult(accessToken);
+                notifyReady();
+            }
         }
 
         @Override
-        public void onStart(ApiBuilderElement element) {
-
+        public void onResponse(AccessToken response) {
+            String token = response.getToken();
+            saveAccessToken(token, context);
+            setResult(token);
+            notifyReady();
         }
 
         @Override
-        public void onReady(ApiBuilderElement element) {
-
+        public void onErrorResponse(LiveNationError error) {
+            notifyFailed(0, "Api Access token:" + error.getMessage());
         }
 
-        @Override
-        public void onFailed(ApiBuilderElement element, int errorCode, String message) {
-            Activity activity = apiBuilder.getActivity().getResult().get();
-            Intent ssoRepair = new Intent(activity, SsoActivity.class);
-            ssoRepair.putExtra(SsoActivity.ARG_PROVIDER_ID, apiBuilder.getSsoProvider().getResult().getId());
-            activity.startActivity(ssoRepair);
+        private Pair<String, String> getSsoParams() {
+            SsoManager.AuthConfiguration ssoConfig = LiveNationApplication.get().getSsoManager().getAuthConfiguration(ApiHelper.this.context);
+            if (ssoConfig != null) {
+                int ssoProviderId = ssoConfig.getSsoProviderId();
+                String key = LiveNationApplication.get().getSsoManager().getSsoProvider(ssoProviderId, ApiHelper.this.context).getTokenKey();
+                String value = ssoConfig.getAccessToken();
+                return new Pair<String, String>(key, value);
+            }
+            return new Pair<String, String>(null, null);
         }
+    }
+
+    private static class AccessTokenPersistenceHelper {
+        private static final String PREF_STORE_NAME = "access";
+        private static final String PREF_ACCESS_TOKEN_KEY = "access_token";
+
+        public static void saveAccessToken(String accessToken, Context context) {
+            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
+            prefs.write(PREF_ACCESS_TOKEN_KEY, accessToken, context);
+        }
+
+        public static void clearAccessToken(Context context) {
+            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
+            prefs.remove(PREF_ACCESS_TOKEN_KEY, context);
+        }
+
+        public static String readAccessToken(Context context) {
+            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
+            return prefs.read(PREF_ACCESS_TOKEN_KEY, context);
+        }
+
     }
 }
