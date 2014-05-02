@@ -321,22 +321,20 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     }
 
     private static class AccessTokenPersistenceHelper {
-        private static final String PREF_STORE_NAME = "access";
-        private static final String PREF_ACCESS_TOKEN_KEY = "access_token";
 
         public static void saveAccessToken(String accessToken, Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
-            prefs.write(PREF_ACCESS_TOKEN_KEY, accessToken, context);
+            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
+            prefs.write(Constants.SharedPreferences.API_ACCESS_TOKEN, accessToken, context);
         }
 
         public static void clearAccessToken(Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
-            prefs.remove(PREF_ACCESS_TOKEN_KEY, context);
+            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
+            prefs.remove(Constants.SharedPreferences.API_ACCESS_TOKEN, context);
         }
 
         public static String readAccessToken(Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(PREF_STORE_NAME);
-            return prefs.read(PREF_ACCESS_TOKEN_KEY, context);
+            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
+            return prefs.read(Constants.SharedPreferences.API_ACCESS_TOKEN, context);
         }
 
     }
