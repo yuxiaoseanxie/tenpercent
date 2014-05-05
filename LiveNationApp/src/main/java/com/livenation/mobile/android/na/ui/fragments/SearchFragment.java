@@ -48,7 +48,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<SearchResult>());
-        LiveNationApplication.get().getApiHelper().bindApi(this);
+        LiveNationApplication.get().getConfigManager().bindApi(this);
     }
 
     @Override

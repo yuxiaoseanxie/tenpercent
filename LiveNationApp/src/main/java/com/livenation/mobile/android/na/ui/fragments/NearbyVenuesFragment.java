@@ -54,7 +54,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         adapter = new EventVenueAdapter(getActivity());
         pager = new NearbyVenuesScrollPager(adapter);
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
     }
 
@@ -90,7 +90,7 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     public void onDestroy() {
         super.onDestroyView();
         pager.stop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override

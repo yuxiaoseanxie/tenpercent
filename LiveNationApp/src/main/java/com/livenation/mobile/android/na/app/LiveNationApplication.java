@@ -20,8 +20,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
@@ -71,7 +71,7 @@ public class LiveNationApplication extends Application {
     private RecommendationsPresenter recommendationsPresenter;
     private RecommendationSetsPresenter recommendationSetsPresenter;
 
-    private ApiHelper apiHelper;
+    private ConfigManager configManager;
 
     public static LiveNationApplication get() {
         return instance;
@@ -85,7 +85,7 @@ public class LiveNationApplication extends Application {
 
         ssoManager = new SsoManager(new DummySsoProvider());
 
-        apiHelper = new ApiHelper(getApplicationContext());
+        configManager = new ConfigManager(getApplicationContext());
 
         locationManager = new LocationManager(getApplicationContext());
 
@@ -218,8 +218,8 @@ public class LiveNationApplication extends Application {
         return recommendationSetsPresenter;
     }
 
-    public ApiHelper getApiHelper() {
-        return apiHelper;
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 
 }

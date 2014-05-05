@@ -48,7 +48,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
         adapter = new RecommendationsAdapter(getActivity(), new ArrayList<TaggedEvent>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
 
     }
@@ -81,7 +81,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override

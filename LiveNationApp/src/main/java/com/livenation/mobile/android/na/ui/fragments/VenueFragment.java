@@ -148,7 +148,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     ;
 
     private void loadBoxOfficeInfo(final long venueId) {
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
                 SingleVenueParameters parameters = new SingleVenueParameters();

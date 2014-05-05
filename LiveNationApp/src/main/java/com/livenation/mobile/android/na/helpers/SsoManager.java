@@ -63,7 +63,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         if (ssoProvider != null) {
             ssoProvider.clearSession();
         }
-        LiveNationApplication.get().getApiHelper().clearAccessToken(activity);
+        LiveNationApplication.get().getConfigManager().clearAccessToken(activity);
     }
 
     public UiApiSsoProvider getConfiguredSsoProvider(Context context) {

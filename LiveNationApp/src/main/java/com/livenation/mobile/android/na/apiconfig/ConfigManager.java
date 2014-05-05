@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.apiconfig;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +11,11 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.LocationProvider;
+import com.livenation.mobile.android.na.helpers.PersistenceProvider;
+import com.livenation.mobile.android.na.helpers.PreferencePersistence;
+import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -31,7 +36,7 @@ import java.util.UUID;
 /**
  * Created by cchilton on 3/10/14.
  */
-public class ApiHelper implements ApiBuilder.OnBuildListener {
+public class ConfigManager implements ApiBuilder.OnBuildListener {
     private final Context context;
     private LiveNationApiBuilder apiBuilder;
     //pending bindings are those objects who tried to bind to the api before it was created
@@ -41,7 +46,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     private List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
 
-    public ApiHelper(Context context) {
+    public ConfigManager(Context context) {
         this.context = context.getApplicationContext();
     }
 
@@ -137,7 +142,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
 
     public void buildApi() {
         apiBuilder = createApiBuilder();
-        apiBuilder.build(ApiHelper.this);
+        apiBuilder.build(ConfigManager.this);
     }
 
     public void clearAccessToken(Context context) {
@@ -170,7 +175,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         @Override
         public void run() {
             super.run();
-            Constants.Environment environment = ApiHelper.getConfiguredEnvironment(context);
+            Constants.Environment environment = ConfigManager.getConfiguredEnvironment(context);
             setResult(environment.getHost());
             notifyReady();
         }
@@ -181,7 +186,7 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         @Override
         public void run() {
             super.run();
-            Constants.Environment environment = ApiHelper.getConfiguredEnvironment(context);
+            Constants.Environment environment = ConfigManager.getConfiguredEnvironment(context);
             setResult(environment.getClientId());
             notifyReady();
         }
@@ -309,10 +314,10 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         private Pair<String, String> getSsoParams() {
-            SsoManager.AuthConfiguration ssoConfig = LiveNationApplication.get().getSsoManager().getAuthConfiguration(ApiHelper.this.context);
+            SsoManager.AuthConfiguration ssoConfig = LiveNationApplication.get().getSsoManager().getAuthConfiguration(ConfigManager.this.context);
             if (ssoConfig != null) {
                 int ssoProviderId = ssoConfig.getSsoProviderId();
-                String key = LiveNationApplication.get().getSsoManager().getSsoProvider(ssoProviderId, ApiHelper.this.context).getTokenKey();
+                String key = LiveNationApplication.get().getSsoManager().getSsoProvider(ssoProviderId, ConfigManager.this.context).getTokenKey();
                 String value = ssoConfig.getAccessToken();
                 return new Pair<String, String>(key, value);
             }
