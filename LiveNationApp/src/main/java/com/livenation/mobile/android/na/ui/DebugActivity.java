@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
@@ -26,6 +27,7 @@ import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -162,6 +164,10 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         }
         scanItem = new ScanItem(getString(R.string.debug_item_scan, MusicLibraryScannerHelper.artistNumber), scanValue);
         actions.add(scanItem);
+
+        //Commerce QA Mode Item
+        CommerceQAModeItem commerceQAModeItem = new CommerceQAModeItem(getString(R.string.debug_item_commerce_qa_mode));
+        actions.add(commerceQAModeItem);
     }
 
     public void onShareSelected() {
@@ -348,6 +354,36 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
             builder.create().show();
 
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class CommerceQAModeItem extends DebugItem {
+        private CommerceQAModeItem(String name) {
+            super(name, null);
+        }
+
+        @Override
+        public String getValue() {
+            if (Ticketing.isQaModeEnabled())
+                return getString(R.string.debug_item_commerce_qa_mode_on);
+            else
+                return getString(R.string.debug_item_commerce_qa_mode_off);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            if (Ticketing.isQaModeEnabled()) {
+                Ticketing.setQaModeEnabled(false);
+            } else {
+                Ticketing.setQaModeEnabled(true);
+            }
+
+            actionsAdapter.notifyDataSetChanged();
         }
 
         @Override

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/calendar_dialog_cell_padding_vertically"
+    android:paddingBottom="@dimen/calendar_dialog_cell_padding_vertically"
+    android:paddingRight="@dimen/calendar_dialog_cell_padding_right"
+    android:paddingLeft="@dimen/ui_dialog_list_separator_padding_left">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/list_calender_item_title"
+        android:textAppearance="@style/calendar_dialog_cell_title" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:minWidth="@dimen/calendar_dialog_cell_prefix_min_width"
+            android:id="@+id/list_calender_item_start_label"
+            android:textAppearance="@style/calendar_dialog_cell_prefix" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/list_calender_item_start_date"
+            android:textAppearance="@style/calendar_dialog_cell_date" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_calender_item_start_time"
+            android:textAppearance="@style/calendar_dialog_cell_date" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/list_calender_item_end_date_wrapper"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_calender_item_end_label"
+            android:minWidth="@dimen/calendar_dialog_cell_prefix_min_width"
+            android:textAppearance="@style/calendar_dialog_cell_prefix" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/list_calender_item_end_date"
+            android:textAppearance="@style/calendar_dialog_cell_date" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_calender_item_end_time"
+            android:textAppearance="@style/calendar_dialog_cell_date" />
+    </LinearLayout>
+</LinearLayout>

@@ -85,6 +85,9 @@
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
     <string name="debug_item_scan">Scan: %s artist(s)</string>
+    <string name="debug_item_commerce_qa_mode">Commerce QA Mode</string>
+    <string name="debug_item_commerce_qa_mode_on">On</string>
+    <string name="debug_item_commerce_qa_mode_off">Off</string>
 
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
@@ -117,6 +120,11 @@
     <string name="box_office_will_call_info">Will Call</string>
     <string name="box_office_general_rules">General Rules</string>
     <string name="box_office_child_rules">Child Rules</string>
+
+    <string name="url_error_bad_entity">Item not found</string>
+    <string name="url_error_no_conneciton">Internet connection required</string>
+    <string name="url_error_platform">Please try again later</string>
+    <string name="url_error_bad_url">Bad URL</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
@@ -167,5 +175,17 @@
     <!-- Help -->
     <string name="help_url_json">https://s3.amazonaws.com/ios-static-content/en_US/help/manifest.json</string>
     <string name="help_base_url_section">https://s3.amazonaws.com/ios-static-content/en_US/help/topics/</string>
+
+    <!-- Calendar dialog -->
+    <string name="calendar_dialog_title">Dates</string>
+    <string name="calendar_dialog_show_date_header_title">Show Date</string>
+    <string name="calendar_dialog_on_sale_general_title">On Sale to General Public</string>
+    <string name="calendar_dialog_start_date_prefix_future">Starts</string>
+    <string name="calendar_dialog_start_date_prefix_past">Began</string>
+    <string name="calendar_dialog_end_date_prefix_future">Ends</string>
+    <string name="calendar_dialog_end_date_prefix_past">Ended</string>
+    <string name="calendar_event_description_url_base">http://livenation.com/events/</string>
+    <string name="calendar_add_event_not_possible_message">Cannot add to calendar. This sale has ended.</string>
+
 
 </resources>
