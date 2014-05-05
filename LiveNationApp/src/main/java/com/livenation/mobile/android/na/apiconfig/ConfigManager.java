@@ -5,6 +5,7 @@ import android.content.Context;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -24,10 +25,10 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     private final Context context;
     private LiveNationApiBuilder apiBuilder;
     //pending bindings are those objects who tried to bind to the api before it was created
-    private List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
+    private final List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
     //persistent bindings are objects who want to be persistently updated of new API objects,
     //eg favoritesObserverPresenter, who will clear its favorite cache when a new API is created
-    private List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
+    private final List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
 
     public ConfigManager(Context context) {
@@ -139,7 +140,7 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<String> host = new HostConfig(this.context);
         ApiBuilderElement<String> clientId = new ClientIdConfig(this.context);
         ApiBuilderElement<Double[]> location = new LocationConfig(this.context);
-        ApiBuilderElement<String> accessToken = new AccessTokenConfig(this.context);
+        ApiBuilderElement<String> accessToken = new AccessTokenConfig(this.context, LiveNationApplication.get().getSsoManager());
 
         LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, accessToken, location, context);
 
