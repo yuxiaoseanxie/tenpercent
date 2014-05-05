@@ -42,7 +42,7 @@ public class NotificationsRegistrationManager {
     }
 
     private void saveApid(String apid) {
-        Log.i(getClass().getName(), "saved apid");
+        Log.i(getClass().getName(), "saved apid:" + apid);
         getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, LiveNationApplication.get());
     }
 
@@ -66,10 +66,11 @@ public class NotificationsRegistrationManager {
     }
 
     public void register() {
+
         getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
-                if(!isHostSafe(apiService.getApiConfig().getHost())) {
+                if (!isHostSafe(apiService.getApiConfig().getHost())) {
                     Log.e(getClass().getName(), "Ignoring unsafe host: " + apiService.getApiConfig().getHost());
                     return;
                 }

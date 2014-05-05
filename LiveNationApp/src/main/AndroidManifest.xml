@@ -149,49 +149,6 @@
             android:value="@string/facebook_app_id" />
 
 
-        <!-- begin auto-generated activities -->
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.LoadEventActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.BarcodeActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.CaptchaActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.ConfirmActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.EventActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.AccountActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.TMPlusActivity"
-            android:screenOrientation="portrait" />
-        <!-- end auto-generated activities -->
-
-
         <!-- Urban Airship config -->
         <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
         <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
@@ -234,6 +191,14 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />
+
+        <receiver android:name=".app.UpdateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:path="com.livenation.mobile.android.na"
+                    android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

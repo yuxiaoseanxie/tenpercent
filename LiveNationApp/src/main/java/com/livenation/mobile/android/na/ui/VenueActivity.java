@@ -24,7 +24,7 @@ import java.util.List;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
-    private static final int EVENTS_PER_VENUE_LIMIT = 3;
+    private static final int EVENTS_PER_VENUE_LIMIT = 30;
     private Venue venue;
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
