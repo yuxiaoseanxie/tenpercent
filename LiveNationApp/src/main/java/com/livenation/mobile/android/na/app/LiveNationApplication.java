@@ -117,6 +117,8 @@ public class LiveNationApplication extends Application {
         setupNotifications();
         setupTicketing();
         checkInstalledAppForAnalytics();
+
+        getConfigManager().buildApi();
     }
 
 
