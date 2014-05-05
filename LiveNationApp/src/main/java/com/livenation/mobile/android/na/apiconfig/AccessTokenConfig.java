@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiConfig;
@@ -23,15 +22,18 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.BasicApiCallback<AccessToken> {
 
     private Context context;
+    private SsoManager ssoManager;
 
-    public AccessTokenConfig(Context context) {
+    public AccessTokenConfig(Context context, SsoManager ssoManager) {
         this.context = context;
+        this.ssoManager = ssoManager;
     }
 
     static void clearAccessToken(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear();
+        editor.commit();
     }
 
     @Override
@@ -79,10 +81,10 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
     }
 
     private Pair<String, String> getSsoParams() {
-        SsoManager.AuthConfiguration ssoConfig = LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        SsoManager.AuthConfiguration ssoConfig = ssoManager.getAuthConfiguration(context);
         if (ssoConfig != null) {
             int ssoProviderId = ssoConfig.getSsoProviderId();
-            String key = LiveNationApplication.get().getSsoManager().getSsoProvider(ssoProviderId, context).getTokenKey();
+            String key = ssoManager.getSsoProvider(ssoProviderId, context).getTokenKey();
             String value = ssoConfig.getAccessToken();
             return new Pair<String, String>(key, value);
         }
