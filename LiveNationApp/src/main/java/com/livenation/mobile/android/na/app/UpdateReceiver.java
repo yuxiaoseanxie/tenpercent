@@ -18,7 +18,6 @@ import java.util.WeakHashMap;
 public class UpdateReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("ELODIE", "updateReceiver has been called");
         ApiHelper apiHelper =  LiveNationApplication.get().getApiHelper();
         apiHelper.setDependencyActivity(new Activity());
         if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
