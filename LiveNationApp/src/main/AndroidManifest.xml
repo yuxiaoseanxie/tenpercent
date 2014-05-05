@@ -191,6 +191,14 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />
+
+        <receiver android:name=".app.UpdateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:path="com.livenation.mobile.android.na"
+                    android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
