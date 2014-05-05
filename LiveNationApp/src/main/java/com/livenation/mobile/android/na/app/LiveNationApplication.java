@@ -85,7 +85,7 @@ public class LiveNationApplication extends Application {
 
         ssoManager = new SsoManager(new DummySsoProvider());
 
-        configManager = new ConfigManager(getApplicationContext());
+        configManager = new ConfigManager(getApplicationContext(), ssoManager);
 
         locationManager = new LocationManager(getApplicationContext());
 

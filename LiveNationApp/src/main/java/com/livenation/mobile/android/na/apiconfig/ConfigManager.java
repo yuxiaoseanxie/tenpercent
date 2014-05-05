@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
+import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
@@ -23,6 +24,8 @@ import java.util.List;
  */
 public class ConfigManager implements ApiBuilder.OnBuildListener {
     private final Context context;
+    private final SsoManager ssoManager;
+
     private LiveNationApiBuilder apiBuilder;
     //pending bindings are those objects who tried to bind to the api before it was created
     private final List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
@@ -31,8 +34,9 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     private final List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
     private LiveNationApiService apiService;
 
-    public ConfigManager(Context context) {
+    public ConfigManager(Context context, SsoManager ssoManager) {
         this.context = context.getApplicationContext();
+        this.ssoManager = ssoManager;
     }
 
     public static Constants.Environment getConfiguredEnvironment(Context context) {
@@ -140,12 +144,10 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
         ApiBuilderElement<String> host = new HostConfig(this.context);
         ApiBuilderElement<String> clientId = new ClientIdConfig(this.context);
         ApiBuilderElement<Double[]> location = new LocationConfig(this.context);
-        ApiBuilderElement<String> accessToken = new AccessTokenConfig(this.context, LiveNationApplication.get().getSsoManager());
+        ApiBuilderElement<String> accessToken = new AccessTokenConfig(this.context, ssoManager);
 
         LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(host, clientId, deviceId, accessToken, location, context);
 
         return apiBuilder;
     }
-
-
 }
