@@ -323,18 +323,22 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
     private static class AccessTokenPersistenceHelper {
 
         public static void saveAccessToken(String accessToken, Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
-            prefs.write(Constants.SharedPreferences.API_ACCESS_TOKEN, accessToken, context);
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(Constants.SharedPreferences.API_ACCESS_TOKEN, accessToken);
+            editor.commit();
         }
 
         public static void clearAccessToken(Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
-            prefs.remove(Constants.SharedPreferences.API_ACCESS_TOKEN, context);
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+
         }
 
         public static String readAccessToken(Context context) {
-            PreferencePersistence prefs = new PreferencePersistence(Constants.SharedPreferences.API_NAME);
-            return prefs.read(Constants.SharedPreferences.API_ACCESS_TOKEN, context);
+            SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
+            return prefs.getString(Constants.SharedPreferences.API_ACCESS_TOKEN, null);
         }
 
     }
