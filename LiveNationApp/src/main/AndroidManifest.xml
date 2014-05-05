@@ -164,11 +164,25 @@
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.ConfirmActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.na.ui.ShowActivity" />
+
+        </activity>
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.EventActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.na.ui.ShowActivity" />
+
+        </activity>
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity"
@@ -176,7 +190,14 @@
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.na.ui.HomeActivity" />
+            
+        </activity>
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
