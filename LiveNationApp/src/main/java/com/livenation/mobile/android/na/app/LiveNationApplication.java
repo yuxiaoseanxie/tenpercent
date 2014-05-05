@@ -77,7 +77,6 @@ public class LiveNationApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("ELODIE", "application start");
         Crashlytics.start(this);
         instance = this;
 
