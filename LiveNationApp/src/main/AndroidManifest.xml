@@ -152,7 +152,8 @@
         <!-- begin auto-generated activities -->
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.LoadEventActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth"/>
 
         <activity
             android:name="com.livenation.mobile.android.ticketing.activities.BarcodeActivity"
