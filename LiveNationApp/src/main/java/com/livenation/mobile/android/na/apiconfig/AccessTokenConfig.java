@@ -21,8 +21,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
  */
 class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.BasicApiCallback<AccessToken> {
 
-    private Context context;
-    private SsoManager ssoManager;
+    private final Context context;
+    private final SsoManager ssoManager;
 
     public AccessTokenConfig(Context context, SsoManager ssoManager) {
         this.context = context;

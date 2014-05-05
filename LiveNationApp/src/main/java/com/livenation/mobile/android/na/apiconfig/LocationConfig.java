@@ -14,7 +14,7 @@ import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
  */
 class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProvider.LocationCallback {
 
-    private Context context;
+    private final Context context;
 
     public LocationConfig(Context context) {
         this.context = context;

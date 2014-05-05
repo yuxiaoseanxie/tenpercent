@@ -10,7 +10,7 @@ import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
  */
 class HostConfig extends ApiBuilderElement<String> {
 
-    private Context context;
+    private final Context context;
 
     public HostConfig(Context context) {
         this.context = context;

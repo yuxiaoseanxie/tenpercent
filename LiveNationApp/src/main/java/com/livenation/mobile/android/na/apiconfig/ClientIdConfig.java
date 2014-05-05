@@ -10,7 +10,7 @@ import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
  */
 class ClientIdConfig extends ApiBuilderElement<String> {
 
-    private Context context;
+    private final Context context;
 
     public ClientIdConfig(Context context) {
         this.context = context;

@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 class DeviceIdConfig extends ApiBuilderElement<String> {
     private final String PREFS_DEVICE_UUID = "device_uuid";
-    private Context context;
+    private final Context context;
 
     public DeviceIdConfig(Context context) {
         this.context = context;
