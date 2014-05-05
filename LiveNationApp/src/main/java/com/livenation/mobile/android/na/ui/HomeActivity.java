@@ -93,12 +93,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         slidingTabLayout.setBottomBorderColor(tabAccentColor);
         slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 
-        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
-
-        if (!configManager.hasApi() && !configManager.isBuildingApi()) {
-            LiveNationApplication.get().getConfigManager().buildApi();
-        }
-
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
     }
 
