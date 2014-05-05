@@ -197,7 +197,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
         ConfigManager configManager = LiveNationApplication.get().getConfigManager();
-        configManager.clearAccessToken(getApplicationContext());
+        configManager.clearAccessToken();
         configManager.buildApi();
         NotificationsRegistrationManager.getInstance().register();
     }
