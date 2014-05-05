@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
@@ -21,6 +20,7 @@ import com.livenation.mobile.android.na.presenters.views.RecommendationSetsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +57,6 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
     }
 
     static class RecommendationSetsState extends BaseResultState<ArrayList<RecommendationSet>, RecommendationSetsView> implements ApiService.BasicApiCallback<List<RecommendationSet>> {
-        public static final int FAILURE_API_GENERAL = 0;
-        public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private final Context context;
@@ -103,8 +101,9 @@ public class RecommendationSetsPresenter extends BasePresenter<RecommendationSet
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

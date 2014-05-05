@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
@@ -14,6 +13,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Art
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +102,9 @@ public class ArtistEventsPresenter
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(error.networkResponse.statusCode);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

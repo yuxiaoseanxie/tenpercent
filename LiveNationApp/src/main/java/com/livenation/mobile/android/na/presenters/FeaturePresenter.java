@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -12,7 +11,7 @@ import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
-
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +35,6 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
     }
 
     static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements ApiService.BasicApiCallback<List<Chart>> {
-        public static final int FAILURE_API_GENERAL = 0;
-        public static final int FAILURE_LOCATION = 1;
         private final Context context;
 
         public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
@@ -67,8 +64,9 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

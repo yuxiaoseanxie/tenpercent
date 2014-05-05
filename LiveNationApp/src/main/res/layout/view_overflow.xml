@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="@dimen/ui_overflow_view_min_height"
     android:background="@drawable/livenation_selector_pressable_background">
 
     <ImageView
@@ -27,7 +28,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/underscore_container_height"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
 

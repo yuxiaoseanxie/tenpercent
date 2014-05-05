@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -13,6 +12,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 public class SingleVenuePresenter extends
         BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
@@ -27,6 +27,9 @@ public class SingleVenuePresenter extends
     }
 
     public static void embedResult(Bundle args, Venue venueCache) {
+        //It's possible to have a venue without box office info. If
+        //handed one of those, we ignore it so that we'll load the
+        //full entity from platform.
         if (null != venueCache) {
             args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
         }
@@ -55,7 +58,6 @@ public class SingleVenuePresenter extends
 
     static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
             ApiService.BasicApiCallback<Venue> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleVenueParameters apiParams;
 
         public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
@@ -94,8 +96,9 @@ public class SingleVenuePresenter extends
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

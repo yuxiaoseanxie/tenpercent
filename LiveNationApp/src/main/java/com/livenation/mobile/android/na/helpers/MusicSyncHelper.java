@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -12,6 +11,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.LibraryAffinitiesParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.Calendar;
 
@@ -42,7 +42,7 @@ public class MusicSyncHelper implements ApiServiceBinder {
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(LiveNationError error) {
                 if (isToastShowable) {
                     failToast.show();
                 }
@@ -69,11 +69,16 @@ public class MusicSyncHelper implements ApiServiceBinder {
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onErrorResponse(LiveNationError error) {
                 if (isToastShowable) {
                     failToast.show();
                 }
             }
         });
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+
     }
 }

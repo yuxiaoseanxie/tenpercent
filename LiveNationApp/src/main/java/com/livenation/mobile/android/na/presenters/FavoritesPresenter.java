@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -17,6 +16,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,6 @@ public class FavoritesPresenter extends
 
     static class FavoritesState extends BaseResultState<ArrayList<Favorite>, FavoritesView> implements
             ApiService.BasicApiCallback<List<Favorite>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleVenueParameters apiParams;
 
         public FavoritesState(StateListener<FavoritesState> listener, Bundle args, FavoritesView view) {
@@ -120,8 +119,9 @@ public class FavoritesPresenter extends
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override
@@ -173,7 +173,6 @@ public class FavoritesPresenter extends
 
         class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
                 ApiService.BasicApiCallback<Void> {
-            public static final int FAILURE_API_GENERAL = 0;
             private FavoriteWithNameParameters apiParams;
 
             public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
@@ -206,8 +205,9 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
-                notifyFailed(FAILURE_API_GENERAL);
+            public void onErrorResponse(LiveNationError error) {
+                int errorCode = error.getErrorCode();
+                notifyFailed(errorCode);
             }
 
             @Override
@@ -261,7 +261,6 @@ public class FavoritesPresenter extends
         class RemoveFavoriteState extends
                 BaseResultState<Favorite, FavoriteRemoveView> implements
                 ApiService.BasicApiCallback<Void> {
-            public static final int FAILURE_API_GENERAL = 0;
             private FavoriteParameters apiParams;
 
             public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,
@@ -295,8 +294,9 @@ public class FavoritesPresenter extends
             }
 
             @Override
-            public void onErrorResponse(VolleyError error) {
-                notifyFailed(FAILURE_API_GENERAL);
+            public void onErrorResponse(LiveNationError error) {
+                int errorCode = error.getErrorCode();
+                notifyFailed(errorCode);
             }
 
             @Override

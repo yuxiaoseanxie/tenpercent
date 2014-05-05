@@ -18,6 +18,11 @@
         android:layout_height="wrap_content"
         android:text="@string/mock_artist_bio" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ui_underscore_height"
+        style="@style/ui_underscore" />
+
     <com.livenation.mobile.android.na.ui.views.OverflowView
         android:id="@+id/fragment_artist_bio_overflow"
         android:layout_width="match_parent"

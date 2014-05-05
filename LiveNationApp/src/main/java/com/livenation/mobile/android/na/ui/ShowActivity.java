@@ -10,17 +10,22 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ShowActivity extends LiveNationFragmentActivity implements SingleEventView {
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
+public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
+    private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
+
+    private Event event;
     private SingleEventView singleEventView;
 
     @Override
@@ -42,19 +47,13 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_show, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 navigateUp();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -63,7 +62,10 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
             //TODO: Possible race condition?
             return;
         }
+        this.event = event;
         singleEventView.setEvent(event);
+
+        invalidateIsShareAvailable();
     }
 
     private void init() {
@@ -84,4 +86,26 @@ public class ShowActivity extends LiveNationFragmentActivity implements SingleEv
         startActivity(intent);
     }
 
+    //region Share Overrides
+
+    @Override
+    protected boolean isShareAvailable() {
+        return (event != null);
+    }
+
+    @Override
+    protected String getShareSubject() {
+        return event.getName();
+    }
+
+    @Override
+    protected String getShareText() {
+        String eventTemplate = getString(R.string.share_template_show);
+        return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
+                            .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
+                            .replace("$VENUE", event.getVenue().getName())
+                            .replace("$LINK", event.getWebUrl());
+    }
+
+    //endregion
 }

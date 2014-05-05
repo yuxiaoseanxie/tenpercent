@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         maven { url 'http://download.crashlytics.com/maven' }
@@ -7,28 +9,63 @@ buildscript {
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
+
 apply plugin: 'android'
 apply plugin: 'crashlytics'
+
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
 }
 
+def computeVersionCode() {
+    return 14
+}
+
+def computeVersionName(def versionCode) {
+    return "2.0." + versionCode
+}
+
+def computeGitSha() {
+    ProcessBuilder processBuilder = new ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+    processBuilder.directory(project.getRootDir())
+    return processBuilder.start().in.text.trim()
+}
 
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.1"
 
     defaultConfig {
+        versionCode computeVersionCode()
+        versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 18
-        versionCode 12
-        versionName "2.0"
+        String gitSha = computeGitSha()
+        buildConfigField "String", "GIT_SHA", "\"$gitSha\""
     }
 
     signingConfigs {
-        def LNStorePassword = LNStorePassword != null ?: "livenationlabs"
-        def LNKeyAlias = LNKeyAlias != null ?: "livenationlabs"
-        def LNKeyPassword = LNKeyPassword != null ?: "livenationlabs"
+
+        def mLNStorePassword
+        def mLNKeyAlias
+        def mLNKeyPassword
+
+        if (!project.hasProperty('LNStorePassword')) {
+            mLNStorePassword = "default"
+        } else {
+            mLNStorePassword = LNStorePassword
+        }
+
+        if (!project.hasProperty('LNKeyAlias')) {
+            mLNKeyAlias = "default"
+        } else {
+            mLNKeyAlias = LNKeyAlias
+        }
+        if (!project.hasProperty('LNKeyPassword')) {
+            mLNKeyPassword = "default"
+        } else {
+            mLNKeyPassword = LNKeyPassword
+        }
 
 
         debug {
@@ -37,9 +74,9 @@ android {
 
         release {
             storeFile file(LNReleaseStoreFile)
-            storePassword LNStorePassword
-            keyAlias LNKeyAlias
-            keyPassword LNKeyPassword
+            storePassword mLNStorePassword
+            keyAlias mLNKeyAlias
+            keyPassword mLNKeyPassword
         }
     }
 

@@ -14,9 +14,11 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.util.Logger;
 import com.urbanairship.richpush.RichPushMessage;
+
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,8 +29,8 @@ import java.util.Locale;
  * Sample implementation of the BaseInboxFragment
  */
 public class RichPushInboxFragment extends BaseInboxFragment {
-
-    private static final SimpleDateFormat INCOMING_FORMAT = new SimpleDateFormat(LiveNationApiService.LOCAL_START_TIME_FORMAT, Locale.US);
+    //Dont use Java6's non ISO8601 compliant (Doesn't handle 'Z' timezone) SimpleDateFormat for incoming format
+    private static final DateTimeFormatter INCOMING_FORMAT = ISODateTimeFormat.dateTimeNoMillis();
     private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
     private static final SimpleDateFormat LONG_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd' at 'h:mm a", Locale.US);
 
@@ -59,6 +61,19 @@ public class RichPushInboxFragment extends BaseInboxFragment {
         try {
             date = formatter.parse(dateTimeString);
         } catch (ParseException e) {
+            date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
+
+            Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);
+        }
+
+        return date;
+    }
+
+    private Date parseDateString(DateTimeFormatter formatter, String dateTimeString) {
+        Date date;
+        try {
+            date = formatter.parseDateTime(dateTimeString).toDate();
+        } catch (NullPointerException e) {
             date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
 
             Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);

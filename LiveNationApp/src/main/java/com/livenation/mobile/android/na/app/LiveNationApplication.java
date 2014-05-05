@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -39,6 +40,8 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -105,6 +108,12 @@ public class LiveNationApplication extends Application {
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(requestQueue, cache);
 
+        //Start and setup the library
+        LivenationLib.start();
+        LivenationLib.setErrorTracker(new LibraryErrorTracker());
+
+        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
+
         setupNotifications();
         setupTicketing();
         checkInstalledAppForAnalytics();
@@ -130,7 +139,6 @@ public class LiveNationApplication extends Application {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
         ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
-        ticketingConfig.setClient("tmus");
         ticketingConfig.setImageLoader(getImageLoader());
         Ticketing.init(ticketingConfig);
     }

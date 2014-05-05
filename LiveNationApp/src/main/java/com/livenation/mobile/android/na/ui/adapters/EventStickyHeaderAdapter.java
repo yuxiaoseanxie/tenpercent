@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.text.ParseException;
@@ -22,8 +22,6 @@ import java.util.Locale;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class EventStickyHeaderAdapter extends EventAdapter implements StickyListHeadersAdapter {
-    private static SimpleDateFormat EVENT_DATE_FORMATTER = new SimpleDateFormat(LiveNationApiService.DATE_TIME_Z_FORMAT, Locale.US);
-
     private LayoutInflater inflater;
 
     public EventStickyHeaderAdapter(Context context, ShowView.DisplayMode displayMode) {
@@ -53,30 +51,18 @@ public class EventStickyHeaderAdapter extends EventAdapter implements StickyList
 
         TextView text = holder.getText();
 
-        //TODO: refactor this into Model helpers (inline or sub-helper classes?)
-        String dateRaw = getItem(position).getStartTime();
-        try {
-            Date date = EVENT_DATE_FORMATTER.parse(dateRaw);
-            String dateValue = DateFormat.format("MMMM", date).toString();
-            text.setText(dateValue);
-        } catch (ParseException e) {
-            throw new IllegalStateException("Unparsable date: " + dateRaw);
-        }
+        Date date = getItem(position).getLocalStartTime();
+        String dateValue = DateFormat.format("MMMM", date).toString();
+        text.setText(dateValue);
 
         return view;
     }
 
     @Override
     public long getHeaderId(int position) {
-        String dateRaw = getItem(position).getStartTime();
-        try {
-
-            Date date = EVENT_DATE_FORMATTER.parse(dateRaw);
-            String dateValue = DateFormat.format("yyyyMM", date).toString();
-            return Long.valueOf(dateValue);
-        } catch (ParseException e) {
-            throw new IllegalStateException("Unparsable date: " + dateRaw);
-        }
+        Date date = getItem(position).getLocalStartTime();
+        String dateValue = DateFormat.format("yyyyMM", date).toString();
+        return Long.valueOf(dateValue);
     }
 
     private class ViewHeaderHolder {

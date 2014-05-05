@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Debug;
 import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.livenation.mobile.android.na.BuildConfig;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -17,6 +17,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -86,6 +87,21 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         Logger.log("ApiHelper", "Already building");
     }
 
+    @Override
+    public void onBuildFailed() {
+        this.apiBuilder = null;
+        this.apiService = null;
+
+        for (ApiServiceBinder binder : pendingBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+        pendingBindings.clear();
+
+        for (ApiServiceBinder binder : persistentBindings) {
+            binder.onApiServiceNotAvailable();
+        }
+    }
+
     public boolean hasApi() {
         return (null != apiService);
     }
@@ -99,6 +115,9 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             binder.onApiServiceAttached(apiService);
         } else {
             pendingBindings.add(binder);
+            if (!isBuildingApi()) {
+                buildDefaultApi();
+            }
         }
     }
 
@@ -260,12 +279,26 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
         }
 
         @Override
-        public void onLocation(double lat, double lng) {
+        public void onLocation(final double lat, final double lng) {
             Double[] locationValue = new Double[2];
             locationValue[0] = lat;
             locationValue[1] = lng;
             setResult(locationValue);
             notifyReady();
+            //add the location to our "location history" list
+            LiveNationApplication.get().getLocationManager().reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
+                @Override
+                public void onGetCity(City city) {
+                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
+                }
+
+                @Override
+                public void onGetCityFailure() {
+                    String label = appContext.getString(R.string.location_unknown);
+                    City city = new City(label, lat, lng);
+                    LiveNationApplication.get().getLocationManager().addLocationHistory(city, appContext);
+                }
+            });
         }
 
         @Override
@@ -299,5 +332,4 @@ public class ApiHelper implements ApiBuilder.OnBuildListener {
             activity.startActivity(ssoRepair);
         }
     }
-
 }

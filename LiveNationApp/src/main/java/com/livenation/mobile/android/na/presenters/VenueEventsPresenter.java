@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -13,6 +12,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,6 @@ public class VenueEventsPresenter extends
 
     static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
             ApiService.BasicApiCallback<List<Event>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private VenueEventsParameters apiParams;
 
         public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
@@ -85,8 +84,9 @@ public class VenueEventsPresenter extends
 
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

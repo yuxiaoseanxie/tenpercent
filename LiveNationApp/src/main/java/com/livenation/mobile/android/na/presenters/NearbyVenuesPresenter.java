@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -20,6 +19,7 @@ import com.livenation.mobile.android.na.presenters.views.VenuesView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.NearbyVenuesWithEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +60,6 @@ public class NearbyVenuesPresenter extends
 
     static class VenuesState extends BaseResultState<ArrayList<Venue>, VenuesView>
             implements ApiService.BasicApiCallback<List<Venue>> {
-        public static final int FAILURE_API_GENERAL = 0;
-        public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private final Context context;
@@ -102,8 +100,9 @@ public class NearbyVenuesPresenter extends
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

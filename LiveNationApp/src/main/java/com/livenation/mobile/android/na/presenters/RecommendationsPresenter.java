@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
@@ -21,6 +20,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,6 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
     }
 
     static class RecommendationsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private RecommendationParameters params;
@@ -99,8 +98,9 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
         }
 
         @Override
-        public void onErrorResponse(VolleyError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+        public void onErrorResponse(LiveNationError error) {
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

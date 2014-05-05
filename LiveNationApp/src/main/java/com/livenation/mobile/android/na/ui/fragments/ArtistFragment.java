@@ -12,6 +12,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
+import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -24,7 +25,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
-    private final static int MAX_INLINE_EVENTS = 3;
+    private final static int MAX_INLINE = 3;
 
     private Artist artist;
     private ArtistEvents artistEvents;
@@ -39,6 +40,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private TextView bioText;
     private OverflowView bioShowMore;
 
+    private YouTubeFragment youTube;
+    private OverflowView showMoreVideos;
+
     //region Lifecycle
 
     @Override
@@ -46,9 +50,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         super.onCreate(savedInstanceState);
 
         this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST);
-        shows.setMaxEvents(MAX_INLINE_EVENTS);
+        shows.setMaxEvents(MAX_INLINE);
         shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
+
+        this.youTube = new YouTubeFragment();
+        youTube.setMaxVideos(MAX_INLINE);
+        addFragment(R.id.fragment_artist_youtube_container, youTube, "shows");
 
         setRetainInstance(true);
     }
@@ -65,7 +73,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowMoreOnClickListener());
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
         this.bioContainer = (LinearLayout) view.findViewById(R.id.fragment_artist_bio_container);
@@ -74,6 +82,16 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         bioShowMore.setTitle(R.string.artist_bio_overflow);
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
+
+        this.showMoreVideos = new OverflowView(getActivity());
+        if(youTube.getMaxVideos() > MAX_INLINE) {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
+            showMoreVideos.setExpanded(true);
+        } else {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow);
+        }
+        showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
+        youTube.setShowMoreItemsView(showMoreVideos);
 
         return view;
     }
@@ -143,6 +161,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             suppressBio();
 
         favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
+
+        youTube.setArtistName(artist.getName());
+
+        ((ArtistActivity) getActivity()).invalidateIsShareAvailable();
     }
 
     @Override
@@ -175,12 +197,37 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //endregion
 
 
-    private class ShowMoreOnClickListener implements View.OnClickListener {
+    //region Getters
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+
+    //endregion
+
+
+    private class ShowAllEventsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), ArtistShowsActivity.class);
             intent.putExtras(ArtistShowsActivity.getArguments(artist));
             startActivity(intent);
+        }
+    }
+
+    private class ShowAllVideosOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (showMoreVideos.isExpanded()) {
+                youTube.setMaxVideos(MAX_INLINE);
+                showMoreVideos.setTitle(R.string.artist_videos_overflow);
+                showMoreVideos.setExpanded(false);
+            } else {
+                youTube.setMaxVideos(youTube.getVideoCount());
+                showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
+                showMoreVideos.setExpanded(true);
+            }
         }
     }
 
