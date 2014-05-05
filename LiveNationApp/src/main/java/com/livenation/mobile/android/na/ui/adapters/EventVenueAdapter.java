@@ -36,7 +36,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
     public EventVenueAdapter(Context context) {
         super(context, android.R.layout.simple_list_item_1, new ArrayList<Event>());
         inflater = LayoutInflater.from(context);
-        LiveNationApplication.get().getApiHelper().bindApi(this);
+        LiveNationApplication.get().getConfigManager().bindApi(this);
     }
 
     @Override

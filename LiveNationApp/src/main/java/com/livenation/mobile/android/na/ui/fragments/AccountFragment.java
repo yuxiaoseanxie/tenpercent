@@ -68,13 +68,13 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     @Override
     public void onStart() {
         super.onStart();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override

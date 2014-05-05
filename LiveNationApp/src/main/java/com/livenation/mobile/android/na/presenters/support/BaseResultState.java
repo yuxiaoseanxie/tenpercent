@@ -28,7 +28,7 @@ public abstract class BaseResultState<TResult extends Serializable, TView extend
 
     @Override
     public final void run() {
-        LiveNationApplication.get().getApiHelper().bindApi(this);
+        LiveNationApplication.get().getConfigManager().bindApi(this);
     }
 
     @Override

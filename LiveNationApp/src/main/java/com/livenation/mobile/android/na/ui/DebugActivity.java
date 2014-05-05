@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -17,14 +15,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
@@ -98,13 +95,13 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(DebugActivity.this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(DebugActivity.this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(DebugActivity.this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(DebugActivity.this);
     }
 
     @Override
@@ -192,15 +189,16 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private Constants.Environment getEnvironment() {
-        return ApiHelper.getConfiguredEnvironment(this);
+        return ConfigManager.getConfiguredEnvironment(this);
     }
 
     private void setEnvironment(Constants.Environment environment) {
-        ApiHelper.setConfiguredEnvironment(environment, this);
+        ConfigManager.setConfiguredEnvironment(environment, this);
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
-        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
-        apiHelper.buildDefaultApi();
+        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
+        configManager.clearAccessToken();
+        configManager.buildApi();
         NotificationsRegistrationManager.getInstance().register();
     }
 

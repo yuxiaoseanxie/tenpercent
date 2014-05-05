@@ -24,7 +24,7 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     private final List<Favorite> favorites = new ArrayList<Favorite>();
 
     public FavoriteObserverPresenter() {
-        LiveNationApplication.get().getApiHelper().persistentBindApi(FavoriteObserverPresenter.this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(FavoriteObserverPresenter.this);
     }
 
     @Override

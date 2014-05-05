@@ -137,7 +137,7 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
 
 
     public void trackScreenWithLocation(final String screenName, final Props props) {
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
                 Props properties = props;

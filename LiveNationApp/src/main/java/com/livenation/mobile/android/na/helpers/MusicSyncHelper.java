@@ -38,7 +38,7 @@ public class MusicSyncHelper implements ApiServiceBinder {
             @Override
             public void onResponse(MusicLibrary result) {
                 musicLibrary = result;
-                LiveNationApplication.get().getApiHelper().bindApi(MusicSyncHelper.this);
+                LiveNationApplication.get().getConfigManager().bindApi(MusicSyncHelper.this);
             }
 
             @Override

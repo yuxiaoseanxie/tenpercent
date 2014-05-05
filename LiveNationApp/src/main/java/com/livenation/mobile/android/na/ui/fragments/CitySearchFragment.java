@@ -41,7 +41,7 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<City>());
-        LiveNationApplication.get().getApiHelper().bindApi(this);
+        LiveNationApplication.get().getConfigManager().bindApi(this);
     }
 
     @Override

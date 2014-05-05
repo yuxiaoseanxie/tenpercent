@@ -28,9 +28,9 @@ import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
@@ -93,11 +93,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         slidingTabLayout.setBottomBorderColor(tabAccentColor);
         slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 
-        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
+        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
 
-        apiHelper.setDependencyActivity(this);
-        if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
-            LiveNationApplication.get().getApiHelper().buildDefaultApi();
+        if (!configManager.hasApi() && !configManager.isBuildingApi()) {
+            LiveNationApplication.get().getConfigManager().buildApi();
         }
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
@@ -184,7 +183,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
                 + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER +"  " + Build.MODEL
                 + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
                 Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();

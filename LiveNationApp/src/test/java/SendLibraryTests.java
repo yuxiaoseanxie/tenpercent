@@ -8,7 +8,6 @@ import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.config.SsoProviderConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.StringValueConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
@@ -121,7 +120,7 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2 implement
         WeakReference<Activity> weakActivity = new WeakReference<Activity>(getActivity());
         apiBuilder.getActivity().setResult(weakActivity);
 
-        apiBuilder.getAppContext().setResult(weakActivity.get().getApplicationContext());
+        apiBuilder.getContext().setResult(weakActivity.get().getApplicationContext());
 
         return apiBuilder;
     }

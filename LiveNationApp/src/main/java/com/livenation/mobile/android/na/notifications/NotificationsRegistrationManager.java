@@ -3,10 +3,10 @@ package com.livenation.mobile.android.na.notifications;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.BuildConfig;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.ApiService;
@@ -28,8 +28,8 @@ public class NotificationsRegistrationManager {
         return instance;
     }
 
-    private ApiHelper getApiHelper() {
-        return LiveNationApplication.get().getApiHelper();
+    private ConfigManager getApiHelper() {
+        return LiveNationApplication.get().getConfigManager();
     }
 
     //endregion

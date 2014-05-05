@@ -15,8 +15,6 @@ import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -98,7 +96,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
 
     @Override
     public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
                 fetch(apiService, offset, limit, callback);
@@ -116,7 +114,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     public void setEmptyView(final EmptyListViewControl emptyView) {
         this.emptyView = emptyView;
         this.emptyView.setRetryOnClickListener(retryClickListener);
-        LiveNationApplication.get().getApiHelper().bindApi(new ApiServiceBinder() {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {}
 

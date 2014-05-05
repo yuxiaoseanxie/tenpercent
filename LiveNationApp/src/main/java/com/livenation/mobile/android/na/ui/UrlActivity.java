@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -205,7 +205,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
 
-    private ApiHelper getApiHelper() {
-        return LiveNationApplication.get().getApiHelper();
+    private ConfigManager getApiHelper() {
+        return LiveNationApplication.get().getConfigManager();
     }
 }
