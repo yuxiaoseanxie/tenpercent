@@ -28,7 +28,6 @@ def computeVersionName(def versionCode) {
 def computeGitSha(File rootDir) {
     ProcessBuilder processBuilder = new ProcessBuilder("git", "rev-parse", "--short", "HEAD")
     processBuilder.directory(rootDir)
-
     return processBuilder.start().in.text.trim()
 }
 
