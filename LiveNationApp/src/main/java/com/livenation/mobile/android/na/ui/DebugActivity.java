@@ -51,7 +51,6 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem locationItem;
     private DebugItem scanItem;
     private DebugItem versionName;
-    private DebugItem gitSha;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -145,7 +144,13 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         versionName = new DebugItem("Version", BuildConfig.VERSION_NAME);
         actions.add(versionName);
 
-        gitSha = new DebugItem("GIT SHA-1", BuildConfig.GIT_SHA);
+        DebugItem gitSha = new DebugItem("SHA-Application", BuildConfig.GIT_SHA_LIVENATIONAPP);
+        actions.add(gitSha);
+
+        gitSha = new DebugItem("SHA-Platform", BuildConfig.GIT_SHA_LABSPLATFORM);
+        actions.add(gitSha);
+
+        gitSha = new DebugItem("SHA-Ticketing", BuildConfig.GIT_SHA_TICKETING);
         actions.add(gitSha);
     }
 
