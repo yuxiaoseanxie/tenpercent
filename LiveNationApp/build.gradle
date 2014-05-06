@@ -25,9 +25,10 @@ def computeVersionName(def versionCode) {
     return "2.0." + versionCode
 }
 
-def computeGitSha() {
+def computeGitSha(File rootDir) {
     ProcessBuilder processBuilder = new ProcessBuilder("git", "rev-parse", "--short", "HEAD")
-    processBuilder.directory(project.getRootDir())
+    processBuilder.directory(rootDir)
+
     return processBuilder.start().in.text.trim()
 }
 
@@ -40,8 +41,12 @@ android {
         versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 18
-        String gitSha = computeGitSha()
-        buildConfigField "String", "GIT_SHA", "\"$gitSha\""
+
+        for (Project project : rootProject.subprojects) {
+            String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
+            String gitSha = computeGitSha(project.buildDir)
+            buildConfigField "String", "GIT_SHA_$name", "\"$gitSha\""
+        }
     }
 
     signingConfigs {
