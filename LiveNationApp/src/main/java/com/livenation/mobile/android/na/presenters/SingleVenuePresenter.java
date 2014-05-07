@@ -27,6 +27,9 @@ public class SingleVenuePresenter extends
     }
 
     public static void embedResult(Bundle args, Venue venueCache) {
+        //It's possible to have a venue without box office info. If
+        //handed one of those, we ignore it so that we'll load the
+        //full entity from platform.
         if (null != venueCache) {
             args.putSerializable(SingleVenuePresenter.INTENT_DATA_KEY, venueCache);
         }
@@ -55,7 +58,6 @@ public class SingleVenuePresenter extends
 
     static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
             ApiService.BasicApiCallback<Venue> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleVenueParameters apiParams;
 
         public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
@@ -95,7 +97,8 @@ public class SingleVenuePresenter extends
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

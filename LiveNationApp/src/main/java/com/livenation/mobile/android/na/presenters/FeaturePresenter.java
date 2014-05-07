@@ -35,8 +35,6 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
     }
 
     static class FeatureState extends BaseResultState<ArrayList<Chart>, FeatureView> implements ApiService.BasicApiCallback<List<Chart>> {
-        public static final int FAILURE_API_GENERAL = 0;
-        public static final int FAILURE_LOCATION = 1;
         private final Context context;
 
         public FeatureState(StateListener<FeatureState> listener, Bundle args, FeatureView view, Context context) {
@@ -66,7 +64,8 @@ public class FeaturePresenter extends BasePresenter<FeatureView, FeaturePresente
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

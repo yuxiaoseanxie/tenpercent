@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     repositories {
         maven { url 'http://download.crashlytics.com/maven' }
@@ -7,10 +9,26 @@ buildscript {
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
+
 apply plugin: 'android'
 apply plugin: 'crashlytics'
+
 repositories {
     maven { url 'http://download.crashlytics.com/maven' }
+}
+
+def computeVersionCode() {
+    return 15
+}
+
+def computeVersionName(def versionCode) {
+    return "2.0." + versionCode
+}
+
+def computeGitSha(File rootDir) {
+    ProcessBuilder processBuilder = new ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+    processBuilder.directory(rootDir)
+    return processBuilder.start().in.text.trim()
 }
 
 android {
@@ -18,10 +36,16 @@ android {
     buildToolsVersion "19.0.1"
 
     defaultConfig {
+        versionCode computeVersionCode()
+        versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 18
-        versionCode 12
-        versionName "2.0"
+
+        for (Project project : rootProject.subprojects) {
+            String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
+            String gitSha = computeGitSha(project.rootDir)
+            buildConfigField "String", "GIT_SHA_$name", "\"$gitSha\""
+        }
     }
 
     signingConfigs {

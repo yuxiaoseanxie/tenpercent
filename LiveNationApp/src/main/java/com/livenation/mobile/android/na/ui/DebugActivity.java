@@ -18,11 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
@@ -34,6 +35,7 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -57,6 +59,7 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     private DebugItem environmentItem;
     private DebugItem locationItem;
     private DebugItem scanItem;
+    private DebugItem versionName;
 
     private ProviderManager providerManager;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
@@ -106,14 +109,14 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(DebugActivity.this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(DebugActivity.this);
         providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID, ProviderManager.ProviderType.LOCATION);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(DebugActivity.this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(DebugActivity.this);
     }
 
     @Override
@@ -159,6 +162,18 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
         locationItem = new DebugItem("Location", "");
         actions.add(locationItem);
+
+        versionName = new DebugItem("Version", BuildConfig.VERSION_NAME);
+        actions.add(versionName);
+
+        DebugItem gitSha = new DebugItem("SHA-Application", BuildConfig.GIT_SHA_LIVENATIONAPP);
+        actions.add(gitSha);
+
+        gitSha = new DebugItem("SHA-Platform", BuildConfig.GIT_SHA_LABSPLATFORM);
+        actions.add(gitSha);
+
+        gitSha = new DebugItem("SHA-Ticketing", BuildConfig.GIT_SHA_TICKETING);
+        actions.add(gitSha);
     }
 
     private void addActionDebugItems() {
@@ -175,6 +190,10 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         }
         scanItem = new ScanItem(getString(R.string.debug_item_scan, MusicLibraryScannerHelper.artistNumber), scanValue);
         actions.add(scanItem);
+
+        //Commerce QA Mode Item
+        CommerceQAModeItem commerceQAModeItem = new CommerceQAModeItem(getString(R.string.debug_item_commerce_qa_mode));
+        actions.add(commerceQAModeItem);
     }
 
     public void onShareSelected() {
@@ -207,8 +226,9 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
         LiveNationLibrary.setEnvironment(environment);
-        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
-        apiHelper.buildDefaultApi();
+        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
+        configManager.clearAccessToken();
+        configManager.buildApi();
         NotificationsRegistrationManager.getInstance().register();
     }
 
@@ -403,6 +423,36 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
 
             builder.create().show();
 
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class CommerceQAModeItem extends DebugItem {
+        private CommerceQAModeItem(String name) {
+            super(name, null);
+        }
+
+        @Override
+        public String getValue() {
+            if (Ticketing.isQaModeEnabled())
+                return getString(R.string.debug_item_commerce_qa_mode_on);
+            else
+                return getString(R.string.debug_item_commerce_qa_mode_off);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            if (Ticketing.isQaModeEnabled()) {
+                Ticketing.setQaModeEnabled(false);
+            } else {
+                Ticketing.setQaModeEnabled(true);
+            }
+
+            actionsAdapter.notifyDataSetChanged();
         }
 
         @Override

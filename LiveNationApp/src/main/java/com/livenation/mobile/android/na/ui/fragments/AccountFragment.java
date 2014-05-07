@@ -84,7 +84,6 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
         LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

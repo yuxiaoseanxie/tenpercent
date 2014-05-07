@@ -70,10 +70,14 @@
             android:name="com.livenation.mobile.android.na.ui.ShowActivity"
             android:label="@string/activity_label_show"
             android:launchMode="singleTop" />
+
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"/>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
         <activity
             android:name=".ui.ArtistShowsActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
@@ -98,6 +102,20 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <activity
+            android:name="com.livenation.mobile.android.na.ui.UrlActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
+
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="livenation" android:host="*" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
             android:name="com.livenation.mobile.android.na.ui.LocationActivity"
             android:label="@string/activity_label_location"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
@@ -110,6 +128,16 @@
             android:name="com.livenation.mobile.android.na.ui.CitySearchActivity"
             android:parentActivityName="com.livenation.mobile.android.na.ui.LocationActivity" />
 
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.LegalActivity"
+            android:label="@string/home_menu_legal"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"  />
+
+
+        <activity
+            android:name=".ui.HelpMenuActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+
 
         <activity android:name="com.facebook.LoginActivity" />
 
@@ -119,49 +147,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
-
-        <!-- begin auto-generated activities -->
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.LoadEventActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.BarcodeActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.CaptchaActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.ConfirmActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.EventActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.PurchaseActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.AccountActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.livenation.mobile.android.ticketing.activities.TMPlusActivity"
-            android:screenOrientation="portrait" />
-        <!-- end auto-generated activities -->
 
 
         <!-- Urban Airship config -->
@@ -206,6 +191,14 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />
+
+        <receiver android:name=".app.UpdateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:path="com.livenation.mobile.android.na"
+                    android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

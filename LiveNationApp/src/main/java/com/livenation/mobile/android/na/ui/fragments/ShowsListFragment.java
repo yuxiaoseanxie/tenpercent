@@ -50,7 +50,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
 
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new AllShowsScrollPager(adapter);
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
 
     }
 
@@ -81,7 +81,7 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override

@@ -12,13 +12,18 @@
         android:showAsAction="always"
         android:title="@string/home_menu_search" />
     <item
-        android:id="@+id/menu_home_faq_item"
-        android:showAsAction="never"
-        android:title="@string/home_menu_faq" />
-    <item
         android:id="@+id/menu_home_legal_item"
         android:showAsAction="never"
         android:title="@string/home_menu_legal" />
+    <item
+        android:id="@+id/menu_home_contact_item"
+        android:showAsAction="never"
+        android:title="@string/home_menu_contact" />
+    <item
+        android:id="@+id/menu_home_help_item"
+        android:showAsAction="never"
+        android:title="@string/home_menu_help" />
+
     <item
         android:id="@+id/menu_home_debug_item"
         android:showAsAction="never"

@@ -24,7 +24,7 @@ import java.util.List;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
-    private static final int EVENTS_PER_VENUE_LIMIT = 3;
+    private static final int EVENTS_PER_VENUE_LIMIT = 30;
     private Venue venue;
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
@@ -72,6 +72,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
             throw new RuntimeException("TODO: investigate possible race condition here");
         }
         eventsView.setEvents(events);
+
+        invalidateIsShareAvailable();
     }
 
     private void init() {

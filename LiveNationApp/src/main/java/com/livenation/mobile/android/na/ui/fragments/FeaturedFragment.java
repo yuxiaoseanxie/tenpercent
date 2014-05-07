@@ -34,7 +34,7 @@ public class FeaturedFragment extends LiveNationFragment implements FeatureView,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         featured = new ArrayList<Chart>();
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class FeaturedFragment extends LiveNationFragment implements FeatureView,
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override

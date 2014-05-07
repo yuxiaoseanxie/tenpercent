@@ -19,8 +19,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
@@ -75,7 +75,7 @@ public class LiveNationApplication extends Application {
     private static LocationManager locationProvider;
     private static ProviderManager providerManager = new ProviderManager();;
 
-    private ApiHelper apiHelper;
+    private ConfigManager configManager;
 
     public static LiveNationApplication get() {
         return instance;
@@ -92,7 +92,7 @@ public class LiveNationApplication extends Application {
 
         ssoManager = new SsoManager(new DummySsoProvider());
 
-        apiHelper = new ApiHelper(ssoManager, getApplicationContext());
+        configManager = new ConfigManager(getApplicationContext(), ssoManager);
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
@@ -121,6 +121,8 @@ public class LiveNationApplication extends Application {
         setupNotifications();
         setupTicketing();
         checkInstalledAppForAnalytics();
+
+        getConfigManager().buildApi();
     }
 
 
@@ -143,7 +145,6 @@ public class LiveNationApplication extends Application {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
         ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
-        ticketingConfig.setClient("tmus");
         ticketingConfig.setImageLoader(getImageLoader());
         Ticketing.init(ticketingConfig);
     }
@@ -218,8 +219,8 @@ public class LiveNationApplication extends Application {
         return recommendationSetsPresenter;
     }
 
-    public ApiHelper getApiHelper() {
-        return apiHelper;
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 
     public static LocationManager getLocationProvider() {

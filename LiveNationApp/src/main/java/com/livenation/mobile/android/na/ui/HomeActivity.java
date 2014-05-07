@@ -12,6 +12,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -19,18 +20,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.apiconfig.ConfigManager;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ApiHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
@@ -40,7 +40,12 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
+import com.livenation.mobile.android.na.utils.ContactUtils;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import java.util.Map;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -84,15 +89,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
         slidingTabLayout.setViewPager(pager);
-        slidingTabLayout.setBottomBorderColor(0xffe11d39);
-        slidingTabLayout.setSelectedIndicatorColors(0xffe11d39);
-
-        ApiHelper apiHelper = LiveNationApplication.get().getApiHelper();
-
-        apiHelper.setDependencyActivity(this);
-        if (!apiHelper.hasApi() && !apiHelper.isBuildingApi()) {
-            LiveNationApplication.get().getApiHelper().buildDefaultApi();
-        }
+        int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
+        slidingTabLayout.setBottomBorderColor(tabAccentColor);
+        slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
     }
@@ -151,18 +150,50 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
-
-            case R.id.menu_home_faq_item:
+            case R.id.menu_home_help_item:
+                startActivity(new Intent(this, HelpMenuActivity.class));
                 LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
                 return true;
 
             case R.id.menu_home_legal_item:
                 LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                startActivity(new Intent(this, LegalActivity.class));
+                return true;
+
+            case R.id.menu_home_contact_item:
+                buildAndOpenContactEmail();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void buildAndOpenContactEmail() {
+
+        final String emailAddress = getString(R.string.contact_email_address);
+        final String subject = getString(R.string.contact_email_subject);
+        final String message = "\n\n" + getString(R.string.contact_email_signature_message)
+                + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
+                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER +"  " + Build.MODEL
+                + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
+                String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
+                String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
+                ContactUtils.emailTo(emailAddress, subject,  signature, HomeActivity.this);
+            }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+                ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
+            }
+        });
+
+
+
     }
 
     @Override
@@ -194,18 +225,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     @Override
     public void onSaveAuthTokenFailure() {
         throw new IllegalStateException("Should not happen..");
-    }
-
-    /**
-     * Here we have to return our own Tab View object to get our desired LiveNation red tab.
-     * <p/>
-     * Because Google forgot to make the default tabs in the TabHost XML stylable....
-     */
-    private View createTab(Context context, String title) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_tab, null);
-        TextView text = (TextView) view.findViewWithTag("titleText");
-        text.setText(title);
-        return view;
     }
 
 

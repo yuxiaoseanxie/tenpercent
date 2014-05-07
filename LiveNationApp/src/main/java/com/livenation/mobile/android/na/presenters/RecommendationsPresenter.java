@@ -56,7 +56,6 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
     }
 
     static class RecommendationsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private RecommendationParameters params;
@@ -99,7 +98,8 @@ public class RecommendationsPresenter extends BasePresenter<EventsView, Recommen
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override

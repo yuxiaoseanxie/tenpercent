@@ -3,27 +3,20 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
-import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
+import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ArtistShowsListFragment extends LiveNationListFragment implements ApiServiceBinder {
     private EventAdapter adapter;
@@ -38,9 +31,11 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         this.adapter = new EventAdapter(getActivity(), ShowView.DisplayMode.ARTIST);
         setListAdapter(adapter);
 
-        this.artistShowsScrollPager = new ArtistShowsScrollPager(adapter);
+        String entityId = getActivity().getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
+        long artistId = DataModelHelper.getNumericEntityId(entityId);
+        this.artistShowsScrollPager = new ArtistShowsScrollPager(artistId, adapter);
 
-        LiveNationApplication.get().getApiHelper().persistentBindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
     }
 
     @Override
@@ -60,7 +55,7 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
     public void onDestroy() {
         super.onDestroy();
 
-        LiveNationApplication.get().getApiHelper().persistentUnbindApi(this);
+        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     //endregion

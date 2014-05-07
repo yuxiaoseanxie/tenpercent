@@ -56,8 +56,6 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
     }
 
     static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
-        public static final int FAILURE_API_GENERAL = 0;
-        public static final int FAILURE_LOCATION = 1;
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private final Context context;
@@ -108,7 +106,8 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
     }
 }

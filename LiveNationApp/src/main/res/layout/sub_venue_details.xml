@@ -60,7 +60,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/venue_detail_phone_box"
         android:layout_marginLeft="@dimen/venue_detail_link_text_margin_left"
+        android:visibility="gone"
         android:text="@string/venue_detail_link"
-        android:textAppearance="@style/venue_detail_link_text" />
+        android:textAppearance="@style/venue_detail_link_text"
+        android:background="@drawable/livenation_selector_pressable_background"/>
 
 </RelativeLayout>

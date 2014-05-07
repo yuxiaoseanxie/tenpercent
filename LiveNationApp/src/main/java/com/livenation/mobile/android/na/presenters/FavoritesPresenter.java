@@ -87,7 +87,6 @@ public class FavoritesPresenter extends
 
     static class FavoritesState extends BaseResultState<ArrayList<Favorite>, FavoritesView> implements
             ApiService.BasicApiCallback<List<Favorite>> {
-        public static final int FAILURE_API_GENERAL = 0;
         private SingleVenueParameters apiParams;
 
         public FavoritesState(StateListener<FavoritesState> listener, Bundle args, FavoritesView view) {
@@ -121,7 +120,8 @@ public class FavoritesPresenter extends
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            notifyFailed(FAILURE_API_GENERAL);
+            int errorCode = error.getErrorCode();
+            notifyFailed(errorCode);
         }
 
         @Override
@@ -173,7 +173,6 @@ public class FavoritesPresenter extends
 
         class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
                 ApiService.BasicApiCallback<Void> {
-            public static final int FAILURE_API_GENERAL = 0;
             private FavoriteWithNameParameters apiParams;
 
             public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
@@ -207,7 +206,8 @@ public class FavoritesPresenter extends
 
             @Override
             public void onErrorResponse(LiveNationError error) {
-                notifyFailed(FAILURE_API_GENERAL);
+                int errorCode = error.getErrorCode();
+                notifyFailed(errorCode);
             }
 
             @Override
@@ -261,7 +261,6 @@ public class FavoritesPresenter extends
         class RemoveFavoriteState extends
                 BaseResultState<Favorite, FavoriteRemoveView> implements
                 ApiService.BasicApiCallback<Void> {
-            public static final int FAILURE_API_GENERAL = 0;
             private FavoriteParameters apiParams;
 
             public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,
@@ -296,7 +295,8 @@ public class FavoritesPresenter extends
 
             @Override
             public void onErrorResponse(LiveNationError error) {
-                notifyFailed(FAILURE_API_GENERAL);
+                int errorCode = error.getErrorCode();
+                notifyFailed(errorCode);
             }
 
             @Override

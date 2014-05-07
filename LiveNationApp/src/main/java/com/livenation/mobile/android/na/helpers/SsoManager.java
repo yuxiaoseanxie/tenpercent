@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
@@ -62,6 +63,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         if (ssoProvider != null) {
             ssoProvider.clearSession();
         }
+        LiveNationApplication.get().getConfigManager().clearAccessToken();
     }
 
     public UiApiSsoProvider getConfiguredSsoProvider(Context context) {
@@ -80,6 +82,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     }
 
     public AuthConfiguration getAuthConfiguration(Context context) {
+        String accessToken = persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
         String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
 
         if (TextUtils.isEmpty(ssoId)) {
@@ -87,7 +90,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         }
 
         Integer ssoIdValue = Integer.valueOf(ssoId);
-        return new AuthConfiguration(ssoIdValue);
+        return new AuthConfiguration(ssoIdValue, accessToken);
     }
 
     public void removeAuthConfiguration(Context context) {
@@ -156,13 +159,19 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
 
     public static class AuthConfiguration {
         private final int ssoProviderId;
+        private final String accessToken;
 
-        public AuthConfiguration(int ssoProviderId) {
+        public AuthConfiguration(int ssoProviderId, String accessToken) {
             this.ssoProviderId = ssoProviderId;
+            this.accessToken = accessToken;
         }
 
         public int getSsoProviderId() {
             return ssoProviderId;
+        }
+
+        public String getAccessToken() {
+            return accessToken;
         }
     }
 
