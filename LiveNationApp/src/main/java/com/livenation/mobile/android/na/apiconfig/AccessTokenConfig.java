@@ -53,6 +53,7 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
     public void onResponse(AccessToken response) {
         String token = response.getToken();
         saveAccessToken(token, context);
+        clearIasId();
         setResult(token);
         notifyReady();
     }
@@ -77,7 +78,7 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
                 builder.getContext().getResult());
 
         LiveNationApiService apiService = new LiveNationApiServiceImpl(quick);
-        apiService.getToken(clientId, deviceId, ssoParams.first, ssoParams.second, AccessTokenConfig.this);
+        apiService.getToken(clientId, deviceId, getIasId(), ssoParams.first, ssoParams.second, AccessTokenConfig.this);
     }
 
     private Pair<String, String> getSsoParams() {
@@ -101,5 +102,17 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
     private String readAccessToken(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.API_ACCESS_TOKEN, null);
+    }
+
+    private String getIasId() {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
+    }
+
+    private void clearIasId() {
+        SharedPreferences oldPrefs = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences newPrefs = context.getSharedPreferences(Constants.SharedPreferences.IAS_NAME, Context.MODE_PRIVATE);
+        newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, getIasId()).commit();
+        oldPrefs.edit().clear().commit();
     }
 }

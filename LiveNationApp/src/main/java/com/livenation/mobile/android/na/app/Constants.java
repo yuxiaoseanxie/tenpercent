@@ -76,5 +76,11 @@ public class Constants {
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
         public static final String API_NAME = "api";
         public static final String API_ACCESS_TOKEN = "access_token";
+        public static final String IAS_NAME = "ias_name";
+        public static final String IAS_USER_ID = "ias_user_id";
+        //1.X key
+        public static final String PREF_NAME = "TM_USER_PREF";
+        public static final String INSTALLATION_ID = "INSTALLATION_ID";
+
     }
 }
