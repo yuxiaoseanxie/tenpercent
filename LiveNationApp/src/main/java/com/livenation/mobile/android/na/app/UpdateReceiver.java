@@ -11,6 +11,6 @@ import android.util.Log;
 public class UpdateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("App update", "Called");
+        Log.d(UpdateReceiver.class.getSimpleName(), "Package Updated, UpdateReceiver Called");
     }
 }
