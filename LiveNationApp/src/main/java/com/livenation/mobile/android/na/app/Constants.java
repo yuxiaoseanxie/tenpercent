@@ -81,6 +81,7 @@ public class Constants {
         //1.X key
         public static final String PREF_NAME = "TM_USER_PREF";
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
+        public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
 
     }
 }
