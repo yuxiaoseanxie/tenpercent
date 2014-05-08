@@ -115,7 +115,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         telephone.setOnClickListener(new OnPhoneNumberClick());
-        location.setOnClickListener(new OnAddressClick(Double.parseDouble(venue.getLat()), Double.parseDouble(venue.getLng()), LiveNationApplication.get().getApplicationContext()));
+        location.setOnClickListener(new OnAddressClick(Double.parseDouble(venue.getLat()), Double.parseDouble(venue.getLng()), venue.getAddress().getSmallFriendlyAddress(false), LiveNationApplication.get().getApplicationContext()));
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
@@ -227,16 +227,18 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         private double lat;
         private double lng;
         private Context context;
+        private String address;
 
-        private OnAddressClick(double lat, double lng, Context context) {
+        private OnAddressClick(double lat, double lng, String address, Context context) {
             this.lat = lat;
             this.lng = lng;
             this.context = context;
+            this.address = address;
         }
 
         @Override
         public void onClick(View v) {
-            MapUtils.redirectToMapApplication(lat, lng, context);
+            MapUtils.redirectToMapApplication(lat, lng, address, context);
         }
     }
 }
