@@ -23,7 +23,10 @@
         android:id="@+id/menu_home_help_item"
         android:showAsAction="never"
         android:title="@string/home_menu_help" />
-
+    <item
+        android:id="@+id/menu_home_logout_item"
+        android:showAsAction="never"
+        android:title="@string/home_menu_logout" />
     <item
         android:id="@+id/menu_home_debug_item"
         android:showAsAction="never"
