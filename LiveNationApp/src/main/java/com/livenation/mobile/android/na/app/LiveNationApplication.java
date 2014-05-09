@@ -25,6 +25,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -142,6 +143,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setContext(this);
         ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
         ticketingConfig.setImageLoader(getImageLoader());
+        ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
         Ticketing.init(ticketingConfig);
     }
 

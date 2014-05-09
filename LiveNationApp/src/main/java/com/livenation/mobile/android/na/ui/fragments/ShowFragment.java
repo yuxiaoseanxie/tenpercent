@@ -48,6 +48,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.activities.ConfirmActivity;
 
 import java.util.List;
 
@@ -238,7 +239,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     protected void showTicketOffering(TicketOffering offering) {
         String buyLink = offering.getPurchaseUrl();
         if (Ticketing.isTicketmasterUrl(buyLink)) {
-            Ticketing.showFindTicketsActivityForUrl(getActivity(), buyLink);
+            Intent confirmIntent = new Intent(getActivity(), ConfirmActivity.class);
+            Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
             Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
