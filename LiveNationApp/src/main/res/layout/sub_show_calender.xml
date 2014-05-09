@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/show_calendar_image_margin_right"
-        android:src="@drawable/show_event_date" />
+        android:src="@drawable/event_date" />
 
     <TextView
         android:id="@+id/sub_show_calendar_text"
