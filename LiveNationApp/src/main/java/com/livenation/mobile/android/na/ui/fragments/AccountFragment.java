@@ -22,6 +22,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
@@ -32,7 +33,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
-public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
+public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ApiServiceBinder {
     private Fragment profileFragment;
     private TextView locationText;
 
@@ -80,7 +81,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         Logger.log("Accounts", "API binded");
-        getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
+        refreshUser(LoginHelper.isLoggin());
         getLocationManager().reverseGeocodeCity(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng(), getActivity(), this);
     }
 
@@ -89,14 +90,13 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
     }
 
-    @Override
-    public void setUser(User user) {
+    public void refreshUser(boolean isLoggedIn) {
         if (null != profileFragment) {
             removeFragment(profileFragment);
             profileFragment = null;
         }
 
-        if (null == user) {
+        if (!isLoggedIn) {
             profileFragment = new AccountSignInFragment();
         } else {
             profileFragment = new AccountUserFragment();

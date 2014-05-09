@@ -4,16 +4,30 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
 import java.lang.ref.WeakReference;
 
+import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
+
 public class SsoManager implements UiApiSsoProvider.ActivityProvider {
-    public static final int SSO_FACEBOOK = 0;
-    public static final int SSO_GOOGLE = 1;
-    public static final int SSO_DUMMY = 2;
+    public enum SSO_TYPE {
+        SSO_FACEBOOK(R.drawable.facebook_logo),
+        SSO_GOOGLE(R.drawable.google_plus_logo),
+        SSO_DUMMY(0),;
+
+        public int logoResId;
+        SSO_TYPE(int logoResId) {
+            this.logoResId = logoResId;
+        }
+
+        public int getLogoResId() {
+            return logoResId;
+        }
+    }
 
     private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
     private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
@@ -32,15 +46,15 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         this.defaultProvider = defaultProvider;
     }
 
-    public static int getProviderId(ApiSsoProvider provider) {
+    public static SSO_TYPE getProviderId(ApiSsoProvider provider) {
         if (provider instanceof FacebookSsoProvider) {
             return SSO_FACEBOOK;
         }
         if (provider instanceof GoogleSsoProvider) {
-            return SSO_GOOGLE;
+            return SSO_TYPE.SSO_GOOGLE;
         }
         if (provider instanceof DummySsoProvider) {
-            return SSO_DUMMY;
+            return SSO_TYPE.SSO_DUMMY;
         }
         throw new IllegalArgumentException("Unknown provider type");
     }
@@ -71,13 +85,13 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         if (null == authConfig) {
             return defaultProvider;
         }
-        int ssoProviderId = authConfig.getSsoProviderId();
+        SSO_TYPE ssoProviderId = authConfig.getSsoProviderId();
         return getSsoProvider(ssoProviderId, context);
     }
 
-    public void saveAuthConfiguration(int ssoProviderId, String token, Context context) {
+    public void saveAuthConfiguration(SSO_TYPE ssoProviderId, String token, Context context) {
         persistance.write(PARAMETER_ACCESS_TOKEN_KEY, token, context);
-        String ssoIdValue = Integer.valueOf(ssoProviderId).toString();
+        String ssoIdValue = ssoProviderId.name();
         persistance.write(PARAMETER_SSO_PROVIDER_ID_KEY, ssoIdValue, context);
     }
 
@@ -89,7 +103,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
             return null;
         }
 
-        Integer ssoIdValue = Integer.valueOf(ssoId);
+        SSO_TYPE ssoIdValue = SSO_TYPE.valueOf(ssoId);
         return new AuthConfiguration(ssoIdValue, accessToken);
     }
 
@@ -141,7 +155,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
      * Since this Activity is stored in a weakreference, the SSOManager will not cause a
      * context/activity memory leak.
      */
-    public UiApiSsoProvider getSsoProvider(int ssoProviderId, Context context) {
+    public UiApiSsoProvider getSsoProvider(SSO_TYPE ssoProviderId, Context context) {
         if (context instanceof Activity) {
             setActivity((Activity) context);
         }
@@ -158,15 +172,15 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     }
 
     public static class AuthConfiguration {
-        private final int ssoProviderId;
+        private final SSO_TYPE ssoProviderId;
         private final String accessToken;
 
-        public AuthConfiguration(int ssoProviderId, String accessToken) {
+        public AuthConfiguration(SSO_TYPE ssoProviderId, String accessToken) {
             this.ssoProviderId = ssoProviderId;
             this.accessToken = accessToken;
         }
 
-        public int getSsoProviderId() {
+        public SSO_TYPE getSsoProviderId() {
             return ssoProviderId;
         }
 

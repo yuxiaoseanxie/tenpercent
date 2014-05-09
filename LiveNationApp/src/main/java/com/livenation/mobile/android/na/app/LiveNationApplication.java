@@ -17,8 +17,8 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -40,8 +40,8 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
-import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
+import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -66,7 +66,7 @@ public class LiveNationApplication extends Application {
     private AccountPresenters accountPresenters;
     private NearbyVenuesPresenter nearbyVenuesPresenter;
     private FavoritesPresenter favoritesPresenter;
-    private SsoManager ssoManager;
+    private static SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
     private RecommendationsPresenter recommendationsPresenter;
     private RecommendationSetsPresenter recommendationSetsPresenter;
@@ -96,7 +96,7 @@ public class LiveNationApplication extends Application {
         singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
-        accountPresenters = new AccountPresenters(getSsoManager());
+        accountPresenters = new AccountPresenters();
         nearbyVenuesPresenter = new NearbyVenuesPresenter();
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
@@ -204,7 +204,7 @@ public class LiveNationApplication extends Application {
         return favoritesPresenter;
     }
 
-    public SsoManager getSsoManager() {
+    public static SsoManager getSsoManager() {
         return ssoManager;
     }
 

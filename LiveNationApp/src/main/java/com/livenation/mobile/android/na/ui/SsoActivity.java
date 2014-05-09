@@ -20,9 +20,9 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Integer providerId = null;
+        SsoManager.SSO_TYPE providerId = null;
         if (getIntent().hasExtra(ARG_PROVIDER_ID)) {
-            providerId = getIntent().getExtras().getInt(ARG_PROVIDER_ID);
+            providerId = SsoManager.SSO_TYPE.valueOf(getIntent().getExtras().getString(ARG_PROVIDER_ID));
         }
 
         if (null == providerId) {
@@ -41,7 +41,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
 
     @Override
     public void onOpenSession(String sessionToken) {
-        int providerId = SsoManager.getProviderId(ssoProvider);
+        SsoManager.SSO_TYPE providerId = SsoManager.getProviderId(ssoProvider);
         Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
         getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
     }
