@@ -10,19 +10,17 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <ImageView
             android:id="@+id/fragment_account_user_image"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:background="#ff777777"
             android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop"></com.android.volley.toolbox.NetworkImageView>
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/fragment_account_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="123"
             android:textAppearance="@style/account_detail_header" />
 
         <TextView
@@ -31,7 +29,6 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/facebook_logo"
             android:drawablePadding="5dp"
-            android:text="456789"
             android:textAppearance="@style/account_detail_detail" />
     </LinearLayout>
 
