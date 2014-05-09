@@ -17,22 +17,16 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 public class AccountPresenters {
     private final SsoManager ssoManager;
 
-    private final GetUserPresenter getUserPresenter;
     private final SaveAuthTokenPresenter saveAuthTokenPresenter;
     private final SaveUserPresenter saveUserPresenter;
     private final SignOutPresenter signOutPresenter;
 
-    public AccountPresenters(SsoManager ssoManager) {
-        this.ssoManager = ssoManager;
+    public AccountPresenters() {
 
-        getUserPresenter = new GetUserPresenter(ssoManager);
+        ssoManager = LiveNationApplication.getSsoManager();
         saveAuthTokenPresenter = new SaveAuthTokenPresenter(ssoManager);
         saveUserPresenter = new SaveUserPresenter(ssoManager);
         signOutPresenter = new SignOutPresenter(ssoManager);
-    }
-
-    public GetUserPresenter getGetUser() {
-        return getUserPresenter;
     }
 
     public SaveAuthTokenPresenter getSetAuthToken() {
@@ -45,25 +39,6 @@ public class AccountPresenters {
 
     public SignOutPresenter getSignOut() {
         return signOutPresenter;
-    }
-
-    public static class GetUserPresenter implements Presenter<AccountUserView> {
-        private final SsoManager ssoManager;
-
-        private GetUserPresenter(SsoManager ssoManager) {
-            this.ssoManager = ssoManager;
-        }
-
-        @Override
-        public void initialize(Context context, Bundle args, AccountUserView view) {
-            User user = ssoManager.readUser(context);
-            view.setUser(user);
-        }
-
-        @Override
-        public void cancel(AccountUserView view) {
-            //do nothing, no state
-        }
     }
 
     public static class SaveAuthTokenPresenter extends BaseSsoPresenter<AccountSaveAuthTokenView> implements Presenter<AccountSaveAuthTokenView> {
@@ -84,18 +59,18 @@ public class AccountPresenters {
                 return;
             }
 
-            Integer providerId = args.getInt(ARG_SSO_PROVIDER_ID);
+            SsoManager.SSO_TYPE providerId = SsoManager.SSO_TYPE.valueOf(args.getString(ARG_SSO_PROVIDER_ID));
             String accessToken = args.getString(ARG_ACCESS_TOKEN_KEY);
 
             ssoManager.saveAuthConfiguration(providerId, accessToken, context);
             view.onSaveAuthTokenSuccess();
         }
 
-        public Bundle getArguments(int providerId, String accessToken) {
+        public Bundle getArguments(SsoManager.SSO_TYPE providerId, String accessToken) {
             Bundle bundle = new Bundle();
 
             bundle.putString(ARG_ACCESS_TOKEN_KEY, accessToken);
-            bundle.putInt(ARG_SSO_PROVIDER_ID, providerId);
+            bundle.putString(ARG_SSO_PROVIDER_ID, providerId.name());
 
             return bundle;
         }

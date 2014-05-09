@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
+import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -34,17 +36,21 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        getAccountPresenters().getGetUser().initialize(getActivity(), getArguments(), this);
+        User user = LoginHelper.getSavedUser();
+        SsoManager.AuthConfiguration authConfiguration = LoginHelper.getAuthConfiguration();
+        setUser(user, authConfiguration);
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(User user, SsoManager.AuthConfiguration authConfiguration) {
         if (null == user) {
             onSignOut();
             return;
         }
+
         name.setText(user.getDisplayName());
         email.setText(user.getEmail());
+        email.setCompoundDrawablesWithIntrinsicBounds(authConfiguration.getSsoProviderId().getLogoResId(), 0, 0, 0);
         image.setImageUrl(user.getUrl(), getImageLoader());
     }
 

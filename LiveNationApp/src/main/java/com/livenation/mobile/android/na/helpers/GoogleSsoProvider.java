@@ -110,9 +110,8 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
         currentSession = null;
     }
 
-    @Override
-    public int getId() {
-        return SsoManager.SSO_GOOGLE;
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_GOOGLE;
     }
 
     public boolean hasSessionCache() {

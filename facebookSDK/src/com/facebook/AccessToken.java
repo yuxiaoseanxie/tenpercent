@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.facebook.internal.NativeProtocol;
 import com.facebook.internal.Utility;
 import com.facebook.internal.Validate;
@@ -139,7 +140,7 @@ public final class AccessToken implements Serializable {
      * @return a new AccessToken
      */
     public static AccessToken createFromExistingAccessToken(String accessToken, Date expirationTime,
-            Date lastRefreshTime, AccessTokenSource accessTokenSource, List<String> permissions) {
+                                                            Date lastRefreshTime, AccessTokenSource accessTokenSource, List<String> permissions) {
         if (expirationTime == null) {
             expirationTime = DEFAULT_EXPIRATION_TIME;
         }
@@ -208,7 +209,7 @@ public final class AccessToken implements Serializable {
         // With Login v4, we now get back the actual permissions granted, so update the permissions to be the real thing
         String grantedPermissions = bundle.getString("granted_scopes");
         if (!Utility.isNullOrEmpty(grantedPermissions)) {
-            requestedPermissions =  new ArrayList<String>(Arrays.asList(grantedPermissions.split(",")));
+            requestedPermissions = new ArrayList<String>(Arrays.asList(grantedPermissions.split(",")));
         }
 
         return createNew(requestedPermissions, token, expires, source);
@@ -253,7 +254,8 @@ public final class AccessToken implements Serializable {
 
         return new AccessToken(bundle.getString(TokenCachingStrategy.TOKEN_KEY), TokenCachingStrategy.getDate(bundle,
                 TokenCachingStrategy.EXPIRATION_DATE_KEY), permissions, TokenCachingStrategy.getSource(bundle),
-                TokenCachingStrategy.getDate(bundle, TokenCachingStrategy.LAST_REFRESH_DATE_KEY));
+                TokenCachingStrategy.getDate(bundle, TokenCachingStrategy.LAST_REFRESH_DATE_KEY)
+        );
     }
 
     Bundle toCacheBundle() {
@@ -273,8 +275,8 @@ public final class AccessToken implements Serializable {
     }
 
     private static AccessToken createFromBundle(List<String> requestedPermissions, Bundle bundle,
-            AccessTokenSource source,
-            Date expirationBase) {
+                                                AccessTokenSource source,
+                                                Date expirationBase) {
         String token = bundle.getString(ACCESS_TOKEN_KEY);
         Date expires = getBundleLongAsDate(bundle, EXPIRES_IN_KEY, expirationBase);
 
@@ -315,7 +317,7 @@ public final class AccessToken implements Serializable {
         private final Date lastRefresh;
 
         private SerializationProxyV1(String token, Date expires,
-                List<String> permissions, AccessTokenSource source, Date lastRefresh) {
+                                     List<String> permissions, AccessTokenSource source, Date lastRefresh) {
             this.expires = expires;
             this.permissions = permissions;
             this.token = token;
