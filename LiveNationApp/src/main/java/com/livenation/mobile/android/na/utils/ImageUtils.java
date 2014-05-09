@@ -14,11 +14,7 @@ import android.graphics.RectF;
 public class ImageUtils {
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int radiusPixel, int strokePixel) {
 
-        int minEdge = bitmap.getHeight();
-        if (minEdge > bitmap.getWidth()) {
-            minEdge = bitmap.getWidth();
-        }
-
+        int minEdge = Math.min(bitmap.getWidth(), bitmap.getHeight());
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -50,10 +46,7 @@ public class ImageUtils {
     }
 
     public static Bitmap getCircleBitmap(Bitmap bitmap, int strokePixel) {
-        int minEdge = bitmap.getHeight();
-        if (minEdge > bitmap.getWidth()) {
-            minEdge = bitmap.getWidth();
-        }
+        int minEdge = Math.min(bitmap.getWidth(), bitmap.getHeight());
 
         return getRoundedCornerBitmap(bitmap, minEdge, strokePixel);
     }
