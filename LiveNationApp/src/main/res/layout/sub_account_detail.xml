@@ -51,66 +51,34 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/account_detail_favorite_artists_container"
+        android:id="@+id/account_detail_favorites_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/account_detail_min_height"
         android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
-            android:id="@+id/account_detail_image_favorite_artists"
+            android:id="@+id/account_detail_image_favorites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:minWidth="@dimen/account_detail_image_min_width"
             android:scaleType="center"
-            android:src="@drawable/favorite_artists" />
+            android:src="@drawable/favorites" />
 
         <TextView
-            android:id="@+id/account_detail_text_favorite_artists_title"
+            android:id="@+id/account_detail_text_favorites_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/account_detail_image_favorite_artists"
-            android:text="@string/account_favorite_artists_title"
+            android:layout_toRightOf="@id/account_detail_image_favorites"
+            android:text="@string/account_favorites"
             android:textAppearance="@style/account_detail_header" />
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
             android:layout_height="@dimen/underscore_container_height"
-            android:layout_alignLeft="@id/account_detail_text_favorite_artists_title"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/account_detail_favorite_venues_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height"
-        android:background="@drawable/livenation_selector_pressable_background">
-
-        <ImageView
-            android:id="@+id/account_detail_image_favorite_venues"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:minWidth="@dimen/account_detail_image_min_width"
-            android:scaleType="center"
-            android:src="@drawable/favorite_venues" />
-
-        <TextView
-            android:id="@+id/account_detail_text_favorite_venues_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/account_detail_image_favorite_venues"
-            android:text="@string/account_favorite_venues_title"
-            android:textAppearance="@style/account_detail_header" />
-
-        <View
-            style="@style/ui_underscore"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/underscore_container_height"
-            android:layout_alignLeft="@id/account_detail_text_favorite_venues_title"
+            android:layout_alignLeft="@id/account_detail_text_favorites_title"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
 

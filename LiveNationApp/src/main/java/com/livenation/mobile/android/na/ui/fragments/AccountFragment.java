@@ -52,11 +52,8 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
         OnOrdersClick ordersClick = new OnOrdersClick();
         result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
 
-        OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
-        result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
-
-        OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
-        result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
+        OnFavoriteClick favoritesOnClick = new OnFavoriteClick();
+        result.findViewById(R.id.account_detail_favorites_container).setOnClickListener(favoritesOnClick);
 
         View locationContainer = result.findViewById(R.id.fragment_account_footer);
         locationContainer.setOnClickListener(new OnLocationClick());
@@ -123,22 +120,9 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     private class OnFavoriteClick implements View.OnClickListener {
-        private final int showTab;
-
-        public OnFavoriteClick(int showTab) {
-            this.showTab = showTab;
-        }
-
         @Override
         public void onClick(View v) {
-            if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_ARTISTS_CELL_TAP);
-            } else {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_VENUES_CELL_TAP);
-            }
-
             Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-            intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
             startActivity(intent);
         }
     }
