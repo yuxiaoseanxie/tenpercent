@@ -164,6 +164,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 buildAndOpenContactEmail();
                 return true;
 
+            case R.id.menu_home_logout_item:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
