@@ -13,6 +13,12 @@ import android.graphics.RectF;
  */
 public class ImageUtils {
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int radiusPixel, int strokePixel) {
+
+        int minEdge = bitmap.getHeight();
+        if (minEdge > bitmap.getWidth()) {
+            minEdge = bitmap.getWidth();
+        }
+
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -20,7 +26,7 @@ public class ImageUtils {
         final int color = 0xff424242;
         final int strokeColor = 0x3B000000;
         final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final Rect rect = new Rect((bitmap.getWidth() - minEdge)/ 2, (bitmap.getHeight() - minEdge) / 2, minEdge, minEdge);
         final RectF rectF = new RectF(rect);
         final float roundPx = radiusPixel;
 
