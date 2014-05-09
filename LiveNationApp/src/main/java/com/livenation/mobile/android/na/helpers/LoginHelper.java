@@ -20,8 +20,8 @@ public class LoginHelper {
         return ssoManager.getAuthConfiguration(applicationContext);
     }
 
-    public static boolean isLoggin() {
-        return ssoManager.readUser(applicationContext) != null;
+    public static boolean isLogout() {
+        return ssoManager.readUser(applicationContext) == null;
     }
 
     public static void logout(Activity activity) {
