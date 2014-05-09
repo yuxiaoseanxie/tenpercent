@@ -11,9 +11,11 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -36,11 +38,12 @@ import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder{
+public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener{
     private StickyListHeadersListView listView;
     private RecommendationsAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,22 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(id.fragment_all_shows_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        scrollPager.connectSwipeRefreshLayout(swipeRefreshLayout);
+
+        //Scroll until the top of the list. Refresh only when the first item of the listview is visible.
+        listView.setOnScrollListener( new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                swipeRefreshLayout.setEnabled(firstVisibleItem == 0);
+            }
+        });
         return view;
     }
 
@@ -121,5 +140,12 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     @Override
     public void onApiServiceNotAvailable() {
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setSoundEffectsEnabled(true);
+        scrollPager.reset();
+        scrollPager.load();
     }
 }
