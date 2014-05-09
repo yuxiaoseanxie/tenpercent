@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -26,6 +26,12 @@ public class AccountUserFragment extends LiveNationFragment implements
     private TextView name;
     private TextView email;
     private NetworkImageView image;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,12 +42,7 @@ public class AccountUserFragment extends LiveNationFragment implements
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
         image = (NetworkImageView) view.findViewById(R.id.fragment_account_user_image);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                onResume();
-            }
-        }, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
         return view;
     }
 
@@ -64,5 +65,12 @@ public class AccountUserFragment extends LiveNationFragment implements
         email.setText(user.getEmail());
         email.setCompoundDrawablesWithIntrinsicBounds(authConfiguration.getSsoProviderId().getLogoResId(), 0, 0, 0);
         image.setImageUrl(user.getUrl(), getImageLoader());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+
     }
 }
