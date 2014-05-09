@@ -116,6 +116,7 @@
 
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>
+    <dimen name="imageview_stroke_width">1dp</dimen>
 
     <!-- Box office -->
     <dimen name="box_office_max_height">450dp</dimen>
