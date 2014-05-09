@@ -43,7 +43,7 @@ android {
 
         for (Project project : rootProject.subprojects) {
             String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
-            String gitSha = computeGitSha(project.rootDir)
+            String gitSha = computeGitSha(project.projectDir)
             buildConfigField "String", "GIT_SHA_$name", "\"$gitSha\""
         }
     }
