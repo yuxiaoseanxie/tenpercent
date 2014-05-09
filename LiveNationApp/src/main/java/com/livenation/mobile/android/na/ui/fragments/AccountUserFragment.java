@@ -1,6 +1,11 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +13,25 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountUserFragment extends LiveNationFragment implements
-        AccountUserView, AccountSignOutView {
+        AccountUserView {
     private TextView name;
     private TextView email;
     private NetworkImageView image;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +41,8 @@ public class AccountUserFragment extends LiveNationFragment implements
         name = (TextView) view.findViewById(R.id.fragment_account_user_name);
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
         image = (NetworkImageView) view.findViewById(R.id.fragment_account_user_image);
-        image.setOnClickListener(new OnImageClickListener());
+
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
         return view;
     }
 
@@ -44,7 +57,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void setUser(User user, SsoManager.AuthConfiguration authConfiguration) {
         if (null == user) {
-            onSignOut();
+            getParentFragment().onResume();
             return;
         }
 
@@ -55,17 +68,9 @@ public class AccountUserFragment extends LiveNationFragment implements
     }
 
     @Override
-    public void onSignOut() {
-        //Update the parent fragment view to reflect signed out state
-        getParentFragment().onResume();
-    }
-
-    private class OnImageClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            getAccountPresenters().getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
 
     }
 }

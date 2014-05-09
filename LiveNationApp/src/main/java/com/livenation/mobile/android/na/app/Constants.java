@@ -83,4 +83,8 @@ public class Constants {
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
 
     }
+
+    public class BroadCastReceiver {
+        public static final String LOGOUT = "logout";
+    }
 }

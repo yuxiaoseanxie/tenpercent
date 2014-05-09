@@ -40,6 +40,7 @@
     <string name="home_menu_legal">Legal &amp; Credits</string>
     <string name="home_menu_contact">Contact</string>
     <string name="home_menu_help">Help</string>
+    <string name="home_menu_logout">Logout</string>
 
     <string name="activity_label_show">Show</string>
     <string name="activity_label_artist">Artist</string>

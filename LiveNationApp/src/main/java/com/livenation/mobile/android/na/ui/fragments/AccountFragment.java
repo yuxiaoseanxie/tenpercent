@@ -81,7 +81,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         Logger.log("Accounts", "API binded");
-        refreshUser(LoginHelper.isLoggin());
+        refreshUser(LoginHelper.isLogout());
         getLocationManager().reverseGeocodeCity(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng(), getActivity(), this);
     }
 
@@ -90,13 +90,13 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     }
 
-    public void refreshUser(boolean isLoggedIn) {
+    public void refreshUser(boolean isLogout) {
         if (null != profileFragment) {
             removeFragment(profileFragment);
             profileFragment = null;
         }
 
-        if (!isLoggedIn) {
+        if (isLogout) {
             profileFragment = new AccountSignInFragment();
         } else {
             profileFragment = new AccountUserFragment();

@@ -18,6 +18,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -30,7 +31,9 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
@@ -164,6 +167,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 buildAndOpenContactEmail();
                 return true;
 
+            case R.id.menu_home_logout_item:
+                LoginHelper.logout(this);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
