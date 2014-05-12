@@ -13,10 +13,11 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 
-public class NotificationsRegistrationManager {
+public class NotificationsRegistrationManager implements Ticketing.PushTokenProvider {
     //region Lifecycle
 
     private static final NotificationsRegistrationManager instance = new NotificationsRegistrationManager();
@@ -48,6 +49,19 @@ public class NotificationsRegistrationManager {
 
     private String getSavedApid() {
         return getPreferences().read(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
+    }
+
+    //endregion
+
+
+    //region Push Captcha
+
+    @Override
+    public String getPushToken() {
+        if (BuildConfig.DEBUG)
+            return null;
+        else
+            return PushManager.shared().getAPID();
     }
 
     //endregion

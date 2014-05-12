@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -23,6 +25,16 @@ public class PushReceiver extends BroadcastReceiver {
             registrationFinished(context, intent);
         } else if (PushManager.ACTION_NOTIFICATION_OPENED.equals(action)) {
             messageClicked(context, intent);
+        } else if (PushManager.ACTION_PUSH_RECEIVED.equals(action)) {
+            pushReceived(context, intent);
+        }
+    }
+
+    private void pushReceived(Context context, Intent intent) {
+        String type = intent.getStringExtra(Constants.Notifications.EXTRA_TYPE);
+        if (!BuildConfig.DEBUG && Constants.Notifications.TYPE_PUSH_CAPTCHA.equals(type)) {
+            String pushCaptchaPayload = intent.getStringExtra(Constants.Notifications.EXTRA_PUSH_CAPTCHA_PAYLOAD);
+            Ticketing.setPushCaptchaPayload(pushCaptchaPayload);
         }
     }
 
