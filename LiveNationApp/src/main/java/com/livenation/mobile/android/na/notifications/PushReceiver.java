@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.notifications;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.BuildConfig;
@@ -31,6 +32,8 @@ public class PushReceiver extends BroadcastReceiver {
     }
 
     private void pushReceived(Context context, Intent intent) {
+        Log.i(LOG_TAG, "Push received: " + TextUtils.join(", ", intent.getExtras().keySet()));
+
         String type = intent.getStringExtra(Constants.Notifications.EXTRA_TYPE);
         if (!BuildConfig.DEBUG && Constants.Notifications.TYPE_PUSH_CAPTCHA.equals(type)) {
             String pushCaptchaPayload = intent.getStringExtra(Constants.Notifications.EXTRA_PUSH_CAPTCHA_PAYLOAD);
