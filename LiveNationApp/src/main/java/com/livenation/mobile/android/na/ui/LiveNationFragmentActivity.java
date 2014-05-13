@@ -18,7 +18,7 @@ public class LiveNationFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         Analytics.onCreate(this);
         if (!LiveNationApplication.get().isMusicSync()) {
-            isMusicSync = true;
+            LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this);
         }

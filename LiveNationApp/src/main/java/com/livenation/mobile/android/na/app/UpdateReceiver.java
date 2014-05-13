@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
-import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
@@ -23,7 +22,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         Boolean isMusicScanAllowed = sharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
 
         if (isMusicScanAllowed) {
-            LiveNationFragmentActivity.isMusicSync = true;
+            LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
                 @Override
