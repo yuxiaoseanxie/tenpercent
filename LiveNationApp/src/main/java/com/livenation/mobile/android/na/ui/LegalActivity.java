@@ -26,13 +26,14 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
-        WebViewFragment termOfUseTabFragment;
-        WebViewFragment privacyPolicyTabFragment;
-        if (savedInstanceState != null) {
-            termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAG);
-            privacyPolicyTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(PRIVACY_POLICY_FRAGMENT_TAG);
-        } else {
+        WebViewFragment termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAG);
+        WebViewFragment privacyPolicyTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(PRIVACY_POLICY_FRAGMENT_TAG);
+
+        if (termOfUseTabFragment == null) {
             termOfUseTabFragment = WebViewFragment.newInstance(getString(R.string.legal_terms_of_use_url));
+        }
+
+        if (privacyPolicyTabFragment == null) {
             privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
         }
 
