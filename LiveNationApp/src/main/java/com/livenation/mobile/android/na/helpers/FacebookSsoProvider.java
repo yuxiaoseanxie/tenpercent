@@ -116,9 +116,8 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
         currentSession = null;
     }
 
-    @Override
-    public int getId() {
-        return SsoManager.SSO_FACEBOOK;
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
 
     public boolean hasSessionCache() {

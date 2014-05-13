@@ -28,6 +28,8 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         this.adapter = new EventAdapter(getActivity(), ShowView.DisplayMode.ARTIST);
         setListAdapter(adapter);
 

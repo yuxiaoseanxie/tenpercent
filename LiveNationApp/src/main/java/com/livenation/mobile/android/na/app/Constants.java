@@ -84,4 +84,8 @@ public class Constants {
         public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
 
     }
+
+    public class BroadCastReceiver {
+        public static final String LOGOUT = "logout";
+    }
 }

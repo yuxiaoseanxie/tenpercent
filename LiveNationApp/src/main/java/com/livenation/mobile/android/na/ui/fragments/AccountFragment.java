@@ -22,6 +22,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
@@ -32,7 +33,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
-public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ApiServiceBinder {
+public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ApiServiceBinder {
     private Fragment profileFragment;
     private TextView locationText;
 
@@ -51,11 +52,8 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
         OnOrdersClick ordersClick = new OnOrdersClick();
         result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
 
-        OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
-        result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
-
-        OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
-        result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
+        OnFavoriteClick favoritesOnClick = new OnFavoriteClick();
+        result.findViewById(R.id.account_detail_favorites_container).setOnClickListener(favoritesOnClick);
 
         View locationContainer = result.findViewById(R.id.fragment_account_footer);
         locationContainer.setOnClickListener(new OnLocationClick());
@@ -80,7 +78,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
         Logger.log("Accounts", "API binded");
-        getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
+        refreshUser(LoginHelper.isLogout());
         getLocationManager().reverseGeocodeCity(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng(), getActivity(), this);
     }
 
@@ -89,14 +87,13 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
     }
 
-    @Override
-    public void setUser(User user) {
+    public void refreshUser(boolean isLogout) {
         if (null != profileFragment) {
             removeFragment(profileFragment);
             profileFragment = null;
         }
 
-        if (null == user) {
+        if (isLogout) {
             profileFragment = new AccountSignInFragment();
         } else {
             profileFragment = new AccountUserFragment();
@@ -123,22 +120,9 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     private class OnFavoriteClick implements View.OnClickListener {
-        private final int showTab;
-
-        public OnFavoriteClick(int showTab) {
-            this.showTab = showTab;
-        }
-
         @Override
         public void onClick(View v) {
-            if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_ARTISTS_CELL_TAP);
-            } else {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_VENUES_CELL_TAP);
-            }
-
             Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-            intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
             startActivity(intent);
         }
     }

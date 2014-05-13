@@ -34,7 +34,7 @@ public class AccountSignInFragment extends Fragment {
         public void onClick(View v) {
             LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP);
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
-            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_FACEBOOK);
+            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
             startActivity(intent);
         }
 
@@ -45,7 +45,7 @@ public class AccountSignInFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
-            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_GOOGLE);
+            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_GOOGLE.name());
             startActivity(intent);
         }
 

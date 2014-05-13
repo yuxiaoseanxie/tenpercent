@@ -1,23 +1,48 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
+import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.utils.BitmapRequest;
+import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountUserFragment extends LiveNationFragment implements
-        AccountUserView, AccountSignOutView {
+        AccountUserView, Response.Listener<Bitmap>, Response.ErrorListener {
     private TextView name;
     private TextView email;
-    private NetworkImageView image;
+
+    private ImageView image;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onResume();
+        }
+    };
+    private BitmapRequest bitmapRequest;
+    private RequestQueue requestQueue = Volley.newRequestQueue(LiveNationApplication.get().getApplicationContext());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,40 +51,61 @@ public class AccountUserFragment extends LiveNationFragment implements
                 false);
         name = (TextView) view.findViewById(R.id.fragment_account_user_name);
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
-        image = (NetworkImageView) view.findViewById(R.id.fragment_account_user_image);
-        image.setOnClickListener(new OnImageClickListener());
+        image = (ImageView) view.findViewById(R.id.fragment_account_user_image);
+
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getAccountPresenters().getGetUser().initialize(getActivity(), getArguments(), this);
+        User user = LoginHelper.getSavedUser();
+        SsoManager.AuthConfiguration authConfiguration = LoginHelper.getAuthConfiguration();
+        setUser(user, authConfiguration);
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(User user, SsoManager.AuthConfiguration authConfiguration) {
         if (null == user) {
-            onSignOut();
+            getParentFragment().onResume();
             return;
         }
+
         name.setText(user.getDisplayName());
         email.setText(user.getEmail());
-        image.setImageUrl(user.getUrl(), getImageLoader());
+        email.setCompoundDrawablesWithIntrinsicBounds(authConfiguration.getSsoProviderId().getLogoResId(), 0, 0, 0);
+
+        bitmapRequest = new BitmapRequest(Request.Method.GET, user.getUrl(), this, this);
+        requestQueue.add(bitmapRequest);
     }
 
     @Override
-    public void onSignOut() {
-        //Update the parent fragment view to reflect signed out state
-        getParentFragment().onResume();
+    public void onDestroy() {
+        super.onDestroy();
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
     }
 
-    private class OnImageClickListener implements View.OnClickListener {
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        //TODO default image
+    }
 
-        @Override
-        public void onClick(View v) {
-            getAccountPresenters().getSignOut().initialize(getActivity(), null, AccountUserFragment.this);
-        }
+    @Override
+    public void onResponse(Bitmap bitmap) {
+        bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.imageview_stroke_width));
+        image.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
 
     }
 }
