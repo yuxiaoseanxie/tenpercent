@@ -189,10 +189,6 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 //manual location set, and we have a manual location specified.
                 locationManager.setLocationMode(LocationManager.MODE_USER, getActivity());
                 locationManager.setUserLocation(configuredLocation.getLat(), configuredLocation.getLng(), getActivity());
-            } else {
-                //manual location was set, but there is no manual location specified
-                //fallback to automatic location
-                locationManager.setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
             }
         }
         super.onDestroyView();
