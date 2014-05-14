@@ -152,6 +152,7 @@
     <string name="notif_date_now">NOW</string>
     <string name="notif_event_info_format" formatted="false">%s - %s</string>
     <string name="notif_event_details_format" formatted="false">%s at %s</string>
+    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.</string>
 
     <!-- Refresh bar -->
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
