@@ -168,6 +168,14 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="list_inbox_empty_message_title" parent="@style/livenation_app_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_inbox_empty_message_details" parent="@style/livenation_app_text">
+        <item name="android:textSize">15sp</item>
+    </style>
     <style name="fragment_message_subject_text" parent="@style/livenation_app_text">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
