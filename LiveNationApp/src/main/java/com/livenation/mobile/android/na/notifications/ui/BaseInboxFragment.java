@@ -22,8 +22,6 @@ import java.util.List;
  * A list fragment that shows rich push messages.
  */
 public abstract class BaseInboxFragment extends ListFragment {
-    public static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
-    static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
     private OnMessageListener listener;
     private RichPushMessageAdapter adapter;
     private List<String> selectedMessageIds = new ArrayList<String>();
@@ -34,20 +32,6 @@ public abstract class BaseInboxFragment extends ListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.setActivityAsListener(activity);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_inbox_list, container, false);
-
-        //Trick to use ListFragment with a empty custom view
-        View progressbarContainer = view.findViewById(R.id.progressContainer);
-        progressbarContainer.setId(INTERNAL_PROGRESS_CONTAINER_ID);
-
-        View listContainer = view.findViewById(R.id.listContainer);
-        listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
-
-        return view;
     }
 
     @Override
@@ -66,6 +50,9 @@ public abstract class BaseInboxFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.fragment_inbox_list_empty_view, null, false);
+        ((ViewGroup)getListView().getParent()).addView(view);
+        getListView().setEmptyView(view);
     }
 
     @Override
