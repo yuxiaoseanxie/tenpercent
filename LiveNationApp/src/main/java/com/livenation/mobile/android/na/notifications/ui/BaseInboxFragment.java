@@ -47,7 +47,6 @@ public abstract class BaseInboxFragment extends ListFragment {
         View listContainer = view.findViewById(R.id.listContainer);
         listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
 
-        android.app.ListFragment
         return view;
     }
 
