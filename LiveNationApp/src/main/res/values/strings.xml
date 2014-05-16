@@ -73,6 +73,11 @@
     <string name="login_google_plus_button">Google</string>
     <string name="login_button_or">or</string>
 
+    <string name="recommendations_favorite_upsell_facebook_button">Connect to Facebook</string>
+    <string name="recommendations_favorite_upsell_search_button">Find Your Favorites</string>
+    <string name="recommendations_favorite_upsell_large_title">No show recommendations? Lets fix that.</string>
+    <string name="recommendations_favorite_upsell_large_text1">Tell us your music \'likes\' via Facebook</string>
+    <string name="recommendations_favorite_upsell_large_text2">Or, let us know who you want to see live</string>
     <string name="debug_menu_title">Debug</string>
     <string name="debug_actionbar_title">DEBUG</string>
     <string name="debug_header_info">INFO</string>
