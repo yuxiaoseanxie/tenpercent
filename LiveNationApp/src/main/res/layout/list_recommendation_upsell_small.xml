@@ -15,5 +15,5 @@
 
     <TextView
         style="@style/text.secondary.recommendations_upsell_discreet_text"
-        android:text="For better recommendations add more favorite artists" />
+        android:text="@string/recommendations_favorite_upsell_small_text" />
 </LinearLayout>
