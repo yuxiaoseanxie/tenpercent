@@ -24,6 +24,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
@@ -97,6 +100,15 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
+
+        //Hockey App
+        checkForUpdates();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCrashes();
     }
 
     @Override
@@ -280,6 +292,20 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         public void setHasUnreadNotifications(boolean hasUnreadNotifications) {
             HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
             invalidateOptionsMenu();
+        }
+    }
+
+    //Hockey App
+    private void checkForCrashes() {
+        if (BuildConfig.DEBUG) {
+            CrashManager.register(this, getString(R.string.hockey_app_id));
+        }
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        if (BuildConfig.DEBUG) {
+            UpdateManager.register(this, getString(R.string.hockey_app_id));
         }
     }
 }

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +61,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private TextView artistTitle;
     private TextView calendarText;
-    private ImageView calendarPlusImage;
+    private RelativeLayout calendarContainer;
     private ViewGroup lineupContainer;
     private NetworkImageView artistImage;
     private ShowVenueView venueDetails;
@@ -91,7 +92,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
-        calendarPlusImage = (ImageView) result.findViewById(R.id.sub_show_calendar_plus_image);
+        calendarContainer = (RelativeLayout) result.findViewById(R.id.sub_show_calendar_container);
         findTicketsOptions = (Button) result.findViewById(R.id.fragment_show_ticketbar_options);
         findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_find);
 
@@ -115,7 +116,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, event.getLocalStartTime()).toString();
         calendarText.setText(calendarValue);
         OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
-        calendarPlusImage.setOnClickListener(onCalendarViewClick);
+        calendarContainer.setOnClickListener(onCalendarViewClick);
 
 
         if (null != event.getVenue()) {
@@ -338,11 +339,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     private class OnCalendarViewClick implements View.OnClickListener {
-        private Event event;
         private CalendarDialogFragment dialogFragment;
 
         public OnCalendarViewClick(Event event) {
-            this.event = event;
             this.dialogFragment = CalendarDialogFragment.newInstance(event);
         }
 
