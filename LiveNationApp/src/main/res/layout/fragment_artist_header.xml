@@ -10,13 +10,12 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <com.livenation.mobile.android.na.ui.views.UnCroppedScaleImageView
             android:id="@+id/fragment_artist_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ff777777"
-            android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop" />
+            android:background="@android:color/black"
+            android:scaleType="fitStart" />
 
     </FrameLayout>
 
