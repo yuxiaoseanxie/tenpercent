@@ -113,6 +113,6 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
         SharedPreferences oldPrefs = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences newPrefs = context.getSharedPreferences(Constants.SharedPreferences.IAS_NAME, Context.MODE_PRIVATE);
         newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, getIasId()).commit();
-        oldPrefs.edit().clear().commit();
+        oldPrefs.edit().remove(Constants.SharedPreferences.IAS_NAME).commit();
     }
 }

@@ -30,7 +30,6 @@ public class DummySsoProvider implements UiApiSsoProvider {
                                  int resultCode, Intent data) {
     }
 
-
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_DUMMY;
     }

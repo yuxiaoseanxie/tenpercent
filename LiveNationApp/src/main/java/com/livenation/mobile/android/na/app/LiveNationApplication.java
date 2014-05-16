@@ -73,6 +73,7 @@ public class LiveNationApplication extends Application {
     private RecommendationSetsPresenter recommendationSetsPresenter;
 
     private ConfigManager configManager;
+    private boolean isMusicSync = false;
 
     public static LiveNationApplication get() {
         return instance;
@@ -225,5 +226,15 @@ public class LiveNationApplication extends Application {
     public ConfigManager getConfigManager() {
         return configManager;
     }
+
+    public boolean isMusicSync() {
+        return isMusicSync;
+    }
+
+    public void setIsMusicSync(boolean isMusicSync) {
+        this.isMusicSync = isMusicSync;
+    }
+
+
 
 }
