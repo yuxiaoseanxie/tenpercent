@@ -146,7 +146,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
         @Override
         public boolean idEquals(TaggedEvent target) {
-            return get().idEquals(target.get());
+            return get().idEquals(target.get()) && isPersonal() == target.isPersonal();
         }
     }
 }
