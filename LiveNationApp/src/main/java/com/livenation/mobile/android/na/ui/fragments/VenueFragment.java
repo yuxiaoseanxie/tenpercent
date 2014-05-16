@@ -114,7 +114,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         if (phoneNumber.isEmpty()) {
             phonebox.setVisibility(View.GONE);
         } else {
-            telephone.setText(venue.getFormattedPhoneNumber());
             telephone.setOnClickListener(new OnPhoneNumberClick());
         }
 
