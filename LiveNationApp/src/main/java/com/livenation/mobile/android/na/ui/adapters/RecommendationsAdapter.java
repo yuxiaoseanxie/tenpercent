@@ -160,7 +160,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE, SearchActivity.SEARCH_MODE_ARTIST_ONLY);
+                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
                 getContext().startActivity(intent);
             }
         });
@@ -173,7 +173,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE, SearchActivity.SEARCH_MODE_ARTIST_ONLY);
+                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
                 getContext().startActivity(intent);
             }
         });
@@ -195,7 +195,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE, SearchActivity.SEARCH_MODE_ARTIST_ONLY);
+                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
                 getContext().startActivity(intent);
             }
         });

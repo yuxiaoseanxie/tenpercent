@@ -19,9 +19,9 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class SearchActivity extends FragmentActivity implements TextWatcher {
-    public static final String SEARCH_MODE = "search_mode";
-    public static final int SEARCH_MODE_DEFAULT = 0;
-    public static final int SEARCH_MODE_ARTIST_ONLY = 1;
+    public static final String SEARCH_MODE_KEY = "search_mode";
+    public static final int SEARCH_MODE_DEFAULT_VALUE = 0;
+    public static final int SEARCH_MODE_ARTIST_ONLY_VALUE = 1;
 
     private SearchForText fragment;
     private EditText input;
