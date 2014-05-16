@@ -113,10 +113,10 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
 
         switch (recommendationType) {
             case PERSONAL:
-                item.setTag(RecommendationItem.EVENT_PERSONAL);
+                item.setTag(RecommendationItem.RecommendationType.EVENT_PERSONAL);
                 break;
             case POPULAR:
-                item.setTag(RecommendationItem.EVENT_POPULAR);
+                item.setTag(RecommendationItem.RecommendationType.EVENT_POPULAR);
                 break;
         }
 
@@ -125,19 +125,19 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
 
     private RecommendationItem createSmallFavoriteUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.FAVORITE_UPSELL_SMALL);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_SMALL);
         return item;
     }
 
     private RecommendationItem createMediumUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.FAVORITE_UPSELL_MEDIUM);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_MEDIUM);
         return item;
     }
 
     private RecommendationItem createLargeUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.FAVORITE_UPSELL_LARGE);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_LARGE);
         return item;
     }
 

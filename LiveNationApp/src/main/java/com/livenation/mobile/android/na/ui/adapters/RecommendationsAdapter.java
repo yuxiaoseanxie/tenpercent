@@ -108,7 +108,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
         TextView text = holder.getText();
         switch (getItem(position).getTag()) {
-            case RecommendationItem.EVENT_POPULAR:
+            case EVENT_POPULAR:
                 text.setText(getContext().getString(R.string.recommendations_title_popular));
                 break;
             default:
@@ -122,13 +122,13 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     public int getItemViewType(int position) {
         //simply returning getItem(position).getTag() here would prevent efficient view recycling in getView(),
         //as views for personal and popular would be in separate view recycle pools. 
-        int itemType = getItem(position).getTag();
-        switch (itemType) {
-            case RecommendationItem.FAVORITE_UPSELL_LARGE:
+
+        switch (getItem(position).getTag()) {
+            case FAVORITE_UPSELL_LARGE:
                 return ITEM_TYPE_UPSELL_LARGE;
-            case RecommendationItem.FAVORITE_UPSELL_MEDIUM:
+            case FAVORITE_UPSELL_MEDIUM:
                 return ITEM_TYPE_UPSELL_MEDIUM;
-            case RecommendationItem.FAVORITE_UPSELL_SMALL:
+            case FAVORITE_UPSELL_SMALL:
                 return ITEM_TYPE_UPSELL_SMALL;
             default:
                 return ITEM_TYPE_EVENT;
@@ -142,15 +142,14 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     @Override
     public long getHeaderId(int position) {
-        int itemType = getItem(position).getTag();
-        switch (itemType) {
-            case RecommendationItem.EVENT_PERSONAL:
-                return RecommendationItem.EVENT_PERSONAL;
-            case RecommendationItem.EVENT_POPULAR:
-                return RecommendationItem.EVENT_POPULAR;
+        switch (getItem(position).getTag()) {
+            case EVENT_PERSONAL:
+                return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
+            case EVENT_POPULAR:
+                return RecommendationItem.RecommendationType.EVENT_POPULAR.ordinal();
             default:
                 //group all recommendation upsells to the personal header group
-                return RecommendationItem.EVENT_PERSONAL;
+                return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
         }
      }
 
@@ -244,12 +243,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
     }
 
-    public static class RecommendationItem extends TaggedReference<Event, Integer> implements IdEquals<RecommendationItem> {
-        public static final int EVENT_PERSONAL = 0;
-        public static final int EVENT_POPULAR = 1;
-        public static final int FAVORITE_UPSELL_SMALL = 2;
-        public static final int FAVORITE_UPSELL_MEDIUM = 3;
-        public static final int FAVORITE_UPSELL_LARGE = 4;
+    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
+        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_SMALL, FAVORITE_UPSELL_MEDIUM, FAVORITE_UPSELL_LARGE}
 
         public RecommendationItem() {
             super(null);
