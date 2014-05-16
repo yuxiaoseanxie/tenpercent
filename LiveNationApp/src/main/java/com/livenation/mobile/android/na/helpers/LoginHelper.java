@@ -31,4 +31,10 @@ public class LoginHelper {
 
         LiveNationApplication.get().getConfigManager().buildApi();
     }
+
+    public static boolean isUsingFacebook(Context context) {
+        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        if (auth == null) return false;
+        return auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK;
+    }
 }

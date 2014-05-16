@@ -4,6 +4,7 @@ import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
 import com.livenation.mobile.android.platform.api.service.ApiService;
@@ -76,7 +77,7 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
                     final int eventCount = set.getEvents().size();
                     if (set.getSetType() == RecommendationSet.SetType.PERSONAL) {
                          if (set.getEvents().size() == 0) {
-                            if (!isUsingFacebook()) {
+                            if (!LoginHelper.isUsingFacebook(getAdapter().getContext())) {
                                 //create a large "get some favs!" upsell to show if no personal recs
                                 RecommendationItem item = createLargeUpsell();
                                 result.add(0, item);
@@ -141,9 +142,4 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
         return item;
     }
 
-    private boolean isUsingFacebook() {
-        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(getAdapter().getContext());
-        if (auth == null) return false;
-        return auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK;
-    }
 }
