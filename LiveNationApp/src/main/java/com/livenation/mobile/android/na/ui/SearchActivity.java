@@ -29,7 +29,7 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
     private Handler limiter = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-        fragment.searchFor(input.getText().toString());
+            fragment.searchFor(input.getText().toString());
         }
     };
 
