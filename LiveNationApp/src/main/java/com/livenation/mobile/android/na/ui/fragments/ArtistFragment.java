@@ -177,9 +177,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         if (artistEvents.getNearby().isEmpty()) {
             showsHeader.setText(R.string.artist_all_shows);
             shows.setEvents(artistEvents.getAll());
+
         } else {
             showsHeader.setText(R.string.artist_nearby_shows);
-            shows.setAlwaysShowMoreItemsView(true);
+            shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size()<artistEvents.getAll().size());
             shows.setEvents(artistEvents.getNearby());
         }
     }

@@ -132,6 +132,7 @@
         <activity
             android:name="com.livenation.mobile.android.na.ui.LegalActivity"
             android:label="@string/home_menu_legal"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"  />
 
 
@@ -148,6 +149,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <!-- Hockey App -->
+        <activity android:name="net.hockeyapp.android.UpdateActivity" />
 
 
         <!-- Urban Airship config -->

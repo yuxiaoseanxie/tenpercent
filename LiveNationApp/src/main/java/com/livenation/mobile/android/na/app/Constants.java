@@ -43,6 +43,7 @@ public class Constants {
     public class Notifications {
         public static final String EXTRA_TYPE = "type";
 
+        public static final String TYPE_PUSH_CAPTCHA = "silent_push";
         public static final int TYPE_FEATURED_CONTENT = -1;
         public static final int TYPE_EVENT_ON_SALE_NOW = 0;
         public static final int TYPE_EVENT_ANNOUNCEMENT = 1;
@@ -52,6 +53,7 @@ public class Constants {
 
 
         public static final String EXTRA_ENTITY_ID = "id";
+        public static final String EXTRA_PUSH_CAPTCHA_PAYLOAD = "payload";
 
         public static final String EXTRA_MESSAGE_ACTION_URL = "message_action_url";
         public static final String EXTRA_MESSAGE_ACTION_NAME = "message_action_name";
@@ -81,6 +83,7 @@ public class Constants {
         //1.X key
         public static final String PREF_NAME = "TM_USER_PREF";
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
+        public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
 
     }
 

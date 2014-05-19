@@ -13,6 +13,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.LibraryAffinitiesParameters;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.Calendar;
@@ -26,9 +27,16 @@ public class MusicSyncHelper implements ApiServiceBinder {
     private Toast successToast;
     private Toast failToast;
     private Context context;
+    private ApiService.BasicApiCallback<Void> callback;
 
     public void syncMusic(Context ctx) {
+        this.callback = null;
+        syncMusic(ctx, null);
+    }
+
+    public synchronized void syncMusic(Context ctx, ApiService.BasicApiCallback<Void> responseCallback) {
         this.context = ctx.getApplicationContext();
+        this.callback = responseCallback;
         isToastShowable = isToastShowable(context);
         if (isToastShowable) {
             Toast.makeText(context, "Music Scan started", Toast.LENGTH_SHORT).show();
@@ -53,6 +61,10 @@ public class MusicSyncHelper implements ApiServiceBinder {
                 if (isToastShowable) {
                     failToast.show();
                 }
+                if (callback != null) {
+                    callback.onErrorResponse(error);
+                    callback = null;
+                }
             }
         });
     }
@@ -73,7 +85,11 @@ public class MusicSyncHelper implements ApiServiceBinder {
                     successToast.setText("Music Scan done! " + String.valueOf(musicLibrary.getData().size()) + " artist(s) has been synchronyzed");
                     successToast.show();
                 }
+
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
+                if (callback != null) {
+                    callback.onResponse(null);
+                }
             }
 
             @Override
@@ -81,12 +97,15 @@ public class MusicSyncHelper implements ApiServiceBinder {
                 if (isToastShowable) {
                     failToast.show();
                 }
+                if (callback != null) {
+                    callback.onErrorResponse(error);
+                }
             }
         });
     }
 
     @Override
     public void onApiServiceNotAvailable() {
-
+        callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_API_SERVICE_NOT_AVAILABLE));
     }
 }
