@@ -101,15 +101,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ticketbar_find_text" parent="@style/livenation_app_text">
+    <style name="bottom_bar_button_text" parent="@style/livenation_app_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
+        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
     </style>
 
     <style name="ticketbar_options_text" parent="@style/livenation_app_text">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
+        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
     </style>
 
     <style name="tab_title_text" parent="@style/livenation_app_text">
