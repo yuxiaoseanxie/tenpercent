@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
@@ -56,7 +57,7 @@ public abstract class BaseInboxFragment extends ListFragment implements View.OnC
         View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.fragment_inbox_list_empty_view, null, false);
         ((ViewGroup)getListView().getParent()).addView(view);
 
-        Button favoriteButton = (Button) view.findViewById(R.id.notif_no_notification_favorite_button);
+        LinearLayout favoriteButton = (LinearLayout) view.findViewById(R.id.notif_no_notification_favorite_button);
         favoriteButton.setOnClickListener(this);
 
         getListView().setEmptyView(view);
