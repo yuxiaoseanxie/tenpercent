@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,6 +55,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView location;
     private TextView telephone;
     private View venueInfo;
+    private View phonebox;
     private EventsView shows;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
@@ -87,6 +89,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
         venueInfo = result.findViewById(R.id.venue_detail_venue_info_link);
         favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
+        phonebox = result.findViewById(R.id.venue_detail_phone_box);
 
         return result;
     }
@@ -106,7 +109,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             location.setText("");
         }
 
-        telephone.setText(venue.getFormattedPhoneNumber());
+        String phoneNumber = venue.getFormattedPhoneNumber();
+        telephone.setText(phoneNumber);
+        if (phoneNumber.isEmpty()) {
+            phonebox.setVisibility(View.GONE);
+        } else {
+            telephone.setOnClickListener(new OnPhoneNumberClick());
+        }
 
         if (venue.getBoxOffice() == null) {
             loadBoxOfficeInfo(venue.getNumericId());
@@ -114,7 +123,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             displayBoxOfficeInfo(venue);
         }
 
-        telephone.setOnClickListener(new OnPhoneNumberClick());
         location.setOnClickListener(new OnAddressClick(Double.parseDouble(venue.getLat()), Double.parseDouble(venue.getLng()), venue.getAddress().getSmallFriendlyAddress(false), LiveNationApplication.get().getApplicationContext()));
 
         double lat = Double.valueOf(venue.getLat());

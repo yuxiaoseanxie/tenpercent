@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
@@ -44,6 +45,7 @@ import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -73,6 +75,7 @@ public class LiveNationApplication extends Application {
     private RecommendationSetsPresenter recommendationSetsPresenter;
 
     private ConfigManager configManager;
+    private boolean isMusicSync = false;
 
     public static LiveNationApplication get() {
         return instance;
@@ -125,7 +128,9 @@ public class LiveNationApplication extends Application {
 
     private void setupNotifications() {
         Logger.logLevel = Log.VERBOSE;
-        UAirship.takeOff(this);
+        AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(this);
+        airshipConfigOptions.inProduction = !BuildConfig.DEBUG;
+        UAirship.takeOff(this, airshipConfigOptions);
 
         PushManager.enablePush();
 
@@ -141,9 +146,10 @@ public class LiveNationApplication extends Application {
     private void setupTicketing() {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
-        ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
         ticketingConfig.setImageLoader(getImageLoader());
         ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
+        ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
+        ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
         Ticketing.init(ticketingConfig);
     }
 
@@ -225,5 +231,15 @@ public class LiveNationApplication extends Application {
     public ConfigManager getConfigManager() {
         return configManager;
     }
+
+    public boolean isMusicSync() {
+        return isMusicSync;
+    }
+
+    public void setIsMusicSync(boolean isMusicSync) {
+        this.isMusicSync = isMusicSync;
+    }
+
+
 
 }
