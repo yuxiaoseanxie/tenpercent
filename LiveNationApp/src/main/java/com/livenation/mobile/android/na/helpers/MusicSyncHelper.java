@@ -101,6 +101,8 @@ public class MusicSyncHelper implements ApiServiceBinder {
 
     @Override
     public void onApiServiceNotAvailable() {
-        callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_API_SERVICE_NOT_AVAILABLE));
+        if (callback != null) {
+            callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_API_SERVICE_NOT_AVAILABLE));
+        }
     }
 }
