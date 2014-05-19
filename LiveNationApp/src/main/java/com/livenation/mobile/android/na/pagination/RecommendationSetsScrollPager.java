@@ -3,14 +3,13 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet.RecommendationSetType;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.RecommendationSetsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
@@ -70,33 +69,36 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
                 for (RecommendationSet set : response) {
                     for (Event event : set.getEvents()) {
                         //add a personal or popular recommendation item
-                        RecommendationItem item = createRecommendationItem(event, set.getSetType());
+                        RecommendationItem item = createRecommendationItem(event, RecommendationSetType.getRecommendationSetType(set.getName()));
                         result.add(item);
                     }
 
                     final int eventCount = set.getEvents().size();
-                    if (set.getSetType() == RecommendationSet.SetType.PERSONAL) {
-                         if (set.getEvents().size() == 0) {
-                            if (!LoginHelper.isUsingFacebook(getAdapter().getContext())) {
-                                //create a large "get some favs!" upsell to show if no personal recs
-                                RecommendationItem item = createLargeUpsell();
-                                result.add(0, item);
-                            } else {
-                                //create a medium "find some recs!" upsell to show if no personal recs
-                                //but user is already using facebook
-                                RecommendationItem item = createMediumUpsell();
-                                result.add(0, item);
+                    RecommendationSetType recommendationSetType = RecommendationSetType.getRecommendationSetType(set.getName());
+                    switch (recommendationSetType) {
+                        case PERSONAL:
+                            if (set.getEvents().size() == 0) {
+                                if (!LoginHelper.isUsingFacebook(getAdapter().getContext())) {
+                                    //create a large "get some favs!" upsell to show if no personal recs
+                                    RecommendationItem item = createLargeUpsell();
+                                    result.add(0, item);
+                                } else {
+                                    //create a medium "find some recs!" upsell to show if no personal recs
+                                    //but user is already using facebook
+                                    RecommendationItem item = createMediumUpsell();
+                                    result.add(0, item);
+                                }
                             }
-                        }
-                        if ((eventCount > 0) && (eventCount <= PERSONAL_RECOMMENDATIONS_LOW_UPSELL_THRESHOLD)) {
-                            //create a discreet in line upsell for adding favorites
-                            RecommendationItem item = createSmallFavoriteUpsell();
-                            result.add(item);
-                        }
-                    } else {
-                        //non personal recs
-                        //if we have fetched popular shows, update our manually tracked paging offset (which excludes personal items)
-                        pagingOffset += eventCount;
+                            if ((eventCount > 0) && (eventCount <= PERSONAL_RECOMMENDATIONS_LOW_UPSELL_THRESHOLD)) {
+                                //create a discreet in line upsell for adding favorites
+                                RecommendationItem item = createSmallFavoriteUpsell();
+                                result.add(item);
+                            }
+                            break;
+                        default:
+                            //non personal recs
+                            //if we have fetched popular shows, update our manually tracked paging offset (which excludes personal items)
+                            pagingOffset += eventCount;
                     }
                 }
                 callback.onResponse(result);
@@ -109,7 +111,7 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
         });
     }
 
-    private RecommendationItem createRecommendationItem(Event event, RecommendationSet.SetType recommendationType) {
+    private RecommendationItem createRecommendationItem(Event event, RecommendationSetType recommendationType) {
         RecommendationItem item = new RecommendationItem(event);
 
         switch (recommendationType) {
