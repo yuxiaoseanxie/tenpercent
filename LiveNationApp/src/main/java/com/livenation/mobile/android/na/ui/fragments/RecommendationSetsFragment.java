@@ -30,7 +30,7 @@ import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
-import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.TaggedEvent;
+import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
@@ -58,7 +58,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new RecommendationsAdapter(getActivity(), new ArrayList<TaggedEvent>());
+        adapter = new RecommendationsAdapter(getActivity(), new ArrayList<RecommendationItem>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
         LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
