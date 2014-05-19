@@ -96,18 +96,18 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         }
 
         adapter.addAll(result);
-        onFetchEnded();
         paginatedFetcher = null;
+        onFetchEnded();
     }
 
     protected void onFetchCancelled() {
-        onFetchEnded();
         paginatedFetcher = null;
+        onFetchEnded();
     }
 
     protected void onFetchFailed() {
-        onFetchError();
         paginatedFetcher = null;
+        onFetchError();
     }
 
     public ArrayAdapter<TItemType> getAdapter() {

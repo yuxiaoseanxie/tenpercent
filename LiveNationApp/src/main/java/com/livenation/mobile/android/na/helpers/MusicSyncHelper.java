@@ -1,8 +1,9 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
@@ -16,8 +17,6 @@ import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionar
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.Calendar;
-
-import javax.security.auth.callback.Callback;
 
 /**
  * Created by elodieferrais on 4/4/14.
@@ -49,7 +48,12 @@ public class MusicSyncHelper implements ApiServiceBinder {
             @Override
             public void onResponse(MusicLibrary result) {
                 musicLibrary = result;
-                LiveNationApplication.get().getConfigManager().bindApi(MusicSyncHelper.this);
+                if (result.getData().size() > 0) {
+                    LiveNationApplication.get().getConfigManager().bindApi(MusicSyncHelper.this);
+                } else {
+                    successToast.setText("Music Scan done! 0 artist has been synchronyzed");
+                    successToast.show();
+                }
             }
 
             @Override
@@ -78,13 +82,14 @@ public class MusicSyncHelper implements ApiServiceBinder {
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
                 editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
                 if (isToastShowable) {
-                    successToast.setText("Music Scan done! " + String.valueOf(musicLibrary.getData().size()) + " artist has been synchronyzed");
+                    successToast.setText("Music Scan done! " + String.valueOf(musicLibrary.getData().size()) + " artist(s) has been synchronyzed");
                     successToast.show();
                 }
+
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
                 if (callback != null) {
                     callback.onResponse(null);
                 }
-
             }
 
             @Override
@@ -101,6 +106,8 @@ public class MusicSyncHelper implements ApiServiceBinder {
 
     @Override
     public void onApiServiceNotAvailable() {
-        callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_API_SERVICE_NOT_AVAILABLE));
+        if (callback != null) {
+            callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_API_SERVICE_NOT_AVAILABLE));
+        }
     }
 }

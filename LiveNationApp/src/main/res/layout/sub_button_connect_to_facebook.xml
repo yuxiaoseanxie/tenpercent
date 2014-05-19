@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/text.button.custom_center_container.blue">
+
+    <TextView
+        style="@style/text.button.custom_center_text.facebook"
+        android:text="@string/recommendations_favorite_upsell_facebook_button" />
+</LinearLayout>

@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
+import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -38,7 +39,10 @@ import java.util.List;
  * Created by cchilton on 4/2/14.
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
-    private final String[] SEARCH_INCLUDES = new String[]{"venues", "artists"};
+    private final String[] SEARCH_INCLUDE_VENUES_ARTISTS = new String[]{"venues", "artists"};
+    private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
+    private String[] searchIncludes = SEARCH_INCLUDE_VENUES_ARTISTS;
+
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private String unboundSearchTextBuffer;
@@ -49,6 +53,18 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<SearchResult>());
         LiveNationApplication.get().getConfigManager().bindApi(this);
+
+        if (getActivity().getIntent() != null) {
+            int searchMode = getActivity().getIntent().getIntExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_DEFAULT_VALUE);
+            switch (searchMode) {
+                case SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE:
+                    searchIncludes = SEARCH_INCLUDE_ARTISTS;
+                    break;
+                default:
+                    searchIncludes = SEARCH_INCLUDE_VENUES_ARTISTS;
+                    break;
+            }
+        }
     }
 
     @Override
@@ -69,7 +85,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             return;
         }
         AutoCompleteSearchParameters params = new AutoCompleteSearchParameters();
-        params.setIncludes(SEARCH_INCLUDES);
+        params.setIncludes(searchIncludes);
         params.setSearchQuery(text);
 
         apiService.autoCompleteSearch(params, this);

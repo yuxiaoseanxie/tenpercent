@@ -3,9 +3,11 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -79,6 +81,13 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getShowMoreItemsView(), layoutParams);
         }
+
+        if (events.size() == 0) {
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            showContainer.addView(getEmptyView(), layoutParams);
+        }
+
+
     }
 
 
@@ -102,8 +111,17 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
 
-    public View getShowMoreItemsView() {
+    private View getShowMoreItemsView() {
         return showMoreItemsView;
+    }
+
+    private View getEmptyView() {
+        View emptyView =  LayoutInflater.from(getActivity().getApplicationContext()).inflate(android.R.layout.simple_list_item_1, null);
+        TextView tv = (TextView) emptyView.findViewById(android.R.id.text1);
+        tv.setText(R.string.artist_events_no_show);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextColor(emptyView.getResources().getColor(android.R.color.black));
+        return emptyView;
     }
 
     public void setShowMoreItemsView(View showMoreItemsView) {
