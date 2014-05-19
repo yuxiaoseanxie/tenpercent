@@ -31,9 +31,9 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
     private LayoutInflater inflater;
     private static final int ITEM_TYPE_EVENT = 0;
-    private static final int ITEM_TYPE_UPSELL_SMALL = 1;
-    private static final int ITEM_TYPE_UPSELL_MEDIUM = 2;
-    private static final int ITEM_TYPE_UPSELL_LARGE = 3;
+    private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
+    private static final int ITEM_TYPE_UPSELL_SEARCH = 2;
+    private static final int ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK = 3;
     private static final int ITEM_TYPE_COUNT = 4;
 
     public RecommendationsAdapter(Context context, List<RecommendationItem> items) {
@@ -55,12 +55,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     public View getView(int position, View convertView, ViewGroup parent) {
         int itemType = getItemViewType(position);
         switch (itemType) {
-            case ITEM_TYPE_UPSELL_SMALL:
-                return getRecommendationsUpsellSmall(inflater, parent);
-            case ITEM_TYPE_UPSELL_MEDIUM:
-                return getRecommendationsUpsellMedium(inflater, parent);
-            case ITEM_TYPE_UPSELL_LARGE:
-                return getRecommendationsUpsellLarge(inflater, parent);
+            case ITEM_TYPE_UPSELL_DISCREET:
+                return getRecommendationsUpsellDiscreet(inflater, parent);
+            case ITEM_TYPE_UPSELL_SEARCH:
+                return getRecommendationsUpsellSearch(inflater, parent);
+            case ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK:
+                return getRecommendationsUpsellSearchWithFacebook(inflater, parent);
         }
 
         View view = null;
@@ -124,12 +124,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         //as views for personal and popular would be in separate view recycle pools. 
 
         switch (getItem(position).getTag()) {
-            case FAVORITE_UPSELL_LARGE:
-                return ITEM_TYPE_UPSELL_LARGE;
-            case FAVORITE_UPSELL_MEDIUM:
-                return ITEM_TYPE_UPSELL_MEDIUM;
-            case FAVORITE_UPSELL_SMALL:
-                return ITEM_TYPE_UPSELL_SMALL;
+            case FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK:
+                return ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK;
+            case FAVORITE_UPSELL_SEARCH:
+                return ITEM_TYPE_UPSELL_SEARCH;
+            case FAVORITE_UPSELL_DISCREET:
+                return ITEM_TYPE_UPSELL_DISCREET;
             default:
                 return ITEM_TYPE_EVENT;
         }
@@ -153,8 +153,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
      }
 
-    private View getRecommendationsUpsellSmall(LayoutInflater inflater, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.list_recommendation_upsell_small, parent, false);
+    private View getRecommendationsUpsellDiscreet(LayoutInflater inflater, ViewGroup parent) {
+        View view = inflater.inflate(R.layout.list_recommendation_upsell_discreet, parent, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,8 +166,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         return view;
     }
 
-    private View getRecommendationsUpsellMedium(LayoutInflater inflater, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.list_recommendation_upsell_medium, parent, false);
+    private View getRecommendationsUpsellSearch(LayoutInflater inflater, ViewGroup parent) {
+        View view = inflater.inflate(R.layout.list_recommendation_upsell_search, parent, false);
         view.findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,8 +179,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         return view;
     }
 
-    private View getRecommendationsUpsellLarge(LayoutInflater inflater, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.list_recommendation_upsell_large, parent, false);
+    private View getRecommendationsUpsellSearchWithFacebook(LayoutInflater inflater, ViewGroup parent) {
+        View view = inflater.inflate(R.layout.list_recommendation_upsell_search_with_facebook, parent, false);
         view.findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,7 +244,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     }
 
     public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
-        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_SMALL, FAVORITE_UPSELL_MEDIUM, FAVORITE_UPSELL_LARGE}
+        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}
 
         public RecommendationItem() {
             super(null);

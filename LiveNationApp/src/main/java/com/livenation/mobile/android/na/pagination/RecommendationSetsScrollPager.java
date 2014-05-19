@@ -80,18 +80,18 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
                             if (set.getEvents().size() == 0) {
                                 if (!LoginHelper.isUsingFacebook(getAdapter().getContext())) {
                                     //create a large "get some favs!" upsell to show if no personal recs
-                                    RecommendationItem item = createLargeUpsell();
+                                    RecommendationItem item = createSearchWithFavoriteUpsell();
                                     result.add(0, item);
                                 } else {
                                     //create a medium "find some recs!" upsell to show if no personal recs
                                     //but user is already using facebook
-                                    RecommendationItem item = createMediumUpsell();
+                                    RecommendationItem item = createSearchFavoriteUpsell();
                                     result.add(0, item);
                                 }
                             }
                             if ((eventCount > 0) && (eventCount <= PERSONAL_RECOMMENDATIONS_LOW_UPSELL_THRESHOLD)) {
                                 //create a discreet in line upsell for adding favorites
-                                RecommendationItem item = createSmallFavoriteUpsell();
+                                RecommendationItem item = createDiscreetFavoriteUpsell();
                                 result.add(item);
                             }
                             break;
@@ -126,21 +126,21 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
         return item;
     }
 
-    private RecommendationItem createSmallFavoriteUpsell() {
+    private RecommendationItem createDiscreetFavoriteUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_SMALL);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_DISCREET);
         return item;
     }
 
-    private RecommendationItem createMediumUpsell() {
+    private RecommendationItem createSearchFavoriteUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_MEDIUM);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_SEARCH);
         return item;
     }
 
-    private RecommendationItem createLargeUpsell() {
+    private RecommendationItem createSearchWithFavoriteUpsell() {
         RecommendationItem item = new RecommendationItem();
-        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_LARGE);
+        item.setTag(RecommendationItem.RecommendationType.FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK);
         return item;
     }
 
