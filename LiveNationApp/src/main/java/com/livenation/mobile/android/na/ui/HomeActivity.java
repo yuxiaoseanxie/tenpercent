@@ -39,10 +39,10 @@ import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.FeaturedFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
-import com.livenation.mobile.android.na.ui.fragments.ShowsListFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
@@ -279,7 +279,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 case 1:
                     return new NearbyVenuesFragment();
                 case 2:
-                    return new ShowsListFragment();
+                    return new AllShowsFragment();
                 default:
                     throw new IllegalArgumentException();
             }
