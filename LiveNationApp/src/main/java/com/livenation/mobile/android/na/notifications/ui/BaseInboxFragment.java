@@ -5,11 +5,18 @@
 package com.livenation.mobile.android.na.notifications.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.urbanairship.richpush.RichPushMessage;
 
 import java.util.ArrayList;
@@ -18,7 +25,7 @@ import java.util.List;
 /**
  * A list fragment that shows rich push messages.
  */
-public abstract class BaseInboxFragment extends ListFragment {
+public abstract class BaseInboxFragment extends ListFragment implements View.OnClickListener{
     private OnMessageListener listener;
     private RichPushMessageAdapter adapter;
     private List<String> selectedMessageIds = new ArrayList<String>();
@@ -47,12 +54,24 @@ public abstract class BaseInboxFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.setEmptyText(getString(getEmptyListStringId()));
+        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.fragment_inbox_list_empty_view, null, false);
+        ((ViewGroup)getListView().getParent()).addView(view);
+
+        LinearLayout favoriteButton = (LinearLayout) view.findViewById(R.id.notif_no_notification_favorite_button);
+        favoriteButton.setOnClickListener(this);
+
+        getListView().setEmptyView(view);
     }
 
     @Override
     public void onListItemClick(ListView list, View view, int position, long id) {
         this.listener.onMessageOpen(this.adapter.getItem(position));
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent favoriteIntent = new Intent(v.getContext(), FavoriteActivity.class);
+        startActivity(favoriteIntent);
     }
 
     /**

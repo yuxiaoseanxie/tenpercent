@@ -47,6 +47,7 @@ public class MessageFragment extends Fragment {
     private TextView subjectText;
     private TextView dateReceivedText;
     private Button callToActionButton;
+    private View errorView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MessageFragment extends Fragment {
         dateReceivedText = (TextView) view.findViewById(R.id.fragment_message_date);
         callToActionButton = (Button) view.findViewById(R.id.fragment_message_cta_button);
         callToActionButton.setOnClickListener(new CallToActionClickListener());
+        errorView = view.findViewById(R.id.fragment_message_error_view);
 
         return view;
     }
@@ -103,7 +105,7 @@ public class MessageFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //TODO define wording https://www.pivotaltracker.com/story/show/69382014
+                errorView.setVisibility(View.VISIBLE);
             }
         }, RichPushManager.shared().getRichPushUser().getId(), RichPushManager.shared().getRichPushUser().getPassword());
         requestQueue.add(urbanAirshipRequest);

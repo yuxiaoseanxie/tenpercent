@@ -7,6 +7,7 @@ package com.livenation.mobile.android.na.notifications.ui;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ListFragment;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,6 +60,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.setContentView(R.layout.activity_inbox);
 
         actionBar = getActionBar();
@@ -70,6 +72,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
         // Set up the activity_inbox fragment
         this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
     }
 
     @Override
@@ -80,7 +83,6 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     @Override
     protected void onStart() {
         super.onStart();
-
         // Activity instrumentation for analytic tracking
         UAirship.shared().getAnalytics().activityStarted(this);
     }

@@ -146,6 +146,9 @@
     <!-- Help -->
     <dimen name="help_menu_item_margin">10dip</dimen>
 
+    <!-- Inbox / Notification -->
+    <dimen name="inbox_notification_empty_message_margin">10dip</dimen>
+
     <!-- Calendar dialog -->
     <dimen name="calendar_dialog_cell_padding_right">26dp</dimen>
     <dimen name="calendar_dialog_cell_padding_vertically">20dp</dimen>
@@ -155,4 +158,5 @@
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
+
 </resources>
