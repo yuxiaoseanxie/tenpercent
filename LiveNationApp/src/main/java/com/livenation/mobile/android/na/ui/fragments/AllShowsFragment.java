@@ -74,7 +74,7 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
         View result = inflater.inflate(R.layout.fragment_featured, null, false);
         chartingContainer = (ViewGroup) result.findViewById(R.id.featured_charting_container);
 
-        listView.getWrappedList().addHeaderView(result);
+        listView.addHeaderView(result);
 
         //Important: connect the listview (which set a footer) before to set the adapter
         scrollPager.connectListView(listView);
@@ -118,7 +118,10 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
-        Event event = adapter.getItem(position);
+        //Since this listview has a header view (featured), we can not use adapter.getItem(x) as x
+        //will be offset by the number of header views. This is the alternative according to:
+        // http://stackoverflow.com/questions/11106397/listview-addheaderview-causes-position-to-increase-by-one
+        Event event = (Event) parent.getItemAtPosition(position);
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
