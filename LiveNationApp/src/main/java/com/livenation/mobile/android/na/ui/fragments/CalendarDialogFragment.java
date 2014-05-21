@@ -63,14 +63,19 @@ public class CalendarDialogFragment extends DialogFragment implements AdapterVie
         //Add Show date item
         if (!event.getIsMegaticket()) {
         CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
-        showDate.setStartDate(event.getLocalStartTime());
-        calendarItemList.add(showDate);
+            if (event.getLocalStartTime() != null) {
+                showDate.setStartDate(event.getLocalStartTime());
+                calendarItemList.add(showDate);
+            }
         }
 
-        //Add Genaral onSale items
+        //Add General onSale items
         CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_on_sale_general_title));
-        generalOnSale.setStartDate(event.getOnSaleDate());
-        calendarItemList.add(generalOnSale);
+        if (event.getOnSaleDate() != null) {
+            generalOnSale.setStartDate(event.getOnSaleDate());
+            calendarItemList.add(generalOnSale);
+        }
+
 
         //Add Presale items
         List<TicketOffering> ticketOfferingList = event.getTicketOfferings();
