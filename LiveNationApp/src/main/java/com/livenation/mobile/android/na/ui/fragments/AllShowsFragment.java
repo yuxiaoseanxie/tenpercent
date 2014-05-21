@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -48,7 +46,7 @@ import java.util.List;
 import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class ShowsListFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder, FeatureView {
+public class AllShowsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder, FeatureView {
     private StickyListHeadersListView listView;
     private EventStickyHeaderAdapter adapter;
     private AllShowsScrollPager scrollPager;
@@ -70,9 +68,9 @@ public class ShowsListFragment extends LiveNationFragment implements OnItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_shows, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
-        listView.setOnItemClickListener(ShowsListFragment.this);
+        listView.setOnItemClickListener(AllShowsFragment.this);
         View result = inflater.inflate(R.layout.fragment_featured, null, false);
         chartingContainer = (ViewGroup) result.findViewById(R.id.featured_charting_container);
 
