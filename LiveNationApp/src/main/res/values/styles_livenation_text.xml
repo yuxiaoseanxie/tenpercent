@@ -53,6 +53,12 @@
         <item name="android:textColor">@color/show_artist_title</item>
     </style>
 
+    <style name="featured_item_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/show_artist_title</item>
+    </style>
+
     <style name="view_lineup_text" parent="@style/livenation_app_text">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>

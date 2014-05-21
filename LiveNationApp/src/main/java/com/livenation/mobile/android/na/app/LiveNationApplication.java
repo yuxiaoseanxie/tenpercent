@@ -146,7 +146,7 @@ public class LiveNationApplication extends Application {
     private void setupTicketing() {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
-        ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
+        //ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
         ticketingConfig.setImageLoader(getImageLoader());
         ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
         ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());

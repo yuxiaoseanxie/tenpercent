@@ -8,11 +8,16 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
@@ -22,6 +27,8 @@ import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,29 +78,26 @@ public class FeaturedFragment extends LiveNationFragment implements FeatureView,
     }
 
     private void setFeaturedView(List<Chart> featured) {
+        final int spacerWidth = getActivity().getResources().getDimensionPixelSize(R.dimen.view_featured_item_spacer);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+
         chartingContainer.removeAllViews();
+        for (Chart chart : featured) {
+            if (TextUtils.isEmpty(chart.getImageUrl())) continue;
 
-        if (featured == null || featured.size() < 3) {
-            //TODO: Investigate the default behavior for when there's nothing featured
-            //throw new IllegalStateException("Returned featured data is missing/too short");
-            return;
-        }
+            View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
-        for (int i = 0; i < 3; i++) {
-            Chart chart = featured.get(i);
-            //TODO: Valid image url helper here
-            if (null == chart.getImageUrl() ||
-                    chart.getImageUrl().trim().length() == 0) {
-                continue;
-            }
-
-            NetworkImageView image = new NetworkImageView(getActivity());
-            LayoutParams layoutParams = new LayoutParams(
-                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            NetworkImageView image = (NetworkImageView) view.findViewById(android.R.id.icon);
 
             image.setImageUrl(chart.getImageUrl(), getImageLoader());
 
-            chartingContainer.addView(image, layoutParams);
+            TextView text = (TextView) view.findViewById(android.R.id.text1);
+            text.setText(chart.getArtistName());
+
+            chartingContainer.addView(view);
+
+            View spacer = new View(getActivity());
+            chartingContainer.addView(spacer, new LayoutParams(spacerWidth, LayoutParams.MATCH_PARENT));
         }
     }
 }
