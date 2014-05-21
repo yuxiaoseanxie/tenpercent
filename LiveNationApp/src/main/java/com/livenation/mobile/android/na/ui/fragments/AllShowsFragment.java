@@ -68,7 +68,7 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_all_shows, container, false);
+        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
         listView.setOnItemClickListener(AllShowsFragment.this);
         View result = inflater.inflate(R.layout.fragment_featured, null, false);
