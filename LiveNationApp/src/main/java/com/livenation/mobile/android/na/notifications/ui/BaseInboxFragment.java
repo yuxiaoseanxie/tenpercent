@@ -10,10 +10,15 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.urbanairship.richpush.RichPushMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 /**
  * A list fragment that shows rich push messages.
@@ -52,6 +57,11 @@ public abstract class BaseInboxFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView list, View view, int position, long id) {
+        Props props = new Props();
+        RichPushMessage message = adapter.getItem(position);
+        props.put(AnalyticConstants.NOTIFICATION_NAME, message.getTitle());
+        props.put(AnalyticConstants.NOTIFICATION_ID, message.getMessageId());
+        LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_CELL_TAP, AnalyticsCategory.NOTIFICATION, props);
         this.listener.onMessageOpen(this.adapter.getItem(position));
     }
 

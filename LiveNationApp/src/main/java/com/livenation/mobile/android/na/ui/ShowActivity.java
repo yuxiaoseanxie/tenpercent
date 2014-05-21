@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
@@ -21,6 +24,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import io.segment.android.models.Props;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -86,6 +91,23 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
         startActivity(intent);
     }
 
+    @Override
+    protected void onShare() {
+        Props props = new Props();
+        if (this.event != null) {
+            props.put(AnalyticConstants.EVENT_NAME, event.getName());
+            props.put(AnalyticConstants.EVENT_ID, event.getId());
+        }
+        trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
+        super.onShare();
+    }
+
+    @Override
+    protected void onSearch() {
+        trackActionBarAction(AnalyticConstants.SEARCH_ICON_TAP, null);
+        super.onSearch();
+    }
+
     //region Share Overrides
 
     @Override
@@ -108,4 +130,12 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     }
 
     //endregion
+
+    private void trackActionBarAction(String event, Props props) {
+        if (props == null) {
+            props = new Props();
+        }
+        props.put(AnalyticConstants.SOURCE, AnalyticsCategory.SDP);
+        LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
+    }
 }
