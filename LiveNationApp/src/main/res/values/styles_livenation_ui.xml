@@ -30,6 +30,10 @@
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
 
+    <style name="ui_header_transparent.with_bottom_padding">
+        <item name="android:paddingBottom">@dimen/ui_header_transparent_padding_bottom</item>
+    </style>
+
     <style name="ui_underscore">
         <item name="android:background">@drawable/ui_underscore_background</item>
     </style>

@@ -55,6 +55,10 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     public void connectListView(StickyListHeadersListView listView) {
+        if (listView.getAdapter() != null) {
+            // http://stackoverflow.com/questions/4317778/hide-footer-view-in-listview?rq=1
+            throw new IllegalStateException("Setting the adapter before the adding a footer is broken on many flavours of Android");
+        }
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
     }

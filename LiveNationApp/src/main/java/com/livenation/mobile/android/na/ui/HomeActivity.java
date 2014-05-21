@@ -24,15 +24,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
-
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -50,6 +46,9 @@ import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.livenation.mobile.android.platform.util.Logger;
+
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
 
 import java.util.Map;
 
@@ -194,7 +193,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         final String subject = getString(R.string.contact_email_subject);
         final String message = "\n\n" + getString(R.string.contact_email_signature_message)
                 + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
-                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER +"  " + Build.MODEL
+                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
                 + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
         LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
@@ -202,7 +201,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
                 String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
                 String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
-                ContactUtils.emailTo(emailAddress, subject,  signature, HomeActivity.this);
+                ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
             }
 
             @Override
@@ -210,7 +209,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
             }
         });
-
 
 
     }
