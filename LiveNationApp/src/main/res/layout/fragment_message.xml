@@ -63,10 +63,10 @@
 
     <Button
         android:id="@+id/fragment_message_cta_button"
-        style="@style/ticketbar_find_text"
+        style="@style/bottom_bar_button_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0ac600"
+        android:background="@drawable/ui_deep_link_button_background"
         android:text="@string/message_cta_default" />
 
 </LinearLayout>
