@@ -141,8 +141,8 @@
         <item quantity="other">%1$d Tickets</item>
     </plurals>
     <plurals name="order_confirmation_quantity">
-        <item quantity="one">Congrats! You've purchased a ticket to</item>
-        <item quantity="other">Congrats! You've purchased tickets to</item>
+        <item quantity="one">Congrats! You\'ve purchased a ticket to</item>
+        <item quantity="other">Congrats! You\'ve purchased tickets to</item>
     </plurals>
     <string name="order_confirmation_details_title">Order Details</string>
     <string name="order_confirmation_number">Order Number</string>
