@@ -79,6 +79,7 @@ public abstract class BaseInboxFragment extends ListFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
+        LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.NOTIFICATION);
         Intent favoriteIntent = new Intent(v.getContext(), FavoriteActivity.class);
         startActivity(favoriteIntent);
     }
