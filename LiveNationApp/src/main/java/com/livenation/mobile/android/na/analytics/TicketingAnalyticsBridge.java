@@ -44,7 +44,6 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             props.put(entry.getKey(), entry.getValue());
         }
-
         return props;
     }
 

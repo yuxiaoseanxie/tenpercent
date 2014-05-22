@@ -11,6 +11,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * A list fragment that shows rich push messages.
  */
-public abstract class BaseInboxFragment extends ListFragment implements View.OnClickListener{
+public abstract class BaseInboxFragment extends ListFragment implements View.OnClickListener {
     private OnMessageListener listener;
     private RichPushMessageAdapter adapter;
     private List<String> selectedMessageIds = new ArrayList<String>();
