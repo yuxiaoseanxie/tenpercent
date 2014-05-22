@@ -20,6 +20,8 @@ import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
     @SuppressWarnings("unused")
@@ -202,14 +204,25 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                     user.setId(currentPerson.getId());
                     user.setDisplayName(name);
                     user.setEmail(email);
-                    user.setUrl(currentPerson.getImage().getUrl());
-
+                    String profilePicUrl = currentPerson.getImage().getUrl();
+                    profilePicUrl = getLargerProfileImage(profilePicUrl);
+                    user.setUrl(profilePicUrl);
                     return user;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        private String getLargerProfileImage(String url) {
+            //search the google image profile pic string for the "sz=50" query param, and remove it if found
+            Pattern pattern = Pattern.compile("[?]sz=[0-9]*$");
+            Matcher m = pattern.matcher(url);
+            if (m.find()) {
+                return m.replaceFirst("");
+            }
+            return url;
         }
 
         abstract void onComplete(String accessToken, User user);
