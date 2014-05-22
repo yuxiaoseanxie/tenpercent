@@ -36,8 +36,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     private Switch autoLocationSwitch;
     private LocationAdapter adapter;
 
-    private TextView currentPrimaryText;
-    private TextView currentSecondaryText;
+    private TextView currentLocationText;
+    private TextView locationModeHeader;
 
     private City actualLocation;
     private City configuredLocation;
@@ -101,8 +101,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         ListView listView = (ListView) view.findViewById(android.R.id.list);
         listView.setAdapter(adapter);
 
-        currentPrimaryText = (TextView) view.findViewById(R.id.fragment_location_current_primary_text);
-        currentSecondaryText = (TextView) view.findViewById(R.id.fragment_location_current_secondary_text);
+        currentLocationText = (TextView) view.findViewById(R.id.fragment_location_current_text);
+        locationModeHeader = (TextView) view.findViewById(R.id.fragment_location_current_header);
 
         listView.setOnItemClickListener(this);
 
@@ -157,7 +157,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         City activeLocation = null;
 
         if (isChecked) {
-            currentPrimaryText.setText(R.string.location_mode_automatic);
+            locationModeHeader.setText(R.string.location_current);
             activeLocation = actualLocation;
             Props props = new Props();
             if (actualLocation != null) {
@@ -167,7 +167,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             }
             LiveNationAnalytics.track(AnalyticConstants.CURRENT_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
         } else {
-            currentPrimaryText.setText(R.string.location_mode_manual);
+            locationModeHeader.setText(R.string.location_manual);
             if (null == configuredLocation) {
                 //no initial manual location!
                 if (null != actualLocation) {
@@ -237,7 +237,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     }
 
     private void showActiveLocation(City city) {
-        currentSecondaryText.setText(city.getName());
+        currentLocationText.setText(city.getName());
     }
 
     private boolean isLocationAutomatic() {

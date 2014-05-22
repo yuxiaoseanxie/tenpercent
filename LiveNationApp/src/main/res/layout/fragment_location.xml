@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/fragment_location_current_header"
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,19 +13,13 @@
 
 
     <TextView
-        android:id="@+id/fragment_location_current_primary_text"
+        android:id="@+id/fragment_location_current_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/fragment_location_current_secondary_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
 
     <TextView
         style="@style/ui_header_transparent"
