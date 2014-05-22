@@ -141,6 +141,7 @@
     <string name="add_message">Add Message</string>
     <string name="mark_read">Mark Read</string>
     <string name="mark_unread">Mark Unread</string>
+    <string name="add_to_calendar">Add To Calendar</string>
     <string name="delete">Delete</string>
     <string name="refresh">Refresh</string>
     <string name="inbox_refresh_failed_dialog_title">Unable to retrieve new messages</string>

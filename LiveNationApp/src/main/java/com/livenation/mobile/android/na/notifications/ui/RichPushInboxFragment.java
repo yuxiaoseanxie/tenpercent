@@ -42,7 +42,7 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
         getListView().setOnItemLongClickListener(this);
     }
 
-    private int getMessageType(RichPushMessage message) {
+    public int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
         if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
             String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
