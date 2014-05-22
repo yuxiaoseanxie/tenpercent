@@ -220,7 +220,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             Pattern pattern = Pattern.compile("[?]sz=[0-9]*$");
             Matcher m = pattern.matcher(url);
             if (m.find()) {
-                return m.replaceFirst("");
+                return m.replaceFirst("?sz=500");
             }
             return url;
         }
