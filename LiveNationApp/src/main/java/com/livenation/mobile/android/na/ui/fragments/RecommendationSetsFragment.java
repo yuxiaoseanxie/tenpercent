@@ -74,7 +74,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
+        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
         //Important: connect the listview (which set a footer) before to set the adapter

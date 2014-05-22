@@ -56,8 +56,10 @@ public class MusicSyncHelper implements ApiServiceBinder {
                 if (result.getData().size() > 0) {
                     LiveNationApplication.get().getConfigManager().bindApi(MusicSyncHelper.this);
                 } else {
-                    successToast.setText("Music Scan done! 0 artist has been synchronyzed");
-                    successToast.show();
+                    if (isToastShowable) {
+                        successToast.setText("Music Scan done! 0 artist has been synchronyzed");
+                        successToast.show();
+                    }
                 }
             }
 

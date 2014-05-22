@@ -44,6 +44,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void reset() {
+        stop();
         adapter.clear();
         lastFetch = null;
         isFirstPage = true;

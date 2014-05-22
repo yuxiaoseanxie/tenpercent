@@ -53,6 +53,12 @@
         <item name="android:textColor">@color/show_artist_title</item>
     </style>
 
+    <style name="featured_item_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/show_artist_title</item>
+    </style>
+
     <style name="view_lineup_text" parent="@style/livenation_app_text">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
@@ -101,15 +107,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ticketbar_find_text" parent="@style/livenation_app_text">
+    <style name="bottom_bar_button_text" parent="@style/livenation_app_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
+        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
     </style>
 
     <style name="ticketbar_options_text" parent="@style/livenation_app_text">
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@drawable/ui_ticketbar_button_textcolor</item>
+        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
     </style>
 
     <style name="tab_title_text" parent="@style/livenation_app_text">
@@ -168,6 +174,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="list_inbox_empty_message_title" parent="@style/livenation_app_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="list_inbox_empty_message_details" parent="@style/livenation_app_text">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
     <style name="fragment_message_subject_text" parent="@style/livenation_app_text">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>

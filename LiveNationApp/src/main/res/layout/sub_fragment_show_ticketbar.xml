@@ -6,7 +6,7 @@
 
     <Button
         android:id="@+id/fragment_show_ticketbar_find"
-        style="@style/ticketbar_find_text"
+        style="@style/bottom_bar_button_text"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ui_ticketbar_height"
         android:layout_centerInParent="true"

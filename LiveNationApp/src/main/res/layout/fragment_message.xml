@@ -35,25 +35,38 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/fragment_message_view"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/widget_margin"
-            android:textColorLink="@color/notification_link_color" />
-    </ScrollView>
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/fragment_message_view"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:padding="@dimen/widget_margin"
+                android:textColorLink="@color/notification_link_color" />
+        </ScrollView>
+        <TextView
+            android:id="@+id/fragment_message_error_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/notif_error_loading_message"
+            android:gravity="center"
+            android:visibility="gone"
+         />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/fragment_message_cta_button"
-        style="@style/ticketbar_find_text"
+        style="@style/bottom_bar_button_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0ac600"
+        android:background="@drawable/ui_deep_link_button_background"
         android:text="@string/message_cta_default" />
 
 </LinearLayout>

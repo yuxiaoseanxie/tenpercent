@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_gray"
-    android:orientation="vertical"
-    android:padding="@dimen/featured_layout_padding">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/featured_title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/featured_title"
-        android:textAppearance="@style/featured_title" />
-
-    <TextView
-        android:id="@+id/featured_see_all_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="@string/featured_see_all"
-        android:textAppearance="@style/featured_see_all" />
-
-    <LinearLayout
-        android:id="@+id/featured_charting_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/featured_title_text"
-        android:layout_marginTop="@dimen/featured_layout_padding"
-        android:minHeight="@dimen/fragment_featured_container_min_height"
-        android:orientation="horizontal"></LinearLayout>
+        android:gravity="center"
+        android:text="@string/featured_title"
+        style="@style/ui_header_transparent.with_bottom_padding" />
 
-</RelativeLayout>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/featured_charting_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/featured_title_text"
+            android:minHeight="@dimen/fragment_featured_container_min_height"
+            android:orientation="horizontal"></LinearLayout>
+    </HorizontalScrollView>
+
+
+    <ImageView style="@style/SwooshDivider.with_top_margin" />
+
+</LinearLayout>

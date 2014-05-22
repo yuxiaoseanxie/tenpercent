@@ -55,7 +55,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         }
 
         Event event = getItem(position);
-        holder.getTitle().setText(event.getName());
+        holder.getTitle().setText(event.getDisplayName());
 
         String startTime = DateFormat.format(START_TIME_FORMAT, event.getLocalStartTime()).toString();
 

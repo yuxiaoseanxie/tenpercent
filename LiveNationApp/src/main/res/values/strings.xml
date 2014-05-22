@@ -17,7 +17,7 @@
     <string name="artist_bio">Bio</string>
     <string name="artist_youtube">Videos</string>
 
-    <string name="tab_title_your_shows">Recommendations</string>
+    <string name="tab_title_your_shows">Recommended</string>
     <string name="tab_title_all_shows">All shows</string>
     <string name="tab_title_nearby">Nearby</string>
 
@@ -160,6 +160,11 @@
     <string name="notif_date_now">NOW</string>
     <string name="notif_event_info_format" formatted="false">%s - %s</string>
     <string name="notif_event_details_format" formatted="false">%s at %s</string>
+    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.</string>
+
+    <string name="notif_loading">Loading</string>
+    <string name="notif_no_notification_title">You have no notifications.</string>
+    <string name="notif_no_notification_description">To receive artist presale and event notifications make sure you\'ve added them as favorites.</string>
 
     <!-- Refresh bar -->
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>

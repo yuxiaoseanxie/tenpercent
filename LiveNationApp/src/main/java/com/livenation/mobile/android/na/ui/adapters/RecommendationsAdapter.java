@@ -77,7 +77,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
         Event event = getItem(position).get();
 
-        holder.getTitle().setText(event.getName());
+        holder.getTitle().setText(event.getDisplayName());
         holder.getLocation().setText(event.getVenue().getName());
 
         if (event.getLineup().size() > 0) {
