@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -215,6 +216,7 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
                         onMessageSelected(message.getMessageId(), checkBox.isChecked());
                     }
                 });
+
                 view.setFocusable(false);
                 view.setFocusableInTouchMode(false);
             }
