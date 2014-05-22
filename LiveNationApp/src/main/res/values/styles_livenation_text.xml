@@ -257,6 +257,29 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="order_confirmation_header_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="order_confirmation_header_text.large">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="order_confirmation_section_header_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="order_confirmation_detail_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="order_confirmation_detail_text.label">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="text" parent="@style/livenation_app_text"/>
 
     <style name="text.primary">

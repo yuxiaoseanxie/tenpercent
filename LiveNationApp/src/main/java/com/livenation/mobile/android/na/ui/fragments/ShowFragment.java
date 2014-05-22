@@ -35,6 +35,7 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
+import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -68,6 +69,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
     private LatLng mapLocationCache = null;
+    private Event event;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
     @Override
     public void setEvent(Event event) {
+        this.event = event;
+
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         trackScreenWithLocation("User views SDP screen", props);
@@ -214,7 +218,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     protected void showTicketOffering(TicketOffering offering) {
         String buyLink = offering.getPurchaseUrl();
         if (Ticketing.isTicketmasterUrl(buyLink)) {
-            Intent confirmIntent = new Intent(getActivity(), ConfirmActivity.class);
+            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
+            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
             Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
