@@ -32,6 +32,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     private LocationAdapter adapter;
 
     private TextView currentLocationText;
+    private TextView locationModeHeader;
 
     private City actualLocation;
     private City configuredLocation;
@@ -96,6 +97,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         listView.setAdapter(adapter);
 
         currentLocationText = (TextView) view.findViewById(R.id.fragment_location_current_text);
+        locationModeHeader = (TextView) view.findViewById(R.id.fragment_location_current_header);
 
         listView.setOnItemClickListener(this);
 
@@ -150,8 +152,10 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         City activeLocation = null;
 
         if (isChecked) {
+            locationModeHeader.setText(R.string.location_current);
             activeLocation = actualLocation;
         } else {
+            locationModeHeader.setText(R.string.location_manual);
             if (null == configuredLocation) {
                 //no initial manual location!
                 if (null != actualLocation) {

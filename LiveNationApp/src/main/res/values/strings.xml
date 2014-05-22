@@ -61,6 +61,7 @@
 
     <string name="location_no_location_set">No location set</string>
     <string name="location_current">Currently Set Location</string>
+    <string name="location_manual">Manually Set Location</string>
     <string name="location_previous_locations">Previous Locations</string>
     <string name="location_youre_nearby">You\'re Nearby</string>
     <string name="location_switch">Use Current Location</string>

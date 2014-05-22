@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/fragment_location_current_header"
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
