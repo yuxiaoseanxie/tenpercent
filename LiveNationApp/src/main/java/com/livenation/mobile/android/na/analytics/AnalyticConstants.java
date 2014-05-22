@@ -80,6 +80,14 @@ public class AnalyticConstants {
     public static final String SUBMIT_LOCATION_QUERY = "Submit Location Query";
     public static final String PREVIOUS_LOCATION_TAP = "Previous Location Tap";
 
+    //HouseKeeping 1.x Updated (LN_Android)
+    public static final String UPDATED = "1.x Updated";
+    public static final String MIGRATION_COMPLETED = "1.x Updated";
+    public static final String GRANTED_ACCESS_TO_MUSIC = "1.x Granted Access to Music Library";
+
+    //Music Library Analysis
+    public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
+
     //Attributes
 
     //Common
@@ -148,6 +156,14 @@ public class AnalyticConstants {
     public static final String LOCATION_LATLONG = "Location";
     public static final String LOCATION_NAME = "Location";
 
+    //HouseKeeping
+    public static final String AIS_USER_ID = "AIS User ID";
+    public static final String ANDROID_DEVICE_ID = "Android Device ID";
+    public static final String TOKEN = "Token";
+    public static final String GRANTED_ACCESS_TO_MUSIC_LIBRARY = "Granted Access to Music Library";
+
+    //Music Library Analysis
+    public static final String NUMBER_OF_ARTISTS_FOUND = "Number of artists found";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 

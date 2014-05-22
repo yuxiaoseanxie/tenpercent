@@ -185,7 +185,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         Props props = new Props();
         props.put(AnalyticConstants.LOCATION_NAME, city.getName());
         props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
-        LiveNationAnalytics.track(AnalyticConstants.SUBMIT_LOCATION_QUERY, AnalyticsCategory.LOCATION, props);
+        LiveNationAnalytics.track(AnalyticConstants.PREVIOUS_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
 
         setConfiguredLocation(city);
     }
