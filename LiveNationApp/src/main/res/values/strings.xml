@@ -48,6 +48,7 @@
     <string name="activity_label_favorites">Favorites</string>
     <string name="activity_label_venue">Venue</string>
     <string name="activity_label_location">Your Location</string>
+    <string name="activity_label_order_confirmation">Order Confirmation</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>

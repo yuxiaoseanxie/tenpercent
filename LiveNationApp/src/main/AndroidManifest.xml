@@ -103,6 +103,11 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <activity
+            android:name="com.livenation.mobile.android.na.ui.OrderConfirmationActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"
+            android:label="@string/activity_label_order_confirmation" />
+
+        <activity
             android:name="com.livenation.mobile.android.na.ui.UrlActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
