@@ -144,7 +144,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("ELODIE menu", item.getTitle().toString());
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
