@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SsoManager;
@@ -171,6 +172,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
                 Intent intent = new Intent(getContext(), SearchActivity.class);
                 intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
                 getContext().startActivity(intent);
@@ -184,7 +186,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP, AnalyticsCategory.RECOMMENDATIONS);
                 Intent intent = new Intent(getContext(), SsoActivity.class);
                 intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
                 getContext().startActivity(intent);
@@ -193,6 +195,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.findViewById(android.R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
                 Intent intent = new Intent(getContext(), SearchActivity.class);
                 intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
                 getContext().startActivity(intent);

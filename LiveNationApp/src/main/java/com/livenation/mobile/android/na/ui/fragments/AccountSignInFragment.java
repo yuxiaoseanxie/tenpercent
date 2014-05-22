@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.ui.SsoActivity;
@@ -32,7 +33,7 @@ public class AccountSignInFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP);
+            LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
             intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
             startActivity(intent);
@@ -44,6 +45,8 @@ public class AccountSignInFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+
+            LiveNationAnalytics.track(AnalyticConstants.GOOGLE_SIGN_IN_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
             intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_GOOGLE.name());
             startActivity(intent);

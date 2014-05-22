@@ -14,6 +14,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -23,6 +26,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.
@@ -154,6 +159,9 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         if (isChecked) {
             currentPrimaryText.setText(R.string.location_mode_automatic);
             activeLocation = actualLocation;
+            Props props = new Props();
+            props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
+            LiveNationAnalytics.track(AnalyticConstants.CURRENT_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
         } else {
             currentPrimaryText.setText(R.string.location_mode_manual);
             if (null == configuredLocation) {
@@ -174,6 +182,11 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         City city = adapter.getItem(position);
+        Props props = new Props();
+        props.put(AnalyticConstants.LOCATION_NAME, city.getName());
+        props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
+        LiveNationAnalytics.track(AnalyticConstants.PREVIOUS_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
+
         setConfiguredLocation(city);
     }
 

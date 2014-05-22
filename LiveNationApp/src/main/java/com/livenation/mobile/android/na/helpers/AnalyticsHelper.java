@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
@@ -39,9 +40,10 @@ public class AnalyticsHelper {
         } else {
             artistName = "To Be Announced";
         }
-        props.put("Event Name", eventName);
-        props.put("Artist Name", artistName);
-        props.put("Venue Name", event.getVenue().getName());
+        props.put(AnalyticConstants.EVENT_NAME, eventName);
+        props.put(AnalyticConstants.EVENT_ID, event.getId());
+        props.put(AnalyticConstants.ARTIST_NAME, artistName);
+        props.put(AnalyticConstants.VENUE_NAME, event.getVenue().getName());
         return props;
     }
 }

@@ -18,6 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -159,7 +160,7 @@ public class LiveNationApplication extends Application {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, props);
+            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
         }
     }
 
