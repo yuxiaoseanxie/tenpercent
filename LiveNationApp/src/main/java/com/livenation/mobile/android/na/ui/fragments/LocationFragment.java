@@ -160,7 +160,11 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             currentPrimaryText.setText(R.string.location_mode_automatic);
             activeLocation = actualLocation;
             Props props = new Props();
-            props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
+            if (actualLocation != null) {
+                props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
+            } else {
+                props.put(AnalyticConstants.LOCATION_LATLONG, "???,???");
+            }
             LiveNationAnalytics.track(AnalyticConstants.CURRENT_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
         } else {
             currentPrimaryText.setText(R.string.location_mode_manual);
