@@ -20,7 +20,7 @@ public class AnalyticConstants {
 
     //On boarding
     public static final String SKIP_TAP = "Skip Tap";
-
+    public static final String ON_BOARDING_FIRST_LAUNCH = "On Boarding First Launch";
     //Action bar
     public static final String SEARCH_ICON_TAP = "Search Icon Tap";
     public static final String SHARE_ICON_TAP = "Share Icon Tap";

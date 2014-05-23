@@ -58,14 +58,19 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <activity
-            android:name="com.livenation.mobile.android.na.ui.HomeActivity"
-            android:launchMode="singleTop">
+            android:name="com.livenation.mobile.android.na.ui.OnBoardingActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.HomeActivity"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ShowActivity"
