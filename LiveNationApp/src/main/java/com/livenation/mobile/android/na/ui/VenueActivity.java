@@ -43,7 +43,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
         }
 
         getActionBar().setHomeButtonEnabled(true);
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
     }
