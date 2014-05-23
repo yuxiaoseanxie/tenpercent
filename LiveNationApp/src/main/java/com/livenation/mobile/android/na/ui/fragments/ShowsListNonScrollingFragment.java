@@ -38,16 +38,16 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     //region Lifecycle
 
-    public ShowsListNonScrollingFragment(AnalyticsCategory category) {
+    public ShowsListNonScrollingFragment() {
         super();
-        this.category = category;
         this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
     }
 
     public static ShowsListNonScrollingFragment newInstance(ShowView.DisplayMode displayMode, AnalyticsCategory category) {
-        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment(category);
+        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
         instance.setDisplayMode(displayMode);
+        instance.setCategory(category);
         return instance;
     }
 
@@ -64,6 +64,10 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     //endregion
 
+
+    public void setCategory(AnalyticsCategory category) {
+        this.category = category;
+    }
 
     @Override
     public void setEvents(List<Event> events) {

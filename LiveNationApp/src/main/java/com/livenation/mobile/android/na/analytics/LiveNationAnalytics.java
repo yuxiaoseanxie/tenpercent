@@ -15,6 +15,9 @@ public class LiveNationAnalytics {
             props = new Props();
         }
 
+        if (category == null) {
+            category = AnalyticsCategory.UNKNOWN;
+        }
         props.put(AnalyticConstants.CATEGORY, category.categoryName);
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);

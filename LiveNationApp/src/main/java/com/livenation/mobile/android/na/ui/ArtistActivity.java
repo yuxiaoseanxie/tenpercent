@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -23,8 +24,6 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         setContentView(R.layout.activity_artist);
 
         artistFragment = (ArtistFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_fragment);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     //endregion
