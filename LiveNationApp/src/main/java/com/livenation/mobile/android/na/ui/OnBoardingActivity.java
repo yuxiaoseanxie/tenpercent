@@ -29,6 +29,8 @@ public class OnBoardingActivity extends LiveNationFragmentActivity {
             setOnBoardingAlreadyDisplayed();
             goToTheApp();
         }
+        LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING);
+
     }
 
     public boolean isOnBoardingAlreadyDisplayed() {

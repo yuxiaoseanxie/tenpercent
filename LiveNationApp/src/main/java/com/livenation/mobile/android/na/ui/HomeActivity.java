@@ -148,13 +148,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             return true;
         }
 
-        //Analytics attributes
-        Props props = new Props();
-        props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
 
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
-                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
+                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -163,27 +160,30 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_search_item:
+                //Analytics attributes
+                Props props = new Props();
+                props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
 
                 LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_home_help_item:
                 startActivity(new Intent(this, HelpMenuActivity.class));
-                LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR, props);
+                LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR);
                 return true;
 
             case R.id.menu_home_legal_item:
-                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR, props);
+                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR);
                 startActivity(new Intent(this, LegalActivity.class));
                 return true;
 
             case R.id.menu_home_contact_item:
-                LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR, props);
+                LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 buildAndOpenContactEmail();
                 return true;
 
             case R.id.menu_home_logout_item:
-                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR, props);
+                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
                 LoginHelper.logout(this);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
                 return true;
