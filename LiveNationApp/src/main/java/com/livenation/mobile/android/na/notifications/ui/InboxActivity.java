@@ -297,6 +297,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
                         Toast.makeText(InboxActivity.this, R.string.calendar_add_event_not_possible_message, Toast.LENGTH_SHORT).show();
                     }
                 }
+                break;
             default:
                 return false;
         }
