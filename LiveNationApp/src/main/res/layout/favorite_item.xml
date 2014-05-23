@@ -17,19 +17,24 @@
         android:checked="false" />
 
     <LinearLayout
-        style="@style/ui_underscore"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/favorite_item_title"
             style="@style/favorite_item_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/mock_favorite_title_1"
             android:textAppearance="@style/view_lineup_text" />
+
+        <View
+            style="@style/ui_underscore"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_underscore_height" />
     </LinearLayout>
 
 
