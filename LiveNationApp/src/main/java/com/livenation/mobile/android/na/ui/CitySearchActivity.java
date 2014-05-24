@@ -17,7 +17,7 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class CitySearchActivity extends FragmentActivity implements TextWatcher {
+public class CitySearchActivity extends LiveNationFragmentActivity implements TextWatcher {
     private SearchForText fragment;
     private EditText input;
     private Handler limiter = new Handler() {
