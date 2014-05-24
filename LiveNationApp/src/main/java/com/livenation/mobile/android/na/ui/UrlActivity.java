@@ -183,13 +183,13 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 @Override
                 public void onApiServiceAttached(LiveNationApiService apiService) {
                     List<String> pathSegments = data.getPathSegments();
-                    if (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events")) {
+                    if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
                         dispatchEvent(apiService, data);
-                    } else if (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists")) {
+                    } else if (pathSegments.size() > 0 && (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists"))) {
                         dispatchArtist(apiService, data);
                     } else {
-                        displayError(R.string.url_error_bad_url);
-
+                        Intent intent = new Intent(UrlActivity.this, OnBoardingActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 }
