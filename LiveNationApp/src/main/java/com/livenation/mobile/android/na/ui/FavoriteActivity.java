@@ -54,9 +54,9 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
             case R.id.menu_home_search_item:
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
-                break;
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
