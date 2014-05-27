@@ -23,6 +23,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -125,8 +126,8 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
-        props.put("Cell Position", position);
-        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+        props.put(AnalyticConstants.CELL_POSITION, position);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.ALL_SHOWS, props);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);

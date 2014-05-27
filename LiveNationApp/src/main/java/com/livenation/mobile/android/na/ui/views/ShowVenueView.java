@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 
 public class ShowVenueView extends LinearLayout {
-    private CheckBox favorite;
+    private FavoriteCheckBox favorite;
     private TextView title;
     private TextView telephone;
     private TextView location;
@@ -46,7 +46,7 @@ public class ShowVenueView extends LinearLayout {
         //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
         View view = inflater.inflate(R.layout.view_show_venue_details, null);
 
-        favorite = (CheckBox) view.findViewById(R.id.view_show_venue_favorite_checkbox);
+        favorite = (FavoriteCheckBox) view.findViewById(R.id.view_show_venue_favorite_checkbox);
         title = (TextView) view.findViewById(R.id.view_show_venue_title);
         location = (TextView) view.findViewById(R.id.venue_detail_location);
         telephone = (TextView) view.findViewById(R.id.venue_detail_telephone);
@@ -58,7 +58,7 @@ public class ShowVenueView extends LinearLayout {
         return title;
     }
 
-    public CheckBox getFavorite() {
+    public FavoriteCheckBox getFavorite() {
         return favorite;
     }
 

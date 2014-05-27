@@ -48,8 +48,8 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     }
 
     @Override
-    public void track(String event, Map<String, String> properties) {
-        LiveNationAnalytics.track(event, mapToProps(properties));
+    public void track(String event, String category, Map<String, String> properties) {
+        LiveNationAnalytics.track(event, AnalyticsCategory.valueOf(category), mapToProps(properties));
     }
 
     @Override

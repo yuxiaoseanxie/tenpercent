@@ -23,6 +23,10 @@ public class LoginHelper {
     public static boolean isLogout() {
         return ssoManager.readUser(applicationContext) == null;
     }
+    public static boolean isLogin() {
+        return ssoManager.readUser(applicationContext) != null;
+    }
+
 
     public static void logout(Activity activity) {
         ssoManager.logout(activity);

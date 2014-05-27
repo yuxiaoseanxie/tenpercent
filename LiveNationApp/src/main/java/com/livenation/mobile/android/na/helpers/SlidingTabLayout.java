@@ -30,6 +30,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 
 import java.util.HashSet;
@@ -325,8 +326,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
-            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.NAV_MENU_YOUR_SHOWS_ITEM, AnalyticConstants.NAV_MENU_NEARBY_ITEM, AnalyticConstants.NAV_MENU_ALL_SHOWS_ITEM};
-            LiveNationAnalytics.track(tabsAnalyticsLabel[position] + " " + AnalyticConstants.NAV_MENU_SELECTED);
+            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.RECOMMENDATIONS_VIEW, AnalyticConstants.NEARBY_VIEW, AnalyticConstants.ALL_SHOWS_VIEW};
+            LiveNationAnalytics.track(tabsAnalyticsLabel[position], AnalyticsCategory.HOME_SCREEN);
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);

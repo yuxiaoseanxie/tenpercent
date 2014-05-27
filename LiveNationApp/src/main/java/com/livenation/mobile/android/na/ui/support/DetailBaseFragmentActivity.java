@@ -64,7 +64,6 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     }
 
     protected void onSearch() {
-        LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
         startActivity(new Intent(this, SearchActivity.class));
     }
 

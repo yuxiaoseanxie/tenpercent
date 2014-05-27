@@ -9,6 +9,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 /**
@@ -83,6 +86,11 @@ public class LegalActivity extends LiveNationFragmentActivity {
                 getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, tag).commit();
             } else {
                 getFragmentManager().beginTransaction().show(fragment).commit();
+            }
+            if (TERMS_OF_USE_FRAGMENT_TAG.equals(tag)) {
+                LiveNationAnalytics.track(AnalyticConstants.TERMS_OF_USE_TAP, AnalyticsCategory.LEGAL);
+            } else {
+                LiveNationAnalytics.track(AnalyticConstants.PRIVACY_POLICY_TAP, AnalyticsCategory.LEGAL);
             }
 
         }

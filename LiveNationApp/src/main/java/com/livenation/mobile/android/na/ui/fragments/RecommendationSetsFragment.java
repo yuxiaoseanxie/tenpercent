@@ -23,9 +23,13 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -39,6 +43,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.ArrayList;
 
+import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder{
@@ -127,6 +132,11 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
+
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put(AnalyticConstants.CELL_POSITION, position);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
 
         startActivity(intent);
     }

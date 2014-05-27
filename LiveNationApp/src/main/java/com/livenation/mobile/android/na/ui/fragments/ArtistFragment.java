@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
@@ -21,6 +25,8 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+
+import io.segment.android.models.Props;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
@@ -49,7 +55,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST);
+        this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
         shows.setMaxEvents(MAX_INLINE);
         shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
         addFragment(R.id.fragment_artist_shows_container, shows, "shows");
@@ -160,7 +166,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         else
             suppressBio();
 
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter());
+        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.ADP);
 
         youTube.setArtistName(artist.getName());
 
@@ -211,6 +217,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowAllEventsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
+            props.put(AnalyticConstants.ARTIST_ID, artist.getId());
+
+            LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_SHOWS_TAP, AnalyticsCategory.ADP, props);
+
             Intent intent = new Intent(getActivity(), ArtistShowsActivity.class);
             intent.putExtras(ArtistShowsActivity.getArguments(artist));
             startActivity(intent);
@@ -220,6 +233,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowAllVideosOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
+            props.put(AnalyticConstants.ARTIST_ID, artist.getId());
+
+            LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_VIDEOS_TAP, AnalyticsCategory.ADP, props);
+
             if (showMoreVideos.isExpanded()) {
                 youTube.setMaxVideos(MAX_INLINE);
                 showMoreVideos.setTitle(R.string.artist_videos_overflow);

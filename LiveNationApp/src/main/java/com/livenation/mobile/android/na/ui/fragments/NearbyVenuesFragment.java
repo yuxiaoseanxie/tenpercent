@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -117,8 +118,8 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
-        props.put("Cell Position", position);
-        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TYPE);
+        props.put(AnalyticConstants.CELL_POSITION, position);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
 
         intent.putExtras(args);
         getActivity().startActivity(intent);
@@ -135,9 +136,10 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
 
         //Analytics
         Props props = new Props();
-        props.put("Venue Name", venue.getName());
-        props.put("Cell Position", position);
-        LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP);
+        props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+        props.put(AnalyticConstants.VENUE_ID, venue.getId());
+        props.put(AnalyticConstants.CELL_POSITION, position);
+        LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.NEARBY, props);
 
         intent.putExtras(args);
         getActivity().startActivity(intent);

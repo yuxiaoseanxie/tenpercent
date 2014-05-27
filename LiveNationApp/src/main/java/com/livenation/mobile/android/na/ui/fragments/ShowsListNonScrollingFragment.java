@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -18,6 +22,8 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
@@ -28,18 +34,19 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     private int maxEvents;
     private View showMoreItemsView;
     private boolean alwaysShowMoreItemsView;
+    private AnalyticsCategory category;
 
     //region Lifecycle
 
-    public ShowsListNonScrollingFragment() {
+    public ShowsListNonScrollingFragment(AnalyticsCategory category) {
         super();
-
+        this.category = category;
         this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
     }
 
-    public static ShowsListNonScrollingFragment newInstance(ShowView.DisplayMode displayMode) {
-        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
+    public static ShowsListNonScrollingFragment newInstance(ShowView.DisplayMode displayMode, AnalyticsCategory category) {
+        ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment(category);
         instance.setDisplayMode(displayMode);
         return instance;
     }
@@ -148,6 +155,10 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
         @Override
         public void onClick(View view) {
+            //Analytics
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, category, props);
+
             Intent intent = new Intent(getActivity(), ShowActivity.class);
 
             Bundle args = SingleEventPresenter.getAruguments(event.getId());

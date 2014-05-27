@@ -155,6 +155,9 @@
     <dimen name="calendar_dialog_cell_prefix_min_width">60dp</dimen>
     <dimen name="calendar_dialog_cell_title_padding_bottom">14dp</dimen>
 
+    <!-- Order Confirmation -->
+    <dimen name="order_confirmation_header_text_margin_bottom">3dp</dimen>
+
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
