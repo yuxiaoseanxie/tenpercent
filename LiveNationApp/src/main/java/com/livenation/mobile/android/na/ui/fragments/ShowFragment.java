@@ -37,6 +37,8 @@ import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
@@ -48,7 +50,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.activities.ConfirmActivity;
 
 import java.util.List;
 
