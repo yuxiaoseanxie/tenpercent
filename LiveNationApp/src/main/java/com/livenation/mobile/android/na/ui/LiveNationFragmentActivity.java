@@ -3,15 +3,19 @@ package com.livenation.mobile.android.na.ui;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/2/14.
  */
-public class LiveNationFragmentActivity extends FragmentActivity {
+public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,12 @@ public class LiveNationFragmentActivity extends FragmentActivity {
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this);
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        trackScreenWithLocation(getScreenName());
     }
 
     @Override
@@ -47,4 +57,35 @@ public class LiveNationFragmentActivity extends FragmentActivity {
         super.onStop();
         Analytics.activityStop(this);
     }
+
+    public void trackScreenWithLocation(final String screenName) {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                Props properties = getAnalyticsProps();
+                if (properties == null) {
+                    properties = new Props();
+                }
+                properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
+                String name = screenName;
+                if (name == null) {
+                    name = getClass().getSimpleName();
+                }
+                LiveNationAnalytics.screen(name, properties);
+            }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+
+            }
+        });
+    }
+
+    protected String getScreenName() {
+        return this.getClass().getSimpleName();
+     }
+
+     protected Props getAnalyticsProps() {
+        return null;
+     }
 }

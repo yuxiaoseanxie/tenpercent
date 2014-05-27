@@ -138,4 +138,20 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
         props.put(AnalyticConstants.SOURCE, AnalyticsCategory.SDP);
         LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_SDP;
+    }
+
+    @Override
+    protected Props getAnalyticsProps() {
+        if (event != null) {
+            Props props = new Props();
+            props.put(AnalyticConstants.EVENT_NAME, event.getName());
+            props.put(AnalyticConstants.EVENT_ID, event.getId());
+            return props;
+        }
+        return null;
+    }
 }

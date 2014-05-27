@@ -144,4 +144,20 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
         props.put(AnalyticConstants.SOURCE, AnalyticsCategory.VDP);
         LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_VDP;
+    }
+
+    @Override
+    protected Props getAnalyticsProps() {
+        if (venue != null) {
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            return props;
+        }
+        return null;
+    }
 }
