@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,7 +23,7 @@ import java.util.List;
 
 import io.segment.android.models.Props;
 
-public class TicketOfferingsDialogFragment extends LivenationDialogFragment implements AdapterView.OnItemClickListener {
+public class TicketOfferingsDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener {
     private ListView listView;
     private TicketOfferingsAdapter adapter;
     private List<TicketOffering> offerings;
