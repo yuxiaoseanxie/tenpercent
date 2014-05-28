@@ -161,7 +161,9 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             activeLocation = actualLocation;
             Props props = new Props();
             if (actualLocation != null) {
+
                 props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
+                props.put(AnalyticConstants.LOCATION_NAME, actualLocation.getName());
             } else {
                 props.put(AnalyticConstants.LOCATION_LATLONG, "???,???");
             }
