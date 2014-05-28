@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import android.content.Context;
 import android.location.Location;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -28,7 +29,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  * Created by elodieferrais on 4/22/14.
  */
 public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter, ApiServiceBinder {
-    private static final String START_TIME_FORMAT = "h:mm a zzz";
+    private static final SimpleDateFormat START_TIME_FORMATTER = new SimpleDateFormat("h:mm a zzz");
     private static float METERS_IN_A_MILE = 1609.34f;
     private LayoutInflater inflater;
     private Double lat;
@@ -57,10 +58,12 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         Event event = getItem(position);
         holder.getTitle().setText(event.getDisplayName());
 
-        String startTime = DateFormat.format(START_TIME_FORMAT, event.getLocalStartTime()).toString();
+        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        START_TIME_FORMATTER.setTimeZone(timeZone);
+        String startTime = START_TIME_FORMATTER.format(event.getLocalStartTime());
 
         holder.getStartTime().setText(startTime);
-        holder.getDate().setDate(event.getLocalStartTime());
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
         return view;
     }

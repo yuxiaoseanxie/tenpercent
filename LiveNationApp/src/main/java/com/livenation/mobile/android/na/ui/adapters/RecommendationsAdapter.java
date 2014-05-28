@@ -25,6 +25,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 import java.util.Random;
+import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -97,7 +98,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         holder.getImage().setErrorImageResId(drawableId);
         holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
 
-        holder.getDate().setDate(event.getLocalStartTime());
+        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
         return view;
     }

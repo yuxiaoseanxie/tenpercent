@@ -24,6 +24,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import io.segment.android.models.Props;
 
@@ -122,6 +123,9 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
     @Override
     protected String getShareText() {
+        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        SHORT_DATE_FORMATTER.setTimeZone(timeZone);
+
         String eventTemplate = getString(R.string.share_template_show);
         return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
                             .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
