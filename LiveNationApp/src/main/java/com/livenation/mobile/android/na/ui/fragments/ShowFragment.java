@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.activities.ConfirmActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import io.segment.android.models.Props;
 
@@ -109,7 +110,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         artistTitle.setText(event.getName());
 
-        String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, event.getLocalStartTime()).toString();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT);
+        dateFormatter.setTimeZone(TimeZone.getTimeZone(event.getVenue().getTimeZone()));
+        String calendarValue = dateFormatter.format(event.getLocalStartTime());
         calendarText.setText(calendarValue);
         OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
         calendarContainer.setOnClickListener(onCalendarViewClick);

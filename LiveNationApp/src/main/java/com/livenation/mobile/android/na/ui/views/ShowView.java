@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.TimeZone;
 
 public class ShowView extends LinearLayout {
     private DisplayMode displayMode;
@@ -45,7 +42,8 @@ public class ShowView extends LinearLayout {
         title.setText(getDisplayMode().getTitle(event));
 
         Date start = event.getLocalStartTime();
-        date.setDate(start);
+        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        date.setDate(start, timeZone);
         details.setText(getDisplayMode().getDetails(event, start));
     }
 
@@ -86,6 +84,8 @@ public class ShowView extends LinearLayout {
 
     public static enum DisplayMode {
         VENUE {
+            private final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz");
+
             @Override
             String getTitle(Event event) {
                 return event.getName();
@@ -93,7 +93,8 @@ public class ShowView extends LinearLayout {
 
             @Override
             String getDetails(Event event, Date localStartTime) {
-                return DateFormat.format("h:mm aa zzz", localStartTime).toString();
+                TIME_FORMATTER.setTimeZone(TimeZone.getTimeZone(event.getVenue().getTimeZone()));
+                return TIME_FORMATTER.format(localStartTime);
             }
         },
         ARTIST {
