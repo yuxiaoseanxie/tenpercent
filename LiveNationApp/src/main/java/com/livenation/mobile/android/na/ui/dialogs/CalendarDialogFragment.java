@@ -1,9 +1,8 @@
-package com.livenation.mobile.android.na.ui.fragments;
+package com.livenation.mobile.android.na.ui.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -31,7 +30,7 @@ import io.segment.android.models.Props;
 /**
  * Created by elodieferrais on 4/29/14.
  */
-public class CalendarDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener{
+public class CalendarDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener{
     private ListView listView;
     private CalendarAdapter adapter;
     private Event event;

@@ -26,22 +26,14 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
-import com.livenation.mobile.android.na.ui.fragments.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.IsoDateDeserializer;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleEventParameters;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
@@ -49,7 +41,6 @@ import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
