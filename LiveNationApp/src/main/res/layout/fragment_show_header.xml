@@ -10,13 +10,10 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
             android:id="@+id/fragment_show_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff777777"
-            android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop"></com.android.volley.toolbox.NetworkImageView>
+            android:layout_height="@dimen/detail_page_image_height" />
     </FrameLayout>
 
     <TextView
