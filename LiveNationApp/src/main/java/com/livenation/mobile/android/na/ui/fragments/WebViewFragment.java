@@ -47,11 +47,6 @@ public class WebViewFragment extends Fragment {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
             }
-
-            @Override
-            public void onLoadResource(WebView view, String url) {
-                super.onLoadResource(view, url);
-            }
         });
 
 
