@@ -35,8 +35,7 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show);
+        super.onCreate(savedInstanceState, R.layout.activity_show);
 
         singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
         init();

@@ -6,7 +6,7 @@
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/fragment_all_shows_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
         android:id="@android:id/empty"

@@ -20,10 +20,9 @@ import io.segment.android.Analytics;
  */
 public class LiveNationFragmentActivity extends FragmentActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState, int res) {
         super.onCreate(savedInstanceState);
-
+        setContentView(res);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 

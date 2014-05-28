@@ -36,8 +36,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venue);
+        super.onCreate(savedInstanceState, R.layout.activity_venue);
         if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
             getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
         }

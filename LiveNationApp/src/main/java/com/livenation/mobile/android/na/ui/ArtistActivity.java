@@ -20,8 +20,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artist);
+        super.onCreate(savedInstanceState, R.layout.activity_artist);
         artistFragment = (ArtistFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_fragment);
     }
 

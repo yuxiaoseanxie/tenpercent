@@ -67,12 +67,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
+        super.onCreate(savedInstanceState, R.layout.activity_landing);
 
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
                 R.drawable.ic_drawer,

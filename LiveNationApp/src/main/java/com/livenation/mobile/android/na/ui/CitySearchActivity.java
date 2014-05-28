@@ -29,9 +29,7 @@ public class CitySearchActivity extends LiveNationFragmentActivity implements Te
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_search);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_city_search);
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         View view = getLayoutInflater().inflate(R.layout.view_city_search_actionbar, null);

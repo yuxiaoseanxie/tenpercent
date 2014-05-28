@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdE
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
+import java.util.Random;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -31,6 +33,8 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
     private LayoutInflater inflater;
+    private int[] defaultTapImages;
+
     private static final int ITEM_TYPE_EVENT = 0;
     private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
     private static final int ITEM_TYPE_UPSELL_SEARCH = 2;
@@ -40,6 +44,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     public RecommendationsAdapter(Context context, List<RecommendationItem> items) {
         super(context, android.R.layout.simple_list_item_1, items);
         inflater = LayoutInflater.from(context);
+        initializeDefaultTapImages();
     }
 
     @Override
@@ -64,7 +69,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 return getRecommendationsUpsellSearchWithFacebook(inflater, parent);
         }
 
-        View view = null;
+        View view;
         EventViewHolder holder;
         if (null == convertView) {
             view = inflater.inflate(R.layout.list_show_item_v2, null);
@@ -80,12 +85,17 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         holder.getTitle().setText(event.getDisplayName());
         holder.getLocation().setText(event.getVenue().getName());
 
+        int drawableId = computeDefaultDrawableId(event.getNumericId());
+        String imageUrl = null;
+
         if (event.getLineup().size() > 0) {
             String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
-            holder.getImage().setImageUrl(event.getLineup().get(0).getImageURL(imageKey), LiveNationApplication.get().getImageLoader());
-        } else {
-            holder.getImage().setImageUrl(null, LiveNationApplication.get().getImageLoader());
+            imageUrl = event.getLineup().get(0).getImageURL(imageKey);
         }
+
+        holder.getImage().setDefaultImageResId(drawableId);
+        holder.getImage().setErrorImageResId(drawableId);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
 
         holder.getDate().setDate(event.getLocalStartTime());
 
@@ -122,7 +132,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     @Override
     public int getItemViewType(int position) {
         //simply returning getItem(position).getTag() here would prevent efficient view recycling in getView(),
-        //as views for personal and popular would be in separate view recycle pools. 
+        //as views for personal and popular would be in separate view recycle pools.
 
         switch (getItem(position).getTag()) {
             case FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK:
@@ -152,7 +162,22 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 //group all recommendation upsells to the personal header group
                 return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
         }
-     }
+    }
+
+    private void initializeDefaultTapImages() {
+        TypedArray defaultImageArray = getContext().getResources().obtainTypedArray(R.array.hero_tap_images);
+        int size = defaultImageArray.length();
+        defaultTapImages = new int[size];
+        for (int i = 0; i < size; i++) {
+            int resourceId = Integer.valueOf(defaultImageArray.getResourceId(i, -1));
+            defaultTapImages[i] = resourceId;
+        }
+    }
+
+    private int computeDefaultDrawableId(long randomSeed) {
+        int index = new Random(randomSeed).nextInt(defaultTapImages.length);
+        return defaultTapImages[index];
+    }
 
     private View getRecommendationsUpsellDiscreet(LayoutInflater inflater, ViewGroup parent) {
         View view = inflater.inflate(R.layout.list_recommendation_upsell_discreet, parent, false);

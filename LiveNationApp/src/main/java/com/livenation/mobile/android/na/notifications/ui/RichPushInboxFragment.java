@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -28,13 +30,20 @@ import java.util.Locale;
 /**
  * Sample implementation of the BaseInboxFragment
  */
-public class RichPushInboxFragment extends BaseInboxFragment {
+public class RichPushInboxFragment extends BaseInboxFragment implements AdapterView.OnItemLongClickListener{
     //Dont use Java6's non ISO8601 compliant (Doesn't handle 'Z' timezone) SimpleDateFormat for incoming format
     private static final DateTimeFormatter INCOMING_FORMAT = ISODateTimeFormat.dateTimeNoMillis();
     private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);
     private static final SimpleDateFormat LONG_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd' at 'h:mm a", Locale.US);
 
-    private int getMessageType(RichPushMessage message) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getListView().setOnItemLongClickListener(this);
+    }
+
+    public int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
         if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
             String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
@@ -207,12 +216,21 @@ public class RichPushInboxFragment extends BaseInboxFragment {
                         onMessageSelected(message.getMessageId(), checkBox.isChecked());
                     }
                 });
+
                 view.setFocusable(false);
                 view.setFocusableInTouchMode(false);
             }
         };
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        RichPushMessage message = (RichPushMessage) getListAdapter().getItem(position);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.message_checkbox);
+        checkBox.setChecked(!checkBox.isChecked());
+        onMessageSelected(message.getMessageId(), checkBox.isChecked());
+        return true;
+    }
 
     private class ViewHolder {
         final View unreadIndicator;

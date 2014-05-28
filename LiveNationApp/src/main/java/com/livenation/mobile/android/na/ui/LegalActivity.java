@@ -24,9 +24,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_legal);
-
+        super.onCreate(savedInstanceState, R.layout.activity_legal);
 
         ActionBar.Tab termOfUseTab, privacyPolicyTab;
         WebViewFragment termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAG);

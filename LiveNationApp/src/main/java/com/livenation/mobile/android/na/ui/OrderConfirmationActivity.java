@@ -48,8 +48,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_confirmation);
+        super.onCreate(savedInstanceState, R.layout.activity_order_confirmation);
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);

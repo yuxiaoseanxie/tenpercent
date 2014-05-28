@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -27,14 +26,13 @@ public class LocationActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        super.onCreate(savedInstanceState, R.layout.activity_location);
         fragment = (LocationFragment) getSupportFragmentManager().findFragmentByTag("location");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.location_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

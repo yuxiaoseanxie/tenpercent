@@ -35,10 +35,8 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, R.layout.activity_search);
 
-        setContentView(R.layout.activity_search);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);

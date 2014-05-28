@@ -10,12 +10,10 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.livenation.mobile.android.na.ui.views.UnCroppedScaleImageView
+        <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
             android:id="@+id/fragment_artist_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
-            android:scaleType="fitStart" />
+            android:layout_height="@dimen/detail_page_image_height"/>
 
     </FrameLayout>
 
