@@ -9,6 +9,9 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
+
+import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 5/22/14.
@@ -19,8 +22,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-
-
         //On boarding never show because is not develop yet. Keep it for analytics
         if (isOnBoardingAlreadyDisplayed()) {
             goToTheApp();
@@ -29,6 +30,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity {
             setOnBoardingAlreadyDisplayed();
             goToTheApp();
         }
+
     }
 
     public boolean isOnBoardingAlreadyDisplayed() {

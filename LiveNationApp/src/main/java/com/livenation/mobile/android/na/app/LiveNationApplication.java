@@ -26,6 +26,7 @@ import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
@@ -124,6 +125,12 @@ public class LiveNationApplication extends Application {
         checkInstalledAppForAnalytics();
 
         getConfigManager().buildApi();
+
+        //Analytics
+        Props props = new Props();
+        props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
+        props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
+        LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
 
@@ -152,6 +159,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
         ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
         Ticketing.init(ticketingConfig);
+        Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
 
     private void checkInstalledAppForAnalytics() {

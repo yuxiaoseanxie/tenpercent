@@ -38,7 +38,12 @@ public class LoginHelper {
 
     public static boolean isUsingFacebook(Context context) {
         SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
-        if (auth == null) return false;
-        return auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK;
+        return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK);
+    }
+
+
+    public static boolean isUsingGoogle(Context context) {
+        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_GOOGLE);
     }
 }

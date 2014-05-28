@@ -3,10 +3,7 @@ package com.livenation.mobile.android.na.ui;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.View;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -15,9 +12,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by elodieferrais on 4/25/14.
@@ -27,16 +22,13 @@ public class LegalActivity extends LiveNationFragmentActivity {
     private static final String TERMS_OF_USE_FRAGMENT_TAB = "terms_of_use_fragment_tab";
     private static final String PRIVACY_POLICY_FRAGMENT_TAB = "privacy_policy_tab";
     private static final String CREDITS_FRAGMENT_TAB = "credits_tab";
-    private String[] tagsByIndex = new String[] {TERMS_OF_USE_FRAGMENT_TAB, PRIVACY_POLICY_FRAGMENT_TAB, CREDITS_FRAGMENT_TAB};
+    private String[] tagsByIndex = new String[]{TERMS_OF_USE_FRAGMENT_TAB, PRIVACY_POLICY_FRAGMENT_TAB, CREDITS_FRAGMENT_TAB};
     private List<Fragment> fragmentsByIndex = new ArrayList<Fragment>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_legal);
-
+        super.onCreate(savedInstanceState, R.layout.activity_legal);
         fragmentsByIndex.clear();
-
         ActionBar.Tab termOfUseTab, privacyPolicyTab, creditsTab;
         WebViewFragment termOfUseTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(TERMS_OF_USE_FRAGMENT_TAB);
         WebViewFragment privacyPolicyTabFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(PRIVACY_POLICY_FRAGMENT_TAB);
@@ -50,7 +42,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
             privacyPolicyTabFragment = WebViewFragment.newInstance(getString(R.string.legal_privacy_policy_url));
         }
         fragmentsByIndex.add(privacyPolicyTabFragment);
-        if(creditsTabFragment == null) {
+        if (creditsTabFragment == null) {
             creditsTabFragment = WebViewFragment.newInstance(getString(R.string.credits_url));
         }
         fragmentsByIndex.add(creditsTabFragment);
@@ -79,19 +71,19 @@ public class LegalActivity extends LiveNationFragmentActivity {
             int index = savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM);
             getActionBar().setSelectedNavigationItem(index);
             int j;
-            for (j = 0; j < fragmentsByIndex.size() ; j++) {
+            for (j = 0; j < fragmentsByIndex.size(); j++) {
                 Fragment fragment = fragmentsByIndex.get(j);
-               if (j == index) {
-                   if (!fragment.isAdded()) {
-                       getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, tagsByIndex[j]).commit();
-                   } else {
-                       getFragmentManager().beginTransaction().show(fragment).commit();
-                   }
-               } else {
-                   if (fragment.isAdded()) {
-                       getFragmentManager().beginTransaction().hide(fragment).commit();
-                   }
-               }
+                if (j == index) {
+                    if (!fragment.isAdded()) {
+                        getFragmentManager().beginTransaction().add(R.id.activity_legal_container, fragment, tagsByIndex[j]).commit();
+                    } else {
+                        getFragmentManager().beginTransaction().show(fragment).commit();
+                    }
+                } else {
+                    if (fragment.isAdded()) {
+                        getFragmentManager().beginTransaction().hide(fragment).commit();
+                    }
+                }
             }
         }
     }

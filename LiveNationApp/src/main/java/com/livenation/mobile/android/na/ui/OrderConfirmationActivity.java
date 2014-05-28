@@ -21,6 +21,7 @@ import com.mobilitus.tm.tickets.models.Total;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     public static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_EVENT";
@@ -48,8 +49,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_confirmation);
+        super.onCreate(savedInstanceState, R.layout.activity_order_confirmation);
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
@@ -158,6 +158,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected String getShareText() {
+        TimeZone timeZone = TimeZone.getTimeZone(getEvent().getVenue().getTimeZone());
+        SHORT_DATE_FORMATTER.setTimeZone(timeZone);
+
         String eventTemplate = getString(R.string.share_template_order_confirmation);
         return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
                 .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))

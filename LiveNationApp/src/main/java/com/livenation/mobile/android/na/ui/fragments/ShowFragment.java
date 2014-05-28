@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +30,15 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
@@ -48,9 +50,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.activities.ConfirmActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import io.segment.android.models.Props;
 
@@ -102,13 +105,11 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     public void setEvent(Event event) {
         this.event = event;
 
-        //Analytics
-        Props props = AnalyticsHelper.getPropsForEvent(event);
-        trackScreenWithLocation("User views SDP screen", props);
-
         artistTitle.setText(event.getName());
 
-        String calendarValue = DateFormat.format(CALENDAR_DATE_FORMAT, event.getLocalStartTime()).toString();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT);
+        dateFormatter.setTimeZone(TimeZone.getTimeZone(event.getVenue().getTimeZone()));
+        String calendarValue = dateFormatter.format(event.getLocalStartTime());
         calendarText.setText(calendarValue);
         OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
         calendarContainer.setOnClickListener(onCalendarViewClick);
@@ -151,6 +152,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
         findTickets.setOnClickListener(onFindTicketsClick);
+
+        artistImage.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), event.getNumericId()));
 
         String imageUrl = null;
         //TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented

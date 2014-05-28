@@ -26,21 +26,14 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
+import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
-import com.livenation.mobile.android.na.ui.fragments.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.IsoDateDeserializer;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleEventParameters;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
@@ -48,7 +41,6 @@ import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -61,7 +53,7 @@ import java.util.List;
  * Activity that manages the activity_inbox.
  * On a tablet it also manages the activity_message view pager.
  */
-public class InboxActivity extends FragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
+public class InboxActivity extends LiveNationFragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
@@ -76,13 +68,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.setContentView(R.layout.activity_inbox);
-
-        actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.inbox_title);
+        super.onCreate(savedInstanceState, R.layout.activity_inbox);
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.fragments.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

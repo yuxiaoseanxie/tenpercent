@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.provider.CalendarContract;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.fragments.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.Calendar;

@@ -51,7 +51,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        trackScreenWithLocation("User views Nearby screen", new Props());
 
         adapter = new EventVenueAdapter(getActivity());
         pager = new NearbyVenuesScrollPager(adapter);

@@ -79,28 +79,21 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
-            android:label="@string/activity_label_venue"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"/>
+            android:label="@string/activity_label_venue"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar" />
         <activity
-            android:name=".ui.ArtistShowsActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+            android:name=".ui.ArtistShowsActivity"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
-            android:label="@string/activity_label_artist"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+            android:label="@string/activity_label_artist"/>
         <activity
             android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
             android:label="@string/activity_label_favorites" />
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity
-            android:name="com.livenation.mobile.android.na.ui.DebugActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.livenation.mobile.android.na.ui.HomeActivity" />
+            android:name="com.livenation.mobile.android.na.ui.DebugActivity">
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.SsoActivity"
@@ -109,7 +102,6 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderConfirmationActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.ShowActivity"
             android:label="@string/activity_label_order_confirmation" />
 
         <activity
@@ -129,25 +121,20 @@
         <activity
             android:name="com.livenation.mobile.android.na.ui.LocationActivity"
             android:label="@string/activity_label_location"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+        />
 
         <activity
-            android:name="com.livenation.mobile.android.na.ui.SearchActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+            android:name="com.livenation.mobile.android.na.ui.SearchActivity"/>
 
         <activity
-            android:name="com.livenation.mobile.android.na.ui.CitySearchActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.LocationActivity" />
+            android:name="com.livenation.mobile.android.na.ui.CitySearchActivity"/>
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.LegalActivity"
-            android:label="@string/home_menu_legal"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity"  />
-
+            android:label="@string/home_menu_legal"/>
 
         <activity
-            android:name=".ui.HelpMenuActivity"
-            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity" />
+            android:name=".ui.HelpMenuActivity"/>
 
 
         <activity android:name="com.facebook.LoginActivity" />
@@ -164,8 +151,10 @@
 
 
         <!-- Urban Airship config -->
-        <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
-        <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity"
+            android:label="@string/inbox_title"/>
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity"
+            android:label="@string/message_title"/>
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver

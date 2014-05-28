@@ -6,7 +6,9 @@ package com.livenation.mobile.android.na.analytics;
 public class AnalyticConstants {
     public static final String PLATFORM_EVENT_SUFFIX = " (LN_ANDROID)";
 
-    //Event
+    /**
+     *Event
+     */
     //Common
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
@@ -18,7 +20,7 @@ public class AnalyticConstants {
     public static final String FAVORITE_VENUE_STAR_TAP = "Favorite Venue Star Tap";
     public static final String FAVORITE_ARTIST_STAR_TAP = "Favorite Artist Star Tap";
 
-    //On boarding
+    //On Boarding
     public static final String SKIP_TAP = "Skip Tap";
     public static final String ON_BOARDING_FIRST_LAUNCH = "On Boarding First Launch";
     //Action bar
@@ -84,12 +86,24 @@ public class AnalyticConstants {
     public static final String UPDATED = "1.x Updated";
     public static final String MIGRATION_COMPLETED = "1.x Updated";
     public static final String GRANTED_ACCESS_TO_MUSIC = "1.x Granted Access to Music Library";
+    public static final String APPLICATION_OPEN = "User Opens App";
+    public static final String DEEP_LINK_REDIRECTION = "Deep Link Redirection";
 
     //Music Library Analysis
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
-    //Attributes
+    /**
+     *Attributes
+     */
 
+    public static final String SCREEN_ADP = "ADP";
+    public static final String SCREEN_SDP = "SDP";
+    public static final String SCREEN_VDP = "VDP";
+
+
+    /**
+     *Attributes
+     */
     //Common
     public static final String CELL_POSITION = "Cell Position";
     public static final String USER_LOGGED_IN = "User Logged In";
@@ -97,6 +111,7 @@ public class AnalyticConstants {
 
     //Category
     public static final String CATEGORY = "Category";
+    public static final String CATEGORY_UNKNOWN = "Category Unknown";
     public static final String CATEGORY_ONBOARDING_VALUE = "OnBoarding";
     public static final String CATEGORY_ACTION_BAR_VALUE = "Action Bar";
     public static final String CATEGORY_DRAWER_VALUE = "Drawer";
@@ -153,8 +168,8 @@ public class AnalyticConstants {
     public static final String NOTIFICATION_ID = "Notification Id";
 
     //Location
-    public static final String LOCATION_LATLONG = "Location";
-    public static final String LOCATION_NAME = "Location";
+    public static final String LOCATION_LATLONG = "Location LatLong";
+    public static final String LOCATION_NAME = "Location Name";
 
     //HouseKeeping
     public static final String AIS_USER_ID = "AIS User ID";
@@ -164,6 +179,16 @@ public class AnalyticConstants {
 
     //Music Library Analysis
     public static final String NUMBER_OF_ARTISTS_FOUND = "Number of artists found";
+
+    //Login
+    public static final String FB_LOGGED_IN = "FB Logged In";
+    public static final String GOOGLE_LOGGED_IN = "Google+ Logged In";
+
+    //Deep Link
+    public static final String BTID = "BTID";
+    public static final String UI = "UI";
+    public static final String C = "C";
+    public static final String FROM = "From";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 
