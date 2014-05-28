@@ -20,7 +20,8 @@ public enum AnalyticsCategory {
     NOTIFICATION(AnalyticConstants.CATEGORY_NOTIFICATION_VALUE),
     LOCATION(AnalyticConstants.CATEGORY_LOCATION_VALUE),
     HOUSEKEEPING(AnalyticConstants.CATEGORY_HOUSEKEEPING_VALUE),
-    ERROR(AnalyticConstants.CATEGORY_ERROR_VALUE);
+    ERROR(AnalyticConstants.CATEGORY_ERROR_VALUE),
+    UNKNOWN(AnalyticConstants.CATEGORY_UNKNOWN);
 
 
     public String categoryName;

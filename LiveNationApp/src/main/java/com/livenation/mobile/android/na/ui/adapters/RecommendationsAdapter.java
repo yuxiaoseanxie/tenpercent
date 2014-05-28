@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
@@ -23,6 +25,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdE
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
+import java.util.Random;
+import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -31,6 +35,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
     private LayoutInflater inflater;
+
     private static final int ITEM_TYPE_EVENT = 0;
     private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
     private static final int ITEM_TYPE_UPSELL_SEARCH = 2;
@@ -64,7 +69,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 return getRecommendationsUpsellSearchWithFacebook(inflater, parent);
         }
 
-        View view = null;
+        View view;
         EventViewHolder holder;
         if (null == convertView) {
             view = inflater.inflate(R.layout.list_show_item_v2, null);
@@ -80,14 +85,20 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         holder.getTitle().setText(event.getDisplayName());
         holder.getLocation().setText(event.getVenue().getName());
 
+        int drawableId = DefaultImageHelper.computeDefaultTapDrawableId(getContext(), event.getNumericId());
+        String imageUrl = null;
+
         if (event.getLineup().size() > 0) {
             String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
-            holder.getImage().setImageUrl(event.getLineup().get(0).getImageURL(imageKey), LiveNationApplication.get().getImageLoader());
-        } else {
-            holder.getImage().setImageUrl(null, LiveNationApplication.get().getImageLoader());
+            imageUrl = event.getLineup().get(0).getImageURL(imageKey);
         }
 
-        holder.getDate().setDate(event.getLocalStartTime());
+        holder.getImage().setDefaultImageResId(drawableId);
+        holder.getImage().setErrorImageResId(drawableId);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
+
+        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
         return view;
     }
@@ -122,7 +133,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     @Override
     public int getItemViewType(int position) {
         //simply returning getItem(position).getTag() here would prevent efficient view recycling in getView(),
-        //as views for personal and popular would be in separate view recycle pools. 
+        //as views for personal and popular would be in separate view recycle pools.
 
         switch (getItem(position).getTag()) {
             case FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK:
@@ -152,7 +163,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 //group all recommendation upsells to the personal header group
                 return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
         }
-     }
+    }
 
     private View getRecommendationsUpsellDiscreet(LayoutInflater inflater, ViewGroup parent) {
         View view = inflater.inflate(R.layout.list_recommendation_upsell_discreet, parent, false);

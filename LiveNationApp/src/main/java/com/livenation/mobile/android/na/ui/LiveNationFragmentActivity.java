@@ -1,13 +1,20 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+
+import java.util.List;
 
 import io.segment.android.Analytics;
 import io.segment.android.models.Props;
@@ -17,9 +24,12 @@ import io.segment.android.models.Props;
  */
 public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState, int res) {
         super.onCreate(savedInstanceState);
+        setContentView(res);
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         Analytics.onCreate(this);
         if (!LiveNationApplication.get().isMusicSync()) {
             LiveNationApplication.get().setIsMusicSync(true);
@@ -90,4 +100,27 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
      protected Props getAnalyticsProps() {
         return null;
      }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (android.R.id.home == item.getItemId()) {
+            ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+            List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+
+            if(taskList.get(0).numActivities == 1 &&
+                    taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+                if (this.getClass().getName() != HomeActivity.class.getName()) {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }
+            } else {
+                onBackPressed();
+                return true;
+            }
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
 }

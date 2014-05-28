@@ -64,7 +64,6 @@
     </style>
 
     <style name="favorite_item_title">
-        <item name="android:layout_marginLeft">@dimen/favorite_margin_left</item>
         <item name="android:layout_marginRight">@dimen/favorite_margin_right</item>
     </style>
 

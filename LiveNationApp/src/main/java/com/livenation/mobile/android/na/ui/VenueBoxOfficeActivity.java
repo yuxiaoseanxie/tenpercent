@@ -19,7 +19,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import io.segment.android.models.Props;
 
-public class VenueBoxOfficeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener{
+public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implements ViewPager.OnPageChangeListener{
     private SlidingTabLayout tabs;
     private ViewPager pager;
     private String[] analyticsEvent = {AnalyticConstants.PARKING_TRANSIT_TAB_TAP, AnalyticConstants.BOX_OFFICE_TAB_TAP};

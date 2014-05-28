@@ -37,9 +37,9 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
     }
 
     @Override
-    public void onFetchEnded() {
-        super.onFetchEnded();
-        if (pagingOffset == 0) {
+    public void onFetchEnded(boolean cancelled) {
+        super.onFetchEnded(cancelled);
+        if (!cancelled && pagingOffset == 0) {
             //if our manually tracked paging offset is 0, load another page.
             //This call fetches the first page of "popular" after the first page of "personal" has loaded
             load();

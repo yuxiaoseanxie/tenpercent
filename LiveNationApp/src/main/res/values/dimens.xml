@@ -15,8 +15,9 @@
     <dimen name="list_show_item_v2_date_margin_right">15dp</dimen>
     <dimen name="list_show_item_v2_date_margin_top">24dp</dimen>
     <dimen name="list_show_item_v2_divider_margin_top">27dp</dimen>
-    <dimen name="show_artist_title_margin_left">20dp</dimen>
-    <dimen name="show_artist_title_margin_bottom">15dp</dimen>
+    <dimen name="detail_page_title_margin_left">20dp</dimen>
+    <dimen name="detail_page_title_margin_right">15dp</dimen>
+    <dimen name="detail_page_title_margin_bottom">15dp</dimen>
     <dimen name="ui_lineup_margin_left">10dp</dimen>
     <dimen name="ui_lineup_margin_right">10dp</dimen>
     <dimen name="ui_lineup_margin_top">8dp</dimen>
@@ -41,7 +42,7 @@
     <dimen name="ui_header1_text_offset_vertical">2dp</dimen>
     <dimen name="ui_header1_accent_height">2dp</dimen>
     <dimen name="ui_gutter_width">58dp</dimen>
-    <dimen name="favorite_item_min_height">60dp</dimen>
+    <dimen name="favorite_item_min_height">55dp</dimen>
     <dimen name="favorite_min_height">38dp</dimen>
     <dimen name="favorite_margin_left">10dp</dimen>
     <dimen name="favorite_margin_right">10dp</dimen>
@@ -50,7 +51,6 @@
     <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
     <dimen name="fragment_show_map_height">70dp</dimen>
     <dimen name="fragment_show_map_gradient_height">35dp</dimen>
-    <dimen name="fragment_show_image_height">250dp</dimen>
     <dimen name="fragment_featured_container_min_height">90dp</dimen>
     <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="fragment_venue_map_height">250dp</dimen>
@@ -125,7 +125,7 @@
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="button_recommendations_upsell_margin_bottom">5dp</dimen>
     <dimen name="button_recommendations_upsell_margin_top">10dp</dimen>
-
+    <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="swoosh_divider_margin_top">20dp</dimen>
 
     <!-- Common dimen -->

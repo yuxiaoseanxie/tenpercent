@@ -18,7 +18,7 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class SearchActivity extends FragmentActivity implements TextWatcher {
+public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
     public static final String SEARCH_MODE_KEY = "search_mode";
     public static final int SEARCH_MODE_DEFAULT_VALUE = 0;
     public static final int SEARCH_MODE_ARTIST_ONLY_VALUE = 1;
@@ -35,10 +35,8 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, R.layout.activity_search);
 
-        setContentView(R.layout.activity_search);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);

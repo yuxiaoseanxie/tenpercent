@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -20,6 +19,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
     protected boolean isFirstPage = true;
+
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
         this.limit = limit;
@@ -78,7 +78,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void onNoMorePages() {
-        onFetchEnded();
+        onFetchEnded(false);
         paginatedFetcher = null;
     }
 
@@ -98,12 +98,12 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
         adapter.addAll(result);
         paginatedFetcher = null;
-        onFetchEnded();
+        onFetchEnded(false);
     }
 
     protected void onFetchCancelled() {
         paginatedFetcher = null;
-        onFetchEnded();
+        onFetchEnded(true);
     }
 
     protected void onFetchFailed() {
@@ -140,7 +140,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     public abstract void onFetchStarted();
 
-    public abstract void onFetchEnded();
+    public abstract void onFetchEnded(boolean cancelled);
 
     public abstract void onFetchError();
 
