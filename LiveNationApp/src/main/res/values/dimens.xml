@@ -50,7 +50,6 @@
     <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
     <dimen name="fragment_show_map_height">70dp</dimen>
     <dimen name="fragment_show_map_gradient_height">35dp</dimen>
-    <dimen name="fragment_show_image_height">250dp</dimen>
     <dimen name="fragment_featured_container_min_height">90dp</dimen>
     <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="fragment_venue_map_height">250dp</dimen>
@@ -125,7 +124,7 @@
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="button_recommendations_upsell_margin_bottom">5dp</dimen>
     <dimen name="button_recommendations_upsell_margin_top">10dp</dimen>
-
+    <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="swoosh_divider_margin_top">20dp</dimen>
 
     <!-- Common dimen -->

@@ -14,7 +14,6 @@
             android:id="@+id/fragment_account_user_image"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:minHeight="@dimen/fragment_show_image_height"
             android:scaleType="centerCrop"/>
 
         <TextView
