@@ -43,12 +43,11 @@ public class CachedBottomCroppedImageView extends BottomCroppedImageView {
     @Override
     public void setImageResource(int resId) {
         if (resId >= 0) {
-            if (cacheResourceId == resId) {
-                applyPerfectWidthMatrix(cache);
-            } else {
+            if (cacheResourceId != resId) {
                 cache = getResources().getDrawable(resId);
                 cacheResourceId = resId;
             }
+            applyPerfectWidthMatrix(cache);
             //skip the expense extract from resources step
             setImageDrawable(cache);
             return;
