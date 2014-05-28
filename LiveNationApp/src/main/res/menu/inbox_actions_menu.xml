@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/add_to_calendar"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/add_to_calendar"/>
+
     <item
         android:id="@+id/mark_read"
         android:icon="@drawable/inbox_mark_read"

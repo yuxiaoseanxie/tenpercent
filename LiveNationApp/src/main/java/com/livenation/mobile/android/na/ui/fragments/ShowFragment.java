@@ -16,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
@@ -30,14 +28,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
+import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -70,8 +69,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private Button findTickets;
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
-    private VenueFavoriteObserver venueFavoriteObserver;
     private LatLng mapLocationCache = null;
+    private Event event;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,13 +100,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        deinitVenueFavoriteObserver();
-    }
-
-    @Override
     public void setEvent(Event event) {
+        this.event = event;
+
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         trackScreenWithLocation("User views SDP screen", props);
@@ -137,14 +132,13 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event);
             venueDetails.setOnClickListener(onVenueClick);
 
-            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity());
+            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity(), AnalyticsCategory.SDP);
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
+            venueDetails.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.SDP);
 
             double lat = Double.valueOf(venue.getLat());
             double lng = Double.valueOf(venue.getLng());
             setMapLocation(lat, lng);
-
-            initVenueFavoriteObserver(venue, venueDetails.getFavorite());
 
         } else {
             venueDetails.setOnClickListener(null);
@@ -173,7 +167,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
 
-            view.setOnClickListener(new OnLineupViewClick(lineup));
+            view.setOnClickListener(new OnLineupViewClick(lineup, event));
 
             if (null == imageUrl) {
                 String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
@@ -209,22 +203,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
     }
 
-    ;
-
-    private void initVenueFavoriteObserver(Venue venue, CheckBox checkbox) {
-        deinitVenueFavoriteObserver();
-        venueFavoriteObserver = new VenueFavoriteObserver(checkbox);
-
-        Bundle args = getFavoritesPresenter().getObserverPresenter().getBundleArgs(Favorite.FAVORITE_VENUE, venue.getNumericId());
-        getFavoritesPresenter().getObserverPresenter().initialize(getActivity(), args, venueFavoriteObserver);
-    }
-
-    private void deinitVenueFavoriteObserver() {
-        if (null != venueFavoriteObserver) {
-            getFavoritesPresenter().getObserverPresenter().cancel(venueFavoriteObserver);
-        }
-    }
-
     private void setMapLocation(double lat, double lng) {
         mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
@@ -243,7 +221,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     protected void showTicketOffering(TicketOffering offering) {
         String buyLink = offering.getPurchaseUrl();
         if (Ticketing.isTicketmasterUrl(buyLink)) {
-            Intent confirmIntent = new Intent(getActivity(), ConfirmActivity.class);
+            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
+            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
             Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
@@ -260,7 +239,10 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
-            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event.getTicketOfferings());
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.OPTIONS_BUTTON_TAP, AnalyticsCategory.SDP, props);
+
+            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event);
             dialogFragment.setOnTicketOfferingClickedListener(this);
             dialogFragment.show(getFragmentManager(), "TicketOfferingsDialogFragment");
         }
@@ -280,9 +262,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View v) {
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, props);
-
             List<TicketOffering> offerings = event.getTicketOfferings();
             if (offerings.isEmpty()) {
                 Toast.makeText(getActivity().getApplicationContext(),
@@ -291,7 +270,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                 return;
             }
 
-            showTicketOffering(offerings.get(0));
+            TicketOffering ticketOffering = offerings.get(0);
+
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
+
+            showTicketOffering(ticketOffering);
         }
     }
 
@@ -316,7 +300,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, props);
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.SDP, props);
 
             startActivity(intent);
         }
@@ -324,13 +309,21 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
     private class OnLineupViewClick implements View.OnClickListener {
         private Artist lineupArtist;
+        private Event event;
 
-        public OnLineupViewClick(Artist lineupArtist) {
+        public OnLineupViewClick(Artist lineupArtist, Event event) {
             this.lineupArtist = lineupArtist;
+            this.event = event;
         }
 
         @Override
         public void onClick(View view) {
+            //Analytics
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            props.put(AnalyticConstants.ARTIST_NAME, lineupArtist.getName());
+            props.put(AnalyticConstants.ARTIST_ID, lineupArtist.getId());
+            LiveNationAnalytics.track(AnalyticConstants.ARTIST_CELL_TAP, AnalyticsCategory.SDP, props);
+
             Intent intent = new Intent(getActivity(), ArtistActivity.class);
 
             Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
@@ -343,39 +336,19 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
     private class OnCalendarViewClick implements View.OnClickListener {
         private CalendarDialogFragment dialogFragment;
+        private Event event;
 
         public OnCalendarViewClick(Event event) {
+            this.event = event;
             this.dialogFragment = CalendarDialogFragment.newInstance(event);
         }
 
         @Override
         public void onClick(View view) {
+            Props props = AnalyticsHelper.getPropsForEvent(event);
+            LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);
+
             dialogFragment.show(getFragmentManager(), "CalendarDialogFragment");
-        }
-    }
-
-    private class VenueFavoriteObserver implements FavoriteObserverView {
-        private final CheckBox checkbox;
-
-        private VenueFavoriteObserver(CheckBox checkbox) {
-            this.checkbox = checkbox;
-        }
-
-        @Override
-        public void onFavoriteAdded(Favorite favorite) {
-
-            Props props = new Props();
-            props.put("Venue Name", favorite.getName());
-            LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
-            checkbox.setChecked(true);
-        }
-
-        @Override
-        public void onFavoriteRemoved(Favorite favorite) {
-            Props props = new Props();
-            props.put("Venue Name", favorite.getName());
-            LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
-            checkbox.setChecked(false);
         }
     }
 }

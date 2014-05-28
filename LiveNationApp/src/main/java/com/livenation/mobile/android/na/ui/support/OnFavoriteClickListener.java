@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
@@ -22,8 +23,8 @@ public class OnFavoriteClickListener {
     public static class OnVenueFavoriteClick extends AbstractOnFavoriteClick {
         private final Venue venue;
 
-        public OnVenueFavoriteClick(Venue venue, FavoritesPresenter favoritesPresenter, Activity activity) {
-            super(favoritesPresenter, activity);
+        public OnVenueFavoriteClick(Venue venue, FavoritesPresenter favoritesPresenter, Activity activity, AnalyticsCategory category) {
+            super(favoritesPresenter, activity, category);
             this.venue = venue;
         }
 
@@ -36,28 +37,11 @@ public class OnFavoriteClickListener {
         }
     }
 
-    public static class OnArtistFavoriteClick extends AbstractOnFavoriteClick {
-        private final Artist artist;
-
-        public OnArtistFavoriteClick(Artist artist, FavoritesPresenter favoritesPresenter, Activity activity) {
-            super(favoritesPresenter, activity);
-            this.artist = artist;
-        }
-
-        public Favorite getFavorite() {
-            Favorite favorite = new Favorite();
-            favorite.setName(artist.getName());
-            favorite.setType(Favorite.FAVORITE_ARTIST_KEY);
-            favorite.setId(artist.getNumericId());
-            return favorite;
-        }
-    }
-
     public static class OnFavoriteClick extends AbstractOnFavoriteClick {
         private final Favorite favorite;
 
-        public OnFavoriteClick(Favorite favorite, FavoritesPresenter favoritesPresenter, Context context) {
-            super(favoritesPresenter, context);
+        public OnFavoriteClick(Favorite favorite, FavoritesPresenter favoritesPresenter, Context context, AnalyticsCategory category) {
+            super(favoritesPresenter, context, category);
             this.favorite = favorite;
         }
 
@@ -70,11 +54,13 @@ public class OnFavoriteClickListener {
         private final FavoritesPresenter favoritesPresenter;
         private final Context context;
         private boolean inProgress;
+        private AnalyticsCategory category;
 
-        public AbstractOnFavoriteClick(FavoritesPresenter favoritesPresenter, Context context) {
+        public AbstractOnFavoriteClick(FavoritesPresenter favoritesPresenter, Context context, AnalyticsCategory category) {
             this.favoritesPresenter = favoritesPresenter;
             this.context = context;
             setInProgress(false);
+            this.category = category;
         }
 
         @Override
@@ -145,20 +131,26 @@ public class OnFavoriteClickListener {
             Props props = new Props();
             switch (favorite.getIntType()) {
                 case Favorite.FAVORITE_ARTIST:
-                    props.put("Artist Name", favorite.getName());
+
+                    props.put(AnalyticConstants.ARTIST_ID, String.valueOf(favorite.getId()));
+                    props.put(AnalyticConstants.ARTIST_NAME, favorite.getName());
                     if (added) {
-                        LiveNationAnalytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, props);
+                        props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_FAVORITED_VALUE);
                     } else {
-                        LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_ARTIST_STAR_TAP, props);
+                        props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_UNFAVORITED_VALUE);
                     }
+                    LiveNationAnalytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, category, props);
                     break;
                 case Favorite.FAVORITE_VENUE:
-                    props.put("Venue Name", favorite.getName());
+                    props.put(AnalyticConstants.VENUE_NAME, favorite.getName());
+                    props.put(AnalyticConstants.VENUE_ID, String.valueOf(favorite.getId()));
                     if (added) {
-                        LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, props);
+                        props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_FAVORITED_VALUE);
                     } else {
-                        LiveNationAnalytics.track(AnalyticConstants.UNFAVORITE_VENUE_STAR_TAP, props);
+                        props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_UNFAVORITED_VALUE);
                     }
+                    LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP,category, props);
+
                     break;
                 default:
                     throw new IllegalStateException("Unknown favorite ID");

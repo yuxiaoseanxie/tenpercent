@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
@@ -34,6 +37,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 /**
  * Created by cchilton on 4/2/14.
@@ -108,9 +113,12 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         SearchResult searchResult = adapter.getItem(position);
-
+        Props props = new Props();
         switch (searchResult.getSearchResultType()) {
             case Venue: {
+                props.put(AnalyticConstants.VENUE_NAME, searchResult.getName());
+                props.put(AnalyticConstants.VENUE_ID, searchResult.getLnid());
+
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
                 String entityId = Venue.getAlphanumericId(searchResult.getLnid());
                 Bundle args = SingleVenuePresenter.getAruguments(entityId);
@@ -120,6 +128,9 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             }
 
             case Artist: {
+                props.put(AnalyticConstants.ARTIST_NAME, searchResult.getName());
+                props.put(AnalyticConstants.ARTIST_ID, searchResult.getLnid());
+
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
                 String entityId = Artist.getAlphanumericId(searchResult.getLnid());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
@@ -128,6 +139,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 break;
             }
         }
+        LiveNationAnalytics.track(AnalyticConstants.SEARCH_RESULT_TAP, AnalyticsCategory.SEARCH, props);
+
     }
 
     @Override
@@ -171,12 +184,12 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             switch (searchResult.getSearchResultType()) {
                 case Artist: {
                     int favoriteTypeId = Favorite.FAVORITE_ARTIST;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter());
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 case Venue: {
                     int favoriteTypeId = Favorite.FAVORITE_VENUE;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter());
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 default:

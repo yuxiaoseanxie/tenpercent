@@ -44,13 +44,12 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             props.put(entry.getKey(), entry.getValue());
         }
-
         return props;
     }
 
     @Override
-    public void track(String event, Map<String, String> properties) {
-        LiveNationAnalytics.track(event, mapToProps(properties));
+    public void track(String event, String category, Map<String, String> properties) {
+        LiveNationAnalytics.track(event, AnalyticsCategory.valueOf(category), mapToProps(properties));
     }
 
     @Override

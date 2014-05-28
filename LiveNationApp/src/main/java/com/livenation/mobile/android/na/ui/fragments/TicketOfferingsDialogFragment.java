@@ -13,21 +13,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 public class TicketOfferingsDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener {
     private ListView listView;
     private TicketOfferingsAdapter adapter;
     private List<TicketOffering> offerings;
     private OnTicketOfferingClickedListener onTicketOfferingClickedListener;
+    private Event event;
 
     //region Lifecycle
 
-    public static TicketOfferingsDialogFragment newInstance(List<TicketOffering> offerings) {
+    public static TicketOfferingsDialogFragment newInstance(Event event) {
         TicketOfferingsDialogFragment dialogFragment = new TicketOfferingsDialogFragment();
-        dialogFragment.setOfferings(offerings);
+        dialogFragment.setEvent(event);
         return dialogFragment;
     }
 
@@ -61,8 +69,9 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Ada
         return offerings;
     }
 
-    public void setOfferings(List<TicketOffering> offerings) {
-        this.offerings = offerings;
+    public void setEvent(Event event) {
+        this.event = event;
+        this.offerings = event.getTicketOfferings();
     }
 
     public OnTicketOfferingClickedListener getOnTicketOfferingClickedListener() {
@@ -78,6 +87,10 @@ public class TicketOfferingsDialogFragment extends DialogFragment implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put(AnalyticConstants.TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED, offerings.get(position).getDisplayType());
+        LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_OPTIONS_SELECTION, AnalyticsCategory.SDP, props);
+
         if(getOnTicketOfferingClickedListener() != null) {
             TicketOffering offering = adapter.getItem(position);
             getOnTicketOfferingClickedListener().onTicketOfferingClicked(offering);

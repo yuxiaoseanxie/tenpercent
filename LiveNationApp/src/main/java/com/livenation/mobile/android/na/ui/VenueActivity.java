@@ -11,6 +11,9 @@ package com.livenation.mobile.android.na.ui;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -21,6 +24,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
@@ -94,6 +99,22 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
         return LiveNationApplication.get().getVenueEventsPresenter();
     }
 
+    @Override
+    protected void onShare() {
+        Props props = new Props();
+        if (this.venue != null) {
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+        }
+        trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
+        super.onShare();
+    }
+
+    @Override
+    protected void onSearch() {
+        trackActionBarAction(AnalyticConstants.SEARCH_ICON_TAP, null);
+        super.onSearch();
+    }
 
     //region Share Overrides
 
@@ -115,4 +136,12 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     }
 
     //endregion
+
+    private void trackActionBarAction(String event, Props props) {
+        if (props == null) {
+            props = new Props();
+        }
+        props.put(AnalyticConstants.SOURCE, AnalyticsCategory.VDP);
+        LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
+    }
 }

@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.view.View;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
@@ -51,6 +53,8 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import java.util.Map;
+
+import io.segment.android.models.Props;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -77,13 +81,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                LiveNationAnalytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                LiveNationAnalytics.track(AnalyticConstants.X_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.OPEN_DRAWER, AnalyticsCategory.DRAWER);
             }
         };
         rootView.setDrawerListener(drawerToggle);
@@ -150,9 +148,13 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             return true;
         }
 
+        //Analytics attributes
+        Props props = new Props();
+        props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
+
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
-                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -161,24 +163,27 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_search_item:
-                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
+
+                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_home_help_item:
                 startActivity(new Intent(this, HelpMenuActivity.class));
-                LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR, props);
                 return true;
 
             case R.id.menu_home_legal_item:
-                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR, props);
                 startActivity(new Intent(this, LegalActivity.class));
                 return true;
 
             case R.id.menu_home_contact_item:
+                LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR, props);
                 buildAndOpenContactEmail();
                 return true;
 
             case R.id.menu_home_logout_item:
+                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR, props);
                 LoginHelper.logout(this);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
                 return true;
