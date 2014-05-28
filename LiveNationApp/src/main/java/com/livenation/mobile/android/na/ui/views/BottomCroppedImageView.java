@@ -13,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 public class BottomCroppedImageView extends NetworkImageView {
     public BottomCroppedImageView(Context context) {
         super(context);
+        init();
     }
 
     public BottomCroppedImageView(Context context, AttributeSet attrs) {
@@ -34,7 +35,8 @@ public class BottomCroppedImageView extends NetworkImageView {
     public void setImageBitmap(Bitmap bm) {
         if (bm != null) {
             Matrix matrix = getImageMatrix();
-            float scaleFactor = getWidth() / (float) bm.getWidth();
+            int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+            float scaleFactor = (float) viewWidth / (float) bm.getWidth();
             matrix.setScale(scaleFactor, scaleFactor, 0, 0);
             setImageMatrix(matrix);
         }
