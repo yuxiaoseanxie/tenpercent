@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="hero_tap_images">
+        <item>@drawable/default_tap_hero_1</item>
+        <item>@drawable/default_tap_hero_2</item>
+        <item>@drawable/default_tap_hero_3</item>
+        <item>@drawable/default_tap_hero_4</item>
+    </array>
+</resources>

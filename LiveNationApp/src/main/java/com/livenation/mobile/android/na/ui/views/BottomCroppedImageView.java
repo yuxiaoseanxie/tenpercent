@@ -1,8 +1,8 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -32,16 +32,30 @@ public class BottomCroppedImageView extends NetworkImageView {
     }
 
     @Override
-    public void setImageBitmap(Bitmap bm) {
-        if (bm != null) {
+    public void setImageResource(int resId) {
+        if (resId >= 0) {
+            Drawable drawable = getResources().getDrawable(resId);
+            applyPerfectWidthMatrix(drawable);
+        }
+        super.setImageResource(resId);
+    }
+
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        applyPerfectWidthMatrix(drawable);
+        super.setImageDrawable(drawable);
+    }
+
+    private void applyPerfectWidthMatrix(Drawable drawable) {
+        if (drawable != null) {
             Matrix matrix = getImageMatrix();
             int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-            float scaleFactor = (float) viewWidth / (float) bm.getWidth();
+            float scaleFactor = (float) viewWidth / (float) drawable.getIntrinsicWidth();
             matrix.setScale(scaleFactor, scaleFactor, 0, 0);
             setImageMatrix(matrix);
         }
-        super.setImageBitmap(bm);
     }
+
 }
 
 
