@@ -26,8 +26,7 @@ public class LocationActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        super.onCreate(savedInstanceState, R.layout.activity_location);
         fragment = (LocationFragment) getSupportFragmentManager().findFragmentByTag("location");
     }
 

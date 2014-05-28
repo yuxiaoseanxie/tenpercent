@@ -27,11 +27,7 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite);
-
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_favorite);
 
         favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
     }

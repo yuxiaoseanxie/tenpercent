@@ -36,14 +36,10 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venue);
+        super.onCreate(savedInstanceState, R.layout.activity_venue);
         if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
             getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
         }
-
-        getActionBar().setHomeButtonEnabled(true);
-
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
     }

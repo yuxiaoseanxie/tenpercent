@@ -31,6 +31,7 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
+import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.fragments.CalendarDialogFragment;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
@@ -61,7 +62,7 @@ import java.util.List;
  * Activity that manages the activity_inbox.
  * On a tablet it also manages the activity_message view pager.
  */
-public class InboxActivity extends FragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
+public class InboxActivity extends LiveNationFragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
@@ -76,13 +77,7 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.setContentView(R.layout.activity_inbox);
-
-        actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.inbox_title);
+        super.onCreate(savedInstanceState, R.layout.activity_inbox);
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 

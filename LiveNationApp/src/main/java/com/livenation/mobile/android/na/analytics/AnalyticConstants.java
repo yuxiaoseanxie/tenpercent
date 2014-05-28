@@ -97,6 +97,7 @@ public class AnalyticConstants {
 
     //Category
     public static final String CATEGORY = "Category";
+    public static final String CATEGORY_UNKNOWN = "Category Unknown";
     public static final String CATEGORY_ONBOARDING_VALUE = "OnBoarding";
     public static final String CATEGORY_ACTION_BAR_VALUE = "Action Bar";
     public static final String CATEGORY_DRAWER_VALUE = "Drawer";
