@@ -46,7 +46,7 @@ public class BottomCroppedImageView extends NetworkImageView {
         super.setImageDrawable(drawable);
     }
 
-    private void applyPerfectWidthMatrix(Drawable drawable) {
+    protected void applyPerfectWidthMatrix(Drawable drawable) {
         if (drawable != null) {
             Matrix matrix = getImageMatrix();
             int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
