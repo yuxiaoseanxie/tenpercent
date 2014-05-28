@@ -41,4 +41,11 @@ public class LoginHelper {
         if (auth == null) return false;
         return auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
+
+
+    public static boolean isUsingGoogle(Context context) {
+        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        if (auth == null) return false;
+        return auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_GOOGLE;
+    }
 }
