@@ -32,6 +32,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
@@ -157,6 +158,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
         findTickets.setOnClickListener(onFindTicketsClick);
+
+        artistImage.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), event.getNumericId()));
 
         String imageUrl = null;
         //TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented

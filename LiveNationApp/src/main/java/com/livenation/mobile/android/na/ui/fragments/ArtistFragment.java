@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
@@ -149,6 +150,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
+        artistImageView.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
         if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
             artistImageView.setImageUrl(imageUrl, getImageLoader());
