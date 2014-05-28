@@ -152,6 +152,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
         ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
         Ticketing.init(ticketingConfig);
+        Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
 
     private void checkInstalledAppForAnalytics() {
