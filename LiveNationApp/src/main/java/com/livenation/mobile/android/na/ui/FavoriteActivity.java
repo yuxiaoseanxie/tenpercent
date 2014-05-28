@@ -51,11 +51,18 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                navigateUp();
-                break;
+            case R.id.menu_home_search_item:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -77,12 +84,6 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
 
     private FavoritesPresenter getFavoritesPresenter() {
         return LiveNationApplication.get().getFavoritesPresenter();
-    }
-
-    private void navigateUp() {
-        Intent intent = new Intent(FavoriteActivity.this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 
 }
