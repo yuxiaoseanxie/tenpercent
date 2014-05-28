@@ -153,8 +153,10 @@
 
 
         <!-- Urban Airship config -->
-        <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity" />
-        <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity" />
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity"
+            android:label="@string/inbox_title"/>
+        <activity android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity"
+            android:label="@string/message_title"/>
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver
