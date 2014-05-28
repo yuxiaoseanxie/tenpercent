@@ -104,10 +104,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     public void setEvent(Event event) {
         this.event = event;
 
-        //Analytics
-        Props props = AnalyticsHelper.getPropsForEvent(event);
-        trackScreenWithLocation("User views SDP screen", props);
-
         artistTitle.setText(event.getName());
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT);

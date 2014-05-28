@@ -8,17 +8,21 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 import java.util.List;
 
 import io.segment.android.Analytics;
+import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/2/14.
  */
-public class LiveNationFragmentActivity extends FragmentActivity {
+public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     protected void onCreate(Bundle savedInstanceState, int res) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,14 @@ public class LiveNationFragmentActivity extends FragmentActivity {
             LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this);
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            trackScreenWithLocation(getScreenName());
         }
     }
 
@@ -58,6 +70,37 @@ public class LiveNationFragmentActivity extends FragmentActivity {
         Analytics.activityStop(this);
     }
 
+    public void trackScreenWithLocation(final String screenName) {
+        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+            @Override
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+                Props properties = getAnalyticsProps();
+                if (properties == null) {
+                    properties = new Props();
+                }
+                properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
+                String name = screenName;
+                if (name == null) {
+                    name = getClass().getSimpleName();
+                }
+                LiveNationAnalytics.screen(name, properties);
+            }
+
+            @Override
+            public void onApiServiceNotAvailable() {
+
+            }
+        });
+    }
+
+    protected String getScreenName() {
+        return this.getClass().getSimpleName();
+     }
+
+     protected Props getAnalyticsProps() {
+        return null;
+     }
+
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (android.R.id.home == item.getItemId()) {
@@ -80,5 +123,4 @@ public class LiveNationFragmentActivity extends FragmentActivity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
-
 }

@@ -24,6 +24,22 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         artistFragment = (ArtistFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_fragment);
     }
 
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_ADP;
+    }
+
+    @Override
+    protected Props getAnalyticsProps() {
+        if (artistFragment != null) {
+            Props props = new Props();
+            props.put(AnalyticConstants.ARTIST_NAME, artistFragment.getArtist().getName());
+            props.put(AnalyticConstants.ARTIST_ID, artistFragment.getArtist().getId());
+            return props;
+        }
+        return null;
+    }
+
     //endregion
 
     @Override

@@ -99,11 +99,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     @Override
     public void setVenue(Venue venue) {
-        //Analytics
-        Props props = new Props();
-        props.put("Venue Name", venue.getName());
-        trackScreenWithLocation("User views VDP screen", props);
-
         venueTitle.setText(venue.getName());
         if (null != venue.getAddress()) {
             Address address = venue.getAddress();

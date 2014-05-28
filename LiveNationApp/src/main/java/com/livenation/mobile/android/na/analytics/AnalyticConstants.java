@@ -6,7 +6,9 @@ package com.livenation.mobile.android.na.analytics;
 public class AnalyticConstants {
     public static final String PLATFORM_EVENT_SUFFIX = " (LN_ANDROID)";
 
-    //Event
+    /**
+     *Event
+     */
     //Common
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
@@ -18,7 +20,7 @@ public class AnalyticConstants {
     public static final String FAVORITE_VENUE_STAR_TAP = "Favorite Venue Star Tap";
     public static final String FAVORITE_ARTIST_STAR_TAP = "Favorite Artist Star Tap";
 
-    //On boarding
+    //On Boarding
     public static final String SKIP_TAP = "Skip Tap";
     public static final String ON_BOARDING_FIRST_LAUNCH = "On Boarding First Launch";
     //Action bar
@@ -88,8 +90,18 @@ public class AnalyticConstants {
     //Music Library Analysis
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
-    //Attributes
+    /**
+     *Attributes
+     */
 
+    public static final String SCREEN_ADP = "ADP";
+    public static final String SCREEN_SDP = "SDP";
+    public static final String SCREEN_VDP = "VDP";
+
+
+    /**
+     *Attributes
+     */
     //Common
     public static final String CELL_POSITION = "Cell Position";
     public static final String USER_LOGGED_IN = "User Logged In";
