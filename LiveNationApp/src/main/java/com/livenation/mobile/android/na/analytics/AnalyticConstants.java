@@ -85,7 +85,7 @@ public class AnalyticConstants {
     public static final String MIGRATION_COMPLETED = "1.x Updated";
     public static final String GRANTED_ACCESS_TO_MUSIC = "1.x Granted Access to Music Library";
     public static final String APPLICATION_OPEN = "User Opens App";
-    public static final String USER_OPENS_APP_FROM_DEEP_LINK = "User Opens App from Deep Link";
+    public static final String DEEP_LINK_REDIRECTION = "Deep Link Redirection";
 
     //Music Library Analysis
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";

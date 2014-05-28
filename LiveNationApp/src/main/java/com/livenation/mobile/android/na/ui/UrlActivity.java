@@ -223,7 +223,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         props.put(AnalyticConstants.FROM, from);
         props.put(AnalyticConstants.DEEP_LINK_URL, url);
 
-        LiveNationAnalytics.track(AnalyticConstants.USER_OPENS_APP_FROM_DEEP_LINK, AnalyticsCategory.HOUSEKEEPING, props);
+        LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
 
     }
 
