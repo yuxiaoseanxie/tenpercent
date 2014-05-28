@@ -131,9 +131,7 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.LegalActivity"
-            android:label="@string/home_menu_legal"
-            android:screenOrientation="portrait"/>
-
+            android:label="@string/home_menu_legal"/>
 
         <activity
             android:name=".ui.HelpMenuActivity"/>
