@@ -179,7 +179,7 @@
     <string name="notif_date_now">NOW</string>
     <string name="notif_event_info_format" formatted="false">%s - %s</string>
     <string name="notif_event_details_format" formatted="false">%s at %s</string>
-    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.</string>
+    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.\nPlease check your connectivity.</string>
 
     <string name="notif_loading">Loading</string>
     <string name="notif_no_notification_title">You have no notifications.</string>
