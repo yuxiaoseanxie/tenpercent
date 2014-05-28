@@ -15,6 +15,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
@@ -33,7 +34,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
     private LayoutInflater inflater;
-    private int[] defaultTapImages;
 
     private static final int ITEM_TYPE_EVENT = 0;
     private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
@@ -44,7 +44,6 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     public RecommendationsAdapter(Context context, List<RecommendationItem> items) {
         super(context, android.R.layout.simple_list_item_1, items);
         inflater = LayoutInflater.from(context);
-        initializeDefaultTapImages();
     }
 
     @Override
@@ -85,7 +84,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         holder.getTitle().setText(event.getDisplayName());
         holder.getLocation().setText(event.getVenue().getName());
 
-        int drawableId = computeDefaultDrawableId(event.getNumericId());
+        int drawableId = DefaultImageHelper.computeDefaultTapDrawableId(getContext(), event.getNumericId());
         String imageUrl = null;
 
         if (event.getLineup().size() > 0) {
@@ -162,21 +161,6 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 //group all recommendation upsells to the personal header group
                 return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
         }
-    }
-
-    private void initializeDefaultTapImages() {
-        TypedArray defaultImageArray = getContext().getResources().obtainTypedArray(R.array.hero_tap_images);
-        int size = defaultImageArray.length();
-        defaultTapImages = new int[size];
-        for (int i = 0; i < size; i++) {
-            int resourceId = Integer.valueOf(defaultImageArray.getResourceId(i, -1));
-            defaultTapImages[i] = resourceId;
-        }
-    }
-
-    private int computeDefaultDrawableId(long randomSeed) {
-        int index = new Random(randomSeed).nextInt(defaultTapImages.length);
-        return defaultTapImages[index];
     }
 
     private View getRecommendationsUpsellDiscreet(LayoutInflater inflater, ViewGroup parent) {

@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
@@ -90,7 +90,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         suppressBio();
 
         this.showMoreVideos = new OverflowView(getActivity());
-        if(youTube.getMaxVideos() > MAX_INLINE) {
+        if (youTube.getMaxVideos() > MAX_INLINE) {
             showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
             showMoreVideos.setExpanded(true);
         } else {
@@ -155,6 +155,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
+        artistImageView.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
         if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
             artistImageView.setImageUrl(imageUrl, getImageLoader());
@@ -186,7 +187,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         } else {
             showsHeader.setText(R.string.artist_nearby_shows);
-            shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size()<artistEvents.getAll().size());
+            shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
             shows.setEvents(artistEvents.getNearby());
         }
     }
