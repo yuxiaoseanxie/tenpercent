@@ -30,9 +30,6 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
     }
 

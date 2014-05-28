@@ -23,6 +23,10 @@ public class LiveNationFragmentActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         Analytics.onCreate(this);
         if (!LiveNationApplication.get().isMusicSync()) {
             LiveNationApplication.get().setIsMusicSync(true);

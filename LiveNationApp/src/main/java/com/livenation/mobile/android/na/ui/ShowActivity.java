@@ -38,9 +38,6 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
 
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
         init();
     }

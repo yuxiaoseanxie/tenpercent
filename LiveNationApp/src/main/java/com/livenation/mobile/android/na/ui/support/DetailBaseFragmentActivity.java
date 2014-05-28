@@ -5,8 +5,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 
@@ -42,7 +40,7 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(shareItem == null)
+        if (shareItem == null)
             throw new IllegalStateException("Subclasses of DetailBaseFragmentActivity must call super.onCreateOptionsMenu");
 
         shareItem.setEnabled(isShareAvailable());
@@ -77,11 +75,13 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     }
 
     protected abstract boolean isShareAvailable();
+
     public void invalidateIsShareAvailable() {
         invalidateOptionsMenu();
     }
 
     protected abstract String getShareSubject();
+
     protected abstract String getShareText();
 
     //endregion
