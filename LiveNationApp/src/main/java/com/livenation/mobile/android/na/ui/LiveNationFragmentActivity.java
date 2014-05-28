@@ -31,7 +31,9 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        trackScreenWithLocation(getScreenName());
+        if (savedInstanceState == null) {
+            trackScreenWithLocation(getScreenName());
+        }
     }
 
     @Override
