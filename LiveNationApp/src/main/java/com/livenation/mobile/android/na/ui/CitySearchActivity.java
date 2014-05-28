@@ -17,7 +17,7 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class CitySearchActivity extends FragmentActivity implements TextWatcher {
+public class CitySearchActivity extends LiveNationFragmentActivity implements TextWatcher {
     private SearchForText fragment;
     private EditText input;
     private Handler limiter = new Handler() {
@@ -29,9 +29,7 @@ public class CitySearchActivity extends FragmentActivity implements TextWatcher 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_search);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_city_search);
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         View view = getLayoutInflater().inflate(R.layout.view_city_search_actionbar, null);

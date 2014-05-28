@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,9 +18,14 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class SearchActivity extends FragmentActivity implements TextWatcher {
+public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
+    public static final String SEARCH_MODE_KEY = "search_mode";
+    public static final int SEARCH_MODE_DEFAULT_VALUE = 0;
+    public static final int SEARCH_MODE_ARTIST_ONLY_VALUE = 1;
+
     private SearchForText fragment;
     private EditText input;
+
     private Handler limiter = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -29,9 +35,8 @@ public class SearchActivity extends FragmentActivity implements TextWatcher {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_search);
+
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);

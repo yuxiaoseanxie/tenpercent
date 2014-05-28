@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.scan;
 
 import android.content.Context;
 
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregatorCallback;
@@ -114,7 +115,7 @@ public class ArtistAggregatorScanner {
                 } catch (Exception e) {
                     Props props = new Props();
                     props.put("Exception", e);
-                    LiveNationAnalytics.track("Unexpected Exception", props);
+                    LiveNationAnalytics.track("Unexpected Exception", AnalyticsCategory.ERROR, props);
                     decrementJobCounter(aggregatorFinal);
                 }
             }

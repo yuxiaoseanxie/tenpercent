@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+
+import io.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.
@@ -22,14 +26,13 @@ public class LocationActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        super.onCreate(savedInstanceState, R.layout.activity_location);
         fragment = (LocationFragment) getSupportFragmentManager().findFragmentByTag("location");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.location_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -49,6 +52,10 @@ public class LocationActivity extends LiveNationFragmentActivity {
             case REQUEST_CODE_CITY_SEARCH:
                 if (resultCode == Activity.RESULT_OK) {
                     City city = (City) data.getSerializableExtra(CitySearchFragment.DATA_RESULT_KEY);
+                    Props props = new Props();
+                    props.put(AnalyticConstants.LOCATION_NAME, city.getName());
+                    props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
+                    LiveNationAnalytics.track(AnalyticConstants.SUBMIT_LOCATION_QUERY, AnalyticsCategory.LOCATION, props);
                     fragment.setConfiguredLocation(city);
                 }
                 break;

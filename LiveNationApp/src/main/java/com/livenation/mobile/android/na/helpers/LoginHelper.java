@@ -23,6 +23,10 @@ public class LoginHelper {
     public static boolean isLogout() {
         return ssoManager.readUser(applicationContext) == null;
     }
+    public static boolean isLogin() {
+        return ssoManager.readUser(applicationContext) != null;
+    }
+
 
     public static void logout(Activity activity) {
         ssoManager.logout(activity);
@@ -30,5 +34,16 @@ public class LoginHelper {
         ssoManager.removeUser(applicationContext);
 
         LiveNationApplication.get().getConfigManager().buildApi();
+    }
+
+    public static boolean isUsingFacebook(Context context) {
+        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK);
+    }
+
+
+    public static boolean isUsingGoogle(Context context) {
+        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_GOOGLE);
     }
 }

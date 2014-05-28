@@ -10,22 +10,19 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.urbanairship.UAirship;
 
 /**
  * Manages the activity_message view pager and display messages
  */
-public class MessageActivity extends FragmentActivity {
+public class MessageActivity extends LiveNationFragmentActivity {
 
     public static final String EXTRA_MESSAGE_ID_KEY = "com.livenation.mobile.android.na.notifications.EXTRA_MESSAGE_ID_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_message);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_message);
         getActionBar().setTitle(R.string.message_title);
     }
 

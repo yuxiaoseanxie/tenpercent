@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -115,6 +116,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     private class OnOrdersClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_ORDERS_TAP, AnalyticsCategory.DRAWER);
             Ticketing.showOrderHistory(getActivity());
         }
     }
@@ -122,6 +124,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     private class OnFavoriteClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_FAVORITES_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(getActivity(), FavoriteActivity.class);
             startActivity(intent);
         }
@@ -130,7 +133,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     private class OnLocationClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            LiveNationAnalytics.track(AnalyticConstants.LOCATION_ICON_TAP);
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_LOCATION_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }

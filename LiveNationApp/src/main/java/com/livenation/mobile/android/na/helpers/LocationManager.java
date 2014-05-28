@@ -127,7 +127,20 @@ public class LocationManager implements LocationProvider {
             try {
                 List<Address> matches = geocoder.getFromLocation(lat, lng, 1);
                 if (!matches.isEmpty()) {
-                    return matches.get(0).getLocality();
+                    String locality = matches.get(0).getLocality();
+                    if (locality == null) {
+                        locality = matches.get(0).getSubLocality();
+                        if (locality == null) {
+                            locality = matches.get(0).getAdminArea();
+                            if (locality == null) {
+                                locality = matches.get(0).getCountryName();
+                                if (locality == null) {
+                                    locality = String.valueOf(lat)  + "," + String.valueOf(lng);
+                                }
+                            }
+                        }
+                    }
+                    return locality;
                 }
             } catch (IOException ignored) {
             }

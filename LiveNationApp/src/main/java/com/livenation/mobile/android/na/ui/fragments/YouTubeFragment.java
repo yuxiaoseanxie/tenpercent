@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.YouTubeVideoView;
@@ -18,6 +21,8 @@ import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.na.youtube.YouTubeVideo;
 
 import java.util.List;
+
+import io.segment.android.models.Props;
 
 public class YouTubeFragment extends LiveNationFragment implements Response.Listener<List<YouTubeVideo>>, Response.ErrorListener {
     private YouTubeClient.Cancelable currentSearchRequest;
@@ -187,6 +192,14 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
 
         @Override
         public void onClick(View view) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.VIDEO_NAME, video.getTitle());
+            props.put(AnalyticConstants.VIDEO_URL, video.getViewUri());
+
+            LiveNationAnalytics.track(AnalyticConstants.VIDEO_TAP, AnalyticsCategory.ADP, props);
+
+
             Intent intent = new Intent(Intent.ACTION_VIEW, video.getViewUri());
             startActivity(intent);
         }

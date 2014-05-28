@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="google_api_key"></string>
-    <string name="youtube_api_key"></string>
+    <string name="google_api_key">AIzaSyB-m9XKAyFJRPIfzBMGZRJQ-yOeFzyTdKM</string>
+    <string name="youtube_api_key">AIzaSyAmVqIc2WXXvc3MdDKJjXSAJf33rS2ACTY</string>
     <string name="facebook_app_id">120727820568</string>
     <string name="urbanairship_permission">com.livenation.mobile.android.na.permission.UA_DATA
     </string>
     <string name="urbanairship_authorities">com.livenation.mobile.android.na.urbanairship.provider
     </string>
     <string name="urbanairship_category">com.livenation.mobile.android.na</string>
+
+    <string name="hockey_app_id">288393dd3b487d01050bad32c59320c6</string>
 </resources>

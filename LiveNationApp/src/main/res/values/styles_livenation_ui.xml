@@ -30,6 +30,10 @@
         <item name="android:textAppearance">@style/ui_header1_text</item>
     </style>
 
+    <style name="ui_header_transparent.with_bottom_padding">
+        <item name="android:paddingBottom">@dimen/ui_header_transparent_padding_bottom</item>
+    </style>
+
     <style name="ui_underscore">
         <item name="android:background">@drawable/ui_underscore_background</item>
     </style>
@@ -60,7 +64,6 @@
     </style>
 
     <style name="favorite_item_title">
-        <item name="android:layout_marginLeft">@dimen/favorite_margin_left</item>
         <item name="android:layout_marginRight">@dimen/favorite_margin_right</item>
     </style>
 
@@ -96,5 +99,69 @@
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:background">@drawable/list_search_result_type</item>
         <item name="android:textAppearance">@style/list_search_result_type_text</item>
+    </style>
+
+    <style name="text.primary.recommendations_upsell_title_text">
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="text.secondary.recommendations_upsell_general_text">
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="text.secondary.recommendations_upsell_discreet_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="text.button.recommendations_upsell">
+        <item name="android:layout_marginBottom">@dimen/button_recommendations_upsell_margin_bottom</item>
+        <item name="android:layout_marginTop">@dimen/button_recommendations_upsell_margin_top</item>
+    </style>
+
+    <style name="text.button.recommendations_upsell.facebook">
+        <item name="android:background">@drawable/account_facebook_sso_button</item>
+    </style>
+
+    <style name="text.button.recommendations_upsell.search">
+        <item name="android:background">@drawable/account_google_plus_sso_button</item>
+    </style>
+
+    <style name="text.button.custom_center_container">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+    </style>
+
+    <style name="text.button.custom_center_container.red">
+        <item name="android:background">@drawable/account_google_plus_sso_button</item>
+    </style>
+
+    <style name="text.button.custom_center_container.blue">
+        <item name="android:background">@drawable/account_facebook_sso_button</item>
+    </style>
+
+    <style name="text.button.custom_center_text">
+        <item name="android:drawablePadding">@dimen/recommendations_button_drawable_padding</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="text.button.custom_center_text.facebook">
+        <item name="android:drawableLeft">@drawable/login_facebook_logo</item>
+    </style>
+
+    <style name="text.button.custom_center_text.search">
+        <item name="android:drawableLeft">@drawable/small_white_favorite</item>
+    </style>
+
+    <style name="SwooshDivider.with_top_margin">
+        <item name="android:layout_marginTop">@dimen/swoosh_divider_margin_top</item>
     </style>
 </resources>

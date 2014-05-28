@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +24,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -54,6 +58,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView location;
     private TextView telephone;
     private View venueInfo;
+    private View phonebox;
     private EventsView shows;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
@@ -65,7 +70,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
-        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE);
+        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
         addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
 
         mapFragment = new LiveNationMapFragment();
@@ -87,17 +92,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         telephone = (TextView) result.findViewById(R.id.venue_detail_telephone);
         venueInfo = result.findViewById(R.id.venue_detail_venue_info_link);
         favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
+        phonebox = result.findViewById(R.id.venue_detail_phone_box);
 
         return result;
     }
 
     @Override
     public void setVenue(Venue venue) {
-        //Analytics
-        Props props = new Props();
-        props.put("Venue Name", venue.getName());
-        trackScreenWithLocation("User views VDP screen", props);
-
         venueTitle.setText(venue.getName());
         if (null != venue.getAddress()) {
             Address address = venue.getAddress();
@@ -106,7 +107,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             location.setText("");
         }
 
-        telephone.setText(venue.getFormattedPhoneNumber());
+        String phoneNumber = venue.getFormattedPhoneNumber();
+        telephone.setText(phoneNumber);
+        if (phoneNumber.isEmpty()) {
+            phonebox.setVisibility(View.GONE);
+        } else {
+            telephone.setOnClickListener(new OnPhoneNumberClick(venue));
+        }
 
         if (venue.getBoxOffice() == null) {
             loadBoxOfficeInfo(venue.getNumericId());
@@ -114,14 +121,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             displayBoxOfficeInfo(venue);
         }
 
-        telephone.setOnClickListener(new OnPhoneNumberClick());
-        location.setOnClickListener(new OnAddressClick(Double.parseDouble(venue.getLat()), Double.parseDouble(venue.getLng()), venue.getAddress().getSmallFriendlyAddress(false), LiveNationApplication.get().getApplicationContext()));
+        location.setOnClickListener(new OnAddressClick(venue, LiveNationApplication.get().getApplicationContext()));
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
         setMapLocation(lat, lng);
 
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter());
+        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
     }
 
     @Override
@@ -207,6 +213,11 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         @Override
         public void onClick(View v) {
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            LiveNationAnalytics.track(AnalyticConstants.MORE_VENUE_INFO_TAP, AnalyticsCategory.VDP, props);
+
             Intent intent = new Intent(getActivity(), VenueBoxOfficeActivity.class);
             intent.putExtras(VenueBoxOfficeActivity.getArguments(venue));
             startActivity(intent);
@@ -214,8 +225,19 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private class OnPhoneNumberClick implements View.OnClickListener {
+        private Venue venue;
+        public OnPhoneNumberClick(Venue venue) {
+            this.venue = venue;
+        }
+
         @Override
         public void onClick(View v) {
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_PHONE_TAP, AnalyticsCategory.VDP,props);
+
+
             String phoneNumber = (String) VenueFragment.this.telephone.getText();
             phoneNumber.replace("[^0-9+]", "");
             if (phoneNumber != null || !phoneNumber.trim().isEmpty())
@@ -228,16 +250,23 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         private double lng;
         private Context context;
         private String address;
+        private Venue venue;
 
-        private OnAddressClick(double lat, double lng, String address, Context context) {
-            this.lat = lat;
-            this.lng = lng;
+        private OnAddressClick(Venue venue, Context context) {
+            this.lat = Double.parseDouble(venue.getLat());
+            this.lng = Double.parseDouble(venue.getLng());
             this.context = context;
-            this.address = address;
+            this.address = venue.getAddress().getSmallFriendlyAddress(false);
+            this.venue = venue;
         }
 
         @Override
         public void onClick(View v) {
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP,props);
+
             MapUtils.redirectToMapApplication(lat, lng, address, context);
         }
     }

@@ -135,23 +135,4 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         return Integer.valueOf(view.getId()).toString();
     }
 
-
-    public void trackScreenWithLocation(final String screenName, final Props props) {
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
-            @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                Props properties = props;
-                if (properties == null) {
-                    properties = new Props();
-                }
-                properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
-                LiveNationAnalytics.screen(screenName, properties);
-            }
-
-            @Override
-            public void onApiServiceNotAvailable() {
-
-            }
-        });
-    }
 }

@@ -1,15 +1,19 @@
-package com.livenation.mobile.android.na.ui.fragments;
+package com.livenation.mobile.android.na.ui.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -21,10 +25,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.segment.android.models.Props;
+
 /**
  * Created by elodieferrais on 4/29/14.
  */
-public class CalendarDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener{
+public class CalendarDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener{
     private ListView listView;
     private CalendarAdapter adapter;
     private Event event;
@@ -63,14 +69,19 @@ public class CalendarDialogFragment extends DialogFragment implements AdapterVie
         //Add Show date item
         if (!event.getIsMegaticket()) {
         CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
-        showDate.setStartDate(event.getLocalStartTime());
-        calendarItemList.add(showDate);
+            if (event.getLocalStartTime() != null) {
+                showDate.setStartDate(event.getLocalStartTime());
+                calendarItemList.add(showDate);
+            }
         }
 
-        //Add Genaral onSale items
+        //Add General onSale items
         CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_on_sale_general_title));
-        generalOnSale.setStartDate(event.getOnSaleDate());
-        calendarItemList.add(generalOnSale);
+        if (event.getOnSaleDate() != null) {
+            generalOnSale.setStartDate(event.getOnSaleDate());
+            calendarItemList.add(generalOnSale);
+        }
+
 
         //Add Presale items
         List<TicketOffering> ticketOfferingList = event.getTicketOfferings();
@@ -91,6 +102,10 @@ public class CalendarDialogFragment extends DialogFragment implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put(AnalyticConstants.USER_LOGGED_IN, LoginHelper.isLogin());
+
+        LiveNationAnalytics.track(AnalyticConstants.ADD_TO_CALENDAR_TAP, AnalyticsCategory.SDP, props);
         CalendarItem item = adapter.getItem(position);
         if (item.getStartDate().compareTo(Calendar.getInstance().getTime()) > 0) {
             CalendarUtils.addEventToCalendar(item, event, getActivity());

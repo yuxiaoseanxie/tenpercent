@@ -8,10 +8,14 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +25,18 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
-import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.TaggedEvent;
+import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
@@ -36,6 +45,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.ArrayList;
 
+import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener{
@@ -44,12 +54,19 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            scrollPager.reset();
+            scrollPager.load();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new RecommendationsAdapter(getActivity(), new ArrayList<TaggedEvent>());
+        adapter = new RecommendationsAdapter(getActivity(), new ArrayList<RecommendationItem>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
         LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
@@ -60,7 +77,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_shows_list, container, false);
+        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
         listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
         //Important: connect the listview (which set a footer) before to set the adapter
@@ -93,7 +110,14 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
                 swipeRefreshLayout.setEnabled(firstVisibleItem == 0);
             }
         });
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -127,6 +151,11 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
         intent.putExtras(args);
+
+        //Analytics
+        Props props = AnalyticsHelper.getPropsForEvent(event);
+        props.put(AnalyticConstants.CELL_POSITION, position);
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
 
         startActivity(intent);
     }

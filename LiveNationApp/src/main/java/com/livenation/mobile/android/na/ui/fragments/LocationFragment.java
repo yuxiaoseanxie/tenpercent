@@ -14,6 +14,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -24,6 +27,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.ArrayList;
 import java.util.List;
 
+import io.segment.android.models.Props;
+
 /**
  * Created by cchilton on 3/12/14.
  */
@@ -31,8 +36,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     private Switch autoLocationSwitch;
     private LocationAdapter adapter;
 
-    private TextView currentPrimaryText;
-    private TextView currentSecondaryText;
+    private TextView currentLocationText;
+    private TextView locationModeHeader;
 
     private City actualLocation;
     private City configuredLocation;
@@ -96,8 +101,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         ListView listView = (ListView) view.findViewById(android.R.id.list);
         listView.setAdapter(adapter);
 
-        currentPrimaryText = (TextView) view.findViewById(R.id.fragment_location_current_primary_text);
-        currentSecondaryText = (TextView) view.findViewById(R.id.fragment_location_current_secondary_text);
+        currentLocationText = (TextView) view.findViewById(R.id.fragment_location_current_text);
+        locationModeHeader = (TextView) view.findViewById(R.id.fragment_location_current_header);
 
         listView.setOnItemClickListener(this);
 
@@ -152,10 +157,19 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         City activeLocation = null;
 
         if (isChecked) {
-            currentPrimaryText.setText(R.string.location_mode_automatic);
+            locationModeHeader.setText(R.string.location_current);
             activeLocation = actualLocation;
+            Props props = new Props();
+            if (actualLocation != null) {
+
+                props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
+                props.put(AnalyticConstants.LOCATION_NAME, actualLocation.getName());
+            } else {
+                props.put(AnalyticConstants.LOCATION_LATLONG, "???,???");
+            }
+            LiveNationAnalytics.track(AnalyticConstants.CURRENT_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
         } else {
-            currentPrimaryText.setText(R.string.location_mode_manual);
+            locationModeHeader.setText(R.string.location_manual);
             if (null == configuredLocation) {
                 //no initial manual location!
                 if (null != actualLocation) {
@@ -174,6 +188,11 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         City city = adapter.getItem(position);
+        Props props = new Props();
+        props.put(AnalyticConstants.LOCATION_NAME, city.getName());
+        props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
+        LiveNationAnalytics.track(AnalyticConstants.PREVIOUS_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
+
         setConfiguredLocation(city);
     }
 
@@ -189,10 +208,6 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 //manual location set, and we have a manual location specified.
                 locationManager.setLocationMode(LocationManager.MODE_USER, getActivity());
                 locationManager.setUserLocation(configuredLocation.getLat(), configuredLocation.getLng(), getActivity());
-            } else {
-                //manual location was set, but there is no manual location specified
-                //fallback to automatic location
-                locationManager.setLocationMode(LocationManager.MODE_SYSTEM, getActivity());
             }
         }
         super.onDestroyView();
@@ -224,7 +239,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     }
 
     private void showActiveLocation(City city) {
-        currentSecondaryText.setText(city.getName());
+        currentLocationText.setText(city.getName());
     }
 
     private boolean isLocationAutomatic() {

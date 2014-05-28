@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -20,6 +19,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
     protected boolean isFirstPage = true;
+
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;
         this.limit = limit;
@@ -44,6 +44,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void reset() {
+        stop();
         adapter.clear();
         lastFetch = null;
         isFirstPage = true;
@@ -77,7 +78,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void onNoMorePages() {
-        onFetchEnded();
+        onFetchEnded(false);
         paginatedFetcher = null;
     }
 
@@ -96,18 +97,18 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         }
 
         adapter.addAll(result);
-        onFetchEnded();
         paginatedFetcher = null;
+        onFetchEnded(false);
     }
 
     protected void onFetchCancelled() {
-        onFetchEnded();
         paginatedFetcher = null;
+        onFetchEnded(true);
     }
 
     protected void onFetchFailed() {
-        onFetchError();
         paginatedFetcher = null;
+        onFetchError();
     }
 
     public ArrayAdapter<TItemType> getAdapter() {
@@ -139,7 +140,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     public abstract void onFetchStarted();
 
-    public abstract void onFetchEnded();
+    public abstract void onFetchEnded(boolean cancelled);
 
     public abstract void onFetchError();
 
