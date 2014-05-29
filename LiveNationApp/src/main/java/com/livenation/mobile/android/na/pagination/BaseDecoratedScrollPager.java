@@ -1,8 +1,10 @@
 package com.livenation.mobile.android.na.pagination;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -37,6 +39,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     protected EmptyListViewControl emptyView;
     private RefreshBar refreshBar;
     private RefreshBarController refreshBarController;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private View.OnClickListener retryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -68,6 +71,10 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         listView.addFooterView(footerBugHack);
     }
 
+    public void connectSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+
     @Override
     public void onFetchStarted() {
         listLoadingView.setViewMode(EmptyListViewControl.ViewMode.LOADING);
@@ -84,6 +91,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         if (getAdapter().getCount() == 0) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -95,6 +105,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             if (isFirstPage) {
                 emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
             }
+        }
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
