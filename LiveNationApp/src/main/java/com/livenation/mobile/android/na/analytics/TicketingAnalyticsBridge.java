@@ -49,7 +49,16 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
 
     @Override
     public void track(String event, String category, Map<String, String> properties) {
-        LiveNationAnalytics.track(event, AnalyticsCategory.valueOf(category), mapToProps(properties));
+        AnalyticsCategory analyticsCategory;
+        try {
+            if (category != null)
+                analyticsCategory = AnalyticsCategory.valueOf(category);
+            else
+                analyticsCategory = AnalyticsCategory.UNKNOWN;
+        } catch (IllegalArgumentException e) {
+            analyticsCategory = AnalyticsCategory.UNKNOWN;
+        }
+        LiveNationAnalytics.track(event, analyticsCategory, mapToProps(properties));
     }
 
     @Override
