@@ -256,7 +256,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            if (!allowForeground || !result.hasResolution()) {
+            if (!allowForeground) {
                 sessionPayload.onSessionFailed();
                 return;
             }
@@ -277,7 +277,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    sessionPayload.onSessionFailed();
+                                    sessionPayload.onSessionCanceled();
                                 }
                             }
                     );
