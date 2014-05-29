@@ -78,7 +78,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                     }
 
                     @Override
-                    public void onGetCityFailure() {
+                    public void onGetCityFailure(double lat, double lng) {
                         //reverse geocode failed, make up an "unknown" label name
                         actualLocation = new City(UNKNOWN_LOCATION, lat, lng);
                         adapter.notifyDataSetChanged();
@@ -136,7 +136,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                     }
 
                     @Override
-                    public void onGetCityFailure() {
+                    public void onGetCityFailure(double lat, double lng) {
                         City apiLocation = new City(UNKNOWN_LOCATION, lat, lng);
                         showActiveLocation(apiLocation);
                     }
