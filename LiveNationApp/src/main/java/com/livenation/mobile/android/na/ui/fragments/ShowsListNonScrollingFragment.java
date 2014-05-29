@@ -67,10 +67,8 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.fragment_show_fixed, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_show_fixed, container, false);
 
         showContainer = (ViewGroup) result;
 
