@@ -10,7 +10,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +28,11 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -45,10 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.segment.android.models.Props;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class AllShowsFragment extends LiveNationFragment implements OnItemClickListener, ApiServiceBinder, FeatureView {
-    private StickyListHeadersListView listView;
+public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, FeatureView {
     private EventStickyHeaderAdapter adapter;
     private AllShowsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
@@ -69,22 +66,17 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
-        listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
+        View view = super.onCreateView(inflater, container, savedInstanceState, R.layout.sub_empty_list);
         listView.setOnItemClickListener(AllShowsFragment.this);
         View result = inflater.inflate(R.layout.fragment_featured, null, false);
         chartingContainer = (ViewGroup) result.findViewById(R.id.featured_charting_container);
 
         listView.addHeaderView(result);
-
-        //Important: connect the listview (which set a footer) before to set the adapter
-        scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         scrollPager.setEmptyView(emptyListViewControl);
-
         listView.setEmptyView(emptyListViewControl);
 
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
@@ -98,20 +90,6 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
         super.onDestroy();
         scrollPager.stop();
         LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-        outState.putParcelable(getViewKey(listView), listState);
-    }
-
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
     }
 
 
@@ -178,6 +156,11 @@ public class AllShowsFragment extends LiveNationFragment implements OnItemClickL
 
             chartingContainer.addView(view);
         }
+    }
+
+    @Override
+    BaseDecoratedScrollPager getScrollPager() {
+        return scrollPager;
     }
 
     private class FeaturedOnClick implements View.OnClickListener {
