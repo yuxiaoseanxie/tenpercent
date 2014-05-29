@@ -179,9 +179,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_logout_item:
-                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
-                LoginHelper.logout(this);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
+                if (LoginHelper.isLogin()) {
+                    LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
+                    LoginHelper.logout(this);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
