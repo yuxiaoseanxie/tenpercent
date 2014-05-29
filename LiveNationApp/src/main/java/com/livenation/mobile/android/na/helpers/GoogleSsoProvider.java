@@ -223,7 +223,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
-        private final int RC_SIGN_IN = 600613;
+        private final int RC_SIGN_IN = 6613;
         private final int RESOLVE_COUNT_MAX = 2;
         private GoogleApiClient googleApiClient;
         private int resolveCount;
