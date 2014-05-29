@@ -112,7 +112,13 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         artistTitle.setText(event.getName());
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT);
-        dateFormatter.setTimeZone(TimeZone.getTimeZone(event.getVenue().getTimeZone()));
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+        dateFormatter.setTimeZone(timeZone);
         String calendarValue = dateFormatter.format(event.getLocalStartTime());
         calendarText.setText(calendarValue);
         OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);

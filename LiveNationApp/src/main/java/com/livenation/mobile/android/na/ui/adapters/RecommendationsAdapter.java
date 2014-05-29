@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdE
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
-import java.util.Random;
 import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -97,7 +95,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         holder.getImage().setErrorImageResId(drawableId);
         holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
 
-        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
         holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
         return view;
