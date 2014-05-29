@@ -18,7 +18,7 @@ public class SingleArtistPresenter
         extends BasePresenter<SingleArtistView, SingleArtistPresenter.SingleArtistState>
         implements Presenter<SingleArtistView>, BaseState.StateListener<SingleArtistPresenter.SingleArtistState> {
     private static final String INTENT_DATA_KEY = SingleArtistPresenter.class.getName();
-    private static final String PARAMETER_ARTIST_ID = "artist_id";
+    public static final String PARAMETER_ARTIST_ID = "artist_id";
 
     public static Bundle getAruguments(String artistIdRaw) {
         Bundle bundle = new Bundle();

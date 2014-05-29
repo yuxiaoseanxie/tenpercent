@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.support;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,6 +11,13 @@ import com.livenation.mobile.android.na.ui.SearchActivity;
 
 public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
     private MenuItem shareItem;
+    protected Bundle args;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState, int res) {
+        super.onCreate(savedInstanceState, res);
+        args = getIntent().getExtras();
+    }
 
     //region Menus
 

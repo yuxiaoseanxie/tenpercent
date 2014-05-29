@@ -25,7 +25,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleEventPresenter.SingleEventState> implements
         Presenter<SingleEventView>, StateListener<SingleEventPresenter.SingleEventState> {
     private static final String INTENT_DATA_KEY = SingleEventPresenter.class.getName();
-    private static final String PARAMETER_EVENT_ID = "event_id";
+    public static final String PARAMETER_EVENT_ID = "event_id";
 
     public static Bundle getAruguments(String eventIdRaw) {
         Bundle bundle = new Bundle();

@@ -15,6 +15,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -150,8 +151,10 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     protected Props getAnalyticsProps() {
         if (venue != null) {
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            if (args.containsKey(SingleVenuePresenter.PARAMETER_VENUE_ID)) {
+                String venueIdRaw = args.getString(SingleVenuePresenter.PARAMETER_VENUE_ID);
+                props.put(AnalyticConstants.VENUE_ID, venueIdRaw);
+            }
             return props;
         }
         return null;
