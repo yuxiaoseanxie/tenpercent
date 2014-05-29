@@ -16,12 +16,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
@@ -96,6 +98,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(id.fragment_all_shows_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorScheme(com.livenation.mobile.android.ticketing.R.color.refresh_color_1, com.livenation.mobile.android.ticketing.R.color.refresh_color_2, com.livenation.mobile.android.ticketing.R.color.refresh_color_3, com.livenation.mobile.android.ticketing.R.color.refresh_color_4);
+
         scrollPager.connectSwipeRefreshLayout(swipeRefreshLayout);
 
         //Scroll until the top of the list. Refresh only when the first item of the listview is visible.
@@ -107,7 +111,13 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                swipeRefreshLayout.setEnabled(firstVisibleItem == 0);
+                if (listView.getChildCount() > 0) {
+                    ViewGroup viewGroup = (ViewGroup) listView.getChildAt(0);
+                    if (viewGroup.getChildCount() > 0) {
+                        int top = viewGroup.getChildAt(0).getTop();
+                        swipeRefreshLayout.setEnabled(top == 0);
+                    }
+                }
             }
         });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
