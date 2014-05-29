@@ -42,7 +42,12 @@ public class ShowView extends LinearLayout {
         title.setText(getDisplayMode().getTitle(event));
 
         Date start = event.getLocalStartTime();
-        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
         date.setDate(start, timeZone);
         details.setText(getDisplayMode().getDetails(event, start));
     }
