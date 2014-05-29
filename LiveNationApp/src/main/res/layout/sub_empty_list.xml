@@ -7,14 +7,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@drawable/ui_gutter_divider"
-        android:dividerHeight="@dimen/divider_height"/>
+        android:layout_height="match_parent">
 
         <se.emilsjolander.stickylistheaders.StickyListHeadersListView
             android:id="@+id/fragment_tab_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:divider="@drawable/ui_gutter_divider"
+            android:dividerHeight="@dimen/divider_height"/>
 
         <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
             android:id="@android:id/empty"
@@ -29,4 +29,5 @@
             android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
+
 </android.support.v4.widget.SwipeRefreshLayout>
