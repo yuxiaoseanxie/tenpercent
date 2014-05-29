@@ -59,11 +59,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             public void onSessionFailed() {
                 callback.onOpenSessionFailed(new Exception(), allowForeground);
             }
-
-            @Override
-            void onNoNetwork() {
-                callback.onNoNetwork();
-            }
         };
 
         currentSession = new SessionState(getActivity(), allowForeground, payload);
@@ -143,11 +138,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onSessionFailed() {
-            getListener().onPayloadComplete(this);
-        }
-
-        @Override
-        void onNoNetwork() {
             getListener().onPayloadComplete(this);
         }
 
