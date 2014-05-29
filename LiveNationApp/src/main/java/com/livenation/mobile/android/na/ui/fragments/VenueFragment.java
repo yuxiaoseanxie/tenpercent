@@ -51,7 +51,6 @@ import java.util.List;
 import io.segment.android.models.Props;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
-    public static final String PARAMETER_VENUE_ID = "venue_id";
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private TextView venueTitle;
     private TextView location;

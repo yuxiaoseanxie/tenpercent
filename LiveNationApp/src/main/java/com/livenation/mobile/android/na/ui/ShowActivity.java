@@ -17,6 +17,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -148,8 +149,10 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     protected Props getAnalyticsProps() {
         if (event != null) {
             Props props = new Props();
-            props.put(AnalyticConstants.EVENT_NAME, event.getName());
-            props.put(AnalyticConstants.EVENT_ID, event.getId());
+            if (args.containsKey(SingleArtistPresenter.PARAMETER_ARTIST_ID)) {
+                String eventIdRaw = args.getString(SingleEventPresenter.PARAMETER_EVENT_ID);
+                props.put(AnalyticConstants.EVENT_ID, eventIdRaw);
+            }
             return props;
         }
         return null;

@@ -1,12 +1,12 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -33,8 +33,10 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     protected Props getAnalyticsProps() {
         if (artistFragment != null) {
             Props props = new Props();
-            props.put(AnalyticConstants.ARTIST_NAME, artistFragment.getArtist().getName());
-            props.put(AnalyticConstants.ARTIST_ID, artistFragment.getArtist().getId());
+            if (args.containsKey(SingleArtistPresenter.PARAMETER_ARTIST_ID)) {
+                String artistIdRaw = args.getString(SingleArtistPresenter.PARAMETER_ARTIST_ID);
+                props.put(AnalyticConstants.ARTIST_ID, artistIdRaw);
+            }
             return props;
         }
         return null;
@@ -76,7 +78,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         Artist artist = artistFragment.getArtist();
         String artistTemplate = getString(R.string.share_template_artist);
         return artistTemplate.replace("$ARTIST", artist.getName())
-                             .replace("$LINK", artist.getWebUrl());
+                .replace("$LINK", artist.getWebUrl());
     }
 
     //endregion
