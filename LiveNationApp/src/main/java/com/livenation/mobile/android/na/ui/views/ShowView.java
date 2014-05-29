@@ -21,7 +21,6 @@ public class ShowView extends LinearLayout {
     private TextView title;
     private TextView details;
     private VerticalDate date;
-    private View bottomLine;
 
     public ShowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -55,17 +54,6 @@ public class ShowView extends LinearLayout {
         this.displayMode = displayMode;
     }
 
-    public boolean isBottomLineVisible() {
-        return (bottomLine.getVisibility() == View.VISIBLE);
-    }
-
-    public void setBottomLineVisible(Boolean bottomLineVisible) {
-        if (bottomLineVisible)
-            bottomLine.setVisibility(View.VISIBLE);
-        else
-            bottomLine.setVisibility(View.GONE);
-    }
-
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -74,7 +62,6 @@ public class ShowView extends LinearLayout {
         this.title = (TextView) view.findViewById(R.id.view_show_title);
         this.details = (TextView) view.findViewById(R.id.view_show_details);
         this.date = (VerticalDate) view.findViewById(R.id.view_show_date);
-        this.bottomLine = view.findViewById(R.id.view_show_bottom_line);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 

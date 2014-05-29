@@ -1,12 +1,13 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -28,6 +29,10 @@ import io.segment.android.models.Props;
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
 
+    private int dividerHeight;
+    private int dividerLeftMargin;
+    private Drawable dividerBackground;
+
     private ShowView.DisplayMode displayMode;
     private ViewGroup showContainer;
 
@@ -40,6 +45,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     public ShowsListNonScrollingFragment() {
         super();
+
         this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
     }
@@ -52,10 +58,17 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.fragment_show_fixed, container,
-                false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.dividerHeight = (int) getResources().getDimension(R.dimen.underscore_container_height);
+        this.dividerLeftMargin = (int) getResources().getDimension(R.dimen.ui_gutter_width);
+        this.dividerBackground = getResources().getDrawable(R.drawable.ui_underscore_background);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_show_fixed, container, false);
 
         showContainer = (ViewGroup) result;
 
@@ -64,6 +77,26 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     //endregion
 
+
+    @SuppressWarnings("deprecation")
+    protected View createDivider() {
+        View view = new View(getActivity());
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackgroundDrawable(dividerBackground);
+        } else {
+            view.setBackground(dividerBackground);
+        }
+        return view;
+    }
+
+    protected void addNewDivider() {
+        View divider = createDivider();
+
+        LayoutParams dividerLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, dividerHeight);
+        dividerLayoutParams.setMargins(dividerLeftMargin, 0, 0, 0);
+
+        showContainer.addView(divider, dividerLayoutParams);
+    }
 
     public void setCategory(AnalyticsCategory category) {
         this.category = category;
@@ -74,21 +107,26 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         showContainer.removeAllViews();
 
         int position = 0;
+        int lastPositionWithDivider = events.size() - 1;
         for (Event event : events) {
             ShowView show = new ShowView(getActivity());
             show.setDisplayMode(getDisplayMode());
             show.setEvent(event);
             show.setOnClickListener(new ShowViewClickListener(event));
 
-            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-            showContainer.addView(show, layoutParams);
+            LayoutParams showLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            showContainer.addView(show, showLayoutParams);
 
             position++;
             if (position >= getMaxEvents())
                 break;
+            else if (position <= lastPositionWithDivider)
+                addNewDivider();
         }
 
         if ((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
+            addNewDivider();
+
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getShowMoreItemsView(), layoutParams);
         }
@@ -97,8 +135,6 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getEmptyView(), layoutParams);
         }
-
-
     }
 
 

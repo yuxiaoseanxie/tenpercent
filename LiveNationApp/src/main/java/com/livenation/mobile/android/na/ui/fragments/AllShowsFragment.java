@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -79,7 +78,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         scrollPager.setEmptyView(emptyListViewControl);
         listView.setEmptyView(emptyListViewControl);
 
-        RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
+        RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
         setFeatured(featured);
         return view;

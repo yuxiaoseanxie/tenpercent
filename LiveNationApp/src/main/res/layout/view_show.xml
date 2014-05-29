@@ -32,13 +32,4 @@
         android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/list_show_location" />
 
-    <View
-        android:id="@+id/view_show_bottom_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/underscore_container_height"
-        android:layout_alignLeft="@id/view_show_title"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/view_show_date"
-        android:background="@drawable/ui_underscore_background" />
-
 </RelativeLayout>

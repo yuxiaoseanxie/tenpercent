@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -66,26 +65,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private LatLng mapLocationCache = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-
-        Fragment showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-        addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
-
-        mapFragment = new LiveNationMapFragment();
-        mapFragment.setMapReadyListener(this);
-
-        addFragment(R.id.fragment_venue_map_container, mapFragment, "map");
-
-        shows = (EventsView) showsFragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.fragment_venue, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View result = inflater.inflate(R.layout.fragment_venue, container, false);
         venueTitle = (TextView) result.findViewById(R.id.fragment_venue_title);
 
         location = (TextView) result.findViewById(R.id.venue_detail_location);
@@ -95,6 +76,26 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         phonebox = result.findViewById(R.id.venue_detail_phone_box);
 
         return result;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Fragment showsFragment;
+        if (savedInstanceState == null) {
+            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
+            addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
+        } else {
+            showsFragment = getChildFragmentManager().findFragmentByTag("shows");
+        }
+
+        mapFragment = new LiveNationMapFragment();
+        mapFragment.setMapReadyListener(this);
+
+        addFragment(R.id.fragment_venue_map_container, mapFragment, "map");
+
+        shows = (EventsView) showsFragment;
     }
 
     @Override

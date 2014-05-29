@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
@@ -43,6 +44,9 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getListView().setDivider(getResources().getDrawable(R.drawable.ui_gutter_divider));
+        getListView().setDividerHeight((int) getResources().getDimension(R.dimen.divider_height));
 
         artistShowsScrollPager.connectListView(getListView());
     }
