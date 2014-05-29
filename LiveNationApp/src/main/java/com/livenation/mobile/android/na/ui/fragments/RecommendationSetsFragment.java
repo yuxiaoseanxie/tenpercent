@@ -30,12 +30,12 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -44,10 +44,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.ArrayList;
 
 import io.segment.android.models.Props;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder{
-    private StickyListHeadersListView listView;
+public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
+
     private RecommendationsAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
@@ -73,12 +72,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
-        listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
+        View view = super.onCreateView(inflater, container, savedInstanceState, R.layout.sub_empty_list);
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
-        //Important: connect the listview (which set a footer) before to set the adapter
-        scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -109,21 +104,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-        outState.putParcelable(getViewKey(listView), listState);
-    }
-
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
-    }
-
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
@@ -150,5 +130,10 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     @Override
     public void onApiServiceNotAvailable() {
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+    }
+
+    @Override
+    BaseDecoratedScrollPager getScrollPager() {
+        return scrollPager;
     }
 }

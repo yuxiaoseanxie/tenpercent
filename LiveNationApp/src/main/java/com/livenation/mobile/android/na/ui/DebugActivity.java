@@ -1,13 +1,11 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +38,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends Activity implements AdapterView.OnItemClickListener, ApiServiceBinder {
+public class DebugActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener, ApiServiceBinder {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
     private StickyListHeadersListView listView;
@@ -69,7 +67,6 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
         listView.setOnItemClickListener(this);
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -82,9 +79,6 @@ public class DebugActivity extends Activity implements AdapterView.OnItemClickLi
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == R.id.debug_activity_menu_item_share) {
             onShareSelected();
-            return true;
-        } else if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
 

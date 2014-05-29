@@ -59,11 +59,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             public void onSessionFailed() {
                 callback.onOpenSessionFailed(new Exception(), allowForeground);
             }
-
-            @Override
-            void onNoNetwork() {
-                callback.onNoNetwork();
-            }
         };
 
         currentSession = new SessionState(getActivity(), allowForeground, payload);
@@ -143,11 +138,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onSessionFailed() {
-            getListener().onPayloadComplete(this);
-        }
-
-        @Override
-        void onNoNetwork() {
             getListener().onPayloadComplete(this);
         }
 
@@ -233,7 +223,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
-        private final int RC_SIGN_IN = 600613;
+        private final int RC_SIGN_IN = 6613;
         private final int RESOLVE_COUNT_MAX = 2;
         private GoogleApiClient googleApiClient;
         private int resolveCount;
@@ -266,7 +256,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            if (!allowForeground || !result.hasResolution()) {
+            if (!allowForeground) {
                 sessionPayload.onSessionFailed();
                 return;
             }
@@ -287,7 +277,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    sessionPayload.onSessionFailed();
+                                    sessionPayload.onSessionCanceled();
                                 }
                             }
                     );

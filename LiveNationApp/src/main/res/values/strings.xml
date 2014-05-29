@@ -73,6 +73,7 @@
     <string name="login_facebook_button">Facebook</string>
     <string name="login_google_plus_button">Google</string>
     <string name="login_button_or">or</string>
+    <string name="login_connection_problem">Can\'t establish a reliable connection to the server</string>
 
     <string name="recommendations_favorite_upsell_facebook_button">Connect to Facebook</string>
     <string name="recommendations_favorite_upsell_search_button">Find Your Favorites</string>
@@ -82,7 +83,7 @@
     <string name="recommendations_favorite_upsell_large_text2">Or, let us know who you want to see live</string>
 
     <string name="debug_menu_title">Debug</string>
-    <string name="debug_actionbar_title">DEBUG</string>
+    <string name="debug_actionbar_title">Debug</string>
     <string name="debug_header_info">INFO</string>
     <string name="debug_header_actions">ACTIONS</string>
     <string name="debug_copied_toast">Copied</string>
