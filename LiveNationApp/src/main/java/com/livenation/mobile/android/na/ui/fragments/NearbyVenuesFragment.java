@@ -10,7 +10,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +24,13 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -41,9 +41,8 @@ import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragment implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder {
+public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener {
 
-    private StickyListHeadersListView listView;
     private EmptyListViewControl emptyListViewControl;
     private EventVenueAdapter adapter;
     private NearbyVenuesScrollPager pager;
@@ -62,17 +61,13 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_nearby_venues, container, false);
-        listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_nearby_venues_list);
+        View view = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_nearby_venues);
 
-        //Important: connect the listview (which set a footer) before to set the adapter
-        pager.connectListView(listView);
         listView.setAdapter(adapter);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         listView.setEmptyView(emptyListViewControl);
-
         pager.setEmptyView(emptyListViewControl);
 
         listView.setDivider(null);
@@ -91,20 +86,6 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
         super.onDestroyView();
         pager.stop();
         LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-        outState.putParcelable(getViewKey(listView), listState);
-    }
-
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
     }
 
     @Override
@@ -153,5 +134,17 @@ public class NearbyVenuesFragment extends LiveNationFragment implements ListView
     @Override
     public void onApiServiceNotAvailable() {
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+    }
+
+    @Override
+    BaseDecoratedScrollPager getScrollPager() {
+        return pager;
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setSoundEffectsEnabled(true);
+        pager.reset();
+        pager.load();
     }
 }

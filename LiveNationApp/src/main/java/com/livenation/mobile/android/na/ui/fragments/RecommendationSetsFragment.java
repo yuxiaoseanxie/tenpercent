@@ -14,16 +14,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
@@ -34,12 +30,12 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -48,14 +44,12 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.ArrayList;
 
 import io.segment.android.models.Props;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class RecommendationSetsFragment extends LiveNationFragment implements OnItemClickListener , ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener{
-    private StickyListHeadersListView listView;
+public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
+
     private RecommendationsAdapter adapter;
     private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -78,12 +72,8 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.sub_empty_list, container, false);
-        listView = (StickyListHeadersListView) view.findViewById(id.fragment_all_shows_list);
+        View view = super.onCreateView(inflater, container, savedInstanceState, R.layout.sub_empty_list);
         listView.setOnItemClickListener(RecommendationSetsFragment.this);
-        //Important: connect the listview (which set a footer) before to set the adapter
-        scrollPager.connectListView(listView);
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -96,30 +86,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(id.fragment_all_shows_swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorScheme(com.livenation.mobile.android.ticketing.R.color.refresh_color_1, com.livenation.mobile.android.ticketing.R.color.refresh_color_2, com.livenation.mobile.android.ticketing.R.color.refresh_color_3, com.livenation.mobile.android.ticketing.R.color.refresh_color_4);
-
-        scrollPager.connectSwipeRefreshLayout(swipeRefreshLayout);
-
-        //Scroll until the top of the list. Refresh only when the first item of the listview is visible.
-        listView.setOnScrollListener( new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (listView.getChildCount() > 0) {
-                    ViewGroup viewGroup = (ViewGroup) listView.getChildAt(0);
-                    if (viewGroup.getChildCount() > 0) {
-                        int top = viewGroup.getChildAt(0).getTop();
-                        swipeRefreshLayout.setEnabled(top == 0);
-                    }
-                }
-            }
-        });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
         return view;
     }
@@ -136,21 +102,6 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
         scrollPager.stop();
         LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-        outState.putParcelable(getViewKey(listView), listState);
-    }
-
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -182,9 +133,7 @@ public class RecommendationSetsFragment extends LiveNationFragment implements On
     }
 
     @Override
-    public void onRefresh() {
-        swipeRefreshLayout.setSoundEffectsEnabled(true);
-        scrollPager.reset();
-        scrollPager.load();
+    BaseDecoratedScrollPager getScrollPager() {
+        return scrollPager;
     }
 }
