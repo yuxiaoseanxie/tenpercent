@@ -19,7 +19,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
     private UiApiSsoProvider ssoProvider;
     public static final int RESULT_OK = Activity.RESULT_OK;
     public static final int RESULT_CANCELED = Activity.RESULT_CANCELED;
-    public static final int RESULT_KO = 111;
+    public static final int RESULT_ERROR = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
 
     @Override
     public void onOpenSessionFailed(Exception exception, boolean allowForeground) {
-        setResult(RESULT_KO);
+        setResult(RESULT_ERROR);
         finish();
     }
 
