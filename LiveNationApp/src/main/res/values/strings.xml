@@ -208,8 +208,8 @@
     <string name="contact_email_signature_message_platform">\nAndroid Platform:</string>
 
     <!-- Help -->
-    <string name="help_url_json">https://s3.amazonaws.com/ios-static-content/en_US/help/manifest.json</string>
-    <string name="help_base_url_section">https://s3.amazonaws.com/ios-static-content/en_US/help/topics/</string>
+    <string name="help_url_json">https://s3.amazonaws.com/adr-static-content/en_US/help/manifest.json</string>
+    <string name="help_base_url_section">https://s3.amazonaws.com/adr-static-content/en_US/help/topics/</string>
 
     <!-- Calendar dialog -->
     <string name="calendar_dialog_title">Dates</string>
