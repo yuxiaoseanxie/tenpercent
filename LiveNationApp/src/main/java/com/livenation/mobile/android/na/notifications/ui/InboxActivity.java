@@ -232,7 +232,15 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         }
 
         MenuItem calendarItem = mode.getMenu().findItem(R.id.calendar);
-        calendarItem.setVisible(inbox.getSelectedMessages().size() == 1);
+        if (inbox.getSelectedMessages().size() == 1) {
+            String messageId = inbox.getSelectedMessages().get(0);
+            RichPushMessage message = richPushInbox.getMessage(messageId);
+            final int type = getMessageType(message);
+            calendarItem.setVisible((type == Constants.Notifications.TYPE_EVENT_ON_SALE_NOW
+                || type == Constants.Notifications.TYPE_EVENT_LAST_MINUTE
+                    || type == Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE
+                    || type == Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT));
+        }
 
         return true;
     }
