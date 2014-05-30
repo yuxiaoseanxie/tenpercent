@@ -10,7 +10,6 @@ import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

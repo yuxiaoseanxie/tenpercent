@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
-import com.livenation.mobile.android.platform.util.Logger;
+
 import com.urbanairship.richpush.RichPushMessage;
 
 import org.joda.time.format.DateTimeFormatter;

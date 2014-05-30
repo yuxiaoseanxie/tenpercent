@@ -9,8 +9,6 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 
-import com.livenation.mobile.android.platform.util.Logger;
-
 /**
  * Dummy location provider to give a dummy location as a last resort.
  * <p/>
