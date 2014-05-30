@@ -10,7 +10,6 @@ import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +34,11 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
                 notifyObserver(observer, favorite, false);
             }
         }
-        Logger.log("Observer", "Added obs: " + view.hashCode());
-    }
+     }
 
     @Override
     public void cancel(FavoriteObserverView view) {
         super.cancel(view);
-        Logger.log("Observer", "Removed obs: " + view.hashCode());
     }
 
     @Override
@@ -93,7 +90,6 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        Logger.log("FavoriteObserver", "Attached to API, clearing cache");
         clear();
         List<Favorite> favorites = apiService.getApiConfig().getAppInitResponse().getData().getFavorites();
         postAll(favorites);

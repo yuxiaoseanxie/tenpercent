@@ -47,7 +47,6 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
@@ -233,14 +232,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-    public void onSaveAuthTokenSuccess() {
-        Logger.log("AuthToken", "Updated it");
-    }
+    public void onSaveAuthTokenSuccess() {}
 
     @Override
-    public void onSignOut() {
-        Logger.log("Account", "Signed out");
-    }
+    public void onSignOut() {}
 
     @Override
     public void onSaveAuthTokenFailure() {

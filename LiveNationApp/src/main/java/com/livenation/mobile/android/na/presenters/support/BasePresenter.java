@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.presenters.support;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +20,10 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
     private List<T> activeStates = new ArrayList<T>();
 
     private void addActiveState(T state) {
-        Logger.log(getTag(), "Adding active state:" + state.hashCode());
         activeStates.add(state);
     }
 
     private void removeActiveState(T state) {
-        Logger.log(getTag(), "Removing active state:" + state.hashCode());
         if (activeStates.contains(state)) {
             activeStates.remove(state);
         } else {

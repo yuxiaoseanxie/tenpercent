@@ -14,7 +14,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.config
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +75,6 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     @Override
     public void onApiAlreadyBuilding() {
         //do nothing
-        Logger.log("ApiHelper", "Already building");
     }
 
     @Override

@@ -31,7 +31,6 @@ import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
-import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ApiServiceBinder {
@@ -78,7 +77,6 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        Logger.log("Accounts", "API binded");
         refreshUser(LoginHelper.isLogout());
         getLocationManager().reverseGeocodeCity(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng(), getActivity(), this);
     }
