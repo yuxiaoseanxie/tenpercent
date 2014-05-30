@@ -45,14 +45,13 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     private EmptyListViewControl emptyListViewControl;
     private EventVenueAdapter adapter;
-    private NearbyVenuesScrollPager pager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         adapter = new EventVenueAdapter(getActivity());
-        pager = new NearbyVenuesScrollPager(adapter);
+        scrollPager = new NearbyVenuesScrollPager(adapter);
         LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
     }
@@ -68,7 +67,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         listView.setEmptyView(emptyListViewControl);
-        pager.setEmptyView(emptyListViewControl);
+        scrollPager.setEmptyView(emptyListViewControl);
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
@@ -77,14 +76,14 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         listView.setOnHeaderClickListener(this);
 
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_nearby_venues_refresh_bar);
-        pager.setRefreshBarView(refreshBar);
+        scrollPager.setRefreshBarView(refreshBar);
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroyView();
-        pager.stop();
+        scrollPager.stop();
         LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
@@ -127,8 +126,8 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        pager.reset();
-        pager.load();
+        scrollPager.reset();
+        scrollPager.load();
     }
 
     @Override
@@ -138,13 +137,13 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     BaseDecoratedScrollPager getScrollPager() {
-        return pager;
+        return scrollPager;
     }
 
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setSoundEffectsEnabled(true);
-        pager.reset();
-        pager.load();
+        scrollPager.reset();
+        scrollPager.load();
     }
 }
