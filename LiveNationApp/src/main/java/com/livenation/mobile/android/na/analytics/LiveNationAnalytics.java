@@ -22,7 +22,7 @@ public class LiveNationAnalytics {
         }
 
         if (category == null) {
-            category = AnalyticsCategory.UNKNOWN.toString();
+            category = AnalyticsCategory.UNKNOWN.categoryName;
         }
         props.put(AnalyticConstants.CATEGORY, category);
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
