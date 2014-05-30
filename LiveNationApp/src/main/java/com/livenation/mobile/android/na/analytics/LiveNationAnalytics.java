@@ -9,16 +9,22 @@ import io.segment.android.models.Props;
 public class LiveNationAnalytics {
 
 
-
     static public void track(String eventTitle, AnalyticsCategory category, Props props) {
+        if (category == null) {
+            category = AnalyticsCategory.UNKNOWN;
+        }
+        track(eventTitle, category.categoryName, props);
+    }
+
+    static public void track(String eventTitle, String category, Props props) {
         if (props == null) {
             props = new Props();
         }
 
         if (category == null) {
-            category = AnalyticsCategory.UNKNOWN;
+            category = AnalyticsCategory.UNKNOWN.categoryName;
         }
-        props.put(AnalyticConstants.CATEGORY, category.categoryName);
+        props.put(AnalyticConstants.CATEGORY, category);
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
     }
