@@ -6,6 +6,7 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 import java.io.IOException;
@@ -104,7 +105,7 @@ public class LocationManager implements LocationProvider {
     public static interface GetCityCallback {
         void onGetCity(City city);
 
-        void onGetCityFailure();
+        void onGetCityFailure(double lat, double lng);
     }
 
     private class ReverseGeocode extends AsyncTask<Void, Void, String> {
@@ -135,7 +136,7 @@ public class LocationManager implements LocationProvider {
                             if (locality == null) {
                                 locality = matches.get(0).getCountryName();
                                 if (locality == null) {
-                                    locality = String.valueOf(lat)  + "," + String.valueOf(lng);
+                                    locality = context.getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng);
                                 }
                             }
                         }
@@ -154,7 +155,7 @@ public class LocationManager implements LocationProvider {
                 City city = new City(value, lat, lng);
                 callback.onGetCity(city);
             } else {
-                callback.onGetCityFailure();
+                callback.onGetCityFailure(lat, lng);
             }
         }
     }

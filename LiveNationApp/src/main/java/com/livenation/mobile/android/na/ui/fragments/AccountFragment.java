@@ -109,8 +109,8 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     @Override
-    public void onGetCityFailure() {
-        locationText.setText("Geocode failed!");
+    public void onGetCityFailure(double lat, double lng) {
+        locationText.setText(getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng));
     }
 
     private class OnOrdersClick implements View.OnClickListener {

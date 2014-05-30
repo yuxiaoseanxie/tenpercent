@@ -41,7 +41,7 @@ class LocationConfig extends ApiBuilderElement<Double[]> implements LocationProv
             }
 
             @Override
-            public void onGetCityFailure() {
+            public void onGetCityFailure(double lat, double lng) {
                 String label = context.getString(R.string.location_unknown);
                 City city = new City(label, lat, lng);
                 LiveNationApplication.get().getLocationManager().addLocationHistory(city, context);
