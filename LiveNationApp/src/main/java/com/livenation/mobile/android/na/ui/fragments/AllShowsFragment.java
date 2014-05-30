@@ -46,7 +46,6 @@ import io.segment.android.models.Props;
 
 public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, FeatureView {
     private EventStickyHeaderAdapter adapter;
-    private AllShowsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
     private ViewGroup chartingContainer;
     private List<Chart> featured;

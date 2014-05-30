@@ -10,6 +10,7 @@ import android.widget.AbsListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.pagination.BaseScrollPager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -20,6 +21,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public abstract class LiveNationFragmentTab extends LiveNationFragment implements SwipeRefreshLayout.OnRefreshListener {
     protected StickyListHeadersListView listView;
     protected SwipeRefreshLayout swipeRefreshLayout;
+    protected BaseDecoratedScrollPager scrollPager;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, int res) {
         View view = inflater.inflate(res, container, false);
@@ -36,11 +38,12 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         listView.setOnScrollListener( new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                scrollPager.onScrollStateChanged(view, scrollState);
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                scrollPager.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 if (listView.getChildCount() > 0) {
                     ViewGroup viewGroup = (ViewGroup) listView.getChildAt(0);
                     if (viewGroup.getChildCount() > 0) {

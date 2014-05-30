@@ -48,10 +48,6 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
         adapter.clear();
         lastFetch = null;
         isFirstPage = true;
-        if (paginatedFetcher != null) {
-            paginatedFetcher.cancel();
-            paginatedFetcher = null;
-        }
         setHasMorePages(true);
     }
 

@@ -48,7 +48,6 @@ import io.segment.android.models.Props;
 public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
 
     private RecommendationsAdapter adapter;
-    private RecommendationSetsScrollPager scrollPager;
     private EmptyListViewControl emptyListViewControl;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
