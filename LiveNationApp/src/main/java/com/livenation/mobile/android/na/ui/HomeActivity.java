@@ -233,14 +233,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-    public void onSaveAuthTokenSuccess() {
-        Logger.log("AuthToken", "Updated it");
-    }
+    public void onSaveAuthTokenSuccess() {}
 
     @Override
-    public void onSignOut() {
-        Logger.log("Account", "Signed out");
-    }
+    public void onSignOut() {}
 
     @Override
     public void onSaveAuthTokenFailure() {

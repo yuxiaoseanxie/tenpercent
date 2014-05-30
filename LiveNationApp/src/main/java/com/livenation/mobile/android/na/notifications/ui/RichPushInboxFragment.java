@@ -71,8 +71,6 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
             date = formatter.parse(dateTimeString);
         } catch (ParseException e) {
             date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
-
-            Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);
         }
 
         return date;
@@ -84,8 +82,6 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
             date = formatter.parseDateTime(dateTimeString).toDate();
         } catch (NullPointerException e) {
             date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
-
-            Logger.log("Notification Date Parse Errors", "Malformed date passed through. Using default.", e);
         }
 
         return date;

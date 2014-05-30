@@ -76,7 +76,6 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     @Override
     public void onApiAlreadyBuilding() {
         //do nothing
-        Logger.log("ApiHelper", "Already building");
     }
 
     @Override

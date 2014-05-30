@@ -35,13 +35,11 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
                 notifyObserver(observer, favorite, false);
             }
         }
-        Logger.log("Observer", "Added obs: " + view.hashCode());
-    }
+     }
 
     @Override
     public void cancel(FavoriteObserverView view) {
         super.cancel(view);
-        Logger.log("Observer", "Removed obs: " + view.hashCode());
     }
 
     @Override
@@ -93,7 +91,6 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
 
     @Override
     public void onApiServiceAttached(LiveNationApiService apiService) {
-        Logger.log("FavoriteObserver", "Attached to API, clearing cache");
         clear();
         List<Favorite> favorites = apiService.getApiConfig().getAppInitResponse().getData().getFavorites();
         postAll(favorites);

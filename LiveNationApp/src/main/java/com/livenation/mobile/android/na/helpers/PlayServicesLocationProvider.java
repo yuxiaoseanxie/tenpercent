@@ -76,7 +76,6 @@ public class PlayServicesLocationProvider implements
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            Logger.log("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
             callback.onLocationFailure(0);
         }
 
@@ -91,7 +90,6 @@ public class PlayServicesLocationProvider implements
             } else {
                 handler = new Handler();
                 if (retryCount < RETRY_LIMIT) {
-                    Logger.log("Location", "Location was null, retrying.. (" + retryCount + ")");
                     handler.postDelayed(this, 1000);
                     retryCount++;
                 } else {

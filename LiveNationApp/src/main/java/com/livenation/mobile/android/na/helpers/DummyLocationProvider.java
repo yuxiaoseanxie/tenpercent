@@ -24,7 +24,6 @@ public class DummyLocationProvider implements LocationProvider {
 
     @Override
     public void getLocation(Context context, LocationCallback callback) {
-        Logger.log(TAG, "Dummy location provider was invoked");
         callback.onLocation(LOCATION_SF[0], LOCATION_SF[1]);
     }
 
