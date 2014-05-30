@@ -8,6 +8,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Ev
         params.setPage(offset, limit);
         params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
         params.setSortMethod("start_time");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        end.add(Calendar.MONTH, 12);
+        params.setTimeRange(start.getTimeInMillis(), end.getTimeInMillis());
         apiService.getEvents(params, callback);
     }
 }
