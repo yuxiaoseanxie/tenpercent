@@ -36,5 +36,4 @@
         android:layout_width="@dimen/recommendations_button_width"
         android:layout_height="@dimen/recommendations_button_height" />
 
-    <ImageView style="@style/SwooshDivider.with_top_margin" />
 </LinearLayout>
