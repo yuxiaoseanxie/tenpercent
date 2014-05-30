@@ -9,6 +9,7 @@
 package com.livenation.mobile.android.na.app;
 
 import android.app.Application;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -133,6 +134,15 @@ public class LiveNationApplication extends Application {
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Object imageLoader = getImageLoader();
+        if (imageLoader instanceof LruCache) {
+            LruCache cache = (LruCache) imageLoader;
+            cache.evictAll();
+        }
+    }
 
     private void setupNotifications() {
         Logger.logLevel = Log.VERBOSE;
