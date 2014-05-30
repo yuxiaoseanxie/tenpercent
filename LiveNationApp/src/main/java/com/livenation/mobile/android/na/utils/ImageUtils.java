@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.ThumbnailUtils;
 
 /**
  * Created by elodieferrais on 5/9/14.
@@ -47,7 +48,8 @@ public class ImageUtils {
 
     public static Bitmap getCircleBitmap(Bitmap bitmap, int strokePixel) {
         int minEdge = Math.min(bitmap.getWidth(), bitmap.getHeight());
+        Bitmap input = ThumbnailUtils.extractThumbnail(bitmap, minEdge, minEdge);
 
-        return getRoundedCornerBitmap(bitmap, minEdge, strokePixel);
+        return getRoundedCornerBitmap(input, minEdge, strokePixel);
     }
 }
