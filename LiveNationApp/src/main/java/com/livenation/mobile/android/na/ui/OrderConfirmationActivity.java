@@ -195,15 +195,29 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         String preciseTotal = getCart().getTotal().getGrandTotal().toString();
 
         Properties props = Analytics.createBaseTrackingProperties(event);
-        props.put(AnalyticConstants.PROP_PAYMENT_METHOD, getCart().getPaymentCard().getType());
+
         props.put(AnalyticConstants.PROP_TICKET_TYPE, getCart().getOrderType());
         props.put(AnalyticConstants.PROP_PRICE, preciseTotal);
         props.put(AnalyticConstants.PROP_ORDER_TOTAL, orderTotal);
-        props.put(AnalyticConstants.PROP_SECTION, getCart().getOrderSummary().getSection());
-        props.put(AnalyticConstants.PROP_DELIVERY_OPTION, getCart().getDeliveryMethod().getName());
-        props.put(AnalyticConstants.PROP_TM_EVENT_ID, getCart().getEvent().getEventID());
-        props.put(AnalyticConstants.PROP_NUM_TICKETS, getCart().getTickets().size());
-        props.put(AnalyticConstants.PROP_ZIP, getCart().getBuyer().getZip());
+
+        if (getCart().getPaymentCard() != null) {
+            props.put(AnalyticConstants.PROP_PAYMENT_METHOD, getCart().getPaymentCard().getType());
+        }
+        if (getCart().getOrderSummary() != null) {
+            props.put(AnalyticConstants.PROP_SECTION, getCart().getOrderSummary().getSection());
+        }
+        if (getCart().getDeliveryMethod() != null) {
+            props.put(AnalyticConstants.PROP_DELIVERY_OPTION, getCart().getDeliveryMethod().getName());
+        }
+        if (getCart().getEvent() != null) {
+            props.put(AnalyticConstants.PROP_TM_EVENT_ID, getCart().getEvent().getEventID());
+        }
+        if (getCart().getTickets() != null) {
+            props.put(AnalyticConstants.PROP_NUM_TICKETS, getCart().getTickets().size());
+        }
+        if (getCart().getBuyer() != null) {
+            props.put(AnalyticConstants.PROP_ZIP, getCart().getBuyer().getZip());
+        }
         return props;
     }
 
