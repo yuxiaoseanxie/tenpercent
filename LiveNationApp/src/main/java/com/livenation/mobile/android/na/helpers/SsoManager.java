@@ -2,9 +2,12 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -118,6 +121,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         persistance.write(USER_NAME, user.getDisplayName(), context);
         persistance.write(USER_EMAIL, user.getEmail(), context);
         persistance.write(USER_PIC_URL, user.getUrl(), context);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGIN));
     }
 
     public User readUser(Context context) {
@@ -143,6 +147,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         persistance.remove(USER_NAME, context);
         persistance.remove(USER_EMAIL, context);
         persistance.remove(USER_PIC_URL, context);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
     }
 
     /**

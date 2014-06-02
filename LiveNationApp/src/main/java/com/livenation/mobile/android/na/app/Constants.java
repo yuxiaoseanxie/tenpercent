@@ -92,5 +92,6 @@ public class Constants {
     public class BroadCastReceiver {
         public static final String LOGOUT = "logout";
         public static final String MUSIC_LIBRARY_UPDATE = "music_library_update";
+        public static final String LOGIN = "music_library_update";
     }
 }
