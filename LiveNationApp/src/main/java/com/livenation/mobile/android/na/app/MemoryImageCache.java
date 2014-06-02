@@ -32,6 +32,11 @@ public class MemoryImageCache extends LruCache<String, Bitmap> implements ImageC
     }
 
     @Override
+    protected int sizeOf(String key, Bitmap value) {
+        return value.getByteCount();
+    }
+
+    @Override
     public Bitmap getBitmap(String url) {
         return get(url);
     }
