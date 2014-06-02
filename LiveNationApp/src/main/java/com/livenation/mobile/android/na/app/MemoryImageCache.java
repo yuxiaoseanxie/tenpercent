@@ -27,13 +27,16 @@ public class MemoryImageCache extends LruCache<String, Bitmap> implements ImageC
     }
 
     public static int getDefaultLruSize() {
-        //TODO:Calculate based on device RAM
-        return 6 * 1024 * 1024; //6 MiB
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/20th (5%) of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 20;
+        return cacheSize;
     }
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getByteCount();
+        return value.getByteCount() / 1024;
     }
 
     @Override
