@@ -28,7 +28,7 @@ public class MemoryImageCache extends LruCache<String, Bitmap> implements ImageC
 
     public static int getDefaultLruSize() {
         //TODO:Calculate based on device RAM
-        return 4 * 1024 * 1024; //4 MiB
+        return 6 * 1024 * 1024; //6 MiB
     }
 
     @Override
