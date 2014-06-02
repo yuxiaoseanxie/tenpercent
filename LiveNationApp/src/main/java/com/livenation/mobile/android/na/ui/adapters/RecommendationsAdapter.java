@@ -104,7 +104,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
         holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
-        if (position + 1 < getCount() && getHeaderId(position + 1) == RecommendationItem.RecommendationType.EVENT_POPULAR.ordinal()) {
+        if ((position + 1) < getCount() && getHeaderId(position) != getHeaderId(position + 1)) {
             holder.getDivider().setVisibility(View.GONE);
         } else {
             holder.getDivider().setVisibility(View.VISIBLE);
