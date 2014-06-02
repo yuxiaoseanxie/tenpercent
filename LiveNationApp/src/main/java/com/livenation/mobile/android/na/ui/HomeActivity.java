@@ -9,8 +9,10 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,6 +65,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private FragmentAdapter adapter;
     private SlidingTabLayout slidingTabLayout;
     private boolean hasUnreadNotifications;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,15 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                invalidateOptionsMenu();
+            }
+        };
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
+
         //Hockey App
         checkForUpdates();
     }
@@ -101,6 +113,14 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onResume() {
         super.onResume();
         checkForCrashes();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+
     }
 
     @Override
@@ -133,6 +153,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         MenuItem debug = menu.findItem(R.id.menu_home_debug_item);
         debug.setVisible(BuildConfig.DEBUG);
+
+        MenuItem logout = menu.findItem(R.id.menu_home_logout_item);
+        logout.setVisible(LoginHelper.isLogin());
 
         return true;
     }
@@ -178,11 +201,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_logout_item:
-                if (LoginHelper.isLogin()) {
                     LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
                     LoginHelper.logout(this);
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGOUT));
-                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
