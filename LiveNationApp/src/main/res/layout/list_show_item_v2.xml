@@ -39,6 +39,7 @@
         android:textAppearance="@style/list_show_location" />
 
     <View
+        android:id="@+id/list_item_show_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/underscore_container_height"
         android:layout_alignLeft="@id/list_item_show_image"

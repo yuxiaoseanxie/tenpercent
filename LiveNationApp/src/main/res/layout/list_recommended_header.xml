@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <ImageView
+        android:id="@+id/list_recommended_header_swoocher"
+        style="@style/SwooshDivider.with_top_margin" />
     <TextView
         android:id="@+id/list_recommended_header_textview"
         style="@style/ui_header_transparent"

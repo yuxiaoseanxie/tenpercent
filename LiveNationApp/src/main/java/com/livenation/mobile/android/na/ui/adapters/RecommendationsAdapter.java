@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -103,6 +104,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
         holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
+        if ((position + 1) < getCount() && getHeaderId(position) != getHeaderId(position + 1)) {
+            holder.getDivider().setVisibility(View.GONE);
+        } else {
+            holder.getDivider().setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
@@ -122,12 +129,15 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
 
         TextView text = holder.getText();
+        ImageView swoocher = holder.getSwoocher();
         switch (getItem(position).getTag()) {
             case EVENT_POPULAR:
                 text.setText(getContext().getString(R.string.recommendations_title_popular));
+                swoocher.setVisibility(View.VISIBLE);
                 break;
             default:
                 text.setText(getContext().getString(R.string.recommendations_title_personal));
+                swoocher.setVisibility(View.GONE);
         }
 
         return view;
@@ -223,12 +233,14 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         private final TextView location;
         private final VerticalDate date;
         private final NetworkImageView image;
+        private final View divider;
 
         public EventViewHolder(View view) {
             this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
             this.image = (NetworkImageView) view.findViewById(R.id.list_item_show_image);
+            this.divider = view.findViewById(R.id.list_item_show_divider);
         }
 
         public TextView getTitle() {
@@ -246,17 +258,26 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         public NetworkImageView getImage() {
             return image;
         }
+
+        public View getDivider() {
+            return divider;
+        }
     }
 
     private class ViewHeaderHolder {
         private final TextView text;
+        private final ImageView swoocher;
 
         public ViewHeaderHolder(View view) {
             this.text = (TextView) view.findViewById(R.id.list_recommended_header_textview);
+            this.swoocher = (ImageView) view.findViewById(R.id.list_recommended_header_swoocher);
         }
 
         public TextView getText() {
             return text;
+        }
+        public ImageView getSwoocher() {
+            return swoocher;
         }
     }
 
