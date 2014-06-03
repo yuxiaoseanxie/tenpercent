@@ -12,7 +12,9 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
@@ -32,9 +34,16 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
         Analytics.onCreate(this);
         if (!LiveNationApplication.get().isMusicSync()) {
-            LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-            musicSyncHelper.syncMusic(this);
+            musicSyncHelper.syncMusic(this, new ApiService.BasicApiCallback<Void>() {
+                @Override
+                public void onResponse(Void response) {
+                    LiveNationApplication.get().setIsMusicSync(true);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {}
+            });
         }
     }
 

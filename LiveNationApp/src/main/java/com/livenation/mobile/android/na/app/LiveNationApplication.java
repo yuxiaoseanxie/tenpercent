@@ -9,6 +9,13 @@
 package com.livenation.mobile.android.na.app;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -28,6 +35,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
+import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
@@ -46,6 +54,8 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.AirshipConfigOptions;
@@ -76,6 +86,7 @@ public class LiveNationApplication extends Application {
     private InboxStatusPresenter inboxStatusPresenter;
     private RecommendationsPresenter recommendationsPresenter;
     private RecommendationSetsPresenter recommendationSetsPresenter;
+    private BroadcastReceiver internetStateReceiver;
 
     private ConfigManager configManager;
     private boolean isMusicSync = false;
@@ -124,6 +135,7 @@ public class LiveNationApplication extends Application {
         setupNotifications();
         setupTicketing();
         checkInstalledAppForAnalytics();
+        setupInternetStateReceiver();
 
         getConfigManager().buildApi();
 
@@ -172,6 +184,37 @@ public class LiveNationApplication extends Application {
         Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
 
+    private void setupInternetStateReceiver() {
+        internetStateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                ConnectivityManager cm = (ConnectivityManager) context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null) {
+                    setupNotifications();
+                    checkInstalledAppForAnalytics();
+                    MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
+                    musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
+                        @Override
+                        public void onResponse(Void response) {
+                            LiveNationApplication.get().setIsMusicSync(true);
+                            LocalBroadcastManager.getInstance(LiveNationApplication.this).unregisterReceiver(internetStateReceiver);
+                            internetStateReceiver = null;
+                        }
+
+                        @Override
+                        public void onErrorResponse(LiveNationError error) {}
+                    });
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(internetStateReceiver, intentFilter);
+    }
+
     private void checkInstalledAppForAnalytics() {
         Analytics.initialize(this);
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
@@ -182,6 +225,13 @@ public class LiveNationApplication extends Application {
         }
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        if (internetStateReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(internetStateReceiver);
+        }
+    }
 
     public LocationManager getLocationManager() {
         return locationManager;
