@@ -26,6 +26,7 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbar</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbar</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbar</item>
+        <item name="android:actionBarTabBarStyle">@style/ActionBarTabBarStyle.Actionbar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbar</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbar</item>
@@ -59,6 +60,14 @@
 
     <style name="ActionBarTabStyle.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
+        <item name="android:showDividers">none</item>
+        <item name="android:measureWithLargestChild">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ActionBarTabBarStyle.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.TabBar">
+        <item name="android:background">@drawable/tab_unselected_actionbar</item>
+        <item name="android:showDividers">middle</item>
     </style>
 
     <style name="ActionBar.Overflow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
