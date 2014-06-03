@@ -34,14 +34,12 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (null != favoritesPresenter) {
-            //release the observer binding, prevent memory leaks
-            favoritesPresenter.getObserverPresenter().cancel(this);
-        }
+        stop();
     }
 
     public void bindToFavorite(int favoriteTypeId, String favoriteName, long itemId, FavoritesPresenter favoritesPresenter, AnalyticsCategory category) {
         this.favoritesPresenter = favoritesPresenter;
+        stop();
         setChecked(false);
 
         Bundle args = favoritesPresenter.getObserverPresenter().getBundleArgs(favoriteTypeId, itemId);
@@ -68,5 +66,16 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
     @Override
     public void onFavoriteRemoved(Favorite favorite) {
         setChecked(false);
+    }
+
+    /**
+     * Cancel any bindings. this will prevent any in progress API requests from triggering
+     * 'onFavoriteAdded' or 'onFavoriteRemoved'
+     */
+    private void stop() {
+        if (null != favoritesPresenter) {
+            //release the observer binding, prevent memory leaks
+            favoritesPresenter.getObserverPresenter().cancel(FavoriteCheckBox.this);
+        }
     }
 }
