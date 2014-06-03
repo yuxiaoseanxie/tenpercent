@@ -119,7 +119,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private void displayDetails() {
         if (getCart() != null) {
             orderNumberText.setText(getCart().getDisplayOrderID());
-            if (getCart().getOrderSummary() != null) {
+            if (getCart().getOrderSummary() != null && !TextUtils.isEmpty(getCart().getOrderSummary().getSeats())) {
                 orderSeatText.setText(getCart().getOrderSummary().getSeats());
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
