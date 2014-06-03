@@ -121,7 +121,7 @@
     <dimen name="view_featured_image_width">152dp</dimen>
     <dimen name="view_featured_image_height">112dp</dimen>
     <dimen name="view_featured_item_spacer">8dp</dimen>
-    <dimen name="view_featured_text_margin_left">8dp</dimen>
+    <dimen name="view_featured_text_margin_left_right">8dp</dimen>
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="button_recommendations_upsell_margin_bottom">5dp</dimen>
     <dimen name="button_recommendations_upsell_margin_top">10dp</dimen>
