@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseScrollPager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -22,6 +23,7 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
     protected StickyListHeadersListView listView;
     protected SwipeRefreshLayout swipeRefreshLayout;
     protected BaseDecoratedScrollPager scrollPager;
+    protected EmptyListViewControl emptyListViewControl;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, int res) {
         View view = inflater.inflate(res, container, false);
@@ -30,6 +32,11 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_tab_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorScheme(com.livenation.mobile.android.ticketing.R.color.refresh_color_1, com.livenation.mobile.android.ticketing.R.color.refresh_color_2, com.livenation.mobile.android.ticketing.R.color.refresh_color_3, com.livenation.mobile.android.ticketing.R.color.refresh_color_4);
+
+        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        scrollPager.setEmptyView(emptyListViewControl);
+        listView.setEmptyView(emptyListViewControl);
 
         getScrollPager().connectSwipeRefreshLayout(swipeRefreshLayout);
         getScrollPager().connectListView(listView);
@@ -53,6 +60,7 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
                 }
             }
         });
+
 
 
         return view;

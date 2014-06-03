@@ -88,7 +88,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     @Override
     public void onFetchEnded(boolean cancelled) {
         footerBugHack.removeAllViews();
-        if (getAdapter().getCount() == 0) {
+        if (getAdapter().getCount() == 0 && emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
         if (swipeRefreshLayout != null) {
