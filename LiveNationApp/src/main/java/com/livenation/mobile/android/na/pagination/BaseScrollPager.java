@@ -52,7 +52,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void load() {
-        if (paginatedFetcher != null || !hasMorePages) {
+        if (paginatedFetcher != null) {
             return;
         }
 
