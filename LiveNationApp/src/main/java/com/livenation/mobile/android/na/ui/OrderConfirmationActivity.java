@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.livenation.mobile.android.ticketing.analytics.Analytics;
 import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+import com.mobilitus.tm.tickets.TicketLibrary;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -117,8 +119,17 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private void displayDetails() {
         if (getCart() != null) {
             orderNumberText.setText(getCart().getDisplayOrderID());
-            orderSeatText.setText(getCart().getOrderSummary().getSeats());
-            orderAccountText.setText(getCart().getBuyer().getEmail());
+            if (getCart().getOrderSummary() != null) {
+                orderSeatText.setText(getCart().getOrderSummary().getSeats());
+            } else {
+                orderSeatText.setText(R.string.data_missing_placeholder);
+            }
+            com.mobilitus.tm.tickets.models.User user = TicketLibrary.getInstance().getUser();
+            if (user != null && !TextUtils.isEmpty(user.getEmail())) {
+                orderAccountText.setText(user.getEmail());
+            } else {
+                orderAccountText.setText(R.string.data_missing_placeholder);
+            }
 
             Total total = getCart().getTotal();
             if (total != null) {
@@ -133,7 +144,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
 
         orderEventDateText.setText(TicketingUtils.formatDate(getEvent().getLocalStartTime()));
-        orderVenueText.setText(getEvent().getVenue().getName());
+        if (getEvent() != null && getEvent().getVenue() != null) {
+            orderVenueText.setText(getEvent().getVenue().getName());
+        } else {
+            orderVenueText.setText(R.string.data_missing_placeholder);
+        }
     }
 
     //endregion
