@@ -192,7 +192,7 @@ public class LiveNationApplication extends Application {
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                if (activeNetwork != null) {
+                if (activeNetwork != null && activeNetwork.isConnected()) {
                     setupNotifications();
                     checkInstalledAppForAnalytics();
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
@@ -200,7 +200,7 @@ public class LiveNationApplication extends Application {
                         @Override
                         public void onResponse(Void response) {
                             LiveNationApplication.get().setIsMusicSync(true);
-                            LocalBroadcastManager.getInstance(LiveNationApplication.this).unregisterReceiver(internetStateReceiver);
+                            unregisterReceiver(internetStateReceiver);
                             internetStateReceiver = null;
                         }
 
@@ -212,7 +212,7 @@ public class LiveNationApplication extends Application {
         };
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(internetStateReceiver, intentFilter);
+        registerReceiver(internetStateReceiver, intentFilter);
     }
 
     private void checkInstalledAppForAnalytics() {
@@ -229,7 +229,7 @@ public class LiveNationApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         if (internetStateReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(internetStateReceiver);
+            unregisterReceiver(internetStateReceiver);
         }
     }
 
