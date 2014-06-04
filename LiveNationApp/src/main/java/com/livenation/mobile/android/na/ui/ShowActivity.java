@@ -149,7 +149,7 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     protected Props getAnalyticsProps() {
         if (event != null) {
             Props props = new Props();
-            if (args.containsKey(SingleArtistPresenter.PARAMETER_ARTIST_ID)) {
+            if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
                 String eventIdRaw = args.getString(SingleEventPresenter.PARAMETER_EVENT_ID);
                 props.put(AnalyticConstants.EVENT_ID, eventIdRaw);
             }
