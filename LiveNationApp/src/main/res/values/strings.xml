@@ -170,10 +170,10 @@
     <string name="cab_selection">%d Selected</string>
     <string name="message_cta_default">Go</string>
 
-    <string name="notif_type_on_sale">ON SALE</string>
-    <string name="notif_type_announcement">JUST ANNOUNCED</string>
+    <string name="notif_type_on_sale">NOW ON SALE</string>
+    <string name="notif_type_announcement">GOES ON SALE</string>
     <string name="notif_type_last_minute">LAST MINUTE</string>
-    <string name="notif_type_presale">PRESALE</string>
+    <string name="notif_type_presale">PRESALE NOW</string>
     <string name="notif_type_in_venue">LIVE FEED</string>
     <string name="notif_type_featured">FEATURED</string>
 

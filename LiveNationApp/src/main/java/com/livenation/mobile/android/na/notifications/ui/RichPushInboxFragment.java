@@ -65,17 +65,6 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
         return (getMessageType(message) == Constants.Notifications.TYPE_IN_VENUE);
     }
 
-    private Date parseDateString(SimpleDateFormat formatter, String dateTimeString) {
-        Date date;
-        try {
-            date = formatter.parse(dateTimeString);
-        } catch (ParseException e) {
-            date = new Date(1041509106000L /* 01/02/2003 04:05:06 */);
-        }
-
-        return date;
-    }
-
     private Date parseDateString(DateTimeFormatter formatter, String dateTimeString) {
         Date date;
         try {
@@ -119,13 +108,7 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
             Date onSaleDate = parseDateString(INCOMING_FORMAT, extra.getString(Constants.Notifications.EXTRA_EVENT_INFO_ON_SALE_DATE));
 
             switch (type) {
-                case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT: {
-                    String onSaleString = (onSaleDate != null) ? SHORT_DATE_FORMAT.format(onSaleDate) : null;
-                    if (onSaleString == null)
-                        onSaleString = getString(R.string.notif_date_now);
-                    return String.format(getString(R.string.notif_event_info_format), localizedName, onSaleString);
-                }
-
+                case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
                 case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
                 case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE: {
                     String onSaleString = LONG_DATE_FORMAT.format(onSaleDate);
