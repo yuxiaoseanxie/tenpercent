@@ -56,7 +56,7 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 
     @Override
     public void onStateCancelled(T state) {
-        removeActiveState(state);
+        //do nothing
     }
 
     @Override
