@@ -13,6 +13,7 @@ import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
@@ -33,9 +34,12 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 
     @Override
     public void cancel(T2 view) {
-        for (T state : activeStates) {
+        Iterator<T> iterator = activeStates.iterator();
+        while (iterator.hasNext()) {
+            T state = iterator.next();
             if (state.getView().equals(view)) {
                 state.cancel();
+                iterator.remove();
             }
         }
     }
