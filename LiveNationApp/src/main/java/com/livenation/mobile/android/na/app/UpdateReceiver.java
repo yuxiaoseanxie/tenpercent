@@ -39,12 +39,12 @@ public class UpdateReceiver extends BroadcastReceiver {
                     sendGrantedAccesToMusicLibraryAnalytics(null, isMusicScanAllowed);
                 }
             });
-            LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
                 @Override
                 public void onResponse(Void response) {
                     sharedPreferences.edit().remove(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE);
+                    LiveNationApplication.get().setIsMusicSync(true);
                 }
 
                 @Override
