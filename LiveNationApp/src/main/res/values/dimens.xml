@@ -165,7 +165,8 @@
     <dimen name="on_boarding_title_margin">6dp</dimen>
     <dimen name="on_boarding_button_margin">16dp</dimen>
     <dimen name="on_boarding_logo_margin">10dp</dimen>
-    <dimen name="on_boarding_desciption_height">240dp</dimen>
+    <dimen name="on_boarding_description_height">240dp</dimen>
+    <dimen name="on_boarding_scan_message_padding">8dp</dimen>
 
 
     <!-- Urban Airship -->

@@ -234,6 +234,7 @@
     <string name="onboarding_login_google_plus_button">Sign in with Google</string>
     <string name="onboarding_permission">We won\'t post without your permission</string>
     <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_scanning_description">Scanning your music for recommendations</string>
 
 
 </resources>

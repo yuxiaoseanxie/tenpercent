@@ -34,7 +34,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/on_boarding_desciption_height"
+            android:layout_height="@dimen/on_boarding_description_height"
             android:id="@+id/on_boarding_login_container"
             >
 
