@@ -3,6 +3,8 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -18,18 +20,26 @@ import io.segment.android.models.Props;
  */
 public class OnBoardingActivity extends LiveNationFragmentActivity {
 
+    private Button facebookButton;
+    private Button googleButton;
+    private TextView skip;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
         //On boarding never show because is not develop yet. Keep it for analytics
         if (isOnBoardingAlreadyDisplayed()) {
-            goToTheApp();
+            //goToTheApp();
         } else {
             LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
             setOnBoardingAlreadyDisplayed();
-            goToTheApp();
+            //goToTheApp();
         }
+
+        facebookButton = (Button) findViewById(R.id.on_boarding_facebook_sign_in_button);
+        googleButton = (Button) findViewById(R.id.on_boarding_google_sign_in_button);
+        skip = (TextView) findViewById(R.id.on_boarding_skip_textview);
 
     }
 

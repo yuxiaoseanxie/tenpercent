@@ -159,6 +159,15 @@
     <dimen name="order_confirmation_header_text_margin_bottom">3dp</dimen>
 
 
+    <!-- On Boarding -->
+    <dimen name="on_boarding_item_negatif_margin">-35dp</dimen>
+    <dimen name="on_boarding_item_padding">8dp</dimen>
+    <dimen name="on_boarding_title_margin">6dp</dimen>
+    <dimen name="on_boarding_button_margin">16dp</dimen>
+    <dimen name="on_boarding_logo_margin">10dp</dimen>
+    <dimen name="on_boarding_desciption_height">240dp</dimen>
+
+
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
 
