@@ -43,7 +43,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener {
 
-    private EmptyListViewControl emptyListViewControl;
     private EventVenueAdapter adapter;
 
     @Override
@@ -63,11 +62,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         View view = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_nearby_venues);
 
         listView.setAdapter(adapter);
-
-        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
-        listView.setEmptyView(emptyListViewControl);
-        scrollPager.setEmptyView(emptyListViewControl);
 
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);

@@ -72,11 +72,6 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         listView.addHeaderView(result);
         listView.setAdapter(adapter);
 
-        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
-        scrollPager.setEmptyView(emptyListViewControl);
-        listView.setEmptyView(emptyListViewControl);
-
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
         setFeatured(featured);

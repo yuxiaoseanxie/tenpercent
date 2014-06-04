@@ -48,7 +48,6 @@ import io.segment.android.models.Props;
 public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
 
     private RecommendationsAdapter adapter;
-    private EmptyListViewControl emptyListViewControl;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -77,10 +76,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
 
-        emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
-        scrollPager.setEmptyView(emptyListViewControl);
-        listView.setEmptyView(emptyListViewControl);
+
 
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
