@@ -8,5 +8,4 @@
 
     <string name="urbanairship_permission">com.livenation.mobile.android.na.debug.permission.UA_DATA</string>
     <string name="urbanairship_authorities">com.livenation.mobile.android.na.debug.urbanairship.provider</string>
-    <string name="urbanairship_category">com.livenation.mobile.android.na.debug</string>
 </resources>
