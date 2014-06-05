@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -94,6 +95,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     //region Displaying Data
 
     private void displayImage() {
+        image.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
+
         List<Artist> lineup = event.getLineup();
         if (!lineup.isEmpty()) {
             Artist headliner = lineup.get(0);

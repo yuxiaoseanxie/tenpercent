@@ -13,13 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/detail_page_image_height">
 
-            <com.android.volley.toolbox.NetworkImageView
+            <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
                 android:id="@+id/activity_order_confirmation_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ff777777"
-                android:minHeight="@dimen/detail_page_image_height"
-                android:scaleType="centerCrop" />
+                android:minHeight="@dimen/detail_page_image_height" />
 
             <View
                 android:layout_width="match_parent"
