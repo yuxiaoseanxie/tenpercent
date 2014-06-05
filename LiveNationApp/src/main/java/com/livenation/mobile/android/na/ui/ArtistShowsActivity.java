@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.fragments.ArtistShowsListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 
@@ -30,6 +31,11 @@ public class ArtistShowsActivity extends LiveNationFragmentActivity {
 
         String artistName = getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_NAME);
         getActionBar().setTitle(artistName);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_ADP_TOUR;
     }
 
     //endregion

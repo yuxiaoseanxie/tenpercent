@@ -26,6 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
@@ -441,5 +442,10 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         } else {
             return Constants.Notifications.TYPE_FEATURED_CONTENT;
         }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_NOTIFICATIONS;
     }
 }

@@ -41,7 +41,7 @@ public class AnalyticConstants {
     //Home Screen
     public static final String ALL_SHOWS_VIEW = "All Shows View";
     public static final String NEARBY_VIEW = "Nearby View";
-    public static final String RECOMMENDATIONS_VIEW = "Recommendations View";
+    public static final String RECOMMENDED_VIEW = "Recommended View";
 
     //SDP
     public static final String FIND_TICKETS_TAP = "Find Tickets Tap";
@@ -99,6 +99,9 @@ public class AnalyticConstants {
     public static final String SCREEN_ADP = "ADP";
     public static final String SCREEN_SDP = "SDP";
     public static final String SCREEN_VDP = "VDP";
+    public static final String SCREEN_NOTIFICATIONS = "Notifications";
+    public static final String SCREEN_HOME_SCREEN = "Home Screen Load";
+    public static final String SCREEN_ADP_TOUR = "ADP Tour";
 
 
     /**
@@ -115,7 +118,7 @@ public class AnalyticConstants {
     public static final String CATEGORY_ONBOARDING_VALUE = "OnBoarding";
     public static final String CATEGORY_ACTION_BAR_VALUE = "Action Bar";
     public static final String CATEGORY_DRAWER_VALUE = "Drawer";
-    public static final String CATEGROY_RECOMMENDATIONS_VALUE = "Recommendations";
+    public static final String CATEGROY_RECOMMENDED_VALUE = "Recommended";
     public static final String CATEGROY_NEARBY_VALUE = "Nearby";
     public static final String CATEGROY_ALL_SHOWS_VALUE = "All Shows";
     public static final String CATEGORY_HOME_SCREEN_VALUE = "Home Screen";
@@ -191,5 +194,7 @@ public class AnalyticConstants {
     public static final String FROM = "From";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
+
+
 
 }
