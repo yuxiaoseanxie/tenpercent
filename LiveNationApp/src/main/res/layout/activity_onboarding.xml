@@ -9,11 +9,10 @@
     <ImageView
         android:id="@+id/on_boarding_lnlogo_imageview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/on_boarding_lnlogo_height"
         android:src="@drawable/onboarding_ln_logo"
         android:background="@color/white"
-        android:scaleType="centerInside"
-        android:layout_margin="@dimen/on_boarding_logo_margin"/>
+        android:scaleType="centerInside"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -55,8 +54,7 @@
                 android:orientation="vertical"
                 android:layout_below="@id/on_boarding_description_textview"
                 android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/on_boarding_item_padding">
+                android:gravity="center_horizontal">
 
                 <ImageView
                     android:id="@+id/on_boarding_recommendations_logo_imageview"
@@ -89,8 +87,7 @@
                 android:layout_below="@id/on_boarding_recommendations_container"
                 android:layout_alignParentLeft="true"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="@dimen/on_boarding_item_negatif_margin"
-                android:padding="@dimen/on_boarding_item_padding">
+                android:layout_marginTop="@dimen/on_boarding_item_negatif_margin">
 
                 <ImageView
                     android:id="@+id/on_boarding_presales_logo_imageview"
@@ -123,7 +120,6 @@
                 android:layout_below="@id/on_boarding_recommendations_container"
                 android:layout_alignParentRight="true"
                 android:gravity="center_horizontal"
-                android:padding="@dimen/on_boarding_item_padding"
                 android:layout_marginTop="@dimen/on_boarding_item_negatif_margin">
 
                 <ImageView
@@ -156,40 +152,34 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <Button
+            <include
                 android:id="@+id/on_boarding_google_sign_in_button"
                 style="@style/account_google_plus_login_button"
-                android:layout_width="wrap_content"
+                layout="@layout/sub_button_connect_to_google"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/account_header_sso_button_height"
-                android:drawableLeft="@drawable/login_google_plus_logo"
-                android:drawablePadding="8dp"
-                android:minWidth="@dimen/account_header_sso_button_width"
-                android:paddingLeft="@dimen/account_header_sso_button_padding"
-                android:paddingRight="@dimen/account_header_sso_button_padding"
-                android:text="@string/onboarding_login_google_plus_button"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/on_boarding_button_margin"
-                android:layout_marginBottom="@dimen/on_boarding_button_margin"/>
+                android:layout_marginBottom="@dimen/on_boarding_button_margin"
+                />
 
-            <Button
+            <include
                 android:id="@+id/on_boarding_facebook_sign_in_button"
                 style="@style/account_facebook_login_button"
-                android:layout_width="wrap_content"
+                layout="@layout/sub_button_connect_to_facebook"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/account_header_sso_button_height"
-                android:drawableLeft="@drawable/login_facebook_logo"
-                android:drawablePadding="8dp"
-                android:minWidth="@dimen/account_header_sso_button_width"
-                android:paddingLeft="@dimen/account_header_sso_button_padding"
-                android:paddingRight="@dimen/account_header_sso_button_padding"
-                android:text="@string/onboarding_login_facebook_button"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/on_boarding_google_sign_in_button"/>
+                android:layout_below="@id/on_boarding_google_sign_in_button"
+            />
+
             <TextView
                 android:id="@+id/on_boarding_permission_textview"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/on_boarding_warning_margin_top"
                 android:layout_height="wrap_content"
                 android:text="@string/onboarding_permission"
                 android:layout_centerHorizontal="true"
+                android:textAppearance="@style/on_boarding_warning_text"
                 android:layout_below="@id/on_boarding_facebook_sign_in_button"
                 android:layout_marginBottom="@dimen/on_boarding_button_margin"/>
 

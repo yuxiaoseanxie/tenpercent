@@ -223,14 +223,13 @@
     <string name="calendar_add_event_not_possible_message">Cannot add to calendar. This sale has ended.</string>
 
     <!-- On boarding -->
-    <string name="onboarding_connect_description">Connect your account for the best access to everything</string>
+    <string name="onboarding_connect_description">Get the best of everything!\nConnect your account.</string>
     <string name="onboarding_connect_recommendations_title">Recommendations</string>
     <string name="onboarding_connect_presales_title">Presales</string>
     <string name="onboarding_connect_early_tickets_title">Early Tickets</string>
-    <string name="onboarding_connect_recommendations_description">Artist and shows that\nmatter to you</string>
-    <string name="onboarding_connect_presales_description">Buy tickets before\nthey go on sale</string>
-    <string name="onboarding_connect_early_tickets_description">description </string>
-    <string name="onboarding_login_facebook_button">Connect to Facebook</string>
+    <string name="onboarding_connect_recommendations_description">Don\'t miss another show</string>
+    <string name="onboarding_connect_presales_description">No password needed</string>
+    <string name="onboarding_connect_early_tickets_description">Jump the line</string>
     <string name="onboarding_login_google_plus_button">Sign in with Google</string>
     <string name="onboarding_permission">We won\'t post without your permission</string>
     <string name="onboarding_skip">Skip</string>

@@ -82,7 +82,7 @@
     <dimen name="account_header_container_width">255dp</dimen>
     <dimen name="account_header_divider_margin">10dp</dimen>
     <dimen name="account_header_sso_button_width">112dp</dimen>
-    <dimen name="account_header_sso_button_height">40dp</dimen>
+    <dimen name="account_header_sso_button_height">46dp</dimen>
     <dimen name="account_header_sso_button_padding">10dp</dimen>
     <dimen name="account_detail_image_min_height">48dp</dimen>
     <dimen name="account_detail_image_min_width">56dp</dimen>
@@ -160,13 +160,14 @@
 
 
     <!-- On Boarding -->
-    <dimen name="on_boarding_item_negatif_margin">-35dp</dimen>
-    <dimen name="on_boarding_item_padding">8dp</dimen>
-    <dimen name="on_boarding_title_margin">6dp</dimen>
-    <dimen name="on_boarding_button_margin">16dp</dimen>
+    <dimen name="on_boarding_item_negatif_margin">-16dp</dimen>
+    <dimen name="on_boarding_title_margin">16dp</dimen>
+    <dimen name="on_boarding_button_margin">20dp</dimen>
     <dimen name="on_boarding_logo_margin">10dp</dimen>
     <dimen name="on_boarding_description_height">240dp</dimen>
     <dimen name="on_boarding_scan_message_padding">8dp</dimen>
+    <dimen name="on_boarding_lnlogo_height">108dp</dimen>
+    <dimen name="on_boarding_warning_margin_top">8dp</dimen>
 
 
     <!-- Urban Airship -->

@@ -288,7 +288,7 @@
 
     <style name="onboarding_item_title_text">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -300,7 +300,7 @@
     <style name="onboarding_skip_text">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/tab_accent_color</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="onboarding_scan_text">
@@ -309,6 +309,12 @@
         <item name="android:textSize">13sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="on_boarding_warning_text">
+        <item name="android:textColor">@color/footer_text</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 
     <style name="text" parent="@style/livenation_app_text"/>
 

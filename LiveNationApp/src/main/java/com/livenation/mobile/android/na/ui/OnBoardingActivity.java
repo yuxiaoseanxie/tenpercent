@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,8 +27,8 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
     private final static int FACEBOOK_LOGIN_REQUEST_CODE = 1010;
     private final static int GOOGLE_LOGIN_REQUEST_CODE = 1011;
-    private Button facebookButton;
-    private Button googleButton;
+    private View facebookButton;
+    private View googleButton;
     private TextView skip;
 
     @Override
@@ -42,12 +44,17 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
             //goToTheApp();
         }
 
-        facebookButton = (Button) findViewById(R.id.on_boarding_facebook_sign_in_button);
-        googleButton = (Button) findViewById(R.id.on_boarding_google_sign_in_button);
+        facebookButton = findViewById(R.id.on_boarding_facebook_sign_in_button);
+        googleButton = findViewById(R.id.on_boarding_google_sign_in_button);
         skip = (TextView) findViewById(R.id.on_boarding_skip_textview);
 
         facebookButton.setOnClickListener(this);
         googleButton.setOnClickListener(this);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.on_boarding_scanning_view, null, false);
+        TranslateAnimation animation = new TranslateAnimation(100,200,100,200);
+        animation.setDuration(1000);
+        view.startAnimation(animation);
 
     }
 

@@ -161,6 +161,10 @@
         <item name="android:drawableLeft">@drawable/small_white_favorite</item>
     </style>
 
+    <style name="text.button.custom_center_text.google">
+        <item name="android:drawableLeft">@drawable/login_google_plus_logo</item>
+    </style>
+
     <style name="SwooshDivider.with_top_margin">
         <item name="android:layout_marginTop">@dimen/swoosh_divider_margin_top</item>
     </style>
