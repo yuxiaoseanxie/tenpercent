@@ -324,4 +324,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             UpdateManager.register(this, getString(R.string.hockey_app_id));
         }
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_HOME_SCREEN;
+    }
 }
