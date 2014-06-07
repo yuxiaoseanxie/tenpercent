@@ -30,6 +30,7 @@
 
     <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
     <color name="view_pressed_background">#11dd1f3b</color>
+    <color name="text_pressed_color">#bd1931</color>
 
     <!-- notification -->
     <color name="notification_link_color">#E51837</color>
@@ -37,5 +38,9 @@
     <!-- refresh toast -->
     <color name="refresh_bar_background">#9B000000</color>
     <color name="refresh_bar_separator">#22000000</color>
+
+    <!-- On boarding -->
+
+    <color name="onboarding_scanning_view_background">#f2f2f2</color>
 
 </resources>

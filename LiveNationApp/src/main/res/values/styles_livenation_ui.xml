@@ -155,14 +155,17 @@
 
     <style name="text.button.custom_center_text.facebook">
         <item name="android:drawableLeft">@drawable/login_facebook_logo</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="text.button.custom_center_text.search">
         <item name="android:drawableLeft">@drawable/small_white_favorite</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="text.button.custom_center_text.google">
         <item name="android:drawableLeft">@drawable/login_google_plus_logo</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="SwooshDivider.with_top_margin">

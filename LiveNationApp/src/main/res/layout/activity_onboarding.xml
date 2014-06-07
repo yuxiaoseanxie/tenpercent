@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,13 +14,15 @@
         android:background="@color/white"
         android:scaleType="centerInside"/>
 
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="fill_parent"
+        android:layout_below="@id/on_boarding_lnlogo_imageview">
 
         <com.livenation.mobile.android.na.ui.views.TopCropImageView
             android:id="@+id/on_boarding_background"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/onboarding_background" />
@@ -34,7 +36,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/on_boarding_description_height"
-            android:id="@+id/on_boarding_login_container"
             >
 
 
@@ -45,9 +46,11 @@
                 android:text="@string/onboarding_connect_description"
                 android:textAppearance="@style/onboarding_title_text"
                 android:gravity="center"
+                android:visibility="invisible"
                 android:layout_marginBottom="@dimen/on_boarding_title_margin"/>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/on_boarding_recommendations_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,13 +63,15 @@
                     android:id="@+id/on_boarding_recommendations_logo_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/onboarding_favorite" />
+                    android:src="@drawable/onboarding_favorite"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
 
                 <TextView
                     android:id="@+id/on_boarding_recommendations_title_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
                     android:text="@string/onboarding_connect_recommendations_title" />
 
                 <TextView
@@ -80,6 +85,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/on_boarding_presales_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,13 +99,15 @@
                     android:id="@+id/on_boarding_presales_logo_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/onboarding_notification" />
+                    android:src="@drawable/onboarding_notification"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
 
                 <TextView
                     android:id="@+id/on_boarding_presales_title_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
                     android:text="@string/onboarding_connect_presales_title" />
 
                 <TextView
@@ -113,6 +121,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/on_boarding_tickets_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,13 +135,15 @@
                     android:id="@+id/on_boarding_tickets_logo_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/onboarding_ticket" />
+                    android:src="@drawable/onboarding_ticket"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
 
                 <TextView
                     android:id="@+id/on_boarding_tickets_title_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
                     android:text="@string/onboarding_connect_early_tickets_title" />
 
                 <TextView
@@ -147,6 +158,8 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="invisible"
+            android:id="@+id/on_boarding_login_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -197,4 +210,10 @@
     </LinearLayout>
     </FrameLayout>
 
-</LinearLayout>
+    <include
+        android:id="@+id/on_boarding_scanning_view"
+        layout="@layout/on_boarding_scanning_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/on_boarding_scanning_view_height"
+    />
+</RelativeLayout>

@@ -75,7 +75,7 @@
     <string name="login_button_or">or</string>
     <string name="login_connection_problem">Can\'t establish a reliable connection to the server</string>
 
-    <string name="recommendations_favorite_upsell_facebook_button">Connect to Facebook</string>
+    <string name="recommendations_favorite_upsell_facebook_button">Connect with Facebook</string>
     <string name="recommendations_favorite_upsell_search_button">Find Your Favorites</string>
     <string name="recommendations_favorite_upsell_small_text">For better recommendations add more favorite artists</string>
     <string name="recommendations_favorite_upsell_large_title">No show recommendations? Lets fix that.</string>
