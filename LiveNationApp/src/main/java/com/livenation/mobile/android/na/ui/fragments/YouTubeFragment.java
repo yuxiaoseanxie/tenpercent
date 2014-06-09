@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.app.ActionBar.LayoutParams;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -130,9 +131,13 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
             videoContainer.removeViewAt(videoContainer.getChildCount() - 1);
         }
 
+        Context context = getActivity();
+        if (context == null)
+            return;
+
         int position = 0;
         for (YouTubeVideo video : videos) {
-            YouTubeVideoView view = new YouTubeVideoView(getActivity());
+            YouTubeVideoView view = new YouTubeVideoView(context);
             view.displayVideo(video);
             view.setOnClickListener(new VideoOnClickListener(video));
 
@@ -159,7 +164,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         empty.setVisibility(View.VISIBLE);
 
-        YouTubeClient.search(getArtistName(), 30, this, this);
+        currentSearchRequest = YouTubeClient.search(getArtistName(), 30, this, this);
     }
 
 
