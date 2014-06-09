@@ -1,10 +1,10 @@
 /*
- * 
- * @author Charlie Chilton 2014/01/24
- * 
- * Copyright (C) 2014 Live Nation Labs. All rights reserved.
- * 
- */
+*
+* @author Charlie Chilton 2014/01/24
+*
+* Copyright (C) 2014 Live Nation Labs. All rights reserved.
+*
+*/
 
 package com.livenation.mobile.android.na.ui.fragments;
 
@@ -29,22 +29,24 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.views.FeatureView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.segment.android.models.Props;
 
-public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, FeatureView {
+public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, ApiService.BasicApiCallback<List<Chart>> {
     private EventStickyHeaderAdapter adapter;
     private ViewGroup chartingContainer;
     private List<Chart> featured;
@@ -57,6 +59,8 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         scrollPager = new AllShowsScrollPager(adapter);
         featured = new ArrayList<Chart>();
         LiveNationApplication.get().getConfigManager().persistentBindApi(this);
+        setRetainInstance(true);
+
     }
 
     @Override
@@ -74,6 +78,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
         setFeatured(featured);
+
         return view;
     }
 
@@ -88,7 +93,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Intent intent = new Intent(getActivity(), ShowActivity.class);
+        Intent intent = new Intent(view.getContext(), ShowActivity.class);
         //Since this listview has a header view (featured), we can not use adapter.getItem(x) as x
         //will be offset by the number of header views. This is the alternative according to:
         // http://stackoverflow.com/questions/11106397/listview-addheaderview-causes-position-to-increase-by-one
@@ -110,7 +115,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     public void onApiServiceAttached(LiveNationApiService apiService) {
         scrollPager.reset();
         scrollPager.load();
-        getFeaturePresenter().initialize(getActivity(), null, this);
+        retrieveCharts(apiService, apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
     }
 
     @Override
@@ -118,16 +123,11 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
     }
 
-
-    @Override
-    public void setFeatured(List<Chart> featured) {
+    private void setFeatured(List<Chart> featured) {
         this.featured = featured;
-        if (null != chartingContainer) {
-            setFeaturedView(featured);
+        if (chartingContainer == null) {
+            return;
         }
-    }
-
-    private void setFeaturedView(List<Chart> featured) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
         chartingContainer.removeAllViews();
@@ -150,9 +150,26 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         }
     }
 
+    private void retrieveCharts(LiveNationApiService apiService, double lat, double lng) {
+        TopChartParameters params = new TopChartParameters();
+        params.setLocation(lat, lng);
+        apiService.getTopCharts(params, this);
+    }
+
     @Override
     BaseDecoratedScrollPager getScrollPager() {
         return scrollPager;
+    }
+
+    @Override
+    public void onResponse(List<Chart> response) {
+        featured = response;
+        setFeatured(response);
+    }
+
+    @Override
+    public void onErrorResponse(LiveNationError error) {
+        //TODO add retry view when error
     }
 
     private class FeaturedOnClick implements View.OnClickListener {
