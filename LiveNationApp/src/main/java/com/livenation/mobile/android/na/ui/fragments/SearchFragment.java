@@ -162,8 +162,13 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onResponse(List<SearchResult> response) {
         adapter.clear();
-        adapter.addAll(response);
-        adapter.notifyDataSetChanged();
+        for (SearchResult searchResult : response) {
+            //remove any events with an invalid item id from the results. These get returned by the api
+            //for events that occured in the past
+            if (searchResult.getLnid() != 0) {
+                adapter.add(searchResult);
+            }
+        }
     }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {
