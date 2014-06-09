@@ -103,6 +103,7 @@
 
     <string name="search_input_hint_default">Events, Artists, Venues</string>
     <string name="search_input_hint_artists">Search Artists</string>
+    <string name="search_input_hint_artists_venues">Search Artists, Venues</string>
 
     <string name="city_search_input_hint">Search cities by name</string>
 

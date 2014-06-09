@@ -48,6 +48,7 @@ import io.segment.android.models.Props;
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
     private final String[] SEARCH_INCLUDE_DEFAULT = new String[]{"venues", "artists", "events"};
+    private final String[] SEARCH_INCLUDE_ARTISTS_VENUES = new String[]{"venues", "artists"};
     private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
     private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
 
@@ -65,6 +66,9 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         switch (searchActivity.getSearchMode()) {
             case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE:
                 searchIncludes = SEARCH_INCLUDE_ARTISTS;
+                break;
+            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE:
+                searchIncludes = SEARCH_INCLUDE_ARTISTS_VENUES;
                 break;
             default:
                 searchIncludes = SEARCH_INCLUDE_DEFAULT;
