@@ -20,15 +20,18 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
+import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -44,9 +47,9 @@ import io.segment.android.models.Props;
  * Created by cchilton on 4/2/14.
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
-    private final String[] SEARCH_INCLUDE_VENUES_ARTISTS = new String[]{"venues", "artists"};
+    private final String[] SEARCH_INCLUDE_DEFAULT = new String[]{"venues", "artists", "events"};
     private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
-    private String[] searchIncludes = SEARCH_INCLUDE_VENUES_ARTISTS;
+    private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
 
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
@@ -64,7 +67,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 searchIncludes = SEARCH_INCLUDE_ARTISTS;
                 break;
             default:
-                searchIncludes = SEARCH_INCLUDE_VENUES_ARTISTS;
+                searchIncludes = SEARCH_INCLUDE_DEFAULT;
                 break;
         }
     }
@@ -131,6 +134,18 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
                 String entityId = Artist.getAlphanumericId(searchResult.getLnid());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
+                intent.putExtras(args);
+                startActivity(intent);
+                break;
+            }
+
+            case Event: {
+                props.put(AnalyticConstants.EVENT_NAME, searchResult.getName());
+                props.put(AnalyticConstants.EVENT_ID, searchResult.getLnid());
+
+                Intent intent = new Intent(getActivity(), ShowActivity.class);
+                String entityId = Event.getAlphanumericId(searchResult.getLnid());
+                Bundle args = SingleEventPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;
