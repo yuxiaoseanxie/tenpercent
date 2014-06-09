@@ -60,7 +60,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         LiveNationApplication.get().getConfigManager().bindApi(this);
         SearchActivity searchActivity = (SearchActivity) getActivity();
         switch (searchActivity.getSearchMode()) {
-            case ARTIST_ONLY:
+            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE:
                 searchIncludes = SEARCH_INCLUDE_ARTISTS;
                 break;
             default:

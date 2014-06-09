@@ -17,13 +17,9 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
-    public static enum ExtraSearchMode {
-        DEFAULT, ARTIST_ONLY;
-
-        public static String getKey() {
-            return ExtraSearchMode.class.getName();
-        }
-    }
+    public static final String EXTRA_SEARCH_MODE_KEY = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_SEARCH_MODE_KEY";
+    public static final int EXTRA_SEARCH_MODE_DEFAULT_VALUE = 0;
+    public static final int EXTRA_SEARCH_MODE_ARTIST_VALUE = 1;
 
     private SearchForText fragment;
     private EditText input;
@@ -50,10 +46,10 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         input.addTextChangedListener(this);
         fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
         switch (getSearchMode()) {
-            case ARTIST_ONLY:
+            case EXTRA_SEARCH_MODE_ARTIST_VALUE:
                 editText.setHint(R.string.search_input_hint_artists);
                 break;
-            case DEFAULT:
+            default:
                 //leave with XML default
                 break;
         }
@@ -74,12 +70,11 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         limiter.sendEmptyMessageDelayed(0, Constants.TEXT_CHANGED_POST_DELAY);
     }
 
-    public ExtraSearchMode getSearchMode() {
+    public int getSearchMode() {
         if (getIntent() != null) {
-            int searchModeOrdinal = getIntent().getIntExtra(SearchActivity.ExtraSearchMode.getKey(), SearchActivity.ExtraSearchMode.DEFAULT.ordinal());
-            SearchActivity.ExtraSearchMode searchMode = SearchActivity.ExtraSearchMode.values()[searchModeOrdinal];
+            int searchMode = getIntent().getIntExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_DEFAULT_VALUE);
             return searchMode;
         }
-        return ExtraSearchMode.DEFAULT;
+        return SearchActivity.EXTRA_SEARCH_MODE_DEFAULT_VALUE;
     }
 }
