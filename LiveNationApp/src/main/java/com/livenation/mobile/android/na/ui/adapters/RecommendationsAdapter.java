@@ -224,7 +224,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     private void launchArtistSearch() {
         LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
         Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(SearchActivity.ExtraSearchMode.getKey(), SearchActivity.ExtraSearchMode.ARTIST_ONLY.ordinal());
+        intent.putExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE);
         getContext().startActivity(intent);
     }
 
