@@ -31,6 +31,7 @@
     <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
     <color name="view_pressed_background">#11dd1f3b</color>
     <color name="text_pressed_color">#bd1931</color>
+    <color name="shadow_color">#e0e0e0</color>
 
     <!-- notification -->
     <color name="notification_link_color">#E51837</color>
