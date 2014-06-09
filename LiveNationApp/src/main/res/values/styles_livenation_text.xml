@@ -280,6 +280,43 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="onboarding_title_text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/tab_accent_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="onboarding_item_title_text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="onboarding_item_description_text">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="onboarding_skip_text">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@drawable/clickable_text_selector</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="onboarding_scan_text">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="on_boarding_warning_text">
+        <item name="android:textColor">@color/footer_text</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+
     <style name="text" parent="@style/livenation_app_text"/>
 
     <style name="text.primary">

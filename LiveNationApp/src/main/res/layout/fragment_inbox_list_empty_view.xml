@@ -40,7 +40,7 @@
     <include
         android:id="@+id/notif_no_notification_favorite_button"
         layout="@layout/sub_button_search_favorites"
-        android:layout_width="@dimen/recommendations_button_width"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/recommendations_button_height"
         android:layout_margin="@dimen/inbox_notification_empty_message_margin"/>
 
