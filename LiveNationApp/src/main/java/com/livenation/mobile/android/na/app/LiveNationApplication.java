@@ -189,7 +189,7 @@ public class LiveNationApplication extends Application {
     private void setupInternetStateReceiver() {
         internetStateReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
+            public synchronized void onReceive(Context context, Intent intent) {
                 ConnectivityManager cm = (ConnectivityManager) context
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -202,8 +202,10 @@ public class LiveNationApplication extends Application {
                         @Override
                         public void onResponse(Void response) {
                             LiveNationApplication.get().setIsMusicSync(true);
-                            unregisterReceiver(internetStateReceiver);
-                            internetStateReceiver = null;
+                            if (internetStateReceiver != null) {
+                                unregisterReceiver(internetStateReceiver);
+                                internetStateReceiver = null;
+                            }
                         }
 
                         @Override
