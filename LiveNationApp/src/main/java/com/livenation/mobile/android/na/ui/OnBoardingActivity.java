@@ -54,9 +54,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         //On boarding never show because is not develop yet. Keep it for analytics
         if (isOnBoardingAlreadyDisplayed()) {
             goToTheApp();
-        } else {
-            LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
-            setOnBoardingAlreadyDisplayed();
         }
 
         facebookButton = findViewById(R.id.on_boarding_facebook_sign_in_button);
@@ -80,39 +77,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        fadeInBackground(new AnimationEndListener() {
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                fadeInTitle(new AnimationEndListener() {
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        popItems(new AnimationEndListener() {
-                                            @Override
-                                            public void onAnimationEnd(Animation animation) {
-                                                showLoginView(new AnimationEndListener() {
-                                                    @Override
-                                                    public void onAnimationEnd(Animation animation) {
-                                                        TimerTask timerTask = new TimerTask() {
-                                                            @Override
-                                                            public void run() {
-                                                                runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        showHideScanning();
-                                                                    }
-                                                                });
-                                                            }
-                                                        };
-                                                        Timer timer = new Timer();
-                                                        timer.schedule(timerTask, MUSIC_SCAN_DELAY_ANIMATION);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                        startAnimations();
                     }
                 });
             }
@@ -123,7 +88,16 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
     }
 
-    public void showHideScanning() {
+    private void setOnboardingAlreadyDisplay() {
+        LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
+        setOnBoardingAlreadyDisplayed();
+    }
+
+    private void startAnimations() {
+        fadeInBackground();
+    }
+
+    private void showHideScanning() {
         final AlphaAnimation animDown = new AlphaAnimation(0, 1);
         animDown.setDuration(SCANNING_DURATION_ANIMATION);
         animDown.setFillAfter(true);
@@ -163,7 +137,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         scanningView.startAnimation(animDown);
     }
 
-    public void fadeInBackground(final AnimationEndListener listener) {
+    public void fadeInBackground() {
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
         alphaAnimation.setDuration(BACKGROUND_DURATION_ANIMATION);
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -174,7 +148,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                listener.onAnimationEnd(animation);
+                fadeInTitle();
             }
 
             @Override
@@ -185,7 +159,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         backgroundView.startAnimation(alphaAnimation);
     }
 
-    public void fadeInTitle(final AnimationEndListener listener) {
+    public void fadeInTitle() {
         AnimationSet animationSet = new AnimationSet(true);
         ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,
                 ScaleAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -203,7 +177,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                listener.onAnimationEnd(animation);
+                popItems();
             }
 
             @Override
@@ -214,7 +188,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         titleView.startAnimation(animationSet);
     }
 
-    public void popItems(final AnimationEndListener listener) {
+    public void popItems() {
         popItem(new AnimationEndListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -224,7 +198,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
                         popItem(new AnimationEndListener() {
                             @Override
                             public void onAnimationEnd(Animation animation) {
-                                listener.onAnimationEnd(animation);
+                                showLoginView();
                             }
                         }, ticketsView);
                     }
@@ -262,7 +236,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         itemView.startAnimation(animationSet);
     }
 
-    public void showLoginView(final AnimationEndListener listener) {
+    public void showLoginView() {
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
         alphaAnimation.setDuration(LOGIN_DURATION_ANIMATION);
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -273,7 +247,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                listener.onAnimationEnd(animation);
+                showScanningView();
             }
 
             @Override
@@ -282,6 +256,22 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
             }
         });
         loginContainerView.startAnimation(alphaAnimation);
+    }
+
+    private void showScanningView() {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showHideScanning();
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, MUSIC_SCAN_DELAY_ANIMATION);
     }
 
     public boolean isOnBoardingAlreadyDisplayed() {
@@ -334,6 +324,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         } else if (R.id.on_boarding_skip_textview == v.getId()) {
             goToTheApp();
         }
+        setOnboardingAlreadyDisplay();
     }
 
     private interface AnimationEndListener {
