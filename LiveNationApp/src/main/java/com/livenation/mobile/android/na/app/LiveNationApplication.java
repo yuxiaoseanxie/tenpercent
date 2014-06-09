@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -30,15 +29,15 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -46,10 +45,6 @@ import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.FeaturePresenter;
-import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
-import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
-import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -77,16 +72,12 @@ public class LiveNationApplication extends Application {
     private SingleEventPresenter singleEventPresenter;
     private SingleArtistPresenter singleArtistPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
-    private FeaturePresenter featurePresenter;
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
-    private NearbyVenuesPresenter nearbyVenuesPresenter;
     private FavoritesPresenter favoritesPresenter;
     private static SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
-    private RecommendationsPresenter recommendationsPresenter;
-    private RecommendationSetsPresenter recommendationSetsPresenter;
     private BroadcastReceiver internetStateReceiver;
 
     private ConfigManager configManager;
@@ -110,17 +101,13 @@ public class LiveNationApplication extends Application {
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
-        featurePresenter = new FeaturePresenter();
         singleVenuePresenter = new SingleVenuePresenter();
         singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
-        nearbyVenuesPresenter = new NearbyVenuesPresenter();
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
-        recommendationsPresenter = new RecommendationsPresenter();
-        recommendationSetsPresenter = new RecommendationSetsPresenter();
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -209,7 +196,8 @@ public class LiveNationApplication extends Application {
                         }
 
                         @Override
-                        public void onErrorResponse(LiveNationError error) {}
+                        public void onErrorResponse(LiveNationError error) {
+                        }
                     });
                 }
             }
@@ -261,20 +249,12 @@ public class LiveNationApplication extends Application {
         return singleEventPresenter;
     }
 
-    public FeaturePresenter getFeaturePresenter() {
-        return featurePresenter;
-    }
-
     public SingleVenuePresenter getSingleVenuePresenter() {
         return singleVenuePresenter;
     }
 
     public VenueEventsPresenter getVenueEventsPresenter() {
         return venueEventsPresenter;
-    }
-
-    public NearbyVenuesPresenter getNearbyVenuesPresenter() {
-        return nearbyVenuesPresenter;
     }
 
     public AccountPresenters getAccountPresenters() {
@@ -293,14 +273,6 @@ public class LiveNationApplication extends Application {
         return inboxStatusPresenter;
     }
 
-    public RecommendationsPresenter getRecommendationsPresenter() {
-        return recommendationsPresenter;
-    }
-
-    public RecommendationSetsPresenter getRecommendationSetsPresenter() {
-        return recommendationSetsPresenter;
-    }
-
     public ConfigManager getConfigManager() {
         return configManager;
     }
@@ -312,7 +284,6 @@ public class LiveNationApplication extends Application {
     public void setIsMusicSync(boolean isMusicSync) {
         this.isMusicSync = isMusicSync;
     }
-
 
 
 }
