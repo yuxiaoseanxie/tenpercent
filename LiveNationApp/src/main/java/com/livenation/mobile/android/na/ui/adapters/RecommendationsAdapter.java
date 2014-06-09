@@ -183,9 +183,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
-                getContext().startActivity(intent);
+
+                launchArtistSearch();
             }
         });
         return view;
@@ -196,10 +195,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
-                Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
-                getContext().startActivity(intent);
+                launchArtistSearch();
             }
         });
         return view;
@@ -219,13 +215,17 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         view.findViewById(android.R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
-                Intent intent = new Intent(getContext(), SearchActivity.class);
-                intent.putExtra(SearchActivity.SEARCH_MODE_KEY, SearchActivity.SEARCH_MODE_ARTIST_ONLY_VALUE);
-                getContext().startActivity(intent);
+                launchArtistSearch();
             }
         });
         return view;
+    }
+
+    private void launchArtistSearch() {
+        LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
+        Intent intent = new Intent(getContext(), SearchActivity.class);
+        intent.putExtra(SearchActivity.ExtraSearchMode.getKey(), SearchActivity.ExtraSearchMode.ARTIST_ONLY.ordinal());
+        getContext().startActivity(intent);
     }
 
     private class EventViewHolder {
@@ -276,6 +276,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         public TextView getText() {
             return text;
         }
+
         public ImageView getSwoocher() {
             return swoocher;
         }

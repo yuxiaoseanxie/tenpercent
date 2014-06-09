@@ -17,9 +17,13 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
-    public static final String SEARCH_MODE_KEY = "search_mode";
-    public static final int SEARCH_MODE_DEFAULT_VALUE = 0;
-    public static final int SEARCH_MODE_ARTIST_ONLY_VALUE = 1;
+    public static enum ExtraSearchMode {
+        DEFAULT, ARTIST_ONLY;
+
+        public static String getKey() {
+            return ExtraSearchMode.class.getName();
+        }
+    }
 
     private SearchForText fragment;
     private EditText input;
@@ -45,6 +49,14 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         input = editText.getEditText();
         input.addTextChangedListener(this);
         fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
+        switch (getSearchMode()) {
+            case ARTIST_ONLY:
+                editText.setHint(R.string.search_input_hint_artists);
+                break;
+            case DEFAULT:
+                //leave with XML default
+                break;
+        }
     }
 
     @Override
@@ -60,5 +72,14 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         //Buffer user keypresses within Xmilliseconds so that we don't hit the API on every keystroke
         limiter.removeMessages(0);
         limiter.sendEmptyMessageDelayed(0, Constants.TEXT_CHANGED_POST_DELAY);
+    }
+
+    public ExtraSearchMode getSearchMode() {
+        if (getIntent() != null) {
+            int searchModeOrdinal = getIntent().getIntExtra(SearchActivity.ExtraSearchMode.getKey(), SearchActivity.ExtraSearchMode.DEFAULT.ordinal());
+            SearchActivity.ExtraSearchMode searchMode = SearchActivity.ExtraSearchMode.values()[searchModeOrdinal];
+            return searchMode;
+        }
+        return ExtraSearchMode.DEFAULT;
     }
 }
