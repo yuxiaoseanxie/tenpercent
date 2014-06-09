@@ -58,7 +58,12 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         Event event = getItem(position);
         holder.getTitle().setText(event.getDisplayName());
 
-        TimeZone timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
         START_TIME_FORMATTER.setTimeZone(timeZone);
         String startTime = START_TIME_FORMATTER.format(event.getLocalStartTime());
 
