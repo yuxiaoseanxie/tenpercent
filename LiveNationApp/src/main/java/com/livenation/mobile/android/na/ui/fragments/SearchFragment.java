@@ -144,7 +144,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
                 props.put(AnalyticConstants.EVENT_ID, searchResult.getLnid());
 
                 Intent intent = new Intent(getActivity(), ShowActivity.class);
-                String entityId = Event.getAlphanumericId(searchResult.getLnid());
+                String entityId = Event.makeTypedId(searchResult.getLnid().toString());
                 Bundle args = SingleEventPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
