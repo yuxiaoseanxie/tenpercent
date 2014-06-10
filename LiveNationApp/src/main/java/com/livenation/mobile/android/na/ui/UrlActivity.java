@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Set;
 
 import io.segment.android.models.Props;
 
@@ -212,7 +214,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
     private Uri buildUri(Uri uri) {
-        if (uri.getHost() == null || uri.getHost().isEmpty()) {
+        if (TextUtils.isEmpty(uri.getHost())) {
             return uri;
         }
         Uri.Builder builder = new Uri.Builder();
@@ -222,13 +224,9 @@ public class UrlActivity extends LiveNationFragmentActivity {
             builder.appendEncodedPath(uri.getPathSegments().get(i));
         }
 
-        String query = uri.getQuery();
-        if (query != null && !query.isEmpty()) {
-            String[] pairs = query.split("&");
-            for (String pair : pairs) {
-                int idx = pair.indexOf("=");
-                builder.appendQueryParameter(pair.substring(0, idx), pair.substring(idx + 1));
-            }
+        Set<String> parameterNames = uri.getQueryParameterNames();
+        for (String paramKey : parameterNames) {
+            builder.appendQueryParameter(paramKey, uri.getQueryParameter(paramKey));
         }
         return builder.build();
     }
