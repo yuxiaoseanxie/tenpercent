@@ -35,7 +35,10 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
         Map<String, Object> map = graphUser.asMap();
 
         String id = graphUser.getId();
-        String email = map.get("email").toString();
+        String email = null;
+        if (map.get("email") != null) {
+            email = map.get("email").toString();
+        }
         String name = graphUser.getName();
         String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
 
