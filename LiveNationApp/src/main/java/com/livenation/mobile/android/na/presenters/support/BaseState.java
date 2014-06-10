@@ -52,7 +52,11 @@ public abstract class BaseState<T extends PresenterView> implements Runnable {
 
     public void notifyFailed(int failureCode) {
         if (null == listener) return;
-        listener.onStateFailed(failureCode, this);
+        if (cancelled) {
+            listener.onStateCancelled(this);
+        } else {
+            listener.onStateFailed(failureCode, this);
+        }
     }
 
     public LocationManager getLocationManager() {
