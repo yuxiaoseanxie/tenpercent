@@ -39,7 +39,7 @@ android {
         versionCode computeVersionCode()
         versionName computeVersionName(versionCode)
         minSdkVersion 14
-        targetSdkVersion 18
+        targetSdkVersion 19
 
         for (Project project : rootProject.subprojects) {
             String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
