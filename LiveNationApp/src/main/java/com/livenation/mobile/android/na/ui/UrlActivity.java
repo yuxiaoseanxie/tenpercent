@@ -26,6 +26,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.MultiGetParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 import io.segment.android.models.Props;
@@ -180,7 +181,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
 
     public void dispatchLiveNationIntent(Intent intent) {
-        final Uri data = intent.getData();
+        final Uri data = buildUri(intent.getData());
         if (isNavigate(data)) {
             dispatchNavigate(data);
         } else {
@@ -208,6 +209,28 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 }
             });
         }
+    }
+
+    private Uri buildUri(Uri uri) {
+        if (uri.getHost() == null || uri.getHost().isEmpty()) {
+            return uri;
+        }
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("livenation").authority("");
+        builder.appendEncodedPath(uri.getHost());
+        for (int i = 0; i < uri.getPathSegments().size(); i++) {
+            builder.appendEncodedPath(uri.getPathSegments().get(i));
+        }
+
+        String query = uri.getQuery();
+        if (query != null && !query.isEmpty()) {
+            String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                int idx = pair.indexOf("=");
+                builder.appendQueryParameter(pair.substring(0, idx), pair.substring(idx + 1));
+            }
+        }
+        return builder.build();
     }
 
     private void trackDeepLinks(Uri uri) {
