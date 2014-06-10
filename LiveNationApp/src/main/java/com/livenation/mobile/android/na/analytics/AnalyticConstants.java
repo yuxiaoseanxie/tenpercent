@@ -22,7 +22,7 @@ public class AnalyticConstants {
 
     //On Boarding
     public static final String SKIP_TAP = "Skip Tap";
-    public static final String ON_BOARDING_FIRST_LAUNCH = "On Boarding First Launch";
+    public static final String ON_BOARDING_FIRST_LAUNCH = "Onboarding First Launch";
     //Action bar
     public static final String SEARCH_ICON_TAP = "Search Icon Tap";
     public static final String SHARE_ICON_TAP = "Share Icon Tap";
@@ -84,7 +84,7 @@ public class AnalyticConstants {
 
     //HouseKeeping 1.x Updated (LN_Android)
     public static final String UPDATED = "1.x Updated";
-    public static final String MIGRATION_COMPLETED = "1.x Updated";
+    public static final String MIGRATION_COMPLETED = "1.x Migration Completed";
     public static final String GRANTED_ACCESS_TO_MUSIC = "1.x Granted Access to Music Library";
     public static final String APPLICATION_OPEN = "User Opens App";
     public static final String DEEP_LINK_REDIRECTION = "Deep Link Redirection";
