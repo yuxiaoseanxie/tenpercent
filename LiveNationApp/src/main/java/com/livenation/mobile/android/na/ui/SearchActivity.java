@@ -20,6 +20,7 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
     public static final String EXTRA_SEARCH_MODE_KEY = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_SEARCH_MODE_KEY";
     public static final int EXTRA_SEARCH_MODE_DEFAULT_VALUE = 0;
     public static final int EXTRA_SEARCH_MODE_ARTIST_VALUE = 1;
+    public static final int EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE = 2;
 
     private SearchForText fragment;
     private EditText input;
@@ -48,6 +49,9 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         switch (getSearchMode()) {
             case EXTRA_SEARCH_MODE_ARTIST_VALUE:
                 editText.setHint(R.string.search_input_hint_artists);
+                break;
+            case EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE:
+                editText.setHint(R.string.search_input_hint_artists_venues);
                 break;
             default:
                 //leave with XML default

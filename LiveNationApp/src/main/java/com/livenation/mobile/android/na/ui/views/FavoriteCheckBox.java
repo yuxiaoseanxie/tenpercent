@@ -37,9 +37,13 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
         stop();
     }
 
-    public void bindToFavorite(int favoriteTypeId, String favoriteName, long itemId, FavoritesPresenter favoritesPresenter, AnalyticsCategory category) {
+    public void bindToFavorite(int favoriteTypeId, String favoriteName, Long itemId, FavoritesPresenter favoritesPresenter, AnalyticsCategory category) {
         this.favoritesPresenter = favoritesPresenter;
         stop();
+        if (itemId == null) {
+            setVisibility(INVISIBLE);
+            return;
+        }
         setChecked(false);
 
         Bundle args = favoritesPresenter.getObserverPresenter().getBundleArgs(favoriteTypeId, itemId);
