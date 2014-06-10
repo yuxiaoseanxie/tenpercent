@@ -117,14 +117,17 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         SearchResult searchResult = adapter.getItem(position);
+        if (searchResult.getNumericalId() == null) {
+            return;
+        }
         Props props = new Props();
         switch (searchResult.getSearchResultType()) {
             case Venue: {
                 props.put(AnalyticConstants.VENUE_NAME, searchResult.getName());
-                props.put(AnalyticConstants.VENUE_ID, searchResult.getLnid());
+                props.put(AnalyticConstants.VENUE_ID, searchResult.getNumericalId());
 
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
-                String entityId = Venue.getAlphanumericId(searchResult.getLnid());
+                String entityId = Venue.getAlphanumericId(searchResult.getNumericalId());
                 Bundle args = SingleVenuePresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
@@ -133,10 +136,10 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             case Artist: {
                 props.put(AnalyticConstants.ARTIST_NAME, searchResult.getName());
-                props.put(AnalyticConstants.ARTIST_ID, searchResult.getLnid());
+                props.put(AnalyticConstants.ARTIST_ID, searchResult.getNumericalId());
 
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
-                String entityId = Artist.getAlphanumericId(searchResult.getLnid());
+                String entityId = Artist.getAlphanumericId(searchResult.getNumericalId());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
@@ -145,10 +148,10 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             case Event: {
                 props.put(AnalyticConstants.EVENT_NAME, searchResult.getName());
-                props.put(AnalyticConstants.EVENT_ID, searchResult.getLnid());
+                props.put(AnalyticConstants.EVENT_ID, searchResult.getNumericalId());
 
                 Intent intent = new Intent(getActivity(), ShowActivity.class);
-                String entityId = Event.makeTypedId(searchResult.getLnid().toString());
+                String entityId = Event.makeTypedId(searchResult.getNumericalId().toString());
                 Bundle args = SingleEventPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
@@ -167,11 +170,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     public void onResponse(List<SearchResult> response) {
         adapter.clear();
         for (SearchResult searchResult : response) {
-            //remove any events with an invalid item id from the results. These get returned by the api
-            //for events that occured in the past
-            if (searchResult.getLnid() != 0) {
-                adapter.add(searchResult);
-            }
+            adapter.add(searchResult);
         }
     }
 
@@ -205,12 +204,12 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             switch (searchResult.getSearchResultType()) {
                 case Artist: {
                     int favoriteTypeId = Favorite.FAVORITE_ARTIST;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 case Venue: {
                     int favoriteTypeId = Favorite.FAVORITE_VENUE;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 default:
@@ -219,6 +218,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             return view;
         }
+
+
 
         private class ViewHolder {
             private final TextView type;

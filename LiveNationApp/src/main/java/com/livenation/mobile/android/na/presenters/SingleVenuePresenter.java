@@ -26,6 +26,14 @@ public class SingleVenuePresenter extends
         return bundle;
     }
 
+    public static Bundle getAruguments(Long venueIdRaw) {
+        Bundle bundle = new Bundle();
+        if (venueIdRaw != null) {
+            bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw.toString());
+        }
+        return bundle;
+    }
+
     public static void embedResult(Bundle args, Venue venueCache) {
         //It's possible to have a venue without box office info. If
         //handed one of those, we ignore it so that we'll load the
