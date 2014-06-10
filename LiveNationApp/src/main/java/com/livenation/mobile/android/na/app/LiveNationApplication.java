@@ -153,6 +153,7 @@ public class LiveNationApplication extends Application {
         PushManager.enablePush();
 
         BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
+        notificationBuilder.iconDrawableId = R.drawable.ic_stat_notify;
         PushManager.shared().setNotificationBuilder(notificationBuilder);
         PushManager.shared().setIntentReceiver(PushReceiver.class);
 
