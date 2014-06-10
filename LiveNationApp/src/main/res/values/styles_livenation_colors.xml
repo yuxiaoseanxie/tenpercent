@@ -22,14 +22,16 @@
     <color name="text_primary">#000000</color>
     <color name="text_secondary">#636363</color>
 
-    <color name="login_facebook_button_color">#396ed3</color>
-    <color name="login_facebook_button_pressed_color">#666666</color>
-    <color name="login_google_plus_button_color">#db4c3f</color>
-    <color name="login_google_plus_button_pressed_color">#666666</color>
+    <color name="login_facebook_button_color">#3b5998</color>
+    <color name="login_facebook_button_pressed_color">#2e4475</color>
+    <color name="login_google_plus_button_color">#dd4b39</color>
+    <color name="login_google_plus_button_pressed_color">#ba4030</color>
     <color name="login_sso_button_text">#ffffff</color>
 
     <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
     <color name="view_pressed_background">#11dd1f3b</color>
+    <color name="text_pressed_color">#bd1931</color>
+    <color name="shadow_color">#e0e0e0</color>
 
     <!-- notification -->
     <color name="notification_link_color">#E51837</color>
@@ -37,5 +39,9 @@
     <!-- refresh toast -->
     <color name="refresh_bar_background">#9B000000</color>
     <color name="refresh_bar_separator">#22000000</color>
+
+    <!-- On boarding -->
+
+    <color name="onboarding_scanning_view_background">#f2f2f2</color>
 
 </resources>

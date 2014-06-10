@@ -1,7 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/on_boarding_lnlogo_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/on_boarding_lnlogo_height"
+        android:src="@drawable/onboarding_ln_logo"
+        android:background="@color/white"
+        android:scaleType="centerInside"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/on_boarding_lnlogo_imageview">
+
+        <com.livenation.mobile.android.na.ui.views.TopCropImageView
+            android:id="@+id/on_boarding_background"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/onboarding_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/on_boarding_description_height"
+            >
+
+
+            <TextView
+                android:id="@+id/on_boarding_description_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_connect_description"
+                android:textAppearance="@style/onboarding_title_text"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:layout_marginBottom="@dimen/on_boarding_title_margin"/>
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/on_boarding_recommendations_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/on_boarding_description_textview"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/on_boarding_recommendations_logo_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/onboarding_favorite"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
+
+                <TextView
+                    android:id="@+id/on_boarding_recommendations_title_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
+                    android:text="@string/onboarding_connect_recommendations_title" />
+
+                <TextView
+                    android:id="@+id/on_boarding_recommendations_detail_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="@style/onboarding_item_description_text"
+                    android:text="@string/onboarding_connect_recommendations_description" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/on_boarding_presales_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/on_boarding_recommendations_container"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/on_boarding_item_negatif_margin">
+
+                <ImageView
+                    android:id="@+id/on_boarding_presales_logo_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/onboarding_notification"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
+
+                <TextView
+                    android:id="@+id/on_boarding_presales_title_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
+                    android:text="@string/onboarding_connect_presales_title" />
+
+                <TextView
+                    android:id="@+id/on_boarding_presales_detail_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="@style/onboarding_item_description_text"
+                    android:text="@string/onboarding_connect_presales_description" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="invisible"
+                android:id="@+id/on_boarding_tickets_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/on_boarding_recommendations_container"
+                android:layout_alignParentRight="true"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/on_boarding_item_negatif_margin">
+
+                <ImageView
+                    android:id="@+id/on_boarding_tickets_logo_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/onboarding_ticket"
+                    android:layout_marginBottom="@dimen/on_boarding_item_image_margin_bottom"/>
+
+                <TextView
+                    android:id="@+id/on_boarding_tickets_title_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/onboarding_item_title_text"
+                    android:layout_marginBottom="@dimen/on_boarding_item_text_margin_bottom"
+                    android:text="@string/onboarding_connect_early_tickets_title" />
+
+                <TextView
+                    android:id="@+id/on_boarding_tickets_detail_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="@style/onboarding_item_description_text"
+                    android:text="@string/onboarding_connect_early_tickets_description" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="invisible"
+            android:id="@+id/on_boarding_login_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <include
+                android:id="@+id/on_boarding_google_sign_in_button"
+                style="@style/account_google_plus_login_button"
+                layout="@layout/sub_button_connect_to_google"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/account_header_sso_button_height"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/on_boarding_button_margin"
+                />
+
+            <include
+                android:id="@+id/on_boarding_facebook_sign_in_button"
+                style="@style/account_facebook_login_button"
+                layout="@layout/sub_button_connect_to_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/account_header_sso_button_height"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/on_boarding_google_sign_in_button"
+            />
+
+            <TextView
+                android:id="@+id/on_boarding_permission_textview"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/on_boarding_warning_margin_top"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_permission"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/on_boarding_warning_text"
+                android:layout_below="@id/on_boarding_facebook_sign_in_button"
+                android:layout_marginBottom="@dimen/on_boarding_button_margin"/>
+
+            <TextView
+                android:id="@+id/on_boarding_skip_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_skip"
+                android:layout_below="@id/on_boarding_permission_textview"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/onboarding_skip_text"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+    </FrameLayout>
+
+    <include
+        android:id="@+id/on_boarding_scanning_view"
+        layout="@layout/on_boarding_scanning_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/on_boarding_scanning_view_height"
+    />
+</RelativeLayout>

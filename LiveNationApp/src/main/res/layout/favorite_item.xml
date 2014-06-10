@@ -8,13 +8,19 @@
     android:minHeight="@dimen/favorite_item_min_height"
     android:orientation="horizontal">
 
-    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
-        android:id="@+id/favorite_item_checkbox"
-        style="@style/favorite_item_checkbox"
+    <LinearLayout
         android:layout_width="@dimen/ui_gutter_width"
-        android:layout_height="wrap_content"
-        android:button="@drawable/checkbox_favorite_padding_selector"
-        android:checked="false" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+            android:id="@+id/favorite_item_checkbox"
+            android:layout_width="@dimen/favorite_checkbox_min_width"
+            android:layout_height="@dimen/favorite_checkbox_min_height"
+            android:button="@drawable/checkbox_favorite_padding_selector" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -85,7 +85,13 @@ public class ShowView extends LinearLayout {
 
             @Override
             String getDetails(Event event, Date localStartTime) {
-                TIME_FORMATTER.setTimeZone(TimeZone.getTimeZone(event.getVenue().getTimeZone()));
+                TimeZone timeZone;
+                if (event.getVenue().getTimeZone() != null) {
+                    timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+                } else {
+                    timeZone = TimeZone.getDefault();
+                }
+                TIME_FORMATTER.setTimeZone(timeZone);
                 return TIME_FORMATTER.format(localStartTime);
             }
         },

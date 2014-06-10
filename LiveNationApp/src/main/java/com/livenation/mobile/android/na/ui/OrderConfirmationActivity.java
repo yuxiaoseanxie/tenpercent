@@ -184,7 +184,12 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected String getShareText() {
-        TimeZone timeZone = TimeZone.getTimeZone(getEvent().getVenue().getTimeZone());
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
         SHORT_DATE_FORMATTER.setTimeZone(timeZone);
 
         String eventTemplate = getString(R.string.share_template_order_confirmation);
