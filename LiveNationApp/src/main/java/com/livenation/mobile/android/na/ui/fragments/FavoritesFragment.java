@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,6 +159,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        //The tabhost widget doesn't automatically save its instance state despite having an id :(
         instanceState = new Bundle();
         instanceState.putInt(ARG_SHOW_TAB, tabHost.getCurrentTab());
     }
