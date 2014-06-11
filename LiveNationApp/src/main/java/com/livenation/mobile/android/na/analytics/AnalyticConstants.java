@@ -102,6 +102,7 @@ public class AnalyticConstants {
     public static final String SCREEN_NOTIFICATIONS = "Notifications";
     public static final String SCREEN_HOME_SCREEN = "Home Screen Load";
     public static final String SCREEN_ADP_TOUR = "ADP Tour";
+    public static final String SCREEN_VDP_ALL_SHOWS = "VDP All Shows";
 
 
     /**

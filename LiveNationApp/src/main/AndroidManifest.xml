@@ -87,6 +87,8 @@
         <activity
             android:name=".ui.ArtistShowsActivity"/>
         <activity
+            android:name=".ui.VenueShowsActivity"/>
+        <activity
             android:name="com.livenation.mobile.android.na.ui.ArtistActivity"
             android:label="@string/activity_label_artist"/>
         <activity
