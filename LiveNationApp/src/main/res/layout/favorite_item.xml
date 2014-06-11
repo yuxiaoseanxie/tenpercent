@@ -3,25 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:baselineAligned="true"
-    android:gravity="center_vertical"
-    android:minHeight="@dimen/favorite_min_height"
     android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/favorite_item_min_height"
     android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/favorite_item_checkbox"
-        style="@style/favorite_item_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/checkbox_favorite_selector"
-        android:checked="false" />
+    <LinearLayout
+        android:layout_width="@dimen/ui_gutter_width"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/favorite_item_title"
-        style="@style/favorite_item_title"
+        <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+            android:id="@+id/favorite_item_checkbox"
+            android:layout_width="@dimen/favorite_checkbox_min_width"
+            android:layout_height="@dimen/favorite_checkbox_min_height"
+            android:button="@drawable/checkbox_favorite_padding_selector" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/mock_favorite_title_1"
-        android:textAppearance="@style/view_lineup_text" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/favorite_item_title"
+            style="@style/favorite_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/mock_favorite_title_1"
+            android:textAppearance="@style/view_lineup_text" />
+
+        <View
+            style="@style/ui_underscore"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_underscore_height" />
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -2,11 +2,11 @@ package com.livenation.mobile.android.na.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
 import com.livenation.mobile.android.platform.init.Environment;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.io.IOException;
 
@@ -42,7 +42,7 @@ public class EnvironmentPreferences {
         try {
             editor.putString(Constants.SharedPreferences.ENVIRONMENT, SerializableHelper.toString(environment)).commit();
         } catch (IOException e) {
-            Logger.log(EnvironmentPreferences.class.getSimpleName(), "Environment cannot be saved: " + environment.getHost());
+            Log.e(EnvironmentPreferences.class.getSimpleName(), "Environment cannot be saved: " + environment.getHost());
         }
     }
 }

@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import android.content.Context;
 import android.location.Location;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
@@ -20,7 +20,9 @@ import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -29,6 +31,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter, ConfigCallback {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
+    private static final SimpleDateFormat START_TIME_FORMATTER = new SimpleDateFormat("h:mm a zzz");
     private static float METERS_IN_A_MILE = 1609.34f;
     private LayoutInflater inflater;
     private Double lat;
@@ -56,12 +59,19 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         }
 
         Event event = getItem(position);
-        holder.getTitle().setText(event.getName());
+        holder.getTitle().setText(event.getDisplayName());
 
-        String startTime = DateFormat.format(START_TIME_FORMAT, event.getLocalStartTime()).toString();
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+        START_TIME_FORMATTER.setTimeZone(timeZone);
+        String startTime = START_TIME_FORMATTER.format(event.getLocalStartTime());
 
         holder.getStartTime().setText(startTime);
-        holder.getDate().setDate(event.getLocalStartTime());
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
 
         return view;
     }
@@ -102,7 +112,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         holder.getFavorite().setChecked(false);
 
         Venue venue = event.getVenue();
-        holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), LiveNationApplication.get().getFavoritesPresenter());
+        holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), LiveNationApplication.get().getFavoritesPresenter(), AnalyticsCategory.NEARBY);
 
         return view;
     }

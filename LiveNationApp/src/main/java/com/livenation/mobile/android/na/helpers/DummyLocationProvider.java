@@ -9,7 +9,7 @@ package com.livenation.mobile.android.na.helpers;
 
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
-import com.livenation.mobile.android.platform.util.Logger;
+import android.content.Context;
 
 /**
  * Dummy location provider to give a dummy location as a last resort.
@@ -24,7 +24,6 @@ public class DummyLocationProvider implements LocationProvider {
 
     @Override
     public void getLocation(ProviderCallback<Double[]> callback) {
-        Logger.log(TAG, "Dummy location provider was invoked");
         callback.onResponse(LOCATION_SF);
     }
 }

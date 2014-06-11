@@ -18,7 +18,7 @@ repositories {
 }
 
 def computeVersionCode() {
-    return 15
+    return 29
 }
 
 def computeVersionName(def versionCode) {
@@ -43,7 +43,7 @@ android {
 
         for (Project project : rootProject.subprojects) {
             String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
-            String gitSha = computeGitSha(project.rootDir)
+            String gitSha = computeGitSha(project.projectDir)
             buildConfigField "String", "GIT_SHA_$name", "\"$gitSha\""
         }
     }
@@ -114,7 +114,7 @@ dependencies {
     compile project(':facebookSDK')
     compile project(':Ticketing')
     compile 'com.android.support:appcompat-v7:+'
-    compile 'com.google.android.gms:play-services:+'
+    compile 'com.google.android.gms:play-services:4.3.23'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.+'
 

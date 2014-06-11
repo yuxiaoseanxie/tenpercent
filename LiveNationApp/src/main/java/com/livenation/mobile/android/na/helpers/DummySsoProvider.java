@@ -29,13 +29,12 @@ public class DummySsoProvider implements UiApiSsoProvider {
     }
 
     @Override
-    public int getId() {
-        return SsoManager.SSO_DUMMY;
-    }
-
-    @Override
     public void onActivityResult(Activity activity, int requestCode,
                                  int resultCode, Intent data) {
+    }
+
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_DUMMY;
     }
 
 }

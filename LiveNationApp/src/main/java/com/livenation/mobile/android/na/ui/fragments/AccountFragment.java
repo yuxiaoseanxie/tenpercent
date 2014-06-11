@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,30 +22,32 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
-import com.livenation.mobile.android.na.presenters.views.AccountUserView;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
-import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
-public class AccountFragment extends LiveNationFragment implements AccountUserView, LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
+public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private Fragment profileFragment;
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
+    private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshUser(LoginHelper.isLogout());
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,11 +63,8 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
         OnOrdersClick ordersClick = new OnOrdersClick();
         result.findViewById(R.id.account_detail_order_history_container).setOnClickListener(ordersClick);
 
-        OnFavoriteClick favoriteArtistOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_ARTISTS);
-        result.findViewById(R.id.account_detail_favorite_artists_container).setOnClickListener(favoriteArtistOnClick);
-
-        OnFavoriteClick favoriteVenueOnClick = new OnFavoriteClick(FavoritesFragment.ARG_VALUE_VENUES);
-        result.findViewById(R.id.account_detail_favorite_venues_container).setOnClickListener(favoriteVenueOnClick);
+        OnFavoriteClick favoritesOnClick = new OnFavoriteClick();
+        result.findViewById(R.id.account_detail_favorites_container).setOnClickListener(favoritesOnClick);
 
         View locationContainer = result.findViewById(R.id.fragment_account_footer);
         locationContainer.setOnClickListener(new OnLocationClick());
@@ -73,6 +73,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
 
         //Get location for update the screen
         LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+
         //Register for being notify when the location change
         registerBroadcastReceiverForUpdate();
 
@@ -82,6 +83,8 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private void registerBroadcastReceiverForUpdate() {
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
+        LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
     }
 
     @Override
@@ -89,16 +92,16 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
         super.onDestroyView();
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(loginLogoutReceiver);
     }
 
-    @Override
-    public void setUser(User user) {
+    public void refreshUser(boolean isLogout) {
         if (null != profileFragment) {
             removeFragment(profileFragment);
             profileFragment = null;
         }
 
-        if (null == user) {
+        if (isLogout) {
             profileFragment = new AccountSignInFragment();
         } else {
             profileFragment = new AccountUserFragment();
@@ -113,20 +116,21 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     }
 
     @Override
-    public void onGetCityFailure() {
-        locationText.setText("Geocode failed!");
+    public void onGetCityFailure(double lat, double lng) {
+        locationText.setText(getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng));
     }
 
     //Get location for display data
 
     @Override
     public void onResponse(LiveNationConfig response) {
-        getAccountPresenters().getGetUser().initialize(getActivity(), null, AccountFragment.this);
+        refreshUser(LoginHelper.isLogout());
         LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(), getActivity(), this);
     }
 
     @Override
-    public void onErrorResponse(int errorCode) {}
+    public void onErrorResponse(int errorCode) {
+    }
 
     //Location update
 
@@ -140,27 +144,16 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private class OnOrdersClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_ORDERS_TAP, AnalyticsCategory.DRAWER);
             Ticketing.showOrderHistory(getActivity());
         }
     }
 
     private class OnFavoriteClick implements View.OnClickListener {
-        private final int showTab;
-
-        public OnFavoriteClick(int showTab) {
-            this.showTab = showTab;
-        }
-
         @Override
         public void onClick(View v) {
-            if (showTab == FavoritesFragment.ARG_VALUE_ARTISTS) {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_ARTISTS_CELL_TAP);
-            } else {
-                LiveNationAnalytics.track(AnalyticConstants.FAVORITES_VENUES_CELL_TAP);
-            }
-
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_FAVORITES_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(getActivity(), FavoriteActivity.class);
-            intent.putExtra(FavoritesFragment.ARG_SHOW_TAB, showTab);
             startActivity(intent);
         }
     }
@@ -168,7 +161,7 @@ public class AccountFragment extends LiveNationFragment implements AccountUserVi
     private class OnLocationClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            LiveNationAnalytics.track(AnalyticConstants.LOCATION_ICON_TAP);
+            LiveNationAnalytics.track(AnalyticConstants.YOUR_LOCATION_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }

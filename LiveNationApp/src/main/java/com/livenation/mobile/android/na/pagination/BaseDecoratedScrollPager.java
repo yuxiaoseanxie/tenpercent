@@ -1,8 +1,10 @@
 package com.livenation.mobile.android.na.pagination;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -37,6 +39,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     protected EmptyListViewControl emptyView;
     private RefreshBar refreshBar;
     private RefreshBarController refreshBarController;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private View.OnClickListener retryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -55,6 +58,10 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     public void connectListView(StickyListHeadersListView listView) {
+        if (listView.getAdapter() != null) {
+            // http://stackoverflow.com/questions/4317778/hide-footer-view-in-listview?rq=1
+            throw new IllegalStateException("Setting the adapter before the adding a footer is broken on many flavours of Android");
+        }
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
     }
@@ -62,6 +69,10 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     public void connectListView(ListView listView) {
         listView.setOnScrollListener(this);
         listView.addFooterView(footerBugHack);
+    }
+
+    public void connectSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     @Override
@@ -75,10 +86,13 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     @Override
-    public void onFetchEnded() {
+    public void onFetchEnded(boolean cancelled) {
         footerBugHack.removeAllViews();
-        if (getAdapter().getCount() == 0) {
+        if (getAdapter().getCount() == 0 && emptyView != null) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -91,6 +105,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             if (isFirstPage) {
                 emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
             }
+        }
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_page_image_height">
+
+            <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
+                android:id="@+id/activity_order_confirmation_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff777777"
+                android:minHeight="@dimen/detail_page_image_height" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/venue_map_foreground" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/order_confirmation_header_text_margin_bottom"
+                    android:gravity="center"
+                    android:textAppearance="@style/order_confirmation_header_text"
+                    android:text="@string/mock_order_quantity" />
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_event_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/order_confirmation_header_text_margin_bottom"
+                    android:gravity="center"
+                    android:textAppearance="@style/order_confirmation_header_text.large"
+                    android:text="@string/mock_order_event_name" />
+=
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:textAppearance="@style/order_confirmation_section_header_text"
+            android:gravity="center"
+            android:text="@string/order_confirmation_details_title"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_number"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_artist_title_1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_seats"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_seats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_artist_title_1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_cost"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_cost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_price"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_account"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_artist_title_1"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_date"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_event_date"/>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="@style/order_confirmation_detail_text.label"
+                    android:text="@string/order_confirmation_venue_name"/>
+
+                <TextView
+                    android:id="@+id/activity_order_confirmation_venue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textAppearance="@style/order_confirmation_detail_text"
+                    android:text="@string/mock_venue_title_1"/>
+
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            android:id="@+id/activity_order_confirmation_details_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/order_confirmation_show_details"
+            style="@style/ExpandableContentButton"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -9,8 +9,10 @@
 package com.livenation.mobile.android.na.ui;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,8 +20,10 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,10 +31,12 @@ import android.view.View;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
@@ -43,9 +49,13 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
-import com.livenation.mobile.android.platform.util.Logger;
+
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
 
 import java.util.Map;
+
+import io.segment.android.models.Props;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -55,15 +65,12 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private FragmentAdapter adapter;
     private SlidingTabLayout slidingTabLayout;
     private boolean hasUnreadNotifications;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
+        super.onCreate(savedInstanceState, R.layout.activity_landing);
 
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
                 R.drawable.ic_drawer,
@@ -72,13 +79,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                LiveNationAnalytics.track(AnalyticConstants.ACCOUNT_ICON_TAP);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                LiveNationAnalytics.track(AnalyticConstants.X_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.OPEN_DRAWER, AnalyticsCategory.DRAWER);
             }
         };
         rootView.setDrawerListener(drawerToggle);
@@ -94,6 +95,32 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 
         LiveNationApplication.get().getInboxStatusPresenter().initialize(this, null, new InboxStatusUpdater());
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                invalidateOptionsMenu();
+            }
+        };
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
+
+        //Hockey App
+        checkForUpdates();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCrashes();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+
     }
 
     @Override
@@ -127,6 +154,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         MenuItem debug = menu.findItem(R.id.menu_home_debug_item);
         debug.setVisible(BuildConfig.DEBUG);
 
+        MenuItem logout = menu.findItem(R.id.menu_home_logout_item);
+        logout.setVisible(LoginHelper.isLogin());
+
         return true;
     }
 
@@ -136,9 +166,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             return true;
         }
 
+
         switch (item.getItemId()) {
             case R.id.menu_home_notifications_item:
-                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR);
                 startActivity(new Intent(this, InboxActivity.class));
                 return true;
 
@@ -147,23 +178,32 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_search_item:
-                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP);
+                //Analytics attributes
+                Props props = new Props();
+                props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
+
+                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
                 startActivity(new Intent(this, SearchActivity.class));
                 return true;
             case R.id.menu_home_help_item:
                 startActivity(new Intent(this, HelpMenuActivity.class));
-                LiveNationAnalytics.track(AnalyticConstants.HELP_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR);
                 return true;
 
             case R.id.menu_home_legal_item:
-                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CELL_TAP);
+                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR);
                 startActivity(new Intent(this, LegalActivity.class));
                 return true;
 
             case R.id.menu_home_contact_item:
+                LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 buildAndOpenContactEmail();
                 return true;
 
+            case R.id.menu_home_logout_item:
+                    LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
+                    LoginHelper.logout(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -175,7 +215,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         final String subject = getString(R.string.contact_email_subject);
         final String message = "\n\n" + getString(R.string.contact_email_signature_message)
                 + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
-                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER +"  " + Build.MODEL
+                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
                 + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
         LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
@@ -183,7 +223,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
                 String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
                 String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
-                ContactUtils.emailTo(emailAddress, subject,  signature, HomeActivity.this);
+                ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
             }
 
             @Override
@@ -191,7 +231,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
             }
         });
-
 
 
     }
@@ -213,14 +252,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-    public void onSaveAuthTokenSuccess() {
-        Logger.log("AuthToken", "Updated it");
-    }
+    public void onSaveAuthTokenSuccess() {}
 
     @Override
-    public void onSignOut() {
-        Logger.log("Account", "Signed out");
-    }
+    public void onSignOut() {}
 
     @Override
     public void onSaveAuthTokenFailure() {
@@ -239,8 +274,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         public FragmentAdapter(FragmentManager fm, Context context) {
             super(fm);
             tabTitles[0] = context.getString(R.string.tab_title_your_shows);
-            tabTitles[1] = context.getString(R.string.tab_title_nearby);
-            tabTitles[2] = context.getString(R.string.tab_title_all_shows);
+            tabTitles[1] = context.getString(R.string.tab_title_all_shows);
+            tabTitles[2] = context.getString(R.string.tab_title_nearby);
         }
 
         @Override
@@ -259,9 +294,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 case 0:
                     return new RecommendationSetsFragment();
                 case 1:
-                    return new NearbyVenuesFragment();
-                case 2:
                     return new AllShowsFragment();
+                case 2:
+                    return new NearbyVenuesFragment();
+
                 default:
                     throw new IllegalArgumentException();
             }
@@ -274,5 +310,24 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
             invalidateOptionsMenu();
         }
+    }
+
+    //Hockey App
+    private void checkForCrashes() {
+        if (BuildConfig.DEBUG) {
+            CrashManager.register(this, getString(R.string.hockey_app_id));
+        }
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        if (BuildConfig.DEBUG) {
+            UpdateManager.register(this, getString(R.string.hockey_app_id));
+        }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_HOME_SCREEN;
     }
 }

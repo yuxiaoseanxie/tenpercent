@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sub_show_calendar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ui_underscore_background"
+    android:background="@drawable/ui_underscore_pressable_background"
     android:paddingBottom="@dimen/show_calendar_padding_bottom">
 
     <ImageView
@@ -10,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/show_calendar_image_margin_right"
-        android:src="@drawable/show_event_date" />
+        android:src="@drawable/event_date" />
 
     <TextView
         android:id="@+id/sub_show_calendar_text"

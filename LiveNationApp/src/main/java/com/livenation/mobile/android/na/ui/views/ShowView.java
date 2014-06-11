@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.TimeZone;
 
 public class ShowView extends LinearLayout {
     private DisplayMode displayMode;
@@ -24,7 +21,6 @@ public class ShowView extends LinearLayout {
     private TextView title;
     private TextView details;
     private VerticalDate date;
-    private View bottomLine;
 
     public ShowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -45,7 +41,13 @@ public class ShowView extends LinearLayout {
         title.setText(getDisplayMode().getTitle(event));
 
         Date start = event.getLocalStartTime();
-        date.setDate(start);
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+        date.setDate(start, timeZone);
         details.setText(getDisplayMode().getDetails(event, start));
     }
 
@@ -57,17 +59,6 @@ public class ShowView extends LinearLayout {
         this.displayMode = displayMode;
     }
 
-    public boolean isBottomLineVisible() {
-        return (bottomLine.getVisibility() == View.VISIBLE);
-    }
-
-    public void setBottomLineVisible(Boolean bottomLineVisible) {
-        if (bottomLineVisible)
-            bottomLine.setVisibility(View.VISIBLE);
-        else
-            bottomLine.setVisibility(View.GONE);
-    }
-
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -76,7 +67,6 @@ public class ShowView extends LinearLayout {
         this.title = (TextView) view.findViewById(R.id.view_show_title);
         this.details = (TextView) view.findViewById(R.id.view_show_details);
         this.date = (VerticalDate) view.findViewById(R.id.view_show_date);
-        this.bottomLine = view.findViewById(R.id.view_show_bottom_line);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
@@ -86,6 +76,8 @@ public class ShowView extends LinearLayout {
 
     public static enum DisplayMode {
         VENUE {
+            private final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz");
+
             @Override
             String getTitle(Event event) {
                 return event.getName();
@@ -93,7 +85,14 @@ public class ShowView extends LinearLayout {
 
             @Override
             String getDetails(Event event, Date localStartTime) {
-                return DateFormat.format("h:mm aa zzz", localStartTime).toString();
+                TimeZone timeZone;
+                if (event.getVenue().getTimeZone() != null) {
+                    timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+                } else {
+                    timeZone = TimeZone.getDefault();
+                }
+                TIME_FORMATTER.setTimeZone(timeZone);
+                return TIME_FORMATTER.format(localStartTime);
             }
         },
         ARTIST {

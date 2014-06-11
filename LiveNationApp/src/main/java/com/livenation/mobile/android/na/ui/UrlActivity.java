@@ -3,11 +3,15 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -23,7 +27,11 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.MultiGetParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
+import java.net.URLDecoder;
 import java.util.List;
+import java.util.Set;
+
+import io.segment.android.models.Props;
 
 public class UrlActivity extends LiveNationFragmentActivity {
     @Override
@@ -175,21 +183,22 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
 
     public void dispatchLiveNationIntent(Intent intent) {
-        final Uri data = intent.getData();
+        final Uri data = buildUri(intent.getData());
         if (isNavigate(data)) {
             dispatchNavigate(data);
         } else {
             getApiHelper().bindApi(new ApiServiceBinder() {
                 @Override
                 public void onApiServiceAttached(LiveNationApiService apiService) {
+                    trackDeepLinks(data);
                     List<String> pathSegments = data.getPathSegments();
-                    if (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events")) {
+                    if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
                         dispatchEvent(apiService, data);
-                    } else if (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists")) {
+                    } else if (pathSegments.size() > 0 && (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists"))) {
                         dispatchArtist(apiService, data);
                     } else {
-                        displayError(R.string.url_error_bad_url);
-
+                        Intent intent = new Intent(UrlActivity.this, OnBoardingActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 }
@@ -202,6 +211,41 @@ public class UrlActivity extends LiveNationFragmentActivity {
                 }
             });
         }
+    }
+
+    private Uri buildUri(Uri uri) {
+        if (TextUtils.isEmpty(uri.getHost())) {
+            return uri;
+        }
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("livenation").authority("");
+        builder.appendEncodedPath(uri.getHost());
+        for (int i = 0; i < uri.getPathSegments().size(); i++) {
+            builder.appendEncodedPath(uri.getPathSegments().get(i));
+        }
+
+        Set<String> parameterNames = uri.getQueryParameterNames();
+        for (String paramKey : parameterNames) {
+            builder.appendQueryParameter(paramKey, uri.getQueryParameter(paramKey));
+        }
+        return builder.build();
+    }
+
+    private void trackDeepLinks(Uri uri) {
+        String btid = uri.getQueryParameter("btid");
+        String ui = uri.getQueryParameter("ui");
+        String c = uri.getQueryParameter("c");
+        String from = uri.getQueryParameter("from");
+        String url = uri.toString();
+        Props props = new Props();
+        props.put(AnalyticConstants.BTID, btid);
+        props.put(AnalyticConstants.UI, ui);
+        props.put(AnalyticConstants.C, c);
+        props.put(AnalyticConstants.FROM, from);
+        props.put(AnalyticConstants.DEEP_LINK_URL, url);
+
+        LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
+
     }
 
 

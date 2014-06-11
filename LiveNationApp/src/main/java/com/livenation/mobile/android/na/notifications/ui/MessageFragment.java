@@ -26,7 +26,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
@@ -35,6 +39,8 @@ import com.urbanairship.richpush.RichPushMessage;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+
+import io.segment.android.models.Props;
 
 /**
  * Fragment that displays a rich push activity_message in a RichPushMessageView
@@ -47,6 +53,7 @@ public class MessageFragment extends Fragment {
     private TextView subjectText;
     private TextView dateReceivedText;
     private Button callToActionButton;
+    private View errorView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +64,7 @@ public class MessageFragment extends Fragment {
         dateReceivedText = (TextView) view.findViewById(R.id.fragment_message_date);
         callToActionButton = (Button) view.findViewById(R.id.fragment_message_cta_button);
         callToActionButton.setOnClickListener(new CallToActionClickListener());
+        errorView = view.findViewById(R.id.fragment_message_error_view);
 
         return view;
     }
@@ -103,7 +111,7 @@ public class MessageFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //TODO define wording https://www.pivotaltracker.com/story/show/69382014
+                errorView.setVisibility(View.VISIBLE);
             }
         }, RichPushManager.shared().getRichPushUser().getId(), RichPushManager.shared().getRichPushUser().getPassword());
         requestQueue.add(urbanAirshipRequest);
@@ -125,12 +133,19 @@ public class MessageFragment extends Fragment {
     private class CallToActionClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+
             Bundle messageExtras = message.getExtras();
             if (!messageExtras.containsKey(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL)) {
                 throw new IllegalStateException("CallToActionClickListener.onClick should never be called without an EXTRA_MESSAGE_ACTION_URL");
             }
 
             String url = messageExtras.getString(Constants.Notifications.EXTRA_MESSAGE_ACTION_URL);
+
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.DEEP_LINK_URL, url);
+            LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_BUTTON_TAP, AnalyticsCategory.NOTIFICATION, props);
+
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);

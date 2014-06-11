@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,13 +20,16 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiService.BasicApiCallback<User>, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
     public static final String ARG_PROVIDER_ID = "provider_id";
     private UiApiSsoProvider ssoProvider;
+    public static final int RESULT_OK = Activity.RESULT_OK;
+    public static final int RESULT_CANCELED = Activity.RESULT_CANCELED;
+    public static final int RESULT_ERROR = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Integer providerId = null;
+        SsoManager.SSO_TYPE providerId = null;
         if (getIntent().hasExtra(ARG_PROVIDER_ID)) {
-            providerId = getIntent().getExtras().getInt(ARG_PROVIDER_ID);
+            providerId = SsoManager.SSO_TYPE.valueOf(getIntent().getExtras().getString(ARG_PROVIDER_ID));
         }
 
         if (null == providerId) {
@@ -44,7 +48,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
 
     @Override
     public void onOpenSession(String sessionToken) {
-        int providerId = SsoManager.getProviderId(ssoProvider);
+        SsoManager.SSO_TYPE providerId = SsoManager.getProviderId(ssoProvider);
         Bundle args = getAccountPresenters().getSetAuthToken().getArguments(providerId, sessionToken);
         getAccountPresenters().getSetAuthToken().initialize(SsoActivity.this, args, SsoActivity.this);
     }
@@ -87,12 +91,13 @@ public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoPro
 
     @Override
     public void onOpenSessionFailed(Exception exception, boolean allowForeground) {
-        getAccountPresenters().getSignOut().initialize(SsoActivity.this, null, SsoActivity.this);
+        setResult(RESULT_ERROR);
+        finish();
     }
 
     @Override
-    public void onNoNetwork() {
-        setResult(RESULT_OK);
+    public void onOpenSessionCanceled() {
+        setResult(RESULT_CANCELED);
         finish();
     }
 

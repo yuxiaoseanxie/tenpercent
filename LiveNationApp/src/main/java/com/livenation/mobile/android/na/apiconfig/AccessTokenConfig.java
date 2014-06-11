@@ -5,17 +5,21 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.LiveNationApiServiceImpl;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationProxy;
+
+import io.segment.android.models.Props;
 
 /**
  * Created by cchilton on 5/5/14.
@@ -52,8 +56,15 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
 
     @Override
     public void onResponse(AccessToken response) {
+        if (getIasId() != null) {
+            Props props = new Props();
+            props.put(AnalyticConstants.TOKEN, response.getToken());
+            props.put(AnalyticConstants.AIS_USER_ID, getIasId());
+            LiveNationAnalytics.track(AnalyticConstants.MIGRATION_COMPLETED, AnalyticsCategory.HOUSEKEEPING, props);
+        }
         String token = response.getToken();
         saveAccessToken(token, context);
+        clearIasId();
         setResult(token);
         notifyReady();
     }
@@ -70,13 +81,18 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
         LiveNationApiConfig quick = new LiveNationApiConfig(builder);
 
         LiveNationApiService apiService = new LiveNationProxy(quick);
-        apiService.getToken(ssoParams.first, ssoParams.second, AccessTokenConfig.this);
+        if (getIasId() != null) {
+            Props props = new Props();
+            props.put(AnalyticConstants.AIS_USER_ID, getIasId());
+            LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
+        }
+        apiService.getToken(getIasId(), ssoParams.first, ssoParams.second, AccessTokenConfig.this);
     }
 
     private Pair<String, String> getSsoParams() {
         SsoManager.AuthConfiguration ssoConfig = ssoManager.getAuthConfiguration(context);
         if (ssoConfig != null) {
-            int ssoProviderId = ssoConfig.getSsoProviderId();
+            SsoManager.SSO_TYPE ssoProviderId = ssoConfig.getSsoProviderId();
             String key = ssoManager.getSsoProvider(ssoProviderId, context).getTokenKey();
             String value = ssoConfig.getAccessToken();
             return new Pair<String, String>(key, value);
@@ -94,5 +110,17 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
     private String readAccessToken(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.API_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.API_ACCESS_TOKEN, null);
+    }
+
+    private String getIasId() {
+        SharedPreferences prefs = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
+    }
+
+    private void clearIasId() {
+        SharedPreferences oldPrefs = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences newPrefs = context.getSharedPreferences(Constants.SharedPreferences.IAS_NAME, Context.MODE_PRIVATE);
+        newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, getIasId()).commit();
+        oldPrefs.edit().remove(Constants.SharedPreferences.IAS_NAME).commit();
     }
 }

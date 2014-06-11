@@ -20,8 +20,7 @@ public class HelpMenuActivity extends LiveNationFragmentActivity implements Adap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help_menu);
+        super.onCreate(savedInstanceState, R.layout.activity_help_menu);
 
         helpMenuFragment = (HelpMenuFragment) getFragmentManager().findFragmentById(R.id.activity_menu_fragment);
         helpMenuFragment.setOnItemClickListener(this);

@@ -12,16 +12,14 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
-import com.livenation.mobile.android.platform.util.Logger;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
@@ -80,7 +78,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            Logger.log("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
+            Log.e("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
             callback.onErrorResponse();
         }
 
@@ -96,7 +94,6 @@ public class PlayServicesLocationProvider implements LocationProvider {
             } else {
                 handler = new Handler();
                 if (retryCount < RETRY_LIMIT) {
-                    Logger.log("Location", "Location was null, retrying.. (" + retryCount + ")");
                     handler.postDelayed(this, 1000);
                     retryCount++;
                 } else {

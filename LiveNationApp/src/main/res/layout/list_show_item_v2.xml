@@ -12,15 +12,13 @@
         android:layout_marginRight="@dimen/list_show_item_v2_date_margin_right"
         android:layout_marginTop="@dimen/list_show_item_v2_date_margin_top" />
 
-    <com.android.volley.toolbox.NetworkImageView
+    <com.livenation.mobile.android.na.ui.views.CachedBottomCroppedImageView
         android:id="@+id/list_item_show_image"
         android:layout_width="96dp"
         android:layout_height="72dp"
         android:layout_alignTop="@id/list_generic_show_date"
         android:layout_marginRight="@dimen/venue_show_date_margin_left"
-        android:layout_toRightOf="@id/list_generic_show_date"
-        android:background="#ff777777"
-        android:scaleType="centerCrop" />
+        android:layout_toRightOf="@id/list_generic_show_date" />
 
     <TextView
         android:id="@+id/list_generic_show_title"
@@ -41,6 +39,7 @@
         android:textAppearance="@style/list_show_location" />
 
     <View
+        android:id="@+id/list_item_show_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/underscore_container_height"
         android:layout_alignLeft="@id/list_item_show_image"

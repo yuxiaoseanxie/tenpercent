@@ -10,13 +10,10 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
             android:id="@+id/fragment_artist_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff777777"
-            android:minHeight="@dimen/fragment_show_image_height"
-            android:scaleType="centerCrop" />
+            android:layout_height="@dimen/detail_page_image_height"/>
 
     </FrameLayout>
 
@@ -38,8 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/fragment_artist_frame_foreground"
-        android:layout_marginBottom="@dimen/show_artist_title_margin_bottom"
-        android:layout_marginLeft="@dimen/show_artist_title_margin_left"
+        android:layout_marginBottom="@dimen/detail_page_title_margin_bottom"
+        android:layout_marginLeft="@dimen/detail_page_title_margin_left"
+        android:layout_marginRight="@dimen/detail_page_title_margin_right"
         android:text="@string/mock_placeholder_artist_title_1"
         android:textAppearance="@style/show_artist_title" />
 

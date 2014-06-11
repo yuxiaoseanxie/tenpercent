@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_tab_swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+            android:id="@+id/fragment_tab_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/ui_gutter_divider"
+            android:dividerHeight="@dimen/divider_height"/>
+
+        <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.livenation.mobile.android.na.ui.views.RefreshBar
+            android:id="@+id/fragment_all_shows_refresh_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/view_refresh_bar_margin"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

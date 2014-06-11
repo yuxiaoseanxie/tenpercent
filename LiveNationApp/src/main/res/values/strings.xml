@@ -17,7 +17,7 @@
     <string name="artist_bio">Bio</string>
     <string name="artist_youtube">Videos</string>
 
-    <string name="tab_title_your_shows">Recommendations</string>
+    <string name="tab_title_your_shows">Recommended</string>
     <string name="tab_title_all_shows">All shows</string>
     <string name="tab_title_nearby">Nearby</string>
 
@@ -26,6 +26,7 @@
 
     <string name="venue_detail_link">+ Venue Info</string>
     <string name="artist_events_overflow">See All Shows</string>
+    <string name="artist_events_no_show">No Scheduled Events</string>
     <string name="artist_videos_overflow">See All Videos</string>
     <string name="artist_videos_overflow_close">See Less Videos</string>
     <string name="artist_bio_overflow">Read Full Bio</string>
@@ -40,30 +41,30 @@
     <string name="home_menu_legal">Legal &amp; Credits</string>
     <string name="home_menu_contact">Contact</string>
     <string name="home_menu_help">Help</string>
+    <string name="home_menu_logout">Logout</string>
 
     <string name="activity_label_show">Show</string>
     <string name="activity_label_artist">Artist</string>
     <string name="activity_label_favorites">Favorites</string>
     <string name="activity_label_venue">Venue</string>
     <string name="activity_label_location">Your Location</string>
+    <string name="activity_label_order_confirmation">Order Confirmation</string>
 
     <string name="actionbar_drawer_open">Open</string>
     <string name="actionbar_drawer_close">Close</string>
 
     <string name="account_your_orders_title">Your Orders</string>
     <string name="account_notifications">Notifications</string>
-    <string name="account_favorite_venues_title">Favorite Venues</string>
-    <string name="account_favorite_artists_title">Favorite Artists</string>
+    <string name="account_favorites">Your Favorites</string>
     <string name="account_your_orders_no_upcoming">You have no upcoming shows</string>
     <string name="account_footer_location_title">Your Location</string>
     <string name="account_footer_location_change">Change</string>
 
     <string name="location_no_location_set">No location set</string>
     <string name="location_current">Currently Set Location</string>
+    <string name="location_manual">Manually Set Location</string>
     <string name="location_previous_locations">Previous Locations</string>
     <string name="location_youre_nearby">You\'re Nearby</string>
-    <string name="location_mode_automatic">Automatic location</string>
-    <string name="location_mode_manual">Manual location</string>
     <string name="location_switch">Use Current Location</string>
     <string name="location_unknown">Unknown</string>
     <string name="location_miles_away">%.1f mi away</string>
@@ -72,9 +73,17 @@
     <string name="login_facebook_button">Facebook</string>
     <string name="login_google_plus_button">Google</string>
     <string name="login_button_or">or</string>
+    <string name="login_connection_problem">Can\'t establish a reliable connection to the server</string>
+
+    <string name="recommendations_favorite_upsell_facebook_button">Connect with Facebook</string>
+    <string name="recommendations_favorite_upsell_search_button">Find Your Favorites</string>
+    <string name="recommendations_favorite_upsell_small_text">For better recommendations add more favorite artists</string>
+    <string name="recommendations_favorite_upsell_large_title">No show recommendations? Lets fix that.</string>
+    <string name="recommendations_favorite_upsell_large_text1">Tell us your music \'likes\' via Facebook</string>
+    <string name="recommendations_favorite_upsell_large_text2">Or, let us know who you want to see live</string>
 
     <string name="debug_menu_title">Debug</string>
-    <string name="debug_actionbar_title">DEBUG</string>
+    <string name="debug_actionbar_title">Debug</string>
     <string name="debug_header_info">INFO</string>
     <string name="debug_header_actions">ACTIONS</string>
     <string name="debug_copied_toast">Copied</string>
@@ -92,7 +101,10 @@
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
 
-    <string name="search_input_hint">Search Artists and Venues</string>
+    <string name="search_input_hint_default">Events, Artists, Venues</string>
+    <string name="search_input_hint_artists">Search Artists</string>
+    <string name="search_input_hint_artists_venues">Search Artists, Venues</string>
+
     <string name="city_search_input_hint">Search cities by name</string>
 
     <string name="view_empty_list_retry_button">Retry</string>
@@ -107,6 +119,7 @@
     <string name="share_template_show">$HEADLINE_ARTIST is playing $VENUE on $SHORT_DATE. Who\'s coming with me? $LINK</string>
     <string name="share_template_venue">Check out upcoming shows at $VENUE on Live Nation! $LINK</string>
     <string name="share_template_artist">Check out upcoming shows from $ARTIST on Live Nation! $LINK</string>
+    <string name="share_template_order_confirmation">I am going to see $HEADLINE_ARTIST at $VENUE on $SHORT_DATE. Who\'s coming with me? $LINK</string>
 
     <string name="box_office_tab_transit">Parking &amp; Transit</string>
     <string name="box_office_tab_general">Box Office</string>
@@ -126,13 +139,31 @@
     <string name="url_error_platform">Please try again later</string>
     <string name="url_error_bad_url">Bad URL</string>
 
+    <plurals name="order_confirmation_title_detail">
+        <item quantity="one">1 Ticket</item>
+        <item quantity="other">%1$d Tickets</item>
+    </plurals>
+    <plurals name="order_confirmation_quantity">
+        <item quantity="one">Congrats! You\'ve purchased a ticket to</item>
+        <item quantity="other">Congrats! You\'ve purchased tickets to</item>
+    </plurals>
+    <string name="order_confirmation_details_title">Order Details</string>
+    <string name="order_confirmation_number">Order Number</string>
+    <string name="order_confirmation_date">Date &amp; Time</string>
+    <string name="order_confirmation_venue_name">Venue</string>
+    <string name="order_confirmation_seats">Seats</string>
+    <string name="order_confirmation_cost">Total</string>
+    <string name="order_confirmation_account">Account</string>
+    <string name="order_confirmation_show_details">View Full Details</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
-    <string name="inbox_title">NOTIFICATIONS</string>
-    <string name="message_title">FEATURED</string>
+    <string name="inbox_title">Notifications</string>
+    <string name="message_title">Featured</string>
     <string name="add_message">Add Message</string>
     <string name="mark_read">Mark Read</string>
     <string name="mark_unread">Mark Unread</string>
+    <string name="add_to_calendar">Add To Calendar</string>
     <string name="delete">Delete</string>
     <string name="refresh">Refresh</string>
     <string name="inbox_refresh_failed_dialog_title">Unable to retrieve new messages</string>
@@ -142,16 +173,21 @@
     <string name="cab_selection">%d Selected</string>
     <string name="message_cta_default">Go</string>
 
-    <string name="notif_type_on_sale">ON SALE</string>
-    <string name="notif_type_announcement">JUST ANNOUNCED</string>
+    <string name="notif_type_on_sale">NOW ON SALE</string>
+    <string name="notif_type_announcement">GOES ON SALE</string>
     <string name="notif_type_last_minute">LAST MINUTE</string>
-    <string name="notif_type_presale">PRESALE</string>
+    <string name="notif_type_presale">PRESALE NOW</string>
     <string name="notif_type_in_venue">LIVE FEED</string>
     <string name="notif_type_featured">FEATURED</string>
 
     <string name="notif_date_now">NOW</string>
     <string name="notif_event_info_format" formatted="false">%s - %s</string>
     <string name="notif_event_details_format" formatted="false">%s at %s</string>
+    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.\nPlease check your connectivity.</string>
+
+    <string name="notif_loading">Loading</string>
+    <string name="notif_no_notification_title">You have no notifications.</string>
+    <string name="notif_no_notification_description">To receive artist presale and event notifications make sure you\'ve added them as favorites.</string>
 
     <!-- Refresh bar -->
     <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
@@ -160,8 +196,10 @@
     <!-- Legal and credit-->
     <string name="legal_terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
     <string name="legal_privacy_policy_url">https://s3.amazonaws.com/adr-static-content/en_US/privacy_policy.html</string>
+    <string name="credits_url">https://s3.amazonaws.com/adr-static-content/en_US/credits/credits.html</string>
     <string name="legal_terms_of_use">Terms of Use</string>
     <string name="legal_privacy_policy">Privacy Policy</string>
+    <string name="legal_credits">Credits</string>
 
     <!-- Contact -->
     <string name="contact_email_address">mobilefeedback@livenation.com</string>
@@ -173,8 +211,8 @@
     <string name="contact_email_signature_message_platform">\nAndroid Platform:</string>
 
     <!-- Help -->
-    <string name="help_url_json">https://s3.amazonaws.com/ios-static-content/en_US/help/manifest.json</string>
-    <string name="help_base_url_section">https://s3.amazonaws.com/ios-static-content/en_US/help/topics/</string>
+    <string name="help_url_json">https://s3.amazonaws.com/adr-static-content/en_US/help/manifest.json</string>
+    <string name="help_base_url_section">https://s3.amazonaws.com/adr-static-content/en_US/help/topics/</string>
 
     <!-- Calendar dialog -->
     <string name="calendar_dialog_title">Dates</string>
@@ -186,6 +224,19 @@
     <string name="calendar_dialog_end_date_prefix_past">Ended</string>
     <string name="calendar_event_description_url_base">http://livenation.com/events/</string>
     <string name="calendar_add_event_not_possible_message">Cannot add to calendar. This sale has ended.</string>
+
+    <!-- On boarding -->
+    <string name="onboarding_connect_description">Get the best of everything!\nConnect your account.</string>
+    <string name="onboarding_connect_recommendations_title">Recommendations</string>
+    <string name="onboarding_connect_presales_title">Presales</string>
+    <string name="onboarding_connect_early_tickets_title">Early Tickets</string>
+    <string name="onboarding_connect_recommendations_description">Don\'t miss another show</string>
+    <string name="onboarding_connect_presales_description">No password needed</string>
+    <string name="onboarding_connect_early_tickets_description">Jump the line</string>
+    <string name="onboarding_login_google_plus_button">Sign in with Google</string>
+    <string name="onboarding_permission">We won\'t post without your permission</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_scanning_description">Scanning your music for recommendations</string>
 
 
 </resources>

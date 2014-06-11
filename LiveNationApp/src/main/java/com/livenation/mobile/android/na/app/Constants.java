@@ -19,6 +19,7 @@ public class Constants {
     public class Notifications {
         public static final String EXTRA_TYPE = "type";
 
+        public static final String TYPE_PUSH_CAPTCHA = "silent_push";
         public static final int TYPE_FEATURED_CONTENT = -1;
         public static final int TYPE_EVENT_ON_SALE_NOW = 0;
         public static final int TYPE_EVENT_ANNOUNCEMENT = 1;
@@ -28,6 +29,7 @@ public class Constants {
 
 
         public static final String EXTRA_ENTITY_ID = "id";
+        public static final String EXTRA_PUSH_CAPTCHA_PAYLOAD = "payload";
 
         public static final String EXTRA_MESSAGE_ACTION_URL = "message_action_url";
         public static final String EXTRA_MESSAGE_ACTION_NAME = "message_action_name";
@@ -53,6 +55,21 @@ public class Constants {
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
         public static final String API_NAME = "api";
         public static final String API_ACCESS_TOKEN = "access_token";
+        public static final String IAS_NAME = "ias_name";
+        public static final String IAS_USER_ID = "ias_user_id";
+        public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
+        public static final String ON_BOARDING_HAS_BEEN_DISPLAYED = "on_boarding_has_been_displayed";
+        //1.X key
+        public static final String PREF_NAME = "TM_USER_PREF";
+        public static final String INSTALLATION_ID = "INSTALLATION_ID";
+        public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
+
+    }
+
+    public class BroadCastReceiver {
+        public static final String LOGOUT = "logout";
+        public static final String MUSIC_LIBRARY_UPDATE = "music_library_update";
+        public static final String LOGIN = "music_library_update";
     }
 
     public class Receiver {

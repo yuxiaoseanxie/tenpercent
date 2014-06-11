@@ -13,7 +13,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -21,6 +25,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
+
+import io.segment.android.models.Props;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -30,11 +37,7 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show);
-
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        super.onCreate(savedInstanceState, R.layout.activity_show);
 
         singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
         init();
@@ -86,6 +89,23 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
         startActivity(intent);
     }
 
+    @Override
+    protected void onShare() {
+        Props props = new Props();
+        if (this.event != null) {
+            props.put(AnalyticConstants.EVENT_NAME, event.getName());
+            props.put(AnalyticConstants.EVENT_ID, event.getId());
+        }
+        trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
+        super.onShare();
+    }
+
+    @Override
+    protected void onSearch() {
+        trackActionBarAction(AnalyticConstants.SEARCH_ICON_TAP, null);
+        super.onSearch();
+    }
+
     //region Share Overrides
 
     @Override
@@ -100,6 +120,14 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
     @Override
     protected String getShareText() {
+        TimeZone timeZone;
+        if (event.getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+        SHORT_DATE_FORMATTER.setTimeZone(timeZone);
+
         String eventTemplate = getString(R.string.share_template_show);
         return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
                             .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
@@ -108,4 +136,30 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     }
 
     //endregion
+
+    private void trackActionBarAction(String event, Props props) {
+        if (props == null) {
+            props = new Props();
+        }
+        props.put(AnalyticConstants.SOURCE, AnalyticsCategory.SDP);
+        LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_SDP;
+    }
+
+    @Override
+    protected Props getAnalyticsProps() {
+        if (event != null) {
+            Props props = new Props();
+            if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
+                String eventIdRaw = args.getString(SingleEventPresenter.PARAMETER_EVENT_ID);
+                props.put(AnalyticConstants.EVENT_ID, eventIdRaw);
+            }
+            return props;
+        }
+        return null;
+    }
 }

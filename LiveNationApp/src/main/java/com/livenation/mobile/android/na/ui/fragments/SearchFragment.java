@@ -13,18 +13,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
+import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
+import com.livenation.mobile.android.na.ui.SearchActivity;
+import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -34,11 +41,17 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import java.util.ArrayList;
 import java.util.List;
 
+import io.segment.android.models.Props;
+
 /**
  * Created by cchilton on 4/2/14.
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
-    private final String[] SEARCH_INCLUDES = new String[]{"venues", "artists"};
+    private final String[] SEARCH_INCLUDE_DEFAULT = new String[]{"venues", "artists", "events"};
+    private final String[] SEARCH_INCLUDE_ARTISTS_VENUES = new String[]{"venues", "artists"};
+    private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
+    private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
+
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private String unboundSearchTextBuffer;
@@ -49,6 +62,18 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<SearchResult>());
         LiveNationApplication.get().getConfigManager().bindApi(this);
+        SearchActivity searchActivity = (SearchActivity) getActivity();
+        switch (searchActivity.getSearchMode()) {
+            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE:
+                searchIncludes = SEARCH_INCLUDE_ARTISTS;
+                break;
+            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE:
+                searchIncludes = SEARCH_INCLUDE_ARTISTS_VENUES;
+                break;
+            default:
+                searchIncludes = SEARCH_INCLUDE_DEFAULT;
+                break;
+        }
     }
 
     @Override
@@ -69,7 +94,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             return;
         }
         AutoCompleteSearchParameters params = new AutoCompleteSearchParameters();
-        params.setIncludes(SEARCH_INCLUDES);
+        params.setIncludes(searchIncludes);
         params.setSearchQuery(text);
 
         apiService.autoCompleteSearch(params, this);
@@ -92,11 +117,17 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         SearchResult searchResult = adapter.getItem(position);
-
+        if (searchResult.getNumericalId() == null) {
+            return;
+        }
+        Props props = new Props();
         switch (searchResult.getSearchResultType()) {
             case Venue: {
+                props.put(AnalyticConstants.VENUE_NAME, searchResult.getName());
+                props.put(AnalyticConstants.VENUE_ID, searchResult.getNumericalId());
+
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
-                String entityId = Venue.getAlphanumericId(searchResult.getLnid());
+                String entityId = Venue.getAlphanumericId(searchResult.getNumericalId());
                 Bundle args = SingleVenuePresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
@@ -104,14 +135,31 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             }
 
             case Artist: {
+                props.put(AnalyticConstants.ARTIST_NAME, searchResult.getName());
+                props.put(AnalyticConstants.ARTIST_ID, searchResult.getNumericalId());
+
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
-                String entityId = Artist.getAlphanumericId(searchResult.getLnid());
+                String entityId = Artist.getAlphanumericId(searchResult.getNumericalId());
                 Bundle args = SingleArtistPresenter.getAruguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;
             }
+
+            case Event: {
+                props.put(AnalyticConstants.EVENT_NAME, searchResult.getName());
+                props.put(AnalyticConstants.EVENT_ID, searchResult.getNumericalId());
+
+                Intent intent = new Intent(getActivity(), ShowActivity.class);
+                String entityId = Event.makeTypedId(searchResult.getNumericalId().toString());
+                Bundle args = SingleEventPresenter.getAruguments(entityId);
+                intent.putExtras(args);
+                startActivity(intent);
+                break;
+            }
         }
+        LiveNationAnalytics.track(AnalyticConstants.SEARCH_RESULT_TAP, AnalyticsCategory.SEARCH, props);
+
     }
 
     @Override
@@ -121,8 +169,9 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onResponse(List<SearchResult> response) {
         adapter.clear();
-        adapter.addAll(response);
-        adapter.notifyDataSetChanged();
+        for (SearchResult searchResult : response) {
+            adapter.add(searchResult);
+        }
     }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {
@@ -155,12 +204,12 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             switch (searchResult.getSearchResultType()) {
                 case Artist: {
                     int favoriteTypeId = Favorite.FAVORITE_ARTIST;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter());
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 case Venue: {
                     int favoriteTypeId = Favorite.FAVORITE_VENUE;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getLnid(), getFavoritesPresenter());
+                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
                     break;
                 }
                 default:
@@ -169,6 +218,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             return view;
         }
+
+
 
         private class ViewHolder {
             private final TextView type;

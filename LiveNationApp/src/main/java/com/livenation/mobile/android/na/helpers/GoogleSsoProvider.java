@@ -21,6 +21,8 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
     @SuppressWarnings("unused")
@@ -57,11 +59,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             @Override
             public void onSessionFailed() {
                 callback.onOpenSessionFailed(new Exception(), allowForeground);
-            }
-
-            @Override
-            void onNoNetwork() {
-                callback.onNoNetwork();
             }
         };
 
@@ -111,9 +108,8 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
         currentSession = null;
     }
 
-    @Override
-    public int getId() {
-        return SsoManager.SSO_GOOGLE;
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_GOOGLE;
     }
 
     public boolean hasSessionCache() {
@@ -143,11 +139,6 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onSessionFailed() {
-            getListener().onPayloadComplete(this);
-        }
-
-        @Override
-        void onNoNetwork() {
             getListener().onPayloadComplete(this);
         }
 
@@ -204,14 +195,25 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                     user.setId(currentPerson.getId());
                     user.setDisplayName(name);
                     user.setEmail(email);
-                    user.setUrl(currentPerson.getImage().getUrl());
-
+                    String profilePicUrl = currentPerson.getImage().getUrl();
+                    profilePicUrl = getLargerProfileImage(profilePicUrl);
+                    user.setUrl(profilePicUrl);
                     return user;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        private String getLargerProfileImage(String url) {
+            //search the google image profile pic string for the "sz=50" query param, and remove it if found
+            Pattern pattern = Pattern.compile("[?]sz=[0-9]*$");
+            Matcher m = pattern.matcher(url);
+            if (m.find()) {
+                return m.replaceFirst("?sz=500");
+            }
+            return url;
         }
 
         abstract void onComplete(String accessToken, User user);
@@ -222,7 +224,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
-        private final int RC_SIGN_IN = 600613;
+        private final int RC_SIGN_IN = 6613;
         private final int RESOLVE_COUNT_MAX = 2;
         private GoogleApiClient googleApiClient;
         private int resolveCount;
@@ -255,7 +257,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            if (!allowForeground || !result.hasResolution()) {
+            if (!allowForeground) {
                 sessionPayload.onSessionFailed();
                 return;
             }
@@ -276,7 +278,7 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    sessionPayload.onSessionFailed();
+                                    sessionPayload.onSessionCanceled();
                                 }
                             }
                     );

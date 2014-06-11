@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
@@ -114,7 +115,7 @@ public class LocationManager implements LocationProvider {
     public static interface GetCityCallback {
         void onGetCity(City city);
 
-        void onGetCityFailure();
+        void onGetCityFailure(double lat, double lng);
     }
 
     private class ReverseGeocode extends AsyncTask<Void, Void, String> {
@@ -137,7 +138,20 @@ public class LocationManager implements LocationProvider {
             try {
                 List<Address> matches = geocoder.getFromLocation(lat, lng, 1);
                 if (!matches.isEmpty()) {
-                    return matches.get(0).getLocality();
+                    String locality = matches.get(0).getLocality();
+                    if (locality == null) {
+                        locality = matches.get(0).getSubLocality();
+                        if (locality == null) {
+                            locality = matches.get(0).getAdminArea();
+                            if (locality == null) {
+                                locality = matches.get(0).getCountryName();
+                                if (locality == null) {
+                                    locality = context.getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng);
+                                }
+                            }
+                        }
+                    }
+                    return locality;
                 }
             } catch (IOException ignored) {
             }
@@ -151,7 +165,7 @@ public class LocationManager implements LocationProvider {
                 City city = new City(value, lat, lng);
                 callback.onGetCity(city);
             } else {
-                callback.onGetCityFailure();
+                callback.onGetCityFailure(lat, lng);
             }
         }
     }

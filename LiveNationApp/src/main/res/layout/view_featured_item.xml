@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/view_featured_image_width"
+        android:layout_height="@dimen/view_featured_image_height">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/featured_image_foreground">
+
+            <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
+                android:id="@android:id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/view_featured_text_margin_bottom"
+            android:layout_marginLeft="@dimen/view_featured_text_margin_left_right"
+            android:layout_marginRight="@dimen/view_featured_text_margin_left_right"
+            android:layout_gravity="bottom"
+            android:text="@string/mock_placeholder_artist_title_1"
+            android:textAppearance="@style/featured_item_text" />
+    </FrameLayout>
+
+
+</LinearLayout>
+

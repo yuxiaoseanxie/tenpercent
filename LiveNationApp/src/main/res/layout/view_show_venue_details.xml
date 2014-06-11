@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <CheckBox
+    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
         android:id="@+id/view_show_venue_favorite_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

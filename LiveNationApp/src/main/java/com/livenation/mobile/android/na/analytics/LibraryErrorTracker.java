@@ -20,7 +20,7 @@ public class LibraryErrorTracker implements ErrorTracker {
                 props.put(key, properties.get(key));
             }
         }
-        LiveNationAnalytics.track(logTitle, props);
+        LiveNationAnalytics.track(logTitle, AnalyticsCategory.ERROR, props);
 
     }
 }

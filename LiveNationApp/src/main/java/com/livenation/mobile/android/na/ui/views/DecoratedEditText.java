@@ -35,8 +35,6 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
         initializeView(context, null);
     }
 
-    ;
-
     public DecoratedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         initializeView(context, attrs);
@@ -65,6 +63,10 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
             //there is user text, hide hint and show clear button
             setViewState(ViewState.STATE_TEXT);
         }
+    }
+
+    public void setHint(int resId) {
+        hint.setText(resId);
     }
 
     public EditText getEditText() {

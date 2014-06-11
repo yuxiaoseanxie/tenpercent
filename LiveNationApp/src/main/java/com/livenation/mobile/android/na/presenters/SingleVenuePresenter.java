@@ -18,11 +18,19 @@ public class SingleVenuePresenter extends
         BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
         StateListener<SingleVenuePresenter.SingleVenueState> {
     private static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
-    private static final String PARAMETER_VENUE_ID = "venue_id";
+    public static final String PARAMETER_VENUE_ID = "venue_id";
 
     public static Bundle getAruguments(String venueIdRaw) {
         Bundle bundle = new Bundle();
         bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw);
+        return bundle;
+    }
+
+    public static Bundle getAruguments(Long venueIdRaw) {
+        Bundle bundle = new Bundle();
+        if (venueIdRaw != null) {
+            bundle.putString(SingleVenuePresenter.PARAMETER_VENUE_ID, venueIdRaw.toString());
+        }
         return bundle;
     }
 

@@ -26,11 +26,14 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbar</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbar</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbar</item>
+        <item name="android:actionBarTabBarStyle">@style/ActionBarTabBarStyle.Actionbar</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbar</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbar</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbar</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbar
         </item>
+        <item name="android:listSelector">@drawable/selectable_background_default</item>
+        <item name="android:selectableItemBackground">@drawable/selectable_background_default</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbar
         </item>
         <item name="actionModeCloseDrawable">@drawable/close_action_mode</item>
@@ -40,8 +43,7 @@
 
     <style name="ActionBar.Solid.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_actionbar</item>
-        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_actionbar</item>
-        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_actionbar</item>
+        <item name="android:backgroundStacked">@color/windowBackground</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Actionbar</item>
     </style>
 
@@ -60,6 +62,14 @@
 
     <style name="ActionBarTabStyle.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
+        <item name="android:showDividers">none</item>
+        <item name="android:measureWithLargestChild">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ActionBarTabBarStyle.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.TabBar">
+        <item name="android:background">@drawable/tab_unselected_actionbar</item>
+        <item name="android:showDividers">middle</item>
     </style>
 
     <style name="ActionBar.Overflow" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">

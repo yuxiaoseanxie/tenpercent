@@ -1,8 +1,11 @@
 package com.livenation.mobile.android.na.helpers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -10,6 +13,7 @@ import com.facebook.Session.Builder;
 import com.facebook.Session.OpenRequest;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.model.GraphUser;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
 import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
 import com.livenation.mobile.android.platform.api.service.ApiService;
@@ -32,7 +36,10 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
         Map<String, Object> map = graphUser.asMap();
 
         String id = graphUser.getId();
-        String email = map.get("email").toString();
+        String email = null;
+        if (map.get("email") != null) {
+            email = map.get("email").toString();
+        }
         String name = graphUser.getName();
         String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
 
@@ -58,18 +65,20 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
             public void onComplete(String accessToken, User user) {
                 FacebookSsoProvider.this.accessToken = accessToken;
                 FacebookSsoProvider.this.user = user;
-
                 callback.onOpenSession(accessToken);
             }
 
             @Override
             public void onSessionFailed() {
                 callback.onOpenSessionFailed(new Exception(), allowForeground);
+                Context context = getActivity().getApplicationContext();
+                Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem) , Toast.LENGTH_SHORT);
+                toast.show();
             }
 
             @Override
-            void onNoNetwork() {
-                callback.onNoNetwork();
+            public void onSessionCanceled() {
+                callback.onOpenSessionCanceled();
             }
         };
 
@@ -117,9 +126,8 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
         currentSession = null;
     }
 
-    @Override
-    public int getId() {
-        return SsoManager.SSO_FACEBOOK;
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
 
     public boolean hasSessionCache() {
@@ -160,10 +168,15 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
             @Override
             public void call(final Session session, com.facebook.SessionState state,
                              Exception exception) {
-                if (null != exception) {
+
+                if (null != exception && !(exception instanceof FacebookOperationCanceledException)) {
                     //TODO: catch the "no network/offline" error details here
                     //route to sessionPayload->onNoNetwork
                     sessionPayload.onSessionFailed();
+                    return;
+                }
+                if (exception instanceof FacebookOperationCanceledException) {
+                    sessionPayload.onSessionCanceled();
                     return;
                 }
                 if (session.isOpened()) {
@@ -191,10 +204,6 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
             getListener().onPayloadComplete(this);
         }
 
-        @Override
-        void onNoNetwork() {
-            getListener().onPayloadComplete(this);
-        }
     }
 
     private abstract class GetTokenAndUserPayload extends BaseSessionState.SessionPayload<Session> {

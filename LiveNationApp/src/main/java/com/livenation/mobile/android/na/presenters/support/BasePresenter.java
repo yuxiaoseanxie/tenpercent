@@ -11,9 +11,9 @@ package com.livenation.mobile.android.na.presenters.support;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
-import com.livenation.mobile.android.platform.util.Logger;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
@@ -21,12 +21,10 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
     private List<T> activeStates = new ArrayList<T>();
 
     private void addActiveState(T state) {
-        Logger.log(getTag(), "Adding active state:" + state.hashCode());
         activeStates.add(state);
     }
 
     private void removeActiveState(T state) {
-        Logger.log(getTag(), "Removing active state:" + state.hashCode());
         if (activeStates.contains(state)) {
             activeStates.remove(state);
         } else {
@@ -36,9 +34,12 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 
     @Override
     public void cancel(T2 view) {
-        for (T state : activeStates) {
+        Iterator<T> iterator = activeStates.iterator();
+        while (iterator.hasNext()) {
+            T state = iterator.next();
             if (state.getView().equals(view)) {
                 state.cancel();
+                iterator.remove();
             }
         }
     }
@@ -55,7 +56,7 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 
     @Override
     public void onStateCancelled(T state) {
-        removeActiveState(state);
+        //do nothing
     }
 
     @Override

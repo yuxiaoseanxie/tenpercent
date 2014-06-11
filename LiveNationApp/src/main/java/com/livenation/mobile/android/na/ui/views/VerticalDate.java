@@ -9,7 +9,6 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,15 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class VerticalDate extends LinearLayout {
+    private final SimpleDateFormat DAY_FORMATTER = new SimpleDateFormat("d");
+    private final SimpleDateFormat DOTW_FORMATTER = new SimpleDateFormat("EEE");
+    private final SimpleDateFormat MONTH_FORMATTER = new SimpleDateFormat("MMM");
+
     private TextView dateDotw;
     private TextView dateDay;
     private TextView dateMonth;
@@ -40,22 +45,24 @@ public class VerticalDate extends LinearLayout {
         init(context);
     }
 
-    public void setDate(Date date) {
-        String day = DateFormat.format("d", date).toString();
-        String dotw = DateFormat.format("EEE", date).toString();
-        String month = DateFormat.format("MMM", date).toString();
-
+    public void setDate(Date date, TimeZone timeZone) {
+        DAY_FORMATTER.setTimeZone(timeZone);
+        String day = DAY_FORMATTER.format(date);
         this.dateDay.setText(day);
+
+        DOTW_FORMATTER.setTimeZone(timeZone);
+        String dotw = DOTW_FORMATTER.format(date);
         this.dateDotw.setText(dotw);
+
+        MONTH_FORMATTER.setTimeZone(timeZone);
+        String month = MONTH_FORMATTER.format(date);
         this.dateMonth.setText(month);
     }
 
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        //TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
-        //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-        View view = inflater.inflate(R.layout.view_vertical_date, null);
+        View view = inflater.inflate(R.layout.view_vertical_date, isInEditMode()? null : this, false);
 
         this.dateDotw = (TextView) view.findViewById(R.id.list_show_item_date_dotw);
         this.dateDay = (TextView) view.findViewById(R.id.list_show_item_date_day);

@@ -23,12 +23,18 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
+import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import com.livenation.mobile.android.na.utils.CalendarUtils;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
@@ -36,6 +42,11 @@ import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
 import com.urbanairship.util.UAStringUtil;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -43,7 +54,7 @@ import java.util.List;
  * Activity that manages the activity_inbox.
  * On a tablet it also manages the activity_message view pager.
  */
-public class InboxActivity extends FragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
+public class InboxActivity extends LiveNationFragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
@@ -58,18 +69,14 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_inbox);
-
-        actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.inbox_title);
+        super.onCreate(savedInstanceState, R.layout.activity_inbox);
 
         this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
 
         // Set up the activity_inbox fragment
         this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
     }
 
     @Override
@@ -80,7 +87,6 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
     @Override
     protected void onStart() {
         super.onStart();
-
         // Activity instrumentation for analytic tracking
         UAirship.shared().getAnalytics().activityStarted(this);
     }
@@ -198,7 +204,6 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
 
         });
 
-
         mode.setCustomView(customView);
 
         return true;
@@ -227,6 +232,17 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
             actionSelectionButton.setText(selectionText);
         }
 
+        MenuItem calendarItem = mode.getMenu().findItem(R.id.calendar);
+        if (inbox.getSelectedMessages().size() == 1) {
+            String messageId = inbox.getSelectedMessages().get(0);
+            RichPushMessage message = richPushInbox.getMessage(messageId);
+            final int type = getMessageType(message);
+            calendarItem.setVisible((type == Constants.Notifications.TYPE_EVENT_ON_SALE_NOW
+                || type == Constants.Notifications.TYPE_EVENT_LAST_MINUTE
+                    || type == Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE
+                    || type == Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT));
+        }
+
         return true;
     }
 
@@ -239,6 +255,43 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
                 break;
             case R.id.delete:
                 richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));
+                break;
+            case R.id.calendar:
+
+                String messageId = inbox.getSelectedMessages().get(0);
+                RichPushMessage message = richPushInbox.getMessage(messageId);
+                final int type = getMessageType(message);
+                final String eventId = String.valueOf(DataModelHelper.getNumericEntityId(message.getExtras().getString("id")));
+                final String artistName = message.getExtras().getString("artist_name");
+                final String venueName = message.getExtras().getString("venue_name");
+                final String localStartTime = message.getExtras().getString("local_start_time");
+                final String onSaleDate = message.getExtras().getString("on_sale_date");
+                if (artistName != null) {
+                    DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
+                    CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(artistName + " " + venueName);
+                    switch (type) {
+                        case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
+                        case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:
+                        case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE:
+                            if (onSaleDate != null) {
+                                Date onSaleDateFormatted = fmt.parseDateTime(onSaleDate).toDate();
+                                calendarItem.setStartDate(onSaleDateFormatted);
+                            }
+                            break;
+                        case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
+                            if (localStartTime != null) {
+                                Date localStartTimeonSaleDateFormatted = fmt.parseDateTime(localStartTime).toDate();
+                                calendarItem.setStartDate(localStartTimeonSaleDateFormatted);
+                            }
+                            break;
+                    }
+
+                    if (calendarItem.getStartDate() != null && calendarItem.getStartDate().compareTo(Calendar.getInstance().getTime()) > 0) {
+                        CalendarUtils.addEventToCalendar(calendarItem, eventId, InboxActivity.this);
+                    } else {
+                        Toast.makeText(InboxActivity.this, R.string.calendar_add_event_not_possible_message, Toast.LENGTH_SHORT).show();
+                    }
+                }
                 break;
             default:
                 return false;
@@ -379,5 +432,20 @@ public class InboxActivity extends FragmentActivity implements BaseInboxFragment
                     })
                     .create();
         }
+    }
+
+    public int getMessageType(RichPushMessage message) {
+        Bundle extras = message.getExtras();
+        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
+            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
+            return Integer.valueOf(typeString);
+        } else {
+            return Constants.Notifications.TYPE_FEATURED_CONTENT;
+        }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_NOTIFICATIONS;
     }
 }

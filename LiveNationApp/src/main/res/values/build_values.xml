@@ -6,6 +6,5 @@
 
     <string name="urbanairship_permission"></string>
     <string name="urbanairship_authorities"></string>
-    <string name="urbanairship_category"></string>
-    <string name="mtopia_api_key">35abec5b15804303aaedbf6bdeb259b2</string>
+    <string name="hockey_app_id"></string>
 </resources>

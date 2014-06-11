@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
@@ -33,14 +34,16 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (null != favoritesPresenter) {
-            //release the observer binding, prevent memory leaks
-            favoritesPresenter.getObserverPresenter().cancel(this);
-        }
+        stop();
     }
 
-    public void bindToFavorite(int favoriteTypeId, String favoriteName, long itemId, FavoritesPresenter favoritesPresenter) {
+    public void bindToFavorite(int favoriteTypeId, String favoriteName, Long itemId, FavoritesPresenter favoritesPresenter, AnalyticsCategory category) {
         this.favoritesPresenter = favoritesPresenter;
+        stop();
+        if (itemId == null) {
+            setVisibility(INVISIBLE);
+            return;
+        }
         setChecked(false);
 
         Bundle args = favoritesPresenter.getObserverPresenter().getBundleArgs(favoriteTypeId, itemId);
@@ -55,7 +58,7 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
 
         //Set a clickListener that will update the user's favorites with the API if they check/uncheck
         //this checkbox
-        OnFavoriteClickListener.OnFavoriteClick clickListener = new OnFavoriteClickListener.OnFavoriteClick(favorite, favoritesPresenter, getContext());
+        OnFavoriteClickListener.OnFavoriteClick clickListener = new OnFavoriteClickListener.OnFavoriteClick(favorite, favoritesPresenter, getContext(), category);
         setOnClickListener(clickListener);
     }
 
@@ -67,5 +70,16 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
     @Override
     public void onFavoriteRemoved(Favorite favorite) {
         setChecked(false);
+    }
+
+    /**
+     * Cancel any bindings. this will prevent any in progress API requests from triggering
+     * 'onFavoriteAdded' or 'onFavoriteRemoved'
+     */
+    private void stop() {
+        if (null != favoritesPresenter) {
+            //release the observer binding, prevent memory leaks
+            favoritesPresenter.getObserverPresenter().cancel(FavoriteCheckBox.this);
+        }
     }
 }

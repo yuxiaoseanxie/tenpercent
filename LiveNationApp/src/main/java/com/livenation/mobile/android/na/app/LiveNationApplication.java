@@ -9,20 +9,33 @@
 package com.livenation.mobile.android.na.app;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
+import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
@@ -32,10 +45,6 @@ import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.FeaturePresenter;
-import com.livenation.mobile.android.na.presenters.NearbyVenuesPresenter;
-import com.livenation.mobile.android.na.presenters.RecommendationSetsPresenter;
-import com.livenation.mobile.android.na.presenters.RecommendationsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -45,8 +54,12 @@ import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
+import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
@@ -62,20 +75,18 @@ public class LiveNationApplication extends Application {
     private SingleEventPresenter singleEventPresenter;
     private SingleArtistPresenter singleArtistPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
-    private FeaturePresenter featurePresenter;
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
-    private NearbyVenuesPresenter nearbyVenuesPresenter;
     private FavoritesPresenter favoritesPresenter;
-    private SsoManager ssoManager;
+    private static SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
-    private RecommendationsPresenter recommendationsPresenter;
-    private RecommendationSetsPresenter recommendationSetsPresenter;
     private static LocationManager locationProvider;
     private static ProviderManager providerManager = new ProviderManager();;
+    private BroadcastReceiver internetStateReceiver;
 
     private ConfigManager configManager;
+    private boolean isMusicSync = false;
 
     public static LiveNationApplication get() {
         return instance;
@@ -96,17 +107,13 @@ public class LiveNationApplication extends Application {
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
-        featurePresenter = new FeaturePresenter();
         singleVenuePresenter = new SingleVenuePresenter();
         singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
-        accountPresenters = new AccountPresenters(getSsoManager());
-        nearbyVenuesPresenter = new NearbyVenuesPresenter();
+        accountPresenters = new AccountPresenters();
         favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
-        recommendationsPresenter = new RecommendationsPresenter();
-        recommendationSetsPresenter = new RecommendationSetsPresenter();
 
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
@@ -121,18 +128,37 @@ public class LiveNationApplication extends Application {
         setupNotifications();
         setupTicketing();
         checkInstalledAppForAnalytics();
+        setupInternetStateReceiver();
 
         getConfigManager().buildApi();
+
+        //Analytics
+        Props props = new Props();
+        props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
+        props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
+        LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Object imageLoader = getImageLoader();
+        if (imageLoader instanceof LruCache) {
+            LruCache cache = (LruCache) imageLoader;
+            cache.evictAll();
+        }
+    }
 
     private void setupNotifications() {
         Logger.logLevel = Log.VERBOSE;
-        UAirship.takeOff(this);
+        AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(this);
+        airshipConfigOptions.inProduction = !BuildConfig.DEBUG;
+        UAirship.takeOff(this, airshipConfigOptions);
 
         PushManager.enablePush();
 
         BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
+        notificationBuilder.iconDrawableId = R.drawable.ic_stat_notify;
         PushManager.shared().setNotificationBuilder(notificationBuilder);
         PushManager.shared().setIntentReceiver(PushReceiver.class);
 
@@ -144,9 +170,47 @@ public class LiveNationApplication extends Application {
     private void setupTicketing() {
         Ticketing.Config ticketingConfig = new Ticketing.Config();
         ticketingConfig.setContext(this);
-        ticketingConfig.setApiKey(getString(R.string.mtopia_api_key));
         ticketingConfig.setImageLoader(getImageLoader());
+        ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
+        ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
+        ticketingConfig.setOrderHistoryUploadHandler(new OrderHistoryUploadHelper());
+        ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
         Ticketing.init(ticketingConfig);
+        Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
+    }
+
+    private void setupInternetStateReceiver() {
+        internetStateReceiver = new BroadcastReceiver() {
+            @Override
+            public synchronized void onReceive(Context context, Intent intent) {
+                ConnectivityManager cm = (ConnectivityManager) context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null && activeNetwork.isConnected()) {
+                    setupNotifications();
+                    checkInstalledAppForAnalytics();
+                    MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
+                    musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
+                        @Override
+                        public void onResponse(Void response) {
+                            LiveNationApplication.get().setIsMusicSync(true);
+                            if (internetStateReceiver != null) {
+                                unregisterReceiver(internetStateReceiver);
+                                internetStateReceiver = null;
+                            }
+                        }
+
+                        @Override
+                        public void onErrorResponse(LiveNationError error) {
+                        }
+                    });
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(internetStateReceiver, intentFilter);
     }
 
     private void checkInstalledAppForAnalytics() {
@@ -155,7 +219,15 @@ public class LiveNationApplication extends Application {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, props);
+            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
+        }
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        if (internetStateReceiver != null) {
+            unregisterReceiver(internetStateReceiver);
         }
     }
 
@@ -179,20 +251,12 @@ public class LiveNationApplication extends Application {
         return singleEventPresenter;
     }
 
-    public FeaturePresenter getFeaturePresenter() {
-        return featurePresenter;
-    }
-
     public SingleVenuePresenter getSingleVenuePresenter() {
         return singleVenuePresenter;
     }
 
     public VenueEventsPresenter getVenueEventsPresenter() {
         return venueEventsPresenter;
-    }
-
-    public NearbyVenuesPresenter getNearbyVenuesPresenter() {
-        return nearbyVenuesPresenter;
     }
 
     public AccountPresenters getAccountPresenters() {
@@ -203,7 +267,7 @@ public class LiveNationApplication extends Application {
         return favoritesPresenter;
     }
 
-    public SsoManager getSsoManager() {
+    public static SsoManager getSsoManager() {
         return ssoManager;
     }
 
@@ -211,16 +275,16 @@ public class LiveNationApplication extends Application {
         return inboxStatusPresenter;
     }
 
-    public RecommendationsPresenter getRecommendationsPresenter() {
-        return recommendationsPresenter;
-    }
-
-    public RecommendationSetsPresenter getRecommendationSetsPresenter() {
-        return recommendationSetsPresenter;
-    }
-
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public boolean isMusicSync() {
+        return isMusicSync;
+    }
+
+    public void setIsMusicSync(boolean isMusicSync) {
+        this.isMusicSync = isMusicSync;
     }
 
     public static LocationManager getLocationProvider() {
