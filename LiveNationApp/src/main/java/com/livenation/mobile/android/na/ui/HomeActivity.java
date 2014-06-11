@@ -274,8 +274,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         public FragmentAdapter(FragmentManager fm, Context context) {
             super(fm);
             tabTitles[0] = context.getString(R.string.tab_title_your_shows);
-            tabTitles[1] = context.getString(R.string.tab_title_nearby);
-            tabTitles[2] = context.getString(R.string.tab_title_all_shows);
+            tabTitles[1] = context.getString(R.string.tab_title_all_shows);
+            tabTitles[2] = context.getString(R.string.tab_title_nearby);
         }
 
         @Override
@@ -294,9 +294,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 case 0:
                     return new RecommendationSetsFragment();
                 case 1:
-                    return new NearbyVenuesFragment();
-                case 2:
                     return new AllShowsFragment();
+                case 2:
+                    return new NearbyVenuesFragment();
+
                 default:
                     throw new IllegalArgumentException();
             }

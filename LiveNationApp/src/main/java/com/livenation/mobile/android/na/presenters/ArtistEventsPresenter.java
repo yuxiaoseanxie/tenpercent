@@ -77,7 +77,7 @@ public class ArtistEventsPresenter
             String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
             apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
 
-            int limit = 30;
+            int limit = 10;
             if (args.containsKey(PARAMETER_LIMIT))
                 limit = args.getInt(PARAMETER_LIMIT);
 
