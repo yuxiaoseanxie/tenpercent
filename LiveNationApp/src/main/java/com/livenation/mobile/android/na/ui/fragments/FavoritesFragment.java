@@ -159,16 +159,9 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parcelable artistState = artistList.getWrappedList().onSaveInstanceState();
-        Parcelable venueState = venueList.getWrappedList().onSaveInstanceState();
-
-        outState.putParcelable("" + artistList.getId(), artistState);
-        outState.putParcelable("" + venueList.getId(), venueState);
-        outState.putInt(ARG_SHOW_TAB, tabHost.getCurrentTab());
 
         instanceState = new Bundle();
         instanceState.putInt(ARG_SHOW_TAB, tabHost.getCurrentTab());
-
     }
 
     public void applyInstanceState(Bundle state) {
