@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -108,7 +109,8 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     @Override
     public void onGetCityFailure(double lat, double lng) {
-        locationText.setText(getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng));
+        Context context = locationText.getContext();
+        locationText.setText(context.getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng));
     }
 
     private class OnOrdersClick implements View.OnClickListener {
