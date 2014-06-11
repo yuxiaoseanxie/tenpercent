@@ -43,17 +43,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
         }
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         init();
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         deinit();
     }
 

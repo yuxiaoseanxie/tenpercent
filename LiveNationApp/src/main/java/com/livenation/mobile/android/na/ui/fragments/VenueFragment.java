@@ -57,11 +57,28 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView telephone;
     private View venueInfo;
     private View phonebox;
-    private EventsView shows;
+    private ShowsListNonScrollingFragment showsFragment;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
     private LatLng mapLocationCache = null;
+    private final String SHOWS_FRAGMENT_TAG = "shows";
+    private final String MAP_FRAGMENT_TAG = "maps";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
+        if (showsFragment == null) {
+            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
+        }
+
+        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = new LiveNationMapFragment();
+            mapFragment.setMapReadyListener(this);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,23 +95,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
+        addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
+    }
 
-        Fragment showsFragment;
-        if (savedInstanceState == null) {
-            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-            addFragment(R.id.fragment_venue_container_list, showsFragment, "shows");
-        } else {
-            showsFragment = getChildFragmentManager().findFragmentByTag("shows");
-        }
-
-        mapFragment = new LiveNationMapFragment();
-        mapFragment.setMapReadyListener(this);
-
-        addFragment(R.id.fragment_venue_map_container, mapFragment, "map");
-
-        shows = (EventsView) showsFragment;
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeFragment(showsFragment);
+        removeFragment(mapFragment);
     }
 
     @Override
@@ -132,7 +143,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     @Override
     public void setEvents(List<Event> events) {
-        shows.setEvents(events);
+        showsFragment.setEvents(events);
     }
 
     @Override
@@ -150,8 +161,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
     }
-
-    ;
 
     private void loadBoxOfficeInfo(final long venueId) {
         LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
