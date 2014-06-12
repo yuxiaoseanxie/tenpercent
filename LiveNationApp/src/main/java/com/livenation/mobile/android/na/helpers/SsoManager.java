@@ -11,18 +11,23 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.sso.ActivityProvider;
+import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
+import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
 import java.lang.ref.WeakReference;
 
 import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
 
-public class SsoManager implements UiApiSsoProvider.ActivityProvider {
+public class SsoManager implements ActivityProvider {
     public enum SSO_TYPE {
         SSO_FACEBOOK(R.drawable.facebook_logo),
         SSO_GOOGLE(R.drawable.google_plus_logo),
         SSO_DUMMY(0),;
 
         public int logoResId;
+
         SSO_TYPE(int logoResId) {
             this.logoResId = logoResId;
         }
@@ -42,10 +47,10 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     private final String USER_NAME = "user_name";
     private final String USER_EMAIL = "user_email";
     private final String USER_PIC_URL = "user_pic_url";
-    private final UiApiSsoProvider defaultProvider;
+    private final ApiSsoProvider defaultProvider;
     private WeakReference<Activity> weakActivity;
 
-    public SsoManager(UiApiSsoProvider defaultProvider) {
+    public SsoManager(ApiSsoProvider defaultProvider) {
         this.defaultProvider = defaultProvider;
     }
 
@@ -75,15 +80,62 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         weakActivity = new WeakReference<Activity>(activity);
     }
 
-    public void logout(Activity activity) {
-        ApiSsoProvider ssoProvider = getConfiguredSsoProvider(activity);
+    public void logout(final Context context, final SsoLogoutCallback callback) {
+        ApiSsoProvider ssoProvider = getConfiguredSsoProvider(context);
         if (ssoProvider != null) {
-            ssoProvider.clearSession();
+            ssoProvider.logout( new SsoLogoutCallback() {
+                @Override
+                public void onLogoutSucceed() {
+                    removeAuthConfiguration(context);
+                    removeUser(context);
+                    if (callback != null) {
+                        callback.onLogoutSucceed();
+                    }
+                }
+
+                @Override
+                public void onLogoutFailed(LiveNationError error) {
+                    if (callback != null) {
+                        callback.onLogoutFailed(error);
+                    }
+                }
+            });
         }
         LiveNationApplication.get().getConfigManager().clearAccessToken();
+        LiveNationApplication.get().getConfigManager().buildApi();
     }
 
-    public UiApiSsoProvider getConfiguredSsoProvider(Context context) {
+    public void login(final SSO_TYPE ssoType, final Context context, boolean allowForeground, final SsoLoginCallback callback) {
+        getSsoProvider(ssoType, context).login(allowForeground, new SsoLoginCallback() {
+            @Override
+            public void onLoginSucceed(String accessToken, User user) {
+                saveAuthConfiguration(ssoType, accessToken, context);
+                saveUser(user, context);
+                if (callback != null) {
+                    callback.onLoginSucceed(accessToken, user);
+                }
+
+            }
+
+            @Override
+            public void onLoginFailed(LiveNationError error) {
+                removeAuthConfiguration(context);
+                removeUser(context);
+                if (callback != null) {
+                    callback.onLoginFailed(error);
+                }
+            }
+
+            @Override
+            public void onLoginCanceled() {
+                if (callback != null) {
+                    callback.onLoginCanceled();
+                }
+            }
+        });
+    }
+
+    public ApiSsoProvider getConfiguredSsoProvider(Context context) {
         AuthConfiguration authConfig = getAuthConfiguration(context);
         if (null == authConfig) {
             return defaultProvider;
@@ -92,7 +144,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         return getSsoProvider(ssoProviderId, context);
     }
 
-    public void saveAuthConfiguration(SSO_TYPE ssoProviderId, String token, Context context) {
+    private void saveAuthConfiguration(SSO_TYPE ssoProviderId, String token, Context context) {
         persistance.write(PARAMETER_ACCESS_TOKEN_KEY, token, context);
         String ssoIdValue = ssoProviderId.name();
         persistance.write(PARAMETER_SSO_PROVIDER_ID_KEY, ssoIdValue, context);
@@ -110,12 +162,12 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         return new AuthConfiguration(ssoIdValue, accessToken);
     }
 
-    public void removeAuthConfiguration(Context context) {
+    private void removeAuthConfiguration(Context context) {
         persistance.remove(PARAMETER_ACCESS_TOKEN_KEY, context);
         persistance.remove(PARAMETER_SSO_PROVIDER_ID_KEY, context);
     }
 
-    public void saveUser(User user, Context context) {
+    private void saveUser(User user, Context context) {
         if (null == user) throw new IllegalArgumentException("User is null");
         persistance.write(USER_ID, user.getId(), context);
         persistance.write(USER_NAME, user.getDisplayName(), context);
@@ -142,7 +194,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         return user;
     }
 
-    public void removeUser(Context context) {
+    private void removeUser(Context context) {
         persistance.remove(USER_ID, context);
         persistance.remove(USER_NAME, context);
         persistance.remove(USER_EMAIL, context);
@@ -160,7 +212,7 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
      * Since this Activity is stored in a weakreference, the SSOManager will not cause a
      * context/activity memory leak.
      */
-    public UiApiSsoProvider getSsoProvider(SSO_TYPE ssoProviderId, Context context) {
+    public ApiSsoProvider getSsoProvider(SSO_TYPE ssoProviderId, Context context) {
         if (context instanceof Activity) {
             setActivity((Activity) context);
         }

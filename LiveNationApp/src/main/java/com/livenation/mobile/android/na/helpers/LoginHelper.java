@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
 /**
  * Created by elodieferrais on 5/8/14.
@@ -28,12 +29,8 @@ public class LoginHelper {
     }
 
 
-    public static void logout(Activity activity) {
-        ssoManager.logout(activity);
-        ssoManager.removeAuthConfiguration(applicationContext);
-        ssoManager.removeUser(applicationContext);
-
-        LiveNationApplication.get().getConfigManager().buildApi();
+    public static void logout(Context context, SsoLogoutCallback callback) {
+        ssoManager.logout(context, callback);
     }
 
     public static boolean isUsingFacebook(Context context) {

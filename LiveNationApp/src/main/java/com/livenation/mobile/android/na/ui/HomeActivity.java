@@ -202,7 +202,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
             case R.id.menu_home_logout_item:
                     LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
-                    LoginHelper.logout(this);
+                    LoginHelper.logout(this, null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
