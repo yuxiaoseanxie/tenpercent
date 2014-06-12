@@ -13,29 +13,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            style="@style/ui_header_top_accent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_details" />
-
         <include
             layout="@layout/sub_show_calender"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/show_calendar_margin_bottom"
-            android:layout_marginLeft="@dimen/show_calendar_margin_left"
-            android:layout_marginRight="@dimen/show_calendar_margin_right"
-            android:layout_marginTop="@dimen/show_calendar_margin_top"
-        />
+            android:layout_height="wrap_content" />
 
         <com.livenation.mobile.android.na.ui.views.ShowVenueView
             android:id="@+id/fragment_show_venue_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/show_calendar_margin_bottom"
-            android:layout_marginLeft="@dimen/show_calendar_margin_left"
-            android:layout_marginRight="@dimen/show_calendar_margin_right"
+            android:layout_marginBottom="@dimen/fragment_show_venue_detail_margin_bottom"
             android:background="@drawable/livenation_selector_pressable_background" />
 
         <FrameLayout
@@ -59,7 +46,6 @@
             android:id="@+id/fragment_show_artist_lineup_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/fragment_show_lineup_margin_left"
             android:orientation="vertical">
 
             <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
