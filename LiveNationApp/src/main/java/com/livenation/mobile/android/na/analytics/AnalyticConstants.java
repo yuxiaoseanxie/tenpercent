@@ -74,6 +74,10 @@ public class AnalyticConstants {
     public static final String NOTIFICATION_CELL_TAP = "Notification Tap";
     public static final String DEEP_LINK_BUTTON_TAP = "Deep Link Button Tap";
 
+    //Push Notification
+    public static final String PUSH_NOITFICATION_RECEIVE= "Push Notification Receive";
+    public static final String PUSH_NOITFICATION_TAP= "Push Notification Tap";
+
     //Search
     public static final String SEARCH_RESULT_TAP = "Search Result Tap";
 
@@ -192,6 +196,9 @@ public class AnalyticConstants {
     public static final String UI = "UI";
     public static final String C = "C";
     public static final String FROM = "From";
+
+    //Push Notification
+    public static final String NOTIFICATION_TYPE= "Notification Type";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 

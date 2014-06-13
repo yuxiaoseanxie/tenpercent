@@ -27,7 +27,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.MultiGetParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Set;
 
