@@ -14,6 +14,9 @@ import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
 import java.lang.ref.WeakReference;
 
+import io.segment.android.Analytics;
+import io.segment.android.models.Traits;
+
 import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
 
 public class SsoManager implements UiApiSsoProvider.ActivityProvider {
@@ -121,6 +124,8 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         persistance.write(USER_NAME, user.getDisplayName(), context);
         persistance.write(USER_EMAIL, user.getEmail(), context);
         persistance.write(USER_PIC_URL, user.getUrl(), context);
+        Analytics.identify(user.getId(), new Traits("name", user.getDisplayName(),
+                "email", user.getEmail()));
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGIN));
     }
 
