@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
@@ -44,9 +45,12 @@ public class PushReceiver extends BroadcastReceiver {
             Ticketing.setPushCaptchaPayload(pushCaptchaPayload);
         }
 
-        //Props props = new Props();
-        //props.put(AnalyticConstants.NOTIFICATION_TYPE, type);
-        //LiveNationAnalytics.track(AnalyticConstants.PUSH_NOITFICATION_RECEIVE, props);
+        String messageValue = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_VALUE);
+        String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
+        Props props = new Props();
+        props.put(AnalyticConstants.MESSAGE_VALUE, messageValue);
+        props.put(AnalyticConstants.MESSAGE_ID, messageId);
+        LiveNationAnalytics.track(AnalyticConstants.PUSH_NOTIFICATION_RECEIVE, AnalyticsCategory.PUSHNOTIFICATION, props);
     }
 
     private void messageClicked(Context context, Intent intent) {
@@ -58,6 +62,13 @@ public class PushReceiver extends BroadcastReceiver {
         outgoingIntent.putExtra(InboxActivity.MESSAGE_ID_RECEIVED_KEY, messageId);
         outgoingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(outgoingIntent);
+
+        String messageValue = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_VALUE);
+        Props props = new Props();
+        props.put(AnalyticConstants.MESSAGE_VALUE, messageValue);
+        props.put(AnalyticConstants.MESSAGE_ID, messageId);
+        LiveNationAnalytics.track(AnalyticConstants.PUSH_NOTIFICATION_TAP, AnalyticsCategory.PUSHNOTIFICATION, props);
+
     }
 
     private void registrationFinished(Context context, Intent intent) {
