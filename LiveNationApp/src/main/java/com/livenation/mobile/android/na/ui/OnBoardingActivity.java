@@ -322,6 +322,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         } else if (R.id.on_boarding_google_sign_in_button == v.getId()) {
             loginWithGoogle();
         } else if (R.id.on_boarding_skip_textview == v.getId()) {
+            LiveNationAnalytics.track(AnalyticConstants.SKIP_TAP, AnalyticsCategory.ON_BOARDING);
             goToTheApp();
         }
         setOnboardingAlreadyDisplay();
