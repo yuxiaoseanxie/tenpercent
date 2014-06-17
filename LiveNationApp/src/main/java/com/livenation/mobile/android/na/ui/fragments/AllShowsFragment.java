@@ -128,7 +128,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         if (chartingContainer == null) {
             return;
         }
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(chartingContainer.getContext());
 
         chartingContainer.removeAllViews();
         for (Chart chart : featured) {
