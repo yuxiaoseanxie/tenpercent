@@ -209,12 +209,12 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
+        Props props = new Props();
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
-            Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
         }
+        LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
     @Override
