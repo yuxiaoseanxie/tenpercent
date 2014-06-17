@@ -91,6 +91,8 @@ public class LiveNationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Crashlytics.start(this);
+        Analytics.initialize(this);
+
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
@@ -122,7 +124,6 @@ public class LiveNationApplication extends Application {
 
         setupNotifications();
         setupTicketing();
-        checkInstalledAppForAnalytics();
         setupInternetStateReceiver();
 
         getConfigManager().buildApi();
@@ -209,7 +210,6 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
-        Analytics.initialize(this);
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
             Props props = new Props();
