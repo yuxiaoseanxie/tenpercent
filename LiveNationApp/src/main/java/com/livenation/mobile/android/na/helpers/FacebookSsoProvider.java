@@ -218,8 +218,7 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
                 public void onCompleted(GraphUser graphUser, Response response) {
                     try {
                         if (null == graphUser) {
-                            onComplete(getSession().getAccessToken(), null);
-                            return;
+                            throw new IllegalStateException("Facebook user is null");
                         }
                         User user = FacebookSsoProvider.getAppUser(graphUser);
                         onComplete(getSession().getAccessToken(), user);
