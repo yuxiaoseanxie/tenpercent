@@ -102,7 +102,14 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
-        Event event = adapter.getItem(position).get();
+        RecommendationItem recommendationItem = (RecommendationItem) parent.getItemAtPosition(position);
+
+        if (recommendationItem == null || recommendationItem.get() == null) {
+            //user clicked the footer/loading view
+            return;
+        }
+
+        Event event = recommendationItem.get();
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
