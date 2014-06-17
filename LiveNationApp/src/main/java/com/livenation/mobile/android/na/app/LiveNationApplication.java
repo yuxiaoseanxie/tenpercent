@@ -184,7 +184,6 @@ public class LiveNationApplication extends Application {
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
-                    setupNotifications();
                     checkInstalledAppForAnalytics();
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
                     musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
