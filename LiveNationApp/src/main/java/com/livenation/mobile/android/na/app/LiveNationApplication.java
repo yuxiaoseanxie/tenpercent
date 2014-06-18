@@ -91,6 +91,8 @@ public class LiveNationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Crashlytics.start(this);
+        Analytics.initialize(this);
+
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
@@ -122,7 +124,6 @@ public class LiveNationApplication extends Application {
 
         setupNotifications();
         setupTicketing();
-        checkInstalledAppForAnalytics();
         setupInternetStateReceiver();
 
         getConfigManager().buildApi();
@@ -183,7 +184,6 @@ public class LiveNationApplication extends Application {
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
-                    setupNotifications();
                     checkInstalledAppForAnalytics();
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
                     musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
@@ -209,13 +209,12 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
-        Analytics.initialize(this);
+        Props props = new Props();
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
-            Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
         }
+        LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
     @Override
