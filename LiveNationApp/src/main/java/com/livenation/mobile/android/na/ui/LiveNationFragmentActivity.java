@@ -117,7 +117,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
             List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
-            if(taskList.get(0).numActivities == 1 &&
+            if (taskList.size() > 0 && taskList.get(0).numActivities == 1 &&
                     taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
                 if (this.getClass().getName() != HomeActivity.class.getName()) {
                     Intent intent = new Intent(this, HomeActivity.class);
