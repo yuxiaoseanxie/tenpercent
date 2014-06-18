@@ -103,7 +103,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             refreshBarController.showRefreshBar(false);
         } else {
             if (isFirstPage) {
-                emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                if (emptyView != null) {
+                    emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
             }
         }
         if (swipeRefreshLayout != null) {
