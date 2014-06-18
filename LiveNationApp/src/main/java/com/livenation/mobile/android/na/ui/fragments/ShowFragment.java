@@ -73,6 +73,17 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private LiveNationMapFragment mapFragment;
     private LatLng mapLocationCache = null;
     private Event event;
+    private final String MAP_FRAGMENT_TAG = "maps";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = new LiveNationMapFragment();
+            mapFragment.setMapReadyListener(this);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,17 +103,15 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        addFragment(R.id.fragment_show_map_container, mapFragment, "map");
+    }
 
-        if (savedInstanceState == null) {
-            mapFragment = new LiveNationMapFragment();
-            mapFragment.setMapReadyListener(this);
-
-            addFragment(R.id.fragment_show_map_container, mapFragment, "map");
-        } else {
-            mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag("map");
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+        removeFragment(mapFragment);
     }
 
     @Override

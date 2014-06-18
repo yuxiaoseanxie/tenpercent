@@ -14,34 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoritesView;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-
-import java.util.List;
 
 
-public class FavoriteActivity extends LiveNationFragmentActivity implements FavoritesView {
-    private FavoritesView favoritesView;
+public class FavoriteActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_favorite);
-
-        favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        init();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        deinit();
     }
 
     @Override
@@ -60,27 +39,6 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void setFavorites(List<Favorite> favorites) {
-        if (favoritesView == null) {
-            //TODO: Possible race condition?
-            return;
-        }
-        favoritesView.setFavorites(favorites);
-    }
-
-    private void init() {
-        getFavoritesPresenter().initialize(FavoriteActivity.this, getIntent().getExtras(), FavoriteActivity.this);
-    }
-
-    private void deinit() {
-        getFavoritesPresenter().cancel(FavoriteActivity.this);
-    }
-
-    private FavoritesPresenter getFavoritesPresenter() {
-        return LiveNationApplication.get().getFavoritesPresenter();
     }
 
 }

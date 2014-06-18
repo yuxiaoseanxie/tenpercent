@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +60,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     private StickyListHeadersListView venueList;
     private EmptyListViewControl artistEmptyView;
     private EmptyListViewControl venueEmptyView;
+    private Bundle instanceState;
 
     private static List<Favorite> filterFavorites(List<Favorite> favorites, String type) {
         List<Favorite> filtered = new ArrayList<Favorite>();
@@ -78,6 +78,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
         artistAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
         venueAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
+        init();
         setRetainInstance(true);
     }
 
@@ -141,29 +142,30 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             getActivity().getIntent().removeExtra(ARG_SHOW_TAB);
         }
 
+        if (instanceState != null) {
+            applyInstanceState(instanceState);
+        }
+
         return result;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        deinit();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parcelable artistState = artistList.getWrappedList().onSaveInstanceState();
-        Parcelable venueState = venueList.getWrappedList().onSaveInstanceState();
 
-        outState.putParcelable("" + artistList.getId(), artistState);
-        outState.putParcelable("" + venueList.getId(), venueState);
-        outState.putInt(ARG_SHOW_TAB, tabHost.getCurrentTab());
+        //The tabhost widget doesn't automatically save its instance state despite having an id :(
+        instanceState = new Bundle();
+        instanceState.putInt(ARG_SHOW_TAB, tabHost.getCurrentTab());
     }
 
-    @Override
     public void applyInstanceState(Bundle state) {
-        super.applyInstanceState(state);
-        Parcelable artistState = state.getParcelable("" + artistList.getId());
-        Parcelable venueState = state.getParcelable("" + venueList.getId());
         int currentTab = state.getInt(ARG_SHOW_TAB);
-
-        artistList.getWrappedList().onRestoreInstanceState(artistState);
-        venueList.getWrappedList().onRestoreInstanceState(venueState);
         tabHost.setCurrentTab(currentTab);
     }
 
@@ -187,6 +189,14 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
 
+    }
+
+    private void init() {
+        getFavoritesPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), FavoritesFragment.this);
+    }
+
+    private void deinit() {
+        getFavoritesPresenter().cancel(FavoritesFragment.this);
     }
 
     /**

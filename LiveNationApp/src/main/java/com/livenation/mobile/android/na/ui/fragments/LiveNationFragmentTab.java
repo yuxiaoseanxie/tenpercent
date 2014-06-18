@@ -61,8 +61,6 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
             }
         });
 
-
-
         return view;
     }
 
@@ -75,19 +73,5 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         getScrollPager().load();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (listView != null) {
-            Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-            outState.putParcelable(getViewKey(listView), listState);
-        }
-    }
 
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState && listView != null) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
-    }
 }
