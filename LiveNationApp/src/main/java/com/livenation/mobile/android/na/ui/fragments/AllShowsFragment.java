@@ -98,6 +98,10 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         //will be offset by the number of header views. This is the alternative according to:
         // http://stackoverflow.com/questions/11106397/listview-addheaderview-causes-position-to-increase-by-one
         Event event = (Event) parent.getItemAtPosition(position);
+        if (event == null) {
+            //user clicked the footer/loading view
+            return;
+        }
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
