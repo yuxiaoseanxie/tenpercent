@@ -162,25 +162,21 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
                 accessToken = GoogleAuthUtil.getToken(activity, Plus.AccountApi.getAccountName(getSession()), SCOPE);
                 User user = getProfileInformation(getSession());
-
+                if (user == null) {
+                    throw new IllegalStateException("Google user is null");
+                }
                 onComplete(accessToken, user);
 
                 getListener().onPayloadComplete(this);
 
             } catch (IOException transientEx) {
-                onSessionFailed();
-                return;
+                throw new IllegalStateException("Get google user failed, IOException", transientEx);
             } catch (UserRecoverableAuthException e) {
                 throw new IllegalStateException("Initial Google Scope was not wide enough");
             } catch (GoogleAuthException authEx) {
-                return;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException("Get google user failed, GAuth Exception", authEx);
             }
         }
-
-        ;
-
 
         private User getProfileInformation(GoogleApiClient googleApiClient) {
             try {
