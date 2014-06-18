@@ -63,7 +63,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private TextView artistTitle;
     private TextView calendarText;
-    private RelativeLayout calendarContainer;
+    private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
     private NetworkImageView artistImage;
     private ShowVenueView venueDetails;
@@ -95,7 +95,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
-        calendarContainer = (RelativeLayout) result.findViewById(R.id.sub_show_calendar_container);
+        calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
         findTicketsOptions = (Button) result.findViewById(R.id.fragment_show_ticketbar_options);
         findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_find);
 

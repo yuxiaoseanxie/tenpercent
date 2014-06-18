@@ -2,27 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="@dimen/view_lineup_min_height"
     android:background="@drawable/livenation_selector_pressable_background">
 
-    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
-        android:id="@+id/view_lineup_favorite_checkbox"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="top"
-        android:button="@drawable/checkbox_favorite_padding_selector"
-        android:checked="false"
-        android:minHeight="@dimen/favorite_checkbox_min_height"
-        android:minWidth="@dimen/favorite_checkbox_min_width" />
+        android:gravity="center"
+        android:id="@+id/view_lineup_favorite_checkbox_container"
+        android:layout_centerVertical="true">
+
+        <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+            android:id="@+id/view_lineup_favorite_checkbox"
+            android:layout_width="@dimen/favorite_checkbox_min_height"
+            android:layout_height="@dimen/favorite_checkbox_min_width"
+            android:button="@drawable/checkbox_favorite_padding_selector"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/view_lineup_title"
-        style="@style/ui_lineup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="top"
-        android:layout_toRightOf="@id/view_lineup_favorite_checkbox"
+        android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/view_lineup_text" />
 
@@ -31,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/underscore_container_height"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/view_lineup_favorite_checkbox"
+        android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>
