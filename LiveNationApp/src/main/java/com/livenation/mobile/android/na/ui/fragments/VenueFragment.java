@@ -66,21 +66,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private final String MAP_FRAGMENT_TAG = "maps";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
-        if (showsFragment == null) {
-            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-        }
-
-        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = new LiveNationMapFragment();
-            mapFragment.setMapReadyListener(this);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_venue, container, false);
         venueTitle = (TextView) result.findViewById(R.id.fragment_venue_title);
@@ -95,17 +80,20 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
-        addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
-    }
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
+        if (showsFragment == null) {
+            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
+            addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
+        }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        removeFragment(showsFragment);
-        removeFragment(mapFragment);
+        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = new LiveNationMapFragment();
+            addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
+        }
+        mapFragment.setMapReadyListener(this);
     }
 
     @Override

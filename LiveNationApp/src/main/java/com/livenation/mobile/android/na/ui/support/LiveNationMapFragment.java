@@ -8,7 +8,9 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -27,8 +29,8 @@ public class LiveNationMapFragment extends SupportMapFragment {
     private MapReadyListener listener;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (null != listener) {
             listener.onMapReady(getMap());
         }

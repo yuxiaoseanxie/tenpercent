@@ -76,16 +76,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private final String MAP_FRAGMENT_TAG = "maps";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = new LiveNationMapFragment();
-            mapFragment.setMapReadyListener(this);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_show, container,
@@ -103,15 +93,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        addFragment(R.id.fragment_show_map_container, mapFragment, "map");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        removeFragment(mapFragment);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
+            mapFragment = new LiveNationMapFragment();
+            addFragment(R.id.fragment_show_map_container, mapFragment, MAP_FRAGMENT_TAG);
+        }
+        mapFragment.setMapReadyListener(this);
     }
 
     @Override
