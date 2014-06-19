@@ -98,8 +98,13 @@ public class AccountUserFragment extends LiveNationFragment implements
 
     @Override
     public void onResponse(Bitmap bitmap) {
-        bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.imageview_stroke_width));
-        image.setImageBitmap(bitmap);
+        if (bitmap != null) {
+            bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.imageview_stroke_width));
+            image.setImageBitmap(bitmap);
+        } else {
+            image.setImageBitmap(null);
+            //TODO default image
+        }
     }
 
     @Override
