@@ -104,6 +104,8 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     @Override
     public void setEvents(List<Event> events) {
+        if (getActivity() == null) return;
+        
         showContainer.removeAllViews();
 
         int position = 0;
