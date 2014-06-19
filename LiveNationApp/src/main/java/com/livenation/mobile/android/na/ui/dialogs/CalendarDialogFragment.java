@@ -31,19 +31,23 @@ import io.segment.android.models.Props;
  * Created by elodieferrais on 4/29/14.
  */
 public class CalendarDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener{
+    private static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment.EVENT";
     private ListView listView;
     private CalendarAdapter adapter;
     private Event event;
 
     public static CalendarDialogFragment newInstance(Event event) {
         CalendarDialogFragment dialogFragment = new CalendarDialogFragment();
-        dialogFragment.setEvent(event);
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_EVENT, event);
+        dialogFragment.setArguments(args);
         return dialogFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        event = getEvent();
         init(event);
         setRetainInstance(true);
     }
@@ -58,10 +62,6 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         dialog.setView(view, 0, 0, 0, 0);
         return dialog;
-    }
-
-    private void setEvent(Event event) {
-        this.event = event;
     }
 
     private void init(Event event) {
@@ -119,6 +119,11 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
         if (getDialog() != null && getRetainInstance())
             getDialog().setDismissMessage(null);
         super.onDestroyView();
+    }
+
+    private Event getEvent() {
+        Event event = (Event) getArguments().getSerializable(EXTRA_EVENT);
+        return event;
     }
 
     public static class CalendarItem {
