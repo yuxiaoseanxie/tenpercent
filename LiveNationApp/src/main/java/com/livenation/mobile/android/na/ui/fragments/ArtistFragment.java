@@ -52,22 +52,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //region Lifecycle
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-        shows.setMaxEvents(MAX_INLINE);
-        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
-        addFragment(R.id.fragment_artist_shows_container, shows, "shows");
-
-        this.youTube = new YouTubeFragment();
-        youTube.setMaxVideos(MAX_INLINE);
-        addFragment(R.id.fragment_artist_youtube_container, youTube, "shows");
-
-        setRetainInstance(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
@@ -77,10 +61,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         this.showsHeader = (TextView) view.findViewById(R.id.fragment_artist_shows_header);
 
-        OverflowView showMoreView = new OverflowView(getActivity());
-        showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
-        shows.setShowMoreItemsView(showMoreView);
 
         this.bioContainer = (LinearLayout) view.findViewById(R.id.fragment_artist_bio_container);
         this.bioText = (TextView) bioContainer.findViewById(R.id.fragment_artist_bio);
@@ -88,6 +68,34 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         bioShowMore.setTitle(R.string.artist_bio_overflow);
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag("shows");
+        if (shows == null) {
+            this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+            addFragment(R.id.fragment_artist_shows_container, shows, "shows");
+        }
+        shows.setMaxEvents(MAX_INLINE);
+        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
+
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
+        shows.setShowMoreItemsView(showMoreView);
+
+        youTube = (YouTubeFragment) getChildFragmentManager().findFragmentByTag("youtube");
+        if (youTube == null) {
+            this.youTube = new YouTubeFragment();
+            addFragment(R.id.fragment_artist_youtube_container, youTube, "youtube");
+        }
+        youTube.setMaxVideos(MAX_INLINE);
+        youTube.setShowMoreItemsView(showMoreVideos);
 
         this.showMoreVideos = new OverflowView(getActivity());
         if (youTube.getMaxVideos() > MAX_INLINE) {
@@ -97,22 +105,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             showMoreVideos.setTitle(R.string.artist_videos_overflow);
         }
         showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
-        youTube.setShowMoreItemsView(showMoreVideos);
-
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         init();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void onDestroyView() {
+        super.onDestroyView();
         deinit();
     }
 
