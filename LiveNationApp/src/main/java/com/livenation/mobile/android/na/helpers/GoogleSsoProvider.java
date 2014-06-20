@@ -179,25 +179,22 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
         }
 
         private User getProfileInformation(GoogleApiClient googleApiClient) {
-            try {
-                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                    String email = Plus.AccountApi.getAccountName(googleApiClient);
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
 
-                    String name = currentPerson.getDisplayName();
+                String name = currentPerson.getDisplayName();
 
-                    User user = new User();
-                    user.setId(currentPerson.getId());
-                    user.setDisplayName(name);
-                    user.setEmail(email);
-                    String profilePicUrl = currentPerson.getImage().getUrl();
-                    profilePicUrl = getLargerProfileImage(profilePicUrl);
-                    user.setUrl(profilePicUrl);
-                    return user;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                User user = new User();
+                user.setId(currentPerson.getId());
+                user.setDisplayName(name);
+                user.setEmail(email);
+                String profilePicUrl = currentPerson.getImage().getUrl();
+                profilePicUrl = getLargerProfileImage(profilePicUrl);
+                user.setUrl(profilePicUrl);
+                return user;
             }
+
             return null;
         }
 
