@@ -124,7 +124,9 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     private void setFeatured(List<Chart> featured) {
