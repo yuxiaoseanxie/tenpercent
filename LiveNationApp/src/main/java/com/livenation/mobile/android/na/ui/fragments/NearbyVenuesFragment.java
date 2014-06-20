@@ -131,7 +131,9 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     @Override

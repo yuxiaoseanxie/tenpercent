@@ -131,7 +131,9 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     @Override
