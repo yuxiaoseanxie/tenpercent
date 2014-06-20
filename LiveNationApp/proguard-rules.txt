@@ -19,6 +19,8 @@
 #   public *;
 #}
 
+# Google Play Services START
+
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
@@ -35,6 +37,8 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+
+# Google Play Services FINISH
 
 # App
 
