@@ -52,6 +52,11 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         if(getArtistName() == null)
             empty.setVisibility(View.GONE);
 
+        if (currentSearchRequest != null) {
+            empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+            empty.setVisibility(View.VISIBLE);
+        }
+        
         return view;
     }
 
@@ -160,9 +165,6 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         if(currentSearchRequest != null) {
             return;
         }
-
-        empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
-        empty.setVisibility(View.VISIBLE);
 
         currentSearchRequest = YouTubeClient.search(getArtistName(), 30, this, this);
     }
