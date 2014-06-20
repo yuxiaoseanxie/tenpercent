@@ -35,8 +35,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ApiServiceBinder {
-    private Fragment profileFragment;
     private TextView locationText;
+    private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,9 +88,9 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     public void refreshUser(boolean isLogout) {
+        Fragment profileFragment = getChildFragmentManager().findFragmentByTag(PROFILE_FRAGMENT_TAG);
         if (null != profileFragment) {
             removeFragment(profileFragment);
-            profileFragment = null;
         }
 
         if (isLogout) {
@@ -99,7 +99,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
             profileFragment = new AccountUserFragment();
         }
 
-        addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");
+        addFragment(R.id.account_header_provider_container, profileFragment, PROFILE_FRAGMENT_TAG);
     }
 
     @Override
