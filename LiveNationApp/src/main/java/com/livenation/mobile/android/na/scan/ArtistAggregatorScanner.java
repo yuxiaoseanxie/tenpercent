@@ -38,13 +38,13 @@ public class ArtistAggregatorScanner {
             ArtistAggregator artistAggregator = (ArtistAggregator) constructor.newInstance(context);
             return artistAggregator;
         } catch (NoSuchMethodException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (InvocationTargetException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":InvocationTargetException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (InstantiationException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":InstantiationException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (IllegalAccessException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":IllegalAccessException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         }
     }
 
