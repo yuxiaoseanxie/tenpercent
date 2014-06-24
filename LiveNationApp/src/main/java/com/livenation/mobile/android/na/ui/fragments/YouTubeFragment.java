@@ -23,7 +23,7 @@ import com.livenation.mobile.android.na.youtube.YouTubeVideo;
 
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class YouTubeFragment extends LiveNationFragment implements Response.Listener<List<YouTubeVideo>>, Response.ErrorListener {
     private YouTubeClient.Cancelable currentSearchRequest;

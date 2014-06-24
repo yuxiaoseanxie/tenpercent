@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/29/14.

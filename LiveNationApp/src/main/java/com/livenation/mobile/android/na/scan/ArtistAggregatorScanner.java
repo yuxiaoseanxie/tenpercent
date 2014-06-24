@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ArtistAggregatorScanner {
 

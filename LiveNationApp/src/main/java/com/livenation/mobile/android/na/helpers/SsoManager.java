@@ -14,8 +14,8 @@ import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
 import java.lang.ref.WeakReference;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Traits;
+import com.segment.android.Analytics;
+import com.segment.android.models.Traits;
 
 import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
 

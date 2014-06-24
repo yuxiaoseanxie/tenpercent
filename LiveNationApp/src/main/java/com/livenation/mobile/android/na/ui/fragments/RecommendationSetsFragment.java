@@ -43,7 +43,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.ArrayList;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
 

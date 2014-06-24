@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);

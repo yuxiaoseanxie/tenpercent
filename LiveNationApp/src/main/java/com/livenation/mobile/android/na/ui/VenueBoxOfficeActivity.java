@@ -17,7 +17,7 @@ import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implements ViewPager.OnPageChangeListener{
     private SlidingTabLayout tabs;

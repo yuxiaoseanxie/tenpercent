@@ -18,8 +18,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.List;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/2/14.

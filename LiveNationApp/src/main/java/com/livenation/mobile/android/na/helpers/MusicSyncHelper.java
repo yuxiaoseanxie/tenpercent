@@ -21,7 +21,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.Calendar;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/4/14.

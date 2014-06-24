@@ -26,7 +26,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {

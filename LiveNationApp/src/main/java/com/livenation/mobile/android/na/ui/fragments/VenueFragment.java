@@ -48,7 +48,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
