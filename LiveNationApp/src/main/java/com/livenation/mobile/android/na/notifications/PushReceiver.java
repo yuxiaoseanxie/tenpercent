@@ -15,8 +15,8 @@ import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 public class PushReceiver extends BroadcastReceiver {
     private static final String LOG_TAG = "Live Nation Notifications";

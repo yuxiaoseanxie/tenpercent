@@ -24,7 +24,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;

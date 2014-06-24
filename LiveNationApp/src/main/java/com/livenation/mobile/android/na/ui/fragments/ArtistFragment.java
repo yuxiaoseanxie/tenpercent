@@ -26,7 +26,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Art
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;

@@ -19,7 +19,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 5/5/14.

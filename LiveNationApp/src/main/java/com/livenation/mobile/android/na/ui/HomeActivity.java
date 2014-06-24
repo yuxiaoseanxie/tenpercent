@@ -55,7 +55,7 @@ import net.hockeyapp.android.UpdateManager;
 
 import java.util.Map;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 

@@ -6,8 +6,8 @@ import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
 
 import java.util.Map;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
     @Override

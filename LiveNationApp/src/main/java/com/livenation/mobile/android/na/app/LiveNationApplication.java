@@ -60,8 +60,8 @@ import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
 import com.urbanairship.push.PushManager;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;

@@ -1,7 +1,8 @@
 package com.livenation.mobile.android.na.analytics;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
+
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/15/14.

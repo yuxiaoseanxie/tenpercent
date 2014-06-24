@@ -14,7 +14,7 @@ import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.

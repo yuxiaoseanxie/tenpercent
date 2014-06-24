@@ -24,7 +24,7 @@ import com.urbanairship.richpush.RichPushMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * A list fragment that shows rich push messages.

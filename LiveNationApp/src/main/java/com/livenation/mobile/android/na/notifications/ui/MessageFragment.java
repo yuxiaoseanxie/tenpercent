@@ -40,7 +40,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Fragment that displays a rich push activity_message in a RichPushMessageView
