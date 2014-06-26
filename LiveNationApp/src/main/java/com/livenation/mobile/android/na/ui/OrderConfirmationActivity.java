@@ -21,7 +21,6 @@ import com.livenation.mobile.android.ticketing.analytics.Analytics;
 import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-import com.mobilitus.tm.tickets.TicketLibrary;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -127,7 +126,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
             }
-            com.mobilitus.tm.tickets.models.User user = TicketLibrary.getInstance().getUser();
+            com.mobilitus.tm.tickets.models.User user = Ticketing.getTicketService().getUser();
             if (user != null && !TextUtils.isEmpty(user.getEmail())) {
                 orderAccountText.setText(user.getEmail());
             } else {
