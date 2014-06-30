@@ -166,6 +166,10 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         //Commerce QA Mode Item
         CommerceQAModeItem commerceQAModeItem = new CommerceQAModeItem(getString(R.string.debug_item_commerce_qa_mode));
         actions.add(commerceQAModeItem);
+
+        //Commerce session recording item
+        CommerceRecordingModeItem commerceRecordingModeItem = new CommerceRecordingModeItem(getString(R.string.debug_item_commerce_session_recording));
+        actions.add(commerceRecordingModeItem);
     }
 
     public void onShareSelected() {
@@ -368,9 +372,9 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         @Override
         public String getValue() {
             if (Ticketing.isQaModeEnabled())
-                return getString(R.string.debug_item_commerce_qa_mode_on);
+                return getString(R.string.debug_item_mode_on);
             else
-                return getString(R.string.debug_item_commerce_qa_mode_off);
+                return getString(R.string.debug_item_mode_off);
         }
 
         @Override
@@ -379,6 +383,37 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
                 Ticketing.setQaModeEnabled(false);
             } else {
                 Ticketing.setQaModeEnabled(true);
+            }
+
+            actionsAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class CommerceRecordingModeItem extends DebugItem {
+        private CommerceRecordingModeItem(String name) {
+            super(name, null);
+        }
+
+        @Override
+        public String getValue() {
+            if (Ticketing.isSessionRecordingEnabled())
+                return getString(R.string.debug_item_mode_on);
+            else
+                return getString(R.string.debug_item_mode_off);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            if (Ticketing.isSessionRecordingEnabled()) {
+                // TODO: Share session recording here.
+                Ticketing.setSessionRecordingEnabled(false);
+            } else {
+                Ticketing.setSessionRecordingEnabled(true);
             }
 
             actionsAdapter.notifyDataSetChanged();
