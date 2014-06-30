@@ -29,7 +29,7 @@ import com.livenation.mobile.android.na.notifications.NotificationsRegistrationM
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.testing.RecordedRequest;
+import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
@@ -423,7 +423,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         @Override
         public void doAction(Context context) {
             if (Ticketing.isSessionRecordingEnabled()) {
-                ArrayList<RecordedRequest> requests = RecordingTicketService.getSessionRequests();
+                ArrayList<RecordedResponse> requests = RecordingTicketService.getSessionRequests();
                 if (!TicketingUtils.isCollectionEmpty(requests)) {
                     try {
                         String jsonString = TestingUtil.convertRequestsToJson(requests);
