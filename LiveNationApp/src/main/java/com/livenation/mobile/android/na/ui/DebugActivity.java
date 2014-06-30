@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
@@ -25,10 +29,17 @@ import com.livenation.mobile.android.na.notifications.NotificationsRegistrationM
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.testing.RecordedRequest;
+import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
+import com.livenation.mobile.android.ticketing.testing.TestingUtil;
+import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -372,9 +383,9 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         @Override
         public String getValue() {
             if (Ticketing.isQaModeEnabled())
-                return getString(R.string.debug_item_mode_on);
+                return getString(R.string.debug_item_commerce_qa_mode_on);
             else
-                return getString(R.string.debug_item_mode_off);
+                return getString(R.string.debug_item_commerce_qa_mode_off);
         }
 
         @Override
@@ -395,6 +406,8 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     }
 
     private class CommerceRecordingModeItem extends DebugItem {
+        private final String SHARED_FILE_NAME = "TicketingSession.json";
+
         private CommerceRecordingModeItem(String name) {
             super(name, null);
         }
@@ -402,15 +415,41 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         @Override
         public String getValue() {
             if (Ticketing.isSessionRecordingEnabled())
-                return getString(R.string.debug_item_mode_on);
+                return getString(R.string.debug_item_commerce_session_recording_on);
             else
-                return getString(R.string.debug_item_mode_off);
+                return getString(R.string.debug_item_commerce_session_recording_off);
         }
 
         @Override
         public void doAction(Context context) {
             if (Ticketing.isSessionRecordingEnabled()) {
-                // TODO: Share session recording here.
+                ArrayList<RecordedRequest> requests = RecordingTicketService.getSessionRequests();
+                if (!TicketingUtils.isCollectionEmpty(requests)) {
+                    try {
+                        String jsonString = TestingUtil.convertRequestsToJson(requests);
+                        File downloadsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        downloadsDirectory.mkdirs();
+
+                        File sharedFile = new File(downloadsDirectory, SHARED_FILE_NAME);
+                        FileOutputStream sharedFileOutputStream = new FileOutputStream(sharedFile);
+                        try {
+                            sharedFileOutputStream.write(jsonString.getBytes());
+                            sharedFileOutputStream.flush();
+                        } finally {
+                            sharedFileOutputStream.close();
+                        }
+
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(sharedFile));
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Ticketing Session");
+                        intent.setType("application/json");
+                        startActivity(Intent.createChooser(intent, "Share Ticketing Session"));
+                    } catch (IOException e) {
+                        Log.e("Ticketing Session", "Could not share session", e);
+                        Toast.makeText(context.getApplicationContext(), "Could not share session", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
                 Ticketing.setSessionRecordingEnabled(false);
             } else {
                 Ticketing.setSessionRecordingEnabled(true);
