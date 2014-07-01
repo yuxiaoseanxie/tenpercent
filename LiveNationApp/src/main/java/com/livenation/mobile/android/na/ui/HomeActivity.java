@@ -197,6 +197,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
+                LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
                 buildAndOpenContactEmail();
                 return true;
 
@@ -328,6 +329,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     @Override
     protected String getScreenName() {
-        return AnalyticConstants.SCREEN_HOME_SCREEN;
+        return AnalyticConstants.SCREEN_HOME;
     }
 }

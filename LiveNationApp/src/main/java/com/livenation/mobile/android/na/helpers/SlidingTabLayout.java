@@ -326,8 +326,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
-            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.RECOMMENDED_VIEW, AnalyticConstants.NEARBY_VIEW, AnalyticConstants.ALL_SHOWS_VIEW};
+            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.RECOMMENDED_VIEW, AnalyticConstants.ALL_SHOWS_VIEW, AnalyticConstants.NEARBY_VIEW};
             LiveNationAnalytics.track(tabsAnalyticsLabel[position], AnalyticsCategory.HOME_SCREEN);
+
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
