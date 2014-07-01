@@ -7,6 +7,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -127,6 +130,16 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         Analytics.identify(user.getId(), new Traits("name", user.getDisplayName(),
                 "email", user.getEmail()));
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGIN));
+
+        UiApiSsoProvider provider = getConfiguredSsoProvider(context);
+        if (provider != null) {
+            if (provider instanceof FacebookSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            } else if (provider instanceof GoogleSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.GOOGLE_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            }
+        }
+
     }
 
     public User readUser(Context context) {
