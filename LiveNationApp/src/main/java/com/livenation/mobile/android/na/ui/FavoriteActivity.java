@@ -42,7 +42,7 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @java.lang.Override
+    @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_FAVORITES;
     }
