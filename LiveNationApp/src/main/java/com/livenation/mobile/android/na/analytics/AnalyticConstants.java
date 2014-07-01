@@ -13,6 +13,8 @@ public class AnalyticConstants {
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
     public static final String NOTIFICATION_ICON_TAP = "Notification Icon Tap";
+    public static final String GOOGLE_CONNECT = "Google Sign In";
+    public static final String FACEBOOK_CONNECT = "Facebook Connect";
     public static final String FAVORITES_UPSELL_TAP = "Favorites Upsell Tap";
     public static final String EVENT_CELL_TAP = "Event Cell Tap";
     public static final String VENUE_CELL_TAP = "Venue Cell Tap";
