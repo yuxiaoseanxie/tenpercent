@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
@@ -80,5 +81,10 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
             return searchMode;
         }
         return SearchActivity.EXTRA_SEARCH_MODE_DEFAULT_VALUE;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_SEARCH;
     }
 }

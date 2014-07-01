@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 
 
 public class FavoriteActivity extends LiveNationFragmentActivity {
@@ -41,4 +42,8 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @java.lang.Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_FAVORITES;
+    }
 }
