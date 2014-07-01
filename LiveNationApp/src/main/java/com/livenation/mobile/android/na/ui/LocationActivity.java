@@ -68,4 +68,9 @@ public class LocationActivity extends LiveNationFragmentActivity {
         Intent intent = new Intent(this, CitySearchActivity.class);
         startActivityForResult(intent, REQUEST_CODE_CITY_SEARCH);
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_LOCATION;
+    }
 }

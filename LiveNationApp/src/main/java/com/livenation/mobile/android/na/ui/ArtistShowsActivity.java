@@ -7,6 +7,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.fragments.ArtistShowsListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.segment.android.models.Props;
 
 public class ArtistShowsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_ARTIST_ID = "com.livenation.mobile.android.na.ui.ArtistShowsActivity.EXTRA_ARTIST_ID";
@@ -36,6 +37,14 @@ public class ArtistShowsActivity extends LiveNationFragmentActivity {
     @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_ADP_TOUR;
+    }
+
+    @Override
+    protected Props getAnalyticsProps() {
+        Props props = new Props();
+        String artistId = getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
+        props.put(AnalyticConstants.ARTIST_ID, artistId);
+        return props;
     }
 
     //endregion
