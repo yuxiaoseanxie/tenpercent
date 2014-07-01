@@ -65,7 +65,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected boolean isShareAvailable() {
-        return (artistFragment.getArtist() != null);
+        return (artistFragment != null && artistFragment.getArtist() != null);
     }
 
     @Override
