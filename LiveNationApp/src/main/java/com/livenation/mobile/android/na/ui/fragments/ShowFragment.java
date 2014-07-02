@@ -353,6 +353,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
+            if (dialogFragment.isAdded()) return;
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);
 
