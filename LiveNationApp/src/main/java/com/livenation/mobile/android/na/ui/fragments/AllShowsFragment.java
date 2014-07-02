@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -78,6 +79,29 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
         setFeatured(featured);
+
+        View scrollView = result.findViewById(R.id.featured_charting_horizontal_scrollview);
+
+        //Block vertical swipes while the featured carousel is being swiped from triggering the swipeToRefresh layout
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //first work out whether the scrollview handled the userevent
+                boolean handled = v.onTouchEvent(event);
+
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_UP) {
+                    //if the user if lifting their finger, always re-enable the swipeRefresh
+                    swipeRefreshLayout.setEnabled(true);
+                } else {
+                    //if the scrollview handled the user event, disable the swipeRefresh
+                    swipeRefreshLayout.setEnabled(!handled);
+                }
+
+                return handled;
+            }
+        });
 
         return view;
     }
