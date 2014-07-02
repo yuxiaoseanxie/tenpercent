@@ -159,7 +159,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     private void retrieveCharts(LiveNationApiService apiService, double lat, double lng) {
         TopChartParameters params = new TopChartParameters();
         params.setLocation(lat, lng);
-        apiService.getTopCharts(params, this);
+        apiService.getMobileFeatured(params, this);
     }
 
     @Override
