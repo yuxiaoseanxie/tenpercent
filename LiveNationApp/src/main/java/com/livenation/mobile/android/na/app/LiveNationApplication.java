@@ -54,6 +54,7 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
