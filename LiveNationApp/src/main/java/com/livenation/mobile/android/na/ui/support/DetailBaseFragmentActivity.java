@@ -19,6 +19,14 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
         args = getIntent().getExtras();
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (isShareAvailable()) {
+            invalidateOptionsMenu();
+        }
+    }
+
     //region Menus
 
     @Override

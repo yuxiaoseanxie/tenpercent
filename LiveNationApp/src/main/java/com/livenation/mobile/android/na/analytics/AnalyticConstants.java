@@ -13,6 +13,8 @@ public class AnalyticConstants {
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
     public static final String NOTIFICATION_ICON_TAP = "Notification Icon Tap";
+    public static final String GOOGLE_CONNECT = "Google Sign In";
+    public static final String FACEBOOK_CONNECT = "Facebook Connect";
     public static final String FAVORITES_UPSELL_TAP = "Favorites Upsell Tap";
     public static final String EVENT_CELL_TAP = "Event Cell Tap";
     public static final String VENUE_CELL_TAP = "Venue Cell Tap";
@@ -97,16 +99,20 @@ public class AnalyticConstants {
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
     /**
-     *Attributes
+     *Screen name
      */
-
-    public static final String SCREEN_ADP = "ADP";
-    public static final String SCREEN_SDP = "SDP";
-    public static final String SCREEN_VDP = "VDP";
-    public static final String SCREEN_NOTIFICATIONS = "Notifications";
-    public static final String SCREEN_HOME_SCREEN = "Home Screen Load";
-    public static final String SCREEN_ADP_TOUR = "ADP Tour";
-
+    public static final String SCREEN_HOME = "LN_Mob: NA App Android: Home";
+    public static final String SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
+    public static final String SCREEN_LEGAL_CREDITS = "LN_Mob: NA App Android: Legal";
+    public static final String SCREEN_VDP = "LN_Mob: NA App Android: VDP";
+    public static final String SCREEN_ADP = "LN_Mob: NA App Android: Artist";
+    public static final String SCREEN_ADP_TOUR = "LN_Mob: NA App Android: Artist: Tours";
+    public static final String SCREEN_LOCATION = "LN_Mob: NA App Android: Location";
+    public static final String SCREEN_NOTIFICATIONS = "LN_Mob: NA App Android: Notifications";
+    public static final String SCREEN_CONTACTS_US = "LN_Mob: NA App Android: Contact Us";
+    public static final String SCREEN_HELP = "LN_Mob: NA App Android: Help";
+    public static final String SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
+    public static final String SCREEN_SDP = "LN_Mob: NA App Android: SDP";
 
     /**
      *Attributes

@@ -132,4 +132,9 @@ public class LegalActivity extends LiveNationFragmentActivity {
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
         }
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_LEGAL_CREDITS;
+    }
 }

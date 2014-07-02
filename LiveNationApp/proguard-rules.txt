@@ -83,3 +83,5 @@
 -keep class com.bugsnap.** { *; }
 -dontwarn com.bugsnag.**
 
+# Crashyltics debugging
+-keepattributes SourceFile,LineNumberTable

@@ -54,6 +54,8 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         //On boarding never show because is not develop yet. Keep it for analytics
         if (isOnBoardingAlreadyDisplayed()) {
             goToTheApp();
+        } else {
+            LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
         }
 
         facebookButton = findViewById(R.id.on_boarding_facebook_sign_in_button);
@@ -89,7 +91,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     }
 
     private void setOnboardingAlreadyDisplay() {
-        LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
         setOnBoardingAlreadyDisplayed();
     }
 
