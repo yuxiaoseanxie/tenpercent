@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="@dimen/venue_detail_title_margin_bottom"
-        android:layout_toRightOf="@id/favorite_checkbox_container"
         android:layout_marginTop="@dimen/venue_detail_margin_top"
+        android:layout_toRightOf="@id/favorite_checkbox_container"
         android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/show_venue_text_title" />
 

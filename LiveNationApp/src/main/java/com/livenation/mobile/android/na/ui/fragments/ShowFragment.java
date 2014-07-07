@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,17 +49,17 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.segment.android.models.Props;
-
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
+    private final String MAP_FRAGMENT_TAG = "maps";
     private TextView artistTitle;
     private TextView calendarText;
     private ViewGroup calendarContainer;
@@ -73,7 +72,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private LiveNationMapFragment mapFragment;
     private LatLng mapLocationCache = null;
     private Event event;
-    private final String MAP_FRAGMENT_TAG = "maps";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

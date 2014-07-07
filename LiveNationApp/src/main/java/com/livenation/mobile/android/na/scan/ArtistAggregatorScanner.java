@@ -11,6 +11,7 @@ import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAg
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
+import com.segment.android.models.Props;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.segment.android.models.Props;
 
 public class ArtistAggregatorScanner {
 

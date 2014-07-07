@@ -16,10 +16,10 @@ import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 
 public class SsoActivity extends LiveNationFragmentActivity implements ApiSsoProvider.OpenSessionCallback, ApiSsoProvider.GetUserCallback, AccountSaveAuthTokenView, AccountSaveUserView, AccountSignOutView {
     public static final String ARG_PROVIDER_ID = "provider_id";
-    private UiApiSsoProvider ssoProvider;
     public static final int RESULT_OK = Activity.RESULT_OK;
     public static final int RESULT_CANCELED = Activity.RESULT_CANCELED;
     public static final int RESULT_ERROR = 111;
+    private UiApiSsoProvider ssoProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

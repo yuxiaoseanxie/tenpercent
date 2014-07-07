@@ -14,10 +14,10 @@ import java.util.List;
  * Created by cchilton on 4/22/14.
  */
 public class LocationHistoryManager {
-    private LocationHistoryList locations;
-    private ObjectMapper mapper = new ObjectMapper();
     private static final String PREFS_PREVIOUS_LOCATIONS = "previous_locations";
     private static final String PREVIOUS_LOCATION_KEY = "previous_location";
+    private LocationHistoryList locations;
+    private ObjectMapper mapper = new ObjectMapper();
 
     public LocationHistoryManager(Context context) {
         restoreState(context);
@@ -37,7 +37,8 @@ public class LocationHistoryManager {
             String json = mapper.writeValueAsString(locations.items());
             PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS);
             prefs.write(PREVIOUS_LOCATION_KEY, json, context);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private void restoreState(Context context) {
@@ -55,8 +56,8 @@ public class LocationHistoryManager {
     }
 
     private class LocationHistoryList {
-        private List<City> items;
         private static final int MAX_SIZE = 5;
+        private List<City> items;
 
         private LocationHistoryList(List<City> items) {
             this.items = items;

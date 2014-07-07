@@ -36,13 +36,13 @@ import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -61,6 +61,41 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     private EmptyListViewControl artistEmptyView;
     private EmptyListViewControl venueEmptyView;
     private Bundle instanceState;
+    private ListView.OnItemClickListener artistListClickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.ARTIST_NAME, artistAdapter.getItem(position).getName());
+            props.put(AnalyticConstants.ARTIST_ID, String.valueOf(artistAdapter.getItem(position).getId()));
+            LiveNationAnalytics.track(AnalyticConstants.ARTIST_CELL_TAP, AnalyticsCategory.FAVORITES, props);
+
+            Favorite favorite = artistAdapter.getItem(position);
+            Intent intent = new Intent(getActivity(), ArtistActivity.class);
+            String entityId = Artist.getAlphanumericId(favorite.getId());
+            Bundle args = SingleArtistPresenter.getAruguments(entityId);
+            intent.putExtras(args);
+            startActivity(intent);
+        }
+    };
+    private ListView.OnItemClickListener venueListClickListener = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venueAdapter.getItem(position).getName());
+            props.put(AnalyticConstants.VENUE_ID, String.valueOf(venueAdapter.getItem(position).getId()));
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.FAVORITES, props);
+
+
+            Favorite favorite = venueAdapter.getItem(position);
+            Intent intent = new Intent(getActivity(), VenueActivity.class);
+            String entityId = Artist.getAlphanumericId(favorite.getId());
+            Bundle args = SingleVenuePresenter.getAruguments(entityId);
+            intent.putExtras(args);
+            startActivity(intent);
+        }
+    };
 
     private static List<Favorite> filterFavorites(List<Favorite> favorites, String type) {
         List<Favorite> filtered = new ArrayList<Favorite>();
@@ -210,43 +245,6 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         text.setText(title);
         return view;
     }
-
-    private ListView.OnItemClickListener artistListClickListener = new ListView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //Analytics
-            Props props = new Props();
-            props.put(AnalyticConstants.ARTIST_NAME, artistAdapter.getItem(position).getName());
-            props.put(AnalyticConstants.ARTIST_ID, String.valueOf(artistAdapter.getItem(position).getId()));
-            LiveNationAnalytics.track(AnalyticConstants.ARTIST_CELL_TAP, AnalyticsCategory.FAVORITES, props);
-
-            Favorite favorite = artistAdapter.getItem(position);
-            Intent intent = new Intent(getActivity(), ArtistActivity.class);
-            String entityId = Artist.getAlphanumericId(favorite.getId());
-            Bundle args = SingleArtistPresenter.getAruguments(entityId);
-            intent.putExtras(args);
-            startActivity(intent);
-        }
-    };
-
-    private ListView.OnItemClickListener venueListClickListener = new ListView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //Analytics
-            Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venueAdapter.getItem(position).getName());
-            props.put(AnalyticConstants.VENUE_ID, String.valueOf(venueAdapter.getItem(position).getId()));
-            LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.FAVORITES, props);
-
-
-            Favorite favorite = venueAdapter.getItem(position);
-            Intent intent = new Intent(getActivity(), VenueActivity.class);
-            String entityId = Artist.getAlphanumericId(favorite.getId());
-            Bundle args = SingleVenuePresenter.getAruguments(entityId);
-            intent.putExtras(args);
-            startActivity(intent);
-        }
-    };
 
     @Override
     public void onTabChanged(String tabId) {

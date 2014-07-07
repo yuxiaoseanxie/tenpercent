@@ -54,18 +54,17 @@ import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
 import com.urbanairship.push.PushManager;
 
-import com.segment.android.Analytics;
-import com.segment.android.models.Props;
-
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
+    private static SsoManager ssoManager;
     private LocationManager locationManager;
     private ImageLoader imageLoader;
     private RequestQueue requestQueue;
@@ -77,7 +76,6 @@ public class LiveNationApplication extends Application {
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private FavoritesPresenter favoritesPresenter;
-    private static SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
     private BroadcastReceiver internetStateReceiver;
 
@@ -86,6 +84,10 @@ public class LiveNationApplication extends Application {
 
     public static LiveNationApplication get() {
         return instance;
+    }
+
+    public static SsoManager getSsoManager() {
+        return ssoManager;
     }
 
     @Override
@@ -264,10 +266,6 @@ public class LiveNationApplication extends Application {
 
     public FavoritesPresenter getFavoritesPresenter() {
         return favoritesPresenter;
-    }
-
-    public static SsoManager getSsoManager() {
-        return ssoManager;
     }
 
     public InboxStatusPresenter getInboxStatusPresenter() {

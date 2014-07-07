@@ -13,11 +13,10 @@ import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-
-import java.util.List;
-
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
+
+import java.util.List;
 
 /**
  * Created by elodieferrais on 4/2/14.
@@ -40,7 +39,8 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
                 }
 
                 @Override
-                public void onErrorResponse(LiveNationError error) {}
+                public void onErrorResponse(LiveNationError error) {
+                }
             });
         }
     }
@@ -102,16 +102,16 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     protected String getScreenName() {
         return this.getClass().getSimpleName();
-     }
+    }
 
-     protected Props getAnalyticsProps() {
+    protected Props getAnalyticsProps() {
         return null;
-     }
+    }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (android.R.id.home == item.getItemId()) {
-            ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+            ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
             List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 

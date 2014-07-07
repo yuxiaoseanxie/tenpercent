@@ -48,7 +48,7 @@ public enum ExternalApplicationAnalytics {
     SIDECAR("Sidecar", "com.sidecarPassenger", ApplicationType.TRANSPORTATION_APPS),
     TAXIMAGIC("TaxiMagic", "com.ridecharge.android.taximagic", ApplicationType.TRANSPORTATION_APPS),
     AMEX("Amex", "com.americanexpress.android.acctsvcs.us", ApplicationType.BANKING_APPS);
-    
+
     private String packageName;
     private String label;
     private ApplicationType type;

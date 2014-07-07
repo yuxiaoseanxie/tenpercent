@@ -10,19 +10,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
-
 import com.urbanairship.richpush.RichPushMessage;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -30,7 +27,7 @@ import java.util.Locale;
 /**
  * Sample implementation of the BaseInboxFragment
  */
-public class RichPushInboxFragment extends BaseInboxFragment implements AdapterView.OnItemLongClickListener{
+public class RichPushInboxFragment extends BaseInboxFragment implements AdapterView.OnItemLongClickListener {
     //Dont use Java6's non ISO8601 compliant (Doesn't handle 'Z' timezone) SimpleDateFormat for incoming format
     private static final DateTimeFormatter INCOMING_FORMAT = ISODateTimeFormat.dateTimeNoMillis();
     private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("E', 'MMM' 'dd", Locale.US);

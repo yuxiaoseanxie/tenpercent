@@ -17,8 +17,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 public class SingleArtistPresenter
         extends BasePresenter<SingleArtistView, SingleArtistPresenter.SingleArtistState>
         implements Presenter<SingleArtistView>, BaseState.StateListener<SingleArtistPresenter.SingleArtistState> {
-    private static final String INTENT_DATA_KEY = SingleArtistPresenter.class.getName();
     public static final String PARAMETER_ARTIST_ID = "artist_id";
+    private static final String INTENT_DATA_KEY = SingleArtistPresenter.class.getName();
 
     public static Bundle getAruguments(String artistIdRaw) {
         Bundle bundle = new Bundle();

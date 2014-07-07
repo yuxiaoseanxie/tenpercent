@@ -14,30 +14,14 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
-
-import java.lang.ref.WeakReference;
-
 import com.segment.android.Analytics;
 import com.segment.android.models.Traits;
+
+import java.lang.ref.WeakReference;
 
 import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
 
 public class SsoManager implements UiApiSsoProvider.ActivityProvider {
-    public enum SSO_TYPE {
-        SSO_FACEBOOK(R.drawable.facebook_logo),
-        SSO_GOOGLE(R.drawable.google_plus_logo),
-        SSO_DUMMY(0),;
-
-        public int logoResId;
-        SSO_TYPE(int logoResId) {
-            this.logoResId = logoResId;
-        }
-
-        public int getLogoResId() {
-            return logoResId;
-        }
-    }
-
     private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
     private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
     private final DummySsoProvider dummySso = new DummySsoProvider();
@@ -50,7 +34,6 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     private final String USER_PIC_URL = "user_pic_url";
     private final UiApiSsoProvider defaultProvider;
     private WeakReference<Activity> weakActivity;
-
     public SsoManager(UiApiSsoProvider defaultProvider) {
         this.defaultProvider = defaultProvider;
     }
@@ -191,6 +174,22 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
                 return dummySso;
             default:
                 throw new IllegalArgumentException("Unknown SSO provider id: " + ssoProviderId);
+        }
+    }
+
+    public enum SSO_TYPE {
+        SSO_FACEBOOK(R.drawable.facebook_logo),
+        SSO_GOOGLE(R.drawable.google_plus_logo),
+        SSO_DUMMY(0),;
+
+        public int logoResId;
+
+        SSO_TYPE(int logoResId) {
+            this.logoResId = logoResId;
+        }
+
+        public int getLogoResId() {
+            return logoResId;
         }
     }
 

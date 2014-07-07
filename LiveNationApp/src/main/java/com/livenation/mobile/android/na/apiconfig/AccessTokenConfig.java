@@ -18,7 +18,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.config
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-
 import com.segment.android.models.Props;
 
 /**
@@ -89,7 +88,7 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
                 builder.getContext().getResult());
 
         LiveNationApiService apiService = new LiveNationApiServiceImpl(quick);
-        if ( getIasId()!= null) {
+        if (getIasId() != null) {
             Props props = new Props();
             props.put(AnalyticConstants.ANDROID_DEVICE_ID, deviceId);
             props.put(AnalyticConstants.AIS_USER_ID, getIasId());

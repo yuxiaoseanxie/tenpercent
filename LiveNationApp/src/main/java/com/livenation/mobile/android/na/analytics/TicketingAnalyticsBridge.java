@@ -3,13 +3,23 @@ package com.livenation.mobile.android.na.analytics;
 import android.app.Activity;
 
 import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
-
-import java.util.Map;
-
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
+import java.util.Map;
+
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
+    private static Props mapToProps(Map<String, String> properties) {
+        if (properties == null)
+            return null;
+
+        Props props = new Props();
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
+            props.put(entry.getKey(), entry.getValue());
+        }
+        return props;
+    }
+
     @Override
     public void activityCreated(Activity activity) {
         // Currently not applicable.
@@ -33,18 +43,6 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     @Override
     public void activityStopped(Activity activity) {
         Analytics.activityStop(activity);
-    }
-
-
-    private static Props mapToProps(Map<String, String> properties) {
-        if (properties == null)
-            return null;
-
-        Props props = new Props();
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            props.put(entry.getKey(), entry.getValue());
-        }
-        return props;
     }
 
     @Override

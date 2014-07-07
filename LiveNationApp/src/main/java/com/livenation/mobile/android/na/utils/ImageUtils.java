@@ -23,7 +23,7 @@ public class ImageUtils {
         final int color = 0xff424242;
         final int strokeColor = 0x3B000000;
         final Paint paint = new Paint();
-        final Rect rect = new Rect((bitmap.getWidth() - minEdge)/ 2, (bitmap.getHeight() - minEdge) / 2, minEdge, minEdge);
+        final Rect rect = new Rect((bitmap.getWidth() - minEdge) / 2, (bitmap.getHeight() - minEdge) / 2, minEdge, minEdge);
         final RectF rectF = new RectF(rect);
         final float roundPx = radiusPixel;
 

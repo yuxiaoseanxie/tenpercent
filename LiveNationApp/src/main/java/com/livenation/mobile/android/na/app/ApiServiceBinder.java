@@ -7,5 +7,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
  */
 public interface ApiServiceBinder {
     void onApiServiceAttached(LiveNationApiService apiService);
+
     void onApiServiceNotAvailable();
 }

@@ -11,7 +11,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
  */
 public class LoginHelper {
     private static SsoManager ssoManager = LiveNationApplication.getSsoManager();
-    private  static Context applicationContext = LiveNationApplication.get().getApplicationContext();
+    private static Context applicationContext = LiveNationApplication.get().getApplicationContext();
+
     public static User getSavedUser() {
         return ssoManager.readUser(applicationContext);
     }
@@ -23,6 +24,7 @@ public class LoginHelper {
     public static boolean isLogout() {
         return ssoManager.readUser(applicationContext) == null;
     }
+
     public static boolean isLogin() {
         return ssoManager.readUser(applicationContext) != null;
     }
@@ -37,13 +39,13 @@ public class LoginHelper {
     }
 
     public static boolean isUsingFacebook(Context context) {
-        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        SsoManager.AuthConfiguration auth = LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
         return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK);
     }
 
 
     public static boolean isUsingGoogle(Context context) {
-        SsoManager.AuthConfiguration auth =  LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        SsoManager.AuthConfiguration auth = LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
         return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_GOOGLE);
     }
 }

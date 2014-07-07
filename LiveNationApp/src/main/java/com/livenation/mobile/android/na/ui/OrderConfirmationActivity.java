@@ -200,17 +200,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     //endregion
 
-
-    private class DetailsClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            trackFullDetailsTap();
-            Intent intent = new Intent(OrderConfirmationActivity.this, OrderDetailsActivity.class);
-            intent.putExtra(Constants.EXTRA_CART, getCart());
-            startActivity(intent);
-        }
-    }
-
     private Properties getProperties() {
         com.mobilitus.tm.tickets.models.Event event = getCart().getEvent();
         String orderTotal = TicketingUtils.formatCurrency(getCart().getTotal().getCurrency(), getCart().getTotal().getGrandTotal());
@@ -249,5 +238,15 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackFullDetailsTap() {
         Ticketing.getAnalytics().track(AnalyticConstants.VIEW_FULL_DETAILS_TAP, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+    }
+
+    private class DetailsClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            trackFullDetailsTap();
+            Intent intent = new Intent(OrderConfirmationActivity.this, OrderDetailsActivity.class);
+            intent.putExtra(Constants.EXTRA_CART, getCart());
+            startActivity(intent);
+        }
     }
 }

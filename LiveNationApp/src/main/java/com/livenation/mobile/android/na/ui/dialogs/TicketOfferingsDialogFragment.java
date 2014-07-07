@@ -18,10 +18,9 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import com.segment.android.models.Props;
 
 public class TicketOfferingsDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener {
     private ListView listView;
@@ -90,11 +89,15 @@ public class TicketOfferingsDialogFragment extends LiveNationDialogFragment impl
         props.put(AnalyticConstants.TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED, offerings.get(position).getDisplayType());
         LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_OPTIONS_SELECTION, AnalyticsCategory.SDP, props);
 
-        if(getOnTicketOfferingClickedListener() != null) {
+        if (getOnTicketOfferingClickedListener() != null) {
             TicketOffering offering = adapter.getItem(position);
             getOnTicketOfferingClickedListener().onTicketOfferingClicked(offering);
         }
         dismissAllowingStateLoss();
+    }
+
+    public interface OnTicketOfferingClickedListener {
+        void onTicketOfferingClicked(TicketOffering offering);
     }
 
     private class TicketOfferingsAdapter extends ArrayAdapter<TicketOffering> {
@@ -111,10 +114,5 @@ public class TicketOfferingsDialogFragment extends LiveNationDialogFragment impl
 
             return text;
         }
-    }
-
-
-    public interface OnTicketOfferingClickedListener {
-        void onTicketOfferingClicked(TicketOffering offering);
     }
 }
