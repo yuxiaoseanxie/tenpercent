@@ -41,11 +41,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.segment.android.models.Props;
 
 public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, ApiService.BasicApiCallback<List<Chart>> {
     private EventStickyHeaderAdapter adapter;

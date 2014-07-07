@@ -19,18 +19,17 @@ import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Presale;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.segment.android.models.Props;
-
 /**
  * Created by elodieferrais on 4/29/14.
  */
-public class CalendarDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener{
+public class CalendarDialogFragment extends LiveNationDialogFragment implements AdapterView.OnItemClickListener {
     private static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment.EVENT";
     private ListView listView;
     private CalendarAdapter adapter;
@@ -68,7 +67,7 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
         List<CalendarItem> calendarItemList = new ArrayList<CalendarItem>();
         //Add Show date item
         if (!event.getIsMegaticket()) {
-        CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
+            CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
             if (event.getLocalStartTime() != null) {
                 showDate.setStartDate(event.getLocalStartTime());
                 calendarItemList.add(showDate);
@@ -140,6 +139,10 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
             return name;
         }
 
+        public void setName(String name) {
+            this.name = name;
+        }
+
         public Date getStartDate() {
             return startDate;
         }
@@ -154,10 +157,6 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
 
         public void setEndDate(Date endDate) {
             this.endDate = endDate;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
     }
 }

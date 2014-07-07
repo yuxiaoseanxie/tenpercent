@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-
 import com.segment.android.models.Props;
 
 /**
@@ -21,8 +20,8 @@ import com.segment.android.models.Props;
  */
 
 public class LocationActivity extends LiveNationFragmentActivity {
-    private LocationFragment fragment;
     private final int REQUEST_CODE_CITY_SEARCH = 1;
+    private LocationFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -22,8 +22,8 @@
             android:id="@+id/fragment_nearby_venues_refresh_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/view_refresh_bar_margin"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/view_refresh_bar_margin" />
 
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -6,11 +6,11 @@
 
     <TextView
         android:id="@+id/featured_title_text"
+        style="@style/ui_header_transparent.with_bottom_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/featured_title"
-        style="@style/ui_header_transparent.with_bottom_padding" />
+        android:text="@string/featured_title" />
 
 
     <HorizontalScrollView

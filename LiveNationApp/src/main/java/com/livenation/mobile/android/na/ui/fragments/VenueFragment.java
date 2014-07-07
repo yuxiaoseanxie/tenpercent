@@ -11,7 +11,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,13 +44,14 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.segment.android.models.Props;
 
 import java.util.List;
 
-import com.segment.android.models.Props;
-
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
+    private final String SHOWS_FRAGMENT_TAG = "shows";
+    private final String MAP_FRAGMENT_TAG = "maps";
     private TextView venueTitle;
     private TextView location;
     private TextView telephone;
@@ -62,8 +62,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
     private LatLng mapLocationCache = null;
-    private final String SHOWS_FRAGMENT_TAG = "shows";
-    private final String MAP_FRAGMENT_TAG = "maps";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -223,6 +221,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     private class OnPhoneNumberClick implements View.OnClickListener {
         private Venue venue;
+
         public OnPhoneNumberClick(Venue venue) {
             this.venue = venue;
         }
@@ -232,7 +231,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             Props props = new Props();
             props.put(AnalyticConstants.VENUE_NAME, venue.getName());
             props.put(AnalyticConstants.VENUE_ID, venue.getId());
-            LiveNationAnalytics.track(AnalyticConstants.VENUE_PHONE_TAP, AnalyticsCategory.VDP,props);
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_PHONE_TAP, AnalyticsCategory.VDP, props);
 
 
             String phoneNumber = (String) VenueFragment.this.telephone.getText();
@@ -262,7 +261,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             Props props = new Props();
             props.put(AnalyticConstants.VENUE_NAME, venue.getName());
             props.put(AnalyticConstants.VENUE_ID, venue.getId());
-            LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP,props);
+            LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP, props);
 
             MapUtils.redirectToMapApplication(lat, lng, address, context);
         }

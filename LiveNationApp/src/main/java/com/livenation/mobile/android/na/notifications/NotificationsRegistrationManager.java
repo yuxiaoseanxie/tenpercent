@@ -100,7 +100,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
                 apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
                     @Override
                     public void onErrorResponse(LiveNationError error) {
-                        String errorMessage = (error != null)? error.getMessage() : "unknown error";
+                        String errorMessage = (error != null) ? error.getMessage() : "unknown error";
                         Log.e(getClass().getName(), "Could not register with platform: " + errorMessage, error);
                     }
 

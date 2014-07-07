@@ -8,7 +8,6 @@
 
 package com.livenation.mobile.android.na.ui;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,13 +47,12 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
+import com.segment.android.models.Props;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import java.util.Map;
-
-import com.segment.android.models.Props;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -202,8 +199,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 return true;
 
             case R.id.menu_home_logout_item:
-                    LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
-                    LoginHelper.logout(this);
+                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
+                LoginHelper.logout(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -253,10 +250,12 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
-    public void onSaveAuthTokenSuccess() {}
+    public void onSaveAuthTokenSuccess() {
+    }
 
     @Override
-    public void onSignOut() {}
+    public void onSignOut() {
+    }
 
     @Override
     public void onSaveAuthTokenFailure() {
@@ -266,6 +265,25 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     private AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
+    }
+
+    //Hockey App
+    private void checkForCrashes() {
+        if (BuildConfig.DEBUG) {
+            CrashManager.register(this, getString(R.string.hockey_app_id));
+        }
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        if (BuildConfig.DEBUG) {
+            UpdateManager.register(this, getString(R.string.hockey_app_id));
+        }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_HOME;
     }
 
     public static class FragmentAdapter extends FragmentPagerAdapter {
@@ -311,24 +329,5 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             HomeActivity.this.hasUnreadNotifications = hasUnreadNotifications;
             invalidateOptionsMenu();
         }
-    }
-
-    //Hockey App
-    private void checkForCrashes() {
-        if (BuildConfig.DEBUG) {
-            CrashManager.register(this, getString(R.string.hockey_app_id));
-        }
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        if (BuildConfig.DEBUG) {
-            UpdateManager.register(this, getString(R.string.hockey_app_id));
-        }
-    }
-
-    @Override
-    protected String getScreenName() {
-        return AnalyticConstants.SCREEN_HOME;
     }
 }

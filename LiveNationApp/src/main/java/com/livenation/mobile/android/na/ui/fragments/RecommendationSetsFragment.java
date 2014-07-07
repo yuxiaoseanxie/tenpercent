@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +39,9 @@ import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
-
-import com.segment.android.models.Props;
 
 public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
 
@@ -75,7 +73,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setAreHeadersSticky(false);
-
 
 
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);

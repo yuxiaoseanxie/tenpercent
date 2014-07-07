@@ -8,7 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 

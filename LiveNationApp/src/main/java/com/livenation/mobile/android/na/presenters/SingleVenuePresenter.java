@@ -17,8 +17,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 public class SingleVenuePresenter extends
         BasePresenter<SingleVenueView, SingleVenuePresenter.SingleVenueState> implements Presenter<SingleVenueView>,
         StateListener<SingleVenuePresenter.SingleVenueState> {
-    private static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
     public static final String PARAMETER_VENUE_ID = "venue_id";
+    private static final String INTENT_DATA_KEY = SingleVenuePresenter.class.getName();
 
     public static Bundle getAruguments(String venueIdRaw) {
         Bundle bundle = new Bundle();

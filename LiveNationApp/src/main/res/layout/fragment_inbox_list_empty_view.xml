@@ -18,31 +18,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/empty"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:gravity="center"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/inbox_notification_empty_message_margin"
         android:text="@string/notif_no_notification_title"
-        android:textAppearance="@style/list_inbox_empty_message_title"
-        android:layout_margin="@dimen/inbox_notification_empty_message_margin" />
+        android:textAppearance="@style/list_inbox_empty_message_title" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/inbox_notification_empty_message_margin"
         android:gravity="center"
         android:text="@string/notif_no_notification_description"
-        android:textAppearance="@style/list_inbox_empty_message_details"
-        android:layout_margin="@dimen/inbox_notification_empty_message_margin" />
+        android:textAppearance="@style/list_inbox_empty_message_details" />
 
     <include
         android:id="@+id/notif_no_notification_favorite_button"
         layout="@layout/sub_button_search_favorites"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recommendations_button_height"
-        android:layout_margin="@dimen/inbox_notification_empty_message_margin"/>
+        android:layout_margin="@dimen/inbox_notification_empty_message_margin" />
 
 </LinearLayout>
 

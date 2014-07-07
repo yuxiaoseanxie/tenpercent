@@ -10,8 +10,8 @@ import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 
 public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
-    private MenuItem shareItem;
     protected Bundle args;
+    private MenuItem shareItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState, int res) {

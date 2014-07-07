@@ -20,10 +20,9 @@ import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.YouTubeVideoView;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.na.youtube.YouTubeVideo;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import com.segment.android.models.Props;
 
 public class YouTubeFragment extends LiveNationFragment implements Response.Listener<List<YouTubeVideo>>, Response.ErrorListener {
     private YouTubeClient.Cancelable currentSearchRequest;
@@ -49,14 +48,14 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
                 load();
             }
         });
-        if(getArtistName() == null)
+        if (getArtistName() == null)
             empty.setVisibility(View.GONE);
 
         if (currentSearchRequest != null) {
             empty.setViewMode(EmptyListViewControl.ViewMode.LOADING);
             empty.setVisibility(View.VISIBLE);
         }
-        
+
         return view;
     }
 
@@ -64,7 +63,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(videos != null) {
+        if (videos != null) {
             displayVideos(videos);
         }
     }
@@ -73,7 +72,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     public void onDestroy() {
         super.onDestroy();
 
-        if(currentSearchRequest != null)
+        if (currentSearchRequest != null)
             currentSearchRequest.cancel();
     }
 
@@ -87,7 +86,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     public void setArtistName(String artistName) {
-        if(this.artistName != null && this.artistName.equals(artistName))
+        if (this.artistName != null && this.artistName.equals(artistName))
             return;
 
         this.artistName = artistName;
@@ -151,7 +150,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
 
             position++;
 
-            if(position >= getMaxVideos())
+            if (position >= getMaxVideos())
                 break;
         }
 
@@ -162,7 +161,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     }
 
     private void load() {
-        if(currentSearchRequest != null) {
+        if (currentSearchRequest != null) {
             return;
         }
 

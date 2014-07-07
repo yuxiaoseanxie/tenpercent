@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/windowBackground">
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
 
     <TextView
+        style="@style/dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        style="@style/dialog_title"
-        android:text="@string/ticket_offerings"/>
+        android:gravity="center"
+        android:text="@string/ticket_offerings" />
 
     <View
         android:id="@+id/view_show_bottom_line"
@@ -25,6 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@drawable/ticket_offering_list_divider"
-        android:dividerHeight="@dimen/ui_underscore_height"/>
+        android:dividerHeight="@dimen/ui_underscore_height" />
 
 </LinearLayout>

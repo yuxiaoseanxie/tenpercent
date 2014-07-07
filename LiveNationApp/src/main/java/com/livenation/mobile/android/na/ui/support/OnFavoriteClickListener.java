@@ -13,10 +13,8 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-
 import com.segment.android.models.Props;
 
 public class OnFavoriteClickListener {
@@ -149,7 +147,7 @@ public class OnFavoriteClickListener {
                     } else {
                         props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_UNFAVORITED_VALUE);
                     }
-                    LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP,category, props);
+                    LiveNationAnalytics.track(AnalyticConstants.FAVORITE_VENUE_STAR_TAP, category, props);
 
                     break;
                 default:

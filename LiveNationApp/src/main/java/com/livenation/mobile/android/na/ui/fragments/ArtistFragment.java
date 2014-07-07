@@ -25,7 +25,6 @@ import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-
 import com.segment.android.models.Props;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {

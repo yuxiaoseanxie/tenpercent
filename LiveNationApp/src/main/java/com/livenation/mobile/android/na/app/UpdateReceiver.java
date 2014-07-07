@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-
 import com.segment.android.models.Props;
 
 /**

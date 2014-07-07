@@ -62,7 +62,7 @@ public class VerticalDate extends LinearLayout {
     private void init(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.view_vertical_date, isInEditMode()? null : this, false);
+        View view = inflater.inflate(R.layout.view_vertical_date, isInEditMode() ? null : this, false);
 
         this.dateDotw = (TextView) view.findViewById(R.id.list_show_item_date_dotw);
         this.dateDay = (TextView) view.findViewById(R.id.list_show_item_date_day);

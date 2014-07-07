@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;

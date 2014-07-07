@@ -7,7 +7,7 @@ public class AnalyticConstants {
     public static final String PLATFORM_EVENT_SUFFIX = " (LN_ANDROID)";
 
     /**
-     *Event
+     * Event
      */
     //Common
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
@@ -77,8 +77,8 @@ public class AnalyticConstants {
     public static final String DEEP_LINK_BUTTON_TAP = "Deep Link Button Tap";
 
     //Push Notification
-    public static final String PUSH_NOTIFICATION_RECEIVE= "Push Notification Receive";
-    public static final String PUSH_NOTIFICATION_TAP= "Push Notification Tap";
+    public static final String PUSH_NOTIFICATION_RECEIVE = "Push Notification Receive";
+    public static final String PUSH_NOTIFICATION_TAP = "Push Notification Tap";
 
     //Search
     public static final String SEARCH_RESULT_TAP = "Search Result Tap";
@@ -99,7 +99,7 @@ public class AnalyticConstants {
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
     /**
-     *Screen name
+     * Screen name
      */
     public static final String SCREEN_HOME = "LN_Mob: NA App Android: Home";
     public static final String SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
@@ -115,7 +115,7 @@ public class AnalyticConstants {
     public static final String SCREEN_SDP = "LN_Mob: NA App Android: SDP";
 
     /**
-     *Attributes
+     * Attributes
      */
     //Common
     public static final String CELL_POSITION = "Cell Position";
@@ -170,8 +170,8 @@ public class AnalyticConstants {
     public static final String STATE_UNFAVORITED_VALUE = "unfavorited";
 
     //Sdp
-    public static final String  TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";
-    public static final String  TYPE_OF_DATE = "Type of Date";
+    public static final String TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";
+    public static final String TYPE_OF_DATE = "Type of Date";
 
     //Video
     public static final String VIDEO_NAME = "Video name";
@@ -205,11 +205,10 @@ public class AnalyticConstants {
     public static final String FROM = "From";
 
     //Push Notification
-    public static final String MESSAGE_VALUE= "Message Value";
-    public static final String MESSAGE_ID= "Message Id";
+    public static final String MESSAGE_VALUE = "Message Value";
+    public static final String MESSAGE_ID = "Message Id";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
-
 
 
 }

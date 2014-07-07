@@ -37,21 +37,19 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.AutoCompleteSearchParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 4/2/14.
  */
 public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
     private final String[] SEARCH_INCLUDE_DEFAULT = new String[]{"venues", "artists", "events"};
+    private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
     private final String[] SEARCH_INCLUDE_ARTISTS_VENUES = new String[]{"venues", "artists"};
     private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
-    private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
-
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private String unboundSearchTextBuffer;
@@ -218,7 +216,6 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             return view;
         }
-
 
 
         private class ViewHolder {

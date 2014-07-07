@@ -112,7 +112,9 @@
     </style>
 
     <style name="text.button.recommendations_upsell">
-        <item name="android:layout_marginBottom">@dimen/button_recommendations_upsell_margin_bottom</item>
+        <item name="android:layout_marginBottom">
+            @dimen/button_recommendations_upsell_margin_bottom
+        </item>
         <item name="android:layout_marginTop">@dimen/button_recommendations_upsell_margin_top</item>
     </style>
 

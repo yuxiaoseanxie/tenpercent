@@ -24,10 +24,10 @@
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/view_featured_text_margin_bottom"
             android:layout_marginLeft="@dimen/view_featured_text_margin_left_right"
             android:layout_marginRight="@dimen/view_featured_text_margin_left_right"
-            android:layout_gravity="bottom"
             android:text="@string/mock_placeholder_artist_title_1"
             android:textAppearance="@style/featured_item_text" />
     </FrameLayout>
