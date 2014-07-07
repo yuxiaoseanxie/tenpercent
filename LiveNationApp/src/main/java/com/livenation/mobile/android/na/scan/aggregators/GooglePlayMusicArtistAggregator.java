@@ -65,12 +65,15 @@ public class GooglePlayMusicArtistAggregator implements ArtistAggregator {
                 Integer numberOfTracks = cursorTracksCount.getCount();
                 musicLibraryEntry.setTotalSongs(numberOfTracks);
             }
+
             cursorTracksCount.close();
 
             libraryEntries.add(musicLibraryEntry);
         }
 
-        cursorDiff.close();
+        if (cursorDiff != null) {
+            cursorDiff.close();
+        }
 
         callback.onResult(libraryEntries);
     }
