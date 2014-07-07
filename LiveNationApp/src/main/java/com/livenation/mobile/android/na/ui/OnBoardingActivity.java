@@ -349,5 +349,10 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     private interface AnimationEndListener {
         public void onAnimationEnd(Animation animation);
     }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_ONBOARDING;
+    }
 }
 

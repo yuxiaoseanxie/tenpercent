@@ -113,6 +113,7 @@ public class AnalyticConstants {
     public static final String SCREEN_HELP = "LN_Mob: NA App Android: Help";
     public static final String SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
     public static final String SCREEN_SDP = "LN_Mob: NA App Android: SDP";
+    public static final String SCREEN_ONBOARDING = "Onboarding screen";
 
     /**
      *Attributes
