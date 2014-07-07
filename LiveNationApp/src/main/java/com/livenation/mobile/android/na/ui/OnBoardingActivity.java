@@ -144,7 +144,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
             }
         });
         scanningView.startAnimation(animDown);
-        //scrollView.fullScroll(View.FOCUS_DOWN);
         int scrollviewHeight = scrollView.getChildAt(0).getHeight();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int height = displayMetrics.heightPixels;
@@ -154,7 +153,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         int paddingBottom = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", 0, scrollviewHeight - height + statusbarHeight - paddingBottom).setDuration(SCROLLING_DURATION_ANIMATION);
         objectAnimator.start();
-        //scrollView.scrollTo(0, scrollviewHeight - height + statusbarHeight - paddingBottom);
     }
 
     public void fadeInBackground() {
