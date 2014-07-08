@@ -7,31 +7,21 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.segment.android.Analytics;
+import com.segment.android.models.Traits;
 
 import java.lang.ref.WeakReference;
 
 import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
 
 public class SsoManager implements UiApiSsoProvider.ActivityProvider {
-    public enum SSO_TYPE {
-        SSO_FACEBOOK(R.drawable.facebook_logo),
-        SSO_GOOGLE(R.drawable.google_plus_logo),
-        SSO_DUMMY(0),;
-
-        public int logoResId;
-        SSO_TYPE(int logoResId) {
-            this.logoResId = logoResId;
-        }
-
-        public int getLogoResId() {
-            return logoResId;
-        }
-    }
-
     private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
     private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
     private final DummySsoProvider dummySso = new DummySsoProvider();
@@ -44,7 +34,6 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
     private final String USER_PIC_URL = "user_pic_url";
     private final UiApiSsoProvider defaultProvider;
     private WeakReference<Activity> weakActivity;
-
     public SsoManager(UiApiSsoProvider defaultProvider) {
         this.defaultProvider = defaultProvider;
     }
@@ -121,7 +110,19 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
         persistance.write(USER_NAME, user.getDisplayName(), context);
         persistance.write(USER_EMAIL, user.getEmail(), context);
         persistance.write(USER_PIC_URL, user.getUrl(), context);
+        Analytics.identify(user.getId(), new Traits("name", user.getDisplayName(),
+                "email", user.getEmail()));
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGIN));
+
+        UiApiSsoProvider provider = getConfiguredSsoProvider(context);
+        if (provider != null) {
+            if (provider instanceof FacebookSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            } else if (provider instanceof GoogleSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.GOOGLE_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            }
+        }
+
     }
 
     public User readUser(Context context) {
@@ -173,6 +174,22 @@ public class SsoManager implements UiApiSsoProvider.ActivityProvider {
                 return dummySso;
             default:
                 throw new IllegalArgumentException("Unknown SSO provider id: " + ssoProviderId);
+        }
+    }
+
+    public enum SSO_TYPE {
+        SSO_FACEBOOK(R.drawable.facebook_logo),
+        SSO_GOOGLE(R.drawable.google_plus_logo),
+        SSO_DUMMY(0),;
+
+        public int logoResId;
+
+        SSO_TYPE(int logoResId) {
+            this.logoResId = logoResId;
+        }
+
+        public int getLogoResId() {
+            return logoResId;
         }
     }
 

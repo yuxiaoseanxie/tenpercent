@@ -13,12 +13,12 @@ import java.util.List;
  * Created by cchilton on 3/11/14.
  */
 public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> implements AbsListView.OnScrollListener {
-    private PaginatedFetcher paginatedFetcher = null;
     private final int limit;
     private final ArrayAdapter<TItemType> adapter;
+    protected boolean isFirstPage = true;
+    private PaginatedFetcher paginatedFetcher = null;
     private boolean hasMorePages = true;
     private List<TItemType> lastFetch;
-    protected boolean isFirstPage = true;
 
     protected BaseScrollPager(int limit, ArrayAdapter<TItemType> adapter) {
         this.adapter = adapter;

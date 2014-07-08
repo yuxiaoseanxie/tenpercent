@@ -56,7 +56,10 @@ abstract class BaseSsoProvider<SessionType> implements UiApiSsoProvider {
             abstract void onSessionFailed();
 
             //Need to override this method if the CANCEL/NONETWORK ... cases are not handle by the provider SDK it self
-            public void onSessionCanceled() {};
+            public void onSessionCanceled() {
+            }
+
+            ;
 
         }
     }

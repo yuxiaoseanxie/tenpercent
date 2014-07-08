@@ -121,6 +121,17 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         return venueId;
     }
 
+    @Override
+    public void onApiServiceAttached(LiveNationApiService apiService) {
+        this.lat = apiService.getApiConfig().getLat();
+        this.lng = apiService.getApiConfig().getLng();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onApiServiceNotAvailable() {
+    }
+
     private class ViewHolder {
         private final TextView title;
         private final TextView startTime;
@@ -143,17 +154,6 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         public VerticalDate getDate() {
             return date;
         }
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.lat = apiService.getApiConfig().getLat();
-        this.lng = apiService.getApiConfig().getLng();
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
     }
 
     private class ViewHeaderHolder {

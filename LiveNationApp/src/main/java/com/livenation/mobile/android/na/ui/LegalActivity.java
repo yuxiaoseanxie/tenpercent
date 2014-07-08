@@ -95,6 +95,10 @@ public class LegalActivity extends LiveNationFragmentActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_LEGAL_CREDITS;
+    }
 
     private class WebViewTabListener implements ActionBar.TabListener {
 

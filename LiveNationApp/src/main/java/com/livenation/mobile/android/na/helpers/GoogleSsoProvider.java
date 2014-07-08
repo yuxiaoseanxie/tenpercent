@@ -162,46 +162,39 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
 
                 accessToken = GoogleAuthUtil.getToken(activity, Plus.AccountApi.getAccountName(getSession()), SCOPE);
                 User user = getProfileInformation(getSession());
-
+                if (user == null) {
+                    throw new IllegalStateException("Google user is null");
+                }
                 onComplete(accessToken, user);
 
                 getListener().onPayloadComplete(this);
 
             } catch (IOException transientEx) {
-                onSessionFailed();
-                return;
+                throw new IllegalStateException("Get google user failed, IOException", transientEx);
             } catch (UserRecoverableAuthException e) {
                 throw new IllegalStateException("Initial Google Scope was not wide enough");
             } catch (GoogleAuthException authEx) {
-                return;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException("Get google user failed, GAuth Exception", authEx);
             }
         }
 
-        ;
-
-
         private User getProfileInformation(GoogleApiClient googleApiClient) {
-            try {
-                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                    String email = Plus.AccountApi.getAccountName(googleApiClient);
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
 
-                    String name = currentPerson.getDisplayName();
+                String name = currentPerson.getDisplayName();
 
-                    User user = new User();
-                    user.setId(currentPerson.getId());
-                    user.setDisplayName(name);
-                    user.setEmail(email);
-                    String profilePicUrl = currentPerson.getImage().getUrl();
-                    profilePicUrl = getLargerProfileImage(profilePicUrl);
-                    user.setUrl(profilePicUrl);
-                    return user;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                User user = new User();
+                user.setId(currentPerson.getId());
+                user.setDisplayName(name);
+                user.setEmail(email);
+                String profilePicUrl = currentPerson.getImage().getUrl();
+                profilePicUrl = getLargerProfileImage(profilePicUrl);
+                user.setUrl(profilePicUrl);
+                return user;
             }
+
             return null;
         }
 

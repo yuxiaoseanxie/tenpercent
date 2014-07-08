@@ -36,7 +36,6 @@
         <item name="android:selectableItemBackground">@drawable/selectable_background_default</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbar
         </item>
-        <item name="actionModeCloseDrawable">@drawable/close_action_mode</item>
         <item name="android:actionModeCloseDrawable">@drawable/close_action_mode</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionBar.Overflow</item>
     </style>

@@ -36,8 +36,8 @@ import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.segment.android.models.Props;
 
-import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
@@ -83,7 +83,12 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Event event = adapter.getItem(position);
+        Event event = (Event) parent.getItemAtPosition(position);
+        if (event == null) {
+            //user clicked the footer/loading view
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
@@ -126,7 +131,9 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     @Override

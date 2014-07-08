@@ -11,9 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
-import com.livenation.mobile.android.na.R;
 
 /**
  * Created by elodieferrais on 4/28/14.

@@ -51,14 +51,14 @@
                 android:padding="@dimen/widget_margin"
                 android:textColorLink="@color/notification_link_color" />
         </ScrollView>
+
         <TextView
             android:id="@+id/fragment_message_error_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/notif_error_loading_message"
             android:gravity="center"
-            android:visibility="gone"
-         />
+            android:text="@string/notif_error_loading_message"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <Button

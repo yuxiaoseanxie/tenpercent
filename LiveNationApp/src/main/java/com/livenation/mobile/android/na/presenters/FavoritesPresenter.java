@@ -49,12 +49,6 @@ public class FavoritesPresenter extends
     }
 
     @Override
-    public void onStateCancelled(FavoritesState state) {
-        super.onStateCancelled(state);
-        postResult(state);
-    }
-
-    @Override
     public void onStateFailed(int failureCode, FavoritesState state) {
         super.onStateFailed(failureCode, state);
         // TODO: this

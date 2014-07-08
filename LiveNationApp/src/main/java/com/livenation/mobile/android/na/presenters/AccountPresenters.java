@@ -11,7 +11,6 @@ import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 
 public class AccountPresenters {

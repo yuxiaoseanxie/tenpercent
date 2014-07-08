@@ -10,13 +10,21 @@ import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 
 public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
-    private MenuItem shareItem;
     protected Bundle args;
+    private MenuItem shareItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState, int res) {
         super.onCreate(savedInstanceState, res);
         args = getIntent().getExtras();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (isShareAvailable()) {
+            invalidateOptionsMenu();
+        }
     }
 
     //region Menus

@@ -5,9 +5,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -28,9 +28,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_gravity="bottom"
                 android:orientation="vertical">
 
                 <TextView
@@ -39,8 +39,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/order_confirmation_header_text_margin_bottom"
                     android:gravity="center"
-                    android:textAppearance="@style/order_confirmation_header_text"
-                    android:text="@string/mock_order_quantity" />
+                    android:text="@string/mock_order_quantity"
+                    android:textAppearance="@style/order_confirmation_header_text" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_event_name"
@@ -48,9 +48,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/order_confirmation_header_text_margin_bottom"
                     android:gravity="center"
-                    android:textAppearance="@style/order_confirmation_header_text.large"
-                    android:text="@string/mock_order_event_name" />
-=
+                    android:text="@string/mock_order_event_name"
+                    android:textAppearance="@style/order_confirmation_header_text.large" />
+                =
             </LinearLayout>
 
         </FrameLayout>
@@ -58,10 +58,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_vertical_margin"
-            android:textAppearance="@style/order_confirmation_section_header_text"
             android:gravity="center"
-            android:text="@string/order_confirmation_details_title"/>
+            android:padding="@dimen/activity_vertical_margin"
+            android:text="@string/order_confirmation_details_title"
+            android:textAppearance="@style/order_confirmation_section_header_text" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -69,15 +69,14 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin">
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_number"/>
+                    android:text="@string/order_confirmation_number"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_number"
@@ -85,20 +84,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_artist_title_1"/>
+                    android:text="@string/mock_artist_title_1"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_seats"/>
+                    android:text="@string/order_confirmation_seats"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_seats"
@@ -106,20 +104,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_artist_title_1"/>
+                    android:text="@string/mock_artist_title_1"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_cost"/>
+                    android:text="@string/order_confirmation_cost"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_cost"
@@ -127,20 +124,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_price"/>
+                    android:text="@string/mock_price"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_account"/>
+                    android:text="@string/order_confirmation_account"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_account"
@@ -148,20 +144,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_artist_title_1"/>
+                    android:text="@string/mock_artist_title_1"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_date"/>
+                    android:text="@string/order_confirmation_date"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_date"
@@ -169,20 +164,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_event_date"/>
+                    android:text="@string/mock_event_date"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+            <TableRow android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/order_confirmation_detail_text.label"
-                    android:text="@string/order_confirmation_venue_name"/>
+                    android:text="@string/order_confirmation_venue_name"
+                    android:textAppearance="@style/order_confirmation_detail_text.label" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_venue"
@@ -190,8 +184,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:textAppearance="@style/order_confirmation_detail_text"
-                    android:text="@string/mock_venue_title_1"/>
+                    android:text="@string/mock_venue_title_1"
+                    android:textAppearance="@style/order_confirmation_detail_text" />
 
             </TableRow>
 
@@ -199,11 +193,11 @@
 
         <Button
             android:id="@+id/activity_order_confirmation_details_button"
+            style="@style/ExpandableContentButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/order_confirmation_show_details"
-            style="@style/ExpandableContentButton"/>
+            android:text="@string/order_confirmation_show_details" />
 
     </LinearLayout>
 

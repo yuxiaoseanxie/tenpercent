@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,20 +49,20 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
-import io.segment.android.models.Props;
-
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
+    private final String MAP_FRAGMENT_TAG = "maps";
     private TextView artistTitle;
     private TextView calendarText;
-    private RelativeLayout calendarContainer;
+    private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
     private NetworkImageView artistImage;
     private ShowVenueView venueDetails;
@@ -84,7 +83,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
-        calendarContainer = (RelativeLayout) result.findViewById(R.id.sub_show_calendar_container);
+        calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
         findTicketsOptions = (Button) result.findViewById(R.id.fragment_show_ticketbar_options);
         findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_find);
 
@@ -94,15 +93,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (savedInstanceState == null) {
+        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        if (mapFragment == null) {
             mapFragment = new LiveNationMapFragment();
-            mapFragment.setMapReadyListener(this);
-
-            addFragment(R.id.fragment_show_map_container, mapFragment, "map");
-        } else {
-            mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag("map");
+            addFragment(R.id.fragment_show_map_container, mapFragment, MAP_FRAGMENT_TAG);
         }
+        mapFragment.setMapReadyListener(this);
     }
 
     @Override
@@ -355,6 +351,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
+            if (dialogFragment.isAdded()) return;
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);
 

@@ -19,12 +19,11 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
+import com.segment.android.models.Props;
 import com.urbanairship.richpush.RichPushMessage;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 /**
  * A list fragment that shows rich push messages.

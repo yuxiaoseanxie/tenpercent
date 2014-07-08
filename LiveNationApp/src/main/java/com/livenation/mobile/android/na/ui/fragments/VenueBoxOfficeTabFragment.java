@@ -16,14 +16,14 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.Map;
 
 public class VenueBoxOfficeTabFragment extends Fragment {
+    private static final String SECTION_TERMINATOR = "<br><br>\n";
     private BoxOffice boxOfficeInfo;
     private String[] displayedSections;
-
     private ScrollView scrollView;
     private TextView text;
-    private int textScrollY;
 
     //region Lifecycle
+    private int textScrollY;
 
     public static VenueBoxOfficeTabFragment newInstance(BoxOffice boxOfficeInfo, String[] displayedSections) {
         VenueBoxOfficeTabFragment fragment = new VenueBoxOfficeTabFragment();
@@ -59,17 +59,17 @@ public class VenueBoxOfficeTabFragment extends Fragment {
         return view;
     }
 
+    //endregion
+
+
+    //region Properties
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         textScrollY = scrollView.getScrollY();
     }
-
-    //endregion
-
-
-    //region Properties
 
     public BoxOffice getBoxOfficeInfo() {
         return boxOfficeInfo;
@@ -83,16 +83,14 @@ public class VenueBoxOfficeTabFragment extends Fragment {
         return displayedSections;
     }
 
-    public void setDisplayedSections(String[] displayedSections) {
-        this.displayedSections = displayedSections;
-    }
-
     //endregion
 
 
     //region Rendering
 
-    private static final String SECTION_TERMINATOR = "<br><br>\n";
+    public void setDisplayedSections(String[] displayedSections) {
+        this.displayedSections = displayedSections;
+    }
 
     private void render() {
         Map<String, String> values = getBoxOfficeInfo().getValues();
@@ -100,7 +98,7 @@ public class VenueBoxOfficeTabFragment extends Fragment {
         String content = "";
         for (String section : getDisplayedSections()) {
             String value = values.get(section);
-            if(value == null)
+            if (value == null)
                 continue;
 
             content += "<h3>" + getString(BoxOfficeTabs.getTitleResIdForSection(section)) + "</h3>\n";

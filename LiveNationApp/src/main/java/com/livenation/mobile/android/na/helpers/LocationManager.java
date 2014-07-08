@@ -136,7 +136,7 @@ public class LocationManager implements LocationProvider {
                             if (locality == null) {
                                 locality = matches.get(0).getCountryName();
                                 if (locality == null) {
-                                    locality = context.getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng);
+                                    locality = context.getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng);
                                 }
                             }
                         }

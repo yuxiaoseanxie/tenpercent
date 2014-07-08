@@ -25,17 +25,15 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ApiServiceBinder {
-    private Fragment profileFragment;
+    private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
     private TextView locationText;
 
     @Override
@@ -88,9 +86,9 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     public void refreshUser(boolean isLogout) {
+        Fragment profileFragment = getChildFragmentManager().findFragmentByTag(PROFILE_FRAGMENT_TAG);
         if (null != profileFragment) {
             removeFragment(profileFragment);
-            profileFragment = null;
         }
 
         if (isLogout) {
@@ -99,7 +97,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
             profileFragment = new AccountUserFragment();
         }
 
-        addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");
+        addFragment(R.id.account_header_provider_container, profileFragment, PROFILE_FRAGMENT_TAG);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onGetCityFailure(double lat, double lng) {
         Context context = locationText.getContext();
-        locationText.setText(context.getString(R.string.location_unknown) + " " + String.valueOf(lat)  + "," + String.valueOf(lng));
+        locationText.setText(context.getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng));
     }
 
     private class OnOrdersClick implements View.OnClickListener {

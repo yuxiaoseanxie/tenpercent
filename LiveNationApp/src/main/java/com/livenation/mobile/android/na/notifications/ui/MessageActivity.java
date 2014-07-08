@@ -6,7 +6,6 @@ package com.livenation.mobile.android.na.notifications.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;

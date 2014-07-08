@@ -1,14 +1,19 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.ScaleAnimation;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -34,6 +39,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     private final static int LOGIN_DURATION_ANIMATION = 850;
     private final static int BACKGROUND_DURATION_ANIMATION = 600;
     private final static int TITLE_DURATION_ANIMATION = 450;
+    private final static int SCROLLING_DURATION_ANIMATION = 450;
     private final static int ITEM_DURATION_ANIMATION = 520;
     private final static int SCANNING_DURATION = 2800;
     private View facebookButton;
@@ -46,6 +52,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     private View recommandationsView;
     private View presalesView;
     private View loginContainerView;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,8 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         //On boarding never show because is not develop yet. Keep it for analytics
         if (isOnBoardingAlreadyDisplayed()) {
             goToTheApp();
+        } else {
+            LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
         }
 
         facebookButton = findViewById(R.id.on_boarding_facebook_sign_in_button);
@@ -67,6 +76,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         recommandationsView = findViewById(R.id.on_boarding_recommendations_container);
         ticketsView = findViewById(R.id.on_boarding_tickets_container);
         presalesView = findViewById(R.id.on_boarding_presales_container);
+        scrollView = (ScrollView) findViewById(R.id.on_boarding_scrollview);
         facebookButton.setOnClickListener(this);
         googleButton.setOnClickListener(this);
         skip.setOnClickListener(this);
@@ -89,7 +99,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     }
 
     private void setOnboardingAlreadyDisplay() {
-        LiveNationAnalytics.track(AnalyticConstants.ON_BOARDING_FIRST_LAUNCH, AnalyticsCategory.ON_BOARDING);
         setOnBoardingAlreadyDisplayed();
     }
 
@@ -115,7 +124,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showHideScanning();
                                 final AlphaAnimation animUp = new AlphaAnimation(1, 0);
                                 animUp.setDuration(SCANNING_DURATION_ANIMATION);
                                 animUp.setFillAfter(true);
@@ -135,6 +143,15 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
             }
         });
         scanningView.startAnimation(animDown);
+        int scrollviewHeight = scrollView.getChildAt(0).getHeight();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int height = displayMetrics.heightPixels;
+        Resources r = getResources();
+        //25 is the height of the status bar
+        int statusbarHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, r.getDisplayMetrics());
+        int paddingBottom = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", 0, scrollviewHeight - height + statusbarHeight - paddingBottom).setDuration(SCROLLING_DURATION_ANIMATION);
+        objectAnimator.start();
     }
 
     public void fadeInBackground() {
@@ -322,6 +339,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         } else if (R.id.on_boarding_google_sign_in_button == v.getId()) {
             loginWithGoogle();
         } else if (R.id.on_boarding_skip_textview == v.getId()) {
+            LiveNationAnalytics.track(AnalyticConstants.SKIP_TAP, AnalyticsCategory.ON_BOARDING);
             goToTheApp();
         }
         setOnboardingAlreadyDisplay();
@@ -329,6 +347,11 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
     private interface AnimationEndListener {
         public void onAnimationEnd(Animation animation);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_ONBOARDING;
     }
 }
 

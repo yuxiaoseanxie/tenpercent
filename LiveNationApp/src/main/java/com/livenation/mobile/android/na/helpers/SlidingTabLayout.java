@@ -46,7 +46,7 @@ import java.util.Set;
  * <p/>
  * The colors can be customized in two ways. The first and simplest is to provide an array of colors
  * via {@link #setSelectedIndicatorColors(int...)} and {@link #setDividerColors(int...)}. The
- * alternative is via the {@link com.livenation.mobile.android.na.helpers.SlidingTabLayout.TabColorizer} interface which provides you complete control over
+ * alternative is via the {@link com.livenation.mobile.android.na.helpers.SlidingTabLayout.TabColorizer} interface which provides you finish control over
  * which color is used for any individual position.
  * <p/>
  * The views used as tabs can be customized by calling {@link #setCustomTabView(int, int)},
@@ -274,7 +274,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     /**
-     * Allows complete control over the colors drawn in the tab layout. Set with
+     * Allows finish control over the colors drawn in the tab layout. Set with
      * {@link #setCustomTabColorizer(com.livenation.mobile.android.na.helpers.SlidingTabLayout.TabColorizer)}.
      */
     public interface TabColorizer {
@@ -326,8 +326,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
-            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.RECOMMENDED_VIEW, AnalyticConstants.NEARBY_VIEW, AnalyticConstants.ALL_SHOWS_VIEW};
+            String[] tabsAnalyticsLabel = new String[]{AnalyticConstants.RECOMMENDED_VIEW, AnalyticConstants.ALL_SHOWS_VIEW, AnalyticConstants.NEARBY_VIEW};
             LiveNationAnalytics.track(tabsAnalyticsLabel[position], AnalyticsCategory.HOME_SCREEN);
+
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
