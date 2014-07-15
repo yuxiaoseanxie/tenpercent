@@ -111,7 +111,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
     @Override
     public void logout(SsoLogoutCallback callback) {
         clearSessionCache();
-        if (googleApiClient.isConnected()) {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
             Plus.AccountApi.revokeAccessAndDisconnect(googleApiClient);
             Plus.AccountApi.clearDefaultAccount(googleApiClient);
         }
@@ -229,7 +229,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
         @Override
         public void onConnected(Bundle bundle) {
             final GoogleUserClient userClient = new GoogleUserClient(loginCallback);
-            new Thread( new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     userClient.run(googleApiClient, LiveNationApplication.get().getApplicationContext());

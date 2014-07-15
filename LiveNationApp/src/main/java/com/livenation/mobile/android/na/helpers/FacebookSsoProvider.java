@@ -206,7 +206,6 @@ public class FacebookSsoProvider extends ApiSsoProvider {
             Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser graphUser, Response response) {
-
                     if (null == graphUser) {
                         loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_FACEBOOK_LOGIN_FAILED));
                         return;
