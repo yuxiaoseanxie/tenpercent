@@ -16,8 +16,7 @@ import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
  * Created by elodieferrais on 5/8/14.
  */
 public class LoginHelper {
-    //private static int USER_UPDATE_PERIOD = 1000 * 60 * 5;
-    private static int USER_UPDATE_PERIOD = 5;
+    private static int USER_UPDATE_PERIOD = 1000 * 60 * 5;
     private static SsoManager ssoManager = LiveNationApplication.getSsoManager();
     private static Context applicationContext = LiveNationApplication.get().getApplicationContext();
 
