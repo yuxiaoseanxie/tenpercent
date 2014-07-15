@@ -79,12 +79,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
                 .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
-        new Runnable() {
-            @Override
-            public void run() {
-                googleApiClient.connect();
-            }
-        }.run();
+        googleApiClient.connect();
     }
 
     @Override

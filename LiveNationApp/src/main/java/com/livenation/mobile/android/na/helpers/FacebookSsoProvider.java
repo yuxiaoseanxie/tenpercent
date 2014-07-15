@@ -87,12 +87,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
         Session.setActiveSession(session);
 
-        new Runnable() {
-            @Override
-            public void run() {
-                session.openForRead(op);
-            }
-        }.run();
+        session.openForRead(op);
     }
 
     @Override
