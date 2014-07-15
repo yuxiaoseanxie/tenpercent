@@ -3,8 +3,6 @@ package com.livenation.mobile.android.na.helpers;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
@@ -50,10 +48,5 @@ public class DummySsoProvider extends ApiSsoProvider {
 
     @Override
     public void login(boolean allowForeground) {
-    }
-
-    @Override
-    public void getUser(ApiService.BasicApiCallback<User> callback) {
-        callback.onResponse(null);
     }
 }

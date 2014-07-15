@@ -35,8 +35,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
     private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
     private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
     private final String PARAMETER_ACCESS_KEY = "google_plus_code";
-    private User user;
-    private String accessToken;
     private GoogleApiClient googleApiClient;
     private final int RC_SIGN_IN = 6613;
     private final int RESOLVE_COUNT_MAX = 2;
@@ -52,8 +50,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
         GoogleSessionWorker googleSessionWorker = new GoogleSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
-                GoogleSsoProvider.this.accessToken = accessToken;
-                GoogleSsoProvider.this.user = user;
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -87,17 +83,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
         login(allowForeground, null);
     }
 
-
-    @Override
-    public void getUser(ApiService.BasicApiCallback<User> callback) {
-        if (null == user) {
-            callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_SESSION_NOT_OPEN));
-        } else {
-            callback.onResponse(user);
-        }
-    }
-
-
     @Override
     public void logout() {
         logout(null);
@@ -105,7 +90,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
 
     @Override
     public void logout(SsoLogoutCallback callback) {
-        clearSessionCache();
         if (googleApiClient != null && googleApiClient.isConnected()) {
             Plus.AccountApi.revokeAccessAndDisconnect(googleApiClient);
             Plus.AccountApi.clearDefaultAccount(googleApiClient);
@@ -122,15 +106,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
 
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_GOOGLE;
-    }
-
-    public boolean hasUserDataCached() {
-        return user != null && accessToken != null;
-    }
-
-    public void clearSessionCache() {
-        user = null;
-        accessToken = null;
     }
 
     @Override

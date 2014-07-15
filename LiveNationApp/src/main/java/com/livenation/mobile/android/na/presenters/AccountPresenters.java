@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.na.helpers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
@@ -72,17 +74,21 @@ public class AccountPresenters {
 
         @Override
         public void initialize(Context context, Bundle args, final AccountSaveUserView view) {
-            ssoManager.getConfiguredSsoProvider(context).getUser(new ApiService.BasicApiCallback<User>() {
-                @Override
-                public void onResponse(User user) {
-                    view.onSaveUserSuccess(user);
-                }
+            if (LoginHelper.getSavedUser() == null) {
+                LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
+                    @Override
+                    public void onResponse(boolean hasChanged, String accessToken, User user) {
+                        view.onSaveUserSuccess(user);
+                    }
 
-                @Override
-                public void onErrorResponse(LiveNationError error) {
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
 
-                }
-            });
+                    }
+                });
+            } else {
+                view.onSaveUserSuccess(LoginHelper.getSavedUser());
+            }
         }
     }
 

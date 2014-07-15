@@ -28,7 +28,6 @@ import java.util.Map;
 
 public class FacebookSsoProvider extends ApiSsoProvider {
     private final String PARAMETER_ACCESS_KEY = "facebook_access_token";
-    private User user;
 
     public FacebookSsoProvider(ActivityProvider activityProvider) {
         super(activityProvider);
@@ -39,22 +38,10 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
     @Override
     public void login(final boolean allowForeground, final SsoLoginCallback callback) {
-        if (hasUserDataCached()) {
-            Session session = Session.getActiveSession();
-            if (session != null && session.isOpened()) {
-                String accessToken = session.getAccessToken();
-                if (callback != null) {
-                    callback.onLoginSucceed(accessToken, user);
-                }
-            }
-        }
-
-
-        final Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
+        Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
-                FacebookSsoProvider.this.user = user;
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -96,31 +83,6 @@ public class FacebookSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void getUser(final ApiService.BasicApiCallback<User> callback) {
-        if (null == user) {
-            //If no user try to login in background
-            login(false, new SsoLoginCallback() {
-                @Override
-                public void onLoginSucceed(String accessToken, User user) {
-                    callback.onResponse(user);
-                }
-
-                @Override
-                public void onLoginFailed(LiveNationError error) {
-                    callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_FACEBOOK_LOGIN_FAILED));
-                }
-
-                @Override
-                public void onLoginCanceled() {
-                    callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_FACEBOOK_LOGIN_FAILED));
-                }
-            });
-        } else {
-            callback.onResponse(user);
-        }
-    }
-
-    @Override
     public void logout() {
         logout(null);
     }
@@ -131,7 +93,6 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         if (session != null) {
             session.closeAndClearTokenInformation();
         }
-        clearSessionCache();
         if (callback != null) {
             callback.onLogoutSucceed();
         }
@@ -151,14 +112,6 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_FACEBOOK;
-    }
-
-    public boolean hasUserDataCached() {
-        return user != null;
-    }
-
-    private void clearSessionCache() {
-        user = null;
     }
 
 
