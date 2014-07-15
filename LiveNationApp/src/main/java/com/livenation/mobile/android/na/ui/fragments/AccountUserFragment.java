@@ -23,11 +23,13 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.na.helpers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.utils.BitmapRequest;
 import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 public class AccountUserFragment extends LiveNationFragment implements
         AccountUserView, Response.Listener<Bitmap>, Response.ErrorListener {
@@ -35,7 +37,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     private TextView email;
 
     private ImageView image;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver logoutBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onResume();
@@ -53,16 +55,28 @@ public class AccountUserFragment extends LiveNationFragment implements
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
         image = (ImageView) view.findViewById(R.id.fragment_account_user_image);
 
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
-        return view;
-    }
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(logoutBroadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        //User cached data
         User user = LoginHelper.getSavedUser();
-        SsoManager.AuthConfiguration authConfiguration = LoginHelper.getAuthConfiguration();
-        setUser(user, authConfiguration);
+        setUser(user, LoginHelper.getAuthConfiguration());
+
+        LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
+            @Override
+            public void onResponse(boolean hasChanged, String accessToken, User user) {
+                if (hasChanged) {
+                    setUser(user, LoginHelper.getAuthConfiguration());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                //When the login fail, the user is automatically removed and the "logout" broadcast is triggered.
+                //That's we this fragment should be destroy when the onErrorResponse method is called.
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -110,7 +124,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(logoutBroadcastReceiver);
 
     }
 }

@@ -3,27 +3,35 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferencePersistence implements PersistenceProvider<String> {
+public class PreferencePersistence {
     protected final String name;
 
     public PreferencePersistence(String name) {
         this.name = name;
     }
 
-    @Override
     public void write(String key, String value, Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    @Override
-    public String read(String key, Context context) {
+    public void write(String key, Long value, Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(name, Context.MODE_PRIVATE).edit();
+        editor.putLong(key, value);
+        editor.apply();
+    }
+
+    public String readString(String key, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         return prefs.getString(key, null);
     }
 
-    @Override
+    public Long readLong(String key, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        return prefs.getLong(key, Long.MAX_VALUE);
+    }
+
     public boolean remove(String key, Context context) {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         if (!prefs.contains(key)) return false;
@@ -35,7 +43,6 @@ public class PreferencePersistence implements PersistenceProvider<String> {
         return true;
     }
 
-    @Override
     public boolean reset(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         prefs.edit().clear().commit();

@@ -89,8 +89,8 @@ public class LocationManager implements LocationProvider {
     }
 
     private int readLocationMode(Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("location");
-        String value = prefs.read(LOCATION_MODE, context);
+        PreferencePersistence prefs = new PreferencePersistence("location");
+        String value = prefs.readString(LOCATION_MODE, context);
         if (TextUtils.isEmpty(value)) {
             return MODE_SYSTEM;
         }
@@ -98,7 +98,7 @@ public class LocationManager implements LocationProvider {
     }
 
     private void saveLocationMode(int mode, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("location");
+        PreferencePersistence prefs = new PreferencePersistence("location");
         prefs.write(LOCATION_MODE, Integer.valueOf(mode).toString(), context);
     }
 

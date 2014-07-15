@@ -7,7 +7,6 @@ import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -38,7 +37,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
 
     //region Persistence
 
-    private PersistenceProvider<String> getPreferences() {
+    private PreferencePersistence getPreferences() {
         return new PreferencePersistence("notifications");
     }
 
@@ -48,7 +47,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
     }
 
     private String getSavedApid() {
-        return getPreferences().read(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
+        return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
     }
 
     //endregion

@@ -59,18 +59,14 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
         locationText = (TextView) result.findViewById(R.id.account_footer_location_detail);
 
+        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
+
         return result;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        super.onDestroyView();
         LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
