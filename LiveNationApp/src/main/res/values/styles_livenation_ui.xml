@@ -165,4 +165,6 @@
     <style name="SwooshDivider.with_top_margin">
         <item name="android:layout_marginTop">@dimen/swoosh_divider_margin_top</item>
     </style>
+
+    <style name="ActionBar.Spinner" parent="@android:style/Widget.Holo.Light.Spinner"/>
 </resources>
