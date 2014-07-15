@@ -174,7 +174,6 @@ public class FacebookSsoProvider extends ApiSsoProvider {
                          Exception exception) {
 
             if (null != exception && !(exception instanceof FacebookOperationCanceledException)) {
-                //TODO: catch the "no network/offline" error details here
                 loginCallback.onLoginFailed(new LiveNationError(exception));
                 return;
             }
