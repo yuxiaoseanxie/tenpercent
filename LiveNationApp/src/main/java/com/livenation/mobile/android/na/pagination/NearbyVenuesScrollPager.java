@@ -1,11 +1,7 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.android.volley.VolleyError;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;

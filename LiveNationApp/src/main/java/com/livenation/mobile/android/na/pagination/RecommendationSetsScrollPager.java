@@ -20,11 +20,10 @@ import java.util.List;
  * Created by elodieferrais on 4/20/14.
  */
 public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<RecommendationItem, List<RecommendationSet>> {
-    private int pagingOffset = 0;
-
     //limit for initial "personal" recommendations request. 200 is the value that IOS uses when doing this same thing.
     private static final int PERSONAL_ONESHOT_LIMIT = 200;
     private static final int PERSONAL_RECOMMENDATIONS_LOW_UPSELL_THRESHOLD = 3;
+    private int pagingOffset = 0;
 
     public RecommendationSetsScrollPager(ArrayAdapter<RecommendationItem> adapter) {
         super(DEFAULT_LIMIT, adapter);

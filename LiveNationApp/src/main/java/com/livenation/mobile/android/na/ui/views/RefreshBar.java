@@ -28,7 +28,7 @@ public class RefreshBar extends RelativeLayout {
     }
 
     private void init() {
-        LayoutInflater mInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater.inflate(R.layout.refresh_bar, this, true);
     }
 }

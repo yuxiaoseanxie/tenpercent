@@ -13,6 +13,7 @@ import com.facebook.Session.OpenRequest;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.model.GraphUser;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -49,7 +50,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         }
 
 
-        final Session session = new Builder(getActivity()).build();
+        final Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
@@ -61,7 +62,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
             @Override
             public void onLoginFailed(LiveNationError error) {
-                Context context = getActivity().getApplicationContext();
+                Context context = LiveNationApplication.get().getApplicationContext();
                 Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem), Toast.LENGTH_SHORT);
                 toast.show();
                 if (callback != null) {
@@ -77,7 +78,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
             }
         });
 
-        final OpenRequest op = new Session.OpenRequest(getActivity());
+        final OpenRequest op = new OpenRequest(getActivity());
         op.setCallback(statusCallback);
         op.setPermissions(Arrays.asList("email"));
         if (!allowForeground) {
@@ -146,7 +147,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         return PARAMETER_ACCESS_KEY;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
         Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
     }
 

@@ -15,6 +15,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
@@ -46,13 +48,6 @@ class GoogleSsoProvider extends ApiSsoProvider {
 
     @Override
     public void login(final boolean allowForeground, final SsoLoginCallback callback) {
-        if (hasUserDataCached()) {
-            //todo check if the token is still valid
-            if (callback != null) {
-                callback.onLoginSucceed(accessToken, user);
-            }
-            return;
-        }
 
         GoogleSessionWorker googleSessionWorker = new GoogleSessionWorker(new SsoLoginCallback() {
             @Override
@@ -78,10 +73,10 @@ class GoogleSsoProvider extends ApiSsoProvider {
                 }
             }
         }, allowForeground);
-        this.googleApiClient = new GoogleApiClient.Builder(getActivity())
+        this.googleApiClient = new GoogleApiClient.Builder(LiveNationApplication.get().getApplicationContext())
                 .addConnectionCallbacks(googleSessionWorker)
                 .addOnConnectionFailedListener(googleSessionWorker)
-                .addApi(Plus.API, null).addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
         new Runnable() {
@@ -144,8 +139,16 @@ class GoogleSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == SsoActivity.RESULT_CANCELED) {
+                callback.onLoginCanceled();
+            } else if (resultCode == SsoActivity.RESULT_OK) {
+                if (!googleApiClient.isConnecting()) {
+                    googleApiClient.connect();
+                }
+            }
+        }
     }
 
     private class GoogleUserClient {
@@ -180,29 +183,23 @@ class GoogleSsoProvider extends ApiSsoProvider {
             }
         }
 
-        ;
-
-
         private User getProfileInformation(GoogleApiClient googleApiClient) {
-            try {
-                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                    String email = Plus.AccountApi.getAccountName(googleApiClient);
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
 
-                    String name = currentPerson.getDisplayName();
+                String name = currentPerson.getDisplayName();
 
-                    User user = new User();
-                    user.setId(currentPerson.getId());
-                    user.setDisplayName(name);
-                    user.setEmail(email);
-                    String profilePicUrl = currentPerson.getImage().getUrl();
-                    profilePicUrl = getLargerProfileImage(profilePicUrl);
-                    user.setUrl(profilePicUrl);
-                    return user;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                User user = new User();
+                user.setId(currentPerson.getId());
+                user.setDisplayName(name);
+                user.setEmail(email);
+                String profilePicUrl = currentPerson.getImage().getUrl();
+                profilePicUrl = getLargerProfileImage(profilePicUrl);
+                user.setUrl(profilePicUrl);
+                return user;
             }
+
             return null;
         }
 
@@ -232,13 +229,12 @@ class GoogleSsoProvider extends ApiSsoProvider {
         @Override
         public void onConnected(Bundle bundle) {
             final GoogleUserClient userClient = new GoogleUserClient(loginCallback);
-            new Runnable() {
+            new Thread( new Runnable() {
                 @Override
                 public void run() {
-                    userClient.run(googleApiClient, getActivity());
+                    userClient.run(googleApiClient, LiveNationApplication.get().getApplicationContext());
                 }
-            }.run();
-
+            }).start();
         }
 
         @Override
@@ -256,11 +252,11 @@ class GoogleSsoProvider extends ApiSsoProvider {
             if (resolveCount < RESOLVE_COUNT_MAX) {
                 if (connectionResult.hasResolution()) {
                     try {
-                        resolveCount++;
                         getActivity().startIntentSenderForResult(
                                 connectionResult.getResolution().getIntentSender(), RC_SIGN_IN,
                                 null, 0, 0, 0);
                     } catch (SendIntentException e) {
+                        resolveCount++;
                         googleApiClient.connect();
                     }
                 } else {

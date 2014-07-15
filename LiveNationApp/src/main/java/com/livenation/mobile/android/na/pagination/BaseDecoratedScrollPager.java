@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -27,6 +26,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * Created by cchilton on 3/12/14.
  */
 public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<TItemTypeOutput>, TItemTypeInput> extends BaseScrollPager<TItemTypeOutput> {
+    protected static final int DEFAULT_LIMIT = 10;
     private final EmptyListViewControl listLoadingView;
     /*
     Use a frame layout to contain our loading view. This is necessary since Android doesn't like direct
@@ -46,7 +46,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             load();
         }
     };
-    protected static final int DEFAULT_LIMIT = 10;
 
     protected BaseDecoratedScrollPager(int limit, ArrayAdapter<TItemTypeOutput> adapter) {
         super(limit, adapter);
@@ -103,7 +102,9 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             refreshBarController.showRefreshBar(false);
         } else {
             if (isFirstPage) {
-                emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                if (emptyView != null) {
+                    emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
             }
         }
         if (swipeRefreshLayout != null) {
@@ -133,7 +134,8 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         this.emptyView.setRetryOnClickListener(retryClickListener);
         LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {}
+            public void onApiServiceAttached(LiveNationApiService apiService) {
+            }
 
             @Override
             public void onApiServiceNotAvailable() {

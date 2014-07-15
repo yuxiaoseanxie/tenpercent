@@ -13,6 +13,7 @@ public enum BoxOfficeTabs {
     //region Section Titles
 
     private static final Map<String, Integer> SECTION_TITLE_MAPPINGS = new HashMap<String, Integer>();
+
     static {
         SECTION_TITLE_MAPPINGS.put("directions", R.string.box_office_directions);
         SECTION_TITLE_MAPPINGS.put("parking_info", R.string.box_office_parking_info);
@@ -24,15 +25,22 @@ public enum BoxOfficeTabs {
         SECTION_TITLE_MAPPINGS.put("general_rules", R.string.box_office_general_rules);
         SECTION_TITLE_MAPPINGS.put("child_rules", R.string.box_office_child_rules);
     }
-
-    public static int getTitleResIdForSection(String section) {
-        return SECTION_TITLE_MAPPINGS.get(section);
-    }
+    private int titleResId;
 
     //endregion
 
 
     //region Section Data
+    private String[] sections;
+
+    private BoxOfficeTabs(int titleResId, String... sections) {
+        this.titleResId = titleResId;
+        this.sections = sections;
+    }
+
+    public static int getTitleResIdForSection(String section) {
+        return SECTION_TITLE_MAPPINGS.get(section);
+    }
 
     public int getTitleResId() {
         return titleResId;
@@ -40,13 +48,6 @@ public enum BoxOfficeTabs {
 
     public String[] getSections() {
         return sections;
-    }
-
-    private int titleResId;
-    private String[] sections;
-    private BoxOfficeTabs(int titleResId, String... sections) {
-        this.titleResId = titleResId;
-        this.sections = sections;
     }
 
     //endregion

@@ -7,6 +7,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
@@ -15,6 +18,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.platform.sso.ActivityProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
+import com.segment.android.Analytics;
+import com.segment.android.models.Traits;
 
 import java.lang.ref.WeakReference;
 
@@ -40,8 +45,9 @@ public class SsoManager implements ActivityProvider {
     private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
     private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
     private final DummySsoProvider dummySso = new DummySsoProvider();
-    private final PersistenceProvider<String> persistance = new PreferencePersistence("auth_configuration");
+    private final PreferencePersistence persistance = new PreferencePersistence("auth_configuration");
     private final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
+    private final String PARAMETER_TIMESTAMP = "timestamp";
     private final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
     private final String USER_ID = "user_id";
     private final String USER_NAME = "user_name";
@@ -51,6 +57,7 @@ public class SsoManager implements ActivityProvider {
     private WeakReference<Activity> weakActivity;
 
     public SsoManager(ApiSsoProvider defaultProvider) {
+
         this.defaultProvider = defaultProvider;
     }
 
@@ -83,7 +90,7 @@ public class SsoManager implements ActivityProvider {
     public void logout(final Context context, final SsoLogoutCallback callback) {
         ApiSsoProvider ssoProvider = getConfiguredSsoProvider(context);
         if (ssoProvider != null) {
-            ssoProvider.logout( new SsoLogoutCallback() {
+            ssoProvider.logout(new SsoLogoutCallback() {
                 @Override
                 public void onLogoutSucceed() {
                     removeAuthConfiguration(context);
@@ -111,6 +118,7 @@ public class SsoManager implements ActivityProvider {
             public void onLoginSucceed(String accessToken, User user) {
                 saveAuthConfiguration(ssoType, accessToken, context);
                 saveUser(user, context);
+
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -148,18 +156,20 @@ public class SsoManager implements ActivityProvider {
         persistance.write(PARAMETER_ACCESS_TOKEN_KEY, token, context);
         String ssoIdValue = ssoProviderId.name();
         persistance.write(PARAMETER_SSO_PROVIDER_ID_KEY, ssoIdValue, context);
+        persistance.write(PARAMETER_TIMESTAMP, System.currentTimeMillis(), context);
     }
 
     public AuthConfiguration getAuthConfiguration(Context context) {
-        String accessToken = persistance.read(PARAMETER_ACCESS_TOKEN_KEY, context);
-        String ssoId = persistance.read(PARAMETER_SSO_PROVIDER_ID_KEY, context);
+        String accessToken = persistance.readString(PARAMETER_ACCESS_TOKEN_KEY, context);
+        String ssoId = persistance.readString(PARAMETER_SSO_PROVIDER_ID_KEY, context);
+        Long timestamp = persistance.readLong(PARAMETER_TIMESTAMP, context);
 
         if (TextUtils.isEmpty(ssoId)) {
             return null;
         }
 
         SSO_TYPE ssoIdValue = SSO_TYPE.valueOf(ssoId);
-        return new AuthConfiguration(ssoIdValue, accessToken);
+        return new AuthConfiguration(ssoIdValue, accessToken, timestamp);
     }
 
     private void removeAuthConfiguration(Context context) {
@@ -173,15 +183,27 @@ public class SsoManager implements ActivityProvider {
         persistance.write(USER_NAME, user.getDisplayName(), context);
         persistance.write(USER_EMAIL, user.getEmail(), context);
         persistance.write(USER_PIC_URL, user.getUrl(), context);
+        Analytics.identify(user.getId(), new Traits("name", user.getDisplayName(),
+                "email", user.getEmail()));
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Constants.BroadCastReceiver.LOGIN));
+
+        ApiSsoProvider provider = getConfiguredSsoProvider(context);
+        if (provider != null) {
+            if (provider instanceof FacebookSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            } else if (provider instanceof GoogleSsoProvider) {
+                LiveNationAnalytics.track(AnalyticConstants.GOOGLE_CONNECT, AnalyticsCategory.HOUSEKEEPING);
+            }
+        }
+
     }
 
     public User readUser(Context context) {
-        String userId = persistance.read(USER_ID, context);
-        String userName = persistance.read(USER_NAME, context);
+        String userId = persistance.readString(USER_ID, context);
+        String userName = persistance.readString(USER_NAME, context);
 
-        String userEmail = persistance.read(USER_EMAIL, context);
-        String userPicUrl = persistance.read(USER_PIC_URL, context);
+        String userEmail = persistance.readString(USER_EMAIL, context);
+        String userPicUrl = persistance.readString(USER_PIC_URL, context);
 
         if (null == userId) return null;
 
@@ -231,10 +253,12 @@ public class SsoManager implements ActivityProvider {
     public static class AuthConfiguration {
         private final SSO_TYPE ssoProviderId;
         private final String accessToken;
+        private final Long timestamp;
 
-        public AuthConfiguration(SSO_TYPE ssoProviderId, String accessToken) {
+        public AuthConfiguration(SSO_TYPE ssoProviderId, String accessToken, Long timestamp) {
             this.ssoProviderId = ssoProviderId;
             this.accessToken = accessToken;
+            this.timestamp = timestamp;
         }
 
         public SSO_TYPE getSsoProviderId() {
@@ -243,6 +267,10 @@ public class SsoManager implements ActivityProvider {
 
         public String getAccessToken() {
             return accessToken;
+        }
+
+        public Long getTimestamp() {
+            return timestamp;
         }
     }
 

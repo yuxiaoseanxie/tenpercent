@@ -8,30 +8,30 @@
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/view_youtube_video_image"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_width="@dimen/view_youtube_video_image_width"
         android:layout_height="@dimen/view_youtube_video_image_height"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_margin="@dimen/view_youtube_video_padding"
-        android:background="@color/black"/>
+        android:background="@color/black" />
 
     <ImageView
         android:layout_width="@dimen/view_youtube_video_image_width"
         android:layout_height="@dimen/view_youtube_video_image_height"
         android:layout_margin="@dimen/view_youtube_video_padding"
-        android:src="@drawable/youtube_play_icon"
+        android:contentDescription="@string/youtube_video_play"
         android:scaleType="center"
-        android:contentDescription="@string/youtube_video_play"/>
+        android:src="@drawable/youtube_play_icon" />
 
     <TextView
         android:id="@+id/view_youtube_video_title"
+        style="@style/list_show_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_toRightOf="@id/view_youtube_video_image"
         android:layout_marginLeft="@dimen/view_youtube_video_title_left_margin"
-        android:text="@string/mock_artist_title_1"
-        style="@style/list_show_title"/>
+        android:layout_toRightOf="@id/view_youtube_video_image"
+        android:text="@string/mock_artist_title_1" />
 
     <View
         android:id="@+id/view_lineup_divider"

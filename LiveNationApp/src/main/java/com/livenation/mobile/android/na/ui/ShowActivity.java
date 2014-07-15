@@ -17,17 +17,15 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import io.segment.android.models.Props;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -130,9 +128,9 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
 
         String eventTemplate = getString(R.string.share_template_show);
         return eventTemplate.replace("$HEADLINE_ARTIST", event.getDisplayName())
-                            .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
-                            .replace("$VENUE", event.getVenue().getName())
-                            .replace("$LINK", event.getWebUrl());
+                .replace("$SHORT_DATE", SHORT_DATE_FORMATTER.format(event.getLocalStartTime()))
+                .replace("$VENUE", event.getVenue().getName())
+                .replace("$LINK", event.getWebUrl());
     }
 
     //endregion
@@ -154,10 +152,15 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     protected Props getAnalyticsProps() {
         if (event != null) {
             Props props = new Props();
-            if (args.containsKey(SingleEventPresenter.PARAMETER_EVENT_ID)) {
-                String eventIdRaw = args.getString(SingleEventPresenter.PARAMETER_EVENT_ID);
-                props.put(AnalyticConstants.EVENT_ID, eventIdRaw);
+            props.put(AnalyticConstants.EVENT_ID, event.getId());
+
+            if (event.getVenue() != null) {
+                props.put(AnalyticConstants.VENUE_ID, event.getVenue().getId());
             }
+            if (event.getLineup() != null && event.getLineup().size() > 0) {
+                props.put(AnalyticConstants.ARTIST_ID, event.getLineup().get(0).getId());
+            }
+
             return props;
         }
         return null;

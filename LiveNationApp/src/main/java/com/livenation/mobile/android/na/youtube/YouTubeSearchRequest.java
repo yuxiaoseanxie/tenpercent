@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
@@ -24,26 +23,6 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
     private boolean filterResults;
 
 
-    private static String generateUrl(String apiKey, String query, int limit) {
-        Uri.Builder builder = new Uri.Builder();
-
-        builder.scheme("https")
-               .encodedAuthority(API_HOST)
-               .encodedPath(API_PATH);
-
-        builder.appendQueryParameter("part", "id,snippet")
-               .appendQueryParameter("key", apiKey)
-               .appendQueryParameter("fields", "items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)")
-               .appendQueryParameter("order", "relevance")
-               .appendQueryParameter("type", "video")
-               .appendQueryParameter("videoCategoryId", "10");
-
-        builder.appendQueryParameter("maxResults", Integer.toString(limit))
-               .appendQueryParameter("q", query + " (artist)");
-
-        return builder.build().toString();
-    }
-
     public YouTubeSearchRequest(String apiKey,
                                 String query,
                                 int limit,
@@ -52,6 +31,26 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
         super(Method.GET, generateUrl(apiKey, query, limit), null, success, failure);
 
         this.query = query;
+    }
+
+    private static String generateUrl(String apiKey, String query, int limit) {
+        Uri.Builder builder = new Uri.Builder();
+
+        builder.scheme("https")
+                .encodedAuthority(API_HOST)
+                .encodedPath(API_PATH);
+
+        builder.appendQueryParameter("part", "id,snippet")
+                .appendQueryParameter("key", apiKey)
+                .appendQueryParameter("fields", "items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)")
+                .appendQueryParameter("order", "relevance")
+                .appendQueryParameter("type", "video")
+                .appendQueryParameter("videoCategoryId", "10");
+
+        builder.appendQueryParameter("maxResults", Integer.toString(limit))
+                .appendQueryParameter("q", query + " (artist)");
+
+        return builder.build().toString();
     }
 
 
@@ -77,14 +76,14 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
         try {
             String responseString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             JSONObject json = new JSONObject(responseString);
-            if(json.has("error")) {
+            if (json.has("error")) {
                 long errorCode = json.getLong("code");
                 return Response.error(new VolleyError("YouTube returned error code: " + errorCode));
             }
 
             JSONArray rawVideos = json.getJSONArray("items");
             List<YouTubeVideo> videos = YouTubeVideo.processJsonItems(rawVideos);
-            if(shouldFilterResults()) {
+            if (shouldFilterResults()) {
                 YouTubeClient.filterVideos(videos, getQuery());
             }
             return Response.success(videos, HttpHeaderParser.parseCacheHeaders(response));

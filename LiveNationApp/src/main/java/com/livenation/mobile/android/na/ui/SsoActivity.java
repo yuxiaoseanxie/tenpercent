@@ -37,7 +37,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
         super.onActivityResult(requestCode, resultCode, data);
         if (providerId != null) {
             LiveNationApplication.getSsoManager().getSsoProvider(providerId, LiveNationApplication.get().getApplicationContext())
-                    .onActivityResult(requestCode, resultCode, data);
+                    .onActivityResult(requestCode, resultCode, data, this);
         }
     }
 

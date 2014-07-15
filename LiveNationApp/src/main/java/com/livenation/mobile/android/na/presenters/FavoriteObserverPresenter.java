@@ -34,7 +34,7 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
                 notifyObserver(observer, favorite, false);
             }
         }
-     }
+    }
 
     @Override
     public void cancel(FavoriteObserverView view) {

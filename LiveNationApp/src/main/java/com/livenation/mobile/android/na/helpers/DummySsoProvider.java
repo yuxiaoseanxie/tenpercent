@@ -39,7 +39,7 @@ public class DummySsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
 
     }
 
