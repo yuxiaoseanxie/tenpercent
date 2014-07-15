@@ -103,6 +103,13 @@ android {
             versionNameSuffix " debug"
             signingConfig signingConfigs.debug
         }
+
+        labrats {
+            packageNameSuffix ".labrats"
+            versionNameSuffix " labrats"
+
+            signingConfig signingConfigs.debug
+        }
     }
 }
 

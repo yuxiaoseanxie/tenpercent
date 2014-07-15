@@ -1,6 +1,5 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -14,24 +13,159 @@ import com.facebook.Session.OpenRequest;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.model.GraphUser;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
-import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.sso.ActivityProvider;
+import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
+import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class FacebookSsoProvider extends BaseSsoProvider<Session> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<Session> {
+public class FacebookSsoProvider extends ApiSsoProvider {
     private final String PARAMETER_ACCESS_KEY = "facebook_access_token";
-    private User user;
-    private String accessToken;
-    private SessionState currentSession;
 
-    FacebookSsoProvider(ActivityProvider activityProvider) {
+    public FacebookSsoProvider(ActivityProvider activityProvider) {
         super(activityProvider);
     }
 
-    public static User getAppUser(GraphUser graphUser) {
+
+    //ApiSsoProvider interface --begin
+
+    @Override
+    public void login(final boolean allowForeground, final SsoLoginCallback callback) {
+        Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
+        Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
+            @Override
+            public void onLoginSucceed(String accessToken, User user) {
+                if (callback != null) {
+                    callback.onLoginSucceed(accessToken, user);
+                }
+            }
+
+            @Override
+            public void onLoginFailed(LiveNationError error) {
+                Context context = LiveNationApplication.get().getApplicationContext();
+                Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem), Toast.LENGTH_SHORT);
+                toast.show();
+                if (callback != null) {
+                    callback.onLoginFailed(error);
+                }
+            }
+
+            @Override
+            public void onLoginCanceled() {
+                if (callback != null) {
+                    callback.onLoginCanceled();
+                }
+            }
+        });
+
+        final OpenRequest op = new OpenRequest(getActivity());
+        op.setCallback(statusCallback);
+        op.setPermissions(Arrays.asList("email"));
+        if (!allowForeground) {
+            op.setLoginBehavior(SessionLoginBehavior.SSO_ONLY);
+        }
+
+        Session.setActiveSession(session);
+
+        session.openForRead(op);
+    }
+
+    @Override
+    public void login(boolean allowForeground) {
+        login(allowForeground, null);
+    }
+
+    @Override
+    public void logout() {
+        logout(null);
+    }
+
+    @Override
+    public void logout(SsoLogoutCallback callback) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            session.closeAndClearTokenInformation();
+        }
+        if (callback != null) {
+            callback.onLogoutSucceed();
+        }
+    }
+
+    @Override
+    public String getTokenKey() {
+        return PARAMETER_ACCESS_KEY;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+        Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
+    }
+
+    //ApiSsoProvider interface --end
+
+
+    public SsoManager.SSO_TYPE getId() {
+        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
+    }
+
+
+    private class FacebookSessionWorker implements Session.StatusCallback {
+        final private SsoLoginCallback loginCallback;
+
+        private FacebookSessionWorker(SsoLoginCallback loginCallback) {
+            this.loginCallback = loginCallback;
+        }
+
+        @Override
+        public void call(final Session session, com.facebook.SessionState state,
+                         Exception exception) {
+
+            if (null != exception && !(exception instanceof FacebookOperationCanceledException)) {
+                loginCallback.onLoginFailed(new LiveNationError(exception));
+                return;
+            }
+            if (exception instanceof FacebookOperationCanceledException) {
+                loginCallback.onLoginCanceled();
+                return;
+            }
+            if (session.isOpened()) {
+                new FacebookUserClient(loginCallback).run(session);
+            }
+        }
+    }
+
+    private class FacebookUserClient {
+
+        private final SsoLoginCallback loginCallback;
+
+        public FacebookUserClient(SsoLoginCallback loginCallback) {
+            this.loginCallback = loginCallback;
+        }
+
+
+        public void run(final Session session) {
+            Request.newMeRequest(session, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser graphUser, Response response) {
+                    if (null == graphUser) {
+                        loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_FACEBOOK_LOGIN_FAILED));
+                        return;
+                    }
+                    User user = FacebookSsoProvider.getAppUser(graphUser);
+                    loginCallback.onLoginSucceed(session.getAccessToken(), user);
+
+                }
+            }).executeAsync();
+        }
+    }
+
+    private static User getAppUser(GraphUser graphUser) {
         Map<String, Object> map = graphUser.asMap();
 
         String id = graphUser.getId();
@@ -49,186 +183,5 @@ public class FacebookSsoProvider extends BaseSsoProvider<Session> implements Bas
         user.setUrl(pictureUrl);
 
         return user;
-    }
-
-    @Override
-    public void openSession(final boolean allowForeground, final OpenSessionCallback callback) {
-        if (hasSessionCache()) {
-            callback.onOpenSession(accessToken);
-            return;
-        }
-
-        GetTokenAndUserPayload payload = new GetTokenAndUserPayload(FacebookSsoProvider.this) {
-
-            @Override
-            public void onComplete(String accessToken, User user) {
-                FacebookSsoProvider.this.accessToken = accessToken;
-                FacebookSsoProvider.this.user = user;
-                callback.onOpenSession(accessToken);
-            }
-
-            @Override
-            public void onSessionFailed() {
-                callback.onOpenSessionFailed(new Exception(), allowForeground);
-                Context context = getActivity().getApplicationContext();
-                Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem), Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-            @Override
-            public void onSessionCanceled() {
-                callback.onOpenSessionCanceled();
-            }
-        };
-
-        currentSession = new SessionState(getActivity(), allowForeground, payload);
-        currentSession.open();
-    }
-
-    @Override
-    public void onPayloadComplete(SessionPayload<Session> payload) {
-        destroySession(payload.getSession());
-    }
-
-    @Override
-    public void getUser(GetUserCallback callback) {
-        if (null == user) throw new IllegalStateException("Session must be opened first");
-        callback.onGetUser(user);
-    }
-
-    @Override
-    public void clearSession() {
-        clearSessionCache();
-        LogoutPayload payload = new LogoutPayload(FacebookSsoProvider.this);
-        currentSession = new SessionState(getActivity(), false, payload);
-        currentSession.open();
-    }
-
-    @Override
-    public void onActivityResult(Activity activity, int requestCode,
-                                 int resultCode, Intent data) {
-        if (null == currentSession) return;
-        Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
-    }
-
-    @Override
-    public String getTokenKey() {
-        return PARAMETER_ACCESS_KEY;
-    }
-
-    @Override
-    void destroySession(Session session) {
-        if (null == Session.getActiveSession()) return;
-        if (null == currentSession) return;
-        Session.getActiveSession().removeCallback(currentSession.getStatusCallback());
-        Session.setActiveSession(null);
-        currentSession = null;
-    }
-
-    public SsoManager.SSO_TYPE getId() {
-        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
-    }
-
-    public boolean hasSessionCache() {
-        return user != null && accessToken != null;
-    }
-
-    public void clearSessionCache() {
-        user = null;
-        accessToken = null;
-    }
-
-    private static class SessionState extends BaseSessionState<Session> {
-        private final Session.StatusCallback statusCallback = new SessionStatusCallback();
-
-        public SessionState(Activity activity, boolean allowForeground, SessionPayload<Session> sessionPayload) {
-            super(activity, allowForeground, sessionPayload);
-        }
-
-        public void open() {
-            OpenRequest op = new Session.OpenRequest(activity);
-            op.setCallback(statusCallback);
-            op.setPermissions(Arrays.asList("email"));
-            if (!allowForeground) {
-                op.setLoginBehavior(SessionLoginBehavior.SSO_ONLY);
-            }
-
-            Session session = new Builder(activity).build();
-            Session.setActiveSession(session);
-            session.openForRead(op);
-        }
-
-        public Session.StatusCallback getStatusCallback() {
-            return statusCallback;
-        }
-
-        private class SessionStatusCallback implements Session.StatusCallback {
-
-            @Override
-            public void call(final Session session, com.facebook.SessionState state,
-                             Exception exception) {
-
-                if (null != exception && !(exception instanceof FacebookOperationCanceledException)) {
-                    //TODO: catch the "no network/offline" error details here
-                    //route to sessionPayload->onNoNetwork
-                    sessionPayload.onSessionFailed();
-                    return;
-                }
-                if (exception instanceof FacebookOperationCanceledException) {
-                    sessionPayload.onSessionCanceled();
-                    return;
-                }
-                if (session.isOpened()) {
-                    sessionPayload.setSession(session);
-                    sessionPayload.run();
-                }
-            }
-        }
-    }
-
-    private class LogoutPayload extends BaseSessionState.SessionPayload<Session> {
-
-        public LogoutPayload(SessionPayloadListener<Session> listener) {
-            super(listener);
-        }
-
-        @Override
-        public void run() {
-            getSession().closeAndClearTokenInformation();
-            getListener().onPayloadComplete(this);
-        }
-
-        @Override
-        public void onSessionFailed() {
-            getListener().onPayloadComplete(this);
-        }
-
-    }
-
-    private abstract class GetTokenAndUserPayload extends BaseSessionState.SessionPayload<Session> {
-
-        public GetTokenAndUserPayload(SessionPayloadListener<Session> listener) {
-            super(listener);
-        }
-
-        @Override
-        public void run() {
-            Request.newMeRequest(getSession(), new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser graphUser, Response response) {
-                    try {
-                        if (null == graphUser) {
-                            throw new IllegalStateException("Facebook user is null");
-                        }
-                        User user = FacebookSsoProvider.getAppUser(graphUser);
-                        onComplete(getSession().getAccessToken(), user);
-                    } finally {
-                        getListener().onPayloadComplete(GetTokenAndUserPayload.this);
-                    }
-                }
-            }).executeAsync();
-        }
-
-        abstract void onComplete(String accessToken, User user);
     }
 }

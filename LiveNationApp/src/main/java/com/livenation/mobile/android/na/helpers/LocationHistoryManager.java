@@ -44,7 +44,7 @@ public class LocationHistoryManager {
     private void restoreState(Context context) {
         try {
             PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS);
-            String json = prefs.read(PREVIOUS_LOCATION_KEY, context);
+            String json = prefs.readString(PREVIOUS_LOCATION_KEY, context);
             JavaType type = mapper.getTypeFactory().
                     constructCollectionType(List.class, City.class);
             List<City> cities = mapper.readValue(json, type);

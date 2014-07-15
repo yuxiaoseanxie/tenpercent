@@ -5,7 +5,6 @@ import android.content.Context;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -40,8 +39,8 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
         if (!BuildConfig.DEBUG) {
             return Constants.Environment.Production;
         }
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        String environmentKey = prefs.read("environment", context);
+        PreferencePersistence prefs = new PreferencePersistence("environment");
+        String environmentKey = prefs.readString("environment", context);
 
         try {
             return Constants.Environment.valueOf(environmentKey);
@@ -51,7 +50,7 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     }
 
     public static void setConfiguredEnvironment(Constants.Environment environment, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        PreferencePersistence prefs = new PreferencePersistence("environment");
         prefs.write("environment", environment.toString(), context);
     }
 
