@@ -35,14 +35,15 @@ import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
+import com.segment.android.models.Props;
 
-import io.segment.android.models.Props;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
@@ -104,7 +105,12 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Event event = adapter.getItem(position);
+        Event event = (Event) parent.getItemAtPosition(position);
+        if (event == null) {
+            //user clicked the footer/loading view
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
@@ -158,6 +164,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     @Override
     public void onErrorResponse(int errorCode) {
+        //TODO what we should do when we cannot get the user location
     }
 
     //Location update

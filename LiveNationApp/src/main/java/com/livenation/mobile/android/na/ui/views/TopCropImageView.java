@@ -8,7 +8,7 @@ import android.widget.ImageView;
 /**
  * Created by elodieferrais on 6/4/14.
  */
-public class TopCropImageView extends ImageView{
+public class TopCropImageView extends ImageView {
 
     public TopCropImageView(Context context, AttributeSet attrs) {
         super(context, attrs);

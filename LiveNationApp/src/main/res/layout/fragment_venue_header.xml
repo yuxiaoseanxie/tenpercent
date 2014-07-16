@@ -12,7 +12,7 @@
             android:id="@+id/fragment_venue_map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/venue_map_foreground"/>
+            android:foreground="@drawable/venue_map_foreground" />
 
         <TextView
             android:id="@+id/fragment_venue_title"
@@ -22,7 +22,7 @@
             android:layout_marginBottom="@dimen/detail_page_title_margin_bottom"
             android:layout_marginLeft="@dimen/detail_page_title_margin_left"
             android:layout_marginRight="@dimen/detail_page_title_margin_right"
-            android:textAppearance="@style/venue_venue_title"/>
+            android:textAppearance="@style/venue_venue_title" />
 
     </FrameLayout>
 

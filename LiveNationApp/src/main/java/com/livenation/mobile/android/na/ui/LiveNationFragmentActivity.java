@@ -15,11 +15,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.LiveNationA
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/2/14.
@@ -133,7 +132,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
             List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
-            if (taskList.get(0).numActivities == 1 &&
+            if (taskList.size() > 0 && taskList.get(0).numActivities == 1 &&
                     taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
                 if (this.getClass().getName() != HomeActivity.class.getName()) {
                     Intent intent = new Intent(this, HomeActivity.class);

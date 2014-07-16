@@ -13,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -238,7 +237,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
             RichPushMessage message = richPushInbox.getMessage(messageId);
             final int type = getMessageType(message);
             calendarItem.setVisible((type == Constants.Notifications.TYPE_EVENT_ON_SALE_NOW
-                || type == Constants.Notifications.TYPE_EVENT_LAST_MINUTE
+                    || type == Constants.Notifications.TYPE_EVENT_LAST_MINUTE
                     || type == Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE
                     || type == Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT));
         }
@@ -414,6 +413,21 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         this.inbox.setMessages(messages);
     }
 
+    public int getMessageType(RichPushMessage message) {
+        Bundle extras = message.getExtras();
+        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
+            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
+            return Integer.valueOf(typeString);
+        } else {
+            return Constants.Notifications.TYPE_FEATURED_CONTENT;
+        }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_NOTIFICATIONS;
+    }
+
     /**
      * Alert dialog for when messages fail to inbox_refresh
      */
@@ -432,20 +446,5 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
                     })
                     .create();
         }
-    }
-
-    public int getMessageType(RichPushMessage message) {
-        Bundle extras = message.getExtras();
-        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
-            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
-            return Integer.valueOf(typeString);
-        } else {
-            return Constants.Notifications.TYPE_FEATURED_CONTENT;
-        }
-    }
-
-    @Override
-    protected String getScreenName() {
-        return AnalyticConstants.SCREEN_NOTIFICATIONS;
     }
 }

@@ -133,7 +133,6 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
 
     @Override
     public void onErrorResponse(int errorCode) {
-
     }
 
     private class ViewHolder {

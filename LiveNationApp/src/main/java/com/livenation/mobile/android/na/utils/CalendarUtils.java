@@ -29,12 +29,12 @@ public class CalendarUtils {
         }
 
         Intent intent = new Intent(Intent.ACTION_INSERT)
-        .setData(CalendarContract.Events.CONTENT_URI)
-        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarItem.getStartDate().getTime())
-        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDateInMilliSec)
-        .putExtra(CalendarContract.Events.TITLE, event.getDisplayName() + " - " + calendarItem.getName())
-        .putExtra(CalendarContract.Events.EVENT_LOCATION, event.getVenue().getName())
-        .putExtra(CalendarContract.Events.DESCRIPTION, activity.getApplicationContext().getString(R.string.calendar_event_description_url_base) + event.getId());
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarItem.getStartDate().getTime())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDateInMilliSec)
+                .putExtra(CalendarContract.Events.TITLE, event.getDisplayName() + " - " + calendarItem.getName())
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, event.getVenue().getName())
+                .putExtra(CalendarContract.Events.DESCRIPTION, activity.getApplicationContext().getString(R.string.calendar_event_description_url_base) + event.getId());
         activity.startActivity(intent);
     }
 

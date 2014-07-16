@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.AbsListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.pagination.BaseScrollPager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 
@@ -42,7 +40,7 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         getScrollPager().connectListView(listView);
 
         //Scroll until the top of the list. Refresh only when the first item of the listview is visible.
-        listView.setOnScrollListener( new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 scrollPager.onScrollStateChanged(view, scrollState);
@@ -61,8 +59,6 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
             }
         });
 
-
-
         return view;
     }
 
@@ -75,19 +71,5 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         getScrollPager().load();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (listView != null) {
-            Parcelable listState = listView.getWrappedList().onSaveInstanceState();
-            outState.putParcelable(getViewKey(listView), listState);
-        }
-    }
 
-    @Override
-    public void applyInstanceState(Bundle state) {
-        Parcelable listState = state.getParcelable(getViewKey(listView));
-        if (null != listState && listView != null) {
-            listView.getWrappedList().onRestoreInstanceState(listState);
-        }
-    }
 }

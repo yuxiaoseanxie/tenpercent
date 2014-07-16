@@ -23,11 +23,10 @@ import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.

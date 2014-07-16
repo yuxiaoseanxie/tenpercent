@@ -15,7 +15,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
@@ -23,10 +22,9 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
@@ -43,17 +41,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
         }
         singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
         eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         init();
     }
 
+
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         deinit();
     }
 
@@ -129,7 +123,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     protected String getShareText() {
         String venueTemplate = getString(R.string.share_template_venue);
         return venueTemplate.replace("$VENUE", venue.getName())
-                            .replace("$LINK", venue.getWebUrl());
+                .replace("$LINK", venue.getWebUrl());
     }
 
     //endregion

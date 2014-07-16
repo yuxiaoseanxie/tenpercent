@@ -33,13 +33,12 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  * Created by elodieferrais on 4/22/14.
  */
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
-    private LayoutInflater inflater;
-
     private static final int ITEM_TYPE_EVENT = 0;
     private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
     private static final int ITEM_TYPE_UPSELL_SEARCH = 2;
     private static final int ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK = 3;
     private static final int ITEM_TYPE_COUNT = 4;
+    private LayoutInflater inflater;
 
     public RecommendationsAdapter(Context context, List<RecommendationItem> items) {
         super(context, android.R.layout.simple_list_item_1, items);
@@ -228,6 +227,30 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         getContext().startActivity(intent);
     }
 
+    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
+        public RecommendationItem() {
+            super(null);
+        }
+
+        public RecommendationItem(Event event) {
+            super(event);
+        }
+
+        @Override
+        public boolean idEquals(RecommendationItem target) {
+            if (hasEvent()) {
+                return get().idEquals(target.get()) && getTag().equals(target.getTag());
+            }
+            return false;
+        }
+
+        public boolean hasEvent() {
+            return get() != null;
+        }
+
+        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}
+    }
+
     private class EventViewHolder {
         private final TextView title;
         private final TextView location;
@@ -279,30 +302,6 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
         public ImageView getSwoocher() {
             return swoocher;
-        }
-    }
-
-    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
-        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}
-
-        public RecommendationItem() {
-            super(null);
-        }
-
-        public RecommendationItem(Event event) {
-            super(event);
-        }
-
-        @Override
-        public boolean idEquals(RecommendationItem target) {
-            if (hasEvent()) {
-                return get().idEquals(target.get()) && getTag().equals(target.getTag());
-            }
-            return false;
-        }
-
-        public boolean hasEvent() {
-            return get() != null;
         }
     }
 }

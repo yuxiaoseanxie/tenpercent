@@ -1,10 +1,10 @@
 package com.livenation.mobile.android.na.analytics;
 
 import com.livenation.mobile.android.platform.api.service.livenation.analytics.ErrorTracker;
+import com.segment.android.models.Props;
 
 import java.util.Map;
 
-import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 4/17/14.

@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;

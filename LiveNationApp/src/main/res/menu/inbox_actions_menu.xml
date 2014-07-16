@@ -6,7 +6,7 @@
         android:id="@+id/calendar"
         android:icon="@drawable/add_to_calendar"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/add_to_calendar"/>
+        android:title="@string/add_to_calendar" />
 
     <item
         android:id="@+id/mark_read"

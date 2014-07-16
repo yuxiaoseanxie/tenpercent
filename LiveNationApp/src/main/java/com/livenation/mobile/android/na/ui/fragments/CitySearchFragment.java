@@ -31,10 +31,10 @@ import java.util.List;
  * Created by cchilton on 4/2/14.
  */
 public class CitySearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<City>>, ListView.OnItemClickListener {
+    public static final String DATA_RESULT_KEY = "search_result";
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
     private String unboundSearchTextBuffer;
-    public static final String DATA_RESULT_KEY = "search_result";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

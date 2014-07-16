@@ -21,10 +21,9 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
@@ -81,7 +80,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     @SuppressWarnings("deprecation")
     protected View createDivider() {
         View view = new View(getActivity());
-        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackgroundDrawable(dividerBackground);
         } else {
             view.setBackground(dividerBackground);
@@ -109,7 +108,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         int position = 0;
         int lastPositionWithDivider = events.size() - 1;
         for (Event event : events) {
-            ShowView show = new ShowView(getActivity());
+            ShowView show = new ShowView(showContainer.getContext());
             show.setDisplayMode(getDisplayMode());
             show.setEvent(event);
             show.setOnClickListener(new ShowViewClickListener(event));
@@ -162,17 +161,17 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         return showMoreItemsView;
     }
 
+    public void setShowMoreItemsView(View showMoreItemsView) {
+        this.showMoreItemsView = showMoreItemsView;
+    }
+
     private View getEmptyView() {
-        View emptyView =  LayoutInflater.from(getActivity().getApplicationContext()).inflate(android.R.layout.simple_list_item_1, null);
+        View emptyView = LayoutInflater.from(getActivity().getApplicationContext()).inflate(android.R.layout.simple_list_item_1, null);
         TextView tv = (TextView) emptyView.findViewById(android.R.id.text1);
         tv.setText(R.string.artist_events_no_show);
         tv.setGravity(Gravity.CENTER);
         tv.setTextColor(emptyView.getResources().getColor(android.R.color.black));
         return emptyView;
-    }
-
-    public void setShowMoreItemsView(View showMoreItemsView) {
-        this.showMoreItemsView = showMoreItemsView;
     }
 
     public boolean alwaysShowMoreItemsView() {

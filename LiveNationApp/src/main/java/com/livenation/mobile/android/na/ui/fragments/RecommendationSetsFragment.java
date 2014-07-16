@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +39,9 @@ import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
-
-import io.segment.android.models.Props;
 
 public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
 
@@ -77,7 +75,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         listView.setAreHeadersSticky(false);
 
 
-
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
 
@@ -102,7 +99,14 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
         Intent intent = new Intent(getActivity(), ShowActivity.class);
-        Event event = adapter.getItem(position).get();
+        RecommendationItem recommendationItem = (RecommendationItem) parent.getItemAtPosition(position);
+
+        if (recommendationItem == null || recommendationItem.get() == null) {
+            //user clicked the footer/loading view
+            return;
+        }
+
+        Event event = recommendationItem.get();
 
         Bundle args = SingleEventPresenter.getAruguments(event.getId());
         SingleEventPresenter.embedResult(args, event);
@@ -124,7 +128,9 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     @Override

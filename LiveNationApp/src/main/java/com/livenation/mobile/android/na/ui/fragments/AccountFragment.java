@@ -40,6 +40,8 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private Fragment profileFragment;
+
+    private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
@@ -96,9 +98,9 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     public void refreshUser(boolean isLogout) {
+        Fragment profileFragment = getChildFragmentManager().findFragmentByTag(PROFILE_FRAGMENT_TAG);
         if (null != profileFragment) {
             removeFragment(profileFragment);
-            profileFragment = null;
         }
 
         if (isLogout) {
@@ -107,7 +109,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
             profileFragment = new AccountUserFragment();
         }
 
-        addFragment(R.id.account_header_provider_container, profileFragment, "account_provider");
+        addFragment(R.id.account_header_provider_container, profileFragment, PROFILE_FRAGMENT_TAG);
     }
 
     @Override
@@ -121,7 +123,6 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     //Get location for display data
-
     @Override
     public void onResponse(LiveNationConfig response) {
         refreshUser(LoginHelper.isLogout());

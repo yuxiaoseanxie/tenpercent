@@ -51,25 +51,23 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
-import com.livenation.mobile.android.platform.init.LiveNationLibrary;
-import com.livenation.mobile.android.platform.init.provider.LocationProvider;
-import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.segment.android.Analytics;
+import com.segment.android.models.Props;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.BasicPushNotificationBuilder;
 import com.urbanairship.push.PushManager;
 
-import io.segment.android.Analytics;
-import io.segment.android.models.Props;
-
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
+    private static SsoManager ssoManager;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
@@ -79,10 +77,10 @@ public class LiveNationApplication extends Application {
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private FavoritesPresenter favoritesPresenter;
-    private static SsoManager ssoManager;
     private InboxStatusPresenter inboxStatusPresenter;
     private static LocationManager locationProvider;
-    private static ProviderManager providerManager = new ProviderManager();;
+    private static ProviderManager providerManager = new ProviderManager();
+    ;
     private BroadcastReceiver internetStateReceiver;
 
     private ConfigManager configManager;
@@ -92,6 +90,10 @@ public class LiveNationApplication extends Application {
         return instance;
     }
 
+    public static SsoManager getSsoManager() {
+        return ssoManager;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -99,6 +101,8 @@ public class LiveNationApplication extends Application {
         locationProvider = new LocationManager(this);
         LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this), locationProvider);
         Crashlytics.start(this);
+        Analytics.initialize(this);
+
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
@@ -127,7 +131,6 @@ public class LiveNationApplication extends Application {
 
         setupNotifications();
         setupTicketing();
-        checkInstalledAppForAnalytics();
         setupInternetStateReceiver();
 
         getConfigManager().buildApi();
@@ -188,7 +191,6 @@ public class LiveNationApplication extends Application {
 
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
-                    setupNotifications();
                     checkInstalledAppForAnalytics();
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
                     musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
@@ -214,13 +216,12 @@ public class LiveNationApplication extends Application {
     }
 
     private void checkInstalledAppForAnalytics() {
-        Analytics.initialize(this);
+        Props props = new Props();
         for (final ExternalApplicationAnalytics application : ExternalApplicationAnalytics.values()) {
             final boolean isInstalled = AnalyticsHelper.isAppInstalled(application.getPackageName(), this);
-            Props props = new Props();
             props.put(application.getPackageName(), isInstalled);
-            LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
         }
+        LiveNationAnalytics.track(AnalyticConstants.TRACK_URL_SCHEMES, AnalyticsCategory.HOUSEKEEPING, props);
     }
 
     @Override
@@ -265,10 +266,6 @@ public class LiveNationApplication extends Application {
 
     public FavoritesPresenter getFavoritesPresenter() {
         return favoritesPresenter;
-    }
-
-    public static SsoManager getSsoManager() {
-        return ssoManager;
     }
 
     public InboxStatusPresenter getInboxStatusPresenter() {

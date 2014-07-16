@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.HelpMenuActivity;
 import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 
 import java.util.List;

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.helpers.PersistenceProvider;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
@@ -22,13 +21,12 @@ import java.util.List;
 public class ConfigManager implements ApiBuilder.OnBuildListener {
     private final Context context;
     private final SsoManager ssoManager;
-
-    private LiveNationApiBuilder apiBuilder;
     //pending bindings are those objects who tried to bind to the api before it was created
     private final List<ApiServiceBinder> pendingBindings = new ArrayList<ApiServiceBinder>();
     //persistent bindings are objects who want to be persistently updated of new API objects,
     //eg favoritesObserverPresenter, who will clear its favorite cache when a new API is created
     private final List<ApiServiceBinder> persistentBindings = new ArrayList<ApiServiceBinder>();
+    private LiveNationApiBuilder apiBuilder;
     private LiveNationApiService apiService;
 
     public ConfigManager(Context context, SsoManager ssoManager) {
@@ -40,8 +38,8 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
         if (!BuildConfig.DEBUG) {
             return Environment.Production;
         }
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
-        String environmentKey = prefs.read("environment", context);
+        PreferencePersistence prefs = new PreferencePersistence("environment");
+        String environmentKey = prefs.readString("environment", context);
 
         try {
             return Environment.valueOf(environmentKey);
@@ -51,7 +49,7 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     }
 
     public static void setConfiguredEnvironment(Environment environment, Context context) {
-        PersistenceProvider<String> prefs = new PreferencePersistence("environment");
+        PreferencePersistence prefs = new PreferencePersistence("environment");
         prefs.write("environment", environment.toString(), context);
     }
 

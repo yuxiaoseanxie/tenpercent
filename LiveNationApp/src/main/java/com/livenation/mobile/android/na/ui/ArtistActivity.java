@@ -10,8 +10,7 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ArtistActivity extends DetailBaseFragmentActivity {
     private ArtistFragment artistFragment;
@@ -65,7 +64,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected boolean isShareAvailable() {
-        return (artistFragment.getArtist() != null);
+        return (artistFragment != null && artistFragment.getArtist() != null);
     }
 
     @Override

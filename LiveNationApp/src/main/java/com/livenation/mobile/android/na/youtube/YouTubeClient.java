@@ -22,7 +22,7 @@ public class YouTubeClient {
     //region Getters
 
     private static void checkInitialized() {
-        if(requestQueue == null || apiKey == null)
+        if (requestQueue == null || apiKey == null)
             throw new IllegalStateException("Must call YouTubeClient.initialize");
     }
 
@@ -69,7 +69,7 @@ public class YouTubeClient {
         Iterator<YouTubeVideo> videoIterator = videos.iterator();
         while (videoIterator.hasNext()) {
             YouTubeVideo video = videoIterator.next();
-            if(shouldFilterVideo(video, query))
+            if (shouldFilterVideo(video, query))
                 videoIterator.remove();
         }
     }
@@ -90,7 +90,7 @@ public class YouTubeClient {
 
         @Override
         public void cancel() {
-            if(!request.isCanceled())
+            if (!request.isCanceled())
                 request.cancel();
         }
     }

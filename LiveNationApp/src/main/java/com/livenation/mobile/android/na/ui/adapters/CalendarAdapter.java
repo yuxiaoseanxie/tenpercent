@@ -21,10 +21,10 @@ import java.util.List;
 public class CalendarAdapter extends ArrayAdapter<CalendarDialogFragment.CalendarItem> {
 
     private static final String DATE_FORMAT = "EEE. MMM dd, yyyy";
-    private static final String TIME_FORMAT = "h:mm aa";
-    private LayoutInflater inflater;
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+    private static final String TIME_FORMAT = "h:mm aa";
     private SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+    private LayoutInflater inflater;
 
 
     public CalendarAdapter(Context context, List<CalendarDialogFragment.CalendarItem> calendarItemList) {

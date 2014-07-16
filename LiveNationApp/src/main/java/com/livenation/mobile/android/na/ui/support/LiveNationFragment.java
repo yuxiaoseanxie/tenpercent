@@ -8,11 +8,9 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -23,17 +21,7 @@ import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
-public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract, StateEnhancer {
-
-    private Bundle state;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (null != state) {
-            applyInstanceState(state);
-        }
-    }
+public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract {
 
     @Override
     public ImageLoader getImageLoader() {
@@ -70,19 +58,6 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         return LiveNationApplication.get().getSingleEventPresenter();
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        state = new Bundle();
-        onSaveInstanceState(state);
-    }
-
-    @Override
-    public void applyInstanceState(Bundle state) {
-    }
-
-
     public void addFragment(int containerId, Fragment fragment, String tag) {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -95,9 +70,5 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(fragment);
         transaction.commit();
-    }
-
-    public String getViewKey(View view) {
-        return Integer.valueOf(view.getId()).toString();
     }
 }

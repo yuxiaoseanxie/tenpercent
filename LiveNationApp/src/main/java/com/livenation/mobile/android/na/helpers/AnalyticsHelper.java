@@ -7,10 +7,9 @@ import android.content.pm.ResolveInfo;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.segment.android.models.Props;
 
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 3/25/14.

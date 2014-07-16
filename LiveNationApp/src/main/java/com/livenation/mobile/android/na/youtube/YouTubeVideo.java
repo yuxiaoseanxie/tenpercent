@@ -28,7 +28,7 @@ public class YouTubeVideo implements Serializable {
         JSONObject thumbnails = snippet.getJSONObject("thumbnails");
         Iterator keys = thumbnails.keys();
         while (keys.hasNext()) {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
             JSONObject thumbnail = thumbnails.getJSONObject(key);
             this.thumbnailURLs.add(thumbnail.getString("url"));
         }
