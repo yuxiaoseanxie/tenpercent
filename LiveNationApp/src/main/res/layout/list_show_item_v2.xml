@@ -12,7 +12,7 @@
         android:layout_marginRight="@dimen/list_show_item_v2_date_margin_right"
         android:layout_marginTop="@dimen/list_show_item_v2_date_margin_top" />
 
-    <com.livenation.mobile.android.na.ui.views.CachedBottomCroppedImageView
+    <com.livenation.mobile.android.na.ui.views.AwesomeImageView
         android:id="@+id/list_item_show_image"
         android:layout_width="96dp"
         android:layout_height="72dp"

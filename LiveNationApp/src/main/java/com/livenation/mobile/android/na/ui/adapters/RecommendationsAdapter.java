@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -20,6 +19,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.na.ui.views.AwesomeImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -87,13 +87,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         String imageUrl = null;
 
         if (event.getLineup().size() > 0) {
-            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
+            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap"});
             imageUrl = event.getLineup().get(0).getImageURL(imageKey);
         }
 
-        holder.getImage().setDefaultImageResId(drawableId);
-        holder.getImage().setErrorImageResId(drawableId);
-        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
+        holder.getImage().setDefaultImage(drawableId);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), AwesomeImageView.LoadAnimation.FADE);
 
         TimeZone timeZone;
         if (event.getVenue().getTimeZone() != null) {
@@ -255,14 +254,14 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         private final TextView title;
         private final TextView location;
         private final VerticalDate date;
-        private final NetworkImageView image;
+        private final AwesomeImageView image;
         private final View divider;
 
         public EventViewHolder(View view) {
             this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
-            this.image = (NetworkImageView) view.findViewById(R.id.list_item_show_image);
+            this.image = (AwesomeImageView) view.findViewById(R.id.list_item_show_image);
             this.divider = view.findViewById(R.id.list_item_show_divider);
         }
 
@@ -278,7 +277,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             return date;
         }
 
-        public NetworkImageView getImage() {
+        public AwesomeImageView getImage() {
             return image;
         }
 
