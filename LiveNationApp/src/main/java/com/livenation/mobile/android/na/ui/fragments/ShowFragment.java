@@ -40,7 +40,7 @@ import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
-import com.livenation.mobile.android.na.ui.views.AwesomeImageView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -64,7 +64,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private TextView calendarText;
     private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
-    private AwesomeImageView artistImage;
+    private TransitioningImageView artistImage;
     private ShowVenueView venueDetails;
     private Button findTicketsOptions;
     private Button findTickets;
@@ -80,7 +80,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                 false);
         artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
         lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
-        artistImage = (AwesomeImageView) result.findViewById(R.id.fragment_show_image);
+        artistImage = (TransitioningImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
         calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
@@ -190,7 +190,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         }
         if (null != imageUrl) {
-            artistImage.setImageUrl(imageUrl, getImageLoader(), AwesomeImageView.LoadAnimation.FADE_ZOOM);
+            artistImage.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
     }
 

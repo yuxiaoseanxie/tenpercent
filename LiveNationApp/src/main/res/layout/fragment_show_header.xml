@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.livenation.mobile.android.na.ui.views.AwesomeImageView
+        <com.livenation.mobile.android.na.ui.views.TransitioningImageView
             android:id="@+id/fragment_show_image"
             android:layout_width="match_parent"
             android:background="@color/black"

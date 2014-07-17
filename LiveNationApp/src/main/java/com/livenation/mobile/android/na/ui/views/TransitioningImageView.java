@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by cchilton on 7/16/14.
  */
-public class AwesomeImageView extends FrameLayout {
+public class TransitioningImageView extends FrameLayout {
     private BottomCroppedImageView networkImage;
     private ImageView defaultImage;
     private ImageLoader.ImageContainer imageContainer;
@@ -35,17 +35,17 @@ public class AwesomeImageView extends FrameLayout {
 
     private static int NO_SIZE = 0;
 
-    public AwesomeImageView(Context context) {
+    public TransitioningImageView(Context context) {
         super(context);
         init();
     }
 
-    public AwesomeImageView(Context context, AttributeSet attrs) {
+    public TransitioningImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public AwesomeImageView(Context context, AttributeSet attrs, int defStyle) {
+    public TransitioningImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }

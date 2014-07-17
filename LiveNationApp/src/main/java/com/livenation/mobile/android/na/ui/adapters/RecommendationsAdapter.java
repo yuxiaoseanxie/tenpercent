@@ -19,7 +19,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
-import com.livenation.mobile.android.na.ui.views.AwesomeImageView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -92,7 +92,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
 
         holder.getImage().setDefaultImage(drawableId);
-        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), AwesomeImageView.LoadAnimation.FADE);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE);
 
         TimeZone timeZone;
         if (event.getVenue().getTimeZone() != null) {
@@ -254,14 +254,14 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         private final TextView title;
         private final TextView location;
         private final VerticalDate date;
-        private final AwesomeImageView image;
+        private final TransitioningImageView image;
         private final View divider;
 
         public EventViewHolder(View view) {
             this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
-            this.image = (AwesomeImageView) view.findViewById(R.id.list_item_show_image);
+            this.image = (TransitioningImageView) view.findViewById(R.id.list_item_show_image);
             this.divider = view.findViewById(R.id.list_item_show_divider);
         }
 
@@ -277,7 +277,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             return date;
         }
 
-        public AwesomeImageView getImage() {
+        public TransitioningImageView getImage() {
             return image;
         }
 
