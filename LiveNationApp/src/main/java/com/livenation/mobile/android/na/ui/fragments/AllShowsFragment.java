@@ -32,6 +32,7 @@ import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
+import com.livenation.mobile.android.na.ui.views.AwesomeImageView;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -168,8 +169,8 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
             View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
-            NetworkImageView image = (NetworkImageView) view.findViewById(android.R.id.icon);
-            image.setImageUrl(chart.getImageUrl(), getImageLoader());
+            AwesomeImageView image = (AwesomeImageView) view.findViewById(android.R.id.icon);
+            image.setImageUrl(chart.getImageUrl(), getImageLoader(), AwesomeImageView.LoadAnimation.FADE_ZOOM);
 
             TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(chart.getArtistName());
