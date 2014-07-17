@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:foreground="@drawable/featured_image_foreground">
 
-            <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
+            <com.livenation.mobile.android.na.ui.views.TransitioningImageView
                 android:id="@android:id/icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

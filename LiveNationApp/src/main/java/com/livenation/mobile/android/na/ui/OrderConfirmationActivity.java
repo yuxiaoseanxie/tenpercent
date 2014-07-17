@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -38,7 +38,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private Event event;
     private Cart cart;
 
-    private NetworkImageView image;
+    private TransitioningImageView image;
     private TextView headerThankYouText;
     private TextView eventNameText;
 
@@ -60,7 +60,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
 
-        this.image = (NetworkImageView) findViewById(R.id.activity_order_confirmation_image);
+        this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
 
@@ -94,7 +94,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     //region Displaying Data
 
     private void displayImage() {
-        image.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
+        image.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
 
         List<Artist> lineup = event.getLineup();
         if (!lineup.isEmpty()) {

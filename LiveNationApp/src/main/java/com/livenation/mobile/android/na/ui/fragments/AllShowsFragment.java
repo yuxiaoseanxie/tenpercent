@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -32,6 +31,7 @@ import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -168,8 +168,8 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
             View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
-            NetworkImageView image = (NetworkImageView) view.findViewById(android.R.id.icon);
-            image.setImageUrl(chart.getImageUrl(), getImageLoader());
+            TransitioningImageView image = (TransitioningImageView) view.findViewById(android.R.id.icon);
+            image.setImageUrl(chart.getImageUrl(), getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
 
             TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(chart.getArtistName());
