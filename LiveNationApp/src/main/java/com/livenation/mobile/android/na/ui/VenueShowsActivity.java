@@ -11,8 +11,6 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_VENUE_ID = "com.livenation.mobile.android.na.ui.VenueShowsActivity.EXTRA_VENUE_ID";
     public static final String EXTRA_VENUE_NAME = "com.livenation.mobile.android.na.ui.VenueShowsActivity.EXTRA_VENUE_NAME";
 
-    private VenueShowsListFragment shows;
-
     //region Lifecycle
 
     public static Bundle getArguments(Venue venue) {
@@ -28,8 +26,8 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
 
         this.shows = (VenueShowsListFragment) getSupportFragmentManager().findFragmentById(R.id.activity_venue_shows_fragment);
 
-        String artistName = getIntent().getStringExtra(VenueShowsActivity.EXTRA_VENUE_NAME);
-        getActionBar().setTitle(artistName);
+        String venueName = getIntent().getStringExtra(VenueShowsActivity.EXTRA_VENUE_NAME);
+        getActionBar().setTitle(venueName);
     }
 
     @Override
