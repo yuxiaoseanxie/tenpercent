@@ -54,6 +54,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         listLoadingView = new EmptyListViewControl(context);
         listLoadingView.setRetryOnClickListener(retryClickListener);
         footerBugHack = new FrameLayout(context);
+        footerBugHack.addView(listLoadingView);
     }
 
     public void connectListView(StickyListHeadersListView listView) {
@@ -80,16 +81,17 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         if (null != emptyView) {
             emptyView.setViewMode(EmptyListViewControl.ViewMode.LOADING);
         }
-        footerBugHack.removeAllViews();
-        footerBugHack.addView(listLoadingView);
     }
 
     @Override
     public void onFetchEnded(boolean cancelled) {
-        footerBugHack.removeAllViews();
+        listLoadingView.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
+
         if (getAdapter().getCount() == 0 && emptyView != null) {
+            listLoadingView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
             emptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
+
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -97,7 +99,7 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
 
     @Override
     public void onFetchError() {
-        footerBugHack.removeAllViews();
+        listLoadingView.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         if (!isFirstPage && refreshBarController != null) {
             refreshBarController.showRefreshBar(false);
         } else {
