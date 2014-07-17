@@ -7,6 +7,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/fan_man_min_height"
+        android:scaleType="center"
         android:src="@drawable/footer_fan_man"/>
 
 </LinearLayout>
