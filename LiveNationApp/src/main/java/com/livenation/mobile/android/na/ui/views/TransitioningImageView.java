@@ -69,7 +69,7 @@ public class TransitioningImageView extends FrameLayout {
         invalidate();
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("UnusedDeclaration")
     public void setImageUrl(String url, ImageLoader imageLoader) {
         setImageUrl(url, imageLoader, LoadAnimation.NONE);
     }
