@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by elodieferrais on 4/29/14.
@@ -55,6 +56,16 @@ public class CalendarAdapter extends ArrayAdapter<CalendarDialogFragment.Calenda
         View endDateWrapper = view.findViewById(R.id.list_calender_item_end_date_wrapper);
 
         CalendarDialogFragment.CalendarItem item = getItem(position);
+
+        TimeZone timeZone;
+        if (item.getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(item.getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+
+        dateFormat.setTimeZone(timeZone);
+        timeFormat.setTimeZone(timeZone);
 
         //Title
         title.setText(item.getName());
