@@ -14,34 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoritesView;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-
-import java.util.List;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 
 
-public class FavoriteActivity extends LiveNationFragmentActivity implements FavoritesView {
-    private FavoritesView favoritesView;
+public class FavoriteActivity extends LiveNationFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_favorite);
-
-        favoritesView = (FavoritesView) getSupportFragmentManager().findFragmentById(R.id.activity_favorite_content);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        init();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        deinit();
     }
 
     @Override
@@ -63,24 +43,7 @@ public class FavoriteActivity extends LiveNationFragmentActivity implements Favo
     }
 
     @Override
-    public void setFavorites(List<Favorite> favorites) {
-        if (favoritesView == null) {
-            //TODO: Possible race condition?
-            return;
-        }
-        favoritesView.setFavorites(favorites);
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_FAVORITES;
     }
-
-    private void init() {
-        getFavoritesPresenter().initialize(FavoriteActivity.this, getIntent().getExtras(), FavoriteActivity.this);
-    }
-
-    private void deinit() {
-        getFavoritesPresenter().cancel(FavoriteActivity.this);
-    }
-
-    private FavoritesPresenter getFavoritesPresenter() {
-        return LiveNationApplication.get().getFavoritesPresenter();
-    }
-
 }

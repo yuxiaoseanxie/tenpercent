@@ -5,7 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 
-import io.segment.android.Logger;
+import com.segment.android.Logger;
 
 /**
  * Created by elodieferrais on 4/11/14.

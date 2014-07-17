@@ -18,6 +18,12 @@ public class RefreshBarController {
     private Handler handler = new Handler();
 
     private View.OnClickListener refreshListener;
+    private Runnable mHideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideUndoBar(false);
+        }
+    };
 
     public RefreshBarController(View refreshView, final View.OnClickListener refreshListener) {
         this.refreshView = refreshView;
@@ -75,11 +81,4 @@ public class RefreshBarController {
                     });
         }
     }
-
-    private Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideUndoBar(false);
-        }
-    };
 }

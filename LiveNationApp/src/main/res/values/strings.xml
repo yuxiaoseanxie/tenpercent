@@ -97,6 +97,9 @@
     <string name="debug_item_commerce_qa_mode">Commerce QA Mode</string>
     <string name="debug_item_commerce_qa_mode_on">On</string>
     <string name="debug_item_commerce_qa_mode_off">Off</string>
+    <string name="debug_item_commerce_session_recording">Record Commerce Session</string>
+    <string name="debug_item_commerce_session_recording_on">Stop</string>
+    <string name="debug_item_commerce_session_recording_off">Start</string>
 
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>

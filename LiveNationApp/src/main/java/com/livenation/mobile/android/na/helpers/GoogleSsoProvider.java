@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
@@ -15,83 +15,88 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayload;
-import com.livenation.mobile.android.na.helpers.BaseSsoProvider.BaseSessionState.SessionPayloadListener;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.sso.ActivityProvider;
+import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
+import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements BaseSsoProvider.BaseSessionState.SessionPayloadListener<GoogleApiClient> {
+class GoogleSsoProvider extends ApiSsoProvider {
     @SuppressWarnings("unused")
     private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
     private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
     private final String PARAMETER_ACCESS_KEY = "google_plus_code";
-    private User user;
-    private String accessToken;
-    private SessionState currentSession;
+    private GoogleApiClient googleApiClient;
+    private final int RC_SIGN_IN = 6613;
+    private final int RESOLVE_COUNT_MAX = 2;
+    private int resolveCount;
 
     public GoogleSsoProvider(ActivityProvider activityProvider) {
         super(activityProvider);
     }
 
     @Override
-    public void openSession(final boolean allowForeground,
-                            final OpenSessionCallback callback) {
-        if (hasSessionCache()) {
-            callback.onOpenSession(accessToken);
-            return;
+    public void login(final boolean allowForeground, final SsoLoginCallback callback) {
+
+        GoogleSessionWorker googleSessionWorker = new GoogleSessionWorker(new SsoLoginCallback() {
+            @Override
+            public void onLoginSucceed(String accessToken, User user) {
+                if (callback != null) {
+                    callback.onLoginSucceed(accessToken, user);
+                }
+            }
+
+            @Override
+            public void onLoginFailed(LiveNationError error) {
+                if (callback != null) {
+                    callback.onLoginFailed(error);
+                }
+            }
+
+            @Override
+            public void onLoginCanceled() {
+                if (callback != null) {
+                    callback.onLoginCanceled();
+                }
+            }
+        }, allowForeground);
+        this.googleApiClient = new GoogleApiClient.Builder(LiveNationApplication.get().getApplicationContext())
+                .addConnectionCallbacks(googleSessionWorker)
+                .addOnConnectionFailedListener(googleSessionWorker)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
+                .build();
+
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void login(boolean allowForeground) {
+        login(allowForeground, null);
+    }
+
+    @Override
+    public void logout() {
+        logout(null);
+    }
+
+    @Override
+    public void logout(SsoLogoutCallback callback) {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            Plus.AccountApi.revokeAccessAndDisconnect(googleApiClient);
+            Plus.AccountApi.clearDefaultAccount(googleApiClient);
         }
-
-        SessionState.SessionPayload<GoogleApiClient> payload = new GetTokenAndUserPayload(
-                getActivity(), GoogleSsoProvider.this) {
-
-            @Override
-            public void onComplete(String accessToken, User user) {
-                GoogleSsoProvider.this.accessToken = accessToken;
-                GoogleSsoProvider.this.user = user;
-
-                callback.onOpenSession(accessToken);
-            }
-
-            @Override
-            public void onSessionFailed() {
-                callback.onOpenSessionFailed(new Exception(), allowForeground);
-            }
-        };
-
-        currentSession = new SessionState(getActivity(), allowForeground, payload);
-        currentSession.open();
-    }
-
-    @Override
-    public void onPayloadComplete(SessionPayload<GoogleApiClient> payload) {
-        destroySession(payload.getSession());
-    }
-
-    @Override
-    public void getUser(GetUserCallback callback) {
-        if (null == user)
-            throw new IllegalStateException("Session must be opened first");
-        callback.onGetUser(user);
-    }
-
-    @Override
-    public void clearSession() {
-        clearSessionCache();
-        SessionState.SessionPayload<GoogleApiClient> payload = new LogoutPayload(GoogleSsoProvider.this);
-        currentSession = new SessionState(getActivity(), false, payload);
-        currentSession.open();
-    }
-
-    @Override
-    public void onActivityResult(Activity activity, int requestCode,
-                                 int resultCode, Intent data) {
-        if (null == currentSession)
-            return;
-        currentSession
-                .onActivityResult(activity, requestCode, resultCode, data);
+        if (callback != null) {
+            callback.onLogoutSucceed();
+        }
     }
 
     @Override
@@ -99,109 +104,72 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
         return PARAMETER_ACCESS_KEY;
     }
 
-    @Override
-    void destroySession(GoogleApiClient googleApiClient) {
-        if (null != googleApiClient) {
-            googleApiClient.disconnect();
-        }
-        currentSession = null;
-    }
-
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_GOOGLE;
     }
 
-    public boolean hasSessionCache() {
-        return user != null && accessToken != null;
-    }
-
-    public void clearSessionCache() {
-        user = null;
-        accessToken = null;
-    }
-
-    private static class LogoutPayload extends
-            SessionState.SessionPayload<GoogleApiClient> {
-
-        public LogoutPayload(SessionPayloadListener<GoogleApiClient> listener) {
-            super(listener);
-        }
-
-        @Override
-        public void run() {
-            if (getSession().isConnected()) {
-                Plus.AccountApi.revokeAccessAndDisconnect(getSession());
-                Plus.AccountApi.clearDefaultAccount(getSession());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == SsoActivity.RESULT_CANCELED) {
+                callback.onLoginCanceled();
+            } else if (resultCode == SsoActivity.RESULT_OK) {
+                if (!googleApiClient.isConnecting()) {
+                    googleApiClient.connect();
+                }
             }
-            getListener().onPayloadComplete(this);
         }
-
-        @Override
-        public void onSessionFailed() {
-            getListener().onPayloadComplete(this);
-        }
-
     }
 
-    private abstract static class GetTokenAndUserPayload extends
-            BaseSessionState.SessionPayload<GoogleApiClient> {
+    private class GoogleUserClient {
 
-        private final Activity activity;
+        private final SsoLoginCallback loginCallback;
 
-        public GetTokenAndUserPayload(Activity activity,
-                                      SessionPayloadListener<GoogleApiClient> listener) {
-            super(listener);
-            this.activity = activity;
+        public GoogleUserClient(SsoLoginCallback loginCallback) {
+            this.loginCallback = loginCallback;
         }
 
-        @Override
-        public void run() {
+        public void run(GoogleApiClient client, Context context) {
             String accessToken = null;
             try {
                 final String SCOPE = String.format("oauth2:%s", PLUS_LOGIN_SCOPE);
 
-                accessToken = GoogleAuthUtil.getToken(activity, Plus.AccountApi.getAccountName(getSession()), SCOPE);
-                User user = getProfileInformation(getSession());
+                accessToken = GoogleAuthUtil.getToken(context, Plus.AccountApi.getAccountName(client), SCOPE);
+                User user = getProfileInformation(client);
 
-                onComplete(accessToken, user);
-
-                getListener().onPayloadComplete(this);
+                loginCallback.onLoginSucceed(accessToken, user);
 
             } catch (IOException transientEx) {
-                onSessionFailed();
+                loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_LOGIN_FAILED));
                 return;
             } catch (UserRecoverableAuthException e) {
-                throw new IllegalStateException("Initial Google Scope was not wide enough");
+                loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_LOGIN_FAILED));
             } catch (GoogleAuthException authEx) {
+                loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_LOGIN_FAILED));
                 return;
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_LOGIN_FAILED));
+                return;
             }
         }
 
-        ;
-
-
         private User getProfileInformation(GoogleApiClient googleApiClient) {
-            try {
-                if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
-                    Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
-                    String email = Plus.AccountApi.getAccountName(googleApiClient);
+            if (Plus.PeopleApi.getCurrentPerson(googleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi.getCurrentPerson(googleApiClient);
+                String email = Plus.AccountApi.getAccountName(googleApiClient);
 
-                    String name = currentPerson.getDisplayName();
+                String name = currentPerson.getDisplayName();
 
-                    User user = new User();
-                    user.setId(currentPerson.getId());
-                    user.setDisplayName(name);
-                    user.setEmail(email);
-                    String profilePicUrl = currentPerson.getImage().getUrl();
-                    profilePicUrl = getLargerProfileImage(profilePicUrl);
-                    user.setUrl(profilePicUrl);
-                    return user;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                User user = new User();
+                user.setId(currentPerson.getId());
+                user.setDisplayName(name);
+                user.setEmail(email);
+                String profilePicUrl = currentPerson.getImage().getUrl();
+                profilePicUrl = getLargerProfileImage(profilePicUrl);
+                user.setUrl(profilePicUrl);
+                return user;
             }
+
             return null;
         }
 
@@ -215,69 +183,59 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
             return url;
         }
 
-        abstract void onComplete(String accessToken, User user);
-
     }
 
-    private static class SessionState extends BaseSessionState<GoogleApiClient>
-            implements GoogleApiClient.ConnectionCallbacks,
+    private class GoogleSessionWorker implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
+        final private SsoLoginCallback loginCallback;
+        final private boolean allowForeground;
 
-        private final int RC_SIGN_IN = 6613;
-        private final int RESOLVE_COUNT_MAX = 2;
-        private GoogleApiClient googleApiClient;
-        private int resolveCount;
+        private GoogleSessionWorker(SsoLoginCallback loginCallback, boolean allowForeground) {
+            this.loginCallback = loginCallback;
+            this.allowForeground = allowForeground;
+        }
 
-        public SessionState(Activity activity, boolean allowForeground,
-                            BaseSessionState.SessionPayload<GoogleApiClient> sessionPayload) {
 
-            super(activity, allowForeground, sessionPayload);
-            this.googleApiClient = new GoogleApiClient.Builder(activity)
-                    .addConnectionCallbacks(SessionState.this)
-                    .addOnConnectionFailedListener(SessionState.this)
-                    .addApi(Plus.API, null).addScope(Plus.SCOPE_PLUS_LOGIN)
-                    .build();
+        @Override
+        public void onConnected(Bundle bundle) {
+            final GoogleUserClient userClient = new GoogleUserClient(loginCallback);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    userClient.run(googleApiClient, LiveNationApplication.get().getApplicationContext());
+                }
+            }).start();
         }
 
         @Override
-        public void open() {
-            googleApiClient.connect();
+        public void onConnectionSuspended(int i) {
+            loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_LOGIN_FAILED_CONNECTION_SUSPENDED));
         }
 
         @Override
-        public void onConnected(Bundle args) {
-            sessionPayload.setSession(googleApiClient);
-            new Thread(sessionPayload).start();
-        }
-
-        @Override
-        public void onConnectionSuspended(int arg0) {
-        }
-
-        @Override
-        public void onConnectionFailed(ConnectionResult result) {
+        public void onConnectionFailed(ConnectionResult connectionResult) {
             if (!allowForeground) {
-                sessionPayload.onSessionFailed();
+                loginCallback.onLoginFailed(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_GOOGLE_SESSION_NOT_OPEN));
                 return;
             }
 
             if (resolveCount < RESOLVE_COUNT_MAX) {
-                if (result.hasResolution()) {
+                if (connectionResult.hasResolution()) {
                     try {
-                        resolveCount++;
-                        activity.startIntentSenderForResult(
-                                result.getResolution().getIntentSender(), RC_SIGN_IN,
+                        getActivity().startIntentSenderForResult(
+                                connectionResult.getResolution().getIntentSender(), RC_SIGN_IN,
                                 null, 0, 0, 0);
                     } catch (SendIntentException e) {
+                        resolveCount++;
                         googleApiClient.connect();
                     }
                 } else {
                     Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                            result.getErrorCode(), activity, RC_SIGN_IN,
+                            connectionResult.getErrorCode(), getActivity(), RC_SIGN_IN,
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
-                                    sessionPayload.onSessionCanceled();
+                                    loginCallback.onLoginCanceled();
                                 }
                             }
                     );
@@ -285,20 +243,5 @@ class GoogleSsoProvider extends BaseSsoProvider<GoogleApiClient> implements Base
                 }
             }
         }
-
-        public void onActivityResult(Activity activity, int requestCode,
-                                     int resultCode, Intent data) {
-
-            if (requestCode == RC_SIGN_IN) {
-                if (resultCode == Activity.RESULT_OK) {
-                    if (!googleApiClient.isConnecting()) {
-                        googleApiClient.connect();
-                    }
-                } else {
-                    sessionPayload.onSessionFailed();
-                }
-            }
-        }
-
     }
 }

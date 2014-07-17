@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,21 +15,17 @@ import com.livenation.mobile.android.na.ui.fragments.VenueBoxOfficeTabFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.segment.android.models.Props;
 
-import io.segment.android.models.Props;
-
-public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implements ViewPager.OnPageChangeListener{
+public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implements ViewPager.OnPageChangeListener {
+    private static final String EXTRA_VENUE = "com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity.EXTRA_VENUE";
     private SlidingTabLayout tabs;
     private ViewPager pager;
     private String[] analyticsEvent = {AnalyticConstants.PARKING_TRANSIT_TAB_TAP, AnalyticConstants.BOX_OFFICE_TAB_TAP};
     private Venue venue;
 
-
-    private BoxOffice boxOfficeInfo;
-
     //region Lifecycle
-
-    private static final String EXTRA_VENUE = "com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity.EXTRA_VENUE";
+    private BoxOffice boxOfficeInfo;
 
     public static Bundle getArguments(Venue venue) {
         Bundle arguments = new Bundle();
@@ -58,7 +53,8 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
     @Override
     public void onPageSelected(int position) {
@@ -73,7 +69,8 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {}
+    public void onPageScrollStateChanged(int state) {
+    }
 
     //endregion
 

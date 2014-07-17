@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -20,6 +19,7 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -33,13 +33,12 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  * Created by elodieferrais on 4/22/14.
  */
 public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.RecommendationItem> implements StickyListHeadersAdapter {
-    private LayoutInflater inflater;
-
     private static final int ITEM_TYPE_EVENT = 0;
     private static final int ITEM_TYPE_UPSELL_DISCREET = 1;
     private static final int ITEM_TYPE_UPSELL_SEARCH = 2;
     private static final int ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK = 3;
     private static final int ITEM_TYPE_COUNT = 4;
+    private LayoutInflater inflater;
 
     public RecommendationsAdapter(Context context, List<RecommendationItem> items) {
         super(context, android.R.layout.simple_list_item_1, items);
@@ -88,13 +87,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         String imageUrl = null;
 
         if (event.getLineup().size() > 0) {
-            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
+            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap"});
             imageUrl = event.getLineup().get(0).getImageURL(imageKey);
         }
 
-        holder.getImage().setDefaultImageResId(drawableId);
-        holder.getImage().setErrorImageResId(drawableId);
-        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
+        holder.getImage().setDefaultImage(drawableId);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE);
 
         TimeZone timeZone;
         if (event.getVenue().getTimeZone() != null) {
@@ -228,18 +226,42 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         getContext().startActivity(intent);
     }
 
+    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
+        public RecommendationItem() {
+            super(null);
+        }
+
+        public RecommendationItem(Event event) {
+            super(event);
+        }
+
+        @Override
+        public boolean idEquals(RecommendationItem target) {
+            if (hasEvent()) {
+                return get().idEquals(target.get()) && getTag().equals(target.getTag());
+            }
+            return false;
+        }
+
+        public boolean hasEvent() {
+            return get() != null;
+        }
+
+        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}
+    }
+
     private class EventViewHolder {
         private final TextView title;
         private final TextView location;
         private final VerticalDate date;
-        private final NetworkImageView image;
+        private final TransitioningImageView image;
         private final View divider;
 
         public EventViewHolder(View view) {
             this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
-            this.image = (NetworkImageView) view.findViewById(R.id.list_item_show_image);
+            this.image = (TransitioningImageView) view.findViewById(R.id.list_item_show_image);
             this.divider = view.findViewById(R.id.list_item_show_divider);
         }
 
@@ -255,7 +277,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             return date;
         }
 
-        public NetworkImageView getImage() {
+        public TransitioningImageView getImage() {
             return image;
         }
 
@@ -279,30 +301,6 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
         public ImageView getSwoocher() {
             return swoocher;
-        }
-    }
-
-    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
-        public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}
-
-        public RecommendationItem() {
-            super(null);
-        }
-
-        public RecommendationItem(Event event) {
-            super(event);
-        }
-
-        @Override
-        public boolean idEquals(RecommendationItem target) {
-            if (hasEvent()) {
-                return get().idEquals(target.get()) && getTag().equals(target.getTag());
-            }
-            return false;
-        }
-
-        public boolean hasEvent() {
-            return get() != null;
         }
     }
 }

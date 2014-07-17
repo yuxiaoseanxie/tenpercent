@@ -30,14 +30,13 @@ import com.livenation.mobile.android.na.R;
  */
 public class EmptyListViewControl extends LinearLayout {
     private static final String VIEW_MODE_STATE_KEY = "viewModeState";
-
-    ;
     private static final String INSTANCE_STATE_KEY = "instanceState";
     private final LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     private ViewMode currentMode = ViewMode.LOADING;
     private View loading;
     private View retry;
     private View noData;
+    private View inactive;
 
     public EmptyListViewControl(Context context) {
         super(context);
@@ -90,6 +89,9 @@ public class EmptyListViewControl extends LinearLayout {
         currentMode = mode;
         removeAllViews();
         switch (mode) {
+            case INACTIVE:
+                addView(inactive, containerParams);
+                break;
             case LOADING:
                 addView(loading, containerParams);
                 break;
@@ -117,6 +119,7 @@ public class EmptyListViewControl extends LinearLayout {
     private void initializeViews(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
+        inactive = inflater.inflate(R.layout.view_empty_list_inactive, this, false);
         loading = inflater.inflate(R.layout.view_empty_list_loading, this, false);
         retry = inflater.inflate(R.layout.view_empty_list_retry, this, false);
         noData = new View(context);
@@ -124,5 +127,5 @@ public class EmptyListViewControl extends LinearLayout {
         setViewMode(ViewMode.LOADING);
     }
 
-    public static enum ViewMode {LOADING, NO_DATA, RETRY}
+    public static enum ViewMode {INACTIVE, LOADING, NO_DATA, RETRY}
 }

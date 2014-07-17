@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/fragment_show_ticketbar_find"
@@ -11,18 +10,17 @@
         android:layout_height="@dimen/ui_ticketbar_height"
         android:layout_centerInParent="true"
         android:background="@drawable/ui_ticketbar_background"
-        android:text="@string/ticketbar_find_ticket"
-        />
+        android:text="@string/ticketbar_find_ticket" />
 
     <Button
         android:id="@+id/fragment_show_ticketbar_options"
+        style="@style/ticketbar_options_text"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/ui_ticketbar_options_height"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/list_show_item_padding"
-        style="@style/ticketbar_options_text"
         android:background="@drawable/findtickets_option_selector_background"
-        android:text="@string/ticketbar_options"/>
+        android:text="@string/ticketbar_options" />
 
 
 </RelativeLayout>

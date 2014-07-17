@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -19,14 +18,14 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
@@ -36,7 +35,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private Artist artist;
     private ArtistEvents artistEvents;
 
-    private NetworkImageView artistImageView;
+    private TransitioningImageView artistImageView;
     private FavoriteCheckBox favoriteCheckBox;
     private TextView artistTitle;
     private TextView showsHeader;
@@ -52,35 +51,15 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     //region Lifecycle
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-        shows.setMaxEvents(MAX_INLINE);
-        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
-        addFragment(R.id.fragment_artist_shows_container, shows, "shows");
-
-        this.youTube = new YouTubeFragment();
-        youTube.setMaxVideos(MAX_INLINE);
-        addFragment(R.id.fragment_artist_youtube_container, youTube, "shows");
-
-        setRetainInstance(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        this.artistImageView = (NetworkImageView) view.findViewById(R.id.fragment_artist_image);
+        this.artistImageView = (TransitioningImageView) view.findViewById(R.id.fragment_artist_image);
         this.favoriteCheckBox = (FavoriteCheckBox) view.findViewById(R.id.fragment_artist_favorite_checkbox);
         this.artistTitle = (TextView) view.findViewById(R.id.fragment_artist_title);
 
         this.showsHeader = (TextView) view.findViewById(R.id.fragment_artist_shows_header);
 
-        OverflowView showMoreView = new OverflowView(getActivity());
-        showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
-        shows.setShowMoreItemsView(showMoreView);
 
         this.bioContainer = (LinearLayout) view.findViewById(R.id.fragment_artist_bio_container);
         this.bioText = (TextView) bioContainer.findViewById(R.id.fragment_artist_bio);
@@ -88,6 +67,34 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         bioShowMore.setTitle(R.string.artist_bio_overflow);
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag("shows");
+        if (shows == null) {
+            this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+            addFragment(R.id.fragment_artist_shows_container, shows, "shows");
+        }
+        shows.setMaxEvents(MAX_INLINE);
+        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
+
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
+        shows.setShowMoreItemsView(showMoreView);
+
+        youTube = (YouTubeFragment) getChildFragmentManager().findFragmentByTag("youtube");
+        if (youTube == null) {
+            this.youTube = new YouTubeFragment();
+            addFragment(R.id.fragment_artist_youtube_container, youTube, "youtube");
+        }
+        youTube.setMaxVideos(MAX_INLINE);
+        youTube.setShowMoreItemsView(showMoreVideos);
 
         this.showMoreVideos = new OverflowView(getActivity());
         if (youTube.getMaxVideos() > MAX_INLINE) {
@@ -97,22 +104,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             showMoreVideos.setTitle(R.string.artist_videos_overflow);
         }
         showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
-        youTube.setShowMoreItemsView(showMoreVideos);
-
-        return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         init();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void onDestroyView() {
+        super.onDestroyView();
         deinit();
     }
 
@@ -155,10 +153,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
-        artistImageView.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
+        artistImageView.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
         if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
-            artistImageView.setImageUrl(imageUrl, getImageLoader());
+            artistImageView.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
 
         String bio = artist.getBio();

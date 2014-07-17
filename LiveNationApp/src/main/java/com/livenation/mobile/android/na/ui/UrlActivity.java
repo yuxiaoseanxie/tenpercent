@@ -26,12 +26,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameterDefinitions;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.MultiGetParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.segment.android.models.Props;
 
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Set;
-
-import io.segment.android.models.Props;
 
 public class UrlActivity extends LiveNationFragmentActivity {
     @Override

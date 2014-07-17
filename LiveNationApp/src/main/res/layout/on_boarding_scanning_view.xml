@@ -3,33 +3,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/on_boarding_scanning_view_height"
-    android:padding="0dp"
-    android:background="@color/onboarding_scanning_view_background">
+    android:background="@color/onboarding_scanning_view_background"
+    android:padding="0dp">
+
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
 
-    <ImageView
-        android:id="@+id/on_boarding_scanning_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/onboarding_music_scan"
-        android:layout_centerVertical="true"/>
-    <TextView
-        android:id="@+id/on_boarding_scanning_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/onboarding_scanning_description"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/on_boarding_scanning_imageview"
-        android:textAppearance="@style/onboarding_scan_text"
-        android:paddingLeft="@dimen/on_boarding_scan_message_padding"/>
+        <ImageView
+            android:id="@+id/on_boarding_scanning_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/onboarding_music_scan" />
+
+        <TextView
+            android:id="@+id/on_boarding_scanning_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/on_boarding_scanning_imageview"
+            android:paddingLeft="@dimen/on_boarding_scan_message_padding"
+            android:text="@string/onboarding_scanning_description"
+            android:textAppearance="@style/onboarding_scan_text" />
     </RelativeLayout>
+
     <View
-        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/shadow_width"
-        android:background="@color/shadow_color"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/shadow_color" />
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by elodieferrais on 4/29/14.
@@ -21,10 +22,10 @@ import java.util.List;
 public class CalendarAdapter extends ArrayAdapter<CalendarDialogFragment.CalendarItem> {
 
     private static final String DATE_FORMAT = "EEE. MMM dd, yyyy";
-    private static final String TIME_FORMAT = "h:mm aa";
-    private LayoutInflater inflater;
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+    private static final String TIME_FORMAT = "h:mm aa";
     private SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+    private LayoutInflater inflater;
 
 
     public CalendarAdapter(Context context, List<CalendarDialogFragment.CalendarItem> calendarItemList) {
@@ -55,6 +56,16 @@ public class CalendarAdapter extends ArrayAdapter<CalendarDialogFragment.Calenda
         View endDateWrapper = view.findViewById(R.id.list_calender_item_end_date_wrapper);
 
         CalendarDialogFragment.CalendarItem item = getItem(position);
+
+        TimeZone timeZone;
+        if (item.getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(item.getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+
+        dateFormat.setTimeZone(timeZone);
+        timeFormat.setTimeZone(timeZone);
 
         //Title
         title.setText(item.getName());

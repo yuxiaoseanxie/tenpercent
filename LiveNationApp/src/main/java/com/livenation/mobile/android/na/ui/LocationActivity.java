@@ -13,16 +13,15 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-
-import io.segment.android.models.Props;
+import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.
  */
 
 public class LocationActivity extends LiveNationFragmentActivity {
-    private LocationFragment fragment;
     private final int REQUEST_CODE_CITY_SEARCH = 1;
+    private LocationFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +66,10 @@ public class LocationActivity extends LiveNationFragmentActivity {
     private void startCitySearchActivity() {
         Intent intent = new Intent(this, CitySearchActivity.class);
         startActivityForResult(intent, REQUEST_CODE_CITY_SEARCH);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return AnalyticConstants.SCREEN_LOCATION;
     }
 }

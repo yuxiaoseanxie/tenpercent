@@ -6,11 +6,7 @@
     <dimen name="featured_layout_padding">10dp</dimen>
     <dimen name="list_show_item_padding">10dp</dimen>
     <dimen name="list_show_item_min_height">80dp</dimen>
-    <dimen name="list_show_item_event_title_left_margin">20dp</dimen>
     <dimen name="list_show_item_date_min_width">30dp</dimen>
-    <dimen name="list_show_item_date_margin_top">10dp</dimen>
-    <dimen name="list_show_item_date_margin_left">15dp</dimen>
-    <dimen name="list_show_item_date_margin_right">15dp</dimen>
     <dimen name="list_show_item_v2_date_margin_left">15dp</dimen>
     <dimen name="list_show_item_v2_date_margin_right">15dp</dimen>
     <dimen name="list_show_item_v2_date_margin_top">24dp</dimen>
@@ -19,10 +15,6 @@
     <dimen name="detail_page_title_margin_right">15dp</dimen>
     <dimen name="detail_page_title_margin_bottom">15dp</dimen>
     <dimen name="ui_lineup_margin_left">10dp</dimen>
-    <dimen name="ui_lineup_margin_right">10dp</dimen>
-    <dimen name="ui_lineup_margin_top">8dp</dimen>
-    <dimen name="ui_lineup_margin_bottom">8dp</dimen>
-    <dimen name="ui_lineup_padding_top">10dp</dimen>
     <dimen name="ui_lineup_padding_bottom">16dp</dimen>
     <dimen name="ui_ticket_offering_padding">21dp</dimen>
     <dimen name="ui_overflow_vertical_padding">16dp</dimen>
@@ -48,17 +40,16 @@
     <dimen name="favorite_margin_right">10dp</dimen>
     <dimen name="view_lineup_min_height">60dp</dimen>
     <dimen name="view_loading_padding_top_bottom">10dp</dimen>
-    <dimen name="fragment_show_lineup_margin_left">10dp</dimen>
     <dimen name="fragment_show_map_height">70dp</dimen>
     <dimen name="fragment_show_map_gradient_height">35dp</dimen>
+    <dimen name="fragment_show_venue_detail_margin_bottom">5dp</dimen>
     <dimen name="fragment_featured_container_min_height">90dp</dimen>
     <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="fragment_venue_map_height">250dp</dimen>
     <dimen name="venue_detail_image_min_width">32dp</dimen>
     <dimen name="venue_detail_image_min_height">20dp</dimen>
     <dimen name="venue_detail_title_margin_bottom">10dp</dimen>
-    <dimen name="venue_detail_title_margin_left">10dp</dimen>
-    <dimen name="venue_detail_margin_top">0dp</dimen>
+    <dimen name="venue_detail_margin_top">17dp</dimen>
     <dimen name="venue_detail_margin_bottom">15dp</dimen>
     <dimen name="venue_detail_margin_left">10dp</dimen>
     <dimen name="venue_detail_margin_right">10dp</dimen>
@@ -72,11 +63,6 @@
     <dimen name="nearby_show_date_margin_top">20dp</dimen>
     <dimen name="nearby_show_date_margin_bottom">15dp</dimen>
     <dimen name="nearby_show_header_checkbox_margin_left">8dp</dimen>
-    <dimen name="show_calendar_margin_left">10dp</dimen>
-    <dimen name="show_calendar_margin_right">10dp</dimen>
-    <dimen name="show_calendar_margin_top">10dp</dimen>
-    <dimen name="show_calendar_margin_bottom">10dp</dimen>
-    <dimen name="show_calendar_padding_bottom">15dp</dimen>
     <dimen name="ui_underscore_height">1dp</dimen>
     <dimen name="show_calendar_image_margin_right">10dp</dimen>
     <dimen name="account_header_container_width">255dp</dimen>
@@ -126,6 +112,7 @@
     <dimen name="button_recommendations_upsell_margin_top">10dp</dimen>
     <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="swoosh_divider_margin_top">20dp</dimen>
+    <dimen name="fan_man_min_height">48dp</dimen>
 
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>

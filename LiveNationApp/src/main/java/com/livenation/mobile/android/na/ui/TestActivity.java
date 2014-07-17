@@ -3,9 +3,6 @@ package com.livenation.mobile.android.na.ui;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-
 /**
  * Created by cchilton on 3/10/14.
  */

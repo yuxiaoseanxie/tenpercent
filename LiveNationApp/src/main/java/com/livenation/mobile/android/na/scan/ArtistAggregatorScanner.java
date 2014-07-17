@@ -11,6 +11,7 @@ import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAg
 import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
+import com.segment.android.models.Props;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,8 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import io.segment.android.models.Props;
 
 public class ArtistAggregatorScanner {
 
@@ -38,13 +37,13 @@ public class ArtistAggregatorScanner {
             ArtistAggregator artistAggregator = (ArtistAggregator) constructor.newInstance(context);
             return artistAggregator;
         } catch (NoSuchMethodException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (InvocationTargetException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":InvocationTargetException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (InstantiationException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":InstantiationException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         } catch (IllegalAccessException e) {
-            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":NoSuchMethodException:" + e.getMessage());
+            throw new UnsupportedOperationException(ArtistAggregatorScanner.class.getSimpleName() + ":IllegalAccessException:" + e.getMessage() + " " + aggregator.getClass().getSimpleName());
         }
     }
 

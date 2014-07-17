@@ -7,12 +7,14 @@ public class AnalyticConstants {
     public static final String PLATFORM_EVENT_SUFFIX = " (LN_ANDROID)";
 
     /**
-     *Event
+     * Event
      */
     //Common
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
     public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
     public static final String NOTIFICATION_ICON_TAP = "Notification Icon Tap";
+    public static final String GOOGLE_CONNECT = "Google Sign In";
+    public static final String FACEBOOK_CONNECT = "Facebook Connect";
     public static final String FAVORITES_UPSELL_TAP = "Favorites Upsell Tap";
     public static final String EVENT_CELL_TAP = "Event Cell Tap";
     public static final String VENUE_CELL_TAP = "Venue Cell Tap";
@@ -74,6 +76,10 @@ public class AnalyticConstants {
     public static final String NOTIFICATION_CELL_TAP = "Notification Tap";
     public static final String DEEP_LINK_BUTTON_TAP = "Deep Link Button Tap";
 
+    //Push Notification
+    public static final String PUSH_NOTIFICATION_RECEIVE = "Push Notification Receive";
+    public static final String PUSH_NOTIFICATION_TAP = "Push Notification Tap";
+
     //Search
     public static final String SEARCH_RESULT_TAP = "Search Result Tap";
 
@@ -93,20 +99,25 @@ public class AnalyticConstants {
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
     /**
-     *Attributes
+     * Screen name
      */
-
-    public static final String SCREEN_ADP = "ADP";
-    public static final String SCREEN_SDP = "SDP";
-    public static final String SCREEN_VDP = "VDP";
-    public static final String SCREEN_NOTIFICATIONS = "Notifications";
-    public static final String SCREEN_HOME_SCREEN = "Home Screen Load";
-    public static final String SCREEN_ADP_TOUR = "ADP Tour";
-    public static final String SCREEN_VDP_ALL_SHOWS = "VDP All Shows";
-
+    public static final String SCREEN_HOME = "LN_Mob: NA App Android: Home";
+    public static final String SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
+    public static final String SCREEN_LEGAL_CREDITS = "LN_Mob: NA App Android: Legal";
+    public static final String SCREEN_VDP = "LN_Mob: NA App Android: VDP";
+    public static final String SCREEN_VDP_ALL_SHOWS = "LN_Mob: NA App Android: VDP: All Shows";
+    public static final String SCREEN_ADP = "LN_Mob: NA App Android: Artist";
+    public static final String SCREEN_ADP_TOUR = "LN_Mob: NA App Android: Artist: Tours";
+    public static final String SCREEN_LOCATION = "LN_Mob: NA App Android: Location";
+    public static final String SCREEN_NOTIFICATIONS = "LN_Mob: NA App Android: Notifications";
+    public static final String SCREEN_CONTACTS_US = "LN_Mob: NA App Android: Contact Us";
+    public static final String SCREEN_HELP = "LN_Mob: NA App Android: Help";
+    public static final String SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
+    public static final String SCREEN_SDP = "LN_Mob: NA App Android: SDP";
+    public static final String SCREEN_ONBOARDING = "Onboarding screen";
 
     /**
-     *Attributes
+     * Attributes
      */
     //Common
     public static final String CELL_POSITION = "Cell Position";
@@ -130,6 +141,7 @@ public class AnalyticConstants {
     public static final String CATEGORY_SEARCH_VALUE = "Search";
     public static final String CATEGORY_LEGAL_VALUE = "Legal";
     public static final String CATEGORY_NOTIFICATION_VALUE = "Notification";
+    public static final String CATEGORY_PUSH_NOTIFICATION_VALUE = "Push Notification";
     public static final String CATEGORY_LOCATION_VALUE = "Location";
 
 
@@ -160,8 +172,8 @@ public class AnalyticConstants {
     public static final String STATE_UNFAVORITED_VALUE = "unfavorited";
 
     //Sdp
-    public static final String  TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";
-    public static final String  TYPE_OF_DATE = "Type of Date";
+    public static final String TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";
+    public static final String TYPE_OF_DATE = "Type of Date";
 
     //Video
     public static final String VIDEO_NAME = "Video name";
@@ -194,8 +206,11 @@ public class AnalyticConstants {
     public static final String C = "C";
     public static final String FROM = "From";
 
-    public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
+    //Push Notification
+    public static final String MESSAGE_VALUE = "Message Value";
+    public static final String MESSAGE_ID = "Message Id";
 
+    public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 
 
 }

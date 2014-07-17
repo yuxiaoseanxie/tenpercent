@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sub_show_calendar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ui_underscore_pressable_background"
-    android:paddingBottom="@dimen/show_calendar_padding_bottom">
+    android:minHeight="@dimen/view_lineup_min_height"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/sub_show_calendar_image"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/show_calendar_image_margin_right"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/event_date" />
 
     <TextView
         android:id="@+id/sub_show_calendar_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/sub_show_calendar_image"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:text="@string/mock_show_calendar_date_time"
         android:textAppearance="@style/venue_detail_date_time_text" />
 
     <ImageView
         android:id="@+id/sub_show_calendar_plus_image"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/show_more_dates" />
 
-</RelativeLayout>
+</LinearLayout>

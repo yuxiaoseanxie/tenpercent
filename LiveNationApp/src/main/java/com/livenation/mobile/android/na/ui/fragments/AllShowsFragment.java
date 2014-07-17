@@ -12,13 +12,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -31,6 +31,7 @@ import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -40,11 +41,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.segment.android.models.Props;
 
 public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, ApiService.BasicApiCallback<List<Chart>> {
     private EventStickyHeaderAdapter adapter;
@@ -79,6 +79,29 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         scrollPager.setRefreshBarView(refreshBar);
         setFeatured(featured);
 
+        View scrollView = result.findViewById(R.id.featured_charting_horizontal_scrollview);
+
+        //Block vertical swipes while the featured carousel is being swiped from triggering the swipeToRefresh layout
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //first work out whether the scrollview handled the userevent
+                boolean handled = v.onTouchEvent(event);
+
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_UP) {
+                    //if the user if lifting their finger, always re-enable the swipeRefresh
+                    swipeRefreshLayout.setEnabled(true);
+                } else {
+                    //if the scrollview handled the user event, disable the swipeRefresh
+                    swipeRefreshLayout.setEnabled(!handled);
+                }
+
+                return handled;
+            }
+        });
+
         return view;
     }
 
@@ -98,6 +121,10 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         //will be offset by the number of header views. This is the alternative according to:
         // http://stackoverflow.com/questions/11106397/listview-addheaderview-causes-position-to-increase-by-one
         Event event = (Event) parent.getItemAtPosition(position);
+        if (event == null) {
+            //user clicked the footer/loading view
+            return;
+        }
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
@@ -120,7 +147,9 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
     @Override
     public void onApiServiceNotAvailable() {
-        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
     }
 
     private void setFeatured(List<Chart> featured) {
@@ -128,7 +157,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         if (chartingContainer == null) {
             return;
         }
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(chartingContainer.getContext());
 
         chartingContainer.removeAllViews();
         for (Chart chart : featured) {
@@ -139,8 +168,8 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
             View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
-            NetworkImageView image = (NetworkImageView) view.findViewById(android.R.id.icon);
-            image.setImageUrl(chart.getImageUrl(), getImageLoader());
+            TransitioningImageView image = (TransitioningImageView) view.findViewById(android.R.id.icon);
+            image.setImageUrl(chart.getImageUrl(), getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
 
             TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(chart.getArtistName());
@@ -153,7 +182,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     private void retrieveCharts(LiveNationApiService apiService, double lat, double lng) {
         TopChartParameters params = new TopChartParameters();
         params.setLocation(lat, lng);
-        apiService.getTopCharts(params, this);
+        apiService.getMobileFeatured(params, this);
     }
 
     @Override

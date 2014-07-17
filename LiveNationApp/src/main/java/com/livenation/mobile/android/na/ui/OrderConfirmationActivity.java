@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -21,7 +21,6 @@ import com.livenation.mobile.android.ticketing.analytics.Analytics;
 import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-import com.mobilitus.tm.tickets.TicketLibrary;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -39,7 +38,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private Event event;
     private Cart cart;
 
-    private NetworkImageView image;
+    private TransitioningImageView image;
     private TextView headerThankYouText;
     private TextView eventNameText;
 
@@ -61,7 +60,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
 
-        this.image = (NetworkImageView) findViewById(R.id.activity_order_confirmation_image);
+        this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
 
@@ -95,7 +94,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     //region Displaying Data
 
     private void displayImage() {
-        image.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
+        image.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
 
         List<Artist> lineup = event.getLineup();
         if (!lineup.isEmpty()) {
@@ -127,7 +126,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
             }
-            com.mobilitus.tm.tickets.models.User user = TicketLibrary.getInstance().getUser();
+            com.mobilitus.tm.tickets.models.User user = Ticketing.getTicketService().getUser();
             if (user != null && !TextUtils.isEmpty(user.getEmail())) {
                 orderAccountText.setText(user.getEmail());
             } else {
@@ -201,17 +200,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     //endregion
 
-
-    private class DetailsClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            trackFullDetailsTap();
-            Intent intent = new Intent(OrderConfirmationActivity.this, OrderDetailsActivity.class);
-            intent.putExtra(Constants.EXTRA_CART, getCart());
-            startActivity(intent);
-        }
-    }
-
     private Properties getProperties() {
         com.mobilitus.tm.tickets.models.Event event = getCart().getEvent();
         String orderTotal = TicketingUtils.formatCurrency(getCart().getTotal().getCurrency(), getCart().getTotal().getGrandTotal());
@@ -250,5 +238,15 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackFullDetailsTap() {
         Ticketing.getAnalytics().track(AnalyticConstants.VIEW_FULL_DETAILS_TAP, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+    }
+
+    private class DetailsClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            trackFullDetailsTap();
+            Intent intent = new Intent(OrderConfirmationActivity.this, OrderDetailsActivity.class);
+            intent.putExtra(Constants.EXTRA_CART, getCart());
+            startActivity(intent);
+        }
     }
 }

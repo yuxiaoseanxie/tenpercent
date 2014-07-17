@@ -30,8 +30,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
+import com.segment.android.models.Props;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
@@ -39,8 +39,6 @@ import com.urbanairship.richpush.RichPushMessage;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-
-import io.segment.android.models.Props;
 
 /**
  * Fragment that displays a rich push activity_message in a RichPushMessageView
