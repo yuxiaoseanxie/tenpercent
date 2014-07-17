@@ -59,7 +59,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView telephone;
     private View venueInfo;
     private View phonebox;
-    private ShowsListNonScrollingFragment shows;
+    private ShowsListNonScrollingFragment showsFragment;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
@@ -83,10 +83,10 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {        
 		super.onViewCreated(view, savedInstanceState);
-        shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
-        if (shows == null) {
-            shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-            addFragment(R.id.fragment_venue_container_list, shows, SHOWS_FRAGMENT_TAG);
+        showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
+        if (showsFragment == null) {
+            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
+            addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
         }
 
         mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
@@ -96,12 +96,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
         mapFragment.setMapReadyListener(this);
 
-        shows.setMaxEvents(MAX_INLINE);
-        shows.setDisplayMode(ShowView.DisplayMode.VENUE);
+        showsFragment.setMaxEvents(MAX_INLINE);
+        showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
 
-        shows.setShowMoreItemsView(showMoreView);
+        showsFragment.setShowMoreItemsView(showMoreView);
     }
 
     @Override
@@ -136,12 +136,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
 
-        shows.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
+        showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
     }
 
     @Override
     public void setEvents(List<Event> events) {
-        shows.setEvents(events);
+        showsFragment.setEvents(events);
     }
 
     @Override
