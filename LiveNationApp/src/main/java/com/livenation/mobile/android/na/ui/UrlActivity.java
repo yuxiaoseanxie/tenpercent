@@ -18,8 +18,8 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Entity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -72,7 +72,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
     public <T> void fetchEntity(LiveNationApiService service, final String id, final Response.Listener<T> success) {
         MultiGetParameters multiGetParameters = buildMultiGetParameters(id);
-        service.multiGet(multiGetParameters, new ApiService.BasicApiCallback<List<Entity>>() {
+        service.multiGet(multiGetParameters, new BasicApiCallback<List<Entity>>() {
             @Override
             public void onResponse(List<Entity> response) {
                 if (response.size() == 0) {

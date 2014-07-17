@@ -22,20 +22,20 @@ import android.widget.Toast;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
-import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
@@ -57,7 +57,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener, ApiServiceBinder, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
+public class DebugActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener, AccessTokenUpdateReceiver.AccessTokenUpdateListener {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
     private StickyListHeadersListView listView;
@@ -71,6 +71,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
     private ProviderManager providerManager;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
+    private AccessTokenUpdateReceiver accessTokenUpdateReceiver = new AccessTokenUpdateReceiver(this);
 
     @Override
     @SuppressWarnings("unchecked")
@@ -91,7 +92,11 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(accessTokenUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.ACCESS_TOKEN_UPDATE_INTENT_FILTER));
+
+
     }
 
     @Override
@@ -113,41 +118,14 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     @Override
     protected void onResume() {
         super.onResume();
-        LiveNationApplication.get().getConfigManager().persistentBindApi(DebugActivity.this);
-        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID, ProviderManager.ProviderType.LOCATION);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(DebugActivity.this);
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID, ProviderManager.ProviderType.LOCATION, ProviderManager.ProviderType.ACCESS_TOKEN);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationUpdateReceiver);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        if (null != accessTokenItem) {
-            accessTokenItem.setValue(apiService.getApiConfig().getAccessToken());
-        }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (null != actionsAdapter) {
-                    actionsAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accessTokenUpdateReceiver);
     }
 
     private void addInfoDebugItems() {
@@ -250,6 +228,10 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
             locationItem.setValue(response.getLat() + "," + response.getLng());
         }
 
+        if (null != accessTokenItem) {
+            accessTokenItem.setValue(response.getAccessToken().getToken());
+        }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -268,6 +250,22 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     public void onLocationUpdated(int mode, double lat, double lng) {
         if (null != locationItem) {
             locationItem.setValue(lat + "," + lng);
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onAccessTokenUpdated(AccessToken accessToken) {
+        if (null != accessTokenItem) {
+            accessTokenItem.setValue(accessToken.getToken());
         }
 
         runOnUiThread(new Runnable() {

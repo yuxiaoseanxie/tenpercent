@@ -16,7 +16,7 @@ import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -55,7 +55,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
         return args;
     }
 
-    static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements ApiService.BasicApiCallback<List<Event>> {
+    static class EventsState extends BaseResultState<ArrayList<Event>, EventsView> implements BasicApiCallback<List<Event>> {
         private static final String ARG_OFFSET_KEY = "offset";
         private static final String ARG_LIMIT_KEY = "limit";
         private final Context context;

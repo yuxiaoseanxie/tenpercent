@@ -28,14 +28,14 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
@@ -84,7 +84,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     private void registerBroadcastReceiverForUpdate() {
         Context context = LiveNationApplication.get().getApplicationContext();
-        LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
         LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
         LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
     }

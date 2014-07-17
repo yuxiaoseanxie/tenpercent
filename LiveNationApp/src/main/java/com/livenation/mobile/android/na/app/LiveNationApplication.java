@@ -13,8 +13,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -51,10 +53,11 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
@@ -79,8 +82,19 @@ public class LiveNationApplication extends Application {
     private FavoritesPresenter favoritesPresenter;
     private InboxStatusPresenter inboxStatusPresenter;
     private static LocationManager locationProvider;
-    private static ProviderManager providerManager = new ProviderManager();
-    ;
+    private static ProviderManager providerManager;
+    private static LiveNationProxy liveNationProxy;
+
+    //Migration
+    private String oldUserId;
+    private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Props props = new Props();
+            props.put(AnalyticConstants.AIS_USER_ID, oldUserId);
+            LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
+        }
+    };
     private BroadcastReceiver internetStateReceiver;
 
     private ConfigManager configManager;
@@ -97,15 +111,31 @@ public class LiveNationApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Declare object used to start the library
         EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
         locationProvider = new LocationManager(this);
-        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this), locationProvider);
+
+        //Migration
+        oldUserId = getIasId();
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
+
+        //Start Library
+        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this), locationProvider, oldUserId);
         Crashlytics.start(this);
         Analytics.initialize(this);
+
+        //Object useful wild app
+        providerManager = new ProviderManager();
+        liveNationProxy = new LiveNationProxy();
+
 
         instance = this;
 
         ssoManager = new SsoManager(new DummySsoProvider());
+
+        //App init
+        providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 
         configManager = new ConfigManager(getApplicationContext(), ssoManager);
 
@@ -133,13 +163,16 @@ public class LiveNationApplication extends Application {
         setupTicketing();
         setupInternetStateReceiver();
 
-        getConfigManager().buildApi();
+
 
         //Analytics
         Props props = new Props();
         props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
         props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
+
+        //Handle migration
+
     }
 
     @Override
@@ -193,7 +226,7 @@ public class LiveNationApplication extends Application {
                 if (activeNetwork != null && activeNetwork.isConnected()) {
                     checkInstalledAppForAnalytics();
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-                    musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
+                    musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                         @Override
                         public void onResponse(Void response) {
                             LiveNationApplication.get().setIsMusicSync(true);
@@ -230,6 +263,8 @@ public class LiveNationApplication extends Application {
         if (internetStateReceiver != null) {
             unregisterReceiver(internetStateReceiver);
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
+
     }
 
     public ImageLoader getImageLoader() {
@@ -290,5 +325,14 @@ public class LiveNationApplication extends Application {
 
     public static ProviderManager getProviderManager() {
         return providerManager;
+    }
+
+    public static LiveNationProxy getLiveNationProxy() {
+        return liveNationProxy;
+    }
+
+    private String getIasId() {
+        SharedPreferences prefs = getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
     }
 }

@@ -9,18 +9,15 @@ import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
-import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.platform.init.proxy.LiveNationConfig;
-import com.livenation.mobile.android.platform.init.proxy.LiveNationProxy;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +55,7 @@ public class ArtistEventsPresenter
 
     public static class ArtistEventsState
             extends BaseResultState<ArtistEvents, ArtistEventsView>
-            implements ApiService.BasicApiCallback<List<Event>> {
+            implements BasicApiCallback<List<Event>> {
         private ArtistEventsParameters apiParams;
 
         public ArtistEventsState(StateListener<ArtistEventsState> listener, Bundle args, ArtistEventsView view) {

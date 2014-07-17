@@ -61,7 +61,7 @@ public class SsoManager implements ActivityProvider {
         this.defaultProvider = defaultProvider;
     }
 
-    public static SSO_TYPE getProviderId(ApiSsoProvider provider) {
+    /**public static SSO_TYPE getProviderId(ApiSsoProvider provider) {
         if (provider instanceof FacebookSsoProvider) {
             return SSO_FACEBOOK;
         }
@@ -72,7 +72,7 @@ public class SsoManager implements ActivityProvider {
             return SSO_TYPE.SSO_DUMMY;
         }
         throw new IllegalArgumentException("Unknown provider type");
-    }
+    }**/
 
     @Override
     public Activity getActivity() {

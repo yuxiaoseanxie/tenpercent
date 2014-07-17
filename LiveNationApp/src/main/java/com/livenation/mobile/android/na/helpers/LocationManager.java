@@ -9,9 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
@@ -171,7 +169,7 @@ public class LocationManager implements LocationProvider {
     }
 
     private void sendBroadcastForLocation() {
-        final Intent intent = new Intent(Constants.Receiver.LOCATION_UPDATE_INTENT_FILTER);
+        final Intent intent = new Intent(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER);
         locationProvider.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {

@@ -12,7 +12,6 @@ import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 

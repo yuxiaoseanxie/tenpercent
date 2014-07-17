@@ -10,8 +10,8 @@ import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
 import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
@@ -80,7 +80,7 @@ public class FavoritesPresenter extends
     }
 
     static class FavoritesState extends BaseResultState<ArrayList<Favorite>, FavoritesView> implements
-            ApiService.BasicApiCallback<List<Favorite>> {
+            BasicApiCallback<List<Favorite>> {
         private SingleVenueParameters apiParams;
 
         public FavoritesState(StateListener<FavoritesState> listener, Bundle args, FavoritesView view) {
@@ -166,7 +166,7 @@ public class FavoritesPresenter extends
         }
 
         class AddFavoriteState extends BaseResultState<Favorite, FavoriteAddView> implements
-                ApiService.BasicApiCallback<Void> {
+                BasicApiCallback<Void> {
             private FavoriteWithNameParameters apiParams;
 
             public AddFavoriteState(StateListener<AddFavoriteState> listener, Bundle args, FavoriteAddView view) {
@@ -254,7 +254,7 @@ public class FavoritesPresenter extends
 
         class RemoveFavoriteState extends
                 BaseResultState<Favorite, FavoriteRemoveView> implements
-                ApiService.BasicApiCallback<Void> {
+                BasicApiCallback<Void> {
             private FavoriteParameters apiParams;
 
             public RemoveFavoriteState(StateListener<RemoveFavoriteState> listener,

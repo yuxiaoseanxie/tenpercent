@@ -10,20 +10,19 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.platform.init.proxy.LiveNationProxy;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 5/5/14.
  */
-class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.BasicApiCallback<AccessToken> {
+class AccessTokenConfig extends ApiBuilderElement<String> implements BasicApiCallback<AccessToken> {
 
     private final Context context;
     private final SsoManager ssoManager;
@@ -77,9 +76,7 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements ApiService.
         LiveNationApiBuilder builder = (LiveNationApiBuilder) getApiBuilder();
         Pair<String, String> ssoParams = getSsoParams();
 
-        LiveNationApiConfig quick = new LiveNationApiConfig(builder);
-
-        LiveNationApiService apiService = new LiveNationProxy(quick);
+        LiveNationApiService apiService = new LiveNationProxy();
         if (getIasId() != null) {
             Props props = new Props();
             props.put(AnalyticConstants.AIS_USER_ID, getIasId());

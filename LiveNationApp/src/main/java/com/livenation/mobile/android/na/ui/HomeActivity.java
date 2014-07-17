@@ -31,7 +31,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -45,8 +44,10 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.segment.android.models.Props;
 
 import net.hockeyapp.android.CrashManager;
@@ -215,22 +216,21 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
                 + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
                 + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+        ProviderManager providerManager = new ProviderManager();
+        providerManager.getConfigReadyFor(new ConfigCallback() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
+            public void onResponse(LiveNationConfig response) {
+                Map<String, String> userInfo = response.getAppInitResponse().getData().getUserInfo();
                 String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
                 String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
                 ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
+            public void onErrorResponse(int errorCode) {
                 ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
             }
-        });
-
-
+        }, ProviderManager.ProviderType.APP_INIT);
     }
 
     @Override

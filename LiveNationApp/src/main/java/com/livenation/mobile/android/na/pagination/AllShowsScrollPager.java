@@ -2,8 +2,8 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 
@@ -20,7 +20,7 @@ public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Ev
     }
 
     @Override
-    protected void fetch(LiveNationApiService apiService, int offset, int limit, ApiService.BasicApiCallback callback) {
+    protected void fetch(int offset, int limit, BasicApiCallback callback) {
         EventParameters params = new EventParameters();
         params.setPage(offset, limit);
         params.setSortMethod("start_time");
@@ -28,6 +28,6 @@ public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Ev
         Calendar end = Calendar.getInstance();
         end.add(Calendar.MONTH, 12);
         params.setTimeRange(start.getTimeInMillis(), end.getTimeInMillis());
-        apiService.getEvents(params, callback);
+        LiveNationApplication.getLiveNationProxy().getEvents(params, callback);
     }
 }

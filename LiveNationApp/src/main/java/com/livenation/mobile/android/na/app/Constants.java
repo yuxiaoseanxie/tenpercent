@@ -73,7 +73,4 @@ public class Constants {
         public static final String LOGIN = "music_library_update";
     }
 
-    public class Receiver {
-        public static final String LOCATION_UPDATE_INTENT_FILTER = "location_update_intent_filter";
-    }
 }

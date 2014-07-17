@@ -13,9 +13,9 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 
 import java.util.List;
 
@@ -113,35 +113,27 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
     }
 
     @Override
-    public void fetch(final int offset, final int limit, final ApiService.BasicApiCallback<List<TItemTypeOutput>> callback) {
+    protected void fetch(final int offset, final int limit, final BasicApiCallback<List<TItemTypeOutput>> callback) {
         LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
-                fetch(apiService, offset, limit, callback);
+                fetch(offset, limit, callback);
             }
 
             @Override
             public void onApiServiceNotAvailable() {
                 callback.onErrorResponse(null);
+                if (emptyView != null) {
+                    emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+                }
             }
         });
     }
 
-    protected abstract void fetch(LiveNationApiService apiService, final int offset, final int limit, ApiService.BasicApiCallback<List<TItemTypeOutput>> callback);
 
     public void setEmptyView(final EmptyListViewControl emptyView) {
         this.emptyView = emptyView;
         this.emptyView.setRetryOnClickListener(retryClickListener);
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
-            @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-            }
-
-            @Override
-            public void onApiServiceNotAvailable() {
-                emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-            }
-        });
     }
 
     public void setRefreshBarView(RefreshBar refreshBar) {

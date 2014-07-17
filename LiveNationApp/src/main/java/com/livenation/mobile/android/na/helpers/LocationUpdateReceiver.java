@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.receiver;
+package com.livenation.mobile.android.na.helpers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

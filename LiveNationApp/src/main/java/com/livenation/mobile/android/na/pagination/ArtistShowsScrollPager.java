@@ -2,9 +2,10 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -26,12 +27,12 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
     }
 
     @Override
-    protected void fetch(final LiveNationApiService apiService, int offset, int limit, final ApiService.BasicApiCallback callback) {
+    protected void fetch(int offset, int limit, final BasicApiCallback callback) {
         ArtistEventsParameters params = new ArtistEventsParameters();
         params.setPage(offset, limit);
         params.setArtistId(artistId);
 
-        apiService.getArtistEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
+        LiveNationApplication.getLiveNationProxy().getArtistEvents(params, new BasicApiCallback<List<Event>>() {
             @Override
             public void onResponse(final List<Event> response) {
                 LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
@@ -42,7 +43,8 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
                     }
 
                     @Override
-                    public void onErrorResponse() {}
+                    public void onErrorResponse() {
+                    }
                 });
 
             }

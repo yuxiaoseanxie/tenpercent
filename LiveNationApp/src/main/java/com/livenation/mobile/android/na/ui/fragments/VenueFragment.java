@@ -36,8 +36,8 @@ import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -154,7 +154,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             public void onApiServiceAttached(LiveNationApiService apiService) {
                 SingleVenueParameters parameters = new SingleVenueParameters();
                 parameters.setVenueId(venueId);
-                apiService.getSingleVenue(parameters, new ApiService.BasicApiCallback<Venue>() {
+                apiService.getSingleVenue(parameters, new BasicApiCallback<Venue>() {
                     @Override
                     public void onResponse(Venue fullVenue) {
                         displayBoxOfficeInfo(fullVenue);

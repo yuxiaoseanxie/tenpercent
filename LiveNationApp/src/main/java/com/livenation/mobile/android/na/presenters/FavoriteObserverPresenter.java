@@ -1,15 +1,21 @@
 package com.livenation.mobile.android.na.presenters;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BaseObserverPresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.Constants;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitResponse;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.receiver.AppInitUpdateReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +23,18 @@ import java.util.List;
 /**
  * Created by cchilton on 2/27/14.
  */
-public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer>, ApiServiceBinder {
+public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, FavoriteObserverView, FavoriteObserverPresenter.Observer> implements BaseState.StateListener<FavoriteObserverPresenter.Observer>, ConfigCallback, AppInitUpdateReceiver.AppInitUpdateListener {
 
     private final static String ARG_FAVORITE_KEY = "favorite";
     private final List<Favorite> favorites = new ArrayList<Favorite>();
+    private AppInitUpdateReceiver appInitUpdateReceiver = new AppInitUpdateReceiver(this);
 
     public FavoriteObserverPresenter() {
-        LiveNationApplication.get().getConfigManager().persistentBindApi(FavoriteObserverPresenter.this);
+        ProviderManager providerManager = new ProviderManager();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(appInitUpdateReceiver, new IntentFilter(Constants.APP_INIT_UPDATE_INTENT_FILTER));
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.APP_INIT);
+
+
     }
 
     @Override
@@ -89,18 +100,6 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
     }
 
     @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        clear();
-        List<Favorite> favorites = apiService.getApiConfig().getAppInitResponse().getData().getFavorites();
-        postAll(favorites);
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
-    }
-
-    @Override
     public void clear() {
         ArrayList<Favorite> copy = new ArrayList<Favorite>();
         copy.addAll(favorites);
@@ -137,6 +136,24 @@ public class FavoriteObserverPresenter extends BaseObserverPresenter<Favorite, F
         } else {
             observer.getView().onFavoriteAdded(favorite);
         }
+    }
+
+    @Override
+    public void onResponse(LiveNationConfig response) {
+        List<Favorite> favorites = response.getAppInitResponse().getData().getFavorites();
+        postAll(favorites);
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {
+
+    }
+
+    @Override
+    public void onAppInitUpdated(AppInitResponse appInitResponse) {
+        clear();
+        List<Favorite> favorites = appInitResponse.getData().getFavorites();
+        postAll(favorites);
     }
 
     static class Observer extends BaseState<FavoriteObserverView> {

@@ -8,11 +8,11 @@ import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.PreferencePersistence;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
-import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
@@ -84,8 +84,8 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
         getApiHelper().bindApi(new ApiServiceBinder() {
             @Override
             public void onApiServiceAttached(LiveNationApiService apiService) {
-                if(!isHostSafe(LiveNationLibrary.getHost())) {
-                    Log.e(getClass().getName(), "Ignoring unsafe host: " +LiveNationLibrary.getHost());
+                if (!isHostSafe(LiveNationLibrary.getHost())) {
+                    Log.e(getClass().getName(), "Ignoring unsafe host: " + LiveNationLibrary.getHost());
                     return;
                 }
 
@@ -96,7 +96,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
 
                 RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
                 params.setTokens(apid, userId);
-                apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
+                apiService.registerForNotifications(params, new BasicApiCallback<Void>() {
                     @Override
                     public void onErrorResponse(LiveNationError error) {
                         String errorMessage = (error != null) ? error.getMessage() : "unknown error";

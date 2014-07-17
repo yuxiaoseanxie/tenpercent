@@ -1,13 +1,10 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.sso.SsoUpdatedUserCallback;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
-import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;

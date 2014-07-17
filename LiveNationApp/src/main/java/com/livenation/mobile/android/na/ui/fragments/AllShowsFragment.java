@@ -35,8 +35,8 @@ import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
@@ -46,7 +46,7 @@ import com.segment.android.models.Props;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, ApiService.BasicApiCallback<List<Chart>> {
+public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, BasicApiCallback<List<Chart>> {
     private EventStickyHeaderAdapter adapter;
     private ViewGroup chartingContainer;
     private List<Chart> featured;
