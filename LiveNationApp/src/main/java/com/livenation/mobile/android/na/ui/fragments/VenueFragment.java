@@ -30,9 +30,11 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
+import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
@@ -62,6 +64,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
     private LatLng mapLocationCache = null;
+    private final static int MAX_INLINE = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,8 +81,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {        
+		super.onViewCreated(view, savedInstanceState);
         showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
         if (showsFragment == null) {
             showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
@@ -92,6 +95,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
         }
         mapFragment.setMapReadyListener(this);
+
+        showsFragment.setMaxEvents(MAX_INLINE);
+        showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
+
+        showsFragment.setShowMoreItemsView(showMoreView);
     }
 
     @Override
@@ -125,6 +135,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         setMapLocation(lat, lng);
 
         favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
+
+        showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
     }
 
     @Override
@@ -264,6 +276,29 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP, props);
 
             MapUtils.redirectToMapApplication(lat, lng, address, context);
+        }
+    }
+
+
+    private class ShowAllEventsOnClickListener implements View.OnClickListener {
+        private final Venue venue;
+
+        private ShowAllEventsOnClickListener(Venue venue) {
+            this.venue = venue;
+        }
+
+        @Override
+        public void onClick(View view) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+
+            LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_SHOWS_TAP, AnalyticsCategory.VDP, props);
+
+            Intent intent = new Intent(getActivity(), VenueShowsActivity.class);
+            intent.putExtras(VenueShowsActivity.getArguments(venue));
+            startActivity(intent);
         }
     }
 }

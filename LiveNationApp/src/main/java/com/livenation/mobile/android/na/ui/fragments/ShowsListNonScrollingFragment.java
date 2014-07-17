@@ -157,7 +157,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
 
-    private View getShowMoreItemsView() {
+    public View getShowMoreItemsView() {
         return showMoreItemsView;
     }
 
