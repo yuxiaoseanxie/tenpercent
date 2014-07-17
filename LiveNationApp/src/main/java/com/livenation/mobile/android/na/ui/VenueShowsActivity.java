@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.ui.fragments.VenueShowsListFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public class VenueShowsActivity extends LiveNationFragmentActivity {
@@ -23,8 +22,6 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_venue_shows);
-
-        this.shows = (VenueShowsListFragment) getSupportFragmentManager().findFragmentById(R.id.activity_venue_shows_fragment);
 
         String venueName = getIntent().getStringExtra(VenueShowsActivity.EXTRA_VENUE_NAME);
         getActionBar().setTitle(venueName);
