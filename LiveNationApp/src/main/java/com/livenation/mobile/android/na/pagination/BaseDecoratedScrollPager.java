@@ -26,7 +26,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  * Created by cchilton on 3/12/14.
  */
 public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<TItemTypeOutput>, TItemTypeInput> extends BaseScrollPager<TItemTypeOutput> {
-    protected static final int DEFAULT_LIMIT = 10;
+    protected static final int DEFAULT_LIMIT = 20;
     private final EmptyListViewControl listLoadingView;
     /*
     Use a frame layout to contain our loading view. This is necessary since Android doesn't like direct
