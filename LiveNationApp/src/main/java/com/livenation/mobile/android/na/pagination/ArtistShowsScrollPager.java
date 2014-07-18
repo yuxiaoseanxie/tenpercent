@@ -44,6 +44,7 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
 
                     @Override
                     public void onErrorResponse() {
+                        //TODO Define an empty view or "retry view"
                     }
                 });
 

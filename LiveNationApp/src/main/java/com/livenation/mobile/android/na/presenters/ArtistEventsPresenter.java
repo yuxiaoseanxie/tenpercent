@@ -70,7 +70,7 @@ public class ArtistEventsPresenter
 
         @Override
         public void retrieveResult() {
-            getApiService().getArtistEvents(apiParams, this);
+            LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, this);
         }
 
         @Override
