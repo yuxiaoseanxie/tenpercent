@@ -43,7 +43,7 @@ import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 
-public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
+public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener {
 
     private RecommendationsAdapter adapter;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -60,7 +60,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
 
         adapter = new RecommendationsAdapter(getActivity(), new ArrayList<RecommendationItem>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
 
     }
@@ -79,6 +78,10 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         scrollPager.setRefreshBarView(refreshBar);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
+
+        scrollPager.load();
         return view;
     }
 
@@ -92,7 +95,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override
@@ -118,19 +120,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-        if (emptyListViewControl != null) {
-            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-        }
     }
 
     @Override

@@ -59,7 +59,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         adapter = new EventVenueAdapter(getActivity());
         scrollPager = new NearbyVenuesScrollPager(adapter);
-        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
 
         setRetainInstance(true);
     }
@@ -85,17 +84,20 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_nearby_venues_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
+
+        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+
         return view;
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        deinit();
+    public void onDestroy() {
+        super.onDestroy();
+        scrollPager.stop();
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         super.onDestroyView();
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
@@ -143,11 +145,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         getActivity().startActivity(intent);
     }
 
-    private void deinit() {
-        scrollPager.stop();
-    }
-
-    private void init() {
+    private void refresh() {
         scrollPager.reset();
         scrollPager.load();
     }
@@ -157,7 +155,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     public void onResponse(LiveNationConfig response) {
         this.lat = response.getLat();
         this.lng = response.getLng();
-        init();
+        scrollPager.load();
     }
 
     @Override
@@ -168,7 +166,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     //Location update
     @Override
     public void onLocationUpdated(int mode, double lat, double lng) {
-        init();
+        refresh();
     }
 
     @Override
@@ -179,7 +177,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setSoundEffectsEnabled(true);
-        scrollPager.reset();
-        scrollPager.load();
+        refresh();
     }
 }
