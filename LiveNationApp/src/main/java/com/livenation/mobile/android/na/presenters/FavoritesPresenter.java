@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -94,7 +95,7 @@ public class FavoritesPresenter extends
 
         @Override
         public void retrieveResult() {
-            getApiService().getFavorites(FavoritesState.this);
+            LiveNationApplication.getLiveNationProxy().getFavorites(FavoritesState.this);
         }
 
         @Override
@@ -180,7 +181,7 @@ public class FavoritesPresenter extends
 
             @Override
             public void retrieveResult() {
-                getApiService().addFavorite(apiParams, AddFavoriteState.this);
+                LiveNationApplication.getLiveNationProxy().addFavorite(apiParams, AddFavoriteState.this);
             }
 
             @Override
@@ -269,7 +270,7 @@ public class FavoritesPresenter extends
 
             @Override
             public void retrieveResult() {
-                getApiService().removeFavorite(apiParams, RemoveFavoriteState.this);
+                LiveNationApplication.getLiveNationProxy().removeFavorite(apiParams, RemoveFavoriteState.this);
             }
 
             @Override

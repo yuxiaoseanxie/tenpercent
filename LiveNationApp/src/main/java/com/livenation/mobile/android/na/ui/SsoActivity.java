@@ -43,8 +43,6 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
 
     @Override
     public void onLoginSucceed(String accessToken, User user) {
-        LiveNationApplication.get().getConfigManager().clearAccessToken();
-        LiveNationApplication.get().getConfigManager().buildApi();
         setResult(RESULT_OK);
         finish();
     }

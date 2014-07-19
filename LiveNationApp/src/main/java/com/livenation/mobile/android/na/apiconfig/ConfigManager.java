@@ -2,15 +2,11 @@ package com.livenation.mobile.android.na.apiconfig;
 
 import android.content.Context;
 
-import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.LiveNationApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
-import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
-import com.livenation.mobile.android.platform.init.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,25 +28,6 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
     public ConfigManager(Context context, SsoManager ssoManager) {
         this.context = context.getApplicationContext();
         this.ssoManager = ssoManager;
-    }
-
-    public static Environment getConfiguredEnvironment(Context context) {
-        if (!BuildConfig.DEBUG) {
-            return Environment.Production;
-        }
-        PreferencePersistence prefs = new PreferencePersistence("environment");
-        String environmentKey = prefs.readString("environment", context);
-
-        try {
-            return Environment.valueOf(environmentKey);
-        } catch (Exception e) {
-            return Environment.Staging;
-        }
-    }
-
-    public static void setConfiguredEnvironment(Environment environment, Context context) {
-        PreferencePersistence prefs = new PreferencePersistence("environment");
-        prefs.write("environment", environment.toString(), context);
     }
 
     @Override
@@ -86,57 +63,5 @@ public class ConfigManager implements ApiBuilder.OnBuildListener {
         for (ApiServiceBinder binder : persistentBindings) {
             binder.onApiServiceNotAvailable();
         }
-    }
-
-    public boolean hasApi() {
-        return (null != apiService);
-    }
-
-    public boolean isBuildingApi() {
-        return (null != apiBuilder);
-    }
-
-    public void bindApi(ApiServiceBinder binder) {
-        if (null != apiService && !isBuildingApi()) {
-            binder.onApiServiceAttached(apiService);
-        } else {
-            pendingBindings.add(binder);
-            if (!isBuildingApi()) {
-                buildApi();
-            }
-        }
-    }
-
-    public void persistentBindApi(ApiServiceBinder binder) {
-        persistentBindings.add(binder);
-        if (null != apiService) {
-            binder.onApiServiceAttached(apiService);
-        }
-    }
-
-    public void persistentUnbindApi(ApiServiceBinder binder) {
-        if (persistentBindings.contains(binder)) {
-            persistentBindings.remove(binder);
-        }
-        if (pendingBindings.contains(binder)) {
-            pendingBindings.remove(binder);
-        }
-    }
-
-    public void buildApi() {
-        apiBuilder = createApiBuilder();
-        apiBuilder.build(ConfigManager.this);
-    }
-
-    public void clearAccessToken() {
-        AccessTokenConfig.clearAccessToken(context);
-    }
-
-    private LiveNationApiBuilder createApiBuilder() {
-        ApiBuilderElement<String> accessToken = new AccessTokenConfig(this.context, ssoManager);
-
-        LiveNationApiBuilder apiBuilder = new LiveNationApiBuilder(accessToken);
-
-        return apiBuilder;
     }
 }

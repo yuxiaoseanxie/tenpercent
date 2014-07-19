@@ -15,6 +15,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.ActivityProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
@@ -108,8 +109,7 @@ public class SsoManager implements ActivityProvider {
                 }
             });
         }
-        LiveNationApplication.get().getConfigManager().clearAccessToken();
-        LiveNationApplication.get().getConfigManager().buildApi();
+        LiveNationApplication.getAccessTokenProvider().clear();
     }
 
     public void login(final SSO_TYPE ssoType, final Context context, boolean allowForeground, final SsoLoginCallback callback) {

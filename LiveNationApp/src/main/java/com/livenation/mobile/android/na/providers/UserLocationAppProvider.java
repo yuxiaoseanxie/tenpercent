@@ -1,16 +1,17 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.PreferencePersistence;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 /**
  * Created by cchilton on 3/13/14.
  */
-public class UserLocationProvider implements LocationProvider {
+public class UserLocationAppProvider implements LocationProvider {
     private static final String KEY_LAT = "lat";
     private static final String KEY_LNG = "lng";
 

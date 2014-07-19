@@ -211,10 +211,8 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         environmentPreferences.setConfiguredEnvironment(environment);
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
-        LiveNationLibrary.setEnvironment(environment);
-        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
-        configManager.clearAccessToken();
-        configManager.buildApi();
+        LiveNationApplication.getEnvironmentProvider().setEnvironment(environment);
+        LiveNationApplication.getAccessTokenProvider().clear();
         NotificationsRegistrationManager.getInstance().register();
     }
 

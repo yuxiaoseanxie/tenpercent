@@ -1,8 +1,11 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers;
 
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DeviceLocationProvider;
+import com.livenation.mobile.android.na.helpers.DummyLocationProvider;
+import com.livenation.mobile.android.na.helpers.PlayServicesLocationProvider;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
@@ -10,7 +13,7 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 /**
  * Created by cchilton on 3/13/14.
  */
-public class SystemLocationProvider implements LocationProvider {
+public class SystemLocationAppProvider implements LocationProvider {
     private final LocationProvider playServices = new PlayServicesLocationProvider();
     private final LocationProvider device = new DeviceLocationProvider();
     private final LocationProvider dummy = new DummyLocationProvider();

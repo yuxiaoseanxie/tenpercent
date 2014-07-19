@@ -215,13 +215,6 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         super.onDestroyView();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onPause();
-        //build a new API on exiting
-        LiveNationApplication.get().getConfigManager().buildApi();
-    }
-
     /**
      * set the configuredLocation pointer to some city.
      * The value of this member field will be used as the manual location when the fragment/activity

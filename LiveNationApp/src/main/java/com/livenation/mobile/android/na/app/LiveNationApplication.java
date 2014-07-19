@@ -31,7 +31,6 @@ import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -42,7 +41,6 @@ import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
-import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
@@ -51,7 +49,9 @@ import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
-import com.livenation.mobile.android.na.providers.DeviceIdProviderImpl;
+import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
+import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
+import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -84,6 +84,8 @@ public class LiveNationApplication extends Application {
     private static LocationManager locationProvider;
     private static ProviderManager providerManager;
     private static LiveNationProxy liveNationProxy;
+    private static EnvironmentAppProvider environmentProvider;
+    private static AccessTokenAppProvider accessTokenProvider;
 
     //Migration
     private String oldUserId;
@@ -97,7 +99,6 @@ public class LiveNationApplication extends Application {
     };
     private BroadcastReceiver internetStateReceiver;
 
-    private ConfigManager configManager;
     private boolean isMusicSync = false;
 
     public static LiveNationApplication get() {
@@ -112,16 +113,19 @@ public class LiveNationApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        instance = this;
         //Declare object used to start the library
-        EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
         locationProvider = new LocationManager(this);
+        environmentProvider = new EnvironmentAppProvider(this);
+        accessTokenProvider = new AccessTokenAppProvider(this);
 
         //Migration
         oldUserId = getIasId();
         LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
 
         //Start Library
-        LiveNationLibrary.start(this, environmentPreferences.getConfiguredEnvironment(), new DeviceIdProviderImpl(this), locationProvider, oldUserId);
+        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
+        LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
         Crashlytics.start(this);
         Analytics.initialize(this);
 
@@ -136,8 +140,6 @@ public class LiveNationApplication extends Application {
 
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
-
-        configManager = new ConfigManager(getApplicationContext(), ssoManager);
 
         eventsPresenter = new EventsPresenter();
         singleEventPresenter = new SingleEventPresenter();
@@ -307,10 +309,6 @@ public class LiveNationApplication extends Application {
         return inboxStatusPresenter;
     }
 
-    public ConfigManager getConfigManager() {
-        return configManager;
-    }
-
     public boolean isMusicSync() {
         return isMusicSync;
     }
@@ -329,6 +327,14 @@ public class LiveNationApplication extends Application {
 
     public static LiveNationProxy getLiveNationProxy() {
         return liveNationProxy;
+    }
+
+    public static EnvironmentAppProvider getEnvironmentProvider() {
+        return environmentProvider;
+    }
+
+    public static AccessTokenAppProvider getAccessTokenProvider() {
+        return accessTokenProvider;
     }
 
     private String getIasId() {

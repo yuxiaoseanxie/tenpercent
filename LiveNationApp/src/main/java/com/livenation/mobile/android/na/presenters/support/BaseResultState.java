@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.presenters.support;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 
 import java.io.Serializable;
@@ -11,9 +10,8 @@ import java.io.Serializable;
 /**
  * Created by cchilton on 2/27/14.
  */
-public abstract class BaseResultState<TResult extends Serializable, TView extends PresenterView> extends BaseState<TView> implements ApiServiceBinder {
+public abstract class BaseResultState<TResult extends Serializable, TView extends PresenterView> extends BaseState<TView> {
     private TResult result;
-    private LiveNationApiService apiService;
 
     protected BaseResultState(StateListener listener, Bundle args, TView view) {
         super(listener, args, view);
@@ -28,26 +26,11 @@ public abstract class BaseResultState<TResult extends Serializable, TView extend
 
     @Override
     public final void run() {
-        LiveNationApplication.get().getConfigManager().bindApi(this);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.apiService = apiService;
         if (hasResult()) {
             onHasResult(result);
         } else {
             retrieveResult();
         }
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
-    }
-
-    public LiveNationApiService getApiService() {
-        return apiService;
     }
 
     public TResult getResult() {

@@ -9,6 +9,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -25,11 +26,10 @@ import com.segment.android.models.Props;
 class AccessTokenConfig extends ApiBuilderElement<String> implements BasicApiCallback<AccessToken> {
 
     private final Context context;
-    private final SsoManager ssoManager;
+    private final SsoManager ssoManager = null;
 
-    public AccessTokenConfig(Context context, SsoManager ssoManager) {
+    public AccessTokenConfig(Context context) {
         this.context = context;
-        this.ssoManager = ssoManager;
     }
 
     static void clearAccessToken(Context context) {
@@ -76,13 +76,12 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements BasicApiCal
         LiveNationApiBuilder builder = (LiveNationApiBuilder) getApiBuilder();
         Pair<String, String> ssoParams = getSsoParams();
 
-        LiveNationApiService apiService = new LiveNationProxy();
         if (getIasId() != null) {
             Props props = new Props();
             props.put(AnalyticConstants.AIS_USER_ID, getIasId());
             LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
         }
-        apiService.getToken(getIasId(), ssoParams.first, ssoParams.second, AccessTokenConfig.this);
+        LiveNationApplication.getLiveNationProxy().getToken(getIasId(), ssoParams.first, ssoParams.second, AccessTokenConfig.this);
     }
 
     private Pair<String, String> getSsoParams() {

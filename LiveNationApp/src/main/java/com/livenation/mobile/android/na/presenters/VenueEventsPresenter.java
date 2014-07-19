@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -60,7 +61,7 @@ public class VenueEventsPresenter extends
 
         @Override
         public void retrieveResult() {
-            getApiService().getVenueEvents(apiParams, VenueEventsState.this);
+            LiveNationApplication.getLiveNationProxy().getVenueEvents(apiParams, VenueEventsState.this);
         }
 
         @Override

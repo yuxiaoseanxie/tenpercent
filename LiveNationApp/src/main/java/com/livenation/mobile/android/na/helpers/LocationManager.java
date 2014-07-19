@@ -10,6 +10,8 @@ import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
+import com.livenation.mobile.android.na.providers.UserLocationAppProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
@@ -26,9 +28,9 @@ public class LocationManager implements LocationProvider {
     public static final int MODE_USER = 1;
     public static final String LOCATION_MODE = "location_mode";
 
-    private final UserLocationProvider userLocationProvider = new UserLocationProvider();
+    private final UserLocationAppProvider userLocationProvider = new UserLocationAppProvider();
 
-    private final LocationProvider systemLocationProvider = new SystemLocationProvider();
+    private final LocationProvider systemLocationProvider = new SystemLocationAppProvider();
 
     private final LocationHistoryManager locationHistory;
 
@@ -61,7 +63,7 @@ public class LocationManager implements LocationProvider {
         return systemLocationProvider;
     }
 
-    public UserLocationProvider getUserLocationProvider() {
+    public UserLocationAppProvider getUserLocationProvider() {
         return userLocationProvider;
     }
 
@@ -175,7 +177,7 @@ public class LocationManager implements LocationProvider {
             public void onResponse(Double[] response) {
                 int mode = MODE_USER;
                 ;
-                if (locationProvider instanceof SystemLocationProvider) {
+                if (locationProvider instanceof SystemLocationAppProvider) {
                     mode = MODE_SYSTEM;
                 }
                 intent.putExtra(LocationUpdateReceiver.EXTRA_MODE_KEY, mode);

@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -89,7 +90,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
                 params = new EventParameters();
             }
             params.setSortMethod("start_time");
-            getApiService().getEvents(params, EventsState.this);
+            LiveNationApplication.getLiveNationProxy().getEvents(params, EventsState.this);
         }
 
         @Override

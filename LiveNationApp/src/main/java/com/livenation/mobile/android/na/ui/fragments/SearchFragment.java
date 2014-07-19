@@ -16,7 +16,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
@@ -45,21 +44,19 @@ import java.util.List;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class SearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
+public class SearchFragment extends LiveNationFragment implements SearchForText, BasicApiCallback<List<SearchResult>>, ListView.OnItemClickListener {
     private final String[] SEARCH_INCLUDE_DEFAULT = new String[]{"venues", "artists", "events"};
     private String[] searchIncludes = SEARCH_INCLUDE_DEFAULT;
     private final String[] SEARCH_INCLUDE_ARTISTS_VENUES = new String[]{"venues", "artists"};
     private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
     private SearchAdapter adapter;
     private LiveNationApiService apiService;
-    private String unboundSearchTextBuffer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<SearchResult>());
-        LiveNationApplication.get().getConfigManager().bindApi(this);
         SearchActivity searchActivity = (SearchActivity) getActivity();
         switch (searchActivity.getSearchMode()) {
             case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE:
@@ -87,29 +84,10 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
-        if (null == apiService) {
-            unboundSearchTextBuffer = text;
-            return;
-        }
         AutoCompleteSearchParameters params = new AutoCompleteSearchParameters();
         params.setIncludes(searchIncludes);
         params.setSearchQuery(text);
-
-        apiService.autoCompleteSearch(params, this);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.apiService = apiService;
-        if (null != unboundSearchTextBuffer) {
-            searchFor(unboundSearchTextBuffer);
-            unboundSearchTextBuffer = null;
-        }
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
+        LiveNationApplication.getLiveNationProxy().autoCompleteSearch(params, this);
     }
 
     @Override

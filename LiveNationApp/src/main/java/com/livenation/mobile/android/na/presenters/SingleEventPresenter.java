@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
@@ -75,7 +76,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 
         @Override
         public void retrieveResult() {
-            getApiService().getSingleEvent(apiParams, SingleEventState.this);
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, SingleEventState.this);
         }
 
         @Override

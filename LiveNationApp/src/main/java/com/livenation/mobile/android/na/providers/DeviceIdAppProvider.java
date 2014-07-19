@@ -14,10 +14,10 @@ import java.util.UUID;
 /**
  * Created by elodieferrais on 4/11/14.
  */
-public class DeviceIdProviderImpl implements DeviceIdProvider {
+public class DeviceIdAppProvider implements com.livenation.mobile.android.platform.init.provider.DeviceIdProvider {
     private final Context appContext;
 
-    public DeviceIdProviderImpl(Context appContext) {
+    public DeviceIdAppProvider(Context appContext) {
         this.appContext = appContext;
     }
 

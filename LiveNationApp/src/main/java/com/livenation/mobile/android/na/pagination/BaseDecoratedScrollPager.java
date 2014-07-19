@@ -8,16 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-
-import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -37,7 +31,6 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
      */
     private final ViewGroup footerBugHack;
     protected EmptyListViewControl emptyView;
-    private RefreshBar refreshBar;
     private RefreshBarController refreshBarController;
     private SwipeRefreshLayout swipeRefreshLayout;
     private View.OnClickListener retryClickListener = new View.OnClickListener() {
@@ -112,32 +105,12 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
         }
     }
 
-    @Override
-    protected void fetch(final int offset, final int limit, final BasicApiCallback<List<TItemTypeOutput>> callback) {
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
-            @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                fetch(offset, limit, callback);
-            }
-
-            @Override
-            public void onApiServiceNotAvailable() {
-                callback.onErrorResponse(null);
-                if (emptyView != null) {
-                    emptyView.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-                }
-            }
-        });
-    }
-
-
     public void setEmptyView(final EmptyListViewControl emptyView) {
         this.emptyView = emptyView;
         this.emptyView.setRetryOnClickListener(retryClickListener);
     }
 
     public void setRefreshBarView(RefreshBar refreshBar) {
-        this.refreshBar = refreshBar;
         refreshBarController = new RefreshBarController(refreshBar, retryClickListener);
     }
 }
