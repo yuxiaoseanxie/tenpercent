@@ -2,9 +2,6 @@ package com.livenation.mobile.android.na.presenters.support;
 
 import android.os.Bundle;
 
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-
 import java.io.Serializable;
 
 /**
