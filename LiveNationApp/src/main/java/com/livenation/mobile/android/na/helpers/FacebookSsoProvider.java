@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -18,7 +19,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.platform.sso.ActivityProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
@@ -26,17 +26,13 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class FacebookSsoProvider extends ApiSsoProvider {
-    private final String PARAMETER_ACCESS_KEY = "facebook_access_token";
-
-    public FacebookSsoProvider(ActivityProvider activityProvider) {
-        super(activityProvider);
-    }
+    public final String PARAMETER_ACCESS_KEY = "facebook_access_token";
 
 
     //ApiSsoProvider interface --begin
 
     @Override
-    public void login(final boolean allowForeground, final SsoLoginCallback callback) {
+    public void login(final boolean allowForeground, final SsoLoginCallback callback, Activity activity) {
         Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
@@ -64,7 +60,7 @@ public class FacebookSsoProvider extends ApiSsoProvider {
             }
         });
 
-        final OpenRequest op = new OpenRequest(getActivity());
+        final OpenRequest op = new OpenRequest(activity);
         op.setCallback(statusCallback);
         op.setPermissions(Arrays.asList("email"));
         if (!allowForeground) {
@@ -77,8 +73,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void login(boolean allowForeground) {
-        login(allowForeground, null);
+    public void login(boolean allowForeground, Activity activity) {
+        login(allowForeground, null, activity);
     }
 
     @Override
@@ -102,8 +98,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         return PARAMETER_ACCESS_KEY;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
-        Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+        Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
     }
 
     //ApiSsoProvider interface --end

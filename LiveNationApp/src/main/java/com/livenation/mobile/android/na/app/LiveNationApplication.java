@@ -118,6 +118,7 @@ public class LiveNationApplication extends Application {
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
         accessTokenProvider = new AccessTokenAppProvider(this);
+        ssoManager = new SsoManager(new DummySsoProvider(), this);
 
         //Migration
         oldUserId = getIasId();
@@ -126,6 +127,7 @@ public class LiveNationApplication extends Application {
         //Start Library
         LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
         LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
+        LiveNationLibrary.setSsoProvider(ssoManager);
         Crashlytics.start(this);
         Analytics.initialize(this);
 
@@ -136,7 +138,6 @@ public class LiveNationApplication extends Application {
 
         instance = this;
 
-        ssoManager = new SsoManager(new DummySsoProvider());
 
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);

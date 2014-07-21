@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +22,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.platform.sso.ActivityProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 
@@ -39,12 +39,9 @@ class GoogleSsoProvider extends ApiSsoProvider {
     private final int RESOLVE_COUNT_MAX = 2;
     private int resolveCount;
 
-    public GoogleSsoProvider(ActivityProvider activityProvider) {
-        super(activityProvider);
-    }
 
     @Override
-    public void login(final boolean allowForeground, final SsoLoginCallback callback) {
+    public void login(final boolean allowForeground, final SsoLoginCallback callback, Activity activity) {
 
         GoogleSessionWorker googleSessionWorker = new GoogleSessionWorker(new SsoLoginCallback() {
             @Override
@@ -67,7 +64,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
                     callback.onLoginCanceled();
                 }
             }
-        }, allowForeground);
+        }, allowForeground, activity);
         this.googleApiClient = new GoogleApiClient.Builder(LiveNationApplication.get().getApplicationContext())
                 .addConnectionCallbacks(googleSessionWorker)
                 .addOnConnectionFailedListener(googleSessionWorker)
@@ -78,8 +75,8 @@ class GoogleSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void login(boolean allowForeground) {
-        login(allowForeground, null);
+    public void login(boolean allowForeground, Activity activity) {
+        login(allowForeground, null, activity);
     }
 
     @Override
@@ -108,7 +105,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == SsoActivity.RESULT_CANCELED) {
                 callback.onLoginCanceled();
@@ -188,10 +185,12 @@ class GoogleSsoProvider extends ApiSsoProvider {
             GoogleApiClient.OnConnectionFailedListener {
         final private SsoLoginCallback loginCallback;
         final private boolean allowForeground;
+        final Activity activity;
 
-        private GoogleSessionWorker(SsoLoginCallback loginCallback, boolean allowForeground) {
+        private GoogleSessionWorker(SsoLoginCallback loginCallback, boolean allowForeground, Activity activity) {
             this.loginCallback = loginCallback;
             this.allowForeground = allowForeground;
+            this.activity = activity;
         }
 
 
@@ -221,7 +220,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
             if (resolveCount < RESOLVE_COUNT_MAX) {
                 if (connectionResult.hasResolution()) {
                     try {
-                        getActivity().startIntentSenderForResult(
+                        activity.startIntentSenderForResult(
                                 connectionResult.getResolution().getIntentSender(), RC_SIGN_IN,
                                 null, 0, 0, 0);
                     } catch (SendIntentException e) {
@@ -230,7 +229,7 @@ class GoogleSsoProvider extends ApiSsoProvider {
                     }
                 } else {
                     Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                            connectionResult.getErrorCode(), getActivity(), RC_SIGN_IN,
+                            connectionResult.getErrorCode(), activity, RC_SIGN_IN,
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {

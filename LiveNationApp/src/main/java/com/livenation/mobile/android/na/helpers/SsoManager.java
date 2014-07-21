@@ -15,18 +15,13 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
-import com.livenation.mobile.android.platform.sso.ActivityProvider;
+import com.livenation.mobile.android.platform.init.provider.SsoProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Traits;
 
-import java.lang.ref.WeakReference;
-
-import static com.livenation.mobile.android.na.helpers.SsoManager.SSO_TYPE.SSO_FACEBOOK;
-
-public class SsoManager implements ActivityProvider {
+public class SsoManager implements SsoProvider {
     public enum SSO_TYPE {
         SSO_FACEBOOK(R.drawable.facebook_logo),
         SSO_GOOGLE(R.drawable.google_plus_logo),
@@ -43,8 +38,8 @@ public class SsoManager implements ActivityProvider {
         }
     }
 
-    private final FacebookSsoProvider facebookSso = new FacebookSsoProvider(this);
-    private final GoogleSsoProvider googleSso = new GoogleSsoProvider(this);
+    private final FacebookSsoProvider facebookSso = new FacebookSsoProvider();
+    private final GoogleSsoProvider googleSso = new GoogleSsoProvider();
     private final DummySsoProvider dummySso = new DummySsoProvider();
     private final PreferencePersistence persistance = new PreferencePersistence("auth_configuration");
     private final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
@@ -55,40 +50,28 @@ public class SsoManager implements ActivityProvider {
     private final String USER_EMAIL = "user_email";
     private final String USER_PIC_URL = "user_pic_url";
     private final ApiSsoProvider defaultProvider;
-    private WeakReference<Activity> weakActivity;
+    private final Context context;
 
-    public SsoManager(ApiSsoProvider defaultProvider) {
-
+    public SsoManager(ApiSsoProvider defaultProvider, Context context) {
+        this.context = context;
         this.defaultProvider = defaultProvider;
     }
 
-    /**public static SSO_TYPE getProviderId(ApiSsoProvider provider) {
-        if (provider instanceof FacebookSsoProvider) {
-            return SSO_FACEBOOK;
-        }
-        if (provider instanceof GoogleSsoProvider) {
-            return SSO_TYPE.SSO_GOOGLE;
-        }
-        if (provider instanceof DummySsoProvider) {
-            return SSO_TYPE.SSO_DUMMY;
-        }
-        throw new IllegalArgumentException("Unknown provider type");
-    }**/
+    public String getKey() {
+        return getConfiguredSsoProvider(context).getTokenKey();
+    }
 
     @Override
-    public Activity getActivity() {
-        if (null != weakActivity) {
-            return weakActivity.get();
+    public String getToken() {
+        AuthConfiguration authConfiguration = getAuthConfiguration(context);
+        String token = null;
+        if (authConfiguration != null) {
+            token = authConfiguration.getAccessToken();
         }
-        return null;
+        return token;
     }
 
-    public void setActivity(Activity activity) {
-        if (null == activity) return;
-        weakActivity = new WeakReference<Activity>(activity);
-    }
-
-    public void logout(final Context context, final SsoLogoutCallback callback) {
+    public void logout(final SsoLogoutCallback callback) {
         ApiSsoProvider ssoProvider = getConfiguredSsoProvider(context);
         if (ssoProvider != null) {
             ssoProvider.logout(new SsoLogoutCallback() {
@@ -112,8 +95,8 @@ public class SsoManager implements ActivityProvider {
         LiveNationApplication.getAccessTokenProvider().clear();
     }
 
-    public void login(final SSO_TYPE ssoType, final Context context, boolean allowForeground, final SsoLoginCallback callback) {
-        getSsoProvider(ssoType, context).login(allowForeground, new SsoLoginCallback() {
+    public void login(final SSO_TYPE ssoType, boolean allowForeground, final SsoLoginCallback callback, Activity activity) {
+        getSsoProvider(ssoType).login(allowForeground, new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
                 saveAuthConfiguration(ssoType, accessToken, context);
@@ -140,7 +123,7 @@ public class SsoManager implements ActivityProvider {
                     callback.onLoginCanceled();
                 }
             }
-        });
+        }, activity);
     }
 
     public ApiSsoProvider getConfiguredSsoProvider(Context context) {
@@ -149,7 +132,7 @@ public class SsoManager implements ActivityProvider {
             return defaultProvider;
         }
         SSO_TYPE ssoProviderId = authConfig.getSsoProviderId();
-        return getSsoProvider(ssoProviderId, context);
+        return getSsoProvider(ssoProviderId);
     }
 
     private void saveAuthConfiguration(SSO_TYPE ssoProviderId, String token, Context context) {
@@ -234,10 +217,7 @@ public class SsoManager implements ActivityProvider {
      * Since this Activity is stored in a weakreference, the SSOManager will not cause a
      * context/activity memory leak.
      */
-    public ApiSsoProvider getSsoProvider(SSO_TYPE ssoProviderId, Context context) {
-        if (context instanceof Activity) {
-            setActivity((Activity) context);
-        }
+    public ApiSsoProvider getSsoProvider(SSO_TYPE ssoProviderId) {
         switch (ssoProviderId) {
             case SSO_FACEBOOK:
                 return facebookSso;

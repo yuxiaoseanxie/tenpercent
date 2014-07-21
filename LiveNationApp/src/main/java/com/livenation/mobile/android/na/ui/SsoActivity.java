@@ -28,7 +28,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
             throw new IllegalArgumentException("Which SSO do you want me to sign in?!");
         }
 
-        LiveNationApplication.get().getSsoManager().login(providerId, SsoActivity.this, true, this);
+        LiveNationApplication.get().getSsoManager().login(providerId, true, this, this);
 
     }
 
@@ -36,8 +36,8 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (providerId != null) {
-            LiveNationApplication.getSsoManager().getSsoProvider(providerId, LiveNationApplication.get().getApplicationContext())
-                    .onActivityResult(requestCode, resultCode, data, this);
+            LiveNationApplication.getSsoManager().getSsoProvider(providerId)
+                    .onActivityResult(this, requestCode, resultCode, data, this);
         }
     }
 

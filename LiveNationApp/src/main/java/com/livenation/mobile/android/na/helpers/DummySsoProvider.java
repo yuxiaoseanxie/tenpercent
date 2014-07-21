@@ -10,12 +10,8 @@ import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 public class DummySsoProvider extends ApiSsoProvider {
 
 
-    public DummySsoProvider() {
-        super(null);
-    }
-
     @Override
-    public void login(boolean allowForeground, SsoLoginCallback callback) {
+    public void login(boolean allowForeground, SsoLoginCallback callback, Activity activity) {
         callback.onLoginSucceed(null, null);
     }
 
@@ -37,16 +33,11 @@ public class DummySsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
 
     }
 
     @Override
-    public Activity getActivity() {
-        return null;
-    }
-
-    @Override
-    public void login(boolean allowForeground) {
+    public void login(boolean allowForeground, Activity activity) {
     }
 }

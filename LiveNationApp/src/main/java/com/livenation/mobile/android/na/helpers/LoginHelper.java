@@ -31,7 +31,7 @@ public class LoginHelper {
         } else if (getAuthConfiguration().getTimestamp() != null && Math.abs(getAuthConfiguration().getTimestamp() - System.currentTimeMillis()) < USER_UPDATE_PERIOD) {
             callback.onResponse(false, getAuthConfiguration().getAccessToken(), getSavedUser());
         } else {
-            ssoManager.login(ssotype, applicationContext, false, new SsoLoginCallback() {
+            ssoManager.login(ssotype, false, new SsoLoginCallback() {
                 @Override
                 public void onLoginSucceed(String accessToken, User user) {
                     if (callback != null) {
@@ -45,7 +45,7 @@ public class LoginHelper {
 
                 @Override
                 public void onLoginFailed(final LiveNationError error) {
-                    ssoManager.logout(applicationContext, new SsoLogoutCallback() {
+                    ssoManager.logout(new SsoLogoutCallback() {
                         @Override
                         public void onLogoutSucceed() {
                             if (callback != null) {
@@ -66,7 +66,7 @@ public class LoginHelper {
                 public void onLoginCanceled() {
                     //Should never happen in this case
                 }
-            });
+            }, null);
         }
     }
 
@@ -83,8 +83,8 @@ public class LoginHelper {
     }
 
 
-    public static void logout(Context context, SsoLogoutCallback callback) {
-        ssoManager.logout(context, callback);
+    public static void logout(SsoLogoutCallback callback) {
+        ssoManager.logout(callback);
     }
 
     public static boolean isUsingFacebook(Context context) {

@@ -88,7 +88,7 @@ class AccessTokenConfig extends ApiBuilderElement<String> implements BasicApiCal
         SsoManager.AuthConfiguration ssoConfig = ssoManager.getAuthConfiguration(context);
         if (ssoConfig != null) {
             SsoManager.SSO_TYPE ssoProviderId = ssoConfig.getSsoProviderId();
-            String key = ssoManager.getSsoProvider(ssoProviderId, context).getTokenKey();
+            String key = ssoManager.getSsoProvider(ssoProviderId).getTokenKey();
             String value = ssoConfig.getAccessToken();
             return new Pair<String, String>(key, value);
         }
