@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginCallback {
     public static final String ARG_PROVIDER_ID = "provider_id";

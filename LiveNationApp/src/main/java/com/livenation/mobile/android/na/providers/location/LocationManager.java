@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.location;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.text.TextUtils;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
 import com.livenation.mobile.android.na.providers.UserLocationAppProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
@@ -28,18 +30,21 @@ public class LocationManager implements LocationProvider {
     public static final int MODE_USER = 1;
     public static final String LOCATION_MODE = "location_mode";
 
-    private final UserLocationAppProvider userLocationProvider = new UserLocationAppProvider();
+    private final UserLocationAppProvider userLocationProvider;
 
     private final LocationProvider systemLocationProvider = new SystemLocationAppProvider();
 
     private final LocationHistoryManager locationHistory;
 
     private LocationProvider locationProvider;
+    private final Context context;
 
     public LocationManager(Context context) {
         int locationMode = readLocationMode(context);
         applyLocationMode(locationMode);
+        userLocationProvider = new UserLocationAppProvider(context);
         locationHistory = new LocationHistoryManager(context);
+        this.context = context;
     }
 
     @Override
@@ -99,8 +104,8 @@ public class LocationManager implements LocationProvider {
     }
 
     private int readLocationMode(Context context) {
-        PreferencePersistence prefs = new PreferencePersistence("location");
-        String value = prefs.readString(LOCATION_MODE, context);
+        PreferencePersistence prefs = new PreferencePersistence("location", context);
+        String value = prefs.readString(LOCATION_MODE);
         if (TextUtils.isEmpty(value)) {
             return MODE_SYSTEM;
         }
@@ -108,8 +113,8 @@ public class LocationManager implements LocationProvider {
     }
 
     private void saveLocationMode(int mode, Context context) {
-        PreferencePersistence prefs = new PreferencePersistence("location");
-        prefs.write(LOCATION_MODE, Integer.valueOf(mode).toString(), context);
+        PreferencePersistence prefs = new PreferencePersistence("location", context);
+        prefs.write(LOCATION_MODE, Integer.valueOf(mode).toString());
     }
 
     public static interface GetCityCallback {

@@ -21,7 +21,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.Timer;
 import java.util.TimerTask;

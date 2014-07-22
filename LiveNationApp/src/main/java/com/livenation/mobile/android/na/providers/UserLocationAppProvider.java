@@ -3,8 +3,7 @@ package com.livenation.mobile.android.na.providers;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.PreferencePersistence;
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
@@ -14,12 +13,17 @@ import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 public class UserLocationAppProvider implements LocationProvider {
     private static final String KEY_LAT = "lat";
     private static final String KEY_LNG = "lng";
+    private final Context context;
+
+    public UserLocationAppProvider(Context context) {
+        this.context = context;
+    }
 
     @Override
     public void getLocation(ProviderCallback<Double[]> callback) {
-        PreferencePersistence prefs = new PreferencePersistence("user_location");
-        String latValue = prefs.readString(KEY_LAT, LiveNationApplication.get().getApplicationContext());
-        String lngValue = prefs.readString(KEY_LNG, LiveNationApplication.get().getApplicationContext());
+        PreferencePersistence prefs = new PreferencePersistence("user_location", context);
+        String latValue = prefs.readString(KEY_LAT);
+        String lngValue = prefs.readString(KEY_LNG);
         if (TextUtils.isEmpty(latValue) || TextUtils.isEmpty(lngValue)) {
             callback.onErrorResponse();
         } else {
@@ -28,9 +32,9 @@ public class UserLocationAppProvider implements LocationProvider {
     }
 
     public void setLocation(double lat, double lng, Context context) {
-        PreferencePersistence prefs = new PreferencePersistence("user_location");
-        prefs.write(KEY_LAT, Double.valueOf(lat).toString(), context);
-        prefs.write(KEY_LNG, Double.valueOf(lng).toString(), context);
+        PreferencePersistence prefs = new PreferencePersistence("user_location", context);
+        prefs.write(KEY_LAT, Double.valueOf(lat).toString());
+        prefs.write(KEY_LNG, Double.valueOf(lng).toString());
     }
 
 }

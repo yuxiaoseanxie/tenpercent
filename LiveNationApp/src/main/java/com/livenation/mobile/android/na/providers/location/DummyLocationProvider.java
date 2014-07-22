@@ -5,11 +5,10 @@
  * Copyright (C) 2014 Live Nation Labs. All rights reserved.
  * 
  */
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.location;
 
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
-import android.content.Context;
 
 /**
  * Dummy location provider to give a dummy location as a last resort.

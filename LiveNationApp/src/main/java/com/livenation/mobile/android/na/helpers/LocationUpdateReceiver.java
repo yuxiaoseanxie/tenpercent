@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.livenation.mobile.android.na.helpers.DummyLocationProvider;
-import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.providers.location.DummyLocationProvider;
+import com.livenation.mobile.android.na.providers.location.LocationManager;
 
 /**
  * Created by elodieferrais on 4/24/14.

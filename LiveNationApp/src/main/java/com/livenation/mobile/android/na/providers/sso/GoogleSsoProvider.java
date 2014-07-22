@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.sso;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -24,20 +24,23 @@ import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionar
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class GoogleSsoProvider extends ApiSsoProvider {
-    @SuppressWarnings("unused")
+public class GoogleSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {
     private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
     private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
-    private final String PARAMETER_ACCESS_KEY = "google_plus_code";
     private GoogleApiClient googleApiClient;
     private final int RC_SIGN_IN = 6613;
     private final int RESOLVE_COUNT_MAX = 2;
     private int resolveCount;
+
+    public GoogleSsoProvider(Context context) {
+        super(context);
+    }
 
 
     @Override
@@ -46,6 +49,8 @@ class GoogleSsoProvider extends ApiSsoProvider {
         GoogleSessionWorker googleSessionWorker = new GoogleSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
+                saveAuthConfiguration(getType(), accessToken);
+                saveUser(user, getType());
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -53,6 +58,8 @@ class GoogleSsoProvider extends ApiSsoProvider {
 
             @Override
             public void onLoginFailed(LiveNationError error) {
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginFailed(error);
                 }
@@ -60,6 +67,8 @@ class GoogleSsoProvider extends ApiSsoProvider {
 
             @Override
             public void onLoginCanceled() {
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginCanceled();
                 }
@@ -90,17 +99,17 @@ class GoogleSsoProvider extends ApiSsoProvider {
             Plus.AccountApi.revokeAccessAndDisconnect(googleApiClient);
             Plus.AccountApi.clearDefaultAccount(googleApiClient);
         }
+
+        removeAuthConfiguration();
+        removeUser();
+
         if (callback != null) {
             callback.onLogoutSucceed();
         }
     }
 
     @Override
-    public String getTokenKey() {
-        return PARAMETER_ACCESS_KEY;
-    }
-
-    public SsoManager.SSO_TYPE getId() {
+    public SsoManager.SSO_TYPE getType() {
         return SsoManager.SSO_TYPE.SSO_GOOGLE;
     }
 

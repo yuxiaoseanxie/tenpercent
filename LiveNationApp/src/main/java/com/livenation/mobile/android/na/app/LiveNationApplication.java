@@ -32,12 +32,13 @@ import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.DummySsoProvider;
-import com.livenation.mobile.android.na.helpers.LocationManager;
+import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
+import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -53,12 +54,13 @@ import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
 import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
@@ -86,6 +88,7 @@ public class LiveNationApplication extends Application {
     private static LiveNationProxy liveNationProxy;
     private static EnvironmentAppProvider environmentProvider;
     private static AccessTokenAppProvider accessTokenProvider;
+    private static SsoProviderPersistence ssoProviderPersistence;
 
     //Migration
     private String oldUserId;
@@ -118,7 +121,14 @@ public class LiveNationApplication extends Application {
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
         accessTokenProvider = new AccessTokenAppProvider(this);
-        ssoManager = new SsoManager(new DummySsoProvider(), this);
+        ssoManager = new SsoManager(this);
+        ssoManager.addSsoProvider(new FacebookSsoProvider(this));
+        ssoManager.addSsoProvider(new GoogleSsoProvider(this));
+        ssoProviderPersistence = new SsoProviderPersistence(this);
+        SsoManager.AuthConfiguration configuration = ssoProviderPersistence.getAuthConfiguration();
+        if (configuration !=  null) {
+            ssoManager.setAuthConfiguration(configuration);
+        }
 
         //Migration
         oldUserId = getIasId();
@@ -165,7 +175,6 @@ public class LiveNationApplication extends Application {
         setupNotifications();
         setupTicketing();
         setupInternetStateReceiver();
-
 
 
         //Analytics
@@ -336,6 +345,10 @@ public class LiveNationApplication extends Application {
 
     public static AccessTokenAppProvider getAccessTokenProvider() {
         return accessTokenProvider;
+    }
+
+    public static SsoProviderPersistence getSsoProviderPersistence() {
+        return ssoProviderPersistence;
     }
 
     private String getIasId() {

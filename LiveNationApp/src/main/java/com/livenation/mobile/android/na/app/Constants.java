@@ -64,13 +64,20 @@ public class Constants {
         public static final String PREF_NAME = "TM_USER_PREF";
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
         public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
+        //Authentification
+        public static final String AUTHENTIFICATION_NAME = "auth_configuration";
+        public static final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
+        public static final String PARAMETER_TIMESTAMP = "timestamp";
+        public static final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
+        public static final String USER_ID = "user_id";
+        public static final String USER_NAME = "user_name";
+        public static final String USER_EMAIL = "user_email";
+        public static final String USER_PIC_URL = "user_pic_url";
 
     }
 
     public class BroadCastReceiver {
-        public static final String LOGOUT = "logout";
         public static final String MUSIC_LIBRARY_UPDATE = "music_library_update";
-        public static final String LOGIN = "login";
     }
 
 }

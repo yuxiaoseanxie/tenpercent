@@ -1,9 +1,10 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.location;
 
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 import java.util.ArrayList;
@@ -18,8 +19,10 @@ public class LocationHistoryManager {
     private static final String PREVIOUS_LOCATION_KEY = "previous_location";
     private LocationHistoryList locations;
     private ObjectMapper mapper = new ObjectMapper();
+    private final Context context;
 
     public LocationHistoryManager(Context context) {
+        this.context = context;
         restoreState(context);
     }
 
@@ -35,16 +38,16 @@ public class LocationHistoryManager {
     private void saveState(Context context) {
         try {
             String json = mapper.writeValueAsString(locations.items());
-            PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS);
-            prefs.write(PREVIOUS_LOCATION_KEY, json, context);
+            PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS, context);
+            prefs.write(PREVIOUS_LOCATION_KEY, json);
         } catch (Exception ignored) {
         }
     }
 
     private void restoreState(Context context) {
         try {
-            PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS);
-            String json = prefs.readString(PREVIOUS_LOCATION_KEY, context);
+            PreferencePersistence prefs = new PreferencePersistence(PREFS_PREVIOUS_LOCATIONS, context);
+            String json = prefs.readString(PREVIOUS_LOCATION_KEY);
             JavaType type = mapper.getTypeFactory().
                     constructCollectionType(List.class, City.class);
             List<City> cities = mapper.readValue(json, type);

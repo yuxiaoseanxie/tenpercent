@@ -3,10 +3,9 @@ package com.livenation.mobile.android.na.notifications;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.BuildConfig;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.PreferencePersistence;
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -30,16 +29,16 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
     //region Persistence
 
     private PreferencePersistence getPreferences() {
-        return new PreferencePersistence("notifications");
+        return new PreferencePersistence("notifications", LiveNationApplication.get().getApplicationContext());
     }
 
     private void saveApid(String apid) {
         Log.i(getClass().getName(), "saved apid:" + apid);
-        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, LiveNationApplication.get());
+        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid);
     }
 
     private String getSavedApid() {
-        return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
+        return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID);
     }
 
     //endregion

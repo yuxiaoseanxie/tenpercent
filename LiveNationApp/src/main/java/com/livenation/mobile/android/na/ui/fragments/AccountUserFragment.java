@@ -19,17 +19,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
-import com.livenation.mobile.android.na.helpers.sso.SsoUpdatedUserCallback;
+import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.utils.BitmapRequest;
 import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class AccountUserFragment extends LiveNationFragment implements
         AccountUserView, Response.Listener<Bitmap>, Response.ErrorListener {
@@ -55,7 +54,7 @@ public class AccountUserFragment extends LiveNationFragment implements
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
         image = (ImageView) view.findViewById(R.id.fragment_account_user_image);
 
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(logoutBroadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(logoutBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
 
         //User cached data
         User user = LoginHelper.getSavedUser();
@@ -88,7 +87,19 @@ public class AccountUserFragment extends LiveNationFragment implements
 
         name.setText(user.getDisplayName());
         email.setText(user.getEmail());
-        email.setCompoundDrawablesWithIntrinsicBounds(authConfiguration.getSsoProviderId().getLogoResId(), 0, 0, 0);
+        int logoId = -1;
+        if (authConfiguration.getSsoProviderId() != null) {
+            switch (authConfiguration.getSsoProviderId()) {
+                case SSO_FACEBOOK:
+                    logoId = R.drawable.facebook_logo;
+                    break;
+                case SSO_GOOGLE:
+                    logoId = R.drawable.google_plus_logo;
+                    break;
+            }
+
+        }
+        email.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
 
         bitmapRequest = new BitmapRequest(Request.Method.GET, user.getUrl(), this, this);
         requestQueue.add(bitmapRequest);

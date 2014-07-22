@@ -6,7 +6,7 @@
  * 
  */
 
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.location;
 
 import android.content.Context;
 import android.location.Criteria;

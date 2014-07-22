@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.sso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +21,15 @@ import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionar
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class FacebookSsoProvider extends ApiSsoProvider {
-    public final String PARAMETER_ACCESS_KEY = "facebook_access_token";
-
+public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {
+    public FacebookSsoProvider(Context context) {
+        super(context);
+    }
 
     //ApiSsoProvider interface --begin
 
@@ -37,6 +39,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
+                saveAuthConfiguration(getType(), accessToken);
+                saveUser(user, getType());
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -47,6 +51,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
                 Context context = LiveNationApplication.get().getApplicationContext();
                 Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem), Toast.LENGTH_SHORT);
                 toast.show();
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginFailed(error);
                 }
@@ -54,6 +60,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
             @Override
             public void onLoginCanceled() {
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginCanceled();
                 }
@@ -88,14 +96,16 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         if (session != null) {
             session.closeAndClearTokenInformation();
         }
+        removeAuthConfiguration();
+        removeUser();
         if (callback != null) {
             callback.onLogoutSucceed();
         }
     }
 
     @Override
-    public String getTokenKey() {
-        return PARAMETER_ACCESS_KEY;
+    public SsoManager.SSO_TYPE getType() {
+        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {

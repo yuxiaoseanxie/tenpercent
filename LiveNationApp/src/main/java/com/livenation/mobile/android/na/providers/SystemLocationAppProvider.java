@@ -3,8 +3,8 @@ package com.livenation.mobile.android.na.providers;
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.DeviceLocationProvider;
-import com.livenation.mobile.android.na.helpers.DummyLocationProvider;
+import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
+import com.livenation.mobile.android.na.providers.location.DummyLocationProvider;
 import com.livenation.mobile.android.na.helpers.PlayServicesLocationProvider;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;

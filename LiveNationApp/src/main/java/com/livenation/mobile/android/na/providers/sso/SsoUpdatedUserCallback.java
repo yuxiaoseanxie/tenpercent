@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers.sso;
+package com.livenation.mobile.android.na.providers.sso;
 
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;

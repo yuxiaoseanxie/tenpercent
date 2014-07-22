@@ -3,35 +3,38 @@ package com.livenation.mobile.android.na.helpers;
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.sso.SsoUpdatedUserCallback;
+import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
+import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 /**
  * Created by elodieferrais on 5/8/14.
  */
 public class LoginHelper {
     private static int USER_UPDATE_PERIOD = 1000 * 60 * 5;
+    private static SsoProviderPersistence ssoProviderPersistence = LiveNationApplication.getSsoProviderPersistence();
     private static SsoManager ssoManager = LiveNationApplication.getSsoManager();
     private static Context applicationContext = LiveNationApplication.get().getApplicationContext();
 
     public static User getSavedUser() {
-        return ssoManager.readUser(applicationContext);
+        return ssoProviderPersistence.readUser();
     }
 
     public static void getUpdatedUser(final SsoUpdatedUserCallback callback) {
-        SsoManager.SSO_TYPE ssotype = getAuthConfiguration().getSsoProviderId();
-        if (ssotype.equals(SsoManager.SSO_TYPE.SSO_DUMMY)) {
+        SsoManager.AuthConfiguration authConfiguration = getAuthConfiguration();
+        if (authConfiguration == null) {
             if (callback != null) {
                 callback.onResponse(false, null, null);
             }
             return;
-        } else if (getAuthConfiguration().getTimestamp() != null && Math.abs(getAuthConfiguration().getTimestamp() - System.currentTimeMillis()) < USER_UPDATE_PERIOD) {
+        } else if (authConfiguration.getTimestamp() != null && Math.abs(authConfiguration.getTimestamp() - System.currentTimeMillis()) < USER_UPDATE_PERIOD) {
             callback.onResponse(false, getAuthConfiguration().getAccessToken(), getSavedUser());
         } else {
-            ssoManager.login(ssotype, false, new SsoLoginCallback() {
+            ssoManager.login(authConfiguration.getSsoProviderId(), false, new SsoLoginCallback() {
                 @Override
                 public void onLoginSucceed(String accessToken, User user) {
                     if (callback != null) {
@@ -71,15 +74,15 @@ public class LoginHelper {
     }
 
     public static SsoManager.AuthConfiguration getAuthConfiguration() {
-        return ssoManager.getAuthConfiguration(applicationContext);
+        return ssoProviderPersistence.getAuthConfiguration();
     }
 
     public static boolean isLogout() {
-        return ssoManager.readUser(applicationContext) == null;
+        return ssoProviderPersistence.readUser() == null;
     }
 
     public static boolean isLogin() {
-        return ssoManager.readUser(applicationContext) != null;
+        return ssoProviderPersistence.readUser() != null;
     }
 
 
@@ -88,13 +91,13 @@ public class LoginHelper {
     }
 
     public static boolean isUsingFacebook(Context context) {
-        SsoManager.AuthConfiguration auth = LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        SsoManager.AuthConfiguration auth = ssoProviderPersistence.getAuthConfiguration();
         return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_FACEBOOK);
     }
 
 
     public static boolean isUsingGoogle(Context context) {
-        SsoManager.AuthConfiguration auth = LiveNationApplication.get().getSsoManager().getAuthConfiguration(context);
+        SsoManager.AuthConfiguration auth = ssoProviderPersistence.getAuthConfiguration();
         return (auth != null && auth.getSsoProviderId() == SsoManager.SSO_TYPE.SSO_GOOGLE);
     }
 }
