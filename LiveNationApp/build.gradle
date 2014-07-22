@@ -87,9 +87,6 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
-    sourceSets {
-        androidTest.setRoot('src/test')
-    }
 
     buildTypes {
         release {
