@@ -345,13 +345,13 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         setOnboardingAlreadyDisplay();
     }
 
-    private interface AnimationEndListener {
-        public void onAnimationEnd(Animation animation);
-    }
-
     @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_ONBOARDING;
+    }
+
+    private interface AnimationEndListener {
+        public void onAnimationEnd(Animation animation);
     }
 }
 

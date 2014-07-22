@@ -10,7 +10,7 @@ import com.livenation.mobile.android.na.providers.location.LocationManager;
 /**
  * Created by elodieferrais on 4/24/14.
  */
-public class LocationUpdateReceiver extends BroadcastReceiver{
+public class LocationUpdateReceiver extends BroadcastReceiver {
 
     public static final String EXTRA_MODE_KEY = "mode";
     public static final String EXTRA_LNG_KEY = "longitude";
@@ -33,5 +33,7 @@ public class LocationUpdateReceiver extends BroadcastReceiver{
 
     public static interface LocationUpdateListener {
         public void onLocationUpdated(int mode, double lat, double lng);
-    };
+    }
+
+    ;
 }

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.platform.init.provider.DeviceIdProvider;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.UUID;

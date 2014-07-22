@@ -33,9 +33,9 @@ import java.util.regex.Pattern;
 public class GoogleSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {
     private static final String CLIENT_ID = "898638177791-oj5jfa34nqjs7abh8pu5p3j9li1momi5.apps.googleusercontent.com";
     private static final String PLUS_LOGIN_SCOPE = "https://www.googleapis.com/auth/plus.login";
-    private GoogleApiClient googleApiClient;
     private final int RC_SIGN_IN = 6613;
     private final int RESOLVE_COUNT_MAX = 2;
+    private GoogleApiClient googleApiClient;
     private int resolveCount;
 
     public GoogleSsoProvider(Context context) {
@@ -192,9 +192,9 @@ public class GoogleSsoProvider extends SsoProviderPersistence implements ApiSsoP
 
     private class GoogleSessionWorker implements GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
+        final Activity activity;
         final private SsoLoginCallback loginCallback;
         final private boolean allowForeground;
-        final Activity activity;
 
         private GoogleSessionWorker(SsoLoginCallback loginCallback, boolean allowForeground, Activity activity) {
             this.loginCallback = loginCallback;

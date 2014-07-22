@@ -35,9 +35,8 @@ public class LocationManager implements LocationProvider {
     private final LocationProvider systemLocationProvider = new SystemLocationAppProvider();
 
     private final LocationHistoryManager locationHistory;
-
-    private LocationProvider locationProvider;
     private final Context context;
+    private LocationProvider locationProvider;
 
     public LocationManager(Context context) {
         int locationMode = readLocationMode(context);
@@ -117,6 +116,29 @@ public class LocationManager implements LocationProvider {
         prefs.write(LOCATION_MODE, Integer.valueOf(mode).toString());
     }
 
+    private void sendBroadcastForLocation() {
+        final Intent intent = new Intent(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER);
+        locationProvider.getLocation(new ProviderCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                int mode = MODE_USER;
+                ;
+                if (locationProvider instanceof SystemLocationAppProvider) {
+                    mode = MODE_SYSTEM;
+                }
+                intent.putExtra(LocationUpdateReceiver.EXTRA_MODE_KEY, mode);
+                intent.putExtra(LocationUpdateReceiver.EXTRA_LAT_KEY, response[0]);
+                intent.putExtra(LocationUpdateReceiver.EXTRA_LNG_KEY, response[1]);
+                LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).sendBroadcast(intent);
+            }
+
+            @Override
+            public void onErrorResponse() {
+            }
+        });
+
+    }
+
     public static interface GetCityCallback {
         void onGetCity(City city);
 
@@ -173,28 +195,5 @@ public class LocationManager implements LocationProvider {
                 callback.onGetCityFailure(lat, lng);
             }
         }
-    }
-
-    private void sendBroadcastForLocation() {
-        final Intent intent = new Intent(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER);
-        locationProvider.getLocation(new ProviderCallback<Double[]>() {
-            @Override
-            public void onResponse(Double[] response) {
-                int mode = MODE_USER;
-                ;
-                if (locationProvider instanceof SystemLocationAppProvider) {
-                    mode = MODE_SYSTEM;
-                }
-                intent.putExtra(LocationUpdateReceiver.EXTRA_MODE_KEY, mode);
-                intent.putExtra(LocationUpdateReceiver.EXTRA_LAT_KEY, response[0]);
-                intent.putExtra(LocationUpdateReceiver.EXTRA_LNG_KEY, response[1]);
-                LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).sendBroadcast(intent);
-            }
-
-            @Override
-            public void onErrorResponse() {
-            }
-        });
-
     }
 }

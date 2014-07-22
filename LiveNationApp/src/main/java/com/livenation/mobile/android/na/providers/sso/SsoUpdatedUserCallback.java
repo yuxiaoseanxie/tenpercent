@@ -8,5 +8,6 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
  */
 public interface SsoUpdatedUserCallback {
     void onResponse(boolean hasChanged, String accessToken, User user);
+
     void onErrorResponse(LiveNationError error);
 }

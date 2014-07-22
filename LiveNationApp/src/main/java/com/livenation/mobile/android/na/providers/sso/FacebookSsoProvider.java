@@ -33,6 +33,26 @@ public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSs
 
     //ApiSsoProvider interface --begin
 
+    private static User getAppUser(GraphUser graphUser) {
+        Map<String, Object> map = graphUser.asMap();
+
+        String id = graphUser.getId();
+        String email = null;
+        if (map.get("email") != null) {
+            email = map.get("email").toString();
+        }
+        String name = graphUser.getName();
+        String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
+
+        User user = new User();
+        user.setId(graphUser.getId());
+        user.setDisplayName(name);
+        user.setEmail(email);
+        user.setUrl(pictureUrl);
+
+        return user;
+    }
+
     @Override
     public void login(final boolean allowForeground, final SsoLoginCallback callback, Activity activity) {
         Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
@@ -108,17 +128,15 @@ public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSs
         return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
 
+    //ApiSsoProvider interface --end
+
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
         Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
     }
 
-    //ApiSsoProvider interface --end
-
-
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
-
 
     private class FacebookSessionWorker implements Session.StatusCallback {
         final private SsoLoginCallback loginCallback;
@@ -168,25 +186,5 @@ public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSs
                 }
             }).executeAsync();
         }
-    }
-
-    private static User getAppUser(GraphUser graphUser) {
-        Map<String, Object> map = graphUser.asMap();
-
-        String id = graphUser.getId();
-        String email = null;
-        if (map.get("email") != null) {
-            email = map.get("email").toString();
-        }
-        String name = graphUser.getName();
-        String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
-
-        User user = new User();
-        user.setId(graphUser.getId());
-        user.setDisplayName(name);
-        user.setEmail(email);
-        user.setUrl(pictureUrl);
-
-        return user;
     }
 }

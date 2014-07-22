@@ -32,13 +32,9 @@ import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
-import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
-import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
-import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
@@ -53,6 +49,10 @@ import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
 import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
+import com.livenation.mobile.android.na.providers.location.LocationManager;
+import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -73,6 +73,12 @@ import com.urbanairship.push.PushManager;
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
     private static SsoManager ssoManager;
+    private static LocationManager locationProvider;
+    private static ProviderManager providerManager;
+    private static LiveNationProxy liveNationProxy;
+    private static EnvironmentAppProvider environmentProvider;
+    private static AccessTokenAppProvider accessTokenProvider;
+    private static SsoProviderPersistence ssoProviderPersistence;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private SingleEventPresenter singleEventPresenter;
@@ -83,13 +89,6 @@ public class LiveNationApplication extends Application {
     private AccountPresenters accountPresenters;
     private FavoritesPresenter favoritesPresenter;
     private InboxStatusPresenter inboxStatusPresenter;
-    private static LocationManager locationProvider;
-    private static ProviderManager providerManager;
-    private static LiveNationProxy liveNationProxy;
-    private static EnvironmentAppProvider environmentProvider;
-    private static AccessTokenAppProvider accessTokenProvider;
-    private static SsoProviderPersistence ssoProviderPersistence;
-
     //Migration
     private String oldUserId;
     private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
@@ -112,6 +111,30 @@ public class LiveNationApplication extends Application {
         return ssoManager;
     }
 
+    public static LocationManager getLocationProvider() {
+        return locationProvider;
+    }
+
+    public static ProviderManager getProviderManager() {
+        return providerManager;
+    }
+
+    public static LiveNationProxy getLiveNationProxy() {
+        return liveNationProxy;
+    }
+
+    public static EnvironmentAppProvider getEnvironmentProvider() {
+        return environmentProvider;
+    }
+
+    public static AccessTokenAppProvider getAccessTokenProvider() {
+        return accessTokenProvider;
+    }
+
+    public static SsoProviderPersistence getSsoProviderPersistence() {
+        return ssoProviderPersistence;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -126,7 +149,7 @@ public class LiveNationApplication extends Application {
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);
         SsoManager.AuthConfiguration configuration = ssoProviderPersistence.getAuthConfiguration();
-        if (configuration !=  null) {
+        if (configuration != null) {
             ssoManager.setAuthConfiguration(configuration);
         }
 
@@ -325,30 +348,6 @@ public class LiveNationApplication extends Application {
 
     public void setIsMusicSync(boolean isMusicSync) {
         this.isMusicSync = isMusicSync;
-    }
-
-    public static LocationManager getLocationProvider() {
-        return locationProvider;
-    }
-
-    public static ProviderManager getProviderManager() {
-        return providerManager;
-    }
-
-    public static LiveNationProxy getLiveNationProxy() {
-        return liveNationProxy;
-    }
-
-    public static EnvironmentAppProvider getEnvironmentProvider() {
-        return environmentProvider;
-    }
-
-    public static AccessTokenAppProvider getAccessTokenProvider() {
-        return accessTokenProvider;
-    }
-
-    public static SsoProviderPersistence getSsoProviderPersistence() {
-        return ssoProviderPersistence;
     }
 
     private String getIasId() {

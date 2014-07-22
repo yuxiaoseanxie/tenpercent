@@ -2,8 +2,8 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import com.livenation.mobile.android.na.ui.TestActivity;
 
 /**
  * Created by elodieferrais on 3/31/14.

@@ -17,16 +17,16 @@ public class EnvironmentAppProvider implements com.livenation.mobile.android.pla
         this.environmentPreferences = new EnvironmentPreferences(context);
     }
 
+    private static void clear() {
+        environment = null;
+    }
+
     @Override
     public Environment getEnvironment() {
         if (environment == null) {
             environment = environmentPreferences.getConfiguredEnvironment();
         }
         return environment;
-    }
-
-    private static void clear() {
-        environment = null;
     }
 
     public static void setEnvironment(Environment environment) {

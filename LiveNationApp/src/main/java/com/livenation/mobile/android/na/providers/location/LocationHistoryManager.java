@@ -17,9 +17,9 @@ import java.util.List;
 public class LocationHistoryManager {
     private static final String PREFS_PREVIOUS_LOCATIONS = "previous_locations";
     private static final String PREVIOUS_LOCATION_KEY = "previous_location";
+    private final Context context;
     private LocationHistoryList locations;
     private ObjectMapper mapper = new ObjectMapper();
-    private final Context context;
 
     public LocationHistoryManager(Context context) {
         this.context = context;
