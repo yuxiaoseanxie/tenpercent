@@ -46,7 +46,7 @@ import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.segment.android.models.Props;
 
 import net.hockeyapp.android.CrashManager;

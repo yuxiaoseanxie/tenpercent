@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,7 +34,7 @@ import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.init.provider.ProviderManager;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
@@ -376,7 +378,13 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
                     Environment environment = Environment.values()[i];
                     setEnvironment(environment);
                     environmentItem.setValue(environment.toString());
-                    actionsAdapter.notifyDataSetChanged();
+
+                    Intent mStartActivity = new Intent(DebugActivity.this, OnBoardingActivity.class);
+                    int mPendingIntentId = 123456;
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(DebugActivity.this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                    System.exit(0);
                 }
             });
 

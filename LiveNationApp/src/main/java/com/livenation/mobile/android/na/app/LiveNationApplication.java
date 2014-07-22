@@ -58,8 +58,7 @@ import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
-import com.livenation.mobile.android.platform.init.provider.ProviderManager;
-import com.livenation.mobile.android.platform.setup.LivenationLib;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
@@ -161,6 +160,8 @@ public class LiveNationApplication extends Application {
         LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
         LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
         LiveNationLibrary.setSsoProvider(ssoManager);
+        LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
+
         Crashlytics.start(this);
         Analytics.initialize(this);
 
@@ -188,10 +189,6 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
-
-        //Start and setup the library
-        LivenationLib.start();
-        LivenationLib.setErrorTracker(new LibraryErrorTracker());
 
         YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
