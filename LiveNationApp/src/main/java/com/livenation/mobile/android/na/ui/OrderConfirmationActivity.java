@@ -50,8 +50,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private TextView orderSeatText;
     private TextView orderAccountText;
 
-    private Button detailsButton;
-
     //region Lifecycle
 
     @Override
@@ -72,7 +70,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_account);
 
-        this.detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
+        Button detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
         detailsButton.setOnClickListener(new DetailsClickListener());
 
         if (null == savedInstanceState) {
@@ -245,6 +243,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             // TODO: Implement second half of Analytics
             Properties charges = Analytics.calculateChargesForCart(getCart());
             Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+
+            boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
+            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket? "resale" : "primary"));
         }
     }
 
