@@ -274,6 +274,13 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             upsellRevenueProps.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
             LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_TOTAL, AnalyticConstants.CATEGORY_CHECKOUT, upsellRevenueProps);
             Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+            Props typeProps = getPreBuiltCartProps();
+            String resale  = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isRelase) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            typeProps.put(AnalyticConstants.PROP_TYPE, resale);
+            LiveNationAnalytics.track(AnalyticConstants.PROP_TYPE, AnalyticConstants.CATEGORY_CHECKOUT, typeProps);
 
             boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
             Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket? "resale" : "primary"));
