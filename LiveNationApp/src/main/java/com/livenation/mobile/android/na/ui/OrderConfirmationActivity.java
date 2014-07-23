@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -121,8 +122,13 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private void displayDetails() {
         if (getCart() != null) {
             orderNumberText.setText(getCart().getDisplayOrderID());
-            if (getCart().getOrderSummary() != null && !TextUtils.isEmpty(getCart().getOrderSummary().getSeats())) {
-                orderSeatText.setText(getCart().getOrderSummary().getSeats());
+            if (getCart().getOrderSummary() != null) {
+                if (!TextUtils.isEmpty(getCart().getOrderSummary().getSeats()))
+                    orderSeatText.setText(getCart().getOrderSummary().getSeats());
+                else if (!TextUtils.isEmpty(getCart().getOrderSummary().getSection()))
+                    orderSeatText.setText(getCart().getOrderSummary().getSection());
+                else
+                    orderSeatText.setText(R.string.data_missing_placeholder);
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
             }
@@ -234,6 +240,12 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackScreenLoad() {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+
+        if (getCart() != null) {
+            // TODO: Implement second half of Analytics
+            Properties charges = Analytics.calculateChargesForCart(getCart());
+            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+        }
     }
 
     private void trackFullDetailsTap() {
