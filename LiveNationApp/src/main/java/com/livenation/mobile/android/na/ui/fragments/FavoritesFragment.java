@@ -8,9 +8,12 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.FavoritesView;
@@ -34,19 +38,22 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.platform.Constants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class FavoritesFragment extends LiveNationFragment implements FavoritesView, TabHost.OnTabChangeListener {
+public class FavoritesFragment extends LiveNationFragment implements TabHost.OnTabChangeListener {
     public static final String ARG_SHOW_TAB = "show_tab";
     public static final int ARG_VALUE_ARTISTS = 0;
     public static final int ARG_VALUE_VENUES = 1;
@@ -61,6 +68,12 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     private EmptyListViewControl artistEmptyView;
     private EmptyListViewControl venueEmptyView;
     private Bundle instanceState;
+    private BroadcastReceiver updateBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            syncFavorites();
+        }
+    };
     private ListView.OnItemClickListener artistListClickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -113,6 +126,9 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
         artistAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
         venueAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
+
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(updateBroadcastReceiver, new IntentFilter(Constants.FAVORITE_UPDATE_INTENT_FILTER));
+
         setRetainInstance(true);
     }
 
@@ -180,6 +196,8 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             applyInstanceState(instanceState);
         }
 
+        syncFavorites();
+
         return result;
     }
 
@@ -197,15 +215,16 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
         tabHost.setCurrentTab(currentTab);
     }
 
-    @Override
-    public void setFavorites(List<Favorite> favorites) {
-        Collections.sort(favorites, favoriteComparator);
+    public void syncFavorites() {
+        Set<Favorite> favorites = LiveNationLibrary.getFavoritesHelper().getFavorites();
+        List<Favorite> favs = new ArrayList<Favorite>(favorites);
+        Collections.sort(favs, favoriteComparator);
 
-        List<Favorite> artistFavorites = filterFavorites(favorites, "artist");
+        List<Favorite> artistFavorites = filterFavorites(favs, "artist");
         artistAdapter.clear();
         artistAdapter.addAll(artistFavorites);
 
-        List<Favorite> venueFavorites = filterFavorites(favorites, "venue");
+        List<Favorite> venueFavorites = filterFavorites(favs, "venue");
         venueAdapter.clear();
         venueAdapter.addAll(venueFavorites);
 
@@ -348,5 +367,10 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
                 return text;
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(updateBroadcastReceiver);
     }
 }
