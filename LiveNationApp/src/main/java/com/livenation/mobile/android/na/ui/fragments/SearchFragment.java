@@ -177,15 +177,18 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             holder.getType().setText(searchResult.getObjectType().toLowerCase());
 
             holder.getCheckBox().setVisibility(View.VISIBLE);
+            Favorite favorite = new Favorite();
+            favorite.setName(searchResult.getName());
+            favorite.setId(searchResult.getNumericalId());
             switch (searchResult.getSearchResultType()) {
                 case Artist: {
-                    int favoriteTypeId = Favorite.FAVORITE_ARTIST;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
+                    favorite.setIntType(Favorite.FAVORITE_ARTIST);
+                    holder.getCheckBox().bindToFavorite(favorite, AnalyticsCategory.SEARCH);
                     break;
                 }
                 case Venue: {
-                    int favoriteTypeId = Favorite.FAVORITE_VENUE;
-                    holder.getCheckBox().bindToFavorite(favoriteTypeId, searchResult.getName(), searchResult.getNumericalId(), getFavoritesPresenter(), AnalyticsCategory.SEARCH);
+                    favorite.setIntType(Favorite.FAVORITE_VENUE);
+                    holder.getCheckBox().bindToFavorite(favorite, AnalyticsCategory.SEARCH);
                     break;
                 }
                 default:

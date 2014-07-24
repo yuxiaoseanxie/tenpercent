@@ -1,31 +1,27 @@
 package com.livenation.mobile.android.na.ui.support;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoriteAddView;
-import com.livenation.mobile.android.na.presenters.views.FavoriteRemoveView;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.segment.android.models.Props;
 
 public class OnFavoriteClickListener {
-    public static class OnVenueFavoriteClick extends AbstractOnFavoriteClick {
+    public static class OnVenueFavoriteClick extends OnFavoriteClick {
         private final Venue venue;
 
-        public OnVenueFavoriteClick(Venue venue, FavoritesPresenter favoritesPresenter, Activity activity, AnalyticsCategory category) {
-            super(favoritesPresenter, activity, category);
+        public OnVenueFavoriteClick(Venue venue, AnalyticsCategory category) {
+            super(null, category);
             this.venue = venue;
         }
 
+        @Override
         public Favorite getFavorite() {
             Favorite favorite = new Favorite();
             favorite.setName(venue.getName());
@@ -35,94 +31,36 @@ public class OnFavoriteClickListener {
         }
     }
 
-    public static class OnFavoriteClick extends AbstractOnFavoriteClick {
+    public static class OnFavoriteClick implements CompoundButton.OnCheckedChangeListener {
         private final Favorite favorite;
+        private AnalyticsCategory category;
 
-        public OnFavoriteClick(Favorite favorite, FavoritesPresenter favoritesPresenter, Context context, AnalyticsCategory category) {
-            super(favoritesPresenter, context, category);
+        public OnFavoriteClick(Favorite favorite, AnalyticsCategory category) {
             this.favorite = favorite;
+            this.category = category;
         }
 
         public Favorite getFavorite() {
             return favorite;
         }
-    }
-
-    private static abstract class AbstractOnFavoriteClick implements OnClickListener, FavoriteAddView, FavoriteRemoveView {
-        private final FavoritesPresenter favoritesPresenter;
-        private final Context context;
-        private boolean inProgress;
-        private AnalyticsCategory category;
-
-        public AbstractOnFavoriteClick(FavoritesPresenter favoritesPresenter, Context context, AnalyticsCategory category) {
-            this.favoritesPresenter = favoritesPresenter;
-            this.context = context;
-            setInProgress(false);
-            this.category = category;
-        }
 
         @Override
-        public void onClick(View v) {
-            CheckBox checkbox = (CheckBox) v;
-
-            final boolean value = checkbox.isChecked();
-            if (isInProgress()) {
-                checkbox.setChecked(!value);
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            String idValue = Long.valueOf(getFavorite().getId()).toString();
+            if (isChecked && !LiveNationLibrary.getFavoritesHelper().contains(getFavorite())) {
+                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                apiParams.setId(idValue, getFavorite().getType());
+                apiParams.setName(getFavorite().getName());
+                LiveNationApplication.getLiveNationProxy().addFavorite(apiParams, null);
+            } else if (LiveNationLibrary.getFavoritesHelper().contains(getFavorite())) {
+                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                apiParams.setId(idValue, getFavorite().getType());
+                apiParams.setName(getFavorite().getName());
+                LiveNationApplication.getLiveNationProxy().removeFavorite(apiParams, null);
             }
 
-            setInProgress(true);
-
-            Favorite favorite = getFavorite();
-
-            Bundle args = getFavoritesPresenter().getArgsBundle(favorite);
-            if (value) {
-                getFavoritesPresenter().addFavorite(getContext(), args, AbstractOnFavoriteClick.this);
-                checkbox.setChecked(value);
-            } else {
-                getFavoritesPresenter().removeFavorite(getContext(), args, AbstractOnFavoriteClick.this);
-                checkbox.setChecked(value);
-            }
+            trackFavoriteChanged(isChecked);
         }
-
-        @Override
-        public void onFavoriteRemoveSuccess() {
-            setInProgress(false);
-            trackFavoriteChanged(false);
-        }
-
-        @Override
-        public void onFavoriteRemoveFailed() {
-            setInProgress(false);
-        }
-
-        @Override
-        public void onFavoriteAddSuccess() {
-            setInProgress(false);
-            trackFavoriteChanged(true);
-        }
-
-        @Override
-        public void onFavoriteAddFailed() {
-            setInProgress(false);
-        }
-
-        public FavoritesPresenter getFavoritesPresenter() {
-            return favoritesPresenter;
-        }
-
-        public Context getContext() {
-            return context;
-        }
-
-        public boolean isInProgress() {
-            return inProgress;
-        }
-
-        private void setInProgress(boolean inProgress) {
-            this.inProgress = inProgress;
-        }
-
-        public abstract Favorite getFavorite();
 
         private void trackFavoriteChanged(boolean added) {
             Favorite favorite = getFavorite();

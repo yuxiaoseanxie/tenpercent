@@ -113,7 +113,6 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
         artistAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
         venueAdapter = new FavoritesAdapter(getActivity().getApplicationContext());
-        init();
         setRetainInstance(true);
     }
 
@@ -185,12 +184,6 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        deinit();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -224,14 +217,6 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
 
-    }
-
-    private void init() {
-        getFavoritesPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), FavoritesFragment.this);
-    }
-
-    private void deinit() {
-        getFavoritesPresenter().cancel(FavoritesFragment.this);
     }
 
     /**
@@ -293,7 +278,7 @@ public class FavoritesFragment extends LiveNationFragment implements FavoritesVi
 
             Favorite favorite = getItem(position);
             holder.getTitle().setText(favorite.getName());
-            holder.getCheckbox().bindToFavorite(favorite.getIntType(), favorite.getName(), favorite.getId(), getFavoritesPresenter(), AnalyticsCategory.FAVORITES);
+            holder.getCheckbox().bindToFavorite(favorite, AnalyticsCategory.FAVORITES);
 
             return view;
         }

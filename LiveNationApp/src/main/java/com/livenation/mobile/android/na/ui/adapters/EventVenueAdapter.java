@@ -112,7 +112,11 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         holder.getFavorite().setChecked(false);
 
         Venue venue = event.getVenue();
-        holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), LiveNationApplication.get().getFavoritesPresenter(), AnalyticsCategory.NEARBY);
+        Favorite favorite = new Favorite();
+        favorite.setId(venue.getNumericId());
+        favorite.setIntType(Favorite.FAVORITE_VENUE);
+        favorite.setName(venue.getName());
+        holder.getFavorite().bindToFavorite(favorite , AnalyticsCategory.NEARBY);
 
         return view;
     }

@@ -138,9 +138,13 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event);
             venueDetails.setOnClickListener(onVenueClick);
 
-            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity(), AnalyticsCategory.SDP);
-            venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
-            venueDetails.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.SDP);
+            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, AnalyticsCategory.SDP);
+            venueDetails.getFavorite().setOnCheckedChangeListener(onVenueFavoriteClick);
+            Favorite favorite = new Favorite();
+            favorite.setId(venue.getNumericId());
+            favorite.setIntType(Favorite.FAVORITE_VENUE);
+            favorite.setName(venue.getName());
+            venueDetails.getFavorite().bindToFavorite(favorite, AnalyticsCategory.SDP);
 
             double lat = Double.valueOf(venue.getLat());
             double lng = Double.valueOf(venue.getLng());
@@ -171,7 +175,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
+            view.bindToFavoriteArtist(lineup);
 
             view.setOnClickListener(new OnLineupViewClick(lineup, event));
 

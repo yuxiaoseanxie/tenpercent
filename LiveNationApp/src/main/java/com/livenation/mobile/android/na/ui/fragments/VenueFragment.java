@@ -122,7 +122,11 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         double lng = Double.valueOf(venue.getLng());
         setMapLocation(lat, lng);
 
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
+        Favorite favorite = new Favorite();
+        favorite.setIntType(Favorite.FAVORITE_VENUE);
+        favorite.setName(venue.getName());
+        favorite.setId(venue.getNumericId());
+        favoriteCheckBox.bindToFavorite(favorite, AnalyticsCategory.VDP);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class LoginHelper {
                     if (callback != null) {
                         boolean hasTokenChanged = !accessToken.equals(getAuthConfiguration().getAccessToken());
                         if (hasTokenChanged) {
-                            LiveNationApplication.getAccessTokenProvider().clear();
+                            LiveNationApplication.getAccessTokenProvider().clearCache();
                         }
                         callback.onResponse(hasTokenChanged, getAuthConfiguration().getAccessToken(), user);
                     }

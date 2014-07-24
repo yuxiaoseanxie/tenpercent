@@ -41,7 +41,6 @@ import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
@@ -55,10 +54,10 @@ import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
@@ -86,7 +85,6 @@ public class LiveNationApplication extends Application {
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
-    private FavoritesPresenter favoritesPresenter;
     private InboxStatusPresenter inboxStatusPresenter;
     //Migration
     private String oldUserId;
@@ -169,7 +167,6 @@ public class LiveNationApplication extends Application {
         providerManager = new ProviderManager();
         liveNationProxy = new LiveNationProxy();
 
-
         instance = this;
 
 
@@ -183,7 +180,6 @@ public class LiveNationApplication extends Application {
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
-        favoritesPresenter = new FavoritesPresenter();
         inboxStatusPresenter = new InboxStatusPresenter();
 
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -329,10 +325,6 @@ public class LiveNationApplication extends Application {
 
     public AccountPresenters getAccountPresenters() {
         return accountPresenters;
-    }
-
-    public FavoritesPresenter getFavoritesPresenter() {
-        return favoritesPresenter;
     }
 
     public InboxStatusPresenter getInboxStatusPresenter() {

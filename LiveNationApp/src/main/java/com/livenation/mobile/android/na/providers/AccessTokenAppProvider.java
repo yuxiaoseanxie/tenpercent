@@ -14,9 +14,12 @@ public class AccessTokenAppProvider extends com.livenation.mobile.android.platfo
         accessTokenPreferences = new AccessTokenPreferences(context);
     }
 
-    @Override
     public void clear() {
-        super.clear();
+        super.clearCache();
         accessTokenPreferences.clearAccessToken();
+    }
+
+    public void clearCache() {
+        super.clearCache();
     }
 }
