@@ -41,7 +41,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private Event event;
     private Cart cart;
-    private boolean isRelase;
+    private boolean isResale;
 
     private TransitioningImageView image;
     private TextView headerThankYouText;
@@ -62,7 +62,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
-        this.isRelase = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
+        this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
 
         this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
@@ -276,7 +276,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
             Props typeProps = getPreBuiltCartProps();
             String resale  = AnalyticConstants.PROP_TYPE_PRIMARY;
-            if (isRelase) {
+            if (isResale) {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
             }
             typeProps.put(AnalyticConstants.PROP_TYPE, resale);
