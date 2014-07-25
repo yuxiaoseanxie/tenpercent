@@ -77,6 +77,6 @@ public class FavoriteCheckBox extends CheckBox {
         //Set a checkListener that will update the user's favorites with the API if they check/uncheck
         //this checkbox
         OnFavoriteClickListener.OnFavoriteClick checkListener = new OnFavoriteClickListener.OnFavoriteClick(favorite, category);
-        setOnCheckedChangeListener(checkListener);
+        setOnClickListener(checkListener);
     }
 }

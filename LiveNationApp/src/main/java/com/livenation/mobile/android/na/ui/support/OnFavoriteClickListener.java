@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.support;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.CompoundButton;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -28,7 +29,7 @@ public class OnFavoriteClickListener {
         }
     }
 
-    public static class OnFavoriteClick implements CompoundButton.OnCheckedChangeListener {
+    public static class OnFavoriteClick implements View.OnClickListener {
         private final Favorite favorite;
         private AnalyticsCategory category;
 
@@ -39,24 +40,6 @@ public class OnFavoriteClickListener {
 
         public Favorite getFavorite() {
             return favorite;
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            String idValue = Long.valueOf(getFavorite().getId()).toString();
-            if (isChecked && !LiveNationLibrary.getFavoritesHelper().contains(getFavorite())) {
-                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
-                apiParams.setId(idValue, getFavorite().getType());
-                apiParams.setName(getFavorite().getName());
-                LiveNationApplication.getLiveNationProxy().addFavorite(apiParams, null);
-            } else if (LiveNationLibrary.getFavoritesHelper().contains(getFavorite())) {
-                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
-                apiParams.setId(idValue, getFavorite().getType());
-                apiParams.setName(getFavorite().getName());
-                LiveNationApplication.getLiveNationProxy().removeFavorite(apiParams, null);
-            }
-
-            trackFavoriteChanged(isChecked);
         }
 
         private void trackFavoriteChanged(boolean added) {
@@ -89,6 +72,26 @@ public class OnFavoriteClickListener {
                     throw new IllegalStateException("Unknown favorite ID");
 
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            CompoundButton checkbox = (CompoundButton) v;
+            checkbox.setChecked(checkbox.isChecked());
+            String idValue = Long.valueOf(getFavorite().getId()).toString();
+            if (checkbox.isChecked()) {
+                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                apiParams.setId(idValue, getFavorite().getType());
+                apiParams.setName(getFavorite().getName());
+                LiveNationApplication.getLiveNationProxy().addFavorite(apiParams, null);
+            } else {
+                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                apiParams.setId(idValue, getFavorite().getType());
+                apiParams.setName(getFavorite().getName());
+                LiveNationApplication.getLiveNationProxy().removeFavorite(apiParams, null);
+            }
+
+            trackFavoriteChanged(checkbox.isChecked());
         }
     }
 }
