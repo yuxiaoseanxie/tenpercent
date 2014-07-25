@@ -63,10 +63,6 @@ public class LineupView extends LinearLayout {
     }
 
     public void bindToFavoriteArtist(Artist artist) {
-        Favorite fav = new Favorite();
-        fav.setId(artist.getNumericId());
-        fav.setIntType(Favorite.FAVORITE_ARTIST);
-        fav.setName(artist.getName());
-        favorite.bindToFavorite(fav, AnalyticsCategory.SDP);
+        favorite.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.SDP);
     }
 }

@@ -165,11 +165,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         else
             suppressBio();
 
-        Favorite favorite = new Favorite();
-        favorite.setIntType(Favorite.FAVORITE_ARTIST);
-        favorite.setName(artist.getName());
-        favorite.setId(artist.getNumericId());
-        favoriteCheckBox.bindToFavorite(favorite, AnalyticsCategory.ADP);
+        favoriteCheckBox.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.ADP);
 
         youTube.setArtistName(artist.getName());
 

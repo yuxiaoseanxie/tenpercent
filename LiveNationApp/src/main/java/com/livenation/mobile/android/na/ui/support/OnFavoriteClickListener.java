@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.support;
 
+import android.support.annotation.NonNull;
 import android.widget.CompoundButton;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -16,18 +17,14 @@ public class OnFavoriteClickListener {
     public static class OnVenueFavoriteClick extends OnFavoriteClick {
         private final Venue venue;
 
-        public OnVenueFavoriteClick(Venue venue, AnalyticsCategory category) {
+        public OnVenueFavoriteClick(@NonNull Venue venue, AnalyticsCategory category) {
             super(null, category);
             this.venue = venue;
         }
 
         @Override
         public Favorite getFavorite() {
-            Favorite favorite = new Favorite();
-            favorite.setName(venue.getName());
-            favorite.setType(Favorite.FAVORITE_VENUE_KEY);
-            favorite.setId(venue.getNumericId());
-            return favorite;
+            return Favorite.fromVenue(venue);
         }
     }
 
