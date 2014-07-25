@@ -81,7 +81,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     }
 
     private void registerBroadcastReceiverForUpdate() {
-        Context context = LiveNationApplication.get().getApplicationContext();
+        final Context context = getActivity();
         LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
         LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         LocalBroadcastManager.getInstance(context).registerReceiver(loginLogoutReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
@@ -90,7 +90,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Context context = LiveNationApplication.get().getApplicationContext();
+        Context context = getActivity();;
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
         LocalBroadcastManager.getInstance(context).unregisterReceiver(loginLogoutReceiver);
     }
