@@ -371,6 +371,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(updateBroadcastReceiver);
     }
 }
