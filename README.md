@@ -52,4 +52,3 @@ Experimental: UIAutomator tests can be run from the root of the app folder (adr-
 Will run the UIAutomator tests specified by the 'UiAutomator/build.gradle' file
 
 
-The end.
