@@ -8,7 +8,7 @@ buildscript {
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
 
 repositories {
@@ -38,6 +38,8 @@ android {
         versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 20
+
+        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
         for (Project project : rootProject.subprojects) {
             String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
@@ -86,6 +88,8 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude "LICENSE.txt"
     }
 
     buildTypes {
@@ -102,7 +106,7 @@ android {
         }
 
         labrats {
-            packageNameSuffix ".labrats"
+            applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
 
             signingConfig signingConfigs.debug
@@ -119,5 +123,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.3.23'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.+'
-
+    androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }
