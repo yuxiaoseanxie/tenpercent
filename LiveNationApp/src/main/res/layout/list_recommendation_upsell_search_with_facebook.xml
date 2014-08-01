@@ -9,14 +9,16 @@
     android:paddingRight="@dimen/activity_vertical_margin">
 
     <TextView
-        style="@style/text.primary.recommendations_upsell_title_text"
+        style="@style/recommendations_upsell_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textAppearance="@style/ln.text.small"
         android:text="@string/recommendations_favorite_upsell_large_title" />
 
     <TextView
-        style="@style/text.secondary.recommendations_upsell_general_text"
+        style="@style/recommendations_upsell_general"
+        android:textAppearance="@style/ln.text.small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recommendations_favorite_upsell_large_text1" />
@@ -28,7 +30,8 @@
         android:layout_height="@dimen/recommendations_button_height" />
 
     <TextView
-        style="@style/text.secondary.recommendations_upsell_general_text"
+        style="@style/recommendations_upsell_general"
+        android:textAppearance="@style/ln.text.small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recommendations_favorite_upsell_large_text2" />

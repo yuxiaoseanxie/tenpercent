@@ -70,6 +70,7 @@
             android:id="@+id/venue_detail_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="@dimen/view_show_venue_address_padding_right"
             android:text="@string/mock_venue_location"
             android:textAppearance="@style/ln.text.medium.italic" />
     </LinearLayout>

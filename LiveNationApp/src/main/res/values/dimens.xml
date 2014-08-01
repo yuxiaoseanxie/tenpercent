@@ -48,8 +48,8 @@
     <dimen name="fragment_venue_map_height">250dp</dimen>
     <dimen name="venue_detail_image_min_width">36dp</dimen>
     <dimen name="venue_detail_image_min_height">20dp</dimen>
-    <dimen name="venue_detail_title_margin_bottom">10dp</dimen>
-    <dimen name="venue_detail_margin_top">2dp</dimen>
+    <dimen name="venue_detail_title_margin_bottom">0dp</dimen>
+    <dimen name="venue_detail_margin_top">15dp</dimen>
     <dimen name="venue_detail_margin_bottom">0dp</dimen>
     <dimen name="venue_detail_margin_left">10dp</dimen>
     <dimen name="venue_detail_margin_right">10dp</dimen>
@@ -58,6 +58,7 @@
     <dimen name="venue_show_date_margin_top">10dp</dimen>
     <dimen name="venue_show_date_margin_left">15dp</dimen>
     <dimen name="venue_show_date_margin_right">15dp</dimen>
+    <dimen name="view_show_venue_address_padding_right">5dp</dimen>
     <dimen name="nearby_show_date_margin_left">15dp</dimen>
     <dimen name="nearby_show_date_margin_right">15dp</dimen>
     <dimen name="nearby_show_date_margin_top">20dp</dimen>
