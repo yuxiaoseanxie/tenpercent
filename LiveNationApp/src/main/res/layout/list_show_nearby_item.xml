@@ -24,7 +24,7 @@
         android:layout_alignTop="@id/list_nearby_show_date"
         android:layout_toRightOf="@id/list_nearby_show_date"
         android:text="@string/mock_artist_title_1"
-        android:textAppearance="@style/list_show_title" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <TextView
         android:id="@+id/list_nearby_show_time"
@@ -33,7 +33,7 @@
         android:layout_alignLeft="@id/list_nearby_show_title"
         android:layout_below="@id/list_nearby_show_title"
         android:text="@string/mock_show_time"
-        android:textAppearance="@style/list_show_nearby_time" />
+        android:textAppearance="@style/ln.text.small.gray" />
 
     <View
         android:id="@+id/list_nearby_show_divider"

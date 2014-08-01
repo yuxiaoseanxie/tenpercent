@@ -28,7 +28,7 @@
         android:layout_gravity="top"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:text="@string/mock_artist_title_1"
-        android:textAppearance="@style/view_lineup_text" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <View
         android:id="@+id/view_lineup_divider"

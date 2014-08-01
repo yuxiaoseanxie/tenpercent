@@ -27,7 +27,7 @@
         android:layout_marginTop="@dimen/venue_detail_margin_top"
         android:layout_toRightOf="@id/favorite_checkbox_container"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/show_venue_text_title" />
+        android:textAppearance="@style/ln.text.medium.bold_italic" />
 
     <LinearLayout
         android:id="@+id/view_show_venue_telephone"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_venue_telephone"
-            android:textAppearance="@style/show_venue_text" />
+            android:textAppearance="@style/ln.text.medium" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_venue_location"
-            android:textAppearance="@style/show_venue_text" />
+            android:textAppearance="@style/ln.text.medium.italic" />
     </LinearLayout>
 
 </RelativeLayout>

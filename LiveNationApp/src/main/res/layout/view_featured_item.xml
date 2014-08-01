@@ -29,7 +29,7 @@
             android:layout_marginLeft="@dimen/view_featured_text_margin_left_right"
             android:layout_marginRight="@dimen/view_featured_text_margin_left_right"
             android:text="@string/mock_placeholder_artist_title_1"
-            android:textAppearance="@style/featured_item_text" />
+            android:textAppearance="@style/ln.text.small.bold.white" />
     </FrameLayout>
 
 

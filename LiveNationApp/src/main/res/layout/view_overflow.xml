@@ -24,7 +24,7 @@
         android:layout_centerInParent="true"
         android:layout_toRightOf="@id/view_overflow_icon"
         android:text="@string/mock_overflow"
-        android:textAppearance="@style/view_overflow_text" />
+        android:textAppearance="@style/ln.text.small.bold_italic" />
 
     <View
         android:layout_width="match_parent"

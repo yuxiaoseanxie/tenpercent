@@ -27,14 +27,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_footer_location_title"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <TextView
             android:id="@+id/account_footer_location_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_account_footer_location_detail"
-            android:textAppearance="@style/account_footer_detail" />
+            android:textAppearance="@style/ln.text.small.red" />
     </LinearLayout>
 
     <TextView
@@ -45,6 +45,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/account_footer_change_margin_right"
         android:text="@string/account_footer_location_change"
-        android:textAppearance="@style/account_footer_change" />
+        android:textAppearance="@style/ln.text.medium" />
 
 </RelativeLayout>

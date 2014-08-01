@@ -1,162 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="livenation_app_text" parent="@android:style/TextAppearance" />
+    <style name="ln.text" parent="@android:style/TextAppearance" />
 
-    <style name="featured_see_all" parent="@style/livenation_app_text">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/featured_text</item>
-    </style>
+    <style name="livenation_app_text" parent="ln.text" />
 
-    <style name="featured_title" parent="@style/featured_see_all">
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="ln.text.tab_title" />
 
-    <style name="list_show_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="text.primary" parent="ln.text" />
 
-    <style name="list_show_location" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-    </style>
+    <style name="text.secondary" parent="ln.text" />
 
-    <style name="list_show_location_v2" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:color">@color/text_secondary</item>
-    </style>
+    <style name="text.button" parent="ln.text" />
 
-    <style name="list_show_date_dotw" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:color">@color/text_secondary</item>
-    </style>
-
-    <style name="list_show_date_day" parent="@style/livenation_app_text">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/list_show_date_text_highlight</item>
-    </style>
-
-    <style name="list_show_date_month" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/list_show_date_text_highlight</item>
-    </style>
-
-    <style name="list_show_nearby_time" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
-    </style>
-
-    <style name="show_artist_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">26sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/show_artist_title</item>
-    </style>
-
-    <style name="featured_item_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/show_artist_title</item>
-    </style>
-
-    <style name="view_lineup_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/view_artist_title</item>
-    </style>
-
-    <style name="view_overflow_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">@color/ui_header1_text</item>
-    </style>
-
-    <style name="ui_header1_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/ui_header1_text</item>
-    </style>
-
-    <style name="artist_bio" parent="@style/livenation_app_text">
-        <item name="android:textSize">15sp</item>
-    </style>
-
-    <style name="show_venue_text" parent="@style/livenation_app_text">
-        <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/show_venue_text</item>
-    </style>
-
-    <style name="show_venue_text_title" parent="@style/show_venue_text">
-        <item name="android:textStyle">bold|italic</item>
-    </style>
-
-    <style name="venue_detail_link_text" parent="@style/livenation_app_text">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/ui_header1_text</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="venue_detail_text" parent="@style/livenation_app_text">
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/venue_detail_text_color</item>
-    </style>
-
-    <style name="venue_detail_date_time_text" parent="@style/livenation_app_text">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="bottom_bar_button_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">17sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
-    </style>
-
-    <style name="ticketbar_options_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
-    </style>
-
-    <style name="tab_title_text" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="venue_venue_title" parent="@style/livenation_app_text">
-        <item name="android:textSize">30sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/venue_venue_title</item>
-    </style>
-
-    <style name="account_detail_header" parent="@style/livenation_app_text">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_primary</item>
-    </style>
-
-    <style name="account_detail_detail" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_secondary</item>
-    </style>
-
-    <style name="account_footer_detail" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/ui_header1_text</item>
-    </style>
-
-    <style name="account_footer_change" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#bbbbbb</item>
-    </style>
-
-    <style name="list_venue_header_miles_text" parent="@style/livenation_app_text">
+    <style name="ln.text.tiny">
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="ln.text.tiny.bold_italic">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <style name="ln.text.tiny.bold_italic.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+
+    <style name="ln.text.small">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="ln.text.small.bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="ln.text.small.italic">
         <item name="android:textStyle">italic</item>
-        <item name="android:textColor">#636363</item>
+    </style>
+
+    <style name="ln.text.small.italic.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+
+    <style name="ln.text.small.bold.white">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="ln.text.small.bold_italic">
+        <item name="android:textStyle">bold|italic</item>
+
+    </style>
+
+    <style name="ln.text.small.bold_italic.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+
+    <style name="ln.text.small.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+    <style name="ln.text.small.bold.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+    <style name="ln.text.small.bold.red.allcaps">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ln.text.small.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="ln.text.medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ln.text.medium.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="ln.text.medium.italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+
+    <style name="ln.text.medium.italic.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="ln.text.medium.bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ln.text.medium.bold.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+    <style name="ln.text.medium.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+    <style name="ln.text.medium.red.allcaps">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ln.text.medium.bold_italic">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <style name="ln.text.medium.bold_italic.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
+
+
+    <style name="ln.text.large">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="ln.text.large.bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="ln.text.large.bold.white">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ln.text.xlarge">
+        <item name="android:textSize">31sp</item>
+    </style>
+
+    <style name="ln.text.xlarge.bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ln.text.xlarge.bold.white">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="list_inbox_message_info" parent="@style/livenation_app_text">
@@ -207,15 +190,11 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="list_previous_location_text_primary" parent="@style/livenation_app_text">
-        <item name="android:textColor">#000000</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
-    </style>
 
-    <style name="list_previous_location_text_secondary" parent="@style/livenation_app_text">
-        <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:textSize">16sp</item>
+    <style name="bottom_bar_button_text" parent="@style/livenation_app_text">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/ui_bottom_bar_button_textcolor</item>
     </style>
 
     <style name="decorated_edittext_hint_text" parent="@style/livenation_app_text">
@@ -321,21 +300,5 @@
 
     <style name="text" parent="@style/livenation_app_text" />
 
-    <style name="text.primary">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="text.secondary">
-        <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="text.button">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
 
 </resources>

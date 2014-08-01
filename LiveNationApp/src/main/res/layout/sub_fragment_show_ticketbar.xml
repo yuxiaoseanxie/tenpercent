@@ -14,7 +14,7 @@
 
     <Button
         android:id="@+id/fragment_show_ticketbar_options"
-        style="@style/ticketbar_options_text"
+        style="@style/ln.text.small"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/ui_ticketbar_options_height"
         android:layout_centerVertical="true"

@@ -50,13 +50,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="3dp"
                     android:text="@string/mock_venue_title_1"
-                    android:textAppearance="@style/show_venue_text_title" />
+                    android:textAppearance="@style/ln.text.medium.bold_italic" />
 
                 <TextView
                     android:id="@+id/list_venue_header_distance"
                     style="@style/list_venue_header_miles"
+                    android:background="@drawable/list_venue_header_miles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -76,14 +77,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:paddingRight="10dp"
-                    android:src="@drawable/venue_location" />
+                    android:src="@drawable/venue_location_red" />
 
                 <TextView
                     android:id="@+id/list_venue_header_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/mock_venue_location"
-                    android:textAppearance="@style/show_venue_text" />
+                    android:textAppearance="@style/ln.text.small.italic.gray" />
             </LinearLayout>
 
 

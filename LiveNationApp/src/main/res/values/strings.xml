@@ -24,7 +24,7 @@
     <string name="tab_favorites_artists">Artists</string>
     <string name="tab_favorites_venues">Venues</string>
 
-    <string name="venue_detail_link">+ Venue Info</string>
+    <string name="venue_detail_link">Venue Info</string>
     <string name="artist_events_overflow">See All Shows</string>
     <string name="artist_events_no_show">No Scheduled Events</string>
     <string name="artist_videos_overflow">See All Videos</string>

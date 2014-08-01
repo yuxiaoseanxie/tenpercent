@@ -18,18 +18,20 @@
         android:id="@+id/view_show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingRight="5dp"
         android:layout_alignTop="@id/view_show_date"
         android:layout_toRightOf="@id/view_show_date"
         android:text="@string/mock_artist_title_1"
-        android:textAppearance="@style/list_show_title" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <TextView
         android:id="@+id/view_show_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/view_show_title"
+        android:paddingRight="5dp"
         android:layout_below="@id/view_show_title"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/list_show_location" />
+        android:textAppearance="@style/ln.text.small.gray" />
 
 </RelativeLayout>

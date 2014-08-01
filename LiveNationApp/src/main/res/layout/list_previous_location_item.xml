@@ -9,11 +9,11 @@
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/list_previous_location_text_primary" />
+        android:textAppearance="@style/ln.text.medium" />
 
     <TextView
         android:id="@android:id/text2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/list_previous_location_text_secondary" />
+        android:textAppearance="@style/ln.text.small" />
 </LinearLayout>

@@ -20,11 +20,12 @@
         android:layout_marginRight="@dimen/venue_detail_margin_right"
         android:layout_marginTop="@dimen/venue_detail_margin_top"
         android:background="@drawable/ui_underscore_background"></include>
-
+    <ImageView style="@style/SwooshDivider.with_top_margin" />
     <TextView
-        style="@style/ui_header_top_accent"
+        style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:text="@string/venue_upcoming_shows" />
 
     <FrameLayout

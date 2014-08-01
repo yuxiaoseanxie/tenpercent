@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/mock_favorite_title_1"
-            android:textAppearance="@style/view_lineup_text" />
+            android:textAppearance="@style/ln.text.large" />
 
         <View
             style="@style/ui_underscore"

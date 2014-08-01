@@ -30,7 +30,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:text="@string/login_connect_or_create"
-            android:textAppearance="@style/account_detail_detail" />
+            android:textAppearance="@style/ln.text.small" />
 
         <View
             android:layout_width="0dip"
@@ -64,7 +64,7 @@
             android:gravity="center"
             android:minWidth="30dp"
             android:text="@string/login_button_or"
-            android:textAppearance="@style/account_detail_detail" />
+            android:textAppearance="@style/ln.text.small" />
 
         <Button
             android:id="@+id/fragment_account_google_sign_in_button"

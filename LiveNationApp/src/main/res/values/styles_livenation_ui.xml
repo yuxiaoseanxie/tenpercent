@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="ui_header_bottom_accent" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:background">@drawable/ui_header_bottom_accent_background</item>
-        <item name="android:minHeight">@dimen/ui_header1_min_height</item>
-        <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:paddingTop">@dimen/ui_header1_text_offset_vertical</item>
-        <item name="android:textAppearance">@style/ui_header1_text</item>
-    </style>
 
-    <style name="ui_header_top_accent" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:background">@drawable/ui_header_top_accent_background</item>
-        <item name="android:minHeight">@dimen/ui_header1_min_height</item>
-        <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:paddingTop">@dimen/ui_header1_text_offset_vertical</item>
-        <item name="android:textAppearance">@style/ui_header1_text</item>
-    </style>
-
-    <style name="ui_header2" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:minHeight">@dimen/ui_header1_min_height</item>
-        <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:textAppearance">@style/ui_header1_text</item>
-    </style>
+    <!--<style name="ui_header2" parent="@android:style/Widget.Holo.Light.TextView">-->
+        <!--<item name="android:minHeight">@dimen/ui_header1_min_height</item>-->
+        <!--<item name="android:gravity">center_vertical|center_horizontal</item>-->
+        <!--<item name="android:textAppearance">@style/L</item>-->
+    <!--</style>-->
 
     <style name="ui_header_transparent" parent="@android:style/Widget.Holo.Light.TextView">
         <item name="android:minHeight">@dimen/ui_header_transparent_min_height</item>
         <item name="android:paddingTop">@dimen/ui_header_transparent_padding_top</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:textAppearance">@style/ui_header1_text</item>
+        <item name="android:textAppearance">@style/ln.text.small.bold.red.allcaps</item>
     </style>
 
     <style name="ui_header_transparent.with_bottom_padding">
@@ -47,7 +32,7 @@
 
     <style name="ui_long_text">
         <item name="android:padding">@dimen/ui_long_text_padding</item>
-        <item name="android:textAppearance">@style/artist_bio</item>
+        <item name="android:textAppearance">@style/ln.text.medium</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
@@ -80,9 +65,13 @@
     </style>
 
     <style name="list_venue_header_miles">
-        <item name="android:padding">3dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+
         <item name="android:background">@drawable/list_venue_header_miles</item>
-        <item name="android:textAppearance">@style/list_venue_header_miles_text</item>
+        <item name="android:textAppearance">@style/ln.text.tiny.bold_italic.gray</item>
     </style>
 
     <style name="list_search_result_type">

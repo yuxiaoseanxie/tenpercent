@@ -17,7 +17,7 @@
         android:drawableLeft="@drawable/your_location_pin"
         android:drawablePadding="@dimen/list_search_city_item_drawable_padding"
         android:text="@string/mock_artist_type"
-        android:textAppearance="@style/list_previous_location_text_primary" />
+        android:textAppearance="@style/ln.text.large.bold" />
 
 
 </LinearLayout>

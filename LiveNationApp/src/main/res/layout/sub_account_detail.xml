@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/account_detail_image_your_orders"
             android:text="@string/account_your_orders_title"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <View
             style="@style/ui_underscore"
@@ -58,7 +58,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/account_detail_image_favorites"
             android:text="@string/account_favorites"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <View
             style="@style/ui_underscore"

@@ -38,7 +38,7 @@
             android:background="@drawable/map_shadow"></View>
 
         <TextView
-            style="@style/ui_header2"
+            style="@style/ui_header_transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/show_lineup" />

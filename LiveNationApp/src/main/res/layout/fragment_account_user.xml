@@ -20,7 +20,7 @@
             android:id="@+id/fragment_account_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.medium" />
 
         <TextView
             android:id="@+id/fragment_account_user_email"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/facebook_logo"
             android:drawablePadding="5dp"
-            android:textAppearance="@style/account_detail_detail" />
+            android:textAppearance="@style/ln.text.medium" />
     </LinearLayout>
 
 </RelativeLayout>
