@@ -243,8 +243,8 @@
 
 
     <!-- Commerce Specific -->
-    <string name="commerce_unavailable_error_title">A new version of Live Nation is available in the Play Store.</string>
-    <string name="commerce_unavailable_error_message">You must update your Live Nation app in order to purchase tickets or view your order history.</string>
+    <string name="commerce_unavailable_error_title">New Version Required</string>
+    <string name="commerce_unavailable_error_message">A new version of the Live Nation app is available on the Play Store. You must update to purchase tickets and view your orders.</string>
     <string name="commerce_unavailable_error_button_play_store">Play Store</string>
 
 </resources>
