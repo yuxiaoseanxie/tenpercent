@@ -28,10 +28,10 @@ public class InstalledAppConfig {
     private static final String UPGRADE_MESSAGE = "upgrade_message";
     private static final String UPGRADE_PLAY_STORE_LINK = "upgrade_play_store_link";
 
-    private static final String FEATURED_CAROUSEL_NAME = "featured_carousel_chart";
+    private static final String FEATURED_CAROUSEL_CHART = "featured_carousel_chart";
 
 
-    private static final String DEFAULT_FEATURED_CAROUSEL_NAME = "mobile-featured";
+    private static final String DEFAULT_FEATURED_CAROUSEL_CHART = "mobile-featured";
     private static final String DEFAULT_PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na";
     private static final long MINIMUM_UPDATE_TIME_ELAPSED = 60 * 60 * 1000; // 60 minutes
 
@@ -85,8 +85,8 @@ public class InstalledAppConfig {
                 String minimumCheckoutVersion = response.optString(MINIMUM_CHECKOUT_VERSION);
                 editor.putString(MINIMUM_CHECKOUT_VERSION, minimumCheckoutVersion);
 
-                String featuredCarouselName = response.optString(FEATURED_CAROUSEL_NAME);
-                editor.putString(FEATURED_CAROUSEL_NAME, featuredCarouselName);
+                String featuredCarouselName = response.optString(FEATURED_CAROUSEL_CHART);
+                editor.putString(FEATURED_CAROUSEL_CHART, featuredCarouselName);
 
                 String upgradeMaximumVersion = response.optString(UPGRADE_MAXIMUM_VERSION);
                 editor.putString(UPGRADE_MAXIMUM_VERSION, upgradeMaximumVersion);
@@ -126,8 +126,8 @@ public class InstalledAppConfig {
         return preferences.getString(MINIMUM_CHECKOUT_VERSION, null);
     }
 
-    public @NonNull String getFeaturedCarouselName() {
-        return preferences.getString(FEATURED_CAROUSEL_NAME, DEFAULT_FEATURED_CAROUSEL_NAME);
+    public @NonNull String getFeaturedCarouselChartName() {
+        return preferences.getString(FEATURED_CAROUSEL_CHART, DEFAULT_FEATURED_CAROUSEL_CHART);
     }
 
     public @Nullable String getUpgradeMaximumVersion() {
@@ -146,5 +146,10 @@ public class InstalledAppConfig {
     public boolean isCommerceAvailable() {
         String minimumCheckoutVersion = getMinimumCheckoutVersion();
         return (minimumCheckoutVersion == null || minimumCheckoutVersion.compareTo(BuildConfig.VERSION_NAME) < 1);
+    }
+
+    public boolean isUpgradeRequired() {
+        String upgradeMaximumVersion = getUpgradeMaximumVersion();
+        return (upgradeMaximumVersion != null && upgradeMaximumVersion.compareTo(BuildConfig.VERSION_NAME) >= 0);
     }
 }
