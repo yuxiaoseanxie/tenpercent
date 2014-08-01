@@ -242,4 +242,9 @@
     <string name="onboarding_scanning_description">Scanning your music for recommendations</string>
 
 
+    <!-- Commerce Specific -->
+    <string name="commerce_unavailable_error_title">A new version of Live Nation is available in the Play Store.</string>
+    <string name="commerce_unavailable_error_message">You must update your Live Nation app in order to purchase tickets or view your order history.</string>
+    <string name="commerce_unavailable_error_button_play_store">Play Store</string>
+
 </resources>

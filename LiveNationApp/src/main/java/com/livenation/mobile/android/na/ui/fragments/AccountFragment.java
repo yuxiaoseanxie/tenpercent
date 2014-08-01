@@ -23,10 +23,12 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
+import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
@@ -111,7 +113,17 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
         @Override
         public void onClick(View view) {
             LiveNationAnalytics.track(AnalyticConstants.YOUR_ORDERS_TAP, AnalyticsCategory.DRAWER);
-            Ticketing.showOrderHistory(getActivity());
+
+            if (getInstalledAppConfig().isCommerceAvailable()) {
+                Ticketing.showOrderHistory(getActivity());
+            } else {
+                CommerceUnavailableDialogFragment dialogFragment = new CommerceUnavailableDialogFragment();
+                dialogFragment.show(getFragmentManager(), CommerceUnavailableDialogFragment.TAG);
+            }
+        }
+
+        private InstalledAppConfig getInstalledAppConfig() {
+            return LiveNationApplication.get().getInstalledAppConfig();
         }
     }
 

@@ -18,12 +18,10 @@ import com.livenation.mobile.android.na.BuildConfig;
 
 import org.json.JSONObject;
 
-public class AppConfig {
-    public static final String ACTION_APP_CONFIG_UPDATED = "com.livenation.mobile.android.na.helpers.AppConfig.ACTION_APP_CONFIG_UPDATED";
+public class InstalledAppConfig {
+    public static final String ACTION_INSTALLED_APP_CONFIG_UPDATED = "com.livenation.mobile.android.na.helpers.InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED";
 
     //region Internal Constants
-
-    private static final String LAST_UPDATE_TIMESTAMP = "last_update_timestamp";
 
     private static final String MINIMUM_CHECKOUT_VERSION = "checkout_requires";
     private static final String UPGRADE_MAXIMUM_VERSION = "upgrade_maximum_version";
@@ -34,7 +32,8 @@ public class AppConfig {
 
 
     private static final String DEFAULT_FEATURED_CAROUSEL_NAME = "mobile-featured";
-    private static final long MINIMUM_UPDATE_TIME_ELAPSED = 60 * 60 * 1000;
+    private static final String DEFAULT_PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na";
+    private static final long MINIMUM_UPDATE_TIME_ELAPSED = 60 * 60 * 1000; // 60 minutes
 
     //endregion
 
@@ -43,10 +42,11 @@ public class AppConfig {
     private final RequestQueue requestQueue;
     private final SharedPreferences preferences;
     private final String url;
+
     private boolean isUpdating = false;
+    private long timeOfLastUpdate = 0;
 
-
-    public AppConfig(@NonNull Context context, @NonNull RequestQueue requestQueue) {
+    public InstalledAppConfig(@NonNull Context context, @NonNull RequestQueue requestQueue) {
         this.applicationContext = context.getApplicationContext();
         this.requestQueue = requestQueue;
         this.preferences = applicationContext.getSharedPreferences(getClass().getName(), 0);
@@ -75,6 +75,7 @@ public class AppConfig {
             return;
 
         isUpdating = true;
+        Log.i(getClass().getSimpleName(), "Updating installed app config");
 
         JsonObjectRequest updateRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -96,12 +97,13 @@ public class AppConfig {
                 String upgradePlayStoreLink = response.optString(UPGRADE_PLAY_STORE_LINK);
                 editor.putString(UPGRADE_PLAY_STORE_LINK, upgradePlayStoreLink);
 
-                editor.putLong(LAST_UPDATE_TIMESTAMP, System.currentTimeMillis());
+                timeOfLastUpdate = System.currentTimeMillis();
 
                 editor.apply();
 
-                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(new Intent(ACTION_APP_CONFIG_UPDATED));
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(new Intent(ACTION_INSTALLED_APP_CONFIG_UPDATED));
 
+                Log.i(getClass().getSimpleName(), "Updated installed app config");
                 isUpdating = false;
             }
         }, new Response.ErrorListener() {
@@ -109,7 +111,7 @@ public class AppConfig {
             public void onErrorResponse(VolleyError error) {
                 isUpdating = false;
 
-                Log.e(AppConfig.class.getSimpleName(), "Could not update app config.", error);
+                Log.e(InstalledAppConfig.class.getSimpleName(), "Could not update installed app config.", error);
             }
         });
         requestQueue.add(updateRequest);
@@ -117,14 +119,14 @@ public class AppConfig {
 
 
     public long getLastUpdateTimestamp() {
-        return preferences.getLong(LAST_UPDATE_TIMESTAMP, 0);
+        return timeOfLastUpdate;
     }
 
     public @Nullable String getMinimumCheckoutVersion() {
         return preferences.getString(MINIMUM_CHECKOUT_VERSION, null);
     }
 
-    public @Nullable String getFeaturedCarouselName() {
+    public @NonNull String getFeaturedCarouselName() {
         return preferences.getString(FEATURED_CAROUSEL_NAME, DEFAULT_FEATURED_CAROUSEL_NAME);
     }
 
@@ -136,7 +138,13 @@ public class AppConfig {
         return preferences.getString(UPGRADE_MESSAGE, null);
     }
 
-    public @Nullable String getUpgradePlayStoreLink() {
-        return preferences.getString(UPGRADE_PLAY_STORE_LINK, null);
+    public @NonNull String getUpgradePlayStoreLink() {
+        return preferences.getString(UPGRADE_PLAY_STORE_LINK, DEFAULT_PLAY_STORE_LINK);
+    }
+
+
+    public boolean isCommerceAvailable() {
+        String minimumCheckoutVersion = getMinimumCheckoutVersion();
+        return (minimumCheckoutVersion == null || minimumCheckoutVersion.compareTo(BuildConfig.VERSION_NAME) < 1);
     }
 }

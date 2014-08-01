@@ -32,6 +32,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -78,6 +79,7 @@ public class LiveNationApplication extends Application {
     private FavoritesPresenter favoritesPresenter;
     private InboxStatusPresenter inboxStatusPresenter;
     private BroadcastReceiver internetStateReceiver;
+    private InstalledAppConfig installedAppConfig;
 
     private ConfigManager configManager;
     private boolean isMusicSync = false;
@@ -118,6 +120,10 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(requestQueue, cache);
+
+        installedAppConfig = new InstalledAppConfig(this, requestQueue);
+        if (installedAppConfig.isUpdateAdvisable())
+            installedAppConfig.update();
 
         //Start and setup the library
         LivenationLib.start();
@@ -274,6 +280,10 @@ public class LiveNationApplication extends Application {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public InstalledAppConfig getInstalledAppConfig() {
+        return installedAppConfig;
     }
 
     public boolean isMusicSync() {
