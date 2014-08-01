@@ -36,7 +36,7 @@
         android:layout_alignLeft="@id/list_generic_show_title"
         android:layout_below="@id/list_generic_show_title"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/ln.text.small" />
+        android:textAppearance="@style/ln.text.small.gray" />
 
     <View
         android:id="@+id/list_item_show_divider"
