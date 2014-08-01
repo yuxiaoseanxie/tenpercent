@@ -11,6 +11,6 @@
         android:gravity="center_horizontal|center_vertical"
         android:tag="titleText"
         android:textAllCaps="true"
-        android:textAppearance="@style/ln.text.tab_title"></TextView>
+        android:textAppearance="@style/ln.text.tab"></TextView>
 
 </LinearLayout>
