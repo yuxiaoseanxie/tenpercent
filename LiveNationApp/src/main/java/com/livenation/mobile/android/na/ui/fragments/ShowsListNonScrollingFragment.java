@@ -1,5 +1,8 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -7,6 +10,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -15,6 +20,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.AnimationHelper;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -30,6 +36,8 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     private int dividerHeight;
     private int dividerLeftMargin;
+    private int reservedHeight = -1;
+
     private Drawable dividerBackground;
 
     private ShowView.DisplayMode displayMode;
@@ -70,6 +78,11 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         View result = inflater.inflate(R.layout.fragment_show_fixed, container, false);
 
         showContainer = (ViewGroup) result;
+        showContainer.setLayoutTransition(AnimationHelper.getListAnimation());
+
+        if (reservedHeight > 0) {
+            showContainer.setMinimumHeight(reservedHeight);
+        }
 
         return result;
     }
@@ -107,6 +120,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
         int position = 0;
         int lastPositionWithDivider = events.size() - 1;
+        int i = 1;
         for (Event event : events) {
             ShowView show = new ShowView(showContainer.getContext());
             show.setDisplayMode(getDisplayMode());
@@ -114,13 +128,15 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
             show.setOnClickListener(new ShowViewClickListener(event));
 
             LayoutParams showLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            showContainer.getLayoutTransition().setStartDelay(LayoutTransition.APPEARING, 130 * i);
             showContainer.addView(show, showLayoutParams);
-
             position++;
             if (position >= getMaxEvents())
                 break;
             else if (position <= lastPositionWithDivider)
                 addNewDivider();
+            i++;
+
         }
 
         if ((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
@@ -133,6 +149,9 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         if (events.size() == 0) {
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
             showContainer.addView(getEmptyView(), layoutParams);
+            if (reservedHeight > 0) {
+                showContainer.setMinimumHeight(0);
+            }
         }
     }
 
@@ -180,6 +199,13 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
     public void setAlwaysShowMoreItemsView(boolean alwaysShowMoreItemsView) {
         this.alwaysShowMoreItemsView = alwaysShowMoreItemsView;
+    }
+
+    public void setReservedHeight(int value) {
+        reservedHeight = value;
+        if (showContainer != null) {
+            showContainer.setMinimumHeight(reservedHeight);
+        }
     }
 
     //endregion

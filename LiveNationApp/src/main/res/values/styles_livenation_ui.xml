@@ -25,7 +25,7 @@
 
     <style name="ui_long_text">
         <item name="android:padding">@dimen/ui_long_text_padding</item>
-        <item name="android:textAppearance">@style/ln.text.medium</item>
+        <item name="android:textAppearance">@style/ln.text.small</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
@@ -44,14 +44,14 @@
     </style>
 
     <style name="account_google_plus_login_button">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/login_sso_button_text</item>
         <item name="android:background">@drawable/account_google_plus_sso_button</item>
     </style>
 
     <style name="account_facebook_login_button">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/login_sso_button_text</item>
         <item name="android:background">@drawable/account_facebook_sso_button</item>

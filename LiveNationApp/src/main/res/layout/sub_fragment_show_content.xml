@@ -13,7 +13,7 @@
             layout="@layout/fragment_show_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
+        <ImageView style="@style/SwooshDivider" />
         <include
             layout="@layout/sub_show_calender"
             android:layout_width="match_parent"

@@ -36,21 +36,26 @@
         android:layout_alignLeft="@id/view_show_venue_title"
         android:layout_below="@id/view_show_venue_title"
         android:baselineAligned="true"
-        android:gravity="center_vertical"
+        android:gravity="top"
+        android:layout_marginTop="5dp"
+
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="center"
             android:minWidth="@dimen/venue_detail_image_min_width"
+            android:layout_marginRight="10dp"
             android:src="@drawable/venue_phone" />
 
         <TextView
             android:id="@+id/venue_detail_telephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
             android:text="@string/mock_venue_telephone"
-            android:textAppearance="@style/ln.text.medium" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,12 +63,16 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/view_show_venue_telephone"
         android:layout_below="@id/view_show_venue_telephone"
+        android:gravity="top"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/venue_detail_image_min_width"
+            android:scaleType="center"
+            android:layout_marginRight="10dp"
             android:src="@drawable/venue_location" />
 
         <TextView
@@ -72,7 +81,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/view_show_venue_address_padding_right"
             android:text="@string/mock_venue_location"
-            android:textAppearance="@style/ln.text.medium.italic" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
 </RelativeLayout>

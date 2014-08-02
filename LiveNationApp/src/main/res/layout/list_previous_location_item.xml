@@ -3,17 +3,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="56dp"
+    android:gravity="center_vertical"
     android:orientation="vertical">
 
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/ln.text.medium" />
+        android:textColor="@color/black"
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <TextView
         android:id="@android:id/text2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/text_secondary"
         android:textAppearance="@style/ln.text.small" />
 </LinearLayout>

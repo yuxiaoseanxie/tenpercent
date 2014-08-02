@@ -27,6 +27,12 @@
         <item name="android:textColor">@color/text_secondary</item>
     </style>
 
+
+    <style name="ln.text.tiny.white">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
     <style name="ln.text.small">
         <item name="android:textSize">15sp</item>
     </style>
@@ -40,6 +46,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ln.text.small.bold.gray">
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
 
     <style name="ln.text.small.italic">
         <item name="android:textStyle">italic</item>
@@ -140,6 +149,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ln.text.large.bold.red">
+        <item name="android:textColor">@color/accent_red</item>
+    </style>
 
     <style name="ln.text.large.bold.white">
         <item name="android:textColor">@color/white</item>

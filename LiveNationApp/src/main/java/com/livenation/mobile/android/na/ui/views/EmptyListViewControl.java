@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.helpers.AnimationHelper;
 
 /**
  * Created by cchilton on 4/4/14.
@@ -54,6 +55,11 @@ public class EmptyListViewControl extends LinearLayout {
     }
 
     @Override
+    public void requestLayout() {
+        super.requestLayout();
+    }
+
+    @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INSTANCE_STATE_KEY, super.onSaveInstanceState());
@@ -90,6 +96,7 @@ public class EmptyListViewControl extends LinearLayout {
         removeAllViews();
         switch (mode) {
             case INACTIVE:
+
                 addView(inactive, containerParams);
                 break;
             case LOADING:
@@ -125,6 +132,8 @@ public class EmptyListViewControl extends LinearLayout {
         noData = new View(context);
 
         setViewMode(ViewMode.LOADING);
+
+        setMinimumHeight(200);
     }
 
     public static enum ViewMode {INACTIVE, LOADING, NO_DATA, RETRY}

@@ -26,7 +26,7 @@
     <dimen name="ui_header_transparent_padding_bottom">15dp</dimen>
     <dimen name="ui_long_text_padding">16dp</dimen>
     <dimen name="ui_overflow_view_min_height">55dp</dimen>
-    <dimen name="ui_ticketbar_height">50dp</dimen>
+    <dimen name="ui_ticketbar_height">56dp</dimen>
     <dimen name="ui_ticketbar_min_padding_left">90dp</dimen>
     <dimen name="ui_ticketbar_options_height">32dp</dimen>
     <dimen name="ui_tab_height">48dp</dimen>
@@ -46,7 +46,7 @@
     <dimen name="fragment_featured_container_min_height">90dp</dimen>
     <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="fragment_venue_map_height">250dp</dimen>
-    <dimen name="venue_detail_image_min_width">36dp</dimen>
+    <dimen name="venue_detail_image_min_width">20dp</dimen>
     <dimen name="venue_detail_image_min_height">20dp</dimen>
     <dimen name="venue_detail_title_margin_bottom">0dp</dimen>
     <dimen name="venue_detail_margin_top">15dp</dimen>
@@ -69,7 +69,7 @@
     <dimen name="account_header_container_width">255dp</dimen>
     <dimen name="account_header_divider_margin">10dp</dimen>
     <dimen name="account_header_sso_button_width">112dp</dimen>
-    <dimen name="account_header_sso_button_height">46dp</dimen>
+    <dimen name="account_header_sso_button_height">40dp</dimen>
     <dimen name="account_header_sso_button_padding">10dp</dimen>
     <dimen name="account_detail_image_min_height">48dp</dimen>
     <dimen name="account_detail_image_min_width">56dp</dimen>
