@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.cash.model;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,12 +13,18 @@ public class ContactData {
     private final String name;
     private final ArrayList<String> emails;
     private final ArrayList<PhoneNumber> phoneNumbers;
+    private final Uri photoUri;
 
-    public ContactData(@NonNull String id, @NonNull String name, @Nullable ArrayList<String> emails, @Nullable ArrayList<PhoneNumber> phoneNumbers) {
+    public ContactData(@NonNull String id,
+                       @NonNull String name,
+                       @Nullable ArrayList<String> emails,
+                       @Nullable ArrayList<PhoneNumber> phoneNumbers,
+                       @Nullable Uri photoUri) {
         this.id = id;
         this.name = name;
         this.emails = emails;
         this.phoneNumbers = phoneNumbers;
+        this.photoUri = photoUri;
     }
 
 
@@ -39,6 +46,10 @@ public class ContactData {
 
     public ArrayList<PhoneNumber> getPhoneNumbers() {
         return phoneNumbers;
+    }
+
+    public Uri getPhotoUri() {
+        return photoUri;
     }
 
     public String getDisplayName() {
@@ -78,6 +89,7 @@ public class ContactData {
                 ", name='" + name + '\'' +
                 ", emails=" + emails +
                 ", phoneNumbers=" + phoneNumbers +
+                ", photoUri=" + photoUri +
                 '}';
     }
 }

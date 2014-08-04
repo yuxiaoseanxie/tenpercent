@@ -248,7 +248,13 @@
     <string name="cash_field_hint_to">Emails or Phone Numbers</string>
     <string name="cash_field_label_note">Note:</string>
     <string name="cash_field_value_note">Blah blah pay me!</string>
-    <string name="cash_no_contacts_placeholder">Search to add contacts</string>
+    <string name="cash_no_contacts_placeholder">Loading Contacts...</string>
+    <string name="cash_content_description_contact_photo">Contact Photo</string>
+    <string name="cash_content_description_clear_field">Clear</string>
     <string name="activity_label_cash_recipients">Recipients</string>
+    <plurals name="cash_transaction_detail">
+        <item quantity="one">1 ticket</item>
+        <item quantity="other">%d tickets</item>
+    </plurals>
 
 </resources>

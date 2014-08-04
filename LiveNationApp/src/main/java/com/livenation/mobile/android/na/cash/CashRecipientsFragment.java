@@ -1,14 +1,15 @@
 package com.livenation.mobile.android.na.cash;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,29 +18,46 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.DataCallback;
+import com.livenation.mobile.android.na.cash.model.LoadAllContactsAysncTask;
 import com.livenation.mobile.android.na.cash.model.PhoneNumber;
 import com.livenation.mobile.android.na.cash.model.ContactData;
+import com.livenation.mobile.android.na.ui.views.CircularImageView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class CashRecipientsFragment extends ListFragment {
     public static final String TAG = CashRecipientsFragment.class.getSimpleName();
+    private static final long SEARCH_DELAY = 400;
 
     @InjectView(R.id.fragment_cash_recipients_field_to) EditText toField;
-    @InjectView(R.id.fragment_cash_recipients_field_note) EditText fromField;
+    @InjectView(R.id.fragment_cash_recipients_field_note) EditText noteField;
+    @InjectView(R.id.fragment_cash_recipients_clear_to) ImageButton clearToField;
 
-    private RecipientAdapter adapter;
-    private boolean searching = false;
-
-    private ArrayList<ContactData> selectedContacts = new ArrayList<ContactData>();
+    private RecipientAdapter recipientsAdapter;
     private ArrayList<ContactData> allContacts;
+    private HashSet<ContactData> selectedContacts = new HashSet<ContactData>();
+
+    private boolean searching = false;
+    private Handler searchHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            new SearchTask().execute(toField.getText().toString());
+        }
+    };
 
     //region Lifecycle
 
@@ -47,10 +65,19 @@ public class CashRecipientsFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new LoadAllContactsTask(getActivity().getContentResolver()).execute();
+        new LoadAllContactsAysncTask(getActivity().getContentResolver(), new DataCallback<ArrayList<ContactData>>() {
+            @Override
+            public void onDataReady(ArrayList<ContactData> contacts) {
+                allContacts = contacts;
+                recipientsAdapter.addAll(allContacts);
 
-        this.adapter = new RecipientAdapter(getActivity());
-        setListAdapter(adapter);
+                toField.setEnabled(true);
+                noteField.setEnabled(true);
+            }
+        }).execute();
+
+        this.recipientsAdapter = new RecipientAdapter(getActivity());
+        setListAdapter(recipientsAdapter);
 
         setRetainInstance(true);
     }
@@ -60,7 +87,9 @@ public class CashRecipientsFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_cash_recipients, container, false);
         ButterKnife.inject(this, view);
 
-        toField.setOnEditorActionListener(new EditorActionListener());
+        ToFieldListener toFieldListener = new ToFieldListener();
+        toField.setOnEditorActionListener(toFieldListener);
+        toField.addTextChangedListener(toFieldListener);
 
         return view;
     }
@@ -68,122 +97,66 @@ public class CashRecipientsFragment extends ListFragment {
     //endregion
 
 
+    public CashRecipientsActivity getCashRecipientsActivity() {
+        return (CashRecipientsActivity) getActivity();
+    }
+
+    public boolean hasContactsSelected() {
+        return !selectedContacts.isEmpty();
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        ContactData contact = adapter.getItem(position);
-        selectedContacts.add(contact);
+        ContactData contact = recipientsAdapter.getItem(position);
+        if (selectedContacts.contains(contact))
+            selectedContacts.remove(contact);
+        else
+            selectedContacts.add(contact);
 
+        getCashRecipientsActivity().invalidateOptionsMenu();
+        recipientsAdapter.notifyDataSetChanged();
+    }
+
+    private void showSearchResults(ArrayList<ContactData> results) {
+        searching = true;
+
+        recipientsAdapter.clear();
+        recipientsAdapter.addAll(results);
+    }
+
+    private void dismissSearchResults() {
         searching = false;
-        adapter.clear();
-        adapter.addAll(selectedContacts);
+
+        recipientsAdapter.clear();
+        recipientsAdapter.addAll(allContacts);
     }
 
-    private class LoadAllContactsTask extends AsyncTask<Void, Void, ArrayList<ContactData>> {
-        private final ContentResolver contentResolver;
+    @SuppressWarnings("unused")
+    @OnClick(R.id.fragment_cash_recipients_clear_to)
+    public void clearToField(ImageButton sender) {
+        toField.setText("");
 
-        private LoadAllContactsTask(@NonNull ContentResolver contentResolver) {
-            this.contentResolver = contentResolver;
-        }
-
-
-        private ArrayList<String> getEmails(@NonNull String id) {
-            String[] projection = new String[]{
-                    ContactsContract.CommonDataKinds.Email.DATA
-            };
-            String selection = ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?";
-            String[] selectionArgs = new String[] { id };
-            Cursor cursorEmail = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                                                       projection,
-                                                       selection,
-                                                       selectionArgs,
-                                                       null);
-
-            ArrayList<String> emails = new ArrayList<String>();
-            if (cursorEmail.moveToNext()) {
-                String email = cursorEmail.getString(cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                emails.add(email);
-            }
-            cursorEmail.close();
-
-            return emails;
-        }
-
-        private ArrayList<PhoneNumber> getPhoneNumbers(@NonNull String id) {
-            String[] projection = new String[]{
-                    ContactsContract.CommonDataKinds.Phone.NUMBER,
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-            };
-            String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?";
-            String[] selectionArgs = new String[] { id };
-            Cursor cursorPhone = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                                       projection,
-                                                       selection,
-                                                       selectionArgs,
-                                                       null);
-
-            ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
-            if (cursorPhone.moveToNext()) {
-                String displayName = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String number = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                phoneNumbers.add(new PhoneNumber(number, displayName));
-            }
-            cursorPhone.close();
-
-            return phoneNumbers;
-        }
-
-        @Override
-        protected ArrayList<ContactData> doInBackground(Void... voids) {
-            String[] projection = new String[] {
-                    ContactsContract.Contacts._ID,
-                    ContactsContract.Contacts.DISPLAY_NAME
-            };
-            String sortQuery = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-            Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-                                                  projection,
-                                                  null,
-                                                  null,
-                                                  sortQuery);
-            ArrayList<ContactData> accumulator = new ArrayList<ContactData>();
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-
-                ArrayList<String> emails = getEmails(id);
-                ArrayList<PhoneNumber> phoneNumbers = getPhoneNumbers(id);
-                if (emails.isEmpty() && phoneNumbers.isEmpty()) {
-                    continue;
-                }
-
-                String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                accumulator.add(new ContactData(id, displayName, emails, phoneNumbers));
-            }
-
-            return accumulator;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<ContactData> contacts) {
-            CashRecipientsFragment.this.allContacts = contacts;
-        }
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(toField.getWindowToken(), 0);
     }
+
 
     private class SearchTask extends AsyncTask<String, Void, ArrayList<ContactData>> {
         @Override
         protected ArrayList<ContactData> doInBackground(String... strings) {
-            String query = strings[0];
+            String query = strings[0].toLowerCase();
 
             ArrayList<ContactData> accumulator = new ArrayList<ContactData>();
             contacts: for (ContactData contact : allContacts) {
-                if (contact.getName().contains(query)) {
+                if (contact.getName().toLowerCase().contains(query)) {
                     accumulator.add(contact);
                     continue;
                 }
 
                 for (String email : contact.getEmails()) {
-                    if (email.contains(query)) {
+                    if (email.toLowerCase().contains(query)) {
                         accumulator.add(contact);
                         continue contacts;
                     }
@@ -202,20 +175,40 @@ public class CashRecipientsFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(ArrayList<ContactData> contacts) {
-            searching = true;
-
-            adapter.clear();
-            adapter.addAll(contacts);
+            showSearchResults(contacts);
         }
     }
 
-    private class EditorActionListener implements TextView.OnEditorActionListener {
+    private class ToFieldListener implements TextView.OnEditorActionListener, TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            searchHandler.removeMessages(0);
+
+            if (editable.length() == 0) {
+                dismissSearchResults();
+                clearToField.setVisibility(View.GONE);
+            } else {
+                searchHandler.sendEmptyMessageDelayed(0, SEARCH_DELAY);
+                clearToField.setVisibility(View.VISIBLE);
+            }
+        }
+
         @Override
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                new SearchTask().execute(textView.getText().toString());
+                searchHandler.removeMessages(0);
+                if (textView.getText().length() == 0) {
+                    dismissSearchResults();
+                } else {
+                    searchHandler.sendEmptyMessage(0);
+                }
 
-                textView.setText("");
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
 
@@ -234,6 +227,7 @@ public class CashRecipientsFragment extends ListFragment {
             this.inflater = LayoutInflater.from(context);
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -247,6 +241,15 @@ public class CashRecipientsFragment extends ListFragment {
             ContactData contactData = getItem(position);
             holder.name.setText(contactData.getDisplayName());
             holder.details.setText(contactData.getDetails());
+            if (contactData.getPhotoUri() != null)
+                holder.photo.setImageURI(contactData.getPhotoUri());
+            else
+                holder.photo.setImageDrawable(null);
+
+            if (selectedContacts.contains(contactData))
+                holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
+            else
+                holder.selection.setImageResource(R.drawable.cash_item_checkmark_off);
 
             return view;
         }
@@ -254,6 +257,8 @@ public class CashRecipientsFragment extends ListFragment {
         class ViewHolder {
             @InjectView(R.id.list_cash_recipient_name) TextView name;
             @InjectView(R.id.list_cash_recipient_details) TextView details;
+            @InjectView(R.id.list_cash_recipient_photo) CircularImageView photo;
+            @InjectView(R.id.list_cash_recipient_selection) ImageView selection;
 
             ViewHolder(@NonNull View view) {
                 ButterKnife.inject(this, view);

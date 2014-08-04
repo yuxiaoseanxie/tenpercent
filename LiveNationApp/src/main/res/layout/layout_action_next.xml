@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:drawableLeft="@drawable/close_action_mode"
+    android:drawablePadding="@dimen/inter_item_padding_medium"
+    android:gravity="center_vertical"
+    android:clickable="false"
+    android:text="@string/next"
+    android:background="?android:attr/selectableItemBackground"/>

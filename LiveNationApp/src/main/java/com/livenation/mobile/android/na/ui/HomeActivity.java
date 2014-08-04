@@ -48,11 +48,13 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
+import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
@@ -107,7 +109,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         checkForUpdates();
 
 
-        startActivity(new Intent(this, CashRecipientsActivity.class));
+        Total testTotal = new Total();
+        testTotal.setGrandTotal(BigDecimal.valueOf(120));
+        startActivity(new Intent(this, CashRecipientsActivity.class)
+                .putExtra(CashRecipientsActivity.EXTRA_TOTAL, testTotal)
+                .putExtra(CashRecipientsActivity.EXTRA_QUANTITY, 3));
     }
 
     @Override

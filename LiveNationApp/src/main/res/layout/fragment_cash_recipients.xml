@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:textStyle="bold"
             android:text="@string/cash_field_label_to"/>
 
         <EditText
@@ -23,14 +24,27 @@
             android:padding="@dimen/inter_item_padding_medium"
             android:inputType="textPersonName"
             android:imeOptions="actionSearch"
+            android:textSize="14sp"
             android:hint="@string/cash_field_hint_to"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:enabled="false"/>
+
+        <ImageButton
+            android:id="@+id/fragment_cash_recipients_clear_to"
+            android:layout_width="@dimen/decorated_edittext_clear_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@null"
+            android:src="@drawable/edittext_clear_with_padding"
+            android:visibility="gone"
+            android:contentDescription="@string/cash_content_description_clear_field"/>
 
     </TableRow>
 
     <View style="@style/Divider"/>
 
     <TableRow
+        android:id="@+id/fragment_cash_recipients_container_note"
         android:paddingLeft="@dimen/inter_item_padding_medium"
         android:paddingRight="@dimen/inter_item_padding_medium">
 
@@ -38,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:textStyle="bold"
             android:text="@string/cash_field_label_note"/>
 
         <EditText
@@ -46,11 +61,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="@dimen/inter_item_padding_medium"
+            android:textSize="14sp"
             android:minLines="1"
             android:maxLines="3"
             android:inputType="text"
             android:imeOptions="actionDone"
             android:text="@string/cash_field_value_note"
+            android:enabled="false"
             android:background="@android:color/transparent"/>
 
     </TableRow>
