@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- Begin Urban Airship Permissions -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -146,6 +147,11 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <!-- Square Cash -->
+        <activity
+            android:name=".cash.CashRecipientsActivity"
+            android:label="@string/activity_label_cash_recipients"/>
 
         <!-- Hockey App -->
         <activity android:name="net.hockeyapp.android.UpdateActivity" />

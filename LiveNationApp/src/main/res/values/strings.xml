@@ -242,4 +242,13 @@
     <string name="onboarding_scanning_description">Scanning your music for recommendations</string>
 
 
+    <!-- Square Cash -->
+    <string name="cash_call_to_action">Split the Cost</string>
+    <string name="cash_field_label_to">To:</string>
+    <string name="cash_field_hint_to">Emails or Phone Numbers</string>
+    <string name="cash_field_label_note">Note:</string>
+    <string name="cash_field_value_note">Blah blah pay me!</string>
+    <string name="cash_no_contacts_placeholder">Search to add contacts</string>
+    <string name="activity_label_cash_recipients">Recipients</string>
+
 </resources>

@@ -50,10 +50,16 @@
                     android:gravity="center"
                     android:text="@string/mock_order_event_name"
                     android:textAppearance="@style/order_confirmation_header_text.large" />
-                =
             </LinearLayout>
 
         </FrameLayout>
+
+        <Button
+            android:id="@+id/activity_order_confirmation_cash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cash_call_to_action"
+            style="@style/text.button.custom_center_container.red"/>
 
         <TextView
             android:layout_width="match_parent"

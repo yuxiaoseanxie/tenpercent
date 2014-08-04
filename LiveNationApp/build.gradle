@@ -86,6 +86,7 @@ android {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 
     buildTypes {
@@ -108,6 +109,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
@@ -119,5 +124,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.3.23'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.+'
-
+    compile 'com.jakewharton:butterknife:5.1.2'
 }

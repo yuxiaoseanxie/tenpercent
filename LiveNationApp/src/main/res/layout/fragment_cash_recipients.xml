@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:paddingLeft="@dimen/inter_item_padding_medium"
+        android:paddingRight="@dimen/inter_item_padding_medium">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="@string/cash_field_label_to"/>
+
+        <EditText
+            android:id="@+id/fragment_cash_recipients_field_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/inter_item_padding_medium"
+            android:inputType="textPersonName"
+            android:imeOptions="actionSearch"
+            android:hint="@string/cash_field_hint_to"
+            android:background="@android:color/transparent"/>
+
+    </TableRow>
+
+    <View style="@style/Divider"/>
+
+    <TableRow
+        android:paddingLeft="@dimen/inter_item_padding_medium"
+        android:paddingRight="@dimen/inter_item_padding_medium">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="@string/cash_field_label_note"/>
+
+        <EditText
+            android:id="@+id/fragment_cash_recipients_field_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/inter_item_padding_medium"
+            android:minLines="1"
+            android:maxLines="3"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:text="@string/cash_field_value_note"
+            android:background="@android:color/transparent"/>
+
+    </TableRow>
+
+    <View style="@style/Divider"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/cash_no_contacts_placeholder"/>
+
+    </FrameLayout>
+
+</TableLayout>

@@ -75,6 +75,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_account);
 
+        Button cashButton = (Button) findViewById(R.id.activity_order_confirmation_cash);
+        cashButton.setOnClickListener(new CashClickListener());
+
         Button detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
         detailsButton.setOnClickListener(new DetailsClickListener());
 
@@ -302,6 +305,13 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackFullDetailsTap() {
         Ticketing.getAnalytics().track(AnalyticConstants.VIEW_FULL_DETAILS_TAP, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+    }
+
+    private class CashClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+
+        }
     }
 
     private class DetailsClickListener implements View.OnClickListener {

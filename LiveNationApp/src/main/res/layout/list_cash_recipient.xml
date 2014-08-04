@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/outer_padding">
+
+    <TextView
+        android:id="@+id/list_cash_recipient_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/inter_item_padding_small"
+        android:textStyle="bold"
+        android:text="@string/mock_artist_title_1"/>
+
+    <TextView
+        android:id="@+id/list_cash_recipient_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mock_artist_title_1"/>
+
+</LinearLayout>
