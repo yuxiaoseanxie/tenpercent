@@ -63,7 +63,7 @@
     </style>
 
     <style name="list_search_result_type">
-        <item name="android:minWidth">@dimen/nice_height</item>
+        <item name="android:minWidth">@dimen/ui_gutter_width</item>
         <item name="android:minHeight">@dimen/list_search_type_min_height</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:background">@drawable/list_search_result_type</item>

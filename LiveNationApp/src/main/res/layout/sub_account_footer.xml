@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/nice_height">
+    android:minHeight="@dimen/list_item_height">
 
     <ImageView
         android:id="@+id/account_footer_location_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:minWidth="@dimen/nice_height"
+        android:minWidth="@dimen/ui_gutter_width"
         android:scaleType="center"
         android:src="@drawable/your_location" />
 
@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:minHeight="68dp"
         android:gravity="center_vertical"
         android:layout_toRightOf="@id/account_footer_location_image"
         android:orientation="vertical">

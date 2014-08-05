@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/account_detail_order_history_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nice_height"
+        android:layout_height="@dimen/list_item_height"
         android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:minWidth="@dimen/nice_height"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/your_orders" />
 
@@ -39,7 +39,7 @@
     <RelativeLayout
         android:id="@+id/account_detail_favorites_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nice_height"
+        android:layout_height="@dimen/list_item_height"
         android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:minWidth="@dimen/nice_height"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/favorites" />
 
