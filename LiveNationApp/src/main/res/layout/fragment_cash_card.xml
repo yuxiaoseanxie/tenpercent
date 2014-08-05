@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:inputType="number"
-        android:imeOptions="actionGo"
+        android:imeOptions="actionNext|flagNoExtractUi"
+        android:nextFocusForward="@+id/fragment_cash_card_month"
         android:textSize="18sp"
         android:hint="@string/credit_card"/>
 
@@ -67,7 +68,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/card_year_hint"
-            android:imeOptions="actionNext|flagNoExtractUi"
+            android:imeOptions="actionGo|flagNoExtractUi"
             android:inputType="number"
             android:nextFocusForward="@+id/edittext_firstname" />
 
