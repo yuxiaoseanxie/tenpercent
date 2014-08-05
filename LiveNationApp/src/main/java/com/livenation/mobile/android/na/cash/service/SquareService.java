@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
@@ -41,7 +43,8 @@ public class SquareService {
     private String makeUrl(@NonNull String route, @Nullable Map<String, String> params) {
         Uri.Builder builder = new Uri.Builder();
 
-        builder.scheme("https");
+        // TODO: This is really dangerous
+        builder.scheme("http");
         builder.encodedAuthority(AUTHORITY);
         builder.appendEncodedPath(route);
 
@@ -107,7 +110,7 @@ public class SquareService {
             throw new RuntimeException("session required");
     }
 
-    public void startSession(String email, String phoneNumber, ApiCallback<CashSession> callback) {
+    public void startSession(String email, String phoneNumber, final ApiCallback<CashSession> callback) {
         if (email == null && phoneNumber == null)
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
@@ -125,7 +128,21 @@ public class SquareService {
             throw new RuntimeException("Unexpected JSON exception during body construction", e);
         }
 
-        SquareRequest<CashSession> request = makePostRequest("/oauth2/authorize/cash", body.toString(), CashSession.class, callback, callback);
+        SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
+            @Override
+            public void onResponse(CashSession response) {
+                SquareService.this.session = response;
+                callback.onResponse(response);
+            }
+        }, callback);
+        requestQueue.add(request);
+    }
+
+    public void retrieveCustomerStatus(ApiCallback<CashCustomerStatus> callback) {
+        assertSession();
+
+        String customerId = Uri.encode(session.getCustomerId());
+        SquareRequest<CashCustomerStatus> request = makeGetRequest("v1/" + customerId + "/cash", null, CashCustomerStatus.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -139,7 +156,7 @@ public class SquareService {
 
         try {
             String customerId = Uri.encode(session.getCustomerId());
-            SquareRequest<CashPayment> request = makePostRequest(customerId + "/cash/payments", payment.toJsonString(), CashPayment.class, callback, callback);
+            SquareRequest<CashPayment> request = makePostRequest("v1/" + customerId + "/cash/payments", payment.toJsonString(), CashPayment.class, callback, callback);
             requestQueue.add(request);
         } catch (IOException e) {
             throw new IllegalStateException("Could not convert payment to json", e);

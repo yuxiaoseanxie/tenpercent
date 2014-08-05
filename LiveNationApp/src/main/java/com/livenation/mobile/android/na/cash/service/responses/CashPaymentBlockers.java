@@ -6,10 +6,13 @@ public class CashPaymentBlockers extends CashResponse {
     @JsonProperty("url")
     private String url;
 
-    @JsonProperty("card")
+    @JsonProperty(value = "card", required = false)
     private CashCardSummary card;
 
-    @JsonProperty("passcode_verification")
+    @JsonProperty(value = "phone_number", required = false)
+    private Object phoneNumber;
+
+    @JsonProperty(value = "passcode_verification", required = false)
     private Object passcodeVerification;
 
 
@@ -21,15 +24,21 @@ public class CashPaymentBlockers extends CashResponse {
         return card;
     }
 
+    public Object getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public Object getPasscodeVerification() {
         return passcodeVerification;
     }
 
+
     @Override
     public String toString() {
-        return "CashCardBlockers{" +
+        return "CashPaymentBlockers{" +
                 "url='" + url + '\'' +
                 ", card=" + card +
+                ", phoneNumber=" + phoneNumber +
                 ", passcodeVerification=" + passcodeVerification +
                 '}';
     }

@@ -3,8 +3,9 @@ package com.livenation.mobile.android.na.cash.service.responses;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class CashResponse {
+public class CashResponse implements Serializable {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static <T extends CashResponse> T fromJsonString(String body, Class<T> clazz) throws IOException {

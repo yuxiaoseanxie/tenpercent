@@ -19,6 +19,9 @@ public class CashCustomerStatus extends CashResponse {
     @JsonProperty("profile")
     private CashCustomerProfile profile;
 
+    @JsonProperty("passcode_confirmation_enabled")
+    private boolean passwordConfirmationEnabled;
+
 
     public CashCustomer getCustomer() {
         return customer;
@@ -36,6 +39,9 @@ public class CashCustomerStatus extends CashResponse {
         return profile;
     }
 
+    public boolean isPasswordConfirmationEnabled() {
+        return passwordConfirmationEnabled;
+    }
 
     @Override
     public String toString() {
@@ -44,6 +50,7 @@ public class CashCustomerStatus extends CashResponse {
                 ", payments=" + payments +
                 ", blockers=" + blockers +
                 ", profile=" + profile +
+                ", passwordConfirmationEnabled=" + passwordConfirmationEnabled +
                 '}';
     }
 }

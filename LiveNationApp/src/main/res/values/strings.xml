@@ -255,6 +255,8 @@
     <string name="activity_label_cash_amounts">Select Amount</string>
     <string name="activity_label_cash_details">Requesting</string>
     <string name="cash_select_quantity">Select Quantity</string>
+    <string name="cash_phone_number_text">Which mobile phone number should we send your receipt to?</string>
+    <string name="cash_powered_by">Powered by Square</string>
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>

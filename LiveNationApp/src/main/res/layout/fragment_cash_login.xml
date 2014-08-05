@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/outer_padding"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/inter_item_padding_large"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/cash_phone_number_text"/>
+
+    <EditText
+        android:id="@+id/fragment_cash_login_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:inputType="phone"
+        android:imeOptions="actionGo"
+        android:textSize="18sp"
+        android:hint="@string/phone"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/inter_item_padding_large"
+        android:src="@drawable/cash_powered_by"
+        android:contentDescription="@string/cash_powered_by"/>
+
+</LinearLayout>

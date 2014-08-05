@@ -2,22 +2,17 @@ package com.livenation.mobile.android.na.cash;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_QUANTITIES = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.EXTRA_QUANTITIES";
 
-    @InjectView(R.id.activity_request_details_view_pager) ViewPager viewPager;
+    private static final String FRAGMENT_TAG = "FRAGMENT_TAG";
 
-    private PageAdapter adapter;
+    private CashCustomerStatus customerStatus;
 
     //region Lifecycle
 
@@ -25,54 +20,56 @@ public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_details);
-        ButterKnife.inject(this);
 
-        this.adapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
+        showPage(Page.ENTER_PHONE_NUMBER);
     }
 
     //endregion
 
 
-    public void nextPage() {
+    public void continueWithCustomerStatus(CashCustomerStatus customerStatus) {
+        this.customerStatus = customerStatus;
 
+        if (customerStatus.getBlockers() != null && customerStatus.getBlockers().getCard() != null) {
+            showPage(Page.ENTER_DEBIT_CARD);
+        } else {
+            showPage(Page.ENTER_VERIFICATION_CODE);
+        }
     }
 
-
-    private class PageAdapter extends FragmentPagerAdapter {
-        private PageAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public int getCount() {
-            return Page.values().length;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (Page.values()[position]) {
-                case ENTER_PHONE_NUMBER:
-                    return null;
-
-                case ENTER_DEBIT_CARD:
-                    return null;
-
-                case ENTER_NAME:
-                    return null;
-
-                case ENTER_VERIFICATION_CODE:
-                    return null;
-            }
-
-            return null;
+    public void showPage(Page page) {
+        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG) == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.activity_request_details_container, page.newInstance(), FRAGMENT_TAG)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_request_details_container, page.newInstance(), FRAGMENT_TAG)
+                    .commit();
         }
     }
 
     private static enum Page {
-        ENTER_PHONE_NUMBER,
-        ENTER_DEBIT_CARD,
-        ENTER_NAME,
-        ENTER_VERIFICATION_CODE,
+        ENTER_PHONE_NUMBER(CashLoginFragment.class),
+        ENTER_DEBIT_CARD(Fragment.class),
+        ENTER_NAME(Fragment.class),
+        ENTER_VERIFICATION_CODE(Fragment.class);
+
+        public Fragment newInstance() {
+            try {
+                return clazz.newInstance();
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+
+        private Class<? extends Fragment> clazz;
+        private Page(Class<? extends Fragment> clazz) {
+            this.clazz = clazz;
+        }
     }
 }
