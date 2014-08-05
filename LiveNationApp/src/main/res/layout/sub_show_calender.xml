@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ui_underscore_pressable_background"
-    android:minHeight="@dimen/view_lineup_min_height"
+    android:minHeight="@dimen/nice_height"
     android:orientation="horizontal">
 
     <ImageView

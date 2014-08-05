@@ -15,10 +15,9 @@
         layout="@layout/sub_venue_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/venue_detail_margin_bottom"
-        android:layout_marginLeft="@dimen/venue_detail_margin_left"
-        android:layout_marginRight="@dimen/venue_detail_margin_right"
-        android:layout_marginTop="@dimen/venue_detail_margin_top"
+        android:layout_marginLeft="@dimen/gap_medium"
+        android:layout_marginRight="@dimen/gap_small"
+        android:layout_marginTop="@dimen/gap_medium"
         android:background="@drawable/ui_underscore_background"></include>
     <ImageView style="@style/SwooshDivider.with_top_margin" />
     <TextView

@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/fragment_show_frame_foreground"
-        android:layout_marginBottom="@dimen/detail_page_title_margin_bottom"
-        android:layout_marginLeft="@dimen/detail_page_title_margin_left"
-        android:layout_marginRight="@dimen/detail_page_title_margin_right"
+        android:layout_marginBottom="@dimen/gap_medium"
+        android:layout_marginLeft="@dimen/gap_medium"
+        android:layout_marginRight="@dimen/gap_medium"
         android:text="@string/mock_placeholder_artist_title_1"
         android:textAppearance="@style/ln.text.xlarge.bold.white"></TextView>
 

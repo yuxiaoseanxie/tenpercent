@@ -3,44 +3,39 @@
 
     <style name="ui_header_transparent" parent="@android:style/Widget.Holo.Light.TextView">
         <item name="android:minHeight">@dimen/ui_header_transparent_min_height</item>
-        <item name="android:paddingTop">@dimen/ui_header_transparent_padding_top</item>
+        <item name="android:paddingTop">@dimen/gap_medium</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textAppearance">@style/ln.text.small.bold.red.allcaps</item>
     </style>
 
     <style name="ui_header_transparent.with_bottom_padding">
-        <item name="android:paddingBottom">@dimen/ui_header_transparent_padding_bottom</item>
+        <item name="android:paddingBottom">@dimen/gap_medium</item>
     </style>
 
     <style name="ui_underscore">
         <item name="android:background">@drawable/ui_underscore_background</item>
     </style>
 
-    <style name="ui_overflow">
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">@dimen/ui_overflow_vertical_padding</item>
-        <item name="android:paddingBottom">@dimen/ui_overflow_vertical_padding</item>
-        <item name="android:layout_marginBottom">@dimen/ui_overflow_margin_bottom</item>
-    </style>
+
 
     <style name="ui_long_text">
-        <item name="android:padding">@dimen/ui_long_text_padding</item>
+        <item name="android:padding">@dimen/gap_medium</item>
         <item name="android:textAppearance">@style/ln.text.small</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
     <style name="favorite_item_checkbox">
-        <item name="android:layout_marginLeft">@dimen/ui_lineup_margin_left</item>
+        <item name="android:layout_marginLeft">@dimen/gap_small</item>
     </style>
 
     <style name="favorite_item_title">
-        <item name="android:layout_marginRight">@dimen/favorite_margin_right</item>
+        <item name="android:layout_marginRight">@dimen/gap_small</item>
     </style>
 
 
     <style name="ui_tab" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_actionbar</item>
-        <item name="android:minHeight">@dimen/ui_tab_height</item>
+        <item name="android:minHeight">@dimen/minimum_pressable</item>
     </style>
 
     <style name="account_google_plus_login_button">
@@ -68,7 +63,7 @@
     </style>
 
     <style name="list_search_result_type">
-        <item name="android:minWidth">@dimen/list_search_type_min_width</item>
+        <item name="android:minWidth">@dimen/nice_height</item>
         <item name="android:minHeight">@dimen/list_search_type_min_height</item>
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:background">@drawable/list_search_result_type</item>
@@ -92,9 +87,9 @@
 
     <style name="recommendations_upsell">
         <item name="android:layout_marginBottom">
-            @dimen/button_recommendations_upsell_margin_bottom
+            @dimen/gap_tiny
         </item>
-        <item name="android:layout_marginTop">@dimen/button_recommendations_upsell_margin_top</item>
+        <item name="android:layout_marginTop">@dimen/gap_small</item>
     </style>
 
     <style name="recommendations_upsell.facebook">
@@ -120,7 +115,7 @@
     </style>
 
     <style name="custom_center_text" parent="ln.text.small.bold.white">
-        <item name="android:drawablePadding">@dimen/recommendations_button_drawable_padding</item>
+        <item name="android:drawablePadding">@dimen/gap_smaller</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -141,7 +136,7 @@
     </style>
 
     <style name="SwooshDivider.with_top_margin">
-        <item name="android:layout_marginTop">@dimen/swoosh_divider_margin_top</item>
+        <item name="android:layout_marginTop">@dimen/gap_large</item>
     </style>
 
     <style name="ActionBar.Spinner" parent="@android:style/Widget.Holo.Light.Spinner"/>

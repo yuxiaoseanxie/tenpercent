@@ -20,7 +20,7 @@
         <View
             android:layout_width="0dip"
             android:layout_height="1dip"
-            android:layout_marginRight="@dimen/account_header_divider_margin"
+            android:layout_marginRight="@dimen/gap_small"
             android:layout_weight="1"
             android:background="@color/ui_header1_accent" />
 
@@ -35,7 +35,7 @@
         <View
             android:layout_width="0dip"
             android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/account_header_divider_margin"
+            android:layout_marginLeft="@dimen/gap_small"
             android:layout_weight="1"
             android:background="@color/ui_header1_accent" />
     </LinearLayout>
@@ -54,8 +54,8 @@
             android:drawableLeft="@drawable/login_facebook_logo"
             android:drawablePadding="8dp"
             android:minWidth="@dimen/account_header_sso_button_width"
-            android:paddingLeft="@dimen/account_header_sso_button_padding"
-            android:paddingRight="@dimen/account_header_sso_button_padding"
+            android:paddingLeft="@dimen/gap_small"
+            android:paddingRight="@dimen/gap_small"
             android:text="@string/login_facebook_button" />
 
         <TextView
@@ -75,8 +75,8 @@
             android:drawableLeft="@drawable/login_google_plus_logo"
             android:drawablePadding="8dp"
             android:minWidth="@dimen/account_header_sso_button_width"
-            android:paddingLeft="@dimen/account_header_sso_button_padding"
-            android:paddingRight="@dimen/account_header_sso_button_padding"
+            android:paddingLeft="@dimen/gap_small"
+            android:paddingRight="@dimen/gap_small"
             android:text="@string/login_google_plus_button" />
 
     </LinearLayout>

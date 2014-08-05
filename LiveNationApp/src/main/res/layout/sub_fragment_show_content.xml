@@ -23,7 +23,7 @@
             android:id="@+id/fragment_show_venue_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fragment_show_venue_detail_margin_bottom"
+            android:layout_marginBottom="@dimen/gap_tiny"
             android:background="@drawable/livenation_selector_pressable_background" />
 
         <FrameLayout

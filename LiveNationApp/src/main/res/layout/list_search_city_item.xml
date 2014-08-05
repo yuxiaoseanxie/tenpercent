@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    android:minHeight="@dimen/list_search_min_height"
+    android:minHeight="@dimen/list_item_height"
     android:orientation="horizontal">
 
 
@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/list_search_city_item_margin_left"
+        android:layout_marginLeft="@dimen/gap_medium"
         android:drawableLeft="@drawable/your_location_pin"
-        android:drawablePadding="@dimen/list_search_city_item_drawable_padding"
+        android:drawablePadding="@dimen/gap_medium"
         android:text="@string/mock_artist_type"
         android:textAppearance="@style/ln.text.large.bold" />
 

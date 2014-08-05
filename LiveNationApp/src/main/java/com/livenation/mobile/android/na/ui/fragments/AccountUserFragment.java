@@ -113,7 +113,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void onResponse(Bitmap bitmap) {
         if (bitmap != null) {
-            bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.imageview_stroke_width));
+            bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.one_dp));
             image.setImageBitmap(bitmap);
         } else {
             image.setImageBitmap(null);

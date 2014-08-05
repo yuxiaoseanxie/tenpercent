@@ -19,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/detail_page_title_margin_bottom"
-            android:layout_marginLeft="@dimen/detail_page_title_margin_left"
-            android:layout_marginRight="@dimen/detail_page_title_margin_right"
+            android:layout_marginBottom="@dimen/gap_medium"
+            android:layout_marginLeft="@dimen/gap_medium"
+            android:layout_marginRight="@dimen/gap_medium"
             android:textAppearance="@style/ln.text.xlarge.bold" />
 
     </FrameLayout>
@@ -32,11 +32,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/favorite_checkbox_header_margin_left"
-        android:layout_marginTop="@dimen/favorite_checkbox_header_margin_top"
+        android:layout_marginLeft="@dimen/gap_small"
+        android:layout_marginTop="@dimen/gap_small"
         android:button="@drawable/checkbox_favorite_disc_selector"
         android:checked="false"
-        android:minHeight="@dimen/favorite_checkbox_min_height"
-        android:minWidth="@dimen/favorite_checkbox_min_width" />
+        android:minHeight="@dimen/minimum_pressable"
+        android:minWidth="@dimen/minimum_pressable" />
 
 </RelativeLayout>

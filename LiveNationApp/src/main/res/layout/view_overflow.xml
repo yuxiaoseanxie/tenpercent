@@ -4,17 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/ui_overflow_view_min_height">
+    android:minHeight="@dimen/list_item_height">
 
     <ImageView
         android:id="@+id/view_overflow_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
+        android:scaleType="center"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/ui_overflow_icon_margin_left"
-        android:layout_marginRight="@dimen/ui_overflow_icon_margin_right"
-        android:paddingBottom="@dimen/ui_overflow_vertical_padding"
-        android:paddingTop="@dimen/ui_overflow_vertical_padding"
         android:src="@drawable/overflow_maximize" />
 
     <TextView
@@ -28,7 +25,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/underscore_container_height"
+        android:layout_height="@dimen/one_dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
 

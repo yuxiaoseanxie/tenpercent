@@ -13,9 +13,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/venue_detail_image_margin_right"
-            android:minHeight="@dimen/venue_detail_image_min_height"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:layout_marginRight="@dimen/gap_small"
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/gap_large"
             android:scaleType="center"
             android:src="@drawable/venue_location_red" />
 
@@ -33,16 +33,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/venue_detail_location_box"
-        android:layout_marginTop="@dimen/venue_detail_item_spacing"
+        android:layout_marginTop="@dimen/gap_small"
         android:gravity="top"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/venue_detail_image_margin_right"
-            android:minHeight="@dimen/venue_detail_image_min_height"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:layout_marginRight="@dimen/gap_small"
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/gap_large"
             android:scaleType="center"
             android:src="@drawable/venue_phone_red" />
 
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/venue_detail_phone_box"
-        android:layout_marginRight="@dimen/venue_detail_link_text_margin_left"
+        android:layout_marginRight="@dimen/gap_medium"
         android:background="@drawable/livenation_selector_pressable_background"
         android:drawableLeft="@drawable/venue_info_plus"
         android:drawablePadding="6dp"

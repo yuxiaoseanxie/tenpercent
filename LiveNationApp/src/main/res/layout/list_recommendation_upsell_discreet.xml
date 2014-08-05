@@ -9,7 +9,7 @@
 
     <ImageView
         android:layout_width="@dimen/ui_gutter_width"
-        android:layout_height="@dimen/favorite_checkbox_min_width"
+        android:layout_height="@dimen/minimum_pressable"
         android:scaleType="center"
         android:src="@drawable/favorite_on" />
 

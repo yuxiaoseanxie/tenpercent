@@ -7,7 +7,7 @@
         android:id="@+id/fragment_show_ticketbar_find"
         style="@style/bottom_bar_button_text"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_ticketbar_height"
+        android:layout_height="@dimen/nice_height"
         android:layout_centerInParent="true"
         android:background="@drawable/ui_ticketbar_background"
         android:text="@string/ticketbar_find_ticket" />
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/ui_ticketbar_options_height"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/list_show_item_padding"
+        android:layout_marginLeft="@dimen/gap_small"
         android:background="@drawable/findtickets_option_selector_background"
         android:text="@string/ticketbar_options" />
 
