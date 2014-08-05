@@ -82,7 +82,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         }
         shows.setMaxEvents(MAX_INLINE);
         shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
-        shows.setReservedHeight(300);
 
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
