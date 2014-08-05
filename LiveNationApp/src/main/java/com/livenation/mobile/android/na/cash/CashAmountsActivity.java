@@ -1,8 +1,6 @@
 package com.livenation.mobile.android.na.cash;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,23 +11,22 @@ import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
-import java.util.Set;
+import java.util.HashSet;
 
-public class CashRecipientsActivity extends LiveNationFragmentActivity {
-    public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.CashRecipientsActivity.EXTRA_TOTAL";
-    public static final String EXTRA_QUANTITY = "com.livenation.mobile.android.na.cash.CashRecipientsActivity.EXTRA_QUANTITY";
+public class CashAmountsActivity extends LiveNationFragmentActivity {
+    public static final String EXTRA_CONTACTS = "com.livenation.mobile.android.na.cash.CashAmountsActivity.EXTRA_CONTACTS";
 
+    private CashAmountsFragment fragment;
     private MenuItem nextItem;
-    private CashRecipientsFragment fragment;
 
     //region Lifecycle
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cash_recipients);
+        setContentView(R.layout.activity_cash_amounts);
 
-        this.fragment = (CashRecipientsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_recipients_fragment);
+        this.fragment = (CashAmountsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_amounts_fragment);
 
         getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getQuantity(), getQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
     }
@@ -46,7 +43,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        nextItem.getActionView().setEnabled(fragment.hasContactsSelected());
+        nextItem.getActionView().setEnabled(fragment.getRemainingQuantity() == 0);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -62,15 +59,16 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
         return (Total) getIntent().getSerializableExtra(CashRecipientsActivity.EXTRA_TOTAL);
     }
 
+    @SuppressWarnings("unchecked")
+    public HashSet<ContactData> getContacts() {
+        return (HashSet<ContactData>) getIntent().getSerializableExtra(CashAmountsActivity.EXTRA_CONTACTS);
+    }
+
 
     private class NextClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(CashRecipientsActivity.this, CashAmountsActivity.class);
-            intent.putExtras(getIntent().getExtras());
 
-            intent.putExtra(CashAmountsActivity.EXTRA_CONTACTS, fragment.getSelectedContacts());
-            startActivity(intent);
         }
     }
 }

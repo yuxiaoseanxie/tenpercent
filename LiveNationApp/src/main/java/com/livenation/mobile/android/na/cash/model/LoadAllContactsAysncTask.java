@@ -119,6 +119,7 @@ public class LoadAllContactsAysncTask extends AsyncTask<Void, Void, ArrayList<Co
             String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             accumulator.add(new ContactData(id, displayName, emails, phoneNumbers, photoUri));
         }
+        cursor.close();
 
         return accumulator;
     }

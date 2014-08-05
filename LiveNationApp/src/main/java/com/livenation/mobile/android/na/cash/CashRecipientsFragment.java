@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -16,19 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.model.DataCallback;
 import com.livenation.mobile.android.na.cash.model.LoadAllContactsAysncTask;
 import com.livenation.mobile.android.na.cash.model.PhoneNumber;
 import com.livenation.mobile.android.na.cash.model.ContactData;
-import com.livenation.mobile.android.na.ui.views.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,11 +42,10 @@ public class CashRecipientsFragment extends ListFragment {
     @InjectView(R.id.fragment_cash_recipients_field_note) EditText noteField;
     @InjectView(R.id.fragment_cash_recipients_clear_to) ImageButton clearToField;
 
-    private RecipientAdapter recipientsAdapter;
+    private ContactDataAdapter recipientsAdapter;
     private ArrayList<ContactData> allContacts;
     private HashSet<ContactData> selectedContacts = new HashSet<ContactData>();
 
-    private boolean searching = false;
     private Handler searchHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -76,7 +72,7 @@ public class CashRecipientsFragment extends ListFragment {
             }
         }).execute();
 
-        this.recipientsAdapter = new RecipientAdapter(getActivity());
+        this.recipientsAdapter = new ContactDataAdapter(getActivity(), selectedContacts);
         setListAdapter(recipientsAdapter);
 
         setRetainInstance(true);
@@ -105,6 +101,10 @@ public class CashRecipientsFragment extends ListFragment {
         return !selectedContacts.isEmpty();
     }
 
+    public HashSet<ContactData> getSelectedContacts() {
+        return selectedContacts;
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -120,15 +120,11 @@ public class CashRecipientsFragment extends ListFragment {
     }
 
     private void showSearchResults(ArrayList<ContactData> results) {
-        searching = true;
-
         recipientsAdapter.clear();
         recipientsAdapter.addAll(results);
     }
 
     private void dismissSearchResults() {
-        searching = false;
-
         recipientsAdapter.clear();
         recipientsAdapter.addAll(allContacts);
     }
@@ -218,51 +214,4 @@ public class CashRecipientsFragment extends ListFragment {
         }
     }
 
-    class RecipientAdapter extends ArrayAdapter<ContactData> {
-        private final LayoutInflater inflater;
-
-        private RecipientAdapter(Context context) {
-            super(context, R.layout.list_cash_recipient);
-
-            this.inflater = LayoutInflater.from(context);
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-            if (view == null) {
-                view = inflater.inflate(R.layout.list_cash_recipient, parent, false);
-                view.setTag(new ViewHolder(view));
-            }
-
-            ViewHolder holder = (ViewHolder) view.getTag();
-
-            ContactData contactData = getItem(position);
-            holder.name.setText(contactData.getDisplayName());
-            holder.details.setText(contactData.getDetails());
-            if (contactData.getPhotoUri() != null)
-                holder.photo.setImageURI(contactData.getPhotoUri());
-            else
-                holder.photo.setImageDrawable(null);
-
-            if (selectedContacts.contains(contactData))
-                holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
-            else
-                holder.selection.setImageResource(R.drawable.cash_item_checkmark_off);
-
-            return view;
-        }
-
-        class ViewHolder {
-            @InjectView(R.id.list_cash_recipient_name) TextView name;
-            @InjectView(R.id.list_cash_recipient_details) TextView details;
-            @InjectView(R.id.list_cash_recipient_photo) CircularImageView photo;
-            @InjectView(R.id.list_cash_recipient_selection) ImageView selection;
-
-            ViewHolder(@NonNull View view) {
-                ButterKnife.inject(this, view);
-            }
-        }
-    }
 }

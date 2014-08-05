@@ -252,9 +252,12 @@
     <string name="cash_content_description_contact_photo">Contact Photo</string>
     <string name="cash_content_description_clear_field">Clear</string>
     <string name="activity_label_cash_recipients">Recipients</string>
+    <string name="activity_label_cash_amounts">Select Amount</string>
+    <string name="activity_label_cash_details">Requesting</string>
+    <string name="cash_select_quantity">Select Quantity</string>
     <plurals name="cash_transaction_detail">
-        <item quantity="one">1 ticket</item>
-        <item quantity="other">%d tickets</item>
+        <item quantity="one">1 ticket, %2$s total</item>
+        <item quantity="other">%1$d tickets, %2$s total</item>
     </plurals>
 
 </resources>

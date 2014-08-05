@@ -44,4 +44,7 @@
 
     <color name="onboarding_scanning_view_background">#f2f2f2</color>
 
+    <!-- Cash -->
+    <color name="square_cash_green">#219602</color>
+
 </resources>

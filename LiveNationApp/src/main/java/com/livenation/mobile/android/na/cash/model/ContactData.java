@@ -2,18 +2,21 @@ package com.livenation.mobile.android.na.cash.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ContactData {
+public class ContactData implements Serializable {
     private final String id;
     private final String name;
     private final ArrayList<String> emails;
     private final ArrayList<PhoneNumber> phoneNumbers;
-    private final Uri photoUri;
+    private final String photoUri;
 
     public ContactData(@NonNull String id,
                        @NonNull String name,
@@ -24,7 +27,7 @@ public class ContactData {
         this.name = name;
         this.emails = emails;
         this.phoneNumbers = phoneNumbers;
-        this.photoUri = photoUri;
+        this.photoUri = photoUri != null? photoUri.toString() : null;
     }
 
 
@@ -49,7 +52,10 @@ public class ContactData {
     }
 
     public Uri getPhotoUri() {
-        return photoUri;
+        if (photoUri != null)
+            return Uri.parse(photoUri);
+        else
+            return null;
     }
 
     public String getDisplayName() {
