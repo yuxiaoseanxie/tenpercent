@@ -41,6 +41,7 @@
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="fan_man_min_height">48dp</dimen>
+    <dimen name="sso_image_size">90dp</dimen>
 
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>
