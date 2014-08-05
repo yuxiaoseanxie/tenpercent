@@ -3,7 +3,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="featured_layout_padding">10dp</dimen>
     <dimen name="list_show_item_padding">10dp</dimen>
     <dimen name="list_show_item_min_height">80dp</dimen>
     <dimen name="list_show_item_date_min_width">30dp</dimen>
@@ -15,7 +14,6 @@
     <dimen name="detail_page_title_margin_right">15dp</dimen>
     <dimen name="detail_page_title_margin_bottom">15dp</dimen>
     <dimen name="ui_lineup_margin_left">10dp</dimen>
-    <dimen name="ui_lineup_padding_bottom">16dp</dimen>
     <dimen name="ui_ticket_offering_padding">21dp</dimen>
     <dimen name="ui_overflow_vertical_padding">16dp</dimen>
     <dimen name="ui_overflow_icon_margin_left">18dp</dimen>
@@ -27,19 +25,12 @@
     <dimen name="ui_long_text_padding">16dp</dimen>
     <dimen name="ui_overflow_view_min_height">55dp</dimen>
     <dimen name="ui_ticketbar_height">56dp</dimen>
-    <dimen name="ui_ticketbar_min_padding_left">90dp</dimen>
     <dimen name="ui_ticketbar_options_height">32dp</dimen>
     <dimen name="ui_tab_height">48dp</dimen>
-    <dimen name="ui_header1_min_height">30dp</dimen>
-    <dimen name="ui_header1_text_offset_vertical">2dp</dimen>
-    <dimen name="ui_header1_accent_height">2dp</dimen>
     <dimen name="ui_gutter_width">58dp</dimen>
     <dimen name="favorite_item_min_height">55dp</dimen>
-    <dimen name="favorite_min_height">38dp</dimen>
-    <dimen name="favorite_margin_left">10dp</dimen>
     <dimen name="favorite_margin_right">10dp</dimen>
     <dimen name="view_lineup_min_height">60dp</dimen>
-    <dimen name="view_loading_padding_top_bottom">10dp</dimen>
     <dimen name="fragment_show_map_height">70dp</dimen>
     <dimen name="fragment_show_map_gradient_height">35dp</dimen>
     <dimen name="fragment_show_venue_detail_margin_bottom">5dp</dimen>
@@ -66,16 +57,13 @@
     <dimen name="nearby_show_date_margin_bottom">15dp</dimen>
     <dimen name="nearby_show_header_checkbox_margin_left">8dp</dimen>
     <dimen name="ui_underscore_height">1dp</dimen>
-    <dimen name="show_calendar_image_margin_right">10dp</dimen>
     <dimen name="account_header_container_width">255dp</dimen>
     <dimen name="account_header_divider_margin">10dp</dimen>
     <dimen name="account_header_sso_button_width">112dp</dimen>
     <dimen name="account_header_sso_button_height">40dp</dimen>
     <dimen name="account_header_sso_button_padding">10dp</dimen>
-    <dimen name="account_detail_image_min_height">48dp</dimen>
     <dimen name="account_detail_image_min_width">56dp</dimen>
     <dimen name="account_detail_min_height">59dp</dimen>
-    <dimen name="account_footer_change_margin_right">15dp</dimen>
     <dimen name="underscore_container_height">1dp</dimen>
     <dimen name="favorite_checkbox_min_height">48dp</dimen>
     <dimen name="favorite_checkbox_min_width">48dp</dimen>
@@ -121,9 +109,6 @@
     <dimen name="imageview_stroke_width">1dp</dimen>
     <dimen name="shadow_width">1dp</dimen>
 
-    <!-- Box office -->
-    <dimen name="box_office_max_height">450dp</dimen>
-    <dimen name="box_office_min_height">50dp</dimen>
 
     <!-- Refresh bar -->
     <dimen name="view_refresh_bar_margin">28dp</dimen>
