@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.cash;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,7 +69,10 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
     private class NextClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-
+            Intent intent = new Intent(CashAmountsActivity.this, CashRequestDetailsActivity.class);
+            intent.putExtras(getIntent().getExtras());
+            intent.putExtra(CashRequestDetailsActivity.EXTRA_QUANTITIES, fragment.getQuantities());
+            startActivity(intent);
         }
     }
 }

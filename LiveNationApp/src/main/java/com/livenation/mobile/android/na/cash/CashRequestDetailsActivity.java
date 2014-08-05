@@ -13,6 +13,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
+    public static final String EXTRA_QUANTITIES = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.EXTRA_QUANTITIES";
+
     @InjectView(R.id.activity_request_details_view_pager) ViewPager viewPager;
 
     private PageAdapter adapter;

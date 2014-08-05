@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
-import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.ListView;
 
@@ -15,13 +14,14 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
     private ContactDataAdapter adapter;
-    private final SparseIntArray quantities = new SparseIntArray();
+    private final ArrayList<Integer> quantities = new ArrayList<Integer>();
     private int remainingQuantity = 0;
     private BigDecimal pricePerTicket = BigDecimal.ZERO;
 
@@ -49,7 +49,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         if (requestCode == SELECT_QUANTITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             int newQuantity = data.getIntExtra(CashQuantityDialogFragment.ARG_VALUE, 1);
-            quantities.put(selectQuantityPosition, newQuantity);
+            quantities.set(selectQuantityPosition, newQuantity);
 
             recalculateRemainingQuantity();
             adapter.notifyDataSetChanged();
@@ -69,7 +69,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private void calculateQuantities() {
         for (int i = 0, count = adapter.getCount(); i < count; i++) {
-            quantities.put(i, 1);
+            quantities.add(1);
         }
 
         int totalQuantity = getCashAmountsActivity().getQuantity();
@@ -79,8 +79,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private void recalculateRemainingQuantity() {
         int totalQuantity = getCashAmountsActivity().getQuantity() - 1;
-        for (int i = 0, count = quantities.size(); i < count; i++) {
-            int quantity = quantities.get(i);
+        for (int quantity : quantities) {
             totalQuantity -= quantity;
         }
 
@@ -99,6 +98,10 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     public int getRemainingQuantity() {
         return remainingQuantity;
+    }
+
+    public ArrayList<Integer> getQuantities() {
+        return quantities;
     }
 
     //endregion
