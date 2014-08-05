@@ -13,6 +13,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/venue_detail_image_margin_right"
             android:minHeight="@dimen/venue_detail_image_min_height"
             android:minWidth="@dimen/venue_detail_image_min_width"
             android:scaleType="center"
@@ -39,6 +40,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/venue_detail_image_margin_right"
             android:minHeight="@dimen/venue_detail_image_min_height"
             android:minWidth="@dimen/venue_detail_image_min_width"
             android:scaleType="center"
@@ -61,9 +63,9 @@
         android:layout_alignTop="@id/venue_detail_phone_box"
         android:layout_marginRight="@dimen/venue_detail_link_text_margin_left"
         android:background="@drawable/livenation_selector_pressable_background"
-        android:text="@string/venue_detail_link"
         android:drawableLeft="@drawable/venue_info_plus"
         android:drawablePadding="6dp"
+        android:text="@string/venue_detail_link"
         android:textAppearance="@style/ln.text.small.red"
         android:visibility="gone" />
 
