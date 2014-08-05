@@ -64,10 +64,12 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
     }
 
     private void init(Event event) {
+        String timeZone = event.getVenue() != null? event.getVenue().getTimeZone() : null;
+
         List<CalendarItem> calendarItemList = new ArrayList<CalendarItem>();
         //Add Show date item
         if (!event.getIsMegaticket()) {
-            CalendarItem showDate = new CalendarItem(getString(R.string.calendar_dialog_show_date_header_title));
+            CalendarItem showDate = new CalendarItem(timeZone, getString(R.string.calendar_dialog_show_date_header_title));
             if (event.getLocalStartTime() != null) {
                 showDate.setStartDate(event.getLocalStartTime());
                 calendarItemList.add(showDate);
@@ -75,7 +77,7 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
         }
 
         //Add General onSale items
-        CalendarItem generalOnSale = new CalendarItem(getString(R.string.calendar_dialog_on_sale_general_title));
+        CalendarItem generalOnSale = new CalendarItem(timeZone, getString(R.string.calendar_dialog_on_sale_general_title));
         if (event.getOnSaleDate() != null) {
             generalOnSale.setStartDate(event.getOnSaleDate());
             calendarItemList.add(generalOnSale);
@@ -88,7 +90,7 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
             List<Presale> presales = ticketOffering.getPresales();
             if (presales != null) {
                 for (Presale presale : presales) {
-                    CalendarItem presaleItem = new CalendarItem(presale.getName());
+                    CalendarItem presaleItem = new CalendarItem(timeZone, presale.getName());
                     presaleItem.setStartDate(presale.getStartsAt());
                     presaleItem.setEndDate(presale.getEndsAt());
                     calendarItemList.add(presaleItem);
@@ -130,8 +132,10 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
         private String name;
         private Date startDate;
         private Date endDate;
+        private String timeZone;
 
-        public CalendarItem(String name) {
+        public CalendarItem(String timeZone, String name) {
+            this.timeZone = timeZone;
             this.name = name;
         }
 
@@ -157,6 +161,14 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
 
         public void setEndDate(Date endDate) {
             this.endDate = endDate;
+        }
+
+        public String getTimeZone() {
+            return timeZone;
+        }
+
+        public void setTimeZone(String timeZone) {
+            this.timeZone = timeZone;
         }
     }
 }

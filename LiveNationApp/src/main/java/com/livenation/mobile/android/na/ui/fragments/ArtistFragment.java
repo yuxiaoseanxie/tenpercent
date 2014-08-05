@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -19,6 +18,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
@@ -35,7 +35,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private Artist artist;
     private ArtistEvents artistEvents;
 
-    private NetworkImageView artistImageView;
+    private TransitioningImageView artistImageView;
     private FavoriteCheckBox favoriteCheckBox;
     private TextView artistTitle;
     private TextView showsHeader;
@@ -54,7 +54,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        this.artistImageView = (NetworkImageView) view.findViewById(R.id.fragment_artist_image);
+        this.artistImageView = (TransitioningImageView) view.findViewById(R.id.fragment_artist_image);
         this.favoriteCheckBox = (FavoriteCheckBox) view.findViewById(R.id.fragment_artist_favorite_checkbox);
         this.artistTitle = (TextView) view.findViewById(R.id.fragment_artist_title);
 
@@ -153,10 +153,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistTitle.setText(artist.getName());
 
         String imageKey = artist.getBestImageKey(IMAGE_PREFERRED_ARTIST_KEYS);
-        artistImageView.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
+        artistImageView.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
         if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
-            artistImageView.setImageUrl(imageUrl, getImageLoader());
+            artistImageView.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
 
         String bio = artist.getBio();

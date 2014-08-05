@@ -3,26 +3,30 @@ package com.livenation.mobile.android.na.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.analytics.Analytics;
+import com.livenation.mobile.android.ticketing.analytics.CartAnalytic;
 import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
+import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -37,8 +41,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private Event event;
     private Cart cart;
+    private boolean isResale;
 
-    private NetworkImageView image;
+    private TransitioningImageView image;
     private TextView headerThankYouText;
     private TextView eventNameText;
 
@@ -49,8 +54,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private TextView orderSeatText;
     private TextView orderAccountText;
 
-    private Button detailsButton;
-
     //region Lifecycle
 
     @Override
@@ -59,8 +62,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
+        this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
 
-        this.image = (NetworkImageView) findViewById(R.id.activity_order_confirmation_image);
+        this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
 
@@ -71,7 +75,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_account);
 
-        this.detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
+        Button detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
         detailsButton.setOnClickListener(new DetailsClickListener());
 
         if (null == savedInstanceState) {
@@ -94,7 +98,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     //region Displaying Data
 
     private void displayImage() {
-        image.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
+        image.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(this, event.getNumericId()));
 
         List<Artist> lineup = event.getLineup();
         if (!lineup.isEmpty()) {
@@ -121,8 +125,13 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private void displayDetails() {
         if (getCart() != null) {
             orderNumberText.setText(getCart().getDisplayOrderID());
-            if (getCart().getOrderSummary() != null && !TextUtils.isEmpty(getCart().getOrderSummary().getSeats())) {
-                orderSeatText.setText(getCart().getOrderSummary().getSeats());
+            if (getCart().getOrderSummary() != null) {
+                if (!TextUtils.isEmpty(getCart().getOrderSummary().getSeats()))
+                    orderSeatText.setText(getCart().getOrderSummary().getSeats());
+                else if (!TextUtils.isEmpty(getCart().getOrderSummary().getSection()))
+                    orderSeatText.setText(getCart().getOrderSummary().getSection());
+                else
+                    orderSeatText.setText(R.string.data_missing_placeholder);
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
             }
@@ -234,6 +243,61 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackScreenLoad() {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+
+        if (getCart() != null) {
+            CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
+            Props ticketQuantityProps = getPreBuiltCartProps();
+            ticketQuantityProps.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_TICKET_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, ticketQuantityProps);
+            Props revenueProps = getPreBuiltCartProps();
+            revenueProps.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_REVENUE, AnalyticConstants.CATEGORY_CHECKOUT, revenueProps);
+            Props convFeeProps = getPreBuiltCartProps();
+            convFeeProps.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, AnalyticConstants.CATEGORY_CHECKOUT, convFeeProps);
+            Props otherFeesProps = getPreBuiltCartProps();
+            otherFeesProps.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, AnalyticConstants.CATEGORY_CHECKOUT, otherFeesProps);
+            Props deliveryFeeProps = getPreBuiltCartProps();
+            deliveryFeeProps.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_DELIVERY_FEE, AnalyticConstants.CATEGORY_CHECKOUT, deliveryFeeProps);
+            Props orderProcessingFeeProps = getPreBuiltCartProps();
+            orderProcessingFeeProps.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_OTHER_FEE, AnalyticConstants.CATEGORY_CHECKOUT, orderProcessingFeeProps);
+            Props originalFaceValueOfTicketProps = getPreBuiltCartProps();
+            originalFaceValueOfTicketProps.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, AnalyticConstants.CATEGORY_CHECKOUT, originalFaceValueOfTicketProps);
+            Props upsellUnitsProps = getPreBuiltCartProps();
+            upsellUnitsProps.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, upsellUnitsProps);
+            Props upsellRevenueProps = getPreBuiltCartProps();
+            upsellRevenueProps.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
+            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_TOTAL, AnalyticConstants.CATEGORY_CHECKOUT, upsellRevenueProps);
+            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+            Props typeProps = getPreBuiltCartProps();
+            String resale  = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isResale) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            typeProps.put(AnalyticConstants.PROP_TYPE, resale);
+            LiveNationAnalytics.track(AnalyticConstants.PROP_TYPE, AnalyticConstants.CATEGORY_CHECKOUT, typeProps);
+
+            boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
+            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket? "resale" : "primary"));
+        }
+    }
+
+    private Props getPreBuiltCartProps() {
+        Props props = new Props();
+        if (event != null) {
+            props.put(AnalyticConstants.PROP_EVENT_ID, event.getId());
+            props.put(AnalyticConstants.PROP_VENUE_ID, event.getVenue().getId());
+            Artist artist = event.getLineup().get(0);
+            if (artist != null) {
+                props.put(AnalyticConstants.PROP_ARTIST_ID, event.getLineup().get(0));
+            }
+        }
+        return props;
     }
 
     private void trackFullDetailsTap() {

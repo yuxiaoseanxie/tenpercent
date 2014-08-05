@@ -267,7 +267,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
                 final String onSaleDate = message.getExtras().getString("on_sale_date");
                 if (artistName != null) {
                     DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
-                    CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(artistName + " " + venueName);
+                    CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(null, artistName + " " + venueName);
                     switch (type) {
                         case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
                         case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:

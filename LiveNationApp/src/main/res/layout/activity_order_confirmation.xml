@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/detail_page_image_height">
 
-            <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
+            <com.livenation.mobile.android.na.ui.views.TransitioningImageView
                 android:id="@+id/activity_order_confirmation_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
