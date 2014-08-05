@@ -15,11 +15,11 @@
         layout="@layout/sub_venue_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/gap_medium"
-        android:layout_marginRight="@dimen/gap_small"
         android:layout_marginTop="@dimen/gap_medium"
         android:background="@drawable/ui_underscore_background"></include>
+
     <ImageView style="@style/SwooshDivider.with_top_margin" />
+
     <TextView
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"

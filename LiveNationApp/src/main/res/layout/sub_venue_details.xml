@@ -13,9 +13,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/gap_small"
             android:minHeight="@dimen/gap_large"
-            android:minWidth="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/venue_location_red" />
 
@@ -40,9 +39,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/gap_small"
             android:minHeight="@dimen/gap_large"
-            android:minWidth="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/venue_phone_red" />
 
