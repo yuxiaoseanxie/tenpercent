@@ -9,6 +9,7 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.ListView;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
 
-public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.PriceProvider {
+public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
     private ContactDataAdapter adapter;
@@ -33,8 +34,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         @SuppressWarnings("unchecked")
         HashSet<ContactData> contacts = getCashAmountsActivity().getContacts();
-        this.adapter = new ContactDataAdapter(getActivity(), null);
-        adapter.setPriceProvider(this);
+        this.adapter = new ContactDataAdapter(getActivity(), ContactDataAdapter.Mode.REVIEW, this);
         adapter.addAll(contacts);
 
         calculatePricePerTicket();
@@ -110,6 +110,18 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         int quantity = quantities.get(position);
         BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
         return TicketingUtils.formatCurrency(null, price);
+    }
+
+    @Override
+    public boolean isContactSelected(int position, @NonNull ContactData contact) {
+        return false;
+    }
+
+    @NonNull
+    @Override
+    public String getDetails(int position, @NonNull ContactData contact) {
+        int quantity = quantities.get(position);
+        return getResources().getQuantityString(R.plurals.cash_recipient_review_detail, quantity, quantity);
     }
 
 

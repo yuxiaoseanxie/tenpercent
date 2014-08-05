@@ -259,5 +259,9 @@
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>
     </plurals>
+    <plurals name="cash_recipient_review_detail">
+        <item quantity="one">for 1 ticket</item>
+        <item quantity="other">for %1$d tickets</item>
+    </plurals>
 
 </resources>

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class CashRecipientsFragment extends ListFragment {
+public class CashRecipientsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     public static final String TAG = CashRecipientsFragment.class.getSimpleName();
     private static final long SEARCH_DELAY = 400;
 
@@ -72,7 +73,7 @@ public class CashRecipientsFragment extends ListFragment {
             }
         }).execute();
 
-        this.recipientsAdapter = new ContactDataAdapter(getActivity(), selectedContacts);
+        this.recipientsAdapter = new ContactDataAdapter(getActivity(), ContactDataAdapter.Mode.SELECTION, this);
         setListAdapter(recipientsAdapter);
 
         setRetainInstance(true);
@@ -138,6 +139,23 @@ public class CashRecipientsFragment extends ListFragment {
         imm.hideSoftInputFromWindow(toField.getWindowToken(), 0);
     }
 
+
+    @Override
+    public boolean isContactSelected(int position, @NonNull ContactData contact) {
+        return selectedContacts.contains(contact);
+    }
+
+    @NonNull
+    @Override
+    public String getDetails(int position, @NonNull ContactData contact) {
+        return contact.getDetails();
+    }
+
+    @NonNull
+    @Override
+    public String getPrice(int position, @NonNull ContactData contact) {
+        return "";
+    }
 
     private class SearchTask extends AsyncTask<String, Void, ArrayList<ContactData>> {
         @Override

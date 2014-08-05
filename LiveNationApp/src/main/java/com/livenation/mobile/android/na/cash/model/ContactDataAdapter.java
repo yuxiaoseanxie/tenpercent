@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.cash.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,36 +10,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.cash.CashRecipientsFragment;
 import com.livenation.mobile.android.na.ui.views.CircularImageView;
-import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     private final LayoutInflater inflater;
-    private final Set<ContactData> selectedContacts;
-    private PriceProvider priceProvider;
+    private final Mode mode;
+    private final DataProvider dataProvider;
 
-    public ContactDataAdapter(@NonNull Context context, @Nullable Set<ContactData> selectedContacts) {
+    public ContactDataAdapter(@NonNull Context context, Mode mode, @NonNull DataProvider dataProvider) {
         super(context, R.layout.list_cash_recipient);
 
         this.inflater = LayoutInflater.from(context);
-        this.selectedContacts = selectedContacts;
+        this.mode = mode;
+        this.dataProvider = dataProvider;
     }
 
 
-    public PriceProvider getPriceProvider() {
-        return priceProvider;
-    }
-
-    public void setPriceProvider(PriceProvider priceProvider) {
-        this.priceProvider = priceProvider;
+    public DataProvider getDataProvider() {
+        return dataProvider;
     }
 
     @Override
@@ -56,32 +45,33 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
 
         ContactData contactData = getItem(position);
         holder.name.setText(contactData.getDisplayName());
-        holder.details.setText(contactData.getDetails());
         if (contactData.getPhotoUri() != null)
             holder.photo.setImageURI(contactData.getPhotoUri());
         else
             holder.photo.setImageDrawable(null);
 
-        if (selectedContacts != null) {
-            holder.selection.setVisibility(View.VISIBLE);
+        holder.details.setText(dataProvider.getDetails(position, contactData));
 
-            if (selectedContacts.contains(contactData))
-                holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
-            else
-                holder.selection.setImageResource(R.drawable.cash_item_checkmark_off);
+        switch (mode) {
+            case SELECTION:
+                holder.selection.setVisibility(View.VISIBLE);
+                holder.price.setVisibility(View.GONE);
 
-            holder.price.setVisibility(View.GONE);
-        } else {
-            holder.price.setVisibility(View.VISIBLE);
+                if (dataProvider.isContactSelected(position, contactData))
+                    holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
+                else
+                    holder.selection.setImageResource(R.drawable.cash_item_checkmark_off);
 
-            if (priceProvider != null) {
-                String price = priceProvider.getPrice(position, contactData);
+                break;
+
+            case REVIEW:
+                holder.selection.setVisibility(View.GONE);
+                holder.price.setVisibility(View.VISIBLE);
+
+                String price = dataProvider.getPrice(position, contactData);
                 holder.price.setText(price);
-            } else {
-                holder.price.setText(null);
-            }
 
-            holder.selection.setVisibility(View.GONE);
+                break;
         }
 
         return view;
@@ -100,7 +90,14 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     }
 
 
-    public interface PriceProvider {
+    public interface DataProvider {
+        boolean isContactSelected(int position, @NonNull ContactData contact);
+        @NonNull String getDetails(int position, @NonNull ContactData contact);
         @NonNull String getPrice(int position, @NonNull ContactData contact);
+    }
+
+    public static enum Mode {
+        SELECTION,
+        REVIEW,
     }
 }
