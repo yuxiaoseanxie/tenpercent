@@ -146,6 +146,20 @@ public class SquareService {
         requestQueue.add(request);
     }
 
+    public void verifyPhoneNumber(@NonNull String phoneNumber, ApiCallback<CashResponse> callback) {
+        assertSession();
+
+        String customerId = Uri.encode(session.getCustomerId());
+        JSONObject body = new JSONObject();
+        try {
+            body.put("phone_number", phoneNumber);
+        } catch (JSONException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        SquareRequest<CashResponse> request = makePostRequest("v1/" + customerId + "/cash/phone-number", body.toString(), CashResponse.class, callback, callback);
+        requestQueue.add(request);
+    }
+
     //endregion
 
 

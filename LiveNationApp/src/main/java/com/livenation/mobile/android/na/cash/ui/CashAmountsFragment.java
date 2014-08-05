@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash;
+package com.livenation.mobile.android.na.cash.ui;
 
 import android.app.Activity;
 import android.content.Intent;

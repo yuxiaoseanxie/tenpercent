@@ -1,19 +1,15 @@
-package com.livenation.mobile.android.na.cash;
+package com.livenation.mobile.android.na.cash.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
-
-import java.util.Set;
 
 public class CashRecipientsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.CashRecipientsActivity.EXTRA_TOTAL";

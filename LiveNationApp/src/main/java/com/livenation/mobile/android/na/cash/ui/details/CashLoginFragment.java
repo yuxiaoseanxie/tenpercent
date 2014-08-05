@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash;
+package com.livenation.mobile.android.na.cash.ui.details;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.ui.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.cash.service.SquareService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;

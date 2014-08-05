@@ -5,14 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
 public class CashMoney extends CashResponse {
+    public static final String CURRENCY_CODE_USD = "USD";
+
+
     @JsonProperty("amount")
-    private BigDecimal amount;
+    private long amount;
 
     @JsonProperty("currency_code")
     private String currencyCode;
 
 
-    public BigDecimal getAmount() {
+    public long getAmount() {
         return amount;
     }
 

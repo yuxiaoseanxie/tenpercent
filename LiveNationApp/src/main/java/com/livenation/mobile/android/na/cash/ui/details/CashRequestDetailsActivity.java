@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash;
+package com.livenation.mobile.android.na.cash.ui.details;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -53,7 +53,7 @@ public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
 
     private static enum Page {
         ENTER_PHONE_NUMBER(CashLoginFragment.class),
-        ENTER_DEBIT_CARD(Fragment.class),
+        ENTER_DEBIT_CARD(CashCardFragment.class),
         ENTER_NAME(Fragment.class),
         ENTER_VERIFICATION_CODE(Fragment.class);
 

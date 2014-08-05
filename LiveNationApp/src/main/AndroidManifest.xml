@@ -150,15 +150,15 @@
 
         <!-- Square Cash -->
         <activity
-            android:name=".cash.CashRecipientsActivity"
+            android:name=".cash.ui.CashRecipientsActivity"
             android:label="@string/activity_label_cash_recipients"/>
 
         <activity
-            android:name=".cash.CashAmountsActivity"
+            android:name=".cash.ui.CashAmountsActivity"
             android:label="@string/activity_label_cash_amounts"/>
 
         <activity
-            android:name=".cash.CashRequestDetailsActivity"
+            android:name=".cash.ui.details.CashRequestDetailsActivity"
             android:label="@string/activity_label_cash_details" />
 
         <!-- Hockey App -->

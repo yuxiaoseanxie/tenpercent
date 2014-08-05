@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash;
+package com.livenation.mobile.android.na.cash.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.ui.details.CashRequestDetailsActivity;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;

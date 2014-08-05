@@ -9,7 +9,7 @@
         android:id="@+id/activity_cash_amounts_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.livenation.mobile.android.na.cash.CashAmountsFragment"
+        android:name="com.livenation.mobile.android.na.cash.ui.CashAmountsFragment"
         tools:layout="@layout/fragment_cash_amounts" />
 
 </FrameLayout>
