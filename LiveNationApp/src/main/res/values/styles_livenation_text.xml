@@ -27,16 +27,13 @@
         <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
-
     <style name="ln.text.tiny.white">
         <item name="android:textColor">@color/white</item>
     </style>
 
-
     <style name="ln.text.small">
         <item name="android:textSize">15sp</item>
     </style>
-
 
     <style name="ln.text.small.white">
         <item name="android:textColor">@color/white</item>
@@ -58,11 +55,9 @@
         <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
-
     <style name="ln.text.small.bold.white">
         <item name="android:textColor">@color/white</item>
     </style>
-
 
     <style name="ln.text.small.bold_italic">
         <item name="android:textStyle">bold|italic</item>
@@ -102,7 +97,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-
     <style name="ln.text.medium.gray">
         <item name="android:textColor">@color/livenation_gray</item>
     </style>
@@ -139,7 +133,6 @@
     <style name="ln.text.medium.bold_italic.red">
         <item name="android:textColor">@color/livenation_red</item>
     </style>
-
 
     <style name="ln.text.large">
         <item name="android:textSize">21sp</item>
@@ -323,7 +316,6 @@
         <item name="android:textColor">@color/footer_text</item>
         <item name="android:textSize">13sp</item>
     </style>
-
 
     <style name="text" />
 
