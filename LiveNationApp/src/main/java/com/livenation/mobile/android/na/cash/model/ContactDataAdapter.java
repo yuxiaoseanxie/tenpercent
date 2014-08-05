@@ -21,7 +21,7 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     private final DataProvider dataProvider;
 
     public ContactDataAdapter(@NonNull Context context, Mode mode, @NonNull DataProvider dataProvider) {
-        super(context, R.layout.list_cash_recipient);
+        super(context, R.layout.list_cash_contact);
 
         this.inflater = LayoutInflater.from(context);
         this.mode = mode;
@@ -37,7 +37,7 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = inflater.inflate(R.layout.list_cash_recipient, parent, false);
+            view = inflater.inflate(R.layout.list_cash_contact, parent, false);
             view.setTag(new ViewHolder(view));
         }
 
@@ -50,12 +50,12 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
         else
             holder.photo.setImageDrawable(null);
 
-        holder.details.setText(dataProvider.getDetails(position, contactData));
+        holder.smallDetails.setText(dataProvider.getSmallDetails(position, contactData));
 
         switch (mode) {
             case SELECTION:
                 holder.selection.setVisibility(View.VISIBLE);
-                holder.price.setVisibility(View.GONE);
+                holder.bigDetails.setVisibility(View.GONE);
 
                 if (dataProvider.isContactSelected(position, contactData))
                     holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
@@ -66,10 +66,10 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
 
             case REVIEW:
                 holder.selection.setVisibility(View.GONE);
-                holder.price.setVisibility(View.VISIBLE);
+                holder.bigDetails.setVisibility(View.VISIBLE);
 
-                String price = dataProvider.getPrice(position, contactData);
-                holder.price.setText(price);
+                String price = dataProvider.getBigDetails(position, contactData);
+                holder.bigDetails.setText(price);
 
                 break;
         }
@@ -79,10 +79,10 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
 
     class ViewHolder {
         @InjectView(R.id.list_cash_recipient_name) TextView name;
-        @InjectView(R.id.list_cash_recipient_details) TextView details;
+        @InjectView(R.id.list_cash_recipient_small_details) TextView smallDetails;
         @InjectView(R.id.list_cash_recipient_photo) CircularImageView photo;
         @InjectView(R.id.list_cash_recipient_selection) ImageView selection;
-        @InjectView(R.id.list_cash_recipient_price) TextView price;
+        @InjectView(R.id.list_cash_recipient_big_details) TextView bigDetails;
 
         ViewHolder(@NonNull View view) {
             ButterKnife.inject(this, view);
@@ -92,8 +92,8 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
 
     public interface DataProvider {
         boolean isContactSelected(int position, @NonNull ContactData contact);
-        @NonNull String getDetails(int position, @NonNull ContactData contact);
-        @NonNull String getPrice(int position, @NonNull ContactData contact);
+        @NonNull String getSmallDetails(int position, @NonNull ContactData contact);
+        @NonNull String getBigDetails(int position, @NonNull ContactData contact);
     }
 
     public static enum Mode {

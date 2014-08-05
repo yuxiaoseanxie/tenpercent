@@ -147,13 +147,13 @@ public class CashRecipientsFragment extends ListFragment implements ContactDataA
 
     @NonNull
     @Override
-    public String getDetails(int position, @NonNull ContactData contact) {
+    public String getSmallDetails(int position, @NonNull ContactData contact) {
         return contact.getDetails();
     }
 
     @NonNull
     @Override
-    public String getPrice(int position, @NonNull ContactData contact) {
+    public String getBigDetails(int position, @NonNull ContactData contact) {
         return "";
     }
 

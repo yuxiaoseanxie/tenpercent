@@ -9,7 +9,6 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.ListView;
 
-import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
@@ -106,10 +105,9 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
 
     @Override
-    public @NonNull String getPrice(int position, @NonNull ContactData contact) {
+    public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(position);
-        BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
-        return TicketingUtils.formatCurrency(null, price);
+        return Integer.toString(quantity);
     }
 
     @Override
@@ -119,9 +117,10 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     @NonNull
     @Override
-    public String getDetails(int position, @NonNull ContactData contact) {
+    public String getSmallDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(position);
-        return getResources().getQuantityString(R.plurals.cash_recipient_review_detail, quantity, quantity);
+        BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
+        return TicketingUtils.formatCurrency(null, price);
     }
 
 
