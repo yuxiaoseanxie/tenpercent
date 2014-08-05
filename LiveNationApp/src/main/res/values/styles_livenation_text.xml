@@ -24,7 +24,7 @@
     </style>
 
     <style name="ln.text.tiny.bold_italic.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
 
@@ -47,7 +47,7 @@
     </style>
 
     <style name="ln.text.small.bold.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="ln.text.small.italic">
@@ -55,7 +55,7 @@
     </style>
 
     <style name="ln.text.small.italic.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
 
@@ -70,16 +70,16 @@
     </style>
 
     <style name="ln.text.small.bold_italic.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
 
     <style name="ln.text.small.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
     <style name="ln.text.small.bold.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
     <style name="ln.text.small.bold.red.allcaps">
@@ -91,7 +91,7 @@
     </style>
 
     <style name="ln.text.small.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="ln.text.medium">
@@ -104,7 +104,7 @@
 
 
     <style name="ln.text.medium.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="ln.text.medium.italic">
@@ -113,7 +113,7 @@
 
 
     <style name="ln.text.medium.italic.gray">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="ln.text.medium.bold">
@@ -121,11 +121,11 @@
     </style>
 
     <style name="ln.text.medium.bold.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
     <style name="ln.text.medium.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
     <style name="ln.text.medium.red.allcaps">
@@ -137,7 +137,7 @@
     </style>
 
     <style name="ln.text.medium.bold_italic.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
 
@@ -150,7 +150,7 @@
     </style>
 
     <style name="ln.text.large.bold.red">
-        <item name="android:textColor">@color/accent_red</item>
+        <item name="android:textColor">@color/livenation_red</item>
     </style>
 
     <style name="ln.text.large.bold.white">
@@ -202,7 +202,7 @@
 
     <style name="fragment_message_details_text">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="list_search_result_type_text">
@@ -241,7 +241,7 @@
 
     <style name="list_help_menu_item_description_text">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="calendar_dialog_cell_title">
@@ -260,7 +260,7 @@
     </style>
 
     <style name="calendar_dialog_cell_date">
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColor">@color/livenation_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
 
