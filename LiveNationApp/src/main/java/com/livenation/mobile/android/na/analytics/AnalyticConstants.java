@@ -105,6 +105,7 @@ public class AnalyticConstants {
     public static final String SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
     public static final String SCREEN_LEGAL_CREDITS = "LN_Mob: NA App Android: Legal";
     public static final String SCREEN_VDP = "LN_Mob: NA App Android: VDP";
+    public static final String SCREEN_VDP_ALL_SHOWS = "LN_Mob: NA App Android: VDP: All Shows";
     public static final String SCREEN_ADP = "LN_Mob: NA App Android: Artist";
     public static final String SCREEN_ADP_TOUR = "LN_Mob: NA App Android: Artist: Tours";
     public static final String SCREEN_LOCATION = "LN_Mob: NA App Android: Location";

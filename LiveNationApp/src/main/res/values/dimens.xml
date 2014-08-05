@@ -112,6 +112,7 @@
     <dimen name="button_recommendations_upsell_margin_top">10dp</dimen>
     <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="swoosh_divider_margin_top">20dp</dimen>
+    <dimen name="fan_man_min_height">48dp</dimen>
 
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>
