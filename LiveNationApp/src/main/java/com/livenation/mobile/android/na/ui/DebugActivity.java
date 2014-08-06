@@ -24,6 +24,8 @@ import com.livenation.mobile.android.na.apiconfig.ConfigManager;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
@@ -33,6 +35,7 @@ import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+import com.mobilitus.tm.tickets.models.Total;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -40,6 +43,7 @@ import com.urbanairship.richpush.RichPushUser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,6 +185,10 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         //Commerce session recording item
         CommerceRecordingModeItem commerceRecordingModeItem = new CommerceRecordingModeItem(getString(R.string.debug_item_commerce_session_recording));
         actions.add(commerceRecordingModeItem);
+
+        //Square Cash Item
+        ShowCashFlowItem showCashFlowItem = new ShowCashFlowItem(getString(R.string.cash_call_to_action));
+        actions.add(showCashFlowItem);
     }
 
     public void onShareSelected() {
@@ -456,6 +464,28 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
             }
 
             actionsAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class ShowCashFlowItem extends DebugItem {
+        private ShowCashFlowItem(String name) {
+            super(name, null);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            Total testTotal = new Total();
+            testTotal.setGrandTotal(BigDecimal.valueOf(120.00));
+
+            Intent intent = new Intent(DebugActivity.this, CashRecipientsActivity.class);
+            intent.putExtra(CashUtils.EXTRA_TICKET_QUANTITY, 3);
+            intent.putExtra(CashUtils.EXTRA_TOTAL, testTotal);
+            startActivity(intent);
         }
 
         @Override
