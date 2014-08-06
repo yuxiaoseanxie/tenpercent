@@ -15,7 +15,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
-import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnBoardingActivity;
+import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
@@ -77,6 +77,8 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
     //endregion
 
 
+    //region Properties
+
     public int getTicketQuantity() {
         return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
     }
@@ -90,13 +92,22 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
         return (HashSet<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
     }
 
+    //endregion
+
 
     private class NextClickListener implements View.OnClickListener {
         private void showOnBoarding(CashCustomerStatus status) {
-            Intent intent = new Intent(CashAmountsActivity.this, CashOnBoardingActivity.class);
+            Intent intent = new Intent(CashAmountsActivity.this, CashOnboardingActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
             intent.putExtra(CashUtils.EXTRA_CUSTOMER_STATUS, status);
+            startActivity(intent);
+        }
+
+        private void showComplete() {
+            Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
+            intent.putExtras(getIntent().getExtras());
+            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
             startActivity(intent);
         }
 
@@ -118,10 +129,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
                     if (response.isBlocked()) {
                         showOnBoarding(response);
                     } else {
-                        Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
-                        intent.putExtras(getIntent().getExtras());
-                        intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
-                        startActivity(intent);
+                        showComplete();
                     }
                 }
             });

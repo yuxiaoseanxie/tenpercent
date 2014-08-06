@@ -5,14 +5,18 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 
 public class CashErrorDialogFragment extends DialogFragment {
     public static final String TAG = CashErrorDialogFragment.class.getSimpleName();
 
     private static final String ARG_ERROR = "com.livenation.mobile.android.na.cash.ui.CashErrorDialogFragment.ARG_ERROR";
+
+    //region Lifecycle
 
     public static CashErrorDialogFragment newInstance(VolleyError error) {
         CashErrorDialogFragment errorDialogFragment = new CashErrorDialogFragment();
@@ -21,7 +25,16 @@ public class CashErrorDialogFragment extends DialogFragment {
         arguments.putSerializable(ARG_ERROR, error);
         errorDialogFragment.setArguments(arguments);
 
+        Log.e(CashUtils.LOG_TAG, "An error occurred", error);
+
         return errorDialogFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setCancelable(true);
     }
 
     @Override
@@ -34,6 +47,8 @@ public class CashErrorDialogFragment extends DialogFragment {
 
         return builder.create();
     }
+
+    //endregion
 
 
     public VolleyError getError() {

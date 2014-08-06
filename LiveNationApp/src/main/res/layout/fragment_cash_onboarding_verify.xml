@@ -13,18 +13,17 @@
         android:layout_marginBottom="@dimen/inter_item_padding_large"
         android:gravity="center"
         android:textAppearance="@style/Cash.Text.Header1"
-        android:text="@string/cash_phone_number_text"/>
+        android:text="@string/cash_verification_code_text"/>
 
     <EditText
-        android:id="@+id/fragment_cash_phone_number_text"
+        android:id="@+id/fragment_cash_onboarding_verify_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:inputType="phone"
         android:imeOptions="actionGo"
-        android:text="2074000051"
         android:textSize="18sp"
-        android:hint="@string/phone">
+        android:hint="@string/verification_code">
 
         <requestFocus />
 

@@ -23,8 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashVerificationCodeFragment extends Fragment {
-    @InjectView(R.id.fragment_cash_verification_code) EditText code;
+public class CashOnboardingVerifyFragment extends Fragment {
+    @InjectView(R.id.fragment_cash_onboarding_verify_code) EditText code;
 
     private boolean requestedCode = false;
 
@@ -37,7 +37,7 @@ public class CashVerificationCodeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cash_verification_code, container, false);
+        View view = inflater.inflate(R.layout.fragment_cash_onboarding_verify, container, false);
         ButterKnife.inject(this, view);
         return view;
     }
@@ -50,8 +50,8 @@ public class CashVerificationCodeFragment extends Fragment {
     }
 
 
-    private CashOnBoardingActivity getCashRequestDetailsActivity() {
-        return (CashOnBoardingActivity) getActivity();
+    private CashOnboardingActivity getCashRequestDetailsActivity() {
+        return (CashOnboardingActivity) getActivity();
     }
 
     private String getPhoneNumber() {
@@ -104,7 +104,7 @@ public class CashVerificationCodeFragment extends Fragment {
     }
 
 
-    @OnEditorAction(R.id.fragment_cash_verification_code)
+    @OnEditorAction(R.id.fragment_cash_onboarding_verify_code)
     public boolean onCodeEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_GO) {
             CashUtils.dismissKeyboard(textView);

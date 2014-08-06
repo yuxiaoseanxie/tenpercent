@@ -41,6 +41,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     private long pricePerTicket;
     private boolean hasInitiatedPayment = false;
 
+    //region Lifecycle
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +74,15 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         initiatePayment();
     }
 
+    //endregion
+
 
     private CashCompleteRequestActivity getCashRequestActivity() {
         return (CashCompleteRequestActivity) getActivity();
     }
 
+
+    //region Sending Payments
 
     private ArrayList<CashPayment> buildPayments() {
         ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
@@ -145,6 +151,10 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         }
     }
 
+    //endregion
+
+
+    //region Contacts Adapter
 
     @Override
     public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
@@ -163,4 +173,6 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         BigDecimal price = BigDecimal.valueOf((pricePerTicket * quantity) / 100.0);
         return TicketingUtils.formatCurrency(null, price);
     }
+
+    //endregion
 }

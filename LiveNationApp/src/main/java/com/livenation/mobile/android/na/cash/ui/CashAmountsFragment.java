@@ -29,6 +29,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private int selectQuantityPosition = 0;
 
+    //region Lifecycle
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
             getActivity().invalidateOptionsMenu();
         }
     }
+
+    //endregion
 
 
     //region Calculations
@@ -111,6 +115,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     //endregion
 
 
+    //region List View
+
     @Override
     public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
@@ -142,4 +148,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         dialogFragment.setTargetFragment(this, SELECT_QUANTITY_REQUEST_CODE);
         dialogFragment.show(getFragmentManager(), CashQuantityDialogFragment.TAG);
     }
+
+    //endregion
 }

@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.cash.ui.onboarding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,26 +22,31 @@ import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragmen
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnEditorAction;
 
-public class CashPhoneNumberFragment extends Fragment {
-    @InjectView(R.id.fragment_cash_phone_number_text) EditText phone;
+public class CashOnboardingPhoneFragment extends Fragment {
+    @InjectView(R.id.fragment_cash_onboarding_verify_number) EditText number;
 
     private final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
 
+    //region Lifecycle
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cash_phone_number, container, false);
+        View view = inflater.inflate(R.layout.fragment_cash_onboarding_phone, container, false);
         ButterKnife.inject(this, view);
-
-        phone.setOnEditorActionListener(new PhoneListener());
-
         return view;
     }
 
+    //endregion
 
-    private CashOnBoardingActivity getCashRequestDetailsActivity() {
-        return (CashOnBoardingActivity) getActivity();
+
+    private CashOnboardingActivity getCashRequestDetailsActivity() {
+        return (CashOnboardingActivity) getActivity();
     }
+
+
+    //region Handshake
 
     private void retrieveCustomerStatus() {
         SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
@@ -61,37 +65,38 @@ public class CashPhoneNumberFragment extends Fragment {
         });
     }
 
-    private void login() {
+    private void doHandshake() {
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
-        SquareCashService.getInstance().startSession(null, phone.getText().toString(), new SquareCashService.ApiCallback<CashSession>() {
+        SquareCashService.getInstance().startSession(null, number.getText().toString(), new SquareCashService.ApiCallback<CashSession>() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(CashUtils.LOG_TAG, "Could not login", error);
                 loadingDialogFragment.dismiss();
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
             public void onResponse(CashSession response) {
-                getCashRequestDetailsActivity().setPhoneNumber(phone.getText().toString());
+                getCashRequestDetailsActivity().setPhoneNumber(number.getText().toString());
                 retrieveCustomerStatus();
             }
         });
     }
 
+    //endregion
 
-    private class PhoneListener implements TextView.OnEditorActionListener {
-        @Override
-        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-            if (actionId == EditorInfo.IME_ACTION_GO) {
-                CashUtils.dismissKeyboard(textView);
 
-                login();
+    @OnEditorAction(R.id.fragment_cash_onboarding_verify_number)
+    public boolean onNumberEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+            CashUtils.dismissKeyboard(textView);
 
-                return true;
-            }
+            doHandshake();
 
-            return false;
+            return true;
         }
+
+        return false;
     }
 }

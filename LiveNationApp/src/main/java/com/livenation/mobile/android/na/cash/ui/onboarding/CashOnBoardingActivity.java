@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
@@ -12,13 +13,13 @@ import com.livenation.mobile.android.na.cash.service.responses.CashPaymentBlocke
 import com.livenation.mobile.android.na.cash.ui.CashCompleteRequestActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 
-public class CashOnBoardingActivity extends LiveNationFragmentActivity {
+public class CashOnboardingActivity extends LiveNationFragmentActivity {
     private static final int WEBSITE_REQUEST_CODE = 0xeb;
 
     private static final String SAVED_CUSTOMER_STATUS = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_CUSTOMER_STATUS";
     private static final String SAVED_PHONE_NUMBER = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_PHONE_NUMBER";
 
-    private static final String FRAGMENT_TAG = "FRAGMENT_TAG";
+    private static final String PAGE_FRAGMENT_TAG = "PAGE_FRAGMENT_TAG";
 
     private CashCustomerStatus customerStatus;
     private String phoneNumber;
@@ -28,7 +29,7 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_on_boarding);
+        setContentView(R.layout.activity_cash_onboarding);
 
         if (savedInstanceState != null) {
             this.customerStatus = (CashCustomerStatus) savedInstanceState.getSerializable(SAVED_CUSTOMER_STATUS);
@@ -39,15 +40,15 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
             if (customerStatus != null && customerStatus.getBlockers() != null) {
                 CashPaymentBlockers blockers = customerStatus.getBlockers();
                 if (blockers.getPhoneNumber() != null)
-                    showPage(Page.ENTER_PHONE_NUMBER);
+                    showPage(Page.PHONE);
                 else if (blockers.getCard() != null)
-                    showPage(Page.ENTER_DEBIT_CARD);
+                    showPage(Page.CARD);
                 else if (blockers.getPasscodeVerification() != null)
-                    showPage(Page.ENTER_VERIFICATION_CODE);
+                    showPage(Page.VERIFY);
                 else if (blockers.getUrl() != null)
                     showWebSite(blockers.getUrl());
             } else {
-                showPage(Page.ENTER_PHONE_NUMBER);
+                showPage(Page.PHONE);
             }
         }
     }
@@ -72,6 +73,8 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
     //endregion
 
 
+    //region Properties
+
     public CashCustomerStatus getCustomerStatus() {
         return customerStatus;
     }
@@ -84,19 +87,24 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
         this.phoneNumber = phoneNumber;
     }
 
+    //endregion
+
+
+    ///region Moving between steps
+
     public void continueWithCustomerStatus(CashCustomerStatus customerStatus) {
         this.customerStatus = customerStatus;
 
         if (customerStatus.getBlockers() != null && customerStatus.getBlockers().getCard() != null) {
-            showPage(Page.ENTER_DEBIT_CARD);
+            showPage(Page.CARD);
         } else {
-            showPage(Page.ENTER_VERIFICATION_CODE);
+            showPage(Page.VERIFY);
         }
     }
 
     public void continueToPhoneVerification() {
         if (customerStatus.getBlockers().getPhoneNumber() != null)
-            showPage(Page.ENTER_VERIFICATION_CODE);
+            showPage(Page.VERIFY);
         else
             setupCompleted();
     }
@@ -112,15 +120,17 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
 
 
     public void showPage(Page page) {
-        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG) == null) {
+        if (getSupportFragmentManager().findFragmentByTag(PAGE_FRAGMENT_TAG) == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_request_details_container, page.newInstance(), FRAGMENT_TAG)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .add(R.id.activity_request_details_container, page.newInstance(), PAGE_FRAGMENT_TAG)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.activity_request_details_container, page.newInstance(), FRAGMENT_TAG)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .replace(R.id.activity_request_details_container, page.newInstance(), PAGE_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -130,11 +140,14 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
         startActivityForResult(intent, WEBSITE_REQUEST_CODE);
     }
 
+    //endregion
+
+
     private static enum Page {
-        ENTER_PHONE_NUMBER(CashPhoneNumberFragment.class),
-        ENTER_DEBIT_CARD(CashCardFragment.class),
-        ENTER_NAME(Fragment.class),
-        ENTER_VERIFICATION_CODE(CashVerificationCodeFragment.class);
+        PHONE(CashOnboardingPhoneFragment.class),
+        CARD(CashOnboardingCardFragment.class),
+        NAME(Fragment.class),
+        VERIFY(CashOnboardingVerifyFragment.class);
 
         public Fragment newInstance() {
             try {

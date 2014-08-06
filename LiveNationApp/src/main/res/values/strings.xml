@@ -265,6 +265,7 @@
     <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
     <string name="cash_confirmation_title_fmt">Requested %1$s!</string>
     <string name="cash_checkmark_content_description">Successfully requested payment</string>
+    <string name="cash_action_done">Done</string>
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>

@@ -14,8 +14,11 @@ import com.livenation.mobile.android.na.R;
 
 public class CashQuantityDialogFragment extends DialogFragment implements NumberPicker.OnValueChangeListener {
     public static final String TAG = CashQuantityDialogFragment.class.getSimpleName();
+
     public static final String ARG_QUANTITY = "com.livenation.mobile.android.na.cash.CashQuantityDialogFragment.ARG_QUANTITY";
     public static final String ARG_VALUE = "com.livenation.mobile.android.na.cash.CashQuantityDialogFragment.ARG_VALUE";
+
+    //region Lifecycle
 
     public static CashQuantityDialogFragment newInstance(int quantity, int value) {
         CashQuantityDialogFragment fragment = new CashQuantityDialogFragment();
@@ -57,6 +60,10 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
         return builder.create();
     }
 
+    //endregion
+
+
+    //region Properties
 
     public int getQuantity() {
         return getArguments().getInt(ARG_QUANTITY, 1);
@@ -73,6 +80,8 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
     public void setValue(int value) {
         getArguments().putInt(ARG_VALUE, value);
     }
+
+    //endregion
 
 
     @Override

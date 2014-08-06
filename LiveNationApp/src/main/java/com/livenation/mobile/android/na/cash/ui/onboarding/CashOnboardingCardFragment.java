@@ -31,14 +31,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashCardFragment extends Fragment {
-    @InjectView(R.id.fragment_cash_card_number) EditText cardNumber;
-    @InjectView(R.id.fragment_cash_card_month) EditText cardExprMonth;
-    @InjectView(R.id.fragment_cash_card_year) EditText cardExprYear;
-    @InjectView(R.id.fragment_cash_card_cvv) EditText cardCvv;
-    @InjectView(R.id.fragment_cash_card_postal) EditText cardPostal;
+public class CashOnboardingCardFragment extends Fragment {
+    @InjectView(R.id.fragment_cash_onboarding_card_number) EditText cardNumber;
+    @InjectView(R.id.fragment_cash_onboarding_card_month) EditText cardExprMonth;
+    @InjectView(R.id.fragment_cash_onboarding_card_year) EditText cardExprYear;
+    @InjectView(R.id.fragment_cash_onboarding_card_cvv) EditText cardCvv;
+    @InjectView(R.id.fragment_cash_onboarding_card_postal) EditText cardPostal;
 
     private ValidationManager validationManager;
+
+    //region Lifecycle
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class CashCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cash_card, container, false);
+        View view = inflater.inflate(R.layout.fragment_cash_onboarding_card, container, false);
         ButterKnife.inject(this, view);
 
         setupCardInput();
@@ -66,11 +68,15 @@ public class CashCardFragment extends Fragment {
         tearDownCardInput();
     }
 
+    //endregion
 
-    private CashOnBoardingActivity getCashRequestDetailsActivity() {
-        return (CashOnBoardingActivity) getActivity();
+
+    private CashOnboardingActivity getCashRequestDetailsActivity() {
+        return (CashOnboardingActivity) getActivity();
     }
 
+
+    //region Validation
 
     private void setupCardInput() {
         validationManager.attach(cardExprMonth, new MonthValidator(), new EditTextValidationListener());
@@ -91,6 +97,10 @@ public class CashCardFragment extends Fragment {
         validationManager.detach(cardPostal);
     }
 
+    //endregion
+
+
+    //region Linking Cards
 
     private void linkCard() {
         CashCardLinkInfo linkInfo = new CashCardLinkInfo();
@@ -128,7 +138,7 @@ public class CashCardFragment extends Fragment {
     }
 
 
-    @OnEditorAction(R.id.fragment_cash_card_postal)
+    @OnEditorAction(R.id.fragment_cash_onboarding_card_postal)
     public boolean onPostalEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_GO) {
             CashUtils.dismissKeyboard(textView);
@@ -138,4 +148,6 @@ public class CashCardFragment extends Fragment {
         }
         return false;
     }
+
+    //endregion
 }
