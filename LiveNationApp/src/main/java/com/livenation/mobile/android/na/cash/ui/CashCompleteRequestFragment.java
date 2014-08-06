@@ -44,8 +44,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         super.onCreate(savedInstanceState);
 
         this.adapter = new ContactDataAdapter(getActivity(), ContactDataAdapter.Mode.REVIEW, this);
-        this.quantities = getCashRequestActivity().getQuantities();
-        this.pricePerTicket = CashUtils.calculatePricePerTicket(getCashRequestActivity().getTotal(), getCashRequestActivity().getQuantity());
+        this.quantities = getCashRequestActivity().getTicketPerContactQuantities();
+        this.pricePerTicket = CashUtils.calculatePricePerTicket(getCashRequestActivity().getTotal(), getCashRequestActivity().getTicketQuantity());
 
         setListAdapter(adapter);
         setRetainInstance(true);
@@ -56,7 +56,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         View view = inflater.inflate(R.layout.fragment_cash_complete_request, container, false);
         ButterKnife.inject(this, view);
 
-        long amountRequested = pricePerTicket * (getCashRequestActivity().getQuantity() - 1);
+        long amountRequested = pricePerTicket * (getCashRequestActivity().getTicketQuantity() - 1);
         BigDecimal formatableAmountRequested = BigDecimal.valueOf(amountRequested / 100.0);
         amount.setText(getString(R.string.cash_confirmation_title_fmt, TicketingUtils.formatCurrency(null, formatableAmountRequested)));
 

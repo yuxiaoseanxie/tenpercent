@@ -25,7 +25,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
         this.fragment = (CashRecipientsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_recipients_fragment);
 
-        getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getQuantity(), getQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
+        getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getTicketQuantity(), getTicketQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
     }
 
     @Override
@@ -48,8 +48,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
     //endregion
 
 
-    public int getQuantity() {
-        return getIntent().getIntExtra(CashUtils.EXTRA_QUANTITY, 0);
+    public int getTicketQuantity() {
+        return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
     }
 
     public Total getTotal() {

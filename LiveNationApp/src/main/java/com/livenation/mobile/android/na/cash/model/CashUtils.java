@@ -14,10 +14,11 @@ import java.math.RoundingMode;
 public class CashUtils {
     public static final String LOG_TAG = "Cash";
 
-    public static final String EXTRA_QUANTITIES = "com.livenation.mobile.android.na.cash.EXTRA_QUANTITIES";
+    public static final String EXTRA_TICKET_PER_CONTACT_QUANTITIES = "com.livenation.mobile.android.na.cash.EXTRA_TICKET_PER_CONTACT_QUANTITIES";
     public static final String EXTRA_CONTACTS = "com.livenation.mobile.android.na.cash.EXTRA_CONTACTS";
     public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.EXTRA_TOTAL";
-    public static final String EXTRA_QUANTITY = "com.livenation.mobile.android.na.cash.EXTRA_QUANTITY";
+    public static final String EXTRA_TICKET_QUANTITY = "com.livenation.mobile.android.na.cash.EXTRA_TICKET_QUANTITY";
+    public static final String EXTRA_CUSTOMER_STATUS = "com.livenation.mobile.android.na.cash.EXTRA_CUSTOMER_STATUS";
 
     public static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
     public static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";

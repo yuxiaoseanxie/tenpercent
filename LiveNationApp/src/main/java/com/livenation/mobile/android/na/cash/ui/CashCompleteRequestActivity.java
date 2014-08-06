@@ -23,8 +23,8 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
     }
 
 
-    public int getQuantity() {
-        return getIntent().getIntExtra(CashUtils.EXTRA_QUANTITY, 0);
+    public int getTicketQuantity() {
+        return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
     }
 
     public Total getTotal() {
@@ -37,7 +37,7 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
     }
 
     @SuppressWarnings("unchecked")
-    public HashMap<String, Integer> getQuantities() {
-        return (HashMap<String, Integer>) getIntent().getSerializableExtra(CashUtils.EXTRA_QUANTITIES);
+    public HashMap<String, Integer> getTicketPerContactQuantities() {
+        return (HashMap<String, Integer>) getIntent().getSerializableExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES);
     }
 }

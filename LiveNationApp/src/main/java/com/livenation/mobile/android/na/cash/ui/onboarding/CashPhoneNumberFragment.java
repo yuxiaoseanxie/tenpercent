@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash.ui.details;
+package com.livenation.mobile.android.na.cash.ui.onboarding;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

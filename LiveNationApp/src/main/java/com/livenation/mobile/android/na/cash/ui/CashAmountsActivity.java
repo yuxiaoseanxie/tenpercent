@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
-import com.livenation.mobile.android.na.cash.ui.details.CashOnBoardingActivity;
+import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnBoardingActivity;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
@@ -34,7 +34,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
         this.fragment = (CashAmountsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_amounts_fragment);
 
-        getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getQuantity(), getQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
+        getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getTicketQuantity(), getTicketQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
     }
 
     @Override
@@ -57,8 +57,8 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
     //endregion
 
 
-    public int getQuantity() {
-        return getIntent().getIntExtra(CashUtils.EXTRA_QUANTITY, 0);
+    public int getTicketQuantity() {
+        return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
     }
 
     public Total getTotal() {
@@ -72,10 +72,11 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     private class NextClickListener implements View.OnClickListener {
-        private void showOnBoarding() {
+        private void showOnBoarding(CashCustomerStatus status) {
             Intent intent = new Intent(CashAmountsActivity.this, CashOnBoardingActivity.class);
             intent.putExtras(getIntent().getExtras());
-            intent.putExtra(CashUtils.EXTRA_QUANTITIES, fragment.getQuantities());
+            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
+            intent.putExtra(CashUtils.EXTRA_CUSTOMER_STATUS, status);
             startActivity(intent);
         }
 
@@ -95,11 +96,11 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
                 public void onResponse(CashCustomerStatus response) {
                     loadingDialogFragment.dismiss();
                     if (response.isBlocked()) {
-                        showOnBoarding();
+                        showOnBoarding(response);
                     } else {
                         Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
                         intent.putExtras(getIntent().getExtras());
-                        intent.putExtra(CashUtils.EXTRA_QUANTITIES, fragment.getQuantities());
+                        intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
                         startActivity(intent);
                     }
                 }
@@ -111,7 +112,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
             if (SquareCashService.getInstance().hasSession()) {
                 requestCustomerStatus();
             } else {
-                showOnBoarding();
+                showOnBoarding(null);
             }
         }
     }

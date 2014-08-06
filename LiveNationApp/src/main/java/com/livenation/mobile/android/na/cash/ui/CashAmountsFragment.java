@@ -66,7 +66,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private void calculatePricePerTicket() {
         BigDecimal total = getCashAmountsActivity().getTotal().getGrandTotal();
-        BigDecimal quantity = BigDecimal.valueOf(getCashAmountsActivity().getQuantity());
+        BigDecimal quantity = BigDecimal.valueOf(getCashAmountsActivity().getTicketQuantity());
         this.pricePerTicket = total.divide(quantity, RoundingMode.HALF_EVEN);
     }
 
@@ -76,13 +76,13 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
             quantities.put(contact.getId(), 1);
         }
 
-        int totalQuantity = getCashAmountsActivity().getQuantity();
+        int totalQuantity = getCashAmountsActivity().getTicketQuantity();
         int usedQuantity = adapter.getCount();
         remainingQuantity = (totalQuantity - usedQuantity) - 1;
     }
 
     private void recalculateRemainingQuantity() {
-        int totalQuantity = getCashAmountsActivity().getQuantity() - 1;
+        int totalQuantity = getCashAmountsActivity().getTicketQuantity() - 1;
         for (Map.Entry<String, Integer> entry : quantities.entrySet()) {
             totalQuantity -= entry.getValue();
         }
@@ -104,7 +104,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         return remainingQuantity;
     }
 
-    public HashMap<String, Integer> getQuantities() {
+    public HashMap<String, Integer> getTicketPerContactQuantities() {
         return quantities;
     }
 

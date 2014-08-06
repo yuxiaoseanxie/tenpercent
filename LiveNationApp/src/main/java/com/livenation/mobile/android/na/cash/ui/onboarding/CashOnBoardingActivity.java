@@ -1,11 +1,13 @@
-package com.livenation.mobile.android.na.cash.ui.details;
+package com.livenation.mobile.android.na.cash.ui.onboarding;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
+import com.livenation.mobile.android.na.cash.service.responses.CashPaymentBlockers;
 import com.livenation.mobile.android.na.cash.ui.CashCompleteRequestActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 
@@ -25,12 +27,24 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_boarding);
 
+        this.customerStatus = (CashCustomerStatus) getIntent().getSerializableExtra(CashUtils.EXTRA_CUSTOMER_STATUS);
+
         if (savedInstanceState != null) {
             this.customerStatus = (CashCustomerStatus) savedInstanceState.getSerializable(SAVED_CUSTOMER_STATUS);
             this.phoneNumber = savedInstanceState.getString(SAVED_PHONE_NUMBER);
         }
 
-        showPage(Page.ENTER_PHONE_NUMBER);
+        if (customerStatus != null && customerStatus.getBlockers() != null) {
+            CashPaymentBlockers blockers = customerStatus.getBlockers();
+            if (blockers.getPhoneNumber() != null)
+                showPage(Page.ENTER_PHONE_NUMBER);
+            else if (blockers.getCard() != null)
+                showPage(Page.ENTER_DEBIT_CARD);
+            else if (blockers.getPasscodeVerification() != null)
+                showPage(Page.ENTER_VERIFICATION_CODE);
+        } else {
+            showPage(Page.ENTER_PHONE_NUMBER);
+        }
     }
 
     @Override

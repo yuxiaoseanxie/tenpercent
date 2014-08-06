@@ -114,7 +114,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         testTotal.setGrandTotal(BigDecimal.valueOf(120));
         startActivity(new Intent(this, CashRecipientsActivity.class)
                 .putExtra(CashUtils.EXTRA_TOTAL, testTotal)
-                .putExtra(CashUtils.EXTRA_QUANTITY, 3));
+                .putExtra(CashUtils.EXTRA_TICKET_QUANTITY, 3));
     }
 
     @Override
