@@ -1,12 +1,15 @@
 package com.livenation.mobile.android.na.cash.model;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import com.livenation.mobile.android.na.cash.ui.CharacterDrawable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,8 +34,8 @@ public class ContactData implements Serializable {
     }
 
 
-    public Bitmap getImage() {
-        return null;
+    public Drawable makePlaceholderImage() {
+        return new CharacterDrawable(getName().charAt(0), 0xFFeaeaea);
     }
 
     public String getId() {

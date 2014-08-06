@@ -162,5 +162,6 @@
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="cash_contact_image_size">45dp</dimen>
 
 </resources>

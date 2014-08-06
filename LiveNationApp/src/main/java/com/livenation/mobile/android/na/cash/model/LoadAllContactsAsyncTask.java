@@ -88,8 +88,7 @@ public class LoadAllContactsAsyncTask extends AsyncTask<Void, Void, ArrayList<Co
             return null;
         }
 
-        Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
-        return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        return ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
     }
 
     @Override

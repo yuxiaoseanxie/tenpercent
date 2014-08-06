@@ -9,8 +9,8 @@
 
     <com.livenation.mobile.android.na.ui.views.CircularImageView
         android:id="@+id/list_cash_recipient_photo"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/cash_contact_image_size"
+        android:layout_height="@dimen/cash_contact_image_size"
         android:layout_gravity="center_vertical"
         android:scaleType="centerCrop"
         android:src="@android:drawable/sym_contact_card"

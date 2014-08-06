@@ -1,6 +1,10 @@
 package com.livenation.mobile.android.na.cash.model;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +16,15 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.CircularImageView;
 
+import java.io.InputStream;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     private final LayoutInflater inflater;
+    private final ContentResolver contentResolver;
+
     private final Mode mode;
     private final DataProvider dataProvider;
 
@@ -24,6 +32,8 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
         super(context, R.layout.list_cash_contact);
 
         this.inflater = LayoutInflater.from(context);
+        this.contentResolver = context.getContentResolver();
+
         this.mode = mode;
         this.dataProvider = dataProvider;
     }
@@ -45,10 +55,17 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
 
         ContactData contactData = getItem(position);
         holder.name.setText(contactData.getDisplayName());
-        if (contactData.getPhotoUri() != null)
-            holder.photo.setImageURI(contactData.getPhotoUri());
-        else
-            holder.photo.setImageDrawable(null);
+        if (contactData.getPhotoUri() != null) {
+            InputStream contactPhotoStream = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver, contactData.getPhotoUri(), true);
+            if (contactPhotoStream != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(contactPhotoStream);
+                holder.photo.setImageBitmap(bitmap);
+            } else {
+                holder.photo.setImageDrawable(contactData.makePlaceholderImage());
+            }
+        } else {
+            holder.photo.setImageDrawable(contactData.makePlaceholderImage());
+        }
 
         holder.smallDetails.setText(dataProvider.getSmallDetails(position, contactData));
 
