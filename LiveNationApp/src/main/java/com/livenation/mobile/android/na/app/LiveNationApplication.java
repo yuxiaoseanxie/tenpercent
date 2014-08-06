@@ -31,7 +31,7 @@ import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.cash.service.SquareService;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.helpers.LocationManager;
@@ -132,7 +132,7 @@ public class LiveNationApplication extends Application {
 
         getConfigManager().buildApi();
 
-        SquareService.init(requestQueue);
+        SquareCashService.init(requestQueue);
 
         //Analytics
         Props props = new Props();

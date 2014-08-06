@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.ui.details.CashRequestDetailsActivity;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
@@ -16,8 +17,6 @@ import com.mobilitus.tm.tickets.models.Total;
 import java.util.HashSet;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
-    public static final String EXTRA_CONTACTS = "com.livenation.mobile.android.na.cash.CashAmountsActivity.EXTRA_CONTACTS";
-
     private CashAmountsFragment fragment;
     private MenuItem nextItem;
 
@@ -54,16 +53,16 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     public int getQuantity() {
-        return getIntent().getIntExtra(CashRecipientsActivity.EXTRA_QUANTITY, 0);
+        return getIntent().getIntExtra(CashUtils.EXTRA_QUANTITY, 0);
     }
 
     public Total getTotal() {
-        return (Total) getIntent().getSerializableExtra(CashRecipientsActivity.EXTRA_TOTAL);
+        return (Total) getIntent().getSerializableExtra(CashUtils.EXTRA_TOTAL);
     }
 
     @SuppressWarnings("unchecked")
     public HashSet<ContactData> getContacts() {
-        return (HashSet<ContactData>) getIntent().getSerializableExtra(CashAmountsActivity.EXTRA_CONTACTS);
+        return (HashSet<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
     }
 
 
@@ -72,7 +71,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
         public void onClick(View view) {
             Intent intent = new Intent(CashAmountsActivity.this, CashRequestDetailsActivity.class);
             intent.putExtras(getIntent().getExtras());
-            intent.putExtra(CashRequestDetailsActivity.EXTRA_QUANTITIES, fragment.getQuantities());
+            intent.putExtra(CashUtils.EXTRA_QUANTITIES, fragment.getQuantities());
             startActivity(intent);
         }
     }

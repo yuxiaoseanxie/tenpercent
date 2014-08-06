@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.cash.service;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -8,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 
 import org.json.JSONException;
@@ -60,6 +62,8 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
     protected VolleyError parseError(String body) {
         try {
             JSONObject json = new JSONObject(body);
+            Log.e(CashUtils.LOG_TAG, "Error for '" + getUrl() + "': " + body);
+
             // Temporary support for crashes on their server.
             if (json.has("message")) {
                 String errorMessage = json.getJSONObject("message").getString("message");
@@ -78,6 +82,8 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String body = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            Log.i(CashUtils.LOG_TAG, "Response for '" + getUrl() + "': " + body);
+
             if (response.statusCode == 200) {
                 return parseSuccess(body, response);
             } else {

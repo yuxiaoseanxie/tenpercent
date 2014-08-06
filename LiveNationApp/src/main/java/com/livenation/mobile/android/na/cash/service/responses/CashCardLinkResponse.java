@@ -9,8 +9,8 @@ public class CashCardLinkResponse extends CashResponse {
     private CashPaymentBlockers blockers;
 
     // TODO: Talk to platform about whether or not we want to require this
-    @JsonProperty("card_proof_token")
-    private String cardProofToken;
+    @JsonProperty("card_token")
+    private String cardToken;
 
     @JsonProperty("field")
     private String errorField;
@@ -26,10 +26,16 @@ public class CashCardLinkResponse extends CashResponse {
         return blockers;
     }
 
-    public String getCardProofToken() {
-        return cardProofToken;
+    public String getCardToken() {
+        return cardToken;
     }
 
+
+    public boolean isValid() {
+        return (getErrorField() == null &&
+                getErrorMessage() == null &&
+                getErrorType() == null);
+    }
 
     public @Nullable String getErrorField() {
         return errorField;
@@ -48,7 +54,7 @@ public class CashCardLinkResponse extends CashResponse {
     public String toString() {
         return "CashCardLinkInfo{" +
                 "blockers=" + blockers +
-                ", cardProofToken='" + cardProofToken + '\'' +
+                ", cardToken='" + cardToken + '\'' +
                 ", errorField='" + errorField + '\'' +
                 ", errorType='" + errorType + '\'' +
                 ", errorMessage='" + errorMessage + '\'' +

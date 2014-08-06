@@ -7,14 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
 public class CashRecipientsActivity extends LiveNationFragmentActivity {
-    public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.CashRecipientsActivity.EXTRA_TOTAL";
-    public static final String EXTRA_QUANTITY = "com.livenation.mobile.android.na.cash.CashRecipientsActivity.EXTRA_QUANTITY";
-
     private MenuItem nextItem;
     private CashRecipientsFragment fragment;
 
@@ -51,11 +49,11 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
 
     public int getQuantity() {
-        return getIntent().getIntExtra(CashRecipientsActivity.EXTRA_QUANTITY, 0);
+        return getIntent().getIntExtra(CashUtils.EXTRA_QUANTITY, 0);
     }
 
     public Total getTotal() {
-        return (Total) getIntent().getSerializableExtra(CashRecipientsActivity.EXTRA_TOTAL);
+        return (Total) getIntent().getSerializableExtra(CashUtils.EXTRA_TOTAL);
     }
 
 
@@ -65,7 +63,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
             Intent intent = new Intent(CashRecipientsActivity.this, CashAmountsActivity.class);
             intent.putExtras(getIntent().getExtras());
 
-            intent.putExtra(CashAmountsActivity.EXTRA_CONTACTS, fragment.getSelectedContacts());
+            intent.putExtra(CashUtils.EXTRA_CONTACTS, fragment.getSelectedContacts());
             startActivity(intent);
         }
     }

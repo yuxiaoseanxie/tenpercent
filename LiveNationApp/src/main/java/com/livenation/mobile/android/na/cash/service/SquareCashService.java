@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SquareService {
+public class SquareCashService {
     private static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
     private static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";
     private static final String AUTHORITY = "cash.square-sandbox.com";
@@ -29,15 +30,15 @@ public class SquareService {
     private final RequestQueue requestQueue;
     private CashSession session;
 
-    private SquareService(@NonNull RequestQueue requestQueue) {
+    private SquareCashService(@NonNull RequestQueue requestQueue) {
         this.requestQueue = requestQueue;
     }
-    private static SquareService instance = null;
-    public static SquareService getInstance() {
+    private static SquareCashService instance = null;
+    public static SquareCashService getInstance() {
         return instance;
     }
     public static void init(@NonNull RequestQueue requestQueue) {
-        instance = new SquareService(requestQueue);
+        instance = new SquareCashService(requestQueue);
     }
 
     //region Building Requests
@@ -73,6 +74,8 @@ public class SquareService {
                                                                   @NonNull Class<T> responseClass,
                                                                   @NonNull Response.Listener<T> listener,
                                                                   @NonNull Response.ErrorListener errorListener) {
+        Log.i(CashUtils.LOG_TAG, "Outgoing request to '" + url + "' with body: " + requestBody);
+
         SquareRequest<T> request = new SquareRequest<T>(method, url, responseClass, requestBody, listener, errorListener);
         injectHeaders(request);
         return request;
@@ -129,7 +132,7 @@ public class SquareService {
                     try {
                         json.put(key, arg);
                     } catch (JSONException e) {
-                        Log.e(getClass().getSimpleName(), "Error constructing request args");
+                        Log.e(CashUtils.LOG_TAG, "Error constructing request args");
                     }
                     key = null;
                 }
@@ -167,7 +170,7 @@ public class SquareService {
         SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
             @Override
             public void onResponse(CashSession response) {
-                SquareService.this.session = response;
+                SquareCashService.this.session = response;
                 callback.onResponse(response);
             }
         }, callback);
@@ -181,12 +184,20 @@ public class SquareService {
         requestQueue.add(request);
     }
 
-    public void verifyPhoneNumber(@NonNull String phoneNumber, ApiCallback<CashResponse> callback) {
+    public void requestPhoneVerification(@NonNull String phoneNumber, ApiCallback<CashResponse> callback) {
         assertSession();
 
-        String customerId = Uri.encode(session.getCustomerId());
         JSONObject body = makeRequestBody("phone_number", phoneNumber);
         SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/phone-number", body.toString(), CashResponse.class, callback, callback);
+        requestQueue.add(request);
+    }
+
+    public void verifyPhoneNumber(@NonNull String phoneNumber, @NonNull String code, ApiCallback<CashResponse> callback) {
+        assertSession();
+
+        JSONObject body = makeRequestBody("phone_number", phoneNumber,
+                                          "verification_code", code);
+        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/phone-verification", body.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -205,7 +216,7 @@ public class SquareService {
             SquareRequest<CashCardLinkResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/card", info.toJsonString(), CashCardLinkResponse.class, callback, callback);
             requestQueue.add(request);
         } catch (IOException e) {
-
+            throw new RuntimeException("Could not convert card info into json payload", e);
         }
     }
 

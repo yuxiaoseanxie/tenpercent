@@ -34,6 +34,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -112,8 +113,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         Total testTotal = new Total();
         testTotal.setGrandTotal(BigDecimal.valueOf(120));
         startActivity(new Intent(this, CashRecipientsActivity.class)
-                .putExtra(CashRecipientsActivity.EXTRA_TOTAL, testTotal)
-                .putExtra(CashRecipientsActivity.EXTRA_QUANTITY, 3));
+                .putExtra(CashUtils.EXTRA_TOTAL, testTotal)
+                .putExtra(CashUtils.EXTRA_QUANTITY, 3));
     }
 
     @Override

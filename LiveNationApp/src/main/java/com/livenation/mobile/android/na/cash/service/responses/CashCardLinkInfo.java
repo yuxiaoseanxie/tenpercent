@@ -30,8 +30,8 @@ public class CashCardLinkInfo extends CashResponse {
         return expiration;
     }
 
-    public void setExpiration(String month, String day) {
-        this.expiration = month + day;
+    public void setExpiration(String month, String year) {
+        this.expiration = month + year;
     }
 
     public String getSecurityCode() {
