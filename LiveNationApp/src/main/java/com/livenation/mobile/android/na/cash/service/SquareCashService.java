@@ -58,7 +58,7 @@ public class SquareCashService {
         Uri.Builder builder = new Uri.Builder();
 
         // TODO: This is really dangerous
-        builder.scheme("http");
+        builder.scheme(CashUtils.SCHEME);
         builder.encodedAuthority(CashUtils.AUTHORITY);
         builder.appendEncodedPath(route);
 
