@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
@@ -132,7 +133,13 @@ public class LiveNationApplication extends Application {
 
         getConfigManager().buildApi();
 
-        SquareCashService.init(requestQueue);
+        SquareCashService.init(requestQueue, new SquareCashService.CustomerIdProvider() {
+            @NonNull
+            @Override
+            public String getSquareCustomerId() {
+                return "gee-your-lip-looks-hairless";
+            }
+        });
 
         //Analytics
         Props props = new Props();

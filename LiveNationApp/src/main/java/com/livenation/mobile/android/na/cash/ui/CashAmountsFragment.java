@@ -15,14 +15,15 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
     private ContactDataAdapter adapter;
-    private final ArrayList<Integer> quantities = new ArrayList<Integer>();
+    private final HashMap<String, Integer> quantities = new HashMap<String, Integer>();
     private int remainingQuantity = 0;
     private BigDecimal pricePerTicket = BigDecimal.ZERO;
 
@@ -50,7 +51,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         if (requestCode == SELECT_QUANTITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             int newQuantity = data.getIntExtra(CashQuantityDialogFragment.ARG_VALUE, 1);
-            quantities.set(selectQuantityPosition, newQuantity);
+            ContactData contact = adapter.getItem(selectQuantityPosition);
+            quantities.put(contact.getId(), newQuantity);
 
             recalculateRemainingQuantity();
             adapter.notifyDataSetChanged();
@@ -70,7 +72,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private void calculateQuantities() {
         for (int i = 0, count = adapter.getCount(); i < count; i++) {
-            quantities.add(1);
+            ContactData contact = adapter.getItem(i);
+            quantities.put(contact.getId(), 1);
         }
 
         int totalQuantity = getCashAmountsActivity().getQuantity();
@@ -80,8 +83,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     private void recalculateRemainingQuantity() {
         int totalQuantity = getCashAmountsActivity().getQuantity() - 1;
-        for (int quantity : quantities) {
-            totalQuantity -= quantity;
+        for (Map.Entry<String, Integer> entry : quantities.entrySet()) {
+            totalQuantity -= entry.getValue();
         }
 
         remainingQuantity = totalQuantity;
@@ -101,7 +104,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         return remainingQuantity;
     }
 
-    public ArrayList<Integer> getQuantities() {
+    public HashMap<String, Integer> getQuantities() {
         return quantities;
     }
 
@@ -110,7 +113,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     @Override
     public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
-        int quantity = quantities.get(position);
+        int quantity = quantities.get(contact.getId());
         return Integer.toString(quantity);
     }
 
@@ -122,7 +125,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     @NonNull
     @Override
     public String getSmallDetails(int position, @NonNull ContactData contact) {
-        int quantity = quantities.get(position);
+        int quantity = quantities.get(contact.getId());
         BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
         return TicketingUtils.formatCurrency(null, price);
     }
@@ -132,7 +135,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     public void onListItemClick(ListView l, View v, int position, long id) {
         this.selectQuantityPosition = position;
 
-        int currentQuantity = quantities.get(position);
+        ContactData contact = adapter.getItem(position);
+        int currentQuantity = quantities.get(contact.getId());
         int maxQuantity = currentQuantity + remainingQuantity;
 
         CashQuantityDialogFragment dialogFragment = CashQuantityDialogFragment.newInstance(maxQuantity, currentQuantity);

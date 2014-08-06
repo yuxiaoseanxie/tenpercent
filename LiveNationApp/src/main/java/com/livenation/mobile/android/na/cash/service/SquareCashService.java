@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.cash.service;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
@@ -23,22 +25,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SquareCashService {
-    private static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
-    private static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";
-    private static final String AUTHORITY = "cash.square-sandbox.com";
+    private static final String PERSISTED_SESSION = "PERSISTED_SESSION";
 
     private final RequestQueue requestQueue;
+    private final CustomerIdProvider customerIdProvider;
     private CashSession session;
 
-    private SquareCashService(@NonNull RequestQueue requestQueue) {
+    private SquareCashService(@NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
         this.requestQueue = requestQueue;
+        this.customerIdProvider = customerIdProvider;
+
+        if (getSharedPreferences().contains(PERSISTED_SESSION)) {
+            try {
+                this.session = CashSession.fromJsonString(getSharedPreferences().getString(PERSISTED_SESSION, "{}"), CashSession.class);
+                // TODO: Handle session expiration
+            } catch (IOException e) {
+                Log.w(CashUtils.LOG_TAG, "Could not load session from persistent storage", e);
+            }
+        }
     }
     private static SquareCashService instance = null;
     public static SquareCashService getInstance() {
         return instance;
     }
-    public static void init(@NonNull RequestQueue requestQueue) {
-        instance = new SquareCashService(requestQueue);
+    public static void init(@NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+        instance = new SquareCashService(requestQueue, customerIdProvider);
     }
 
     //region Building Requests
@@ -48,7 +59,7 @@ public class SquareCashService {
 
         // TODO: This is really dangerous
         builder.scheme("http");
-        builder.encodedAuthority(AUTHORITY);
+        builder.encodedAuthority(CashUtils.AUTHORITY);
         builder.appendEncodedPath(route);
 
         if (params != null) {
@@ -60,7 +71,7 @@ public class SquareCashService {
     }
 
     private <T extends CashResponse> void injectHeaders(SquareRequest<T> request) {
-        String authorizationHeader = "Client " + CLIENT_ID + " " + CLIENT_SECRET;
+        String authorizationHeader = "Client " + CashUtils.CLIENT_ID + " " + CashUtils.CLIENT_SECRET;
         HashMap<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", authorizationHeader);
         headers.put("Content-Type", "application/json");
@@ -110,6 +121,26 @@ public class SquareCashService {
 
     //region Sessions
 
+    private SharedPreferences getSharedPreferences() {
+        return LiveNationApplication.get().getSharedPreferences(CashUtils.PREFS_ID, 0);
+    }
+
+    private void setSession(@Nullable CashSession session) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        if (session != null) {
+            try {
+                editor.putString(PERSISTED_SESSION, session.toJsonString());
+            } catch (IOException e) {
+                Log.e(CashUtils.LOG_TAG, "Could not persist session", e);
+            }
+        } else {
+            editor.remove(PERSISTED_SESSION);
+        }
+        editor.apply();
+
+        this.session = session;
+    }
+
     public @Nullable CashSession getSession() {
         return session;
     }
@@ -118,7 +149,7 @@ public class SquareCashService {
         return (getSession() != null);
     }
 
-    protected JSONObject makeRequestBody(String... args) {
+    protected JSONObject makeRequestBody(@NonNull String... args) {
         JSONObject json = new JSONObject();
         if (args.length > 0) {
             if (args.length % 2 != 0)
@@ -156,7 +187,8 @@ public class SquareCashService {
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
         JSONObject body = makeRequestBody("response_type", "token",
-                                          "client_id", CLIENT_ID);
+                                          "client_id", CashUtils.CLIENT_ID,
+                                          "customer_id", customerIdProvider.getSquareCustomerId());
         try {
             if (phoneNumber != null)
                 body.put("phone_number", phoneNumber);
@@ -170,7 +202,7 @@ public class SquareCashService {
         SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
             @Override
             public void onResponse(CashSession response) {
-                SquareCashService.this.session = response;
+                setSession(response);
                 callback.onResponse(response);
             }
         }, callback);
@@ -249,4 +281,7 @@ public class SquareCashService {
 
 
     public interface ApiCallback<T> extends Response.Listener<T>, Response.ErrorListener {}
+    public interface CustomerIdProvider {
+        @NonNull String getSquareCustomerId();
+    }
 }

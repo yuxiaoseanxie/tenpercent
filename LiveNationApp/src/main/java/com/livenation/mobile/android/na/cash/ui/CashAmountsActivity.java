@@ -6,10 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
-import com.livenation.mobile.android.na.cash.ui.details.CashRequestDetailsActivity;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
+import com.livenation.mobile.android.na.cash.ui.details.CashOnBoardingActivity;
 import com.livenation.mobile.android.na.cash.model.ContactData;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
@@ -67,12 +72,47 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     private class NextClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(CashAmountsActivity.this, CashRequestDetailsActivity.class);
+        private void showOnBoarding() {
+            Intent intent = new Intent(CashAmountsActivity.this, CashOnBoardingActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(CashUtils.EXTRA_QUANTITIES, fragment.getQuantities());
             startActivity(intent);
+        }
+
+        private void requestCustomerStatus() {
+            final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
+            loadingDialogFragment.show(getSupportFragmentManager(), CashLoadingDialogFragment.TAG);
+
+            SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loadingDialogFragment.dismiss();
+                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                    errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
+                }
+
+                @Override
+                public void onResponse(CashCustomerStatus response) {
+                    loadingDialogFragment.dismiss();
+                    if (response.isBlocked()) {
+                        showOnBoarding();
+                    } else {
+                        Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
+                        intent.putExtras(getIntent().getExtras());
+                        intent.putExtra(CashUtils.EXTRA_QUANTITIES, fragment.getQuantities());
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (SquareCashService.getInstance().hasSession()) {
+                requestCustomerStatus();
+            } else {
+                showOnBoarding();
+            }
         }
     }
 }

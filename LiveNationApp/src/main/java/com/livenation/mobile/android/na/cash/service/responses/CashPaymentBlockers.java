@@ -33,6 +33,14 @@ public class CashPaymentBlockers extends CashResponse {
     }
 
 
+    public boolean isBlocked() {
+        return (getUrl() != null ||
+                getCard() != null ||
+                getPhoneNumber() != null ||
+                getPasscodeVerification() != null);
+    }
+
+
     @Override
     public String toString() {
         return "CashPaymentBlockers{" +

@@ -67,8 +67,8 @@ public class CashCardFragment extends Fragment {
     }
 
 
-    private CashRequestDetailsActivity getCashRequestDetailsActivity() {
-        return (CashRequestDetailsActivity) getActivity();
+    private CashOnBoardingActivity getCashRequestDetailsActivity() {
+        return (CashOnBoardingActivity) getActivity();
     }
 
 

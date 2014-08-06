@@ -22,4 +22,12 @@ public class CashMoney extends CashResponse {
     public String getCurrencyCode() {
         return currencyCode;
     }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 }

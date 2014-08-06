@@ -158,8 +158,12 @@
             android:label="@string/activity_label_cash_amounts"/>
 
         <activity
-            android:name=".cash.ui.details.CashRequestDetailsActivity"
+            android:name=".cash.ui.details.CashOnBoardingActivity"
             android:label="@string/activity_label_cash_details" />
+
+        <activity
+            android:name=".cash.ui.CashCompleteRequestActivity"
+            android:label="@string/activity_label_cash_confirmation" />
 
         <!-- Hockey App -->
         <activity android:name="net.hockeyapp.android.UpdateActivity" />

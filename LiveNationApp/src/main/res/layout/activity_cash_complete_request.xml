@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/activity_cash_complete_request_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.livenation.mobile.android.na.cash.ui.CashCompleteRequestFragment"
+        tools:layout="@layout/fragment_cash_request" />
+
+</FrameLayout>

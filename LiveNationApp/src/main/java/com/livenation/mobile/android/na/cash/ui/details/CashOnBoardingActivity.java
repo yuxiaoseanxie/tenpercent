@@ -1,13 +1,15 @@
 package com.livenation.mobile.android.na.cash.ui.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
+import com.livenation.mobile.android.na.cash.ui.CashCompleteRequestActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 
-public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
+public class CashOnBoardingActivity extends LiveNationFragmentActivity {
     private static final String SAVED_CUSTOMER_STATUS = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_CUSTOMER_STATUS";
     private static final String SAVED_PHONE_NUMBER = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_PHONE_NUMBER";
 
@@ -21,7 +23,7 @@ public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_details);
+        setContentView(R.layout.activity_on_boarding);
 
         if (savedInstanceState != null) {
             this.customerStatus = (CashCustomerStatus) savedInstanceState.getSerializable(SAVED_CUSTOMER_STATUS);
@@ -65,10 +67,17 @@ public class CashRequestDetailsActivity extends LiveNationFragmentActivity {
     }
 
     public void continueToPhoneVerification() {
-        showPage(Page.ENTER_VERIFICATION_CODE);
+        if (customerStatus.getBlockers().getPhoneNumber() != null)
+            showPage(Page.ENTER_VERIFICATION_CODE);
+        else
+            setupCompleted();
     }
 
     public void setupCompleted() {
+        Intent intent = new Intent(this, CashCompleteRequestActivity.class);
+        intent.putExtras(getIntent().getExtras());
+        startActivity(intent);
+
         setResult(RESULT_OK);
         finish();
     }

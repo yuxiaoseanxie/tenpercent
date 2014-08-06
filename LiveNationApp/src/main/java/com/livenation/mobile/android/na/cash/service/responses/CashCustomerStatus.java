@@ -35,6 +35,10 @@ public class CashCustomerStatus extends CashResponse {
         return blockers;
     }
 
+    public boolean isBlocked() {
+        return (getBlockers() != null && getBlockers().isBlocked());
+    }
+
     public CashCustomerProfile getProfile() {
         return profile;
     }

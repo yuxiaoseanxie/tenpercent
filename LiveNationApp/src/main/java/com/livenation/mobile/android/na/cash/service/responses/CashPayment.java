@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CashPayment extends CashResponse {
     public static final String ACTION_SEND = "SEND";
+    public static final String ACTION_REQUEST = "REQUEST";
 
     public static final String STATE_WAITING_ON_SENDER = "WAITING_ON_SENDER";
     public static final String STATE_WAITING_ON_RECIPIENT = "WAITING_ON_RECIPIENT";

@@ -40,8 +40,8 @@ public class CashPhoneNumberFragment extends Fragment {
     }
 
 
-    private CashRequestDetailsActivity getCashRequestDetailsActivity() {
-        return (CashRequestDetailsActivity) getActivity();
+    private CashOnBoardingActivity getCashRequestDetailsActivity() {
+        return (CashOnBoardingActivity) getActivity();
     }
 
     private void retrieveCustomerStatus() {
