@@ -13,6 +13,9 @@ import java.math.RoundingMode;
 
 public class CashUtils {
     public static final String LOG_TAG = "Cash";
+    public static final String PREFS_ID = "Cash";
+    public static final String ACTION_REQUESTS_COMPLETED = "com.livenation.mobile.android.na.cash.ACTION_REQUESTS_COMPLETED";
+
 
     public static final String EXTRA_TICKET_PER_CONTACT_QUANTITIES = "com.livenation.mobile.android.na.cash.EXTRA_TICKET_PER_CONTACT_QUANTITIES";
     public static final String EXTRA_CONTACTS = "com.livenation.mobile.android.na.cash.EXTRA_CONTACTS";
@@ -23,8 +26,6 @@ public class CashUtils {
     public static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
     public static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";
     public static final String AUTHORITY = "cash.square-sandbox.com";
-
-    public static final String PREFS_ID = "Cash";
 
     public static void dismissKeyboard(@Nullable View view) {
         if (view != null) {

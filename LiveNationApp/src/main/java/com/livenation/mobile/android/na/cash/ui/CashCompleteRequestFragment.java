@@ -1,9 +1,11 @@
 package com.livenation.mobile.android.na.cash.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,6 +135,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
                 public void onResponse(CashPayment response) {
                     if (counter.decrementAndGet() == 0) {
                         loadingDialogFragment.dismiss();
+
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CashUtils.ACTION_REQUESTS_COMPLETED));
                     }
 
                     adapter.addAll(getCashRequestActivity().getContacts());
