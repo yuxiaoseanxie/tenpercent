@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.cash.ui.onboarding;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -12,6 +13,8 @@ import com.livenation.mobile.android.na.cash.ui.CashCompleteRequestActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 
 public class CashOnBoardingActivity extends LiveNationFragmentActivity {
+    private static final int WEBSITE_REQUEST_CODE = 0xeb;
+
     private static final String SAVED_CUSTOMER_STATUS = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_CUSTOMER_STATUS";
     private static final String SAVED_PHONE_NUMBER = "com.livenation.mobile.android.na.cash.CashRequestDetailsActivity.SAVED_PHONE_NUMBER";
 
@@ -32,7 +35,7 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
             this.phoneNumber = savedInstanceState.getString(SAVED_PHONE_NUMBER);
         } else {
             this.customerStatus = (CashCustomerStatus) getIntent().getSerializableExtra(CashUtils.EXTRA_CUSTOMER_STATUS);
-            
+
             if (customerStatus != null && customerStatus.getBlockers() != null) {
                 CashPaymentBlockers blockers = customerStatus.getBlockers();
                 if (blockers.getPhoneNumber() != null)
@@ -41,6 +44,8 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
                     showPage(Page.ENTER_DEBIT_CARD);
                 else if (blockers.getPasscodeVerification() != null)
                     showPage(Page.ENTER_VERIFICATION_CODE);
+                else if (blockers.getUrl() != null)
+                    showWebSite(blockers.getUrl());
             } else {
                 showPage(Page.ENTER_PHONE_NUMBER);
             }
@@ -53,6 +58,15 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
 
         outState.putSerializable(SAVED_CUSTOMER_STATUS, getCustomerStatus());
         outState.putString(SAVED_PHONE_NUMBER, getPhoneNumber());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == WEBSITE_REQUEST_CODE) {
+            setupCompleted();
+        }
     }
 
     //endregion
@@ -109,6 +123,11 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
                     .replace(R.id.activity_request_details_container, page.newInstance(), FRAGMENT_TAG)
                     .commit();
         }
+    }
+
+    public void showWebSite(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivityForResult(intent, WEBSITE_REQUEST_CODE);
     }
 
     private static enum Page {
