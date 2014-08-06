@@ -3,10 +3,12 @@ package com.livenation.mobile.android.na.cash.service;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
+import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
+import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
@@ -84,6 +86,14 @@ public class SquareService {
         return makeRequest(SquareRequest.Method.GET, makeUrl(route, params), null, responseClass, listener, errorListener);
     }
 
+    private <T extends CashResponse> SquareRequest<T> makeDeleteRequest(@NonNull String route,
+                                                                        @Nullable Map<String, String> params,
+                                                                        @NonNull Class<T> responseClass,
+                                                                        @NonNull Response.Listener<T> listener,
+                                                                        @NonNull Response.ErrorListener errorListener) {
+        return makeRequest(SquareRequest.Method.DELETE, makeUrl(route, params), null, responseClass, listener, errorListener);
+    }
+
     private <T extends CashResponse> SquareRequest<T> makePostRequest(@NonNull String route,
                                                                       @Nullable String requestBody,
                                                                       @NonNull Class<T> responseClass,
@@ -105,7 +115,35 @@ public class SquareService {
         return (getSession() != null);
     }
 
-    public void assertSession() {
+    protected JSONObject makeRequestBody(String... args) {
+        JSONObject json = new JSONObject();
+        if (args.length > 0) {
+            if (args.length % 2 != 0)
+                throw new IllegalArgumentException("Must specify an even number of arguments");
+
+            String key = null;
+            for (String arg : args) {
+                if (key == null) {
+                    key = arg;
+                } else {
+                    try {
+                        json.put(key, arg);
+                    } catch (JSONException e) {
+                        Log.e(getClass().getSimpleName(), "Error constructing request args");
+                    }
+                    key = null;
+                }
+            }
+        }
+
+        return json;
+    }
+
+    protected String getEncodedCustomerId() {
+        return Uri.encode(session.getCustomerId());
+    }
+
+    protected void assertSession() {
         if (!hasSession())
             throw new RuntimeException("session required");
     }
@@ -114,11 +152,9 @@ public class SquareService {
         if (email == null && phoneNumber == null)
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
-        JSONObject body = new JSONObject();
+        JSONObject body = makeRequestBody("response_type", "token",
+                                          "client_id", CLIENT_ID);
         try {
-            body.put("response_type", "token");
-            body.put("client_id", CLIENT_ID);
-
             if (phoneNumber != null)
                 body.put("phone_number", phoneNumber);
 
@@ -141,8 +177,7 @@ public class SquareService {
     public void retrieveCustomerStatus(ApiCallback<CashCustomerStatus> callback) {
         assertSession();
 
-        String customerId = Uri.encode(session.getCustomerId());
-        SquareRequest<CashCustomerStatus> request = makeGetRequest("v1/" + customerId + "/cash", null, CashCustomerStatus.class, callback, callback);
+        SquareRequest<CashCustomerStatus> request = makeGetRequest("v1/" + getEncodedCustomerId() + "/cash", null, CashCustomerStatus.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -150,13 +185,8 @@ public class SquareService {
         assertSession();
 
         String customerId = Uri.encode(session.getCustomerId());
-        JSONObject body = new JSONObject();
-        try {
-            body.put("phone_number", phoneNumber);
-        } catch (JSONException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-        SquareRequest<CashResponse> request = makePostRequest("v1/" + customerId + "/cash/phone-number", body.toString(), CashResponse.class, callback, callback);
+        JSONObject body = makeRequestBody("phone_number", phoneNumber);
+        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/phone-number", body.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -165,16 +195,43 @@ public class SquareService {
 
     //region Payments
 
+    public void linkCard(@NonNull CashCardLinkInfo info, ApiCallback<CashCardLinkResponse> callback) {
+        assertSession();
+
+        if (!info.validateForJsonConversion())
+            throw new IllegalStateException("invalid card info given");
+
+        try {
+            SquareRequest<CashCardLinkResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/card", info.toJsonString(), CashCardLinkResponse.class, callback, callback);
+            requestQueue.add(request);
+        } catch (IOException e) {
+
+        }
+    }
+
+    public void unlinkCard(ApiCallback<CashResponse> callback) {
+        assertSession();
+
+        SquareRequest<CashResponse> request = makeDeleteRequest("v1/" + getEncodedCustomerId() + "/cash/card", null, CashResponse.class, callback, callback);
+        requestQueue.add(request);
+    }
+
     public void initiatePayment(@NonNull CashPayment payment, ApiCallback<CashPayment> callback) {
         assertSession();
 
         try {
-            String customerId = Uri.encode(session.getCustomerId());
-            SquareRequest<CashPayment> request = makePostRequest("v1/" + customerId + "/cash/payments", payment.toJsonString(), CashPayment.class, callback, callback);
+            SquareRequest<CashPayment> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/payments", payment.toJsonString(), CashPayment.class, callback, callback);
             requestQueue.add(request);
         } catch (IOException e) {
             throw new IllegalStateException("Could not convert payment to json", e);
         }
+    }
+
+    public void retrievePayment(@NonNull String paymentId, ApiCallback<CashPayment> callback) {
+        assertSession();
+
+        SquareRequest<CashPayment> request = makeGetRequest("v1/" + getEncodedCustomerId() + "/cash/payments/" + paymentId, null, CashPayment.class, callback, callback);
+        requestQueue.add(request);
     }
 
     //endregion
