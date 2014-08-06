@@ -27,23 +27,23 @@ public class CashOnBoardingActivity extends LiveNationFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_boarding);
 
-        this.customerStatus = (CashCustomerStatus) getIntent().getSerializableExtra(CashUtils.EXTRA_CUSTOMER_STATUS);
-
         if (savedInstanceState != null) {
             this.customerStatus = (CashCustomerStatus) savedInstanceState.getSerializable(SAVED_CUSTOMER_STATUS);
             this.phoneNumber = savedInstanceState.getString(SAVED_PHONE_NUMBER);
-        }
-
-        if (customerStatus != null && customerStatus.getBlockers() != null) {
-            CashPaymentBlockers blockers = customerStatus.getBlockers();
-            if (blockers.getPhoneNumber() != null)
-                showPage(Page.ENTER_PHONE_NUMBER);
-            else if (blockers.getCard() != null)
-                showPage(Page.ENTER_DEBIT_CARD);
-            else if (blockers.getPasscodeVerification() != null)
-                showPage(Page.ENTER_VERIFICATION_CODE);
         } else {
-            showPage(Page.ENTER_PHONE_NUMBER);
+            this.customerStatus = (CashCustomerStatus) getIntent().getSerializableExtra(CashUtils.EXTRA_CUSTOMER_STATUS);
+            
+            if (customerStatus != null && customerStatus.getBlockers() != null) {
+                CashPaymentBlockers blockers = customerStatus.getBlockers();
+                if (blockers.getPhoneNumber() != null)
+                    showPage(Page.ENTER_PHONE_NUMBER);
+                else if (blockers.getCard() != null)
+                    showPage(Page.ENTER_DEBIT_CARD);
+                else if (blockers.getPasscodeVerification() != null)
+                    showPage(Page.ENTER_VERIFICATION_CODE);
+            } else {
+                showPage(Page.ENTER_PHONE_NUMBER);
+            }
         }
     }
 
