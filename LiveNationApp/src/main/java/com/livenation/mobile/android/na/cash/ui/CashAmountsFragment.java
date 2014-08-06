@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashQuantityDialogFragment;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;

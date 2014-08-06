@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.cash.ui.details;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
-import com.livenation.mobile.android.na.cash.ui.CashLoadingDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -72,7 +72,8 @@ public class CashVerificationCodeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loadingDialogFragment.dismiss();
-                Log.e(getClass().getSimpleName(), "Could not request phone verification", error);
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
@@ -90,7 +91,8 @@ public class CashVerificationCodeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loadingDialogFragment.dismiss();
-                Log.e(CashUtils.LOG_TAG, "Could not verify phone number", error);
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override

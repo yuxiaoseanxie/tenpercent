@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash.ui;
+package com.livenation.mobile.android.na.cash.ui.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -20,7 +20,8 @@ import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
-import com.livenation.mobile.android.na.cash.ui.CashLoadingDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
 import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.MonthValidator;
@@ -104,7 +105,8 @@ public class CashCardFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loadingDialogFragment.dismiss();
-                Log.e(CashUtils.LOG_TAG, "Could not link credit card", error);
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override

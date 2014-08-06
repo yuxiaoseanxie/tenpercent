@@ -18,7 +18,8 @@ import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
-import com.livenation.mobile.android.na.cash.ui.CashLoadingDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,8 +48,9 @@ public class CashPhoneNumberFragment extends Fragment {
         SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(CashUtils.LOG_TAG, "Could not retrieve customer status", error);
                 loadingDialogFragment.dismiss();
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
