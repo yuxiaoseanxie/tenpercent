@@ -8,4 +8,6 @@
 
     <string name="urbanairship_permission">com.livenation.mobile.android.na.debug.permission.UA_DATA</string>
     <string name="urbanairship_authorities">com.livenation.mobile.android.na.debug.urbanairship.provider</string>
+
+    <string name="square_cash_environment">cash.square-sandbox.com</string>
 </resources>

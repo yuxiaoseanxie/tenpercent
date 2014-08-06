@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.cash.service;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
@@ -27,11 +29,13 @@ import java.util.Map;
 public class SquareCashService {
     private static final String PERSISTED_SESSION = "PERSISTED_SESSION";
 
+    private final Context context;
     private final RequestQueue requestQueue;
     private final CustomerIdProvider customerIdProvider;
     private CashSession session;
 
-    private SquareCashService(@NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+    private SquareCashService(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+        this.context = context.getApplicationContext();
         this.requestQueue = requestQueue;
         this.customerIdProvider = customerIdProvider;
 
@@ -48,8 +52,8 @@ public class SquareCashService {
     public static SquareCashService getInstance() {
         return instance;
     }
-    public static void init(@NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
-        instance = new SquareCashService(requestQueue, customerIdProvider);
+    public static void init(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+        instance = new SquareCashService(context, requestQueue, customerIdProvider);
     }
 
     //region Building Requests
@@ -57,9 +61,8 @@ public class SquareCashService {
     private String makeUrl(@NonNull String route, @Nullable Map<String, String> params) {
         Uri.Builder builder = new Uri.Builder();
 
-        // TODO: This is really dangerous
-        builder.scheme(CashUtils.SCHEME);
-        builder.encodedAuthority(CashUtils.AUTHORITY);
+        builder.scheme("http");
+        builder.encodedAuthority(context.getString(R.string.square_cash_environment));
         builder.appendEncodedPath(route);
 
         if (params != null) {

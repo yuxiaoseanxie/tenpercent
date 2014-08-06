@@ -36,8 +36,6 @@ public class CashUtils {
 
     public static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
     public static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";
-    public static final String SCHEME = "http";
-    public static final String AUTHORITY = "cash.square-sandbox.com";
 
     //endregion
 

@@ -7,4 +7,6 @@
     <string name="urbanairship_permission"></string>
     <string name="urbanairship_authorities"></string>
     <string name="hockey_app_id"></string>
+
+    <string name="square_cash_environment"></string>
 </resources>
