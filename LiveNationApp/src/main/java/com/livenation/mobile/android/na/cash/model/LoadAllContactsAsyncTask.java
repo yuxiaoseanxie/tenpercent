@@ -10,11 +10,11 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-public class LoadAllContactsAysncTask extends AsyncTask<Void, Void, ArrayList<ContactData>> {
+public class LoadAllContactsAsyncTask extends AsyncTask<Void, Void, ArrayList<ContactData>> {
     private final ContentResolver contentResolver;
     private final DataCallback<ArrayList<ContactData>> callback;
 
-    public LoadAllContactsAysncTask(@NonNull ContentResolver contentResolver, @NonNull DataCallback<ArrayList<ContactData>> callback) {
+    public LoadAllContactsAsyncTask(@NonNull ContentResolver contentResolver, @NonNull DataCallback<ArrayList<ContactData>> callback) {
         this.contentResolver = contentResolver;
         this.callback = callback;
     }

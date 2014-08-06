@@ -24,7 +24,7 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.model.DataCallback;
-import com.livenation.mobile.android.na.cash.model.LoadAllContactsAysncTask;
+import com.livenation.mobile.android.na.cash.model.LoadAllContactsAsyncTask;
 import com.livenation.mobile.android.na.cash.model.PhoneNumber;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 
@@ -62,7 +62,7 @@ public class CashRecipientsFragment extends ListFragment implements ContactDataA
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new LoadAllContactsAysncTask(getActivity().getContentResolver(), new DataCallback<ArrayList<ContactData>>() {
+        new LoadAllContactsAsyncTask(getActivity().getContentResolver(), new DataCallback<ArrayList<ContactData>>() {
             @Override
             public void onDataReady(ArrayList<ContactData> contacts) {
                 allContacts = contacts;
