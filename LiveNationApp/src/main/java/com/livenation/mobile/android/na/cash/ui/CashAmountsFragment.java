@@ -122,9 +122,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         return false;
     }
 
-    @NonNull
     @Override
-    public String getSmallDetails(int position, @NonNull ContactData contact) {
+    public @NonNull String getSmallDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
         return TicketingUtils.formatCurrency(null, price);

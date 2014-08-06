@@ -262,6 +262,9 @@
     <string name="cash_enter_card_text">Add a bank by enter your debit card</string>
     <string name="cash_verification_code_text">Please enter the verification code sent to your phone</string>
     <string name="verification_code">Verification Code</string>
+    <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
+    <string name="cash_confirmation_title_fmt">Requested %1$s!</string>
+    <string name="cash_checkmark_content_description">Successfully requested payment</string>
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>

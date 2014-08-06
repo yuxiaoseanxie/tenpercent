@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/inter_item_padding_large"
         android:gravity="center"
-        android:textSize="25sp"
-        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="@style/Cash.Text.Header1"
         android:text="@string/cash_enter_card_text"/>
 
     <EditText

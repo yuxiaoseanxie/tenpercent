@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/outer_padding"
+        android:src="@drawable/square_big_checkmark"
+        android:contentDescription="@string/cash_checkmark_content_description"/>
+
+    <TextView
+        android:id="@+id/fragment_cash_complete_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/outer_padding"
+        android:layout_marginRight="@dimen/outer_padding"
+        android:layout_marginBottom="@dimen/inter_item_padding_medium"
+        android:gravity="center"
+        android:textAppearance="@style/Cash.Text.Header1"
+        android:text="@string/cash_confirmation_title_fmt"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/outer_padding"
+        android:layout_marginRight="@dimen/outer_padding"
+        android:layout_marginBottom="@dimen/inter_item_padding_large"
+        android:gravity="center"
+        android:textAppearance="@style/Cash.Text.Header2"
+        android:text="@string/cash_confirmation_explanation"/>
+
+    <View style="@style/Divider" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
