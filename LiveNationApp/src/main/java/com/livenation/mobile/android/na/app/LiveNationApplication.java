@@ -133,7 +133,7 @@ public class LiveNationApplication extends Application {
 
         getConfigManager().buildApi();
 
-        SquareCashService.init(requestQueue, new SquareCashService.CustomerIdProvider() {
+        SquareCashService.init(this, requestQueue, new SquareCashService.CustomerIdProvider() {
             @NonNull
             @Override
             public String getSquareCustomerId() {

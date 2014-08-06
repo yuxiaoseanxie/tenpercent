@@ -34,8 +34,6 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.cash.model.CashUtils;
-import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
@@ -49,13 +47,11 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
-import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
@@ -108,13 +104,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         //Hockey App
         checkForUpdates();
-
-
-        Total testTotal = new Total();
-        testTotal.setGrandTotal(BigDecimal.valueOf(120));
-        startActivity(new Intent(this, CashRecipientsActivity.class)
-                .putExtra(CashUtils.EXTRA_TOTAL, testTotal)
-                .putExtra(CashUtils.EXTRA_TICKET_QUANTITY, 3));
     }
 
     @Override

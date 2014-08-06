@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -310,7 +312,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private class CashClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-
+            Intent intent = new Intent(OrderConfirmationActivity.this, CashRecipientsActivity.class);
+            intent.putExtra(CashUtils.EXTRA_TOTAL, getCart().getTotal());
+            intent.putExtra(CashUtils.EXTRA_TICKET_QUANTITY, TicketingUtils.getTicketCountForCart(getCart()));
+            startActivity(intent);
         }
     }
 
