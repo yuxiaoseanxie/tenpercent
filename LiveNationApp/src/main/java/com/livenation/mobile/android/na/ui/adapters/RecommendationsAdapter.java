@@ -15,7 +15,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
@@ -23,6 +22,7 @@ import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.List;
 import java.util.TimeZone;

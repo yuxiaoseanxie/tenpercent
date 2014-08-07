@@ -1,13 +1,16 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +23,19 @@ import android.widget.Toast;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
+import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
+import com.livenation.mobile.android.platform.init.Environment;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
+import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
@@ -49,7 +57,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by km on 2/28/14.
  */
-public class DebugActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener, ApiServiceBinder {
+public class DebugActivity extends LiveNationFragmentActivity implements AdapterView.OnItemClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener, AccessTokenUpdateReceiver.AccessTokenUpdateListener {
     private static final String ACTIONS = "com.livenation.mobile.android.na.DebugActivity.ACTIONS";
     private ArrayList<DebugItem> actions;
     private StickyListHeadersListView listView;
@@ -61,12 +69,17 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     private DebugItem scanItem;
     private DebugItem versionName;
 
+    private ProviderManager providerManager;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
+    private AccessTokenUpdateReceiver accessTokenUpdateReceiver = new AccessTokenUpdateReceiver(this);
+
     @Override
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
 
+        providerManager = new ProviderManager();
         listView = (StickyListHeadersListView) findViewById(R.id.debug_activity_list_view);
 
         actions = new ArrayList<DebugItem>();
@@ -78,6 +91,12 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         listView.setOnItemClickListener(this);
 
         getActionBar().setTitle(R.string.debug_actionbar_title);
+
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(accessTokenUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.ACCESS_TOKEN_UPDATE_INTENT_FILTER));
+
+
     }
 
     @Override
@@ -99,34 +118,14 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     @Override
     protected void onResume() {
         super.onResume();
-        LiveNationApplication.get().getConfigManager().persistentBindApi(DebugActivity.this);
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.DEVICE_ID, ProviderManager.ProviderType.LOCATION, ProviderManager.ProviderType.ACCESS_TOKEN);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(DebugActivity.this);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        if (null != accessTokenItem) {
-            accessTokenItem.setValue(apiService.getApiConfig().getAccessToken());
-        }
-        if (null != deviceIdItem) {
-            deviceIdItem.setValue(apiService.getApiConfig().getDeviceId());
-        }
-        if (null != locationItem) {
-            locationItem.setValue(apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
-        }
-        if (null != actionsAdapter) {
-            actionsAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accessTokenUpdateReceiver);
     }
 
     private void addInfoDebugItems() {
@@ -160,7 +159,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     }
 
     private void addActionDebugItems() {
-        //Environnement Item
+        //Environment Item
         environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
         actions.add(environmentItem);
 
@@ -202,18 +201,79 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         action.doAction(this);
     }
 
-    private Constants.Environment getEnvironment() {
-        return ConfigManager.getConfiguredEnvironment(this);
+    private Environment getEnvironment() {
+        EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
+        return environmentPreferences.getConfiguredEnvironment();
     }
 
-    private void setEnvironment(Constants.Environment environment) {
-        ConfigManager.setConfiguredEnvironment(environment, this);
+    private void setEnvironment(Environment environment) {
+        EnvironmentPreferences environmentPreferences = new EnvironmentPreferences(this);
+        environmentPreferences.setConfiguredEnvironment(environment);
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
-        ConfigManager configManager = LiveNationApplication.get().getConfigManager();
-        configManager.clearAccessToken();
-        configManager.buildApi();
+        LiveNationApplication.getEnvironmentProvider().setEnvironment(environment);
+        LiveNationApplication.getAccessTokenProvider().clear();
         NotificationsRegistrationManager.getInstance().register();
+    }
+
+    @Override
+    public void onResponse(LiveNationConfig response) {
+        if (null != deviceIdItem) {
+            deviceIdItem.setValue(response.getDeviceId());
+        }
+
+        if (null != locationItem) {
+            locationItem.setValue(response.getLat() + "," + response.getLng());
+        }
+
+        if (null != accessTokenItem) {
+            accessTokenItem.setValue(response.getAccessToken().getToken());
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {
+    }
+
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        if (null != locationItem) {
+            locationItem.setValue(lat + "," + lng);
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onAccessTokenUpdated(AccessToken accessToken) {
+        if (null != accessTokenItem) {
+            accessTokenItem.setValue(accessToken.getToken());
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != actionsAdapter) {
+                    actionsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private static enum ScanOptions {
@@ -306,19 +366,25 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
         @Override
         public void doAction(Context context) {
-            final String[] items = new String[Constants.Environment.values().length];
+            final String[] items = new String[Environment.values().length];
             for (int i = 0; i < items.length; i++) {
-                items[i] = Constants.Environment.values()[i].toString();
+                items[i] = Environment.values()[i].toString();
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(DebugActivity.this);
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Constants.Environment environment = Constants.Environment.values()[i];
+                    Environment environment = Environment.values()[i];
                     setEnvironment(environment);
                     environmentItem.setValue(environment.toString());
-                    actionsAdapter.notifyDataSetChanged();
+
+                    Intent mStartActivity = new Intent(DebugActivity.this, OnBoardingActivity.class);
+                    int mPendingIntentId = 123456;
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(DebugActivity.this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                    System.exit(0);
                 }
             });
 
@@ -427,7 +493,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
                 if (!TicketingUtils.isCollectionEmpty(requests)) {
                     try {
                         String jsonString = TestingUtil.convertRequestsToJson(requests);
-                        File downloadsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        File downloadsDirectory = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
                         downloadsDirectory.mkdirs();
 
                         File sharedFile = new File(downloadsDirectory, SHARED_FILE_NAME);

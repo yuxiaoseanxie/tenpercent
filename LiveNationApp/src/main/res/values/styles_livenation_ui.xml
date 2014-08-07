@@ -139,5 +139,5 @@
         <item name="android:layout_marginTop">@dimen/gap_large</item>
     </style>
 
-    <style name="ActionBar.Spinner" parent="@android:style/Widget.Holo.Light.Spinner"/>
+    <style name="ActionBar.Spinner" parent="@android:style/Widget.Holo.Light.Spinner" />
 </resources>

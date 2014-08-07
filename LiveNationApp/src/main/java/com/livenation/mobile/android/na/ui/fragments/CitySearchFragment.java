@@ -14,12 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SearchCitiesParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -30,18 +28,15 @@ import java.util.List;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class CitySearchFragment extends LiveNationFragment implements SearchForText, ApiServiceBinder, ApiService.BasicApiCallback<List<City>>, ListView.OnItemClickListener {
+public class CitySearchFragment extends LiveNationFragment implements SearchForText, BasicApiCallback<List<City>>, ListView.OnItemClickListener {
     public static final String DATA_RESULT_KEY = "search_result";
     private SearchAdapter adapter;
-    private LiveNationApiService apiService;
-    private String unboundSearchTextBuffer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         adapter = new SearchAdapter(getActivity(), new ArrayList<City>());
-        LiveNationApplication.get().getConfigManager().bindApi(this);
     }
 
     @Override
@@ -56,28 +51,10 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
 
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
-        if (null == apiService) {
-            unboundSearchTextBuffer = text;
-            return;
-        }
         SearchCitiesParameters params = new SearchCitiesParameters();
         params.setSearchQuery(text);
 
-        apiService.searchCities(params, this);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.apiService = apiService;
-        if (null != unboundSearchTextBuffer) {
-            searchFor(unboundSearchTextBuffer);
-            unboundSearchTextBuffer = null;
-        }
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
+        LiveNationApplication.getLiveNationProxy().searchCities(params, this);
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.sso;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -14,34 +15,52 @@ import com.facebook.SessionLoginBehavior;
 import com.facebook.model.GraphUser;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.platform.sso.ActivityProvider;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class FacebookSsoProvider extends ApiSsoProvider {
-    private final String PARAMETER_ACCESS_KEY = "facebook_access_token";
-
-    public FacebookSsoProvider(ActivityProvider activityProvider) {
-        super(activityProvider);
+public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {
+    public FacebookSsoProvider(Context context) {
+        super(context);
     }
-
 
     //ApiSsoProvider interface --begin
 
+    private static User getAppUser(GraphUser graphUser) {
+        Map<String, Object> map = graphUser.asMap();
+
+        String id = graphUser.getId();
+        String email = null;
+        if (map.get("email") != null) {
+            email = map.get("email").toString();
+        }
+        String name = graphUser.getName();
+        String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
+
+        User user = new User();
+        user.setId(graphUser.getId());
+        user.setDisplayName(name);
+        user.setEmail(email);
+        user.setUrl(pictureUrl);
+
+        return user;
+    }
+
     @Override
-    public void login(final boolean allowForeground, final SsoLoginCallback callback) {
+    public void login(final boolean allowForeground, final SsoLoginCallback callback, Activity activity) {
         Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
+                saveAuthConfiguration(getType(), accessToken);
+                saveUser(user, getType());
                 if (callback != null) {
                     callback.onLoginSucceed(accessToken, user);
                 }
@@ -52,6 +71,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
                 Context context = LiveNationApplication.get().getApplicationContext();
                 Toast toast = Toast.makeText(context, context.getString(R.string.login_connection_problem), Toast.LENGTH_SHORT);
                 toast.show();
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginFailed(error);
                 }
@@ -59,13 +80,15 @@ public class FacebookSsoProvider extends ApiSsoProvider {
 
             @Override
             public void onLoginCanceled() {
+                removeAuthConfiguration();
+                removeUser();
                 if (callback != null) {
                     callback.onLoginCanceled();
                 }
             }
         });
 
-        final OpenRequest op = new OpenRequest(getActivity());
+        final OpenRequest op = new OpenRequest(activity);
         op.setCallback(statusCallback);
         op.setPermissions(Arrays.asList("email"));
         if (!allowForeground) {
@@ -78,8 +101,8 @@ public class FacebookSsoProvider extends ApiSsoProvider {
     }
 
     @Override
-    public void login(boolean allowForeground) {
-        login(allowForeground, null);
+    public void login(boolean allowForeground, Activity activity) {
+        login(allowForeground, null, activity);
     }
 
     @Override
@@ -93,27 +116,27 @@ public class FacebookSsoProvider extends ApiSsoProvider {
         if (session != null) {
             session.closeAndClearTokenInformation();
         }
+        removeAuthConfiguration();
+        removeUser();
         if (callback != null) {
             callback.onLogoutSucceed();
         }
     }
 
     @Override
-    public String getTokenKey() {
-        return PARAMETER_ACCESS_KEY;
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
-        Session.getActiveSession().onActivityResult(getActivity(), requestCode, resultCode, data);
+    public SsoManager.SSO_TYPE getType() {
+        return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
 
     //ApiSsoProvider interface --end
 
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data, SsoLoginCallback callback) {
+        Session.getActiveSession().onActivityResult(activity, requestCode, resultCode, data);
+    }
 
     public SsoManager.SSO_TYPE getId() {
         return SsoManager.SSO_TYPE.SSO_FACEBOOK;
     }
-
 
     private class FacebookSessionWorker implements Session.StatusCallback {
         final private SsoLoginCallback loginCallback;
@@ -163,25 +186,5 @@ public class FacebookSsoProvider extends ApiSsoProvider {
                 }
             }).executeAsync();
         }
-    }
-
-    private static User getAppUser(GraphUser graphUser) {
-        Map<String, Object> map = graphUser.asMap();
-
-        String id = graphUser.getId();
-        String email = null;
-        if (map.get("email") != null) {
-            email = map.get("email").toString();
-        }
-        String name = graphUser.getName();
-        String pictureUrl = String.format("http://graph.facebook.com/%s/picture?type=large", id);
-
-        User user = new User();
-        user.setId(graphUser.getId());
-        user.setDisplayName(name);
-        user.setEmail(email);
-        user.setUrl(pictureUrl);
-
-        return user;
     }
 }

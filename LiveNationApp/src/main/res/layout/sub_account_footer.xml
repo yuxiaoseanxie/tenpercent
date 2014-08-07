@@ -39,5 +39,4 @@
             android:textAppearance="@style/ln.text.small.bold.red" />
     </LinearLayout>
 
-
 </RelativeLayout>
