@@ -25,6 +25,7 @@ public enum BoxOfficeTabs {
         SECTION_TITLE_MAPPINGS.put("general_rules", R.string.box_office_general_rules);
         SECTION_TITLE_MAPPINGS.put("child_rules", R.string.box_office_child_rules);
     }
+
     private int titleResId;
 
     //endregion

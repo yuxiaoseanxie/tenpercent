@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginCallback {
     public static final String ARG_PROVIDER_ID = "provider_id";
@@ -28,7 +28,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
             throw new IllegalArgumentException("Which SSO do you want me to sign in?!");
         }
 
-        LiveNationApplication.get().getSsoManager().login(providerId, SsoActivity.this, true, this);
+        LiveNationApplication.get().getSsoManager().login(providerId, true, this, this);
 
     }
 
@@ -36,15 +36,13 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (providerId != null) {
-            LiveNationApplication.getSsoManager().getSsoProvider(providerId, LiveNationApplication.get().getApplicationContext())
-                    .onActivityResult(requestCode, resultCode, data, this);
+            LiveNationApplication.getSsoManager().getSsoProvider(providerId)
+                    .onActivityResult(this, requestCode, resultCode, data, this);
         }
     }
 
     @Override
     public void onLoginSucceed(String accessToken, User user) {
-        LiveNationApplication.get().getConfigManager().clearAccessToken();
-        LiveNationApplication.get().getConfigManager().buildApi();
         setResult(RESULT_OK);
         finish();
     }

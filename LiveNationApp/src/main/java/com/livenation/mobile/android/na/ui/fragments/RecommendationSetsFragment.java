@@ -25,9 +25,7 @@ import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
@@ -35,15 +33,13 @@ import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 
-public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder {
+public class RecommendationSetsFragment extends LiveNationFragmentTab implements OnItemClickListener {
 
     private RecommendationsAdapter adapter;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -60,7 +56,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
 
         adapter = new RecommendationsAdapter(getActivity(), new ArrayList<RecommendationItem>());
         scrollPager = new RecommendationSetsScrollPager(adapter);
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
 
     }
@@ -79,6 +74,11 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         scrollPager.setRefreshBarView(refreshBar);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
+
+        scrollPager.load();
         return view;
     }
 
@@ -92,7 +92,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
     @Override
@@ -118,19 +117,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-        if (emptyListViewControl != null) {
-            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-        }
     }
 
     @Override

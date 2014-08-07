@@ -3,15 +3,13 @@ package com.livenation.mobile.android.na.notifications;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.BuildConfig;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.PreferencePersistence;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
@@ -28,26 +26,19 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
         return instance;
     }
 
-    private ConfigManager getApiHelper() {
-        return LiveNationApplication.get().getConfigManager();
-    }
-
-    //endregion
-
-
     //region Persistence
 
     private PreferencePersistence getPreferences() {
-        return new PreferencePersistence("notifications");
+        return new PreferencePersistence("notifications", LiveNationApplication.get().getApplicationContext());
     }
 
     private void saveApid(String apid) {
         Log.i(getClass().getName(), "saved apid:" + apid);
-        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid, LiveNationApplication.get());
+        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid);
     }
 
     private String getSavedApid() {
-        return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, LiveNationApplication.get());
+        return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID);
     }
 
     //endregion
@@ -80,40 +71,29 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
 
     public void register() {
 
-        getApiHelper().bindApi(new ApiServiceBinder() {
+        if (!isHostSafe(LiveNationLibrary.getHost())) {
+            Log.e(getClass().getName(), "Ignoring unsafe host: " + LiveNationLibrary.getHost());
+            return;
+        }
+
+        final String apid = PushManager.shared().getAPID();
+        final String userId = RichPushManager.shared().getRichPushUser().getId();
+
+        Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
+
+        RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
+        params.setTokens(apid, userId);
+        LiveNationApplication.getLiveNationProxy().registerForNotifications(params, new BasicApiCallback<Void>() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                if (!isHostSafe(apiService.getApiConfig().getHost())) {
-                    Log.e(getClass().getName(), "Ignoring unsafe host: " + apiService.getApiConfig().getHost());
-                    return;
-                }
-
-                final String apid = PushManager.shared().getAPID();
-                final String userId = RichPushManager.shared().getRichPushUser().getId();
-
-                Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
-
-                RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
-                params.setDeviceId(apiService.getApiConfig().getDeviceId());
-                params.setTokens(apid, userId);
-                apiService.registerForNotifications(params, new ApiService.BasicApiCallback<Void>() {
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-                        String errorMessage = (error != null) ? error.getMessage() : "unknown error";
-                        Log.e(getClass().getName(), "Could not register with platform: " + errorMessage, error);
-                    }
-
-                    @Override
-                    public void onResponse(Void response) {
-                        saveApid(apid);
-                        Log.i(getClass().getName(), "Completed platform registration");
-                    }
-                });
+            public void onErrorResponse(LiveNationError error) {
+                String errorMessage = (error != null) ? error.getMessage() : "unknown error";
+                Log.e(getClass().getName(), "Could not register with platform: " + errorMessage, error);
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
-
+            public void onResponse(Void response) {
+                saveApid(apid);
+                Log.i(getClass().getName(), "Completed platform registration");
             }
         });
     }
