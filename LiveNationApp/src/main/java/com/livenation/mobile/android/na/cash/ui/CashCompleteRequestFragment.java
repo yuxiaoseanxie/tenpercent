@@ -93,13 +93,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
             CashPayment payment = CashPayment.newRequest();
             payment.setSenderCustomization(senderCustomization);
             payment.setAmount(CashMoney.newUSD(pricePerTicket * quantity));
-
-            CashCustomer sender = new CashCustomer();
-            if (!TicketingUtils.isCollectionEmpty(contact.getPhoneNumbers()))
-                sender.setPhoneNumber(contact.getPhoneNumbers().get(0).getPhoneNumber());
-            if (!TicketingUtils.isCollectionEmpty(contact.getEmails()))
-                sender.setEmail(contact.getEmails().get(0));
-            payment.setSender(sender);
+            payment.setSender(CashCustomer.fromContactData(contact));
 
             payments.add(payment);
         }
