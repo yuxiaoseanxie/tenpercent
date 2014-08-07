@@ -37,14 +37,4 @@
             android:textAppearance="@style/account_footer_detail" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/account_footer_change_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/account_footer_change_margin_right"
-        android:text="@string/account_footer_location_change"
-        android:textAppearance="@style/account_footer_change" />
-
 </RelativeLayout>
