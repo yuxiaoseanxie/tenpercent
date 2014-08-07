@@ -2,6 +2,8 @@ package com.livenation.mobile.android.na.cash.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+
 public class CashPayment extends CashResponse {
     public static final String ACTION_SEND = "SEND";
     public static final String ACTION_REQUEST = "REQUEST";
@@ -29,8 +31,14 @@ public class CashPayment extends CashResponse {
     @JsonProperty("sender")
     private CashCustomer sender;
 
+    @JsonProperty("sender_customization")
+    private CashCustomization senderCustomization;
+
     @JsonProperty("recipient")
     private CashCustomer recipient;
+
+    @JsonProperty("recipient_customization")
+    private CashCustomization recipientCustomization;
 
     @JsonProperty("amount_money")
     private CashMoney amount;
@@ -60,6 +68,14 @@ public class CashPayment extends CashResponse {
     private String refundedAt;
 
 
+    public static CashPayment newRequest() {
+        CashPayment payment = new CashPayment();
+        payment.setAction(CashPayment.ACTION_REQUEST);
+        payment.setPaymentId(UUID.randomUUID().toString());
+        return payment;
+    }
+
+
     public String getPaymentId() {
         return paymentId;
     }
@@ -84,12 +100,28 @@ public class CashPayment extends CashResponse {
         this.sender = sender;
     }
 
+    public CashCustomization getSenderCustomization() {
+        return senderCustomization;
+    }
+
+    public void setSenderCustomization(CashCustomization senderCustomization) {
+        this.senderCustomization = senderCustomization;
+    }
+
     public CashCustomer getRecipient() {
         return recipient;
     }
 
     public void setRecipient(CashCustomer recipient) {
         this.recipient = recipient;
+    }
+
+    public CashCustomization getRecipientCustomization() {
+        return recipientCustomization;
+    }
+
+    public void setRecipientCustomization(CashCustomization recipientCustomization) {
+        this.recipientCustomization = recipientCustomization;
     }
 
     public CashMoney getAmount() {
@@ -139,7 +171,9 @@ public class CashPayment extends CashResponse {
                 "paymentId='" + paymentId + '\'' +
                 ", action='" + action + '\'' +
                 ", sender=" + sender +
+                ", senderCustomization=" + senderCustomization +
                 ", recipient=" + recipient +
+                ", recipientCustomization=" + recipientCustomization +
                 ", amount=" + amount +
                 ", state='" + state + '\'' +
                 ", recipientBlockers=" + recipientBlockers +

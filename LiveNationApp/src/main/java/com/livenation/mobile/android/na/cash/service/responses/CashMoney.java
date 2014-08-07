@@ -15,6 +15,14 @@ public class CashMoney extends CashResponse {
     private String currencyCode;
 
 
+    public static CashMoney newUSD(long amount) {
+        CashMoney money = new CashMoney();
+        money.setCurrencyCode(CashMoney.CURRENCY_CODE_USD);
+        money.setAmount(amount);
+        return money;
+    }
+
+
     public long getAmount() {
         return amount;
     }

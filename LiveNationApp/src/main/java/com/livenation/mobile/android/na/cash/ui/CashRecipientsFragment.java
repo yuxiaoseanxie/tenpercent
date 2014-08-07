@@ -106,6 +106,10 @@ public class CashRecipientsFragment extends ListFragment implements ContactDataA
         return selectedContacts;
     }
 
+    public String getNote() {
+        return noteField.getText().toString();
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);

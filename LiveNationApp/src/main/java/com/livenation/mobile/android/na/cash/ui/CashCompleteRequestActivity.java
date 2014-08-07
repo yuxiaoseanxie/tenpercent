@@ -62,5 +62,9 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
         return (HashMap<String, Integer>) getIntent().getSerializableExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES);
     }
 
+    public String getNote() {
+        return getIntent().getStringExtra(CashUtils.EXTRA_NOTE);
+    }
+
     //endregion
 }

@@ -82,7 +82,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
         public void onClick(View view) {
             Intent intent = new Intent(CashRecipientsActivity.this, CashAmountsActivity.class);
             intent.putExtras(getIntent().getExtras());
-
+            intent.putExtra(CashUtils.EXTRA_NOTE, fragment.getNote());
             intent.putExtra(CashUtils.EXTRA_CONTACTS, fragment.getSelectedContacts());
             startActivity(intent);
         }

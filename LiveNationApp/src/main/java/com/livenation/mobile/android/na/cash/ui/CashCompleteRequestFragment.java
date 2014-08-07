@@ -18,6 +18,7 @@ import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomization;
 import com.livenation.mobile.android.na.cash.service.responses.CashMoney;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
@@ -27,7 +28,6 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.ButterKnife;
@@ -85,28 +85,21 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     //region Sending Payments
 
     private ArrayList<CashPayment> buildPayments() {
+        CashCustomization senderCustomization = new CashCustomization(getCashRequestActivity().getNote());
         ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
         for (ContactData contact : getCashRequestActivity().getContacts()) {
             int quantity = quantities.get(contact.getId());
 
-            CashPayment payment = new CashPayment();
-            payment.setAction(CashPayment.ACTION_REQUEST);
-            payment.setPaymentId(UUID.randomUUID().toString());
+            CashPayment payment = CashPayment.newRequest();
+            payment.setSenderCustomization(senderCustomization);
+            payment.setAmount(CashMoney.newUSD(pricePerTicket * quantity));
 
             CashCustomer sender = new CashCustomer();
-            if (!TicketingUtils.isCollectionEmpty(contact.getPhoneNumbers())) {
+            if (!TicketingUtils.isCollectionEmpty(contact.getPhoneNumbers()))
                 sender.setPhoneNumber(contact.getPhoneNumbers().get(0).getPhoneNumber());
-            }
-
-            if (!TicketingUtils.isCollectionEmpty(contact.getEmails())) {
+            if (!TicketingUtils.isCollectionEmpty(contact.getEmails()))
                 sender.setEmail(contact.getEmails().get(0));
-            }
             payment.setSender(sender);
-
-            CashMoney amount = new CashMoney();
-            amount.setCurrencyCode(CashMoney.CURRENCY_CODE_USD);
-            amount.setAmount(pricePerTicket * quantity);
-            payment.setAmount(amount);
 
             payments.add(payment);
         }

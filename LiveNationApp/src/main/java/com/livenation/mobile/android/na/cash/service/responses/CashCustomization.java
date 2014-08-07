@@ -7,6 +7,10 @@ public class CashCustomization extends CashResponse {
     private String statementDescription;
 
 
+    public CashCustomization(String statementDescription) {
+        this.statementDescription = statementDescription;
+    }
+
     public String getStatementDescription() {
         return statementDescription;
     }

@@ -28,6 +28,7 @@ public class CashUtils {
     public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.EXTRA_TOTAL";
     public static final String EXTRA_TICKET_QUANTITY = "com.livenation.mobile.android.na.cash.EXTRA_TICKET_QUANTITY";
     public static final String EXTRA_CUSTOMER_STATUS = "com.livenation.mobile.android.na.cash.EXTRA_CUSTOMER_STATUS";
+    public static final String EXTRA_NOTE = "com.livenation.mobile.android.na.cash.EXTRA_NOTE";
 
     //endregion
 
