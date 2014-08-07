@@ -23,6 +23,7 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
 
     private CashCustomerStatus customerStatus;
     private String phoneNumber;
+    private String name;
 
     //region Lifecycle
 
@@ -87,6 +88,14 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     //endregion
 
 
@@ -100,6 +109,10 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         } else {
             showPage(Page.VERIFY);
         }
+    }
+
+    public void continueToName() {
+        showPage(Page.NAME);
     }
 
     public void continueToPhoneVerification() {
@@ -146,7 +159,7 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
     private static enum Page {
         PHONE(CashOnboardingPhoneFragment.class),
         CARD(CashOnboardingCardFragment.class),
-        NAME(Fragment.class),
+        NAME(CashOnboardingNameFragment.class),
         VERIFY(CashOnboardingVerifyFragment.class);
 
         public Fragment newInstance() {

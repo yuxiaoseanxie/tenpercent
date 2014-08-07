@@ -125,7 +125,7 @@ public class CashOnboardingCardFragment extends Fragment {
                 loadingDialogFragment.dismiss();
 
                 if (response.isValid()) {
-                    getCashRequestDetailsActivity().continueToPhoneVerification();
+                    getCashRequestDetailsActivity().continueToName();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(R.string.error_title_generic);
