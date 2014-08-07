@@ -1,23 +1,60 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoriteObserverView;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
+import com.livenation.mobile.android.platform.Constants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by cchilton on 4/3/14.
  * <p/>
  * An extended CheckBox class that encapsulates the mapping a Favorite Checkbox's state to the User's favorites
  */
-public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
-    private FavoritesPresenter favoritesPresenter;
+public class FavoriteCheckBox extends CheckBox {
+    private Favorite favorite;
+    private final Set<Favorite> favorites = Collections.synchronizedSet(new HashSet<Favorite>());
+
+    private BroadcastReceiver updateBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            favorites.clear();
+            favorites.addAll(LiveNationLibrary.getFavoritesHelper().getFavorites());
+            updateCheckBoxState();
+        }
+    };
+
+    private void updateCheckBoxState() {
+        if (favorite != null) {
+            for (Favorite fav : favorites) {
+                if (fav.idEquals(favorite)) {
+                    if (!isChecked()) {
+                        setChecked(true);
+                    }
+                    break;
+                } else {
+                    if (isChecked()) {
+                        setChecked(false);
+                    }
+                }
+
+            }
+        }
+
+    }
 
     public FavoriteCheckBox(Context context) {
         super(context);
@@ -31,55 +68,15 @@ public class FavoriteCheckBox extends CheckBox implements FavoriteObserverView {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        stop();
-    }
-
-    public void bindToFavorite(int favoriteTypeId, String favoriteName, Long itemId, FavoritesPresenter favoritesPresenter, AnalyticsCategory category) {
-        this.favoritesPresenter = favoritesPresenter;
-        stop();
-        if (itemId == null) {
-            setVisibility(INVISIBLE);
-            return;
-        }
-        setChecked(false);
-
-        Bundle args = favoritesPresenter.getObserverPresenter().getBundleArgs(favoriteTypeId, itemId);
-        //Bind our checkbox to the FavoriteObserver so that it can update the checked state of this control
-        //if the API Entity this checkbox represents is favorited, this line makes sure that we are Checked
-        favoritesPresenter.getObserverPresenter().initialize(getContext(), args, this);
-
-        Favorite favorite = new Favorite();
-        favorite.setIntType(favoriteTypeId);
-        favorite.setName(favoriteName);
-        favorite.setId(itemId);
-
-        //Set a clickListener that will update the user's favorites with the API if they check/uncheck
+    public void bindToFavorite(Favorite favorite, AnalyticsCategory category) {
+        this.favorite = favorite;
+        favorites.clear();
+        favorites.addAll(LiveNationLibrary.getFavoritesHelper().getFavorites());
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(updateBroadcastReceiver, new IntentFilter(Constants.FAVORITE_UPDATE_INTENT_FILTER));
+        updateCheckBoxState();
+        //Set a checkListener that will update the user's favorites with the API if they check/uncheck
         //this checkbox
-        OnFavoriteClickListener.OnFavoriteClick clickListener = new OnFavoriteClickListener.OnFavoriteClick(favorite, favoritesPresenter, getContext(), category);
-        setOnClickListener(clickListener);
-    }
-
-    @Override
-    public void onFavoriteAdded(Favorite favorite) {
-        setChecked(true);
-    }
-
-    @Override
-    public void onFavoriteRemoved(Favorite favorite) {
-        setChecked(false);
-    }
-
-    /**
-     * Cancel any bindings. this will prevent any in progress API requests from triggering
-     * 'onFavoriteAdded' or 'onFavoriteRemoved'
-     */
-    private void stop() {
-        if (null != favoritesPresenter) {
-            //release the observer binding, prevent memory leaks
-            favoritesPresenter.getObserverPresenter().cancel(FavoriteCheckBox.this);
-        }
+        OnFavoriteClickListener.OnFavoriteClick checkListener = new OnFavoriteClickListener.OnFavoriteClick(favorite, category);
+        setOnClickListener(checkListener);
     }
 }

@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 /**
  * Created by elodieferrais on 4/22/14.
  */
-public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter, ApiServiceBinder {
+public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter, ConfigCallback {
+    private static final String START_TIME_FORMAT = "h:mm a zzz";
     private static final SimpleDateFormat START_TIME_FORMATTER = new SimpleDateFormat("h:mm a zzz");
     private static float METERS_IN_A_MILE = 1609.34f;
     private LayoutInflater inflater;
@@ -38,7 +40,8 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
     public EventVenueAdapter(Context context) {
         super(context, android.R.layout.simple_list_item_1, new ArrayList<Event>());
         inflater = LayoutInflater.from(context);
-        LiveNationApplication.get().getConfigManager().bindApi(this);
+        ProviderManager providerManager = new ProviderManager();
+        providerManager.getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
     }
 
     @Override
@@ -109,7 +112,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         holder.getFavorite().setChecked(false);
 
         Venue venue = event.getVenue();
-        holder.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), LiveNationApplication.get().getFavoritesPresenter(), AnalyticsCategory.NEARBY);
+        holder.getFavorite().bindToFavorite(Favorite.fromVenue(venue) , AnalyticsCategory.NEARBY);
 
         return view;
     }
@@ -122,14 +125,14 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
     }
 
     @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        this.lat = apiService.getApiConfig().getLat();
-        this.lng = apiService.getApiConfig().getLng();
+    public void onResponse(LiveNationConfig response) {
+        this.lat = response.getLat();
+        this.lng = response.getLng();
         notifyDataSetChanged();
     }
 
     @Override
-    public void onApiServiceNotAvailable() {
+    public void onErrorResponse(int errorCode) {
     }
 
     private class ViewHolder {

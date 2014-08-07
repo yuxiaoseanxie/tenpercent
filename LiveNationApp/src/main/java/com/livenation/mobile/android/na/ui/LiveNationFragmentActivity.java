@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
@@ -32,7 +32,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         Analytics.onCreate(this);
         if (!LiveNationApplication.get().isMusicSync()) {
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-            musicSyncHelper.syncMusic(this, new ApiService.BasicApiCallback<Void>() {
+            musicSyncHelper.syncMusic(this, new BasicApiCallback<Void>() {
                 @Override
                 public void onResponse(Void response) {
                     LiveNationApplication.get().setIsMusicSync(true);
@@ -78,26 +78,32 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     }
 
     public void trackScreenWithLocation(final String screenName) {
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+        Props properties = getAnalyticsProps();
+        if (properties == null) {
+            properties = new Props();
+        }
+        final Props finalProps = properties;
+        LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                Props properties = getAnalyticsProps();
-                if (properties == null) {
-                    properties = new Props();
-                }
-                properties.put("Location", apiService.getApiConfig().getLat() + "," + apiService.getApiConfig().getLng());
+            public void onResponse(Double[] response) {
+                finalProps.put("Location", response[0] + "," + response[1]);
                 String name = screenName;
                 if (name == null) {
                     name = getClass().getSimpleName();
                 }
-                LiveNationAnalytics.screen(name, properties);
+                LiveNationAnalytics.screen(name, finalProps);
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
-
+            public void onErrorResponse() {
+                String name = screenName;
+                if (name == null) {
+                    name = getClass().getSimpleName();
+                }
+                LiveNationAnalytics.screen(name, finalProps);
             }
         });
+
     }
 
     protected String getScreenName() {

@@ -25,7 +25,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
@@ -38,8 +37,7 @@ import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -81,8 +79,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {        
-		super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
         if (showsFragment == null) {
             showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
@@ -134,9 +132,9 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         double lng = Double.valueOf(venue.getLng());
         setMapLocation(lat, lng);
 
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
-
+        favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
         showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
+
     }
 
     @Override
@@ -161,27 +159,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private void loadBoxOfficeInfo(final long venueId) {
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+        SingleVenueParameters parameters = new SingleVenueParameters();
+        parameters.setVenueId(venueId);
+        LiveNationApplication.getLiveNationProxy().getSingleVenue(parameters, new BasicApiCallback<Venue>() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                SingleVenueParameters parameters = new SingleVenueParameters();
-                parameters.setVenueId(venueId);
-                apiService.getSingleVenue(parameters, new ApiService.BasicApiCallback<Venue>() {
-                    @Override
-                    public void onResponse(Venue fullVenue) {
-                        displayBoxOfficeInfo(fullVenue);
-                    }
-
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-                        Log.e(getClass().getName(), "Could not load box office info. " + error);
-                    }
-                });
+            public void onResponse(Venue fullVenue) {
+                displayBoxOfficeInfo(fullVenue);
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
-                Log.e(getClass().getName(), "Could not load box office info. Api error");
+            public void onErrorResponse(LiveNationError error) {
+                Log.e(getClass().getName(), "Could not load box office info. " + error);
             }
         });
     }

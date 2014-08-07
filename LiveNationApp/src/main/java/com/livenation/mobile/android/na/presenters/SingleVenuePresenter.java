@@ -3,13 +3,14 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -65,7 +66,7 @@ public class SingleVenuePresenter extends
     }
 
     static class SingleVenueState extends BaseResultState<Venue, SingleVenueView> implements
-            ApiService.BasicApiCallback<Venue> {
+            BasicApiCallback<Venue> {
         private SingleVenueParameters apiParams;
 
         public SingleVenueState(StateListener<SingleVenueState> listener, Bundle args, SingleVenueView view) {
@@ -79,7 +80,7 @@ public class SingleVenuePresenter extends
 
         @Override
         public void retrieveResult() {
-            getApiService().getSingleVenue(apiParams, SingleVenueState.this);
+            LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, SingleVenueState.this);
         }
 
         @Override

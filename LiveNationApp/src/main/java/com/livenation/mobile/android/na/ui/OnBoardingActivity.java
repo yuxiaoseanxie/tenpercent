@@ -21,7 +21,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.SsoManager;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -345,13 +345,13 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         setOnboardingAlreadyDisplay();
     }
 
-    private interface AnimationEndListener {
-        public void onAnimationEnd(Animation animation);
-    }
-
     @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_ONBOARDING;
+    }
+
+    private interface AnimationEndListener {
+        public void onAnimationEnd(Animation animation);
     }
 }
 

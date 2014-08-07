@@ -19,10 +19,10 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationManager;
-import com.livenation.mobile.android.na.helpers.LocationProvider;
+import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.models.Props;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        locationManager = LiveNationApplication.get().getLocationManager();
+        locationManager = LiveNationApplication.getLocationProvider();
 
         //would be final, but need a context to set it, so CAPS are preserved...
         UNKNOWN_LOCATION = getActivity().getString(R.string.location_unknown);
@@ -65,10 +65,12 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
         //get our actual location, so that we can show valid "distance from you in miles" values.
         final Context appContext = getActivity().getApplicationContext();
-        locationManager.getSystemLocationProvider().getLocation(getActivity(), new LocationProvider.LocationCallback() {
+        locationManager.getSystemLocationProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
-            public void onLocation(final double lat, final double lng) {
+            public void onResponse(Double[] response) {
                 //we now have our actual location, lets get a name for it.
+                final double lat = response[0];
+                final double lng = response[1];
                 locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City city) {
@@ -86,7 +88,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             }
 
             @Override
-            public void onLocationFailure(int failureCode) {
+            public void onErrorResponse() {
                 //todo: need comps: bug user with modal dialog screaming "WHERE ARE YOU!?!"
             }
         });
@@ -125,9 +127,11 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         final Context appContext = getActivity().getApplicationContext();
 
         //retrieve a city for where the API is currently configured
-        locationManager.getLocation(getActivity(), new LocationProvider.LocationCallback() {
+        locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
-            public void onLocation(final double lat, final double lng) {
+            public void onResponse(Double[] response) {
+                final double lat = response[0];
+                final double lng = response[1];
                 locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City apiLocation) {
@@ -143,8 +147,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             }
 
             @Override
-            public void onLocationFailure(int failureCode) {
-
+            public void onErrorResponse() {
             }
         });
 
@@ -210,13 +213,6 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             }
         }
         super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onPause();
-        //build a new API on exiting
-        LiveNationApplication.get().getConfigManager().buildApi();
     }
 
     /**

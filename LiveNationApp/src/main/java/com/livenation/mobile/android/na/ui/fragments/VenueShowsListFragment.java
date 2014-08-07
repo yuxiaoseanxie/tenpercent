@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.VenueShowsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -15,11 +13,10 @@ import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class VenueShowsListFragment extends LiveNationListFragment implements ApiServiceBinder {
+public class VenueShowsListFragment extends LiveNationListFragment {
     private EventAdapter adapter;
     private VenueShowsScrollPager venueShowsScrollPager;
 
@@ -37,8 +34,6 @@ public class VenueShowsListFragment extends LiveNationListFragment implements Ap
         String entityId = getActivity().getIntent().getStringExtra(VenueShowsActivity.EXTRA_VENUE_ID);
         long venueId = DataModelHelper.getNumericEntityId(entityId);
         this.venueShowsScrollPager = new VenueShowsScrollPager(venueId, adapter);
-
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
     }
 
     @Override
@@ -49,6 +44,7 @@ public class VenueShowsListFragment extends LiveNationListFragment implements Ap
         getListView().setDividerHeight((int) getResources().getDimension(R.dimen.divider_height));
 
         venueShowsScrollPager.connectListView(getListView());
+        venueShowsScrollPager.load();
     }
 
     @Override
@@ -56,30 +52,6 @@ public class VenueShowsListFragment extends LiveNationListFragment implements Ap
         super.onStop();
         venueShowsScrollPager.stop();
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
-    }
-
-    //endregion
-
-
-    //region Api Binding
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        venueShowsScrollPager.reset();
-        venueShowsScrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
-    }
-
 
     //endregion
 

@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.na.ui.TestActivity;
 
 /**
@@ -19,13 +20,13 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        preferencePersistence.reset(getActivity());
+        preferencePersistence.reset();
     }
 
     public void testWriteAndReadSuccess() {
         final String KEY = "key_test";
         final String VALUE = "value_test";
-        preferencePersistence.write(KEY, VALUE, getActivity());
+        preferencePersistence.write(KEY, VALUE);
 
         String readValue = preferencePersistence.read(KEY, getActivity());
         assertEquals(VALUE, readValue);
@@ -41,8 +42,8 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
     public void testResetSuccess() {
         final String KEY = "key_test";
         final String VALUE = "value_test";
-        preferencePersistence.write(KEY, VALUE, getActivity());
-        preferencePersistence.reset(getActivity());
+        preferencePersistence.write(KEY, VALUE);
+        preferencePersistence.reset();
 
         String readValue = preferencePersistence.read(KEY, getActivity());
         assertNull(null, readValue);

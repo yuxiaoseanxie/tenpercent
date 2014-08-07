@@ -3,7 +3,6 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.DummySsoProvider;
 import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.config.ContextConfig;
@@ -14,6 +13,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.ApiBuilder;
 import com.livenation.mobile.android.platform.api.transport.ApiBuilderElement;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
+import com.livenation.mobile.android.platform.sso.DummySsoProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;

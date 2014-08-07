@@ -10,9 +10,11 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.segment.android.models.Props;
 
 /**
@@ -27,19 +29,9 @@ public class UpdateReceiver extends BroadcastReceiver {
         final Boolean isMusicScanAllowed = sharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
 
         if (isMusicScanAllowed) {
-            LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    sendGrantedAccesToMusicLibraryAnalytics(apiService.getApiConfig().getAccessToken(), isMusicScanAllowed);
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    sendGrantedAccesToMusicLibraryAnalytics(null, isMusicScanAllowed);
-                }
-            });
+            sendGrantedAccessToMusicLibraryAnalytics(isMusicScanAllowed);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
-            musicSyncHelper.syncMusic(context, new ApiService.BasicApiCallback<Void>() {
+            musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                 @Override
                 public void onResponse(Void response) {
                     sharedPreferences.edit().remove(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE);
@@ -54,13 +46,26 @@ public class UpdateReceiver extends BroadcastReceiver {
         }
     }
 
-    private void sendGrantedAccesToMusicLibraryAnalytics(String token, boolean isMusicScanAllowed) {
+    private void sendGrantedAccessToMusicLibraryAnalytics(final boolean isMusicScanAllowed) {
 
-        Props props = new Props();
-        if (token != null) {
-            props.put(AnalyticConstants.ANDROID_DEVICE_ID, token);
-        }
-        props.put(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC_LIBRARY, isMusicScanAllowed);
-        LiveNationAnalytics.track(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC, AnalyticsCategory.HOUSEKEEPING, props);
+        ProviderManager providerManager = new ProviderManager();
+        providerManager.getConfigReadyFor(new ConfigCallback() {
+            @Override
+            public void onResponse(LiveNationConfig response) {
+                Props props = new Props();
+                props.put(AnalyticConstants.ANDROID_DEVICE_ID, response.getAccessToken().getToken());
+                props.put(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC_LIBRARY, isMusicScanAllowed);
+                LiveNationAnalytics.track(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC, AnalyticsCategory.HOUSEKEEPING, props);
+            }
+
+            @Override
+            public void onErrorResponse(int errorCode) {
+                Props props = new Props();
+                props.put(AnalyticConstants.ANDROID_DEVICE_ID, "Unknown");
+                props.put(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC_LIBRARY, isMusicScanAllowed);
+                LiveNationAnalytics.track(AnalyticConstants.GRANTED_ACCESS_TO_MUSIC, AnalyticsCategory.HOUSEKEEPING, props);
+
+            }
+        }, ProviderManager.ProviderType.ACCESS_TOKEN);
     }
 }
