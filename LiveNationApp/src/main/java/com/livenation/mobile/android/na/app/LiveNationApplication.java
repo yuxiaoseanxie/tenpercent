@@ -21,6 +21,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.android.volley.Response;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -32,6 +33,7 @@ import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -58,6 +60,7 @@ import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitResponse;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.sso.SsoManager;
@@ -196,10 +199,21 @@ public class LiveNationApplication extends Application {
 
 
         SquareCashService.init(this, Volley.newRequestQueue(this), new SquareCashService.CustomerIdProvider() {
-            @NonNull
             @Override
-            public String getSquareCustomerId() {
-                return "gee-your-lip-looks-hairless";
+            public void provideSquareCustomerId(final Response.Listener<String> onResponse) {
+                LiveNationLibrary.getAppInitProvider().getAppInitResponse(new BasicApiCallback<AppInitResponse>() {
+                    @Override
+                    public void onResponse(AppInitResponse response) {
+                        onResponse.onResponse(response.getData().getUserInfo().get("id"));
+                    }
+
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        // TODO: handle this
+                        Log.e(CashUtils.LOG_TAG, "Could not retrieve user id", error);
+                        onResponse.onResponse(null);
+                    }
+                });
             }
         });
 

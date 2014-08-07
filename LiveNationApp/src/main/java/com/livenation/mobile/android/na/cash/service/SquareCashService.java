@@ -185,31 +185,40 @@ public class SquareCashService {
             throw new RuntimeException("session required");
     }
 
-    public void startSession(String email, String phoneNumber, final ApiCallback<CashSession> callback) {
+    public void startSession(final String email, final String phoneNumber, final ApiCallback<CashSession> callback) {
         if (email == null && phoneNumber == null)
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
-        JSONObject body = makeRequestBody("response_type", "token",
-                                          "client_id", CashUtils.CLIENT_ID,
-                                          "customer_id", customerIdProvider.getSquareCustomerId());
-        try {
-            if (phoneNumber != null)
-                body.put("phone_number", phoneNumber);
-
-            if (email != null)
-                body.put("email", email);
-        } catch (JSONException e) {
-            throw new RuntimeException("Unexpected JSON exception during body construction", e);
-        }
-
-        SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
+        customerIdProvider.provideSquareCustomerId(new Response.Listener<String>() {
             @Override
-            public void onResponse(CashSession response) {
-                setSession(response);
-                callback.onResponse(response);
+            public void onResponse(String squareCustomerId) {
+                // TODO: This can be a valid state
+                if (squareCustomerId == null)
+                    throw new IllegalArgumentException("squareCustomerId may not be null");
+
+                JSONObject body = makeRequestBody("response_type", "token",
+                                                  "client_id", CashUtils.CLIENT_ID,
+                                                  "customer_id", squareCustomerId);
+                try {
+                    if (phoneNumber != null)
+                        body.put("phone_number", phoneNumber);
+
+                    if (email != null)
+                        body.put("email", email);
+                } catch (JSONException e) {
+                    throw new RuntimeException("Unexpected JSON exception during body construction", e);
+                }
+
+                SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
+                    @Override
+                    public void onResponse(CashSession response) {
+                        setSession(response);
+                        callback.onResponse(response);
+                    }
+                }, callback);
+                requestQueue.add(request);
             }
-        }, callback);
-        requestQueue.add(request);
+        });
     }
 
     public void retrieveCustomerStatus(ApiCallback<CashCustomerStatus> callback) {
@@ -285,6 +294,6 @@ public class SquareCashService {
 
     public interface ApiCallback<T> extends Response.Listener<T>, Response.ErrorListener {}
     public interface CustomerIdProvider {
-        @NonNull String getSquareCustomerId();
+        void provideSquareCustomerId(Response.Listener<String> onResponse);
     }
 }
