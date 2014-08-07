@@ -15,8 +15,8 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
@@ -36,9 +36,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         super.onCreate(savedInstanceState);
 
         @SuppressWarnings("unchecked")
-        HashSet<ContactData> contacts = getCashAmountsActivity().getContacts();
-        this.adapter = new ContactDataAdapter(getActivity(), ContactDataAdapter.Mode.REVIEW, this);
-        adapter.addAll(contacts);
+        ArrayList<ContactData> contacts = getCashAmountsActivity().getContacts();
+        this.adapter = new ContactDataAdapter(getActivity(), this, contacts);
 
         calculatePricePerTicket();
         calculateQuantities();
@@ -121,11 +120,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         return Integer.toString(quantity);
-    }
-
-    @Override
-    public boolean isContactSelected(int position, @NonNull ContactData contact) {
-        return false;
     }
 
     @Override

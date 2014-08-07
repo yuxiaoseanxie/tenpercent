@@ -16,8 +16,8 @@ import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
-import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
+import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;

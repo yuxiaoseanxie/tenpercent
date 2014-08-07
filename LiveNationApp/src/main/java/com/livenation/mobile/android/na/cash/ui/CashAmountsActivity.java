@@ -13,17 +13,17 @@ import android.view.View;
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
-import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
-import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;
@@ -88,8 +88,8 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
     }
 
     @SuppressWarnings("unchecked")
-    public HashSet<ContactData> getContacts() {
-        return (HashSet<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
+    public ArrayList<ContactData> getContacts() {
+        return (ArrayList<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
     }
 
     //endregion

@@ -46,5 +46,6 @@
 
     <!-- Cash -->
     <color name="square_cash_green">#219602</color>
+    <color name="square_cash_token_background">#f2f2f2</color>
 
 </resources>

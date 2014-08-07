@@ -47,7 +47,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.adapter = new ContactDataAdapter(getActivity(), ContactDataAdapter.Mode.REVIEW, this);
+        this.adapter = new ContactDataAdapter(getActivity(), this);
         this.quantities = getCashRequestActivity().getTicketPerContactQuantities();
         this.pricePerTicket = CashUtils.calculatePricePerTicket(getCashRequestActivity().getTotal(), getCashRequestActivity().getTicketQuantity());
 
@@ -147,11 +147,6 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         return Integer.toString(quantity);
-    }
-
-    @Override
-    public boolean isContactSelected(int position, @NonNull ContactData contact) {
-        return false;
     }
 
     @Override

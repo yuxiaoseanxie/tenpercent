@@ -43,14 +43,6 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/list_cash_recipient_selection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/cash_item_checkmark_off"
-        android:visibility="gone"/>
-
     <TextView
         android:id="@+id/list_cash_recipient_big_details"
         android:layout_width="wrap_content"

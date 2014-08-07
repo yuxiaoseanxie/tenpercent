@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.cash.ui;
+package com.livenation.mobile.android.na.cash.ui.views;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

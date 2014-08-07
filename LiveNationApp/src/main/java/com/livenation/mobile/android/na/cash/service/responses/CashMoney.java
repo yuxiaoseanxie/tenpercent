@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.cash.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
-
 public class CashMoney extends CashResponse {
     public static final String CURRENCY_CODE_USD = "USD";
 

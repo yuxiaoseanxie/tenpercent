@@ -6,36 +6,38 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.CircularImageView;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ContactDataAdapter extends ArrayAdapter<ContactData> {
+public class ContactDataAdapter extends FilteredArrayAdapter<ContactData> {
     private final LayoutInflater inflater;
     private final ContentResolver contentResolver;
 
-    private final Mode mode;
     private final DataProvider dataProvider;
 
-    public ContactDataAdapter(@NonNull Context context, Mode mode, @NonNull DataProvider dataProvider) {
-        super(context, R.layout.list_cash_contact);
+    public ContactDataAdapter(@NonNull Context context, @NonNull DataProvider dataProvider, ArrayList<ContactData> contacts) {
+        super(context, R.layout.list_cash_contact, contacts);
 
         this.inflater = LayoutInflater.from(context);
         this.contentResolver = context.getContentResolver();
 
-        this.mode = mode;
         this.dataProvider = dataProvider;
+    }
+
+    public ContactDataAdapter(@NonNull Context context, @NonNull DataProvider dataProvider) {
+        this(context, dataProvider, new ArrayList<ContactData>());
     }
 
 
@@ -68,27 +70,12 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
         }
 
         holder.smallDetails.setText(dataProvider.getSmallDetails(position, contactData));
-
-        switch (mode) {
-            case SELECTION:
-                holder.selection.setVisibility(View.VISIBLE);
-                holder.bigDetails.setVisibility(View.GONE);
-
-                if (dataProvider.isContactSelected(position, contactData))
-                    holder.selection.setImageResource(R.drawable.cash_item_checkmark_on);
-                else
-                    holder.selection.setImageResource(R.drawable.cash_item_checkmark_off);
-
-                break;
-
-            case REVIEW:
-                holder.selection.setVisibility(View.GONE);
-                holder.bigDetails.setVisibility(View.VISIBLE);
-
-                String price = dataProvider.getBigDetails(position, contactData);
-                holder.bigDetails.setText(price);
-
-                break;
+        String price = dataProvider.getBigDetails(position, contactData);
+        if (TextUtils.isEmpty(price)) {
+            holder.bigDetails.setVisibility(View.GONE);
+        } else {
+            holder.bigDetails.setVisibility(View.VISIBLE);
+            holder.bigDetails.setText(price);
         }
 
         return view;
@@ -98,7 +85,6 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
         @InjectView(R.id.list_cash_recipient_name) TextView name;
         @InjectView(R.id.list_cash_recipient_small_details) TextView smallDetails;
         @InjectView(R.id.list_cash_recipient_photo) CircularImageView photo;
-        @InjectView(R.id.list_cash_recipient_selection) ImageView selection;
         @InjectView(R.id.list_cash_recipient_big_details) TextView bigDetails;
 
         ViewHolder(@NonNull View view) {
@@ -107,14 +93,13 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     }
 
 
-    public interface DataProvider {
-        boolean isContactSelected(int position, @NonNull ContactData contact);
-        @NonNull String getSmallDetails(int position, @NonNull ContactData contact);
-        @NonNull String getBigDetails(int position, @NonNull ContactData contact);
+    @Override
+    protected boolean keepObject(ContactData contact, String mask) {
+        return contact.matches(mask);
     }
 
-    public static enum Mode {
-        SELECTION,
-        REVIEW,
+    public interface DataProvider {
+        @NonNull String getSmallDetails(int position, @NonNull ContactData contact);
+        @NonNull String getBigDetails(int position, @NonNull ContactData contact);
     }
 }

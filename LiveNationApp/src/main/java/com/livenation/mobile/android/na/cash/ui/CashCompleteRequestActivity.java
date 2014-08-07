@@ -11,8 +11,8 @@ import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.mobilitus.tm.tickets.models.Total;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
     //region Lifecycle
@@ -53,8 +53,8 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
     }
 
     @SuppressWarnings("unchecked")
-    public HashSet<ContactData> getContacts() {
-        return (HashSet<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
+    public ArrayList<ContactData> getContacts() {
+        return (ArrayList<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
     }
 
     @SuppressWarnings("unchecked")

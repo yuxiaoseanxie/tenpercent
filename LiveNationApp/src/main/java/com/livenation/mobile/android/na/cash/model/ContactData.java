@@ -1,15 +1,12 @@
 package com.livenation.mobile.android.na.cash.model;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.na.cash.ui.CharacterDrawable;
+import com.livenation.mobile.android.na.cash.ui.views.CharacterDrawable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,6 +85,25 @@ public class ContactData implements Serializable {
         }
 
         return details;
+    }
+
+    public boolean matches(String query) {
+        String sanitizedQuery = query.toLowerCase();
+
+        if (getName().toLowerCase().contains(sanitizedQuery))
+            return true;
+
+        for (String email : getEmails()) {
+            if (email.toLowerCase().contains(sanitizedQuery))
+                return true;
+        }
+
+        for (PhoneNumber phoneNumber : getPhoneNumbers()) {
+            if (phoneNumber.getPhoneNumber().contains(query))
+                return true;
+        }
+
+        return false;
     }
 
 
