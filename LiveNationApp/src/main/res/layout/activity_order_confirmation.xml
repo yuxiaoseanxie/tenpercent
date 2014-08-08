@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cash_call_to_action"
-            style="@style/text.button.custom_center_container.red"/>
+            style="@style/custom_center_container.red"/>
 
         <TextView
             android:layout_width="match_parent"

@@ -89,7 +89,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         if (requestCode == SELECT_QUANTITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             int newQuantity = data.getIntExtra(CashQuantityDialogFragment.ARG_VALUE, 1);
-            ContactData contact = adapter.getItem(selectQuantityPosition);
+            ContactData contact = (ContactData) getListView().getItemAtPosition(selectQuantityPosition);
             quantities.put(contact.getId(), newQuantity);
 
             recalculateRemainingQuantity();
