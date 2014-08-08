@@ -102,7 +102,7 @@ android {
         }
 
         labrats {
-            packageNameSuffix ".labrats"
+            applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
 
             signingConfig signingConfigs.debug
