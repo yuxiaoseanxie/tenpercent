@@ -140,6 +140,10 @@
         <item name="android:background">@drawable/account_facebook_sso_button</item>
     </style>
 
+    <style name="text.button.custom_center_container.green">
+        <item name="android:background">@drawable/button_call_to_action</item>
+    </style>
+
     <style name="text.button.custom_center_text">
         <item name="android:drawablePadding">@dimen/recommendations_button_drawable_padding</item>
         <item name="android:gravity">center_vertical</item>

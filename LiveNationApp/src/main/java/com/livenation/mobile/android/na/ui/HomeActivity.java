@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -25,6 +26,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
@@ -32,6 +36,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
@@ -63,10 +68,13 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private SlidingTabLayout slidingTabLayout;
     private boolean hasUnreadNotifications;
     private BroadcastReceiver broadcastReceiver;
+    private LinearLayout contentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
+
+        contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
@@ -96,11 +104,18 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                invalidateOptionsMenu();
+                if (InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED.equals(intent.getAction())) {
+                    updateUpdateRequiredHeader();
+                } else {
+                    invalidateOptionsMenu();
+                }
             }
         };
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
 
         //Hockey App
         checkForUpdates();
@@ -110,14 +125,20 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onResume() {
         super.onResume();
         checkForCrashes();
+
+        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+        if (installedAppConfig.isUpdateAdvisable())
+            installedAppConfig.update();
+
+        updateUpdateRequiredHeader();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
 
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        localBroadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -230,6 +251,32 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
             }
         }, ProviderManager.ProviderType.APP_INIT);
+    }
+
+    private void updateUpdateRequiredHeader() {
+        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+
+        View updateRequiredLayout = contentLayout.findViewById(R.id.sub_update_required_layout);
+        if (installedAppConfig.isUpgradeRequired()) {
+            if (updateRequiredLayout == null) {
+                updateRequiredLayout = getLayoutInflater().inflate(R.layout.sub_update_required, contentLayout, false);
+                contentLayout.addView(updateRequiredLayout, 1); // After the tab strip
+            }
+
+            TextView text = (TextView) updateRequiredLayout.findViewById(R.id.sub_update_required_text);
+            text.setText(installedAppConfig.getUpgradeMessage());
+
+            Button button = (Button) updateRequiredLayout.findViewById(R.id.sub_update_required_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri playStore = Uri.parse(installedAppConfig.getUpgradePlayStoreLink());
+                    startActivity(new Intent(Intent.ACTION_VIEW, playStore));
+                }
+            });
+        } else if (updateRequiredLayout != null) {
+            contentLayout.removeView(updateRequiredLayout);
+        }
     }
 
     @Override
