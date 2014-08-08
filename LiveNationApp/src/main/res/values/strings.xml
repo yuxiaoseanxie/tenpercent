@@ -274,5 +274,9 @@
         <item quantity="one">for 1 ticket</item>
         <item quantity="other">for %1$d tickets</item>
     </plurals>
+    <plurals name="cash_ticket_quantity">
+        <item quantity="one">1 ticket</item>
+        <item quantity="other">%1$d tickets</item>
+    </plurals>
 
 </resources>
