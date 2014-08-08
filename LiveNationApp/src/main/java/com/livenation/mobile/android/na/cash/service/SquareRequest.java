@@ -59,7 +59,7 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
         }
     }
 
-    protected VolleyError parseError(String body) {
+    protected VolleyError parseError(String body, VolleyError outerError) {
         try {
             JSONObject json = new JSONObject(body);
             Log.e(CashUtils.LOG_TAG, "Error for '" + getUrl() + "': " + body);
@@ -67,14 +67,19 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
             // Temporary support for crashes on their server.
             if (json.has("message")) {
                 String errorMessage = json.getJSONObject("message").getString("message");
-                return new VolleyError(errorMessage);
+                return new VolleyError(errorMessage, outerError);
             }
 
             String error = json.getString("error");
             String description = json.optString("error_description");
-            return new VolleyError(error + ": " + description);
+            return new VolleyError(error + ": " + description, outerError);
         } catch (JSONException e) {
-            return new VolleyError("Malformed error response", e);
+            if (outerError != null) {
+                Log.w(CashUtils.LOG_TAG, "Json parsing error for error, ignoring.", e);
+                return outerError;
+            } else {
+                return new VolleyError("Malformed error response", e);
+            }
         }
     }
 
@@ -87,10 +92,21 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
             if (response.statusCode == 200) {
                 return parseSuccess(body, response);
             } else {
-                return Response.error(parseError(body));
+                return Response.error(parseError(body, null));
             }
         } catch (UnsupportedEncodingException e) {
             return Response.error(new VolleyError("Unsupported encoding in response", e));
+        }
+    }
+
+    @Override
+    protected VolleyError parseNetworkError(VolleyError volleyError) {
+        try {
+            NetworkResponse response = volleyError.networkResponse;
+            String body = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            return parseError(body, volleyError);
+        } catch (UnsupportedEncodingException e) {
+            return super.parseNetworkError(volleyError);
         }
     }
 }
