@@ -24,7 +24,6 @@
         android:imeOptions="actionNext|flagNoExtractUi"
         android:nextFocusForward="@+id/fragment_cash_onboarding_card_month"
         android:textSize="18sp"
-        android:text="4000060000000162"
         android:hint="@string/credit_card">
 
         <requestFocus />
@@ -44,7 +43,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/card_month_hint"
-            android:text="12"
             android:imeOptions="actionNext|flagNoExtractUi"
             android:inputType="number"
             android:nextFocusForward="@+id/edittext_card_year" />
@@ -66,7 +64,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/card_year_hint"
-            android:text="16"
             android:imeOptions="actionNext|flagNoExtractUi"
             android:inputType="number"
             android:nextFocusForward="@+id/fragment_cash_onboarding_card_cvv" />
@@ -80,7 +77,6 @@
         android:layout_marginTop="@dimen/inter_item_padding_medium"
         android:gravity="center"
         android:hint="@string/dialog_enter_cvv_text_hint"
-        android:text="100"
         android:inputType="number"
         android:imeOptions="actionNext|flagNoExtractUi"
         android:nextFocusForward="@+id/fragment_cash_onboarding_card_postal"/>
@@ -92,7 +88,6 @@
         android:layout_marginTop="@dimen/inter_item_padding_medium"
         android:inputType="number"
         android:imeOptions="actionGo|flagNoExtractUi"
-        android:text="94158"
         android:gravity="center"
         android:hint="@string/zip"/>
 

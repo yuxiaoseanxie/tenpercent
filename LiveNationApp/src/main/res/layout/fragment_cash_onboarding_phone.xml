@@ -22,7 +22,6 @@
         android:gravity="center"
         android:inputType="phone"
         android:imeOptions="actionGo"
-        android:text="2074000051"
         android:textSize="18sp"
         android:hint="@string/phone">
 
