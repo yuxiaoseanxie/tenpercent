@@ -76,6 +76,8 @@ public class ContactData implements Serializable {
         String phoneNumbers = "";
         for (PhoneNumber phoneNumber : getPhoneNumbers())
             phoneNumbers += phoneNumber.getPhoneNumber() + ", ";
+        if (phoneNumbers.length() > 0)
+            phoneNumbers = phoneNumbers.substring(0, phoneNumbers.length() - 3);
 
         if (!TextUtils.isEmpty(phoneNumbers)) {
             if (!TextUtils.isEmpty(details))
