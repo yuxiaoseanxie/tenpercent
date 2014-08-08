@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.cash.ui.onboarding;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashOnboardingPhoneFragment extends Fragment {
+public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     @InjectView(R.id.fragment_cash_onboarding_verify_number) EditText number;
 
     private final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
@@ -39,11 +38,6 @@ public class CashOnboardingPhoneFragment extends Fragment {
     }
 
     //endregion
-
-
-    private CashOnboardingActivity getCashRequestDetailsActivity() {
-        return (CashOnboardingActivity) getActivity();
-    }
 
 
     //region Handshake
@@ -65,7 +59,10 @@ public class CashOnboardingPhoneFragment extends Fragment {
         });
     }
 
-    private void doHandshake() {
+    @Override
+    public void next() {
+        CashUtils.dismissKeyboard(number);
+
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
         SquareCashService.getInstance().startSession(null, number.getText().toString(), new SquareCashService.ApiCallback<CashSession>() {
@@ -90,9 +87,7 @@ public class CashOnboardingPhoneFragment extends Fragment {
     @OnEditorAction(R.id.fragment_cash_onboarding_verify_number)
     public boolean onNumberEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
         if (actionId == EditorInfo.IME_ACTION_GO) {
-            CashUtils.dismissKeyboard(textView);
-
-            doHandshake();
+            next();
 
             return true;
         }

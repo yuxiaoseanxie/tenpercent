@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.cash.ui.onboarding;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashOnboardingNameFragment extends Fragment {
+public class CashOnboardingNameFragment extends CashOnboardingFragment {
     @InjectView(R.id.fragment_cash_name_field) EditText nameField;
 
     //region Lifecycle
@@ -61,12 +60,8 @@ public class CashOnboardingNameFragment extends Fragment {
     //endregion
 
 
-    private CashOnboardingActivity getCashRequestDetailsActivity() {
-        return (CashOnboardingActivity) getActivity();
-    }
-
-
-    public void updateName() {
+    @Override
+    public void next() {
         getCashRequestDetailsActivity().setName(nameField.getText().toString());
         getCashRequestDetailsActivity().continueToPhoneVerification();
     }
@@ -77,7 +72,7 @@ public class CashOnboardingNameFragment extends Fragment {
         if (actionId == EditorInfo.IME_ACTION_GO) {
             CashUtils.dismissKeyboard(textView);
 
-            updateName();
+            next();
 
             return true;
         }

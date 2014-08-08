@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashOnboardingVerifyFragment extends Fragment {
+public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     @InjectView(R.id.fragment_cash_onboarding_verify_code) EditText code;
 
     private boolean requestedCode = false;
@@ -49,10 +49,6 @@ public class CashOnboardingVerifyFragment extends Fragment {
         requestCode();
     }
 
-
-    private CashOnboardingActivity getCashRequestDetailsActivity() {
-        return (CashOnboardingActivity) getActivity();
-    }
 
     private String getPhoneNumber() {
         return getCashRequestDetailsActivity().getPhoneNumber();
@@ -83,11 +79,14 @@ public class CashOnboardingVerifyFragment extends Fragment {
         });
     }
 
-    private void verifyCode(String code) {
+    @Override
+    public void next() {
+        CashUtils.dismissKeyboard(code);
+
         final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
-        SquareCashService.getInstance().verifyPhoneNumber(getPhoneNumber(), code, new SquareCashService.ApiCallback<CashResponse>() {
+        SquareCashService.getInstance().verifyPhoneNumber(getPhoneNumber(), code.getText().toString(), new SquareCashService.ApiCallback<CashResponse>() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loadingDialogFragment.dismiss();
@@ -107,8 +106,7 @@ public class CashOnboardingVerifyFragment extends Fragment {
     @OnEditorAction(R.id.fragment_cash_onboarding_verify_code)
     public boolean onCodeEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_GO) {
-            CashUtils.dismissKeyboard(textView);
-            verifyCode(code.getText().toString());
+            next();
 
             return true;
         }

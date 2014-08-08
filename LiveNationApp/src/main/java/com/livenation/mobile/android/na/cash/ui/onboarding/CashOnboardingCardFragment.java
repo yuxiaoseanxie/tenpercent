@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.cash.ui.onboarding;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnEditorAction;
 
-public class CashOnboardingCardFragment extends Fragment {
+public class CashOnboardingCardFragment extends CashOnboardingFragment {
     @InjectView(R.id.fragment_cash_onboarding_card_number) EditText cardNumber;
     @InjectView(R.id.fragment_cash_onboarding_card_month) EditText cardExprMonth;
     @InjectView(R.id.fragment_cash_onboarding_card_year) EditText cardExprYear;
@@ -71,11 +70,6 @@ public class CashOnboardingCardFragment extends Fragment {
     //endregion
 
 
-    private CashOnboardingActivity getCashRequestDetailsActivity() {
-        return (CashOnboardingActivity) getActivity();
-    }
-
-
     //region Validation
 
     private void setupCardInput() {
@@ -102,7 +96,10 @@ public class CashOnboardingCardFragment extends Fragment {
 
     //region Linking Cards
 
-    private void linkCard() {
+    @Override
+    public void next() {
+        CashUtils.dismissKeyboard(getActivity().getCurrentFocus());
+
         CashCardLinkInfo linkInfo = new CashCardLinkInfo();
         linkInfo.setNumber(cardNumber.getText().toString());
         linkInfo.setExpiration(cardExprMonth.getText().toString(), cardExprYear.getText().toString());
@@ -141,8 +138,7 @@ public class CashOnboardingCardFragment extends Fragment {
     @OnEditorAction(R.id.fragment_cash_onboarding_card_postal)
     public boolean onPostalEditorAction(TextView textView, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_GO) {
-            CashUtils.dismissKeyboard(textView);
-            linkCard();
+            next();
 
             return true;
         }

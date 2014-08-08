@@ -3,8 +3,10 @@ package com.livenation.mobile.android.na.cash.ui.onboarding;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
@@ -24,6 +26,8 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
     private CashCustomerStatus customerStatus;
     private String phoneNumber;
     private String name;
+
+    private MenuItem nextItem;
 
     //region Lifecycle
 
@@ -69,6 +73,39 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         if (requestCode == WEBSITE_REQUEST_CODE) {
             setupCompleted();
         }
+    }
+
+    //endregion
+
+
+    //region Menus
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cash, menu);
+
+        this.nextItem = menu.findItem(R.id.action_next);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        nextItem.setEnabled(getCurrentPage() == null || getCurrentPage().isNextAvailable());
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_next) {
+            if (getCurrentPage() != null)
+                getCurrentPage().next();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     //endregion
@@ -146,6 +183,12 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
                     .replace(R.id.activity_request_details_container, page.newInstance(), PAGE_FRAGMENT_TAG)
                     .commit();
         }
+
+        invalidateOptionsMenu();
+    }
+
+    public @Nullable CashOnboardingFragment getCurrentPage() {
+        return (CashOnboardingFragment) getSupportFragmentManager().findFragmentByTag(PAGE_FRAGMENT_TAG);
     }
 
     public void showWebSite(String url) {
@@ -162,7 +205,7 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         NAME(CashOnboardingNameFragment.class),
         VERIFY(CashOnboardingVerifyFragment.class);
 
-        public Fragment newInstance() {
+        public CashOnboardingFragment newInstance() {
             try {
                 return clazz.newInstance();
             } catch (InstantiationException e) {
@@ -172,8 +215,8 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
             }
         }
 
-        private Class<? extends Fragment> clazz;
-        private Page(Class<? extends Fragment> clazz) {
+        private Class<? extends CashOnboardingFragment> clazz;
+        private Page(Class<? extends CashOnboardingFragment> clazz) {
             this.clazz = clazz;
         }
     }
