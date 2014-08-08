@@ -147,12 +147,6 @@
         <item name="android:textColor">@color/ui_header1_text</item>
     </style>
 
-    <style name="account_footer_change" parent="@style/livenation_app_text">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#bbbbbb</item>
-    </style>
-
     <style name="list_venue_header_miles_text" parent="@style/livenation_app_text">
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">italic</item>

@@ -8,8 +8,11 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +24,9 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -31,18 +34,23 @@ import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.segment.android.models.Props;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
-public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ApiServiceBinder, SwipeRefreshLayout.OnRefreshListener {
-
+public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener, SwipeRefreshLayout.OnRefreshListener {
+    private static final String START_TIME_FORMAT = "h:mm a zzz";
+    private static float METERS_IN_A_MILE = 1609.34f;
+    private Double lat;
+    private Double lng;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private EventVenueAdapter adapter;
 
     @Override
@@ -51,7 +59,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         adapter = new EventVenueAdapter(getActivity());
         scrollPager = new NearbyVenuesScrollPager(adapter);
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
+
         setRetainInstance(true);
     }
 
@@ -69,16 +77,30 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         listView.setOnItemClickListener(this);
         listView.setOnHeaderClickListener(this);
 
+
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
+
+
         RefreshBar refreshBar = (RefreshBar) view.findViewById(R.id.fragment_nearby_venues_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
+
+        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+
         return view;
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroyView();
+        super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Context context = LiveNationApplication.get().getApplicationContext();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
     }
 
     @Override
@@ -123,17 +145,28 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         getActivity().startActivity(intent);
     }
 
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
+    private void refresh() {
         scrollPager.reset();
         scrollPager.load();
     }
 
+    //Get config for starting the screen
     @Override
-    public void onApiServiceNotAvailable() {
-        if (emptyListViewControl != null) {
-            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-        }
+    public void onResponse(LiveNationConfig response) {
+        this.lat = response.getLat();
+        this.lng = response.getLng();
+        scrollPager.load();
+    }
+
+    @Override
+    public void onErrorResponse(int errorCode) {
+        //TODO what we should do when we cannot get the user location
+    }
+
+    //Location update
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        refresh();
     }
 
     @Override
@@ -144,7 +177,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setSoundEffectsEnabled(true);
-        scrollPager.reset();
-        scrollPager.load();
+        refresh();
     }
 }

@@ -6,13 +6,17 @@
  * 
  */
 
-package com.livenation.mobile.android.na.helpers;
+package com.livenation.mobile.android.na.providers.location;
 
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +25,8 @@ public class DeviceLocationProvider implements LocationProvider {
     private List<State> activeStates = new ArrayList<State>();
 
     @Override
-    public void getLocation(Context context, LocationCallback callback) {
-        State state = new State(context, callback);
+    public void getLocation(ProviderCallback<Double[]> callback) {
+        State state = new State(LiveNationApplication.get().getApplicationContext(), callback);
         activeStates.add(state);
         state.run();
     }
@@ -30,9 +34,9 @@ public class DeviceLocationProvider implements LocationProvider {
     private class State implements LocationListener, Runnable {
         private final android.location.LocationManager locationManager;
         private final Context context;
-        private final LocationCallback callback;
+        private final ProviderCallback<Double[]> callback;
 
-        private State(Context context, LocationCallback callback) {
+        private State(Context context, ProviderCallback<Double[]> callback) {
             this.context = context;
             this.callback = callback;
             locationManager = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -46,12 +50,12 @@ public class DeviceLocationProvider implements LocationProvider {
             String provider = locationManager.getBestProvider(criteria, false);
             if (null == provider) {
                 //no location providers, may be an emulator
-                callback.onLocationFailure(0);
+                callback.onErrorResponse();
                 return;
             }
             Location last = locationManager.getLastKnownLocation(provider);
             if (null != last) {
-                callback.onLocation(last.getLatitude(), last.getLongitude());
+                callback.onResponse(new Double[]{last.getLatitude(), last.getLongitude()});
             } else {
                 locationManager.requestLocationUpdates(provider, 1000, 0, this);
             }
@@ -60,7 +64,7 @@ public class DeviceLocationProvider implements LocationProvider {
         @Override
         public void onLocationChanged(Location location) {
             locationManager.removeUpdates(this);
-            callback.onLocation(location.getLatitude(), location.getLongitude());
+            callback.onResponse(new Double[]{location.getLatitude(), location.getLongitude()});
         }
 
         @Override
@@ -73,7 +77,7 @@ public class DeviceLocationProvider implements LocationProvider {
 
         @Override
         public void onProviderDisabled(String s) {
-            callback.onLocationFailure(0);
+            callback.onErrorResponse();
         }
     }
 }

@@ -2,10 +2,10 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.NearbyVenuesWithEventsParameters;
@@ -41,12 +41,11 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
     }
 
     @Override
-    protected void fetch(LiveNationApiService apiService, int offset, int limit, final ApiService.BasicApiCallback callback) {
+    protected void fetch(int offset, int limit, final BasicApiCallback callback) {
         NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
         params.setMinimumNumberOfEvents(2);
         params.setPage(offset, limit);
-        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-        apiService.getNearbyVenuesWithEvents(params, new ApiService.BasicApiCallback<List<Venue>>() {
+        LiveNationApplication.getLiveNationProxy().getNearbyVenuesWithEvents(params, new BasicApiCallback<List<Venue>>() {
             @Override
             public void onResponse(List<Venue> response) {
                 NearbyVenuesScrollPager.this.offset += response.size();

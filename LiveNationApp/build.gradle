@@ -102,7 +102,7 @@ android {
         }
 
         labrats {
-            packageNameSuffix ".labrats"
+            applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
 
             signingConfig signingConfigs.debug
@@ -119,5 +119,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.3.23'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.+'
+
 
 }
