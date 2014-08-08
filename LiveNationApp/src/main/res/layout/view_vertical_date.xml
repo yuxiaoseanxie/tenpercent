@@ -15,6 +15,9 @@
         android:textAppearance="@style/list_show_date_dotw" />
 
     <TextView
+        android:layout_marginTop="@dimen/view_show_venue_details_packing"
+        android:layout_marginBottom="@dimen/view_show_venue_details_packing"
+
         android:id="@+id/list_show_item_date_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

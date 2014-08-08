@@ -13,7 +13,7 @@
             layout="@layout/fragment_show_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
+        <ImageView style="@style/SwooshDivider" />
         <include
             layout="@layout/sub_show_calender"
             android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:id="@+id/fragment_show_venue_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fragment_show_venue_detail_margin_bottom"
+            android:layout_marginBottom="@dimen/gap_tiny"
             android:background="@drawable/livenation_selector_pressable_background" />
 
         <FrameLayout
@@ -38,7 +38,7 @@
             android:background="@drawable/map_shadow"></View>
 
         <TextView
-            style="@style/ui_header2"
+            style="@style/ui_header_transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/show_lineup" />

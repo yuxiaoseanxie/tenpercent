@@ -16,7 +16,7 @@
     <View
         android:id="@+id/view_show_bottom_line"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/underscore_container_height"
+        android:layout_height="@dimen/one_dp"
         android:background="@drawable/ui_dialog_underscore" />
 
     <ListView
@@ -24,6 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@drawable/ticket_offering_list_divider"
-        android:dividerHeight="@dimen/ui_underscore_height"
+        android:dividerHeight="@dimen/one_dp"
         android:scrollbars="none" />
 </LinearLayout>

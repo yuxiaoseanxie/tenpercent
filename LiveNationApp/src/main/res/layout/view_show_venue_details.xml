@@ -8,12 +8,12 @@
         android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
 
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
         <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
             android:id="@+id/view_show_venue_favorite_checkbox"
-            android:layout_width="@dimen/favorite_checkbox_min_width"
-            android:layout_height="@dimen/favorite_item_min_height"
+            android:layout_width="@dimen/minimum_pressable"
+            android:layout_height="@dimen/minimum_pressable"
             android:button="@drawable/checkbox_favorite_padding_selector"
             android:checked="false" />
     </LinearLayout>
@@ -23,11 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="@dimen/venue_detail_title_margin_bottom"
-        android:layout_marginTop="@dimen/venue_detail_margin_top"
+        android:layout_marginTop="@dimen/gap_medium"
         android:layout_toRightOf="@id/favorite_checkbox_container"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/show_venue_text_title" />
+        android:textAppearance="@style/ln.text.medium.bold_italic" />
 
     <LinearLayout
         android:id="@+id/view_show_venue_telephone"
@@ -35,22 +34,27 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/view_show_venue_title"
         android:layout_below="@id/view_show_venue_title"
+        android:layout_marginTop="@dimen/gap_small"
         android:baselineAligned="true"
-        android:gravity="center_vertical"
+        android:gravity="top"
+
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:layout_marginRight="@dimen/gap_small"
+            android:minWidth="@dimen/gap_large"
+            android:scaleType="center"
             android:src="@drawable/venue_phone" />
 
         <TextView
             android:id="@+id/venue_detail_telephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/view_show_venue_details_packing"
             android:text="@string/mock_venue_telephone"
-            android:textAppearance="@style/show_venue_text" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,20 +62,26 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/view_show_venue_telephone"
         android:layout_below="@id/view_show_venue_telephone"
+        android:layout_marginBottom="@dimen/gap_medium"
+        android:layout_marginTop="@dimen/gap_tiny"
+        android:gravity="top"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:layout_marginRight="@dimen/gap_small"
+            android:minWidth="@dimen/gap_large"
+            android:scaleType="center"
             android:src="@drawable/venue_location" />
 
         <TextView
             android:id="@+id/venue_detail_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingRight="@dimen/gap_tiny"
             android:text="@string/mock_venue_location"
-            android:textAppearance="@style/show_venue_text" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
 </RelativeLayout>

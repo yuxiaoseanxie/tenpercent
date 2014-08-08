@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/ui_header_top_accent"
+        style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/artist_bio" />
@@ -21,7 +21,7 @@
     <View
         style="@style/ui_underscore"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_underscore_height" />
+        android:layout_height="@dimen/one_dp" />
 
     <com.livenation.mobile.android.na.ui.views.OverflowView
         android:id="@+id/fragment_artist_bio_overflow"
