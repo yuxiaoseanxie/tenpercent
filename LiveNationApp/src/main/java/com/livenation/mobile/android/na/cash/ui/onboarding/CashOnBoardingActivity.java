@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
@@ -85,27 +86,22 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         getMenuInflater().inflate(R.menu.menu_cash, menu);
 
         this.nextItem = menu.findItem(R.id.action_next);
+        nextItem.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getCurrentPage() != null)
+                    getCurrentPage().next();
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        nextItem.setEnabled(getCurrentPage() == null || getCurrentPage().isNextAvailable());
+        nextItem.getActionView().setEnabled(getCurrentPage() == null || getCurrentPage().isNextAvailable());
 
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_next) {
-            if (getCurrentPage() != null)
-                getCurrentPage().next();
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //endregion
