@@ -57,8 +57,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
             recalculateRemainingQuantity();
             adapter.notifyDataSetChanged();
-
-            getActivity().invalidateOptionsMenu();
         }
     }
 

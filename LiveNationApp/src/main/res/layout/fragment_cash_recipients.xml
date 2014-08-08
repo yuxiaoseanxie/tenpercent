@@ -24,8 +24,7 @@
             android:padding="@dimen/inter_item_padding_medium"
             android:textSize="14sp"
             android:hint="@string/cash_field_hint_to"
-            android:background="@android:color/transparent"
-            android:enabled="false"/>
+            android:background="@android:color/transparent" />
 
     </TableRow>
 

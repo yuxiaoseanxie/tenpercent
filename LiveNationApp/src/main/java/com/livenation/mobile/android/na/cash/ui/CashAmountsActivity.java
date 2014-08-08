@@ -67,13 +67,6 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        nextItem.getActionView().setEnabled(fragment.getRemainingQuantity() == 0);
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     //endregion
 
 

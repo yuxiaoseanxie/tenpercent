@@ -16,13 +16,14 @@ import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.model.DataCallback;
 import com.livenation.mobile.android.na.cash.model.LoadAllContactsAsyncTask;
 import com.livenation.mobile.android.na.cash.ui.views.ContactsCompleteTextView;
+import com.livenation.mobile.android.na.cash.ui.views.TokenCompleteTextView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CashRecipientsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
+public class CashRecipientsFragment extends ListFragment implements ContactDataAdapter.DataProvider, TokenCompleteTextView.TokenListener<ContactData> {
     public static final String TAG = CashRecipientsFragment.class.getSimpleName();
 
     @InjectView(R.id.fragment_cash_recipients_field_to) ContactsCompleteTextView toField;
@@ -59,6 +60,8 @@ public class CashRecipientsFragment extends ListFragment implements ContactDataA
         View view = inflater.inflate(R.layout.fragment_cash_recipients, container, false);
         ButterKnife.inject(this, view);
 
+        toField.setTokenListener(this);
+
         return view;
     }
 
@@ -89,7 +92,17 @@ public class CashRecipientsFragment extends ListFragment implements ContactDataA
         toField.addObject(contact);
 
         getCashRecipientsActivity().invalidateOptionsMenu();
-        recipientsAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onTokenAdded(ContactData token) {
+        getCashRecipientsActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onTokenRemoved(ContactData token) {
+        getCashRecipientsActivity().invalidateOptionsMenu();
     }
 
 

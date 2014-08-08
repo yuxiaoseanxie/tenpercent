@@ -8,7 +8,7 @@
     android:padding="@dimen/outer_padding">
 
     <com.livenation.mobile.android.na.ui.views.CircularImageView
-        android:id="@+id/list_cash_recipient_photo"
+        android:id="@+id/view_cash_contact_photo"
         android:layout_width="@dimen/cash_contact_image_size"
         android:layout_height="@dimen/cash_contact_image_size"
         android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/list_cash_recipient_name"
+            android:id="@+id/view_cash_contact_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/inter_item_padding_small"
@@ -36,7 +36,7 @@
             android:text="@string/mock_artist_title_1"/>
 
         <TextView
-            android:id="@+id/list_cash_recipient_small_details"
+            android:id="@+id/view_cash_contact_small_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/mock_artist_title_1"/>
@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/list_cash_recipient_big_details"
+        android:id="@+id/view_cash_contact_big_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

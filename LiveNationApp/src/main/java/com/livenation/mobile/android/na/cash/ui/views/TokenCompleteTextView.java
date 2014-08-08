@@ -78,7 +78,7 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
 
     private Tokenizer tokenizer;
     private T selectedObject;
-    private TokenListener listener;
+    private TokenListener<T> listener;
     private TokenSpanWatcher spanWatcher;
     private ArrayList<T> objects;
     private TokenDeleteStyle deletionStyle = TokenDeleteStyle._Parent;
@@ -195,7 +195,7 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
         tokenClickStyle = cStyle;
     }
 
-    public void setTokenListener(TokenListener l) {
+    public void setTokenListener(TokenListener<T> l) {
         listener = l;
     }
 
@@ -914,9 +914,9 @@ public abstract class TokenCompleteTextView<T> extends MultiAutoCompleteTextView
 
     }
 
-    public static interface TokenListener {
-        public void onTokenAdded(Object token);
-        public void onTokenRemoved(Object token);
+    public static interface TokenListener<T> {
+        public void onTokenAdded(T token);
+        public void onTokenRemoved(T token);
     }
 
     private class TokenSpanWatcher implements SpanWatcher {
