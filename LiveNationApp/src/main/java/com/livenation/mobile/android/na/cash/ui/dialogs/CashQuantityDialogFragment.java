@@ -43,7 +43,7 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
         numberPicker.setOnValueChangedListener(this);
         String[] displayedValues = new String[getQuantity()];
         for (int i = 1, quantity = getQuantity(); i <= quantity; i++) {
-            displayedValues[i] = getResources().getQuantityString(R.plurals.cash_ticket_quantity, i, i);
+            displayedValues[i - 1] = getResources().getQuantityString(R.plurals.cash_ticket_quantity, i, i);
         }
         numberPicker.setDisplayedValues(displayedValues);
         builder.setView(numberPicker);
