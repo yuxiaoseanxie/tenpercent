@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/account_footer_location_detail"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="@dimen/account_footer_item_packing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_account_footer_location_detail"

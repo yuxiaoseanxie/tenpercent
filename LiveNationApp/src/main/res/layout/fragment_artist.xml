@@ -20,9 +20,9 @@
             style="@style/ui_header_transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:paddingTop="6dp"
-            android:minHeight="34dp"
+            android:layout_marginTop="@dimen/zero_dp"
+            android:paddingTop="@dimen/gap_tiny"
+            android:paddingBottom="@dimen/gap_tiny"
             android:text="@string/artist_all_shows" />
 
         <LinearLayout

@@ -62,7 +62,7 @@
         android:layout_marginRight="@dimen/gap_medium"
         android:background="@drawable/livenation_selector_pressable_background"
         android:drawableLeft="@drawable/venue_info_plus"
-        android:drawablePadding="6dp"
+        android:drawablePadding="@dimen/gap_tiny"
         android:text="@string/venue_detail_link"
         android:textAppearance="@style/ln.text.small.red"
         android:visibility="gone" />

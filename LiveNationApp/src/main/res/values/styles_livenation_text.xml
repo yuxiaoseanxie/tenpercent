@@ -105,7 +105,6 @@
         <item name="android:textStyle">italic</item>
     </style>
 
-
     <style name="ln.text.medium.italic.gray">
         <item name="android:textColor">@color/livenation_gray</item>
     </style>
@@ -160,6 +159,10 @@
 
     <style name="ln.text.xlarge.bold.white">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ticketbar_options_text" parent="ln.text.tiny.white">
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="list_inbox_message_info">

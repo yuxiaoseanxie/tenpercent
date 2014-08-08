@@ -27,8 +27,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/gap_small"
+            android:layout_marginTop="@dimen/gap_small"
             android:text="@string/login_connect_or_create"
             android:textAppearance="@style/ln.text.small.bold.gray" />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
             android:drawableLeft="@drawable/login_facebook_logo"
-            android:drawablePadding="8dp"
+            android:drawablePadding="@dimen/gap_smaller"
             android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
             android:drawableLeft="@drawable/login_google_plus_logo"
-            android:drawablePadding="8dp"
+            android:drawablePadding="@dimen/gap_smaller"
             android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"

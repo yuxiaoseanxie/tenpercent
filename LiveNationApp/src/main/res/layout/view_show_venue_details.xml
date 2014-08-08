@@ -52,7 +52,7 @@
             android:id="@+id/venue_detail_telephone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-3dp"
+            android:layout_marginTop="@dimen/view_show_venue_details_packing"
             android:text="@string/mock_venue_telephone"
             android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
