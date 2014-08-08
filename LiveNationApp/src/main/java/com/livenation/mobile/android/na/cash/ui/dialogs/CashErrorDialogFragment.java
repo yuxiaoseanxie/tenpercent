@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.VolleyError;
@@ -42,7 +43,10 @@ public class CashErrorDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(R.string.error_title_generic);
-        builder.setMessage(getError().getLocalizedMessage());
+        if (TextUtils.isEmpty(getError().getMessage()))
+            builder.setMessage(getString(R.string.cash_generic_error, getError().networkResponse.statusCode));
+        else
+            builder.setMessage(getError().getMessage());
         builder.setPositiveButton(android.R.string.ok, null);
 
         return builder.create();
