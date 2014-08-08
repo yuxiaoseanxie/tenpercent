@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    android:minHeight="@dimen/list_search_min_height"
-    android:orientation="horizontal">
+    android:minHeight="@dimen/list_search_min_height">
 
+
+    <ImageView
+        android:id="@+id/list_search_city_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/list_search_checkbox_margin_left"
+        android:src="@drawable/your_location_pin"
+        android:scaleType="centerInside"
+        android:minHeight="@dimen/favorite_checkbox_min_height"
+        android:minWidth="@dimen/favorite_checkbox_min_width"/>
 
     <TextView
         android:id="@+id/list_search_city_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/list_search_city_item_margin_left"
-        android:drawableLeft="@drawable/your_location_pin"
-        android:drawablePadding="@dimen/list_search_city_item_drawable_padding"
-        android:text="@string/mock_artist_type"
-        android:textAppearance="@style/list_previous_location_text_primary" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/list_search_title_margin_left"
+        android:layout_toRightOf="@+id/list_search_city_logo"
+        android:textAppearance="@style/list_search_result_text" />
 
+    <View
+        android:id="@+id/list_search_result_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/underscore_container_height"
+        android:layout_alignLeft="@id/list_search_city_title"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ui_underscore_background" />
 
-</LinearLayout>
+</RelativeLayout>
