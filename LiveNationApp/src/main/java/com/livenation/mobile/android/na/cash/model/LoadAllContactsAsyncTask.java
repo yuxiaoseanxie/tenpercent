@@ -27,17 +27,19 @@ public class LoadAllContactsAsyncTask extends AsyncTask<Void, Void, ArrayList<Co
         String selection = ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?";
         String[] selectionArgs = new String[] { id };
         Cursor cursorEmail = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                                                   projection,
-                                                   selection,
-                                                   selectionArgs,
-                                                   null);
+                projection,
+                selection,
+                selectionArgs,
+                null);
 
         ArrayList<String> emails = new ArrayList<String>();
-        if (cursorEmail.moveToNext()) {
-            String email = cursorEmail.getString(cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-            emails.add(email);
+        if (cursorEmail != null) {
+            if (cursorEmail.moveToNext()) {
+                String email = cursorEmail.getString(cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                emails.add(email);
+            }
+            cursorEmail.close();
         }
-        cursorEmail.close();
 
         return emails;
     }
@@ -50,45 +52,43 @@ public class LoadAllContactsAsyncTask extends AsyncTask<Void, Void, ArrayList<Co
         String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?";
         String[] selectionArgs = new String[] { id };
         Cursor cursorPhone = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                                   projection,
-                                                   selection,
-                                                   selectionArgs,
-                                                   null);
+                projection,
+                selection,
+                selectionArgs,
+                null);
 
         ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
-        if (cursorPhone.moveToNext()) {
-            String displayName = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String number = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            phoneNumbers.add(new PhoneNumber(number, displayName));
+        if (cursorPhone != null) {
+            if (cursorPhone.moveToNext()) {
+                String displayName = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String number = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                phoneNumbers.add(new PhoneNumber(number, displayName));
+            }
+            cursorPhone.close();
         }
-        cursorPhone.close();
 
         return phoneNumbers;
     }
 
     private Uri getPhotoUri(String id) {
-        try {
-            Cursor cur = contentResolver.query(
-                    ContactsContract.Data.CONTENT_URI,
-                    null,
-                    ContactsContract.Data.CONTACT_ID + "=" + id + " AND "
+        String selection = (ContactsContract.Data.CONTACT_ID + "=" + id + " AND "
                             + ContactsContract.Data.MIMETYPE + "='"
-                            + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null,
-                    null
-            );
-            if (cur != null) {
-                if (!cur.moveToFirst()) {
-                    return null; // no photo
-                }
-            } else {
-                return null; // error in cursor process
+                            + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'");
+        Cursor photoCursor = contentResolver.query(ContactsContract.Data.CONTENT_URI,
+                                                   null,
+                                                   selection,
+                                                   null,
+                                                   null);
+        if (photoCursor != null) {
+            Uri photoUri = null;
+            if (photoCursor.moveToFirst()) {
+                photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            photoCursor.close();
+            return photoUri;
+        } else {
             return null;
         }
-
-        return ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
     }
 
     @Override
@@ -100,25 +100,27 @@ public class LoadAllContactsAsyncTask extends AsyncTask<Void, Void, ArrayList<Co
         String sortQuery = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-                                              projection,
-                                              null,
-                                              null,
-                                              sortQuery);
+                projection,
+                null,
+                null,
+                sortQuery);
         ArrayList<ContactData> accumulator = new ArrayList<ContactData>();
-        while (cursor.moveToNext()) {
-            String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
-            ArrayList<String> emails = getEmails(id);
-            ArrayList<PhoneNumber> phoneNumbers = getPhoneNumbers(id);
-            if (emails.isEmpty() && phoneNumbers.isEmpty()) {
-                continue;
+                ArrayList<String> emails = getEmails(id);
+                ArrayList<PhoneNumber> phoneNumbers = getPhoneNumbers(id);
+                if (emails.isEmpty() && phoneNumbers.isEmpty()) {
+                    continue;
+                }
+
+                Uri photoUri = getPhotoUri(id);
+                String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                accumulator.add(new ContactData(id, displayName, emails, phoneNumbers, photoUri));
             }
-
-            Uri photoUri = getPhotoUri(id);
-            String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            accumulator.add(new ContactData(id, displayName, emails, phoneNumbers, photoUri));
+            cursor.close();
         }
-        cursor.close();
 
         return accumulator;
     }
