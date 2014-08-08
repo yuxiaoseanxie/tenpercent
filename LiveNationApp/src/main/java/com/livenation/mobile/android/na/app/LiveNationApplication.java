@@ -98,6 +98,7 @@ public class LiveNationApplication extends Application {
         }
     };
     private BroadcastReceiver internetStateReceiver;
+    private InstalledAppConfig installedAppConfig;
 
     private boolean isMusicSync = false;
 
@@ -187,7 +188,7 @@ public class LiveNationApplication extends Application {
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
 
-        installedAppConfig = new InstalledAppConfig(this, requestQueue);
+        installedAppConfig = new InstalledAppConfig(this, Volley.newRequestQueue(getApplicationContext()));
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 

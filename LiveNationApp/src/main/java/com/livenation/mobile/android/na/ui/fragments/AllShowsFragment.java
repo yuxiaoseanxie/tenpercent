@@ -173,11 +173,11 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         }
     }
 
-    private void retrieveCharts(LiveNationApiService apiService, double lat, double lng) {
+    private void retrieveCharts() {
         InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
 
         TopChartParameters params = new TopChartParameters();
-        apiService.getChart(installedAppConfig.getFeaturedCarouselChartName(), params, this);
+        LiveNationApplication.getLiveNationProxy().getChart(installedAppConfig.getFeaturedCarouselChartName(), params, this);
     }
 
     @Override
