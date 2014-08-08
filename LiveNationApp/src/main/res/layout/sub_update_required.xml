@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:gravity="center"
-        android:textAppearance="@style/ui_header1_text"
+        style="@style/ui_header_transparent"
         android:text="@string/update_available"/>
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_vertical_margin"
         android:gravity="center"
-        android:textAppearance="@style/artist_bio"
+        android:textAppearance="@style/ln.text.medium"
         android:text="@string/mock_update_message" />
 
     <Button
@@ -29,7 +29,7 @@
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        style="@style/text.button.custom_center_container.green"
+        style="@style/custom_center_container.green"
         android:text="@string/update_now"/>
 
     <View style="@style/Divider" />
