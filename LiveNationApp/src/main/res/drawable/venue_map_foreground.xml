@@ -14,7 +14,7 @@
                 android:centerX="100%"
                 android:centerY="0%"
                 android:endColor="@color/windowBackground"
-                android:startColor="#00FFFFFF"
+                android:startColor="#22FFFFFF"
                 android:type="linear" />
         </shape>
     </item>

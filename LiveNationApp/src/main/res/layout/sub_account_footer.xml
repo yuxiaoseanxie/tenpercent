@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/account_detail_min_height">
+    android:minHeight="@dimen/list_item_height">
 
     <ImageView
         android:id="@+id/account_footer_location_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:minWidth="@dimen/account_detail_image_min_width"
+        android:minWidth="@dimen/ui_gutter_width"
         android:scaleType="center"
         android:src="@drawable/your_location" />
 
@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center_vertical"
         android:layout_toRightOf="@id/account_footer_location_image"
         android:orientation="vertical">
 
@@ -27,14 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_footer_location_title"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <TextView
             android:id="@+id/account_footer_location_detail"
+            android:layout_marginTop="@dimen/account_footer_item_packing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_account_footer_location_detail"
-            android:textAppearance="@style/account_footer_detail" />
+            android:textAppearance="@style/ln.text.small.bold.red" />
     </LinearLayout>
 
 </RelativeLayout>

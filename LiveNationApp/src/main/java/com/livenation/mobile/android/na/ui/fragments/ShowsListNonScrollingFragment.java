@@ -60,7 +60,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.dividerHeight = (int) getResources().getDimension(R.dimen.underscore_container_height);
+        this.dividerHeight = (int) getResources().getDimension(R.dimen.one_dp);
         this.dividerLeftMargin = (int) getResources().getDimension(R.dimen.ui_gutter_width);
         this.dividerBackground = getResources().getDrawable(R.drawable.ui_underscore_background);
     }

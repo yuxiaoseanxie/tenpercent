@@ -13,17 +13,17 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/venue_detail_image_min_height"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
-            android:src="@drawable/venue_location" />
+            android:src="@drawable/venue_location_red" />
 
         <TextView
             android:id="@+id/venue_detail_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mock_venue_title_linebreak_1"
-            android:textAppearance="@style/venue_detail_text" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
 
@@ -32,17 +32,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/venue_detail_location_box"
-        android:layout_marginTop="@dimen/venue_detail_item_spacing"
+        android:layout_marginTop="@dimen/gap_small"
         android:gravity="top"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/venue_detail_image_min_height"
-            android:minWidth="@dimen/venue_detail_image_min_width"
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
-            android:src="@drawable/venue_phone" />
+            android:src="@drawable/venue_phone_red" />
 
         <TextView
             android:id="@+id/venue_detail_telephone"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/livenation_selector_pressable_background"
             android:text="@string/mock_venue_telephone"
-            android:textAppearance="@style/venue_detail_text" />
+            android:textAppearance="@style/ln.text.small.italic.gray" />
     </LinearLayout>
 
     <TextView
@@ -59,10 +59,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/venue_detail_phone_box"
-        android:layout_marginLeft="@dimen/venue_detail_link_text_margin_left"
+        android:layout_marginRight="@dimen/gap_medium"
         android:background="@drawable/livenation_selector_pressable_background"
+        android:drawableLeft="@drawable/venue_info_plus"
+        android:drawablePadding="@dimen/gap_tiny"
         android:text="@string/venue_detail_link"
-        android:textAppearance="@style/venue_detail_link_text"
+        android:textAppearance="@style/ln.text.small.red"
         android:visibility="gone" />
 
 </RelativeLayout>

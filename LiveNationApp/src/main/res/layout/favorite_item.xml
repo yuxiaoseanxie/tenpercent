@@ -5,7 +5,7 @@
     android:baselineAligned="true"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
-    android:minHeight="@dimen/favorite_item_min_height"
+    android:minHeight="@dimen/list_item_height"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -16,8 +16,8 @@
 
         <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
             android:id="@+id/favorite_item_checkbox"
-            android:layout_width="@dimen/favorite_checkbox_min_width"
-            android:layout_height="@dimen/favorite_checkbox_min_height"
+            android:layout_width="@dimen/minimum_pressable"
+            android:layout_height="@dimen/minimum_pressable"
             android:button="@drawable/checkbox_favorite_padding_selector" />
     </LinearLayout>
 
@@ -35,12 +35,13 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/mock_favorite_title_1"
-            android:textAppearance="@style/view_lineup_text" />
+            android:textColor="@color/black"
+            android:textAppearance="@style/ln.text.medium.bold" />
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_underscore_height" />
+            android:layout_height="@dimen/one_dp" />
     </LinearLayout>
 
 
