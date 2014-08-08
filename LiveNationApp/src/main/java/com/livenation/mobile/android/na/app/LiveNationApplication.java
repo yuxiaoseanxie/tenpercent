@@ -32,6 +32,7 @@ import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
@@ -97,6 +98,7 @@ public class LiveNationApplication extends Application {
         }
     };
     private BroadcastReceiver internetStateReceiver;
+    private InstalledAppConfig installedAppConfig;
 
     private boolean isMusicSync = false;
 
@@ -185,6 +187,10 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
         imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
+
+        installedAppConfig = new InstalledAppConfig(this, Volley.newRequestQueue(getApplicationContext()));
+        if (installedAppConfig.isUpdateAdvisable())
+            installedAppConfig.update();
 
         YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
@@ -329,6 +335,10 @@ public class LiveNationApplication extends Application {
 
     public InboxStatusPresenter getInboxStatusPresenter() {
         return inboxStatusPresenter;
+    }
+
+    public InstalledAppConfig getInstalledAppConfig() {
+        return installedAppConfig;
     }
 
     public boolean isMusicSync() {

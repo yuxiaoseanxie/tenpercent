@@ -28,6 +28,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -173,8 +174,10 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     }
 
     private void retrieveCharts() {
+        InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+
         TopChartParameters params = new TopChartParameters();
-        LiveNationApplication.getLiveNationProxy().getMobileFeatured(params, this);
+        LiveNationApplication.getLiveNationProxy().getChart(installedAppConfig.getFeaturedCarouselChartName(), params, this);
     }
 
     @Override
