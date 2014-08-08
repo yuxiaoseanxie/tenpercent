@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.cash.model;
 
-public class PhoneNumber {
+import java.io.Serializable;
+
+public class PhoneNumber implements Serializable {
     private final String displayName;
     private final String phoneNumber;
 
