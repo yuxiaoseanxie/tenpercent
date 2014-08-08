@@ -540,7 +540,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
     private class ShowCashFlowItem extends DebugItem {
         private ShowCashFlowItem(String name) {
-            super(name, null);
+            super(name, "");
         }
 
         @Override

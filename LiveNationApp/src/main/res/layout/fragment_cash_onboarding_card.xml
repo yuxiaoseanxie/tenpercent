@@ -38,7 +38,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/fragment_cash_card_month"
+            android:id="@+id/fragment_cash_onboarding_card_month"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -74,7 +74,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/fragment_cash_card_cvv"
+        android:id="@+id/fragment_cash_onboarding_card_cvv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/inter_item_padding_medium"
@@ -86,7 +86,7 @@
         android:nextFocusForward="@+id/fragment_cash_onboarding_card_postal"/>
 
     <EditText
-        android:id="@+id/fragment_cash_card_postal"
+        android:id="@+id/fragment_cash_onboarding_card_postal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/inter_item_padding_medium"

@@ -148,6 +148,10 @@ public class SquareCashService {
         return session;
     }
 
+    public void clearSession() {
+        setSession(null);
+    }
+
     public boolean hasSession() {
         return (getSession() != null);
     }

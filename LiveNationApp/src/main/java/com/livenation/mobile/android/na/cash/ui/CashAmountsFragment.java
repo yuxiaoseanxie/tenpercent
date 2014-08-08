@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashQuantityDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.views.CharacterDrawable;
+import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;
@@ -23,6 +31,9 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
     private ContactDataAdapter adapter;
+    private ContactView headerView;
+    private View footerView;
+
     private final HashMap<String, Integer> quantities = new HashMap<String, Integer>();
     private int remainingQuantity = 0;
     private BigDecimal pricePerTicket = BigDecimal.ZERO;
@@ -44,6 +55,32 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         setListAdapter(adapter);
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        this.headerView = new ContactView(getActivity());
+        headerView.getPhotoImageView().setImageDrawable(new CharacterDrawable('Y', 0xFFeaeaea));
+        headerView.setName(getString(R.string.cash_contact_name_you));
+        headerView.setSmallDetails(TicketingUtils.formatCurrency(null, pricePerTicket));
+        headerView.setBigDetails("1");
+        getListView().addHeaderView(headerView, null, false);
+
+        this.footerView = LayoutInflater.from(getActivity()).inflate(android.R.layout.simple_list_item_1, getListView(), false);
+        TextView footerText = (TextView) footerView;
+        footerText.setText(getString(R.string.cash_logout_text));
+        footerText.setGravity(Gravity.CENTER);
+        footerText.setBackgroundResource(android.R.drawable.list_selector_background);
+        footerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+        if (SquareCashService.getInstance().hasSession())
+            getListView().addFooterView(footerText, null, false);
     }
 
     @Override
@@ -100,7 +137,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         return (CashAmountsActivity) getActivity();
     }
 
-
     public int getRemainingQuantity() {
         return remainingQuantity;
     }
@@ -132,9 +168,9 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     public void onListItemClick(ListView l, View v, int position, long id) {
         this.selectQuantityPosition = position;
 
-        ContactData contact = adapter.getItem(position);
+        ContactData contact = (ContactData) l.getItemAtPosition(position);
         int currentQuantity = quantities.get(contact.getId());
-        int maxQuantity = currentQuantity + remainingQuantity;
+        int maxQuantity = currentQuantity + getRemainingQuantity();
 
         CashQuantityDialogFragment dialogFragment = CashQuantityDialogFragment.newInstance(maxQuantity, currentQuantity);
         dialogFragment.setTargetFragment(this, SELECT_QUANTITY_REQUEST_CODE);
@@ -142,4 +178,10 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     }
 
     //endregion
+
+
+    private void logout() {
+        SquareCashService.getInstance().clearSession();
+        getListView().removeFooterView(footerView);
+    }
 }

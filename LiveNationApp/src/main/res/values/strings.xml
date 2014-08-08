@@ -266,6 +266,8 @@
     <string name="cash_checkmark_content_description">Successfully requested payment</string>
     <string name="cash_action_done">Done</string>
     <string name="cash_name_text">Please confirm your first and last name</string>
+    <string name="cash_contact_name_you">You</string>
+    <string name="cash_logout_text">Not you?</string>
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>
