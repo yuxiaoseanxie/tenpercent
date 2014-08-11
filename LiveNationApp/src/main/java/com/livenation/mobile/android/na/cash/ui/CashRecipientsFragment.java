@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.cash.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomization;
 import com.livenation.mobile.android.na.cash.ui.views.ContactsCompleteTextView;
 import com.livenation.mobile.android.na.cash.ui.views.TokenCompleteTextView;
 
@@ -39,6 +41,7 @@ public class CashRecipientsFragment extends Fragment implements TokenCompleteTex
         ButterKnife.inject(this, view);
 
         toField.setTokenListener(this);
+        noteField.setFilters(new InputFilter[] { new InputFilter.LengthFilter(CashCustomization.MAX_LENGTH) });
         noteField.setText(getString(R.string.cash_field_value_note_fmt, getCashRecipientsActivity().getEvent().getDisplayName()));
 
         return view;
