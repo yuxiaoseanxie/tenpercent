@@ -27,6 +27,7 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
+import com.mobilitus.tm.tickets.models.Order;
 import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
@@ -312,10 +313,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private class CashClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(OrderConfirmationActivity.this, CashRecipientsActivity.class);
-            intent.putExtra(CashUtils.EXTRA_TOTAL, getCart().getTotal());
-            intent.putExtra(CashUtils.EXTRA_TICKET_QUANTITY, TicketingUtils.getTicketCountForCart(getCart()));
-            startActivity(intent);
+            CashUtils.startPaybackFlow(OrderConfirmationActivity.this, getCart().getTotal(), TicketingUtils.getTicketCountForCart(getCart()), event);
         }
     }
 

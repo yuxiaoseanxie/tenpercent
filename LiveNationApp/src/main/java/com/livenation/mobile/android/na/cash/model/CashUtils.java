@@ -1,11 +1,15 @@
 package com.livenation.mobile.android.na.cash.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
 import java.math.BigDecimal;
@@ -23,6 +27,7 @@ public class CashUtils {
 
     //region Activity Extras
 
+    public static final String EXTRA_EVENT = "com.livenation.mobile.android.na.cash.EXTRA_EVENT";
     public static final String EXTRA_TICKET_PER_CONTACT_QUANTITIES = "com.livenation.mobile.android.na.cash.EXTRA_TICKET_PER_CONTACT_QUANTITIES";
     public static final String EXTRA_CONTACTS = "com.livenation.mobile.android.na.cash.EXTRA_CONTACTS";
     public static final String EXTRA_TOTAL = "com.livenation.mobile.android.na.cash.EXTRA_TOTAL";
@@ -57,4 +62,16 @@ public class CashUtils {
     }
 
     //endregion
+
+
+    public static void startPaybackFlow(@NonNull Context context,
+                                        @NonNull Total total,
+                                        int ticketQuantity,
+                                        @NonNull Event event) {
+        Intent intent = new Intent(context, CashRecipientsActivity.class);
+        intent.putExtra(EXTRA_TOTAL, total);
+        intent.putExtra(EXTRA_TICKET_QUANTITY, ticketQuantity);
+        intent.putExtra(EXTRA_EVENT, event);
+        context.startActivity(intent);
+    }
 }

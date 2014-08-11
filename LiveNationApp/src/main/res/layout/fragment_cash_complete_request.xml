@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/outer_padding"
         android:src="@drawable/square_big_checkmark"
-        android:contentDescription="@string/cash_checkmark_content_description"/>
+        android:contentDescription="@string/cash_check_mark_content_description"/>
 
     <TextView
         android:id="@+id/fragment_cash_complete_amount"

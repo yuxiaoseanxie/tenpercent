@@ -33,12 +33,17 @@ import com.livenation.mobile.android.na.notifications.NotificationsRegistrationM
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleEventParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.dialogs.LoadingDialogFragment;
 import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
@@ -545,13 +550,27 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
         @Override
         public void doAction(Context context) {
-            Total testTotal = new Total();
-            testTotal.setGrandTotal(BigDecimal.valueOf(120.00));
+            final LoadingDialogFragment loadingDialogFragment = new LoadingDialogFragment();
+            loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.TAG);
 
-            Intent intent = new Intent(DebugActivity.this, CashRecipientsActivity.class);
-            intent.putExtra(CashUtils.EXTRA_TICKET_QUANTITY, 3);
-            intent.putExtra(CashUtils.EXTRA_TOTAL, testTotal);
-            startActivity(intent);
+            SingleEventParameters params = new SingleEventParameters();
+            params.setEventId(327272);
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(params, new BasicApiCallback<Event>() {
+                @Override
+                public void onResponse(Event event) {
+                    loadingDialogFragment.dismiss();
+
+                    Total testTotal = new Total();
+                    testTotal.setGrandTotal(BigDecimal.valueOf(120.00));
+
+                    CashUtils.startPaybackFlow(DebugActivity.this, testTotal, 3, event);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    loadingDialogFragment.dismiss();
+                }
+            });
         }
 
         @Override

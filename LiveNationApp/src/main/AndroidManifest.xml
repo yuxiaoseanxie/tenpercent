@@ -148,19 +148,19 @@
         <!-- Square Cash -->
         <activity
             android:name=".cash.ui.CashRecipientsActivity"
-            android:label="@string/activity_label_cash_recipients"/>
+            android:label="@string/activity_label_cash"/>
 
         <activity
             android:name=".cash.ui.CashAmountsActivity"
-            android:label="@string/activity_label_cash_amounts"/>
+            android:label="@string/activity_label_cash"/>
 
         <activity
             android:name=".cash.ui.onboarding.CashOnboardingActivity"
-            android:label="@string/activity_label_cash_details" />
+            android:label="@string/activity_label_cash" />
 
         <activity
             android:name=".cash.ui.CashCompleteRequestActivity"
-            android:label="@string/activity_label_cash_confirmation" />
+            android:label="@string/activity_label_cash" />
 
         <!-- Hockey App -->
         <activity android:name="net.hockeyapp.android.UpdateActivity" />

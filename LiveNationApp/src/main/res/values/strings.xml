@@ -239,37 +239,41 @@
     <string name="update_now">Update Now</string>
 
     <!-- Square Cash -->
-    <string name="activity_label_cash_recipients">Recipients</string>
-    <string name="activity_label_cash_amounts">Select Amount</string>
-    <string name="activity_label_cash_details">Requesting</string>
-    <string name="activity_label_cash_confirmation">Confirmation</string>
+    <string name="activity_label_cash">Get Paid Back</string>
 
-    <string name="cash_call_to_action">Split the Cost</string>
-    <string name="cash_field_label_to">To</string>
-    <string name="cash_field_hint_to">Emails or Phone Numbers</string>
-    <string name="cash_field_label_note">Note</string>
-    <string name="cash_field_value_note">Blah blah pay me!</string>
-    <string name="cash_no_contacts_placeholder">Loading Contacts...</string>
-    <string name="cash_content_description_contact_photo">Contact Photo</string>
-    <string name="cash_content_description_clear_field">Clear</string>
-    <string name="cash_select_quantity">Select Quantity</string>
-    <string name="cash_phone_number_text">Which mobile phone number should we send your receipt to?</string>
+    <string name="cash_call_to_action">Get Paid Back</string>
     <string name="cash_powered_by">Powered by Square</string>
-    <string name="cash_enter_card_text">Add a bank by enter your debit card</string>
-    <string name="cash_verification_code_text">Please enter the verification code sent to your phone</string>
-    <string name="verification_code">Verification Code</string>
-    <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
-    <string name="cash_confirmation_title_fmt">Requested %1$s!</string>
-    <string name="cash_checkmark_content_description">Successfully requested payment</string>
-    <string name="cash_action_done">Done</string>
+
+    <string name="cash_field_label_to">To</string>
+    <string name="cash_field_hint_to">Name, Email or Phone #</string>
+    <string name="cash_field_label_note">Note</string>
+    <string name="cash_field_value_note">Requesting money for your share of tickets to %1$s.</string>
+    
+    <string name="cash_request_amount_summary_fmt">Requesting %1$s from friends</string>
+    <string name="cash_content_description_contact_photo">Contact Photo</string>
+    <string name="cash_select_quantity">Select Ticket Quantity</string>
+    
+    <string name="cash_phone_number_text">Which mobile phone number should we send your receipt to?</string>
+    <string name="cash_enter_card_text">Add a debit card to get paid back instantly</string>
     <string name="cash_name_text">Please confirm your first and last name</string>
+    
+    <string name="cash_verification_code_text">Please enter the verification code sent</string>
+    <string name="verification_code">Verification Code</string>
+    
+    <string name="cash_confirmation_title_fmt">Requested %1$s from friends</string>
+    <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
+    <string name="cash_check_mark_content_description">We\'ll let you know when your request is approved</string>
+    <string name="cash_action_done">Done</string>
+
     <string name="cash_contact_name_you">You</string>
     <string name="cash_logout_text">Not you?</string>
+
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
     <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>
+
     <plurals name="cash_transaction_detail">
-        <item quantity="one">1 ticket, %2$s total</item>
-        <item quantity="other">%1$d tickets, %2$s total</item>
+        <item quantity="one">1 Ticket | %2$s</item>
+        <item quantity="other">%1$d Tickets | %2$s</item>
     </plurals>
     <plurals name="cash_recipient_review_detail">
         <item quantity="one">for 1 ticket</item>
