@@ -45,7 +45,7 @@
         android:gravity="top|left"
         android:inputType="textMultiLine"
         android:imeOptions="actionDone"
-        android:text="@string/cash_field_value_note"
+        android:text="@string/cash_field_value_note_fmt"
         android:background="@android:color/transparent"/>
 
     <View

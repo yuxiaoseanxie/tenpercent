@@ -27,8 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
+
+    @InjectView(R.id.fragment_cash_amounts_artist_text) TextView artist;
+    @InjectView(R.id.fragment_cash_amounts_summary_text) TextView summary;
 
     private ContactDataAdapter adapter;
     private ContactView headerView;
@@ -50,9 +56,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         ArrayList<ContactData> contacts = getCashAmountsActivity().getContacts();
         this.adapter = new ContactDataAdapter(getActivity(), this, contacts);
 
-        calculatePricePerTicket();
-        calculateQuantities();
-
         setListAdapter(adapter);
         setRetainInstance(true);
     }
@@ -60,7 +63,13 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_amounts, container, false);
-        
+        ButterKnife.inject(this, view);
+
+        artist.setText(getCashAmountsActivity().getEvent().getDisplayName());
+
+        calculatePricePerTicket();
+        calculateQuantities();
+
         return view;
     }
 
@@ -124,15 +133,23 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         int totalQuantity = getCashAmountsActivity().getTicketQuantity();
         int usedQuantity = adapter.getCount();
         remainingQuantity = (totalQuantity - usedQuantity) - 1;
+
+        BigDecimal totalAmount = pricePerTicket.multiply(BigDecimal.valueOf(usedQuantity));
+        String amountString = TicketingUtils.formatCurrency(null, totalAmount);
+        summary.setText(getString(R.string.cash_request_amount_summary_fmt, amountString));
     }
 
     private void recalculateRemainingQuantity() {
-        int totalQuantity = getCashAmountsActivity().getTicketQuantity() - 1;
+        int usedQuantity = 0;
+        remainingQuantity = getCashAmountsActivity().getTicketQuantity() - 1;
         for (Map.Entry<String, Integer> entry : quantities.entrySet()) {
-            totalQuantity -= entry.getValue();
+            remainingQuantity -= entry.getValue();
+            usedQuantity += entry.getValue();
         }
 
-        remainingQuantity = totalQuantity;
+        BigDecimal totalAmount = pricePerTicket.multiply(BigDecimal.valueOf(usedQuantity));
+        String amountString = TicketingUtils.formatCurrency(null, totalAmount);
+        summary.setText(getString(R.string.cash_request_amount_summary_fmt, amountString));
     }
 
     //endregion

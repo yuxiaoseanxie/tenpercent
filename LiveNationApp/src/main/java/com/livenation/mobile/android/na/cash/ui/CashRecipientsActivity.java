@@ -13,6 +13,7 @@ import android.view.View;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -67,6 +68,10 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
     //endregion
 
+
+    public Event getEvent() {
+        return (Event) getIntent().getSerializableExtra(CashUtils.EXTRA_EVENT);
+    }
 
     public int getTicketQuantity() {
         return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);

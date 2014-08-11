@@ -20,6 +20,7 @@ import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -71,6 +72,10 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     //region Properties
+
+    public Event getEvent() {
+        return (Event) getIntent().getSerializableExtra(CashUtils.EXTRA_EVENT);
+    }
 
     public int getTicketQuantity() {
         return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
