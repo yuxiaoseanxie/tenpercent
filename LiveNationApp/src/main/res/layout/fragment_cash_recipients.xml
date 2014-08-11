@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/inter_item_padding_medium"
         android:textAppearance="@style/ln.text.small"
-        android:lines="3"
+        android:maxLines="2"
         android:gravity="top|left"
         android:inputType="textMultiLine"
         android:imeOptions="actionDone"
