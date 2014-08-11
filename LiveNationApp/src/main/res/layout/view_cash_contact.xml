@@ -22,8 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginLeft="@dimen/inter_item_padding_medium"
-        android:layout_marginRight="@dimen/inter_item_padding_medium"
+        android:layout_marginLeft="@dimen/gap_small"
+        android:layout_marginRight="@dimen/gap_small"
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
@@ -31,14 +31,15 @@
             android:id="@+id/view_cash_contact_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/inter_item_padding_small"
-            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/gap_smaller"
+            android:textAppearance="@style/ln.text.medium.bold"
             android:text="@string/mock_artist_title_1"/>
 
         <TextView
             android:id="@+id/view_cash_contact_small_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/ln.text.small.gray"
             android:text="@string/mock_artist_title_1"/>
 
     </LinearLayout>

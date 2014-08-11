@@ -245,9 +245,9 @@
     <string name="activity_label_cash_confirmation">Confirmation</string>
 
     <string name="cash_call_to_action">Split the Cost</string>
-    <string name="cash_field_label_to">To:</string>
+    <string name="cash_field_label_to">To</string>
     <string name="cash_field_hint_to">Emails or Phone Numbers</string>
-    <string name="cash_field_label_note">Note:</string>
+    <string name="cash_field_label_note">Note</string>
     <string name="cash_field_value_note">Blah blah pay me!</string>
     <string name="cash_no_contacts_placeholder">Loading Contacts...</string>
     <string name="cash_content_description_contact_photo">Contact Photo</string>
@@ -266,6 +266,7 @@
     <string name="cash_contact_name_you">You</string>
     <string name="cash_logout_text">Not you?</string>
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
+    <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 ticket, %2$s total</item>
         <item quantity="other">%1$d tickets, %2$s total</item>

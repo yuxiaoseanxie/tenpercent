@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_horizontal_margin">
 
-    <TableRow
-        android:paddingLeft="@dimen/inter_item_padding_medium"
-        android:paddingRight="@dimen/inter_item_padding_medium">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gap_smaller"
+        android:gravity="center"
+        android:textAppearance="@style/ln.text.medium.bold.red"
+        android:text="@string/cash_field_label_to"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textStyle="bold"
-            android:text="@string/cash_field_label_to"/>
+    <com.livenation.mobile.android.na.cash.ui.views.ContactsCompleteTextView
+        android:id="@+id/fragment_cash_recipients_field_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/inter_item_padding_medium"
+        android:textAppearance="@style/ln.text.small"
+        android:hint="@string/cash_field_hint_to"
+        android:background="@android:color/transparent"/>
 
-        <com.livenation.mobile.android.na.cash.ui.views.ContactsCompleteTextView
-            android:id="@+id/fragment_cash_recipients_field_to"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="@dimen/inter_item_padding_medium"
-            android:textSize="14sp"
-            android:hint="@string/cash_field_hint_to"
-            android:background="@android:color/transparent" />
+    <View
+        android:layout_marginBottom="@dimen/gap_medium"
+        style="@style/Divider" />
 
-    </TableRow>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/gap_smaller"
+        android:textAppearance="@style/ln.text.medium.bold.red"
+        android:text="@string/cash_field_label_note"/>
 
-    <View style="@style/Divider"/>
+    <EditText
+        android:id="@+id/fragment_cash_recipients_field_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/inter_item_padding_medium"
+        android:textAppearance="@style/ln.text.small"
+        android:lines="3"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:imeOptions="actionDone"
+        android:text="@string/cash_field_value_note"
+        android:background="@android:color/transparent"/>
 
-    <TableRow
-        android:id="@+id/fragment_cash_recipients_container_note"
-        android:paddingLeft="@dimen/inter_item_padding_medium"
-        android:paddingRight="@dimen/inter_item_padding_medium">
+    <View
+        android:layout_marginBottom="@dimen/gap_medium"
+        style="@style/Divider" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textStyle="bold"
-            android:text="@string/cash_field_label_note"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/ln.text.medium.italic.gray"
+        android:gravity="center"
+        android:text="@string/cash_recipients_explanation"/>
 
-        <EditText
-            android:id="@+id/fragment_cash_recipients_field_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="@dimen/inter_item_padding_medium"
-            android:textSize="14sp"
-            android:minLines="1"
-            android:maxLines="3"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:text="@string/cash_field_value_note"
-            android:enabled="false"
-            android:background="@android:color/transparent"/>
-
-    </TableRow>
-
-</TableLayout>
+</LinearLayout>
