@@ -19,7 +19,6 @@ import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ContactsCursorAdapter extends CursorAdapter {
     private static final Uri CONTACT_DATA_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
@@ -78,10 +77,14 @@ public class ContactsCursorAdapter extends CursorAdapter {
         cursor.moveToPosition(position);
 
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
 
-        ArrayList<String> emails = getEmails(id);
+        ArrayList<String> emails = new ArrayList<String>();
+        emails.add(email);
+
         ArrayList<PhoneNumber> phoneNumbers = getPhoneNumbers(id);
         Uri photoUri = getPhotoUri(id);
+
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
         return new ContactData(id, displayName, emails, phoneNumbers, photoUri);
     }
@@ -137,13 +140,14 @@ public class ContactsCursorAdapter extends CursorAdapter {
     }
 
     private Uri getPhotoUri(String id) {
-        String selection = (ContactsContract.Data.CONTACT_ID + "=" + id + " AND "
+        String selection = (ContactsContract.Data.CONTACT_ID + "= ? AND "
                           + ContactsContract.Data.MIMETYPE + "='"
                           + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'");
+        String[] selectionArgs = new String[] { id };
         Cursor photoCursor = contentResolver.query(ContactsContract.Data.CONTENT_URI,
                                                    null,
                                                    selection,
-                                                   null,
+                                                   selectionArgs,
                                                    null);
         if (photoCursor != null) {
             Uri photoUri = null;
