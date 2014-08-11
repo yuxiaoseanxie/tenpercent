@@ -66,7 +66,7 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
 
             // Temporary support for crashes on their server.
             if (json.has("message")) {
-                String errorMessage = json.getJSONObject("message").getString("message");
+                String errorMessage = json.getString("message");
                 return new VolleyError(errorMessage, outerError);
             }
 

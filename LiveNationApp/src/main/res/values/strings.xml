@@ -264,6 +264,7 @@
     <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
     <string name="cash_check_mark_content_description">We\'ll let you know when your request is approved</string>
     <string name="cash_action_done">Done</string>
+    <string name="cash_action_request">Request</string>
 
     <string name="cash_contact_name_you">You</string>
     <string name="cash_logout_text">Not you?</string>

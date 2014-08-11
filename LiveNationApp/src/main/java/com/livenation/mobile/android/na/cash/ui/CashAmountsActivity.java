@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
@@ -63,7 +64,9 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
         getMenuInflater().inflate(R.menu.menu_cash, menu);
 
         this.nextItem = menu.findItem(R.id.action_next);
-        nextItem.getActionView().setOnClickListener(new NextClickListener());
+        TextView actionView = (TextView) nextItem.getActionView();
+        actionView.setText(R.string.cash_action_request);
+        actionView.setOnClickListener(new NextClickListener());
 
         return super.onCreateOptionsMenu(menu);
     }
