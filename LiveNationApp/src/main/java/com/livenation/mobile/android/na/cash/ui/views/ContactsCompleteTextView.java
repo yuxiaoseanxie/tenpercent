@@ -9,21 +9,27 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
+import com.livenation.mobile.android.na.cash.model.ContactsCursorAdapter;
 import com.livenation.mobile.android.na.cash.model.PhoneNumber;
 
 import java.util.ArrayList;
 
 public class ContactsCompleteTextView extends TokenCompleteTextView<ContactData> {
+    private final ContactsCursorAdapter adapter = ContactsCursorAdapter.forAllContacts(getContext());
+
     public ContactsCompleteTextView(Context context) {
         super(context);
+        setAdapter(adapter);
     }
 
     public ContactsCompleteTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setAdapter(adapter);
     }
 
     public ContactsCompleteTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setAdapter(adapter);
     }
 
 
