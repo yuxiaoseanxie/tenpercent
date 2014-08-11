@@ -86,6 +86,11 @@ public class EmptyListViewControl extends LinearLayout {
      * @param mode The view state that this view is meant to represent.
      */
     public void setViewMode(ViewMode mode) {
+        if (currentMode == mode) {
+            //if already in the requested view mode, don't bother with
+            // another redundant layout request
+            return;
+        }
         currentMode = mode;
         removeAllViews();
         switch (mode) {
