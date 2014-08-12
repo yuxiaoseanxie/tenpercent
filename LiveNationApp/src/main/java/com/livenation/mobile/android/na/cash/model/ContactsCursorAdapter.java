@@ -68,7 +68,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
                                     ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE,
                                     ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE};
                     return contentResolver.query(CONTACT_DATA_URI,
-                                                 null,
+                                                 CONTACT_PROJECTION,
                                                  selection,
                                                  selectionArgs,
                                                  CONTACTS_SORT_QUERY);
