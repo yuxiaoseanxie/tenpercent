@@ -7,43 +7,41 @@
     <ScrollView
         android:id="@+id/on_boarding_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+
         android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/on_boarding_lnlogo_imageview"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/on_boarding_lnlogo_height"
-                android:background="@color/white"
-                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/on_boarding_lnlogo_margin_top"
                 android:src="@drawable/onboarding_ln_logo" />
 
 
             <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/on_boarding_lnlogo_imageview">
+                android:layout_width="@dimen/on_boarding_content_width"
+                android:paddingLeft="@dimen/on_boarding_content_padding_sides"
+                android:paddingRight="@dimen/on_boarding_content_padding_sides"
 
-                <com.livenation.mobile.android.na.ui.views.TopCropImageView
-                    android:id="@+id/on_boarding_background"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/onboarding_background"
-                    android:visibility="invisible" />
+                android:layout_marginTop="@dimen/on_boarding_content_margin_top"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/on_boarding_lnlogo_imageview">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="@dimen/activity_horizontal_margin">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/on_boarding_description_height">
+                        android:layout_height="wrap_content">
 
 
                         <TextView
@@ -167,26 +165,26 @@
                     <RelativeLayout
                         android:id="@+id/on_boarding_login_container"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layout_marginTop="@dimen/on_boarding_login_margin_top"
                         android:visibility="invisible">
 
-                        <include
+                        <Button
                             android:id="@+id/on_boarding_google_sign_in_button"
-                            style="@style/account_google_plus_login_button"
-                            layout="@layout/sub_button_connect_to_google"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/account_header_sso_button_height"
+                            style="@style/onboarding_sso_button"
+                            android:text="@string/onboarding_login_google_plus_button"
+                            android:drawableLeft="@drawable/login_google_plus_logo"
                             android:layout_centerHorizontal="true"
+                            android:background="@drawable/account_google_plus_sso_button"
                             android:layout_marginBottom="@dimen/on_boarding_button_margin" />
 
-                        <include
+                        <Button
                             android:id="@+id/on_boarding_facebook_sign_in_button"
-                            style="@style/account_facebook_login_button"
-                            layout="@layout/sub_button_connect_to_facebook"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/account_header_sso_button_height"
+                            android:text="@string/recommendations_favorite_upsell_facebook_button"
+                            style="@style/onboarding_sso_button"
+                            android:drawableLeft="@drawable/login_facebook_logo"
+                            android:background="@drawable/account_facebook_sso_button"
                             android:layout_below="@id/on_boarding_google_sign_in_button"
                             android:layout_centerHorizontal="true" />
 
@@ -204,7 +202,7 @@
                         <TextView
                             android:id="@+id/on_boarding_skip_textview"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/on_boarding_skip_height"
                             android:layout_below="@id/on_boarding_permission_textview"
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal"
@@ -222,5 +220,6 @@
         android:id="@+id/on_boarding_scanning_view"
         layout="@layout/on_boarding_scanning_view"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="@dimen/on_boarding_scanning_view_height" />
 </RelativeLayout>

@@ -76,15 +76,17 @@
     <dimen name="on_boarding_item_negatif_margin">-16dp</dimen>
     <dimen name="on_boarding_title_margin">16dp</dimen>
     <dimen name="on_boarding_button_margin">20dp</dimen>
-    <dimen name="on_boarding_logo_margin">10dp</dimen>
-    <dimen name="on_boarding_description_height">240dp</dimen>
     <dimen name="on_boarding_scan_message_padding">8dp</dimen>
-    <dimen name="on_boarding_lnlogo_height">94dp</dimen>
     <dimen name="on_boarding_scanning_view_height">36dp</dimen>
     <dimen name="on_boarding_warning_margin_top">8dp</dimen>
     <dimen name="on_boarding_item_image_margin_bottom">6dp</dimen>
-    <dimen name="on_boarding_item_text_margin_bottom">-2dp</dimen>x
-
+    <dimen name="on_boarding_item_text_margin_bottom">-2dp</dimen>
+    <dimen name="on_boarding_content_width">400dp</dimen>
+    <dimen name="on_boarding_content_padding_sides">10dp</dimen>
+    <dimen name="on_boarding_content_margin_top">32dp</dimen>
+    <dimen name="on_boarding_login_margin_top">32dp</dimen>
+    <dimen name="on_boarding_lnlogo_margin_top">48dp</dimen>
+    <dimen name="on_boarding_skip_height">32dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
