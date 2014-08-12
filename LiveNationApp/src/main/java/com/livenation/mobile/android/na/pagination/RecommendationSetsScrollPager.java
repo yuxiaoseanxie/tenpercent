@@ -3,10 +3,10 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.RecommendationSet.RecommendationSetType;
@@ -46,7 +46,7 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
     }
 
     @Override
-    protected void fetch(LiveNationApiService apiService, final int offset, final int limit, final ApiService.BasicApiCallback callback) {
+    protected void fetch(final int offset, final int limit, final BasicApiCallback callback) {
         RecommendationSetsParameters params = new RecommendationSetsParameters();
         if (offset == 0 && pagingOffset == 0) {
             //if no data, do a one shot fetch for personal recommendation shows
@@ -58,9 +58,8 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
             params.setIncludes(new String[]{"popular"});
             params.setPage(pagingOffset, limit);
         }
-        params.setLocation(apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
         params.setRadius(Constants.DEFAULT_RADIUS);
-        apiService.getRecommendationSets(params, new ApiService.BasicApiCallback<List<RecommendationSet>>() {
+        LiveNationApplication.getLiveNationProxy().getRecommendationSets(params, new BasicApiCallback<List<RecommendationSet>>() {
             @Override
             public void onResponse(List<RecommendationSet> response) {
                 List<RecommendationItem> result = new ArrayList<RecommendationItem>();

@@ -11,13 +11,14 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleEventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -61,7 +62,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
     }
 
     static class SingleEventState extends BaseResultState<Event, SingleEventView>
-            implements ApiService.BasicApiCallback<Event> {
+            implements BasicApiCallback<Event> {
         private SingleEventParameters apiParams;
 
         public SingleEventState(StateListener<SingleEventState> listener, Bundle args, SingleEventView view) {
@@ -75,7 +76,7 @@ public class SingleEventPresenter extends BasePresenter<SingleEventView, SingleE
 
         @Override
         public void retrieveResult() {
-            getApiService().getSingleEvent(apiParams, SingleEventState.this);
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, SingleEventState.this);
         }
 
         @Override

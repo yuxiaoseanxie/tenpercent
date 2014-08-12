@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ui_underscore_pressable_background"
-    android:minHeight="@dimen/view_lineup_min_height"
+    android:minHeight="@dimen/ui_gutter_width"
     android:orientation="horizontal">
 
     <ImageView
@@ -21,7 +21,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:text="@string/mock_show_calendar_date_time"
-        android:textAppearance="@style/venue_detail_date_time_text" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <ImageView
         android:id="@+id/sub_show_calendar_plus_image"

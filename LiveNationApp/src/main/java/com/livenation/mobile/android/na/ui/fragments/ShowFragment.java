@@ -27,8 +27,10 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
@@ -36,6 +38,7 @@ import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
@@ -138,9 +141,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event);
             venueDetails.setOnClickListener(onVenueClick);
 
-            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity(), AnalyticsCategory.SDP);
+            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, AnalyticsCategory.SDP);
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
-            venueDetails.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.SDP);
+            venueDetails.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.SDP);
 
             double lat = Double.valueOf(venue.getLat());
             double lng = Double.valueOf(venue.getLng());
@@ -171,7 +174,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
+            view.bindToFavoriteArtist(lineup);
 
             view.setOnClickListener(new OnLineupViewClick(lineup, event));
 
@@ -221,15 +224,24 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
 
+    private InstalledAppConfig getInstalledAppConfig() {
+        return LiveNationApplication.get().getInstalledAppConfig();
+    }
+
 
     //region Find Tickets
 
     protected void showTicketOffering(TicketOffering offering) {
         String buyLink = offering.getPurchaseUrl();
         if (Ticketing.isTicketmasterUrl(buyLink)) {
-            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
-            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-            Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
+            if (getInstalledAppConfig().isCommerceAvailable()) {
+                Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
+                confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
+                Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
+            } else {
+                CommerceUnavailableDialogFragment dialogFragment = new CommerceUnavailableDialogFragment();
+                dialogFragment.show(getFragmentManager(), CommerceUnavailableDialogFragment.TAG);
+            }
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
             Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();

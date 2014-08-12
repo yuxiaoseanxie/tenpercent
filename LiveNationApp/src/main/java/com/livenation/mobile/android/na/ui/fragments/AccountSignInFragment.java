@@ -11,8 +11,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class AccountSignInFragment extends Fragment {
     @Override

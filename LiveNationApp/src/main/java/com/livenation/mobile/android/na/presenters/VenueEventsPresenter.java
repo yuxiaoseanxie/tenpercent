@@ -3,13 +3,14 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -46,7 +47,7 @@ public class VenueEventsPresenter extends
     }
 
     static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
-            ApiService.BasicApiCallback<List<Event>> {
+            BasicApiCallback<List<Event>> {
         private VenueEventsParameters apiParams;
 
         public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
@@ -60,7 +61,7 @@ public class VenueEventsPresenter extends
 
         @Override
         public void retrieveResult() {
-            getApiService().getVenueEvents(apiParams, VenueEventsState.this);
+            LiveNationApplication.getLiveNationProxy().getVenueEvents(apiParams, VenueEventsState.this);
         }
 
         @Override

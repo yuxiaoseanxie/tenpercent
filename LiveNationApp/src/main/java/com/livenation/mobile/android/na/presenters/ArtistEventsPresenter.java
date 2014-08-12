@@ -3,17 +3,21 @@ package com.livenation.mobile.android.na.presenters;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseResultState;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +55,7 @@ public class ArtistEventsPresenter
 
     public static class ArtistEventsState
             extends BaseResultState<ArtistEvents, ArtistEventsView>
-            implements ApiService.BasicApiCallback<List<Event>> {
+            implements BasicApiCallback<List<Event>> {
         private ArtistEventsParameters apiParams;
 
         public ArtistEventsState(StateListener<ArtistEventsState> listener, Bundle args, ArtistEventsView view) {
@@ -66,7 +70,7 @@ public class ArtistEventsPresenter
 
         @Override
         public void retrieveResult() {
-            getApiService().getArtistEvents(apiParams, this);
+            LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, this);
         }
 
         @Override
@@ -94,17 +98,28 @@ public class ArtistEventsPresenter
         }
 
         @Override
-        public void onResponse(List<Event> result) {
-            double lat = getApiService().getApiConfig().getLat();
-            double lng = getApiService().getApiConfig().getLng();
-            setResult(ArtistEvents.from((ArrayList<Event>) result, lat, lng));
-            notifyReady();
+        public void onResponse(final List<Event> result) {
+            LiveNationApplication.getProviderManager().getConfigReadyFor(new ConfigCallback() {
+                @Override
+                public void onResponse(LiveNationConfig config) {
+                    double lat = config.getLat();
+                    double lng = config.getLng();
+                    setResult(ArtistEvents.from((ArrayList<Event>) result, lat, lng));
+                    notifyReady();
+                }
+
+                @Override
+                public void onErrorResponse(int errorCode) {
+                    //Is it possible to not have location ?
+                    //TODO track the error
+                }
+            }, ProviderManager.ProviderType.LOCATION);
+
         }
 
         @Override
         public void onErrorResponse(LiveNationError error) {
-            int errorCode = error.getErrorCode();
-            notifyFailed(errorCode);
+            notifyFailed(error.getErrorCode());
         }
     }
 }

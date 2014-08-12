@@ -12,17 +12,20 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
+import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayServicesLocationProvider implements
-        LocationProvider {
+public class PlayServicesLocationProvider implements LocationProvider {
 
 
     public static final int STATUS_GOOGLE_PLAY_SUCCESS = 0;
@@ -44,12 +47,12 @@ public class PlayServicesLocationProvider implements
     }
 
     @Override
-    public void getLocation(Context context, LocationManager.LocationCallback callback) {
-        if (STATUS_GOOGLE_PLAY_SUCCESS != getGooglePlayServiceStatus(context)) {
-            callback.onLocationFailure(0);
+    public void getLocation(ProviderCallback<Double[]> callback) {
+        if (STATUS_GOOGLE_PLAY_SUCCESS != getGooglePlayServiceStatus(LiveNationApplication.get().getApplicationContext())) {
+            callback.onErrorResponse();
             return;
         }
-        State state = new State(callback, context);
+        State state = new State(callback, LiveNationApplication.get().getApplicationContext());
         //stop it from getting GC'd
         activeStates.add(state);
         state.run();
@@ -58,12 +61,12 @@ public class PlayServicesLocationProvider implements
     private class State implements GooglePlayServicesClient.ConnectionCallbacks,
             GooglePlayServicesClient.OnConnectionFailedListener, Runnable {
         private final LocationClient client;
-        private final LocationProvider.LocationCallback callback;
+        private final ProviderCallback<Double[]> callback;
         private final int RETRY_LIMIT = 3;
         private Handler handler;
         private int retryCount;
 
-        private State(LocationCallback callback, Context context) {
+        private State(ProviderCallback<Double[]> callback, Context context) {
             this.callback = callback;
             this.client = new LocationClient(context, this, this);
         }
@@ -75,7 +78,8 @@ public class PlayServicesLocationProvider implements
 
         @Override
         public void onConnectionFailed(ConnectionResult result) {
-            callback.onLocationFailure(0);
+            Log.e("PlayServicesLocation", "Error binding to LocationClient: " + result.getErrorCode());
+            callback.onErrorResponse();
         }
 
         @Override
@@ -84,7 +88,8 @@ public class PlayServicesLocationProvider implements
             if (null != location) {
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
-                callback.onLocation(lat, lng);
+                Double[] locationArray = new Double[]{lat, lng};
+                callback.onResponse(locationArray);
                 cleanUp();
             } else {
                 handler = new Handler();
@@ -92,7 +97,7 @@ public class PlayServicesLocationProvider implements
                     handler.postDelayed(this, 1000);
                     retryCount++;
                 } else {
-                    callback.onLocationFailure(0);
+                    callback.onErrorResponse();
                     cleanUp();
                 }
             }

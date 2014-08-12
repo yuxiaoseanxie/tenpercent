@@ -9,7 +9,9 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,9 +25,10 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
@@ -35,8 +38,7 @@ import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
@@ -46,10 +48,12 @@ import com.segment.android.models.Props;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, ApiServiceBinder, ApiService.BasicApiCallback<List<Chart>> {
+public class AllShowsFragment extends LiveNationFragmentTab implements OnItemClickListener, BasicApiCallback<List<Chart>>, LocationUpdateReceiver.LocationUpdateListener {
     private EventStickyHeaderAdapter adapter;
     private ViewGroup chartingContainer;
     private List<Chart> featured;
+    private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,6 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         adapter = new EventStickyHeaderAdapter(getActivity(), ShowView.DisplayMode.EVENT);
         scrollPager = new AllShowsScrollPager(adapter);
         featured = new ArrayList<Chart>();
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
         setRetainInstance(true);
 
     }
@@ -102,6 +105,12 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
             }
         });
 
+
+        scrollPager.load();
+        retrieveCharts();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(locationUpdateReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));
+
+
         return view;
     }
 
@@ -109,7 +118,6 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     public void onDestroy() {
         super.onDestroy();
         scrollPager.stop();
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
     }
 
 
@@ -136,20 +144,6 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         intent.putExtras(args);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        scrollPager.reset();
-        scrollPager.load();
-        retrieveCharts(apiService, apiService.getApiConfig().getLat(), apiService.getApiConfig().getLng());
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-        if (emptyListViewControl != null) {
-            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
-        }
     }
 
     private void setFeatured(List<Chart> featured) {
@@ -179,10 +173,11 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         }
     }
 
-    private void retrieveCharts(LiveNationApiService apiService, double lat, double lng) {
+    private void retrieveCharts() {
+        InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+
         TopChartParameters params = new TopChartParameters();
-        params.setLocation(lat, lng);
-        apiService.getMobileFeatured(params, this);
+        LiveNationApplication.getLiveNationProxy().getChart(installedAppConfig.getFeaturedCarouselChartName(), params, this);
     }
 
     @Override
@@ -190,6 +185,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         return scrollPager;
     }
 
+    //getMobileFeatured Callback
     @Override
     public void onResponse(List<Chart> response) {
         featured = response;
@@ -198,7 +194,17 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
     @Override
     public void onErrorResponse(LiveNationError error) {
-        //TODO add retry view when error
+        if (emptyListViewControl != null) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.RETRY);
+        }
+    }
+
+    //LocationUpdateReceiver callback
+    @Override
+    public void onLocationUpdated(int mode, double lat, double lng) {
+        scrollPager.reset();
+        scrollPager.load();
+        retrieveCharts();
     }
 
     private class FeaturedOnClick implements View.OnClickListener {

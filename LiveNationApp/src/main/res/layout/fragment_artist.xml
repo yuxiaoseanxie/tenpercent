@@ -14,12 +14,15 @@
             layout="@layout/fragment_artist_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
+        <ImageView style="@style/SwooshDivider" />
         <TextView
             android:id="@+id/fragment_artist_shows_header"
-            style="@style/ui_header_top_accent"
+            style="@style/ui_header_transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/zero_dp"
+            android:paddingTop="@dimen/gap_tiny"
+            android:paddingBottom="@dimen/gap_tiny"
             android:text="@string/artist_all_shows" />
 
         <LinearLayout
@@ -34,7 +37,7 @@
 
         <TextView
             android:id="@+id/fragment_artist_youtube_header"
-            style="@style/ui_header_top_accent"
+            style="@style/ui_header_transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/artist_youtube" />

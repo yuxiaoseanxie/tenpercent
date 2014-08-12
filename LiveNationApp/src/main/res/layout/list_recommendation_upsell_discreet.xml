@@ -9,11 +9,11 @@
 
     <ImageView
         android:layout_width="@dimen/ui_gutter_width"
-        android:layout_height="@dimen/favorite_checkbox_min_width"
+        android:layout_height="@dimen/minimum_pressable"
         android:scaleType="center"
         android:src="@drawable/favorite_on" />
 
     <TextView
-        style="@style/text.secondary.recommendations_upsell_discreet_text"
+        style="@style/recommendations_upsell_discreet_text"
         android:text="@string/recommendations_favorite_upsell_small_text" />
 </LinearLayout>

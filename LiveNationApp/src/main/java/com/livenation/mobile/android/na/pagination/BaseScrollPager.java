@@ -3,8 +3,8 @@ package com.livenation.mobile.android.na.pagination;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
@@ -53,6 +53,11 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     public void load() {
         if (paginatedFetcher != null) {
+            return;
+        }
+
+        if (!hasMorePages) {
+            onNoMorePages();
             return;
         }
 
@@ -132,7 +137,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     //Abstract methods
 
-    public abstract void fetch(int offset, int limit, ApiService.BasicApiCallback<List<TItemType>> callback);
+    protected abstract void fetch(int offset, int limit, BasicApiCallback<List<TItemType>> callback);
 
     public abstract void onFetchStarted();
 
@@ -142,7 +147,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
 
     //Paginated Fetcher
 
-    private class PaginatedFetcher implements Runnable, ApiService.BasicApiCallback<List<TItemType>> {
+    private class PaginatedFetcher implements Runnable, BasicApiCallback<List<TItemType>> {
         private final int offset;
         private final int limit;
         private boolean isCanceled = false;

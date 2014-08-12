@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
@@ -63,7 +62,7 @@ public class LineupView extends LinearLayout {
         return divider;
     }
 
-    public void bindToFavoriteArtist(Artist artist, FavoritesPresenter favoritesPresenter) {
-        favorite.bindToFavorite(Favorite.FAVORITE_ARTIST, artist.getName(), artist.getNumericId(), favoritesPresenter, AnalyticsCategory.SDP);
+    public void bindToFavoriteArtist(Artist artist) {
+        favorite.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.SDP);
     }
 }

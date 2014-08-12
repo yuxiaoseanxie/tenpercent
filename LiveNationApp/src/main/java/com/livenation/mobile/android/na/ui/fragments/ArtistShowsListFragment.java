@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
@@ -15,11 +13,10 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class ArtistShowsListFragment extends LiveNationListFragment implements ApiServiceBinder {
+public class ArtistShowsListFragment extends LiveNationListFragment {
     private EventAdapter adapter;
     private ArtistShowsScrollPager artistShowsScrollPager;
 
@@ -38,7 +35,6 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         long artistId = DataModelHelper.getNumericEntityId(entityId);
         this.artistShowsScrollPager = new ArtistShowsScrollPager(artistId, adapter);
 
-        LiveNationApplication.get().getConfigManager().persistentBindApi(this);
     }
 
     @Override
@@ -49,40 +45,16 @@ public class ArtistShowsListFragment extends LiveNationListFragment implements A
         getListView().setDividerHeight((int) getResources().getDimension(R.dimen.divider_height));
 
         artistShowsScrollPager.connectListView(getListView());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        artistShowsScrollPager.stop();
+        artistShowsScrollPager.load();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        LiveNationApplication.get().getConfigManager().persistentUnbindApi(this);
+        artistShowsScrollPager.stop();
     }
 
     //endregion
-
-
-    //region Api Binding
-
-    @Override
-    public void onApiServiceAttached(LiveNationApiService apiService) {
-        artistShowsScrollPager.reset();
-        artistShowsScrollPager.load();
-    }
-
-    @Override
-    public void onApiServiceNotAvailable() {
-
-    }
-
-
-    //endregion
-
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

@@ -8,7 +8,7 @@ import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregatorCallback;
 import com.livenation.mobile.android.na.scan.aggregators.DeviceArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAggregator;
-import com.livenation.mobile.android.platform.api.service.ApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 import com.segment.android.models.Props;
@@ -22,12 +22,12 @@ import java.util.Set;
 
 public class ArtistAggregatorScanner {
 
-    public void aggregate(Context context, ApiService.BasicApiCallback<MusicLibrary> callback, Date sinceDate) {
+    public void aggregate(Context context, BasicApiCallback<MusicLibrary> callback, Date sinceDate) {
         ScannerTask task = new ScannerTask(context, callback, sinceDate);
         new Thread(task).start();
     }
 
-    public void aggregate(Context context, ApiService.BasicApiCallback<MusicLibrary> callback) {
+    public void aggregate(Context context, BasicApiCallback<MusicLibrary> callback) {
         aggregate(context, callback, null);
     }
 
@@ -72,10 +72,10 @@ public class ArtistAggregatorScanner {
         final private Set<Aggregator> aggregators = new HashSet<Aggregator>();
         final private MusicLibrary musicLibrary = new MusicLibrary();
         final private Context context;
-        final private ApiService.BasicApiCallback<MusicLibrary> callback;
+        final private BasicApiCallback<MusicLibrary> callback;
         final private Date sinceDate;
 
-        public ScannerTask(Context context, ApiService.BasicApiCallback<MusicLibrary> callback, Date sinceDate) {
+        public ScannerTask(Context context, BasicApiCallback<MusicLibrary> callback, Date sinceDate) {
             if (context == null) {
                 throw new NullPointerException("Context cannot be null");
             }

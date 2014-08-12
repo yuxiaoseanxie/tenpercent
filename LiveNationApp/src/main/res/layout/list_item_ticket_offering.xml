@@ -8,4 +8,4 @@
     android:paddingRight="@dimen/ui_ticket_offering_padding"
     android:paddingTop="@dimen/ui_ticket_offering_padding"
     android:text="@string/mock_artist_title_1"
-    android:textAppearance="@style/view_lineup_text" />
+    android:textAppearance="@style/ln.text.medium.bold" />
