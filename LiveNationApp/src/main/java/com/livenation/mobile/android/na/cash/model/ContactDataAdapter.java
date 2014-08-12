@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
@@ -15,7 +16,7 @@ import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class ContactDataAdapter extends FilteredArrayAdapter<ContactData> {
+public class ContactDataAdapter extends ArrayAdapter<ContactData> {
     private final ContentResolver contentResolver;
 
     private final DataProvider dataProvider;
@@ -31,10 +32,6 @@ public class ContactDataAdapter extends FilteredArrayAdapter<ContactData> {
         this(context, dataProvider, new ArrayList<ContactData>());
     }
 
-
-    public DataProvider getDataProvider() {
-        return dataProvider;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -61,12 +58,6 @@ public class ContactDataAdapter extends FilteredArrayAdapter<ContactData> {
         view.setBigDetails(dataProvider.getBigDetails(position, contactData));
 
         return view;
-    }
-
-
-    @Override
-    protected boolean keepObject(ContactData contact, String mask) {
-        return contact.matches(mask);
     }
 
     public interface DataProvider {

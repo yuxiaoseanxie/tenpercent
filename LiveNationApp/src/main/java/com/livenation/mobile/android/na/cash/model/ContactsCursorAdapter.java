@@ -21,11 +21,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactsCursorAdapter extends CursorAdapter {
-    private static final Uri CONTACT_DATA_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+    private static final Uri CONTACT_DATA_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
     private static final String[] CONTACT_PROJECTION = new String[] {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Email.DATA
+            ContactsContract.CommonDataKinds.Phone.DATA
     };
     private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
@@ -77,16 +77,11 @@ public class ContactsCursorAdapter extends CursorAdapter {
         cursor.moveToPosition(position);
 
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-
-        ArrayList<String> emails = new ArrayList<String>();
-        emails.add(email);
-
-        ArrayList<PhoneNumber> phoneNumbers = getPhoneNumbers(id);
+        String phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
         Uri photoUri = getPhotoUri(id);
 
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        return new ContactData(id, displayName, emails, phoneNumbers, photoUri);
+        return new ContactData(id, displayName, null, phone, photoUri);
     }
 
     private ArrayList<String> getEmails(@NonNull String id) {
@@ -103,7 +98,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
 
         ArrayList<String> emails = new ArrayList<String>();
         if (cursorEmail != null) {
-            if (cursorEmail.moveToNext()) {
+            while (cursorEmail.moveToNext()) {
                 String email = cursorEmail.getString(cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
                 emails.add(email);
             }
@@ -128,7 +123,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
 
         ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
         if (cursorPhone != null) {
-            if (cursorPhone.moveToNext()) {
+            while (cursorPhone.moveToNext()) {
                 String displayName = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 phoneNumbers.add(new PhoneNumber(number, displayName));
@@ -188,7 +183,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
 
         ContactView contactView = (ContactView) view;
         contactView.setName(displayName);

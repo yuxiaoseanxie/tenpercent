@@ -45,13 +45,9 @@ public class ContactsCompleteTextView extends TokenCompleteTextView<ContactData>
     @Override
     protected Object defaultObject(String completionText) {
         if (Patterns.EMAIL_ADDRESS.matcher(completionText).matches()) {
-            ArrayList<String> emails = new ArrayList<String>();
-            emails.add(completionText);
-            return new ContactData("{}", completionText, emails, null, null);
+            return new ContactData("{}", completionText, completionText, null, null);
         } else {
-            ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
-            phoneNumbers.add(new PhoneNumber(completionText, ""));
-            return new ContactData("{}", completionText, null, phoneNumbers, null);
+            return new ContactData("{}", completionText, null, completionText, null);
         }
     }
 }

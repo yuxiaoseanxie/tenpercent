@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.cash.service.responses;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.livenation.mobile.android.na.cash.model.ContactData;
@@ -22,10 +23,10 @@ public class CashCustomer extends CashResponse {
 
     public static CashCustomer fromContactData(@NonNull ContactData contact) {
         CashCustomer customer = new CashCustomer();
-        if (!TicketingUtils.isCollectionEmpty(contact.getPhoneNumbers()))
-            customer.setPhoneNumber(contact.getPhoneNumbers().get(0).getPhoneNumber());
-        if (!TicketingUtils.isCollectionEmpty(contact.getEmails()))
-            customer.setEmail(contact.getEmails().get(0));
+        if (!TextUtils.isEmpty(contact.getPhoneNumber()))
+            customer.setPhoneNumber(contact.getPhoneNumber());
+        if (!TextUtils.isEmpty(contact.getEmail()))
+            customer.setEmail(contact.getEmail());
         return customer;
     }
 

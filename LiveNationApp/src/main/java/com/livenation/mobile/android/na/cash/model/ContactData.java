@@ -14,19 +14,19 @@ import java.util.ArrayList;
 public class ContactData implements Serializable {
     private final String id;
     private final String name;
-    private final ArrayList<String> emails;
-    private final ArrayList<PhoneNumber> phoneNumbers;
+    private final String email;
+    private final String phoneNumber;
     private final String photoUri;
 
     public ContactData(@NonNull String id,
                        @NonNull String name,
-                       @Nullable ArrayList<String> emails,
-                       @Nullable ArrayList<PhoneNumber> phoneNumbers,
+                       @Nullable String email,
+                       @Nullable String phoneNumber,
                        @Nullable Uri photoUri) {
         this.id = id;
         this.name = name;
-        this.emails = emails;
-        this.phoneNumbers = phoneNumbers;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.photoUri = photoUri != null? photoUri.toString() : null;
     }
 
@@ -43,12 +43,12 @@ public class ContactData implements Serializable {
         return name;
     }
 
-    public ArrayList<String> getEmails() {
-        return emails;
+    public String getEmail() {
+        return email;
     }
 
-    public ArrayList<PhoneNumber> getPhoneNumbers() {
-        return phoneNumbers;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public Uri getPhotoUri() {
@@ -61,51 +61,12 @@ public class ContactData implements Serializable {
     public String getDisplayName() {
         if (!TextUtils.isEmpty(getName()))
             return getName();
+        else if (!TextUtils.isEmpty(getPhoneNumber()))
+            return getPhoneNumber();
+        else if (!TextUtils.isEmpty(getEmail()))
+            return getEmail();
         else
-            return null;
-    }
-
-    public String getDetails() {
-        String emails = TextUtils.join(", ", getEmails());
-
-        String details = "";
-        if (!TextUtils.isEmpty(emails)) {
-            details += emails;
-        }
-
-        String phoneNumbers = "";
-        for (PhoneNumber phoneNumber : getPhoneNumbers())
-            phoneNumbers += phoneNumber.getPhoneNumber() + ", ";
-        if (phoneNumbers.length() > 0)
-            phoneNumbers = phoneNumbers.substring(0, phoneNumbers.length() - 3);
-
-        if (!TextUtils.isEmpty(phoneNumbers)) {
-            if (!TextUtils.isEmpty(details))
-                details += "\n";
-
-            details += phoneNumbers;
-        }
-
-        return details;
-    }
-
-    public boolean matches(String query) {
-        String sanitizedQuery = query.toLowerCase();
-
-        if (getName().toLowerCase().contains(sanitizedQuery))
-            return true;
-
-        for (String email : getEmails()) {
-            if (email.toLowerCase().contains(sanitizedQuery))
-                return true;
-        }
-
-        for (PhoneNumber phoneNumber : getPhoneNumbers()) {
-            if (phoneNumber.getPhoneNumber().contains(query))
-                return true;
-        }
-
-        return false;
+            return "?";
     }
 
 
@@ -114,9 +75,9 @@ public class ContactData implements Serializable {
         return "ContactData{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", emails=" + emails +
-                ", phoneNumbers=" + phoneNumbers +
-                ", photoUri=" + photoUri +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", photoUri='" + photoUri + '\'' +
                 '}';
     }
 }
