@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactsCursorAdapter extends CursorAdapter {
-    private static final Uri CONTACT_DATA_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+    private static final Uri CONTACT_DATA_URI = ContactsContract.Data.CONTENT_URI;
     private static final String[] CONTACT_PROJECTION = new String[] {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
@@ -54,9 +54,10 @@ public class ContactsCursorAdapter extends CursorAdapter {
                                                  CONTACTS_SORT_QUERY);
                 } else {
                     String wildcardQuery = "%" + query.toString() + "%";
-                    String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE ? OR "
-                            + ContactsContract.CommonDataKinds.Email.DATA + " LIKE ?";
-                    String[] selectionArgs = new String[] { wildcardQuery };
+                    String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE ? OR " +
+                            ContactsContract.CommonDataKinds.Email.DATA + " LIKE ? OR " +
+                            ContactsContract.CommonDataKinds.Phone.NUMBER + " LIKE ?";
+                    String[] selectionArgs = new String[] { wildcardQuery, wildcardQuery, wildcardQuery };
                     return contentResolver.query(CONTACT_DATA_URI,
                                                  CONTACT_PROJECTION,
                                                  selection,
