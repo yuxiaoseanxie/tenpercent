@@ -25,8 +25,11 @@ public class ContactsCursorAdapter extends CursorAdapter {
     private static final String[] CONTACT_PROJECTION = new String[] {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.DATA
+            ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
+            ContactsContract.CommonDataKinds.Email.DATA,
+            ContactsContract.Data.MIMETYPE
     };
+
     private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
 
@@ -53,11 +56,17 @@ public class ContactsCursorAdapter extends CursorAdapter {
                                                  null,
                                                  CONTACTS_SORT_QUERY);
                 } else {
+
                     String wildcardQuery = "%" + query.toString() + "%";
-                    String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE ? OR " +
+                    String selection = "(" + ContactsContract.Contacts.DISPLAY_NAME + " LIKE ? OR " +
                             ContactsContract.CommonDataKinds.Email.DATA + " LIKE ? OR " +
-                            ContactsContract.CommonDataKinds.Phone.NUMBER + " LIKE ?";
-                    String[] selectionArgs = new String[] { wildcardQuery, wildcardQuery, wildcardQuery };
+                            ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER + " LIKE ?) AND (" +
+                            ContactsContract.Data.MIMETYPE + " = ? OR " +
+                            ContactsContract.Data.MIMETYPE + " = ?)";
+
+                            String[] selectionArgs = new String[] { wildcardQuery, wildcardQuery, wildcardQuery,
+                                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE,
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE};
                     return contentResolver.query(CONTACT_DATA_URI,
                                                  CONTACT_PROJECTION,
                                                  selection,
@@ -78,11 +87,30 @@ public class ContactsCursorAdapter extends CursorAdapter {
         cursor.moveToPosition(position);
 
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-        String phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+        String mimeType = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
+
+
+        /**
+         * This cursor returns data accros many contact tables using joins
+         *
+         * This means that the generic 'data1' and 'data2' columns differ in meaning between rows.
+         *
+         * For this reason, we can not extract both the phone and email from a single row, and
+         * instead have to identify the row type, and then extract the relevant data for that row.
+         */
+        String phone = null;
+        String email = null;
+        if (ContactsContract.CommonDataKinds.Phone.MIMETYPE.equals(mimeType)) {
+            phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+        }
+        if (ContactsContract.CommonDataKinds.Email.MIMETYPE.equals(mimeType)) {
+            email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        }
+
         Uri photoUri = getPhotoUri(id);
 
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        return new ContactData(id, displayName, null, phone, photoUri);
+        return new ContactData(id, displayName, email, phone, photoUri);
     }
 
     private ArrayList<String> getEmails(@NonNull String id) {
@@ -184,11 +212,20 @@ public class ContactsCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA));
+        String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+        String smallDetails = null;
+
+        if (!TextUtils.isEmpty(email)) {
+            smallDetails = email;
+        }
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            smallDetails = phoneNumber;
+        }
 
         ContactView contactView = (ContactView) view;
         contactView.setName(displayName);
-        contactView.setSmallDetails(email);
+        contactView.setSmallDetails(smallDetails);
 
         Uri photoUri = getPhotoUri(id);
         if (photoUri != null) {
