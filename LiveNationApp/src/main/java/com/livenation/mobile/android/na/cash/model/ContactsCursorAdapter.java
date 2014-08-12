@@ -89,6 +89,15 @@ public class ContactsCursorAdapter extends CursorAdapter {
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
         String mimeType = cursor.getString(cursor.getColumnIndex(ContactsContract.Data.MIMETYPE));
 
+
+        /**
+         * This cursor returns data accros many contact tables using joins
+         *
+         * This means that the generic 'data1' and 'data2' columns differ in meaning between rows.
+         *
+         * For this reason, we can not extract both the phone and email from a single row, and
+         * instead have to identify the row type, and then extract the relevant data for that row.
+         */
         String phone = null;
         String email = null;
         if (ContactsContract.CommonDataKinds.Phone.MIMETYPE.equals(mimeType)) {
