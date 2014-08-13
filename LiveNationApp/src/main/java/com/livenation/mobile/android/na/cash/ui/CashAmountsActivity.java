@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;
-    private MenuItem nextItem;
 
     private final BroadcastReceiver requestsCompletedReceiver = new BroadcastReceiver() {
         @Override
@@ -63,7 +62,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cash, menu);
 
-        this.nextItem = menu.findItem(R.id.action_next);
+        MenuItem nextItem = menu.findItem(R.id.action_next);
         TextView actionView = (TextView) nextItem.getActionView();
         actionView.setText(R.string.cash_action_request);
         actionView.setOnClickListener(new NextClickListener());
