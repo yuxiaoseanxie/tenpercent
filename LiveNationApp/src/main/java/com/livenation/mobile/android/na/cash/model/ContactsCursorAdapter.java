@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -14,18 +15,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
-
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
-
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public class ContactsCursorAdapter extends CursorAdapter {
+
+    static {
+        if (Build.VERSION.SDK_INT >= 16) {
+            PHONE_DATA_COLUMN =  ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER;
+        } else {
+            PHONE_DATA_COLUMN = ContactsContract.CommonDataKinds.Phone.DATA;
+        }
+    }
+    
+    private static final String PHONE_DATA_COLUMN;
     private static final Uri CONTACT_DATA_URI = ContactsContract.Data.CONTENT_URI;
     private static final String[] CONTACT_PROJECTION = new String[] {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
+            PHONE_DATA_COLUMN,
             ContactsContract.CommonDataKinds.Email.DATA,
             ContactsContract.Data.MIMETYPE
     };
@@ -60,7 +68,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
                     String wildcardQuery = "%" + query.toString() + "%";
                     String selection = "(" + ContactsContract.Contacts.DISPLAY_NAME + " LIKE ? OR " +
                             ContactsContract.CommonDataKinds.Email.DATA + " LIKE ? OR " +
-                            ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER + " LIKE ?) AND (" +
+                            PHONE_DATA_COLUMN + " LIKE ?) AND (" +
                             ContactsContract.Data.MIMETYPE + " = ? OR " +
                             ContactsContract.Data.MIMETYPE + " = ?)";
 
@@ -101,7 +109,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
         String phone = null;
         String email = null;
         if (ContactsContract.CommonDataKinds.Phone.MIMETYPE.equals(mimeType)) {
-            phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+            phone = cursor.getString(cursor.getColumnIndex(PHONE_DATA_COLUMN));
         }
         if (ContactsContract.CommonDataKinds.Email.MIMETYPE.equals(mimeType)) {
             email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
@@ -137,7 +145,6 @@ public class ContactsCursorAdapter extends CursorAdapter {
 
     //endregion
 
-
     //region Overrides
 
     @Override
@@ -163,7 +170,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
         String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-        String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
+        String phoneNumber = cursor.getString(cursor.getColumnIndex(PHONE_DATA_COLUMN));
         String smallDetails = null;
 
         if (!TextUtils.isEmpty(email)) {
