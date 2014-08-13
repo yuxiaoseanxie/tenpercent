@@ -172,7 +172,7 @@ public class StubResponseProvider {
         public void andReturnEntity(@NonNull HttpEntity entity,
                                     @NonNull Map<String, String> headers,
                                     int statusCode) {
-            HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, statusCode, "OK"));
+            HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, statusCode, null));
             for (Map.Entry<String, String> header : headers.entrySet())
                 response.setHeader(header.getKey(), header.getValue());
             response.setEntity(entity);
