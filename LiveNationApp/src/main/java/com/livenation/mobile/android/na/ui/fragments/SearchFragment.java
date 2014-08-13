@@ -59,10 +59,10 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         adapter = new SearchAdapter(getActivity(), new ArrayList<SearchResult>());
         SearchActivity searchActivity = (SearchActivity) getActivity();
         switch (searchActivity.getSearchMode()) {
-            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE:
+            case SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST:
                 searchIncludes = SEARCH_INCLUDE_ARTISTS;
                 break;
-            case SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE:
+            case SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES:
                 searchIncludes = SEARCH_INCLUDE_ARTISTS_VENUES;
                 break;
             default:
@@ -92,6 +92,29 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        switch (((SearchActivity) getActivity()).getOnClickActionMode()) {
+            case SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_OPEN:
+                openSearchItem(position);
+                break;
+            case SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE:
+                favoriteItemClick(view);
+                break;
+        }
+    }
+
+    @Override
+    public void onErrorResponse(LiveNationError error) {
+    }
+
+    @Override
+    public void onResponse(List<SearchResult> response) {
+        adapter.clear();
+        for (SearchResult searchResult : response) {
+            adapter.add(searchResult);
+        }
+    }
+
+    private void openSearchItem(int position) {
         SearchResult searchResult = adapter.getItem(position);
         if (searchResult.getNumericalId() == null) {
             return;
@@ -135,19 +158,11 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             }
         }
         LiveNationAnalytics.track(AnalyticConstants.SEARCH_RESULT_TAP, AnalyticsCategory.SEARCH, props);
-
     }
 
-    @Override
-    public void onErrorResponse(LiveNationError error) {
-    }
-
-    @Override
-    public void onResponse(List<SearchResult> response) {
-        adapter.clear();
-        for (SearchResult searchResult : response) {
-            adapter.add(searchResult);
-        }
+    private void favoriteItemClick(View view) {
+        View view = view.findViewById(R.id.list_search_result_checkbox);
+        view.performClick();
     }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {
