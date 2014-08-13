@@ -21,7 +21,9 @@ public class StubHttpStack implements HttpStack {
     private ArrayList<StubResponseProvider> responseProviders = new ArrayList<StubResponseProvider>();
 
     public RequestQueue newRequestQueue() {
-        return new RequestQueue(new NoCache(), new BasicNetwork(this));
+        RequestQueue queue = new RequestQueue(new NoCache(), new BasicNetwork(this));
+        queue.start();
+        return queue;
     }
 
 

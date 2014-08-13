@@ -64,13 +64,16 @@ public class StubResponseProvider {
 
     //region Identity
 
+    private static boolean equalObjects(Object a, Object b) {
+        return (a == b) || (a != null && b != null && a.equals(b));
+    }
+
     public boolean matchesRequest(@NonNull Request<?> request) {
         try {
             return (method == request.getMethod() &&
-                    Objects.equals(url, request.getUrl()) &&
-                    Objects.equals(headers, request.getHeaders()) &&
-                    Objects.equals(outgoingBody, request.getBody()) &&
-                    Objects.equals(outgoingBodyType, request.getBodyContentType()));
+                    equalObjects(url, request.getUrl()) &&
+                    equalObjects(headers, request.getHeaders()) &&
+                    equalObjects(outgoingBody, request.getBody()));
         } catch (AuthFailureError e) {
             return false;
         }
