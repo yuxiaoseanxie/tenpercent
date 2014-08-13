@@ -59,7 +59,6 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OnBoardingActivity"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
