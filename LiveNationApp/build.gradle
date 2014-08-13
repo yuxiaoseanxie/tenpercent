@@ -128,5 +128,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:5.0.77'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'
+    compile 'com.jakewharton:butterknife:5.1.2'
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }
