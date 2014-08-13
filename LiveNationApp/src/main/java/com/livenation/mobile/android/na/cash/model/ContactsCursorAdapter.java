@@ -19,8 +19,17 @@ import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import java.io.InputStream;
 
 public class ContactsCursorAdapter extends CursorAdapter {
+
+    static {
+        if (Build.VERSION.SDK_INT >= 16) {
+            PHONE_DATA_COLUMN =  ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER;
+        } else {
+            PHONE_DATA_COLUMN = ContactsContract.CommonDataKinds.Phone.DATA;
+        }
+    }
+    
+    private static final String PHONE_DATA_COLUMN;
     private static final Uri CONTACT_DATA_URI = ContactsContract.Data.CONTENT_URI;
-    private static final String PHONE_DATA_COLUMN = getPhoneDataColumn();
     private static final String[] CONTACT_PROJECTION = new String[] {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
@@ -132,17 +141,6 @@ public class ContactsCursorAdapter extends CursorAdapter {
         } else {
             return null;
         }
-    }
-
-    //endregion
-
-    //region compatibility
-
-    private static String getPhoneDataColumn() {
-        if (Build.VERSION.SDK_INT >= 16) {
-            return ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER;
-        }
-        return ContactsContract.CommonDataKinds.Phone.DATA;
     }
 
     //endregion
