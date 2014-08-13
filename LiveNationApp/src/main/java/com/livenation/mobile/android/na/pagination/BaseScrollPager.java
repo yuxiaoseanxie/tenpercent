@@ -79,7 +79,7 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     public void onNoMorePages() {
-        onFetchEnded(false);
+        onFetchEnded(true);
         paginatedFetcher = null;
     }
 
