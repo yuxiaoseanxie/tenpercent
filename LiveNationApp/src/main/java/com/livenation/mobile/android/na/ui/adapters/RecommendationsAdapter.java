@@ -57,6 +57,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         int itemType = getItemViewType(position);
         switch (itemType) {
             case ITEM_TYPE_UPSELL_DISCREET:
@@ -222,7 +223,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     private void launchArtistSearch() {
         LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
         Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE);
+        intent.putExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST);
+        intent.putExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
         getContext().startActivity(intent);
     }
 
