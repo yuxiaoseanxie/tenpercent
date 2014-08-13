@@ -161,8 +161,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     }
 
     private void favoriteItemClick(View view) {
-        View view = view.findViewById(R.id.list_search_result_checkbox);
-        view.performClick();
+        View checkbox = view.findViewById(R.id.list_search_result_checkbox);
+        checkbox.performClick();
     }
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {

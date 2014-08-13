@@ -75,7 +75,7 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
                     RecommendationSetType recommendationSetType = RecommendationSetType.getRecommendationSetType(set.getName());
                     switch (recommendationSetType) {
                         case PERSONAL:
-                            if (set.getEvents().size() != 0) {
+                            if (set.getEvents().size() == 0) {
                                 if (!LoginHelper.isUsingFacebook(getAdapter().getContext())) {
                                     //create a large "get some favs!" upsell to show if no personal recs
                                     RecommendationItem item = createSearchWithFavoriteUpsell();
