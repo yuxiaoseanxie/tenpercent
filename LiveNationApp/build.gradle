@@ -119,7 +119,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.3.23'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.+'
-    compile('io.segment.analytics.android:all:+@aar') {
+    compile('io.segment.analytics.android:all:1.4.1+@aar') {
         transitive = true
     }
 }
