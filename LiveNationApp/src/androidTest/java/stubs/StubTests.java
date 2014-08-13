@@ -4,6 +4,7 @@ import android.test.InstrumentationTestCase;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -88,6 +89,21 @@ public class StubTests extends InstrumentationTestCase {
 
 
     private static class TestObject {
+        @SuppressWarnings("unused")
         @JsonProperty("worked") boolean worked = true;
+    }
+
+    public void testUnstubbedUrls() {
+        SyncResponseAdapter<String> adapter = new SyncResponseAdapter<String>();
+        queue.add(new StringRequest(Request.Method.GET, "http://this.will/fail", adapter, adapter));
+
+        try {
+            //noinspection UnusedDeclaration
+            String unused = adapter.get();
+        } catch (VolleyError e) {
+            return;
+        }
+
+        fail("unstubbed URL should have failed.");
     }
 }
