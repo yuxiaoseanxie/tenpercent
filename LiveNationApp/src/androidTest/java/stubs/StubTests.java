@@ -10,7 +10,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import stubs.converters.JacksonJsonConverter;
