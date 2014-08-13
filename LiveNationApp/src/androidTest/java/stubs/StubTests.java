@@ -4,7 +4,6 @@ import android.test.InstrumentationTestCase;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import java.util.Collections;
@@ -16,7 +15,7 @@ public class StubTests extends InstrumentationTestCase {
     private static final String TEST_BODY = "hello, world!";
 
     private final StubHttpStack stack = new StubHttpStack();
-    private final RequestQueue queue = stack.newRequestQueue();
+    private final RequestQueue queue = stack.getRequestQueue();
 
     @Override
     protected void setUp() throws Exception {
@@ -38,11 +37,8 @@ public class StubTests extends InstrumentationTestCase {
     public void testSuccessfulStub() {
         SyncResponseAdapter<String> adapter = new SyncResponseAdapter<String>();
         queue.add(new StringRequest(Request.Method.GET, TEST_URL, adapter, adapter));
-        try {
-            String response = adapter.get();
-            assertEquals(TEST_BODY, response);
-        } catch (VolleyError e) {
-            fail("Stubbed request failed " + e.getMessage());
-        }
+
+        String response = adapter.getOrFail();
+        assertEquals(TEST_BODY, response);
     }
 }

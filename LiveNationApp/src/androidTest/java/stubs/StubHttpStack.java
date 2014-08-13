@@ -17,13 +17,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("UnusedDeclaration")
 public class StubHttpStack implements HttpStack {
     private ArrayList<StubResponseProvider> responseProviders = new ArrayList<StubResponseProvider>();
+    private RequestQueue requestQueue = null;
 
-    public RequestQueue newRequestQueue() {
-        RequestQueue queue = new RequestQueue(new NoCache(), new BasicNetwork(this));
-        queue.start();
-        return queue;
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            this.requestQueue = new RequestQueue(new NoCache(), new BasicNetwork(this));
+            requestQueue.start();
+        }
+        return requestQueue;
     }
 
 
@@ -67,7 +71,7 @@ public class StubHttpStack implements HttpStack {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.GET)
                       .setUrl(url)
-                      .setHeaders(headers);
+                      .setOutgoingHeaders(headers);
     }
 
     public StubResponseProvider.Builder stubDelete(@NonNull String url,
@@ -75,7 +79,7 @@ public class StubHttpStack implements HttpStack {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.DELETE)
                       .setUrl(url)
-                      .setHeaders(headers);
+                      .setOutgoingHeaders(headers);
     }
 
     public StubResponseProvider.Builder stubPost(@NonNull String url,
@@ -85,7 +89,7 @@ public class StubHttpStack implements HttpStack {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.POST)
                       .setUrl(url)
-                      .setHeaders(headers)
+                      .setOutgoingHeaders(headers)
                       .setOutgoingBody(body)
                       .setOutgoingBodyType(bodyContentType);
     }
@@ -97,7 +101,7 @@ public class StubHttpStack implements HttpStack {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.PUT)
                       .setUrl(url)
-                      .setHeaders(headers)
+                      .setOutgoingHeaders(headers)
                       .setOutgoingBody(body)
                       .setOutgoingBodyType(bodyContentType);
     }
@@ -160,7 +164,7 @@ public class StubHttpStack implements HttpStack {
         public RequestNotAllowedException(@NonNull Request<?> request) {
             super("Real outgoing connections are not allowed. Unregistered " + getNameForMethod(request.getMethod())
                   + " request to " + request.getUrl()
-                  + " with headers " + safeGetHeaders(request));
+                  + " with outgoingHeaders " + safeGetHeaders(request));
 
             this.request = request;
         }

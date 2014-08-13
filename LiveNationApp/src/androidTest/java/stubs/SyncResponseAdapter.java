@@ -3,6 +3,8 @@ package stubs;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import junit.framework.TestCase;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +41,15 @@ public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.Er
             throw error;
         } else {
             return response;
+        }
+    }
+
+    public T getOrFail() {
+        try {
+            return get();
+        } catch (VolleyError e) {
+            TestCase.fail("Request failed " + e);
+            return null;
         }
     }
 

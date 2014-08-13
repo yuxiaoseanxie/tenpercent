@@ -19,28 +19,30 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 
+@SuppressWarnings("UnusedDeclaration")
 public class StubResponseProvider {
     private final int method;
     private final String url;
-    private final Map<String, String> headers;
+    private final Map<String, String> outgoingHeaders;
+
     private final String outgoingBodyType;
     private final byte[] outgoingBody;
+
     private final HttpResponse response;
     private final long emulatedLoadTime;
 
 
     public StubResponseProvider(int method,
                                 @NonNull String url,
-                                Map<String, String> headers,
+                                Map<String, String> outgoingHeaders,
                                 String outgoingBodyType,
                                 byte[] outgoingBody,
                                 HttpResponse response,
                                 long emulatedLoadTime) {
         this.method = method;
         this.url = url;
-        this.headers = headers;
+        this.outgoingHeaders = outgoingHeaders;
         this.outgoingBodyType = outgoingBodyType;
         this.outgoingBody = outgoingBody;
         this.response = response;
@@ -72,7 +74,7 @@ public class StubResponseProvider {
         try {
             return (method == request.getMethod() &&
                     equalObjects(url, request.getUrl()) &&
-                    equalObjects(headers, request.getHeaders()) &&
+                    equalObjects(outgoingHeaders, request.getHeaders()) &&
                     equalObjects(outgoingBody, request.getBody()));
         } catch (AuthFailureError e) {
             return false;
@@ -84,7 +86,7 @@ public class StubResponseProvider {
         return "StubResponseProvider{" +
                 "method=" + method +
                 ", url='" + url + '\'' +
-                ", headers=" + headers +
+                ", outgoingHeaders=" + outgoingHeaders +
                 ", outgoingBodyType='" + outgoingBodyType + '\'' +
                 ", outgoingBody=" + Arrays.toString(outgoingBody) +
                 ", response=" + response +
@@ -103,14 +105,14 @@ public class StubResponseProvider {
 
     public static class Builder {
         StubHttpStack stack;
+
         int method;
         String url;
-        Map<String, String> headers;
-
+        Map<String, String> outgoingHeaders;
         String outgoingBodyType;
         byte[] outgoingBody;
-        HttpResponse response;
 
+        HttpResponse response;
         long emulatedLoadTime;
 
 
@@ -133,8 +135,8 @@ public class StubResponseProvider {
             return this;
         }
 
-        public Builder setHeaders(Map<String, String> headers) {
-            this.headers = headers;
+        public Builder setOutgoingHeaders(Map<String, String> outgoingHeaders) {
+            this.outgoingHeaders = outgoingHeaders;
             return this;
         }
 
@@ -161,9 +163,11 @@ public class StubResponseProvider {
         //endregion
 
 
-        //region Convenience Stubbers
+        //region Convenience Stubbing
 
-        public void andReturnEntity(HttpEntity entity, Map<String, String> headers, int statusCode) {
+        public void andReturnEntity(@NonNull HttpEntity entity,
+                                    @NonNull Map<String, String> headers,
+                                    int statusCode) {
             HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, statusCode, "OK"));
             for (Map.Entry<String, String> header : headers.entrySet())
                 response.setHeader(header.getKey(), header.getValue());
@@ -172,11 +176,16 @@ public class StubResponseProvider {
             add();
         }
 
-        public void andReturnStream(InputStream stream, int length, Map<String, String> headers, int statusCode) {
-            andReturnEntity(new InputStreamEntity(stream, length), headers, statusCode);
+        public void andReturnStream(@NonNull InputStream stream,
+                                    int streamLength,
+                                    @NonNull Map<String, String> headers,
+                                    int statusCode) {
+            andReturnEntity(new InputStreamEntity(stream, streamLength), headers, statusCode);
         }
 
-        public void andReturnString(String string, Map<String, String> headers, int statusCode) throws UnsupportedEncodingException {
+        public void andReturnString(@NonNull String string,
+                                    @NonNull Map<String, String> headers,
+                                    int statusCode) throws UnsupportedEncodingException {
             andReturnEntity(new StringEntity(string), headers, statusCode);
         }
 
@@ -184,7 +193,7 @@ public class StubResponseProvider {
 
 
         public StubResponseProvider build() {
-            return new StubResponseProvider(method, url, headers, outgoingBodyType, outgoingBody, response, emulatedLoadTime);
+            return new StubResponseProvider(method, url, outgoingHeaders, outgoingBodyType, outgoingBody, response, emulatedLoadTime);
         }
 
         public void add() {
