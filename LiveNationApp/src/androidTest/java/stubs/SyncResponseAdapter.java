@@ -2,13 +2,14 @@ package stubs;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
 
 import junit.framework.TestCase;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.ErrorListener {
+public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.ErrorListener, SquareCashService.ApiCallback<T> {
     private static final long WAIT_TIMEOUT_MS = 5000;
 
     private final CountDownLatch signal = new CountDownLatch(1);

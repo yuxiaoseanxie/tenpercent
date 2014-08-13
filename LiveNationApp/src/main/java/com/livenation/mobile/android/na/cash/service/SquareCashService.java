@@ -34,7 +34,7 @@ public class SquareCashService {
     private final CustomerIdProvider customerIdProvider;
     private CashSession session;
 
-    private SquareCashService(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+    public SquareCashService(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
         this.context = context.getApplicationContext();
         this.requestQueue = requestQueue;
         this.customerIdProvider = customerIdProvider;

@@ -14,8 +14,8 @@ import org.json.JSONObject;
 
 import stubs.converters.JacksonJsonConverter;
 
-import static stubs.StubHttpStack.createBasicHeaders;
-import static stubs.StubHttpStack.emptyHeaders;
+import static stubs.StubHttpStack.createHeadersWithContentType;
+import static stubs.StubHttpStack.createEmptyHeaders;
 
 public class StubTests extends InstrumentationTestCase {
     private static final String TEST_URL = "http://example.com/test.file";
@@ -34,8 +34,8 @@ public class StubTests extends InstrumentationTestCase {
 
 
     public void testSuccessfulStringStub() {
-        stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnString(TEST_BODY, createBasicHeaders("text/plain"), 200);
+        stack.stubGet(TEST_URL, createEmptyHeaders())
+             .andReturnString(TEST_BODY, createHeadersWithContentType("text/plain"), 200);
 
         SyncResponseAdapter<String> adapter = new SyncResponseAdapter<String>();
         queue.add(new StringRequest(Request.Method.GET, TEST_URL, adapter, adapter));
@@ -47,8 +47,8 @@ public class StubTests extends InstrumentationTestCase {
     public void testSuccessfulGetJsonObjectStub() throws Exception {
         JSONObject stubbedResponse = new JSONObject();
         stubbedResponse.put("worked", true);
-        stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnJson(stubbedResponse, emptyHeaders(), 200);
+        stack.stubGet(TEST_URL, createEmptyHeaders())
+             .andReturnJson(stubbedResponse, createEmptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.GET, TEST_URL, null, adapter, adapter));
@@ -58,8 +58,8 @@ public class StubTests extends InstrumentationTestCase {
     }
 
     public void testSuccessfulGetJacksonConverterStub() {
-        stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnJson(new TestObject(), JACKSON_JSON_CONVERTER, emptyHeaders(), 200);
+        stack.stubGet(TEST_URL, createEmptyHeaders())
+             .andReturnJson(new TestObject(), JACKSON_JSON_CONVERTER, createEmptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.GET, TEST_URL, null, adapter, adapter));
@@ -76,8 +76,8 @@ public class StubTests extends InstrumentationTestCase {
         JSONObject responseBody = new JSONObject();
         responseBody.put("destroyed", true);
 
-        stack.stubPost(TEST_URL, emptyHeaders(), postBody)
-             .andReturnJson(responseBody, emptyHeaders(), 200);
+        stack.stubPost(TEST_URL, createEmptyHeaders(), postBody)
+             .andReturnJson(responseBody, createEmptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.POST, TEST_URL, postBody, adapter, adapter));

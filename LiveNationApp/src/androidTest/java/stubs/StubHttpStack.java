@@ -145,11 +145,11 @@ public class StubHttpStack implements HttpStack {
     }
 
 
-    public static Map<String, String> emptyHeaders() {
+    public static Map<String, String> createEmptyHeaders() {
         return new HashMap<String, String>();
     }
 
-    public static Map<String, String> createBasicHeaders(@NonNull String contentType) {
+    public static Map<String, String> createHeadersWithContentType(@NonNull String contentType) {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", contentType);
         return headers;
