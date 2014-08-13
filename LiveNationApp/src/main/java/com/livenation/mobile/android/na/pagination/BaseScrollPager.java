@@ -56,6 +56,11 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
             return;
         }
 
+        if (!hasMorePages) {
+            onNoMorePages();
+            return;
+        }
+
         //Create a new fetcherLoader
         paginatedFetcher = new PaginatedFetcher(getOffset(), limit);
         onFetchStarted();

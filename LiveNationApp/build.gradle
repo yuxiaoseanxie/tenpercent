@@ -4,11 +4,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.11.4'
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
 
 repositories {
@@ -16,7 +16,7 @@ repositories {
 }
 
 def computeVersionCode() {
-    return 49
+    return 50
 }
 
 def computeVersionName(def versionCode) {
@@ -38,6 +38,8 @@ android {
         versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 20
+
+        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
         for (Project project : rootProject.subprojects) {
             String name = project.name.toUpperCase().replaceAll("[^A-Z_]", "")
@@ -87,6 +89,8 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/LICENSE.txt'
+        exclude "LICENSE.txt"
     }
 
     buildTypes {
@@ -120,9 +124,9 @@ dependencies {
     compile project(':LabsPlatform')
     compile project(':facebookSDK')
     compile project(':Ticketing')
-    compile 'com.android.support:support-v13:20.+'
-    compile 'com.google.android.gms:play-services:4.3.23'
+    compile 'com.android.support:support-v13:20.0.0'
+    compile 'com.google.android.gms:play-services:5.0.77'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
-    compile 'com.crashlytics.android:crashlytics:1.+'
-    compile 'com.jakewharton:butterknife:5.1.2'
+    compile 'com.crashlytics.android:crashlytics:1.1.11'
+    androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }
