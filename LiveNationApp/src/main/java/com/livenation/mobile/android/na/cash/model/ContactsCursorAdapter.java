@@ -15,12 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
-
-import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
-
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public class ContactsCursorAdapter extends CursorAdapter {
     private static final Uri CONTACT_DATA_URI = ContactsContract.Data.CONTENT_URI;
