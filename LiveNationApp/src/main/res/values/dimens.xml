@@ -46,6 +46,9 @@
     <dimen name="account_footer_item_packing">-5dp</dimen>
     <dimen name="vertical_date_packing">-4dp</dimen>
 
+    <!-- App -->
+    <dimen name="app_navigation_drawer_width">290dp</dimen>
+
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>
 
