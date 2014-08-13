@@ -1,0 +1,191 @@
+package stubs;
+
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.message.BasicStatusLine;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
+
+public class StubResponseProvider {
+    private final int method;
+    private final String url;
+    private final Map<String, String> headers;
+    private final String outgoingBodyType;
+    private final byte[] outgoingBody;
+    private final HttpResponse response;
+    private final long emulatedLoadTime;
+
+
+    public StubResponseProvider(int method,
+                                @NonNull String url,
+                                Map<String, String> headers,
+                                String outgoingBodyType,
+                                byte[] outgoingBody,
+                                HttpResponse response,
+                                long emulatedLoadTime) {
+        this.method = method;
+        this.url = url;
+        this.headers = headers;
+        this.outgoingBodyType = outgoingBodyType;
+        this.outgoingBody = outgoingBody;
+        this.response = response;
+        this.emulatedLoadTime = emulatedLoadTime;
+    }
+
+
+    public HttpResponse provideResponse(@NonNull Request<?> request) throws IOException, AuthFailureError {
+        if (!matchesRequest(request))
+            throw new RequestMismatchException();
+
+        try {
+            Thread.sleep(emulatedLoadTime);
+        } catch (InterruptedException e) {
+            Log.w(getClass().getSimpleName(), "Emulated load time interrupted", e);
+        }
+
+        return response;
+    }
+
+
+    //region Identity
+
+    public boolean matchesRequest(@NonNull Request<?> request) {
+        try {
+            return (method == request.getMethod() &&
+                    Objects.equals(url, request.getUrl()) &&
+                    Objects.equals(headers, request.getHeaders()) &&
+                    Objects.equals(outgoingBody, request.getBody()) &&
+                    Objects.equals(outgoingBodyType, request.getBodyContentType()));
+        } catch (AuthFailureError e) {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "StubResponseProvider{" +
+                "method=" + method +
+                ", url='" + url + '\'' +
+                ", headers=" + headers +
+                ", outgoingBodyType='" + outgoingBodyType + '\'' +
+                ", outgoingBody=" + Arrays.toString(outgoingBody) +
+                ", response=" + response +
+                '}';
+    }
+
+    //endregion
+
+
+    public static class RequestMismatchException extends IOException {
+        public RequestMismatchException() {
+            super("Stub response provider invoked with unexpected request");
+        }
+    }
+
+
+    public static class Builder {
+        StubHttpStack stack;
+        int method;
+        String url;
+        Map<String, String> headers;
+
+        String outgoingBodyType;
+        byte[] outgoingBody;
+        HttpResponse response;
+
+        long emulatedLoadTime;
+
+
+        public Builder(StubHttpStack stack) {
+            this.stack = stack;
+            this.method = Request.Method.GET;
+            this.emulatedLoadTime = 200;
+        }
+
+
+        //region Setters
+
+        public Builder setMethod(int method) {
+            this.method = method;
+            return this;
+        }
+
+        public Builder setUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder setHeaders(Map<String, String> headers) {
+            this.headers = headers;
+            return this;
+        }
+
+        public Builder setOutgoingBodyType(String outgoingBodyType) {
+            this.outgoingBodyType = outgoingBodyType;
+            return this;
+        }
+
+        public Builder setOutgoingBody(byte[] outgoingBody) {
+            this.outgoingBody = outgoingBody;
+            return this;
+        }
+
+        public Builder setResponse(HttpResponse response) {
+            this.response = response;
+            return this;
+        }
+
+        public Builder setEmulatedLoadTime(long emulatedLoadTime) {
+            this.emulatedLoadTime = emulatedLoadTime;
+            return this;
+        }
+
+        //endregion
+
+
+        //region Convenience Stubbers
+
+        public void andReturnEntity(HttpEntity entity, Map<String, String> headers, int statusCode) {
+            HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, statusCode, "OK"));
+            for (Map.Entry<String, String> header : headers.entrySet())
+                response.setHeader(header.getKey(), header.getValue());
+            response.setEntity(entity);
+            setResponse(response);
+            add();
+        }
+
+        public void andReturnStream(InputStream stream, int length, Map<String, String> headers, int statusCode) {
+            andReturnEntity(new InputStreamEntity(stream, length), headers, statusCode);
+        }
+
+        public void andReturnString(String string, Map<String, String> headers, int statusCode) throws UnsupportedEncodingException {
+            andReturnEntity(new StringEntity(string), headers, statusCode);
+        }
+
+        //endregion
+
+
+        public StubResponseProvider build() {
+            return new StubResponseProvider(method, url, headers, outgoingBodyType, outgoingBody, response, emulatedLoadTime);
+        }
+
+        public void add() {
+            stack.addStub(build());
+        }
+    }
+}
