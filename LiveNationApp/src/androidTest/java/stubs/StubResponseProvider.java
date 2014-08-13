@@ -1,6 +1,7 @@
 package stubs;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -13,12 +14,15 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Map;
+
+import stubs.converters.JsonConverter;
 
 @SuppressWarnings("UnusedDeclaration")
 public class StubResponseProvider {
@@ -185,8 +189,31 @@ public class StubResponseProvider {
 
         public void andReturnString(@NonNull String string,
                                     @NonNull Map<String, String> headers,
-                                    int statusCode) throws UnsupportedEncodingException {
-            andReturnEntity(new StringEntity(string), headers, statusCode);
+                                    int statusCode) {
+            try {
+                andReturnEntity(new StringEntity(string), headers, statusCode);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void andReturnJson(@NonNull JSONObject object,
+                                  @NonNull Map<String, String> headers,
+                                  int statusCode) {
+            headers.put("Content-Type", "application/json");
+            andReturnString(object.toString(), headers, statusCode);
+        }
+
+        public void andReturnJson(@Nullable Object object,
+                                  @NonNull JsonConverter converter,
+                                  @NonNull Map<String, String> headers,
+                                  int statusCode) {
+            try {
+                headers.put("Content-Type", "application/json");
+                andReturnString(converter.convertToJsonString(object), headers, statusCode);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         //endregion

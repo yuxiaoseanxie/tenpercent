@@ -1,6 +1,7 @@
 package stubs;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -10,12 +11,15 @@ import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.NoCache;
 
 import org.apache.http.HttpResponse;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import stubs.converters.JsonConverter;
 
 @SuppressWarnings("UnusedDeclaration")
 public class StubHttpStack implements HttpStack {
@@ -70,16 +74,16 @@ public class StubHttpStack implements HttpStack {
                                                 @NonNull Map<String, String> headers) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.GET)
-                      .setUrl(url)
-                      .setOutgoingHeaders(headers);
+                .setUrl(url)
+                .setOutgoingHeaders(headers);
     }
 
     public StubResponseProvider.Builder stubDelete(@NonNull String url,
                                                    @NonNull Map<String, String> headers) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.DELETE)
-                      .setUrl(url)
-                      .setOutgoingHeaders(headers);
+                .setUrl(url)
+                .setOutgoingHeaders(headers);
     }
 
     public StubResponseProvider.Builder stubPost(@NonNull String url,
@@ -88,10 +92,27 @@ public class StubHttpStack implements HttpStack {
                                                  @NonNull String bodyContentType) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.POST)
-                      .setUrl(url)
-                      .setOutgoingHeaders(headers)
-                      .setOutgoingBody(body)
-                      .setOutgoingBodyType(bodyContentType);
+                .setUrl(url)
+                .setOutgoingHeaders(headers)
+                .setOutgoingBody(body)
+                .setOutgoingBodyType(bodyContentType);
+    }
+
+    public StubResponseProvider.Builder stubPost(@NonNull String url,
+                                                 @NonNull Map<String, String> headers,
+                                                 @NonNull JSONObject json) {
+        return stubPost(url, headers, json.toString().getBytes(), "application/json");
+    }
+
+    public StubResponseProvider.Builder stubPost(@NonNull String url,
+                                                 @NonNull Map<String, String> headers,
+                                                 @Nullable Object json,
+                                                 @NonNull JsonConverter converter) {
+        try {
+            return stubPost(url, headers, converter.convertToJsonString(json).getBytes(), "application/json");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public StubResponseProvider.Builder stubPut(@NonNull String url,
@@ -100,10 +121,27 @@ public class StubHttpStack implements HttpStack {
                                                 @NonNull String bodyContentType) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.PUT)
-                      .setUrl(url)
-                      .setOutgoingHeaders(headers)
-                      .setOutgoingBody(body)
-                      .setOutgoingBodyType(bodyContentType);
+                .setUrl(url)
+                .setOutgoingHeaders(headers)
+                .setOutgoingBody(body)
+                .setOutgoingBodyType(bodyContentType);
+    }
+
+    public StubResponseProvider.Builder stubPut(@NonNull String url,
+                                                @NonNull Map<String, String> headers,
+                                                @NonNull JSONObject json) {
+        return stubPut(url, headers, json.toString().getBytes(), "application/json");
+    }
+
+    public StubResponseProvider.Builder stubPut(@NonNull String url,
+                                                @NonNull Map<String, String> headers,
+                                                @Nullable Object json,
+                                                @NonNull JsonConverter converter) {
+        try {
+            return stubPut(url, headers, converter.convertToJsonString(json).getBytes(), "application/json");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -163,8 +201,8 @@ public class StubHttpStack implements HttpStack {
 
         public RequestNotAllowedException(@NonNull Request<?> request) {
             super("Real outgoing connections are not allowed. Unregistered " + getNameForMethod(request.getMethod())
-                  + " request to " + request.getUrl()
-                  + " with outgoingHeaders " + safeGetHeaders(request));
+                    + " request to " + request.getUrl()
+                    + " with outgoingHeaders " + safeGetHeaders(request));
 
             this.request = request;
         }
