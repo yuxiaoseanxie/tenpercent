@@ -1,22 +1,14 @@
 package stubs;
 
 import android.test.InstrumentationTestCase;
-import android.widget.Adapter;
 
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.impl.io.HttpResponseParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,13 +44,9 @@ public class StubTests extends InstrumentationTestCase {
         assertEquals(TEST_BODY, response);
     }
 
-    public void testSuccessfulGetJsonObjectStub() {
+    public void testSuccessfulGetJsonObjectStub() throws Exception {
         JSONObject stubbedResponse = new JSONObject();
-        try {
-            stubbedResponse.put("worked", true);
-        } catch (JSONException e) {
-            fail("stupid JSONObject");
-        }
+        stubbedResponse.put("worked", true);
         stack.stubGet(TEST_URL, emptyHeaders())
              .andReturnJson(stubbedResponse, emptyHeaders(), 200);
 
@@ -78,6 +66,24 @@ public class StubTests extends InstrumentationTestCase {
 
         JSONObject response = adapter.getOrFail();
         assertTrue(response.optBoolean("worked"));
+    }
+
+    public void testSuccessfulPostStub() throws Exception {
+        JSONObject postBody = new JSONObject();
+        postBody.put("product_id", "12345678");
+        postBody.put("action", "BLOW_UP");
+
+        JSONObject responseBody = new JSONObject();
+        responseBody.put("destroyed", true);
+
+        stack.stubPost(TEST_URL, emptyHeaders(), postBody)
+             .andReturnJson(responseBody, emptyHeaders(), 200);
+
+        SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
+        queue.add(new JsonObjectRequest(Request.Method.POST, TEST_URL, postBody, adapter, adapter));
+
+        JSONObject response = adapter.getOrFail();
+        assertTrue(response.getBoolean("destroyed"));
     }
 
 

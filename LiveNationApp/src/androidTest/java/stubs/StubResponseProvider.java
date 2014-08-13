@@ -79,7 +79,7 @@ public class StubResponseProvider {
             return (method == request.getMethod() &&
                     equalObjects(url, request.getUrl()) &&
                     equalObjects(outgoingHeaders, request.getHeaders()) &&
-                    equalObjects(outgoingBody, request.getBody()));
+                    Arrays.equals(outgoingBody, request.getBody()));
         } catch (AuthFailureError e) {
             return false;
         }
