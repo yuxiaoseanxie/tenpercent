@@ -113,56 +113,6 @@ public class ContactsCursorAdapter extends CursorAdapter {
         return new ContactData(id, displayName, email, phone, photoUri);
     }
 
-    private ArrayList<String> getEmails(@NonNull String id) {
-        String[] projection = new String[]{
-                ContactsContract.CommonDataKinds.Email.DATA
-        };
-        String selection = ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?";
-        String[] selectionArgs = new String[] { id };
-        Cursor cursorEmail = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null);
-
-        ArrayList<String> emails = new ArrayList<String>();
-        if (cursorEmail != null) {
-            while (cursorEmail.moveToNext()) {
-                String email = cursorEmail.getString(cursorEmail.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                emails.add(email);
-            }
-            cursorEmail.close();
-        }
-
-        return emails;
-    }
-
-    private ArrayList<PhoneNumber> getPhoneNumbers(@NonNull String id) {
-        String[] projection = new String[]{
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-        };
-        String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?";
-        String[] selectionArgs = new String[] { id };
-        Cursor cursorPhone = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                null);
-
-        ArrayList<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
-        if (cursorPhone != null) {
-            while (cursorPhone.moveToNext()) {
-                String displayName = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String number = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                phoneNumbers.add(new PhoneNumber(number, displayName));
-            }
-            cursorPhone.close();
-        }
-
-        return phoneNumbers;
-    }
-
     private Uri getPhotoUri(String id) {
         String selection = (ContactsContract.Data.CONTACT_ID + "= ? AND "
                           + ContactsContract.Data.MIMETYPE + "='"
