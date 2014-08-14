@@ -46,7 +46,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     private View googleButton;
     private TextView skip;
     private View scanningView;
-    private View backgroundView;
     private View titleView;
     private View ticketsView;
     private View recommandationsView;
@@ -69,7 +68,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         googleButton = findViewById(R.id.on_boarding_google_sign_in_button);
         skip = (TextView) findViewById(R.id.on_boarding_skip_textview);
         scanningView = findViewById(R.id.on_boarding_scanning_view);
-        backgroundView = findViewById(R.id.on_boarding_background);
         scanningView.setVisibility(View.INVISIBLE);
         titleView = findViewById(R.id.on_boarding_description_textview);
         loginContainerView = findViewById(R.id.on_boarding_login_container);
@@ -81,20 +79,28 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         googleButton.setOnClickListener(this);
         skip.setOnClickListener(this);
 
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startAnimations();
-                    }
-                });
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(task, DELAY_ANIMATION);
-
+        if (savedInstanceState == null) {
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startAnimations();
+                        }
+                    });
+                }
+            };
+            Timer timer = new Timer();
+            timer.schedule(task, DELAY_ANIMATION);
+        } else {
+            //skip animations if reloaded due to config change (rotation)
+            titleView.setVisibility(View.VISIBLE);
+            ticketsView.setVisibility(View.VISIBLE);
+            presalesView.setVisibility(View.VISIBLE);
+            recommandationsView.setVisibility(View.VISIBLE);
+            loginContainerView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -103,7 +109,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     }
 
     private void startAnimations() {
-        fadeInBackground();
+        fadeInTitle();
     }
 
     private void showHideScanning() {
@@ -152,28 +158,6 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
         int paddingBottom = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", 0, scrollviewHeight - height + statusbarHeight - paddingBottom).setDuration(SCROLLING_DURATION_ANIMATION);
         objectAnimator.start();
-    }
-
-    public void fadeInBackground() {
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
-        alphaAnimation.setDuration(BACKGROUND_DURATION_ANIMATION);
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                backgroundView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                fadeInTitle();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        backgroundView.startAnimation(alphaAnimation);
     }
 
     public void fadeInTitle() {

@@ -1,8 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!--
-         Customize dimensions originally defined in res/values/dimens.xml (such as
-         screen margins) for sw600dp devices (e.g. 7" tablets) here.
-    -->
-
+    <dimen name="on_boarding_item_negatif_margin">60dp</dimen>
+    <dimen name="on_boarding_content_margin_top">64dp</dimen>
+    <dimen name="on_boarding_login_margin_top">64dp</dimen>
 </resources>
