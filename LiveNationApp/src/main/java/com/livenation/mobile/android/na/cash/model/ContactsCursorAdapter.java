@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.cash.ui.views.ContactView;
+
 import java.io.InputStream;
 
 import butterknife.ButterKnife;
@@ -202,10 +202,10 @@ public class ContactsCursorAdapter extends CursorAdapter {
                 Bitmap bitmap = BitmapFactory.decodeStream(contactPhotoStream);
                 holder.contactPhoto.setImageBitmap(bitmap);
             } else {
-                holder.contactPhoto.setImageDrawable(null);
+                holder.contactPhoto.setImageResource(R.drawable.ic_contact_picture);
             }
         } else {
-            holder.contactPhoto.setImageDrawable(null);
+            holder.contactPhoto.setImageResource(R.drawable.ic_contact_picture);
         }
     }
 

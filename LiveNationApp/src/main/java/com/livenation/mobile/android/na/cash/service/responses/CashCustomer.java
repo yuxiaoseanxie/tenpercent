@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.livenation.mobile.android.na.cash.model.ContactData;
-import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 public class CashCustomer extends CashResponse {
     public static final String ROLE_RECIPIENT = "RECIPIENT";

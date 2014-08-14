@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
 import java.math.BigDecimal;

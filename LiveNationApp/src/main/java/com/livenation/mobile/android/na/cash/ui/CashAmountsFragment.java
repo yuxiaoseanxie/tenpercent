@@ -17,7 +17,6 @@ import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashQuantityDialogFragment;
-import com.livenation.mobile.android.na.cash.ui.views.CharacterDrawable;
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
@@ -81,7 +80,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         super.onViewCreated(view, savedInstanceState);
 
         this.headerView = new ContactView(getActivity());
-        headerView.getPhotoImageView().setImageDrawable(new CharacterDrawable('Y', 0xFFeaeaea));
+        headerView.getPhotoImageView().setImageResource(R.drawable.ic_contact_picture);
         headerView.setName(getString(R.string.cash_contact_name_you));
         headerView.setPrice(TicketingUtils.formatCurrency(null, pricePerTicket));
         headerView.setQuantity(1);

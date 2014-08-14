@@ -48,10 +48,10 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
                 Bitmap bitmap = BitmapFactory.decodeStream(contactPhotoStream);
                 view.getPhotoImageView().setImageBitmap(bitmap);
             } else {
-                view.getPhotoImageView().setImageDrawable(contactData.makePlaceholderImage());
+                view.getPhotoImageView().setImageResource(R.drawable.ic_contact_picture);
             }
         } else {
-            view.getPhotoImageView().setImageDrawable(contactData.makePlaceholderImage());
+            view.getPhotoImageView().setImageResource(R.drawable.ic_contact_picture);
         }
 
         view.setPrice(dataProvider.getPrice(position, contactData));

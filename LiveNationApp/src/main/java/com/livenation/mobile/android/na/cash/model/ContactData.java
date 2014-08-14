@@ -1,15 +1,11 @@
 package com.livenation.mobile.android.na.cash.model;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.na.cash.ui.views.CharacterDrawable;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class ContactData implements Serializable {
     private final String id;
@@ -30,10 +26,6 @@ public class ContactData implements Serializable {
         this.photoUri = photoUri != null? photoUri.toString() : null;
     }
 
-
-    public Drawable makePlaceholderImage() {
-        return new CharacterDrawable(getName().charAt(0), 0xFFeaeaea);
-    }
 
     public String getId() {
         return id;
