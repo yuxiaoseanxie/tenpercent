@@ -40,8 +40,8 @@ public class LocationManager implements LocationProvider {
 
     public LocationManager(Context context) {
         int locationMode = readLocationMode(context);
-        applyLocationMode(locationMode);
         userLocationProvider = new UserLocationAppProvider(context);
+        applyLocationMode(locationMode);
         locationHistory = new LocationHistoryManager(context);
         this.context = context;
     }
