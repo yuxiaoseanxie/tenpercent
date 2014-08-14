@@ -33,8 +33,10 @@ import butterknife.InjectView;
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
-    @InjectView(R.id.fragment_cash_amounts_artist_text) TextView artist;
-    @InjectView(R.id.fragment_cash_amounts_summary_text) TextView summary;
+    @InjectView(R.id.fragment_cash_amounts_artist_text) TextView artistText;
+    @InjectView(R.id.fragment_cash_amounts_date_text) TextView dateText;
+    @InjectView(R.id.fragment_cash_amounts_price_per_ticket_text) TextView pricePerTicketText;
+    @InjectView(R.id.cash_request_total_text) TextView totalText;
 
     private ContactDataAdapter adapter;
     private ContactView headerView;
@@ -65,7 +67,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         View view = inflater.inflate(R.layout.fragment_cash_amounts, container, false);
         ButterKnife.inject(this, view);
 
-        artist.setText(getCashAmountsActivity().getEvent().getDisplayName());
+        artistText.setText(getCashAmountsActivity().getEvent().getDisplayName());
+        dateText.setText(TicketingUtils.formatDate(getCashAmountsActivity().getEvent().getLocalStartTime()));
 
         calculatePricePerTicket();
         calculateQuantities();
@@ -122,6 +125,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         BigDecimal total = getCashAmountsActivity().getTotal().getGrandTotal();
         BigDecimal quantity = BigDecimal.valueOf(getCashAmountsActivity().getTicketQuantity());
         this.pricePerTicket = total.divide(quantity, RoundingMode.HALF_EVEN);
+        pricePerTicketText.setText(getString(R.string.cash_request_price_per_ticket_fmt, TicketingUtils.formatCurrency(null, pricePerTicket)));
     }
 
     private void calculateQuantities() {
@@ -136,7 +140,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         BigDecimal totalAmount = pricePerTicket.multiply(BigDecimal.valueOf(usedQuantity));
         String amountString = TicketingUtils.formatCurrency(null, totalAmount);
-        summary.setText(getString(R.string.cash_request_amount_summary_fmt, amountString));
+        totalText.setText(amountString);
     }
 
     private void recalculateRemainingQuantity() {
@@ -149,7 +153,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
         BigDecimal totalAmount = pricePerTicket.multiply(BigDecimal.valueOf(usedQuantity));
         String amountString = TicketingUtils.formatCurrency(null, totalAmount);
-        summary.setText(getString(R.string.cash_request_amount_summary_fmt, amountString));
+        totalText.setText(amountString);
     }
 
     //endregion

@@ -249,7 +249,7 @@
     <string name="cash_field_label_note">Note</string>
     <string name="cash_field_value_note_fmt">Your share of %1$s</string>
     
-    <string name="cash_request_amount_summary_fmt">Requesting %1$s from friends</string>
+    <string name="cash_request_price_per_ticket_fmt">%1$s per ticket</string>
     <string name="cash_content_description_contact_photo">Contact Photo</string>
     <string name="cash_select_quantity">Select Ticket Quantity</string>
     
@@ -271,6 +271,7 @@
 
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
     <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>
+    <string name="cash_request_total">Request Total</string>
 
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 Ticket | %2$s</item>

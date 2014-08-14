@@ -18,21 +18,57 @@
         android:text="@string/mock_artist_title_1"/>
 
     <TextView
-        android:id="@+id/fragment_cash_amounts_summary_text"
+        android:id="@+id/fragment_cash_amounts_date_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/gap_smaller"
+        android:gravity="center"
+        android:textAppearance="@style/ln.text.small"
+        android:text="@string/mock_event_date"/>
+
+    <TextView
+        android:id="@+id/fragment_cash_amounts_price_per_ticket_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:gravity="center"
-        android:textAppearance="@style/ln.text.small"
-        android:text="@string/cash_request_amount_summary_fmt"/>
+        android:textAppearance="@style/ln.text.small.bold"
+        android:text="@string/cash_request_price_per_ticket_fmt"/>
 
     <View style="@style/Divider" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/inter_item_padding_medium"
+        android:background="@drawable/cab_background_bottom_actionbar"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cash_request_total"
+            android:textAppearance="@style/ln.text.small.bold"/>
+
+        <TextView
+            android:id="@+id/cash_request_total_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ln.text.small.gray"
+            android:text="@string/mock_price" />
+
+    </LinearLayout>
 
 </LinearLayout>
