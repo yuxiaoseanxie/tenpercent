@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.cash.ui.views;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -16,10 +16,12 @@ import butterknife.InjectView;
 
 @SuppressWarnings("UnusedDeclaration")
 public class ContactView extends FrameLayout {
-    @InjectView(R.id.view_cash_contact_name) TextView name;
-    @InjectView(R.id.view_cash_contact_small_details) TextView smallDetails;
-    @InjectView(R.id.view_cash_contact_big_details) TextView bigDetails;
     @InjectView(R.id.view_cash_contact_photo) CircularImageView photoImageView;
+    @InjectView(R.id.view_cash_contact_name) TextView name;
+    @InjectView(R.id.view_cash_contact_price) TextView priceText;
+
+    @InjectView(R.id.view_cash_contact_quantity) TextView quantity;
+    @InjectView(R.id.view_cash_contact_quantity_tag) TextView quantityTag;
 
 
     public ContactView(Context context) {
@@ -48,29 +50,31 @@ public class ContactView extends FrameLayout {
         return name.getText();
     }
 
-    public void setSmallDetails(CharSequence smallDetails) {
-        this.smallDetails.setText(smallDetails);
+    public void setPrice(String price) {
+        priceText.setText(price);
     }
 
-    public CharSequence getSmallDetails() {
-        return smallDetails.getText();
+    public String getPrice() {
+        return priceText.getText().toString();
     }
 
-    public void setBigDetails(CharSequence bigDetails) {
-        if (TextUtils.isEmpty(bigDetails)) {
-            this.bigDetails.setVisibility(GONE);
-        } else {
-            this.bigDetails.setVisibility(VISIBLE);
-            this.bigDetails.setText(bigDetails);
-        }
-    }
-
-    public CharSequence getBigDetails() {
-        return bigDetails.getText();
+    public void setQuantity(int quantity) {
+        this.quantity.setText(Integer.toString(quantity));
+        this.quantityTag.setText(getResources().getQuantityText(R.plurals.cash_tickets, quantity));
     }
 
     public ImageView getPhotoImageView() {
         return photoImageView;
+    }
+
+    public void setEditable(boolean editable) {
+        if (editable) {
+            quantity.setBackgroundResource(R.drawable.cash_quantity_background_editable);
+            quantity.setTextColor(getResources().getColor(R.color.white));
+        } else {
+            quantity.setBackgroundResource(R.drawable.cash_quantity_background_non_editable);
+            quantity.setTextColor(getResources().getColor(R.color.disabled));
+        }
     }
 
     //endregion

@@ -83,8 +83,9 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         this.headerView = new ContactView(getActivity());
         headerView.getPhotoImageView().setImageDrawable(new CharacterDrawable('Y', 0xFFeaeaea));
         headerView.setName(getString(R.string.cash_contact_name_you));
-        headerView.setSmallDetails(TicketingUtils.formatCurrency(null, pricePerTicket));
-        headerView.setBigDetails("1");
+        headerView.setPrice(TicketingUtils.formatCurrency(null, pricePerTicket));
+        headerView.setQuantity(1);
+        headerView.setEditable(false);
         getListView().addHeaderView(headerView, null, false);
 
         this.footerView = LayoutInflater.from(getActivity()).inflate(android.R.layout.simple_list_item_1, getListView(), false);
@@ -178,17 +179,18 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     //region List View
 
-    @Override
-    public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
-        int quantity = quantities.get(contact.getId());
-        return Integer.toString(quantity);
-    }
 
+    @NonNull
     @Override
-    public @NonNull String getSmallDetails(int position, @NonNull ContactData contact) {
+    public String getPrice(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
         return TicketingUtils.formatCurrency(null, price);
+    }
+
+    @Override
+    public int getQuantity(int position, @NonNull ContactData contact) {
+        return quantities.get(contact.getId());
     }
 
 

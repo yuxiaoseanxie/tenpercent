@@ -11,12 +11,20 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import java.io.InputStream;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class ContactsCursorAdapter extends CursorAdapter {
 
@@ -42,6 +50,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
 
 
     private final ContentResolver contentResolver;
+    private final LayoutInflater inflater;
 
     //region Lifecycle
 
@@ -53,6 +62,7 @@ public class ContactsCursorAdapter extends CursorAdapter {
         super(context, c, flags);
 
         this.contentResolver = context.getContentResolver();
+        this.inflater = LayoutInflater.from(context);
 
         setFilterQueryProvider(new FilterQueryProvider() {
             @Override
@@ -160,13 +170,15 @@ public class ContactsCursorAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        ContactView contactView = new ContactView(context);
-        contactView.setBigDetails("");
-        return contactView;
+        View view = inflater.inflate(R.layout.layout_item_cash_autocomplete_contact, viewGroup, false);
+        view.setTag(new ViewHolder(view));
+        return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        ViewHolder holder = (ViewHolder) view.getTag();
+
         String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
         String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
         String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
@@ -180,23 +192,33 @@ public class ContactsCursorAdapter extends CursorAdapter {
             smallDetails = phoneNumber;
         }
 
-        ContactView contactView = (ContactView) view;
-        contactView.setName(displayName);
-        contactView.setSmallDetails(smallDetails);
+        holder.contactName.setText(displayName);
+        holder.contactInfo.setText(smallDetails);
 
         Uri photoUri = getPhotoUri(id);
         if (photoUri != null) {
             InputStream contactPhotoStream = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver, photoUri, true);
             if (contactPhotoStream != null) {
                 Bitmap bitmap = BitmapFactory.decodeStream(contactPhotoStream);
-                contactView.getPhotoImageView().setImageBitmap(bitmap);
+                holder.contactPhoto.setImageBitmap(bitmap);
             } else {
-                contactView.getPhotoImageView().setImageDrawable(null);
+                holder.contactPhoto.setImageDrawable(null);
             }
         } else {
-            contactView.getPhotoImageView().setImageDrawable(null);
+            holder.contactPhoto.setImageDrawable(null);
         }
     }
 
     //endregion
+
+
+    class ViewHolder {
+        @InjectView(R.id.view_cash_autocomplete_contact_photo) ImageView contactPhoto;
+        @InjectView(R.id.view_cash_autocomplete_contact_name) TextView contactName;
+        @InjectView(R.id.view_cash_autocomplete_contact_info) TextView contactInfo;
+
+        ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+    }
 }

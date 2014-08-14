@@ -143,17 +143,18 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
 
     //region Contacts Adapter
 
-    @Override
-    public @NonNull String getBigDetails(int position, @NonNull ContactData contact) {
-        int quantity = quantities.get(contact.getId());
-        return Integer.toString(quantity);
-    }
 
+    @NonNull
     @Override
-    public @NonNull String getSmallDetails(int position, @NonNull ContactData contact) {
+    public String getPrice(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         BigDecimal price = BigDecimal.valueOf((pricePerTicket * quantity) / 100.0);
         return TicketingUtils.formatCurrency(null, price);
+    }
+
+    @Override
+    public int getQuantity(int position, @NonNull ContactData contact) {
+        return quantities.get(contact.getId());
     }
 
     //endregion

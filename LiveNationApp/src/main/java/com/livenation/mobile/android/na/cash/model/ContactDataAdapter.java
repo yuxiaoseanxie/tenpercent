@@ -54,14 +54,14 @@ public class ContactDataAdapter extends ArrayAdapter<ContactData> {
             view.getPhotoImageView().setImageDrawable(contactData.makePlaceholderImage());
         }
 
-        view.setSmallDetails(dataProvider.getSmallDetails(position, contactData));
-        view.setBigDetails(dataProvider.getBigDetails(position, contactData));
+        view.setPrice(dataProvider.getPrice(position, contactData));
+        view.setQuantity(dataProvider.getQuantity(position, contactData));
 
         return view;
     }
 
     public interface DataProvider {
-        @NonNull String getSmallDetails(int position, @NonNull ContactData contact);
-        @NonNull String getBigDetails(int position, @NonNull ContactData contact);
+        @NonNull String getPrice(int position, @NonNull ContactData contact);
+        int getQuantity(int position, @NonNull ContactData contact);
     }
 }
