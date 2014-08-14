@@ -201,7 +201,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         int currentQuantity = quantities.get(contact.getId());
         int maxQuantity = currentQuantity + getRemainingQuantity();
 
-        CashQuantityDialogFragment dialogFragment = CashQuantityDialogFragment.newInstance(maxQuantity, currentQuantity);
+        CashQuantityDialogFragment dialogFragment = CashQuantityDialogFragment.newInstance(maxQuantity, currentQuantity, pricePerTicket);
         dialogFragment.setTargetFragment(this, SELECT_QUANTITY_REQUEST_CODE);
         dialogFragment.show(getFragmentManager(), CashQuantityDialogFragment.TAG);
     }

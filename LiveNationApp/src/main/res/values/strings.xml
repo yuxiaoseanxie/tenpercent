@@ -285,9 +285,9 @@
         <item quantity="one">Ticket</item>
         <item quantity="other">Tickets</item>
     </plurals>
-    <plurals name="cash_ticket_quantity">
-        <item quantity="one">1 Ticket</item>
-        <item quantity="other">%1$d Tickets</item>
+    <plurals name="cash_ticket_quantity_picker">
+        <item quantity="one">1 Ticket … %2$s</item>
+        <item quantity="other">%1$d Tickets … %2$s</item>
     </plurals>
 
 </resources>

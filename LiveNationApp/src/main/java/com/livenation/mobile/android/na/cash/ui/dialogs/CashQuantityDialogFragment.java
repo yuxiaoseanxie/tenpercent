@@ -11,21 +11,26 @@ import android.support.v4.app.DialogFragment;
 import android.widget.NumberPicker;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+
+import java.math.BigDecimal;
 
 public class CashQuantityDialogFragment extends DialogFragment implements NumberPicker.OnValueChangeListener {
     public static final String TAG = CashQuantityDialogFragment.class.getSimpleName();
 
     public static final String ARG_QUANTITY = "com.livenation.mobile.android.na.cash.CashQuantityDialogFragment.ARG_QUANTITY";
     public static final String ARG_VALUE = "com.livenation.mobile.android.na.cash.CashQuantityDialogFragment.ARG_VALUE";
+    public static final String ARG_PRICE_PER_TICKET = "com.livenation.mobile.android.na.cash.CashQuantityDialogFragment.ARG_PRICE_PER_TICKET";
 
     //region Lifecycle
 
-    public static CashQuantityDialogFragment newInstance(int quantity, int value) {
+    public static CashQuantityDialogFragment newInstance(int quantity, int value, BigDecimal pricePerTicket) {
         CashQuantityDialogFragment fragment = new CashQuantityDialogFragment();
 
         Bundle arguments = new Bundle();
         arguments.putInt(ARG_QUANTITY, quantity);
         arguments.putInt(ARG_VALUE, value);
+        arguments.putSerializable(ARG_PRICE_PER_TICKET, pricePerTicket);
         fragment.setArguments(arguments);
 
         return fragment;
@@ -42,8 +47,11 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
         numberPicker.setValue(getValue());
         numberPicker.setOnValueChangedListener(this);
         String[] displayedValues = new String[getQuantity()];
+        BigDecimal pricePerTicket = getPricePerTicket();
         for (int i = 1, quantity = getQuantity(); i <= quantity; i++) {
-            displayedValues[i - 1] = getResources().getQuantityString(R.plurals.cash_ticket_quantity, i, i);
+            BigDecimal amount = pricePerTicket.multiply(BigDecimal.valueOf(i));
+            String amountString = TicketingUtils.formatCurrency(null, amount);
+            displayedValues[i - 1] = getResources().getQuantityString(R.plurals.cash_ticket_quantity_picker, i, i, amountString);
         }
         numberPicker.setDisplayedValues(displayedValues);
         builder.setView(numberPicker);
@@ -84,6 +92,10 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
 
     public void setValue(int value) {
         getArguments().putInt(ARG_VALUE, value);
+    }
+
+    public BigDecimal getPricePerTicket() {
+        return (BigDecimal) getArguments().getSerializable(ARG_PRICE_PER_TICKET);
     }
 
     //endregion
