@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/inter_item_padding_medium"
+        android:padding="@dimen/activity_horizontal_margin"
         android:background="@drawable/cab_background_bottom_actionbar"
         android:gravity="center_vertical">
 
