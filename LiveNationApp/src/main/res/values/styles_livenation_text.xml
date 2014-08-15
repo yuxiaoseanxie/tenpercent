@@ -267,7 +267,7 @@
     </style>
 
     <style name="order_confirmation_header_text.large">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">33sp</item>
     </style>
 
     <style name="order_confirmation_section_header_text">
