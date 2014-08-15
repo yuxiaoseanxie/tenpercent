@@ -18,10 +18,13 @@ import static stubs.StubHttpStack.createHeadersWithContentType;
 
 public class SquareCashServiceTests extends InstrumentationTestCase {
     private final StubHttpStack stack = new StubHttpStack();
-    private final SquareCashService service;
+    private SquareCashService service;
 
-    public SquareCashServiceTests() {
-        this.service = new SquareCashService(getInstrumentation().getContext(), stack.getRequestQueue(), new SquareCashService.CustomerIdProvider() {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        this.service = new SquareCashService(getInstrumentation().getTargetContext(), stack.getRequestQueue(), new SquareCashService.CustomerIdProvider() {
             @Override
             public void provideSquareCustomerId(Response.Listener<String> onResponse) {
                 onResponse.onResponse("this-is-a-test-session");
@@ -49,7 +52,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
 
 
     public void testSessionCreation() throws Exception {
-        JSONObject body = new JSONObject("{\"response_type\":\"token\", \"client_id\":\"a2jqttf932pokmmkp0xtzz8ku\", \"phone_number\":\"1234567890\"}");
+        JSONObject body = new JSONObject("{\"phone_number\":\"1234567890\",\"client_id\":\"a2jqttf932pokmmkp0xtzz8ku\",\"response_type\":\"token\"}");
         JSONObject response = new JSONObject("{\"access_token\": \"123thisisfake\", \"customer_id\": \"this-is-a-test-session\", \"expires_at\": \"2020-01-01T00:00:00Z\", \"token_type\": \"bearer\"}");
         stack.stubPost("http://cash.square-sandbox.com/oauth2/authorize/cash", createHeaders(), body)
              .andReturnJson(response, createEmptyHeaders(), 200);

@@ -101,12 +101,15 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
 
     @Override
     protected VolleyError parseNetworkError(VolleyError volleyError) {
-        try {
-            NetworkResponse response = volleyError.networkResponse;
-            String body = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            return parseError(body, volleyError);
-        } catch (UnsupportedEncodingException e) {
-            return super.parseNetworkError(volleyError);
+        NetworkResponse response = volleyError.networkResponse;
+        if (response != null) {
+            try {
+                String body = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                return parseError(body, volleyError);
+            } catch (UnsupportedEncodingException ignored) {
+            }
         }
+
+        return super.parseNetworkError(volleyError);
     }
 }

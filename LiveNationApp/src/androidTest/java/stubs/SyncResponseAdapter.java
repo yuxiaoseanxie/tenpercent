@@ -33,7 +33,7 @@ public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.Er
 
     public T get() throws VolleyError {
         try {
-            signal.await(WAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+            signal.await();//(WAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
