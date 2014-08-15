@@ -1,11 +1,8 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -17,7 +14,6 @@ import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.activities.OrderDetailsActivity;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.analytics.Analytics;
 import com.livenation.mobile.android.ticketing.analytics.CartAnalytic;
@@ -29,6 +25,7 @@ import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -37,7 +34,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     public static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_EVENT";
 
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
-    private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
+    private static final SimpleDateFormat DISPLAY_DATE_FORMATTER = new SimpleDateFormat("EEE, MMM d, yyyy\nhh:mm a ZZZZ", Locale.US);
+    private static final SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
 
     private Event event;
     private Cart cart;
@@ -73,10 +71,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderVenueText = (TextView) findViewById(R.id.activity_order_confirmation_venue);
         this.orderCostText = (TextView) findViewById(R.id.activity_order_confirmation_cost);
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
-        this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_account);
-
-        Button detailsButton = (Button) findViewById(R.id.activity_order_confirmation_details_button);
-        detailsButton.setOnClickListener(new DetailsClickListener());
+        this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_note);
 
         if (null == savedInstanceState) {
             trackScreenLoad();
@@ -137,9 +132,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             }
             com.mobilitus.tm.tickets.models.User user = Ticketing.getTicketService().getUser();
             if (user != null && !TextUtils.isEmpty(user.getEmail())) {
-                orderAccountText.setText(user.getEmail());
+                orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, user.getEmail()));
             } else {
-                orderAccountText.setText(R.string.data_missing_placeholder);
+                orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, getString(R.string.data_missing_placeholder)));
             }
 
             Total total = getCart().getTotal();
@@ -151,10 +146,17 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         } else {
             orderNumberText.setText(R.string.data_missing_placeholder);
             orderSeatText.setText(R.string.data_missing_placeholder);
-            orderAccountText.setText(R.string.data_missing_placeholder);
+            orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, getString(R.string.data_missing_placeholder)));
         }
 
-        orderEventDateText.setText(TicketingUtils.formatDate(getEvent().getLocalStartTime()));
+        TimeZone timeZone;
+        if (getEvent().getVenue() != null && getEvent().getVenue().getTimeZone() != null) {
+            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        } else {
+            timeZone = TimeZone.getDefault();
+        }
+        DISPLAY_DATE_FORMATTER.setTimeZone(timeZone);
+        orderEventDateText.setText(DISPLAY_DATE_FORMATTER.format(getEvent().getLocalStartTime()));
         if (getEvent() != null && getEvent().getVenue() != null) {
             orderVenueText.setText(getEvent().getVenue().getName());
         } else {
@@ -298,19 +300,5 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             }
         }
         return props;
-    }
-
-    private void trackFullDetailsTap() {
-        Ticketing.getAnalytics().track(AnalyticConstants.VIEW_FULL_DETAILS_TAP, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
-    }
-
-    private class DetailsClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            trackFullDetailsTap();
-            Intent intent = new Intent(OrderConfirmationActivity.this, OrderDetailsActivity.class);
-            intent.putExtra(Constants.EXTRA_CART, getCart());
-            startActivity(intent);
-        }
     }
 }

@@ -39,6 +39,7 @@
     <dimen name="view_featured_image_height">112dp</dimen>
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="detail_page_image_height">270dp</dimen>
+    <dimen name="confirmation_image_height">222dp</dimen>
     <dimen name="fan_man_min_height">48dp</dimen>
     <dimen name="sso_image_size">90dp</dimen>
     <dimen name="list_venue_nearby_header_padding">3dp</dimen>
