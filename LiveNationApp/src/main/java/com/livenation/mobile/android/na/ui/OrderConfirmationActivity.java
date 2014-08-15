@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -334,11 +335,40 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
 
     private static enum Action {
-        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost),
-        SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share),
-        RIDE_SHARE(R.string.confirmation_action_ride_share, R.string.confirmation_action_tag_line_ride_share, R.drawable.confirmation_book_your_ride),
-        ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar),
-        UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade);
+        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
+        SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
+        RIDE_SHARE(R.string.confirmation_action_ride_share, R.string.confirmation_action_tag_line_ride_share, R.drawable.confirmation_book_your_ride) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
+        ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
+        UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        };
 
         public final int titleResId;
         public final int tagLineResId;
@@ -349,9 +379,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             actionButton.setTitle(context.getString(titleResId));
             actionButton.setTagLine(context.getString(tagLineResId));
             actionButton.setImageResource(imageResId);
+            actionButton.setOnClickListener(newOnClickListener(context));
             return actionButton;
         }
 
+        protected abstract View.OnClickListener newOnClickListener(@NonNull Context context);
         private Action(int titleResId, int tagLineResId, int imageResId) {
             this.titleResId = titleResId;
             this.tagLineResId = tagLineResId;
