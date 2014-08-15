@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -59,6 +60,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_order_confirmation);
+        LocalBroadcastManager.getInstance(this).sendBroadcastSync(new Intent(Ticketing.ACTION_PURCHASE_CONFIRMED));
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);

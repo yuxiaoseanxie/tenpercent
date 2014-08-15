@@ -328,4 +328,8 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="rating_button" parent="android:Widget.Button">
+        <item name="android:background">@color/button_account_tab</item>
+    </style>
+
 </resources>

@@ -216,7 +216,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
-                buildAndOpenContactEmail();
+                ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 
             case R.id.menu_home_logout_item:
@@ -228,30 +228,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
     }
 
-    private void buildAndOpenContactEmail() {
-
-        final String emailAddress = getString(R.string.contact_email_address);
-        final String subject = getString(R.string.contact_email_subject);
-        final String message = "\n\n" + getString(R.string.contact_email_signature_message)
-                + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
-                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
-                + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
-        ProviderManager providerManager = new ProviderManager();
-        providerManager.getConfigReadyFor(new ConfigCallback() {
-            @Override
-            public void onResponse(LiveNationConfig response) {
-                Map<String, String> userInfo = response.getAppInitResponse().getData().getUserInfo();
-                String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
-                String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
-                ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
-            }
-
-            @Override
-            public void onErrorResponse(int errorCode) {
-                ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
-            }
-        }, ProviderManager.ProviderType.APP_INIT);
-    }
 
     private void updateUpdateRequiredHeader() {
         final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
