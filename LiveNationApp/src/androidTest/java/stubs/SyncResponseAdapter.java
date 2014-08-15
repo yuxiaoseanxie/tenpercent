@@ -7,11 +7,8 @@ import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import junit.framework.TestCase;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.ErrorListener, SquareCashService.ApiCallback<T> {
-    private static final long WAIT_TIMEOUT_MS = 5000;
-
     private final CountDownLatch signal = new CountDownLatch(1);
 
     private VolleyError error;
@@ -33,7 +30,7 @@ public class SyncResponseAdapter<T> implements Response.Listener<T>, Response.Er
 
     public T get() throws VolleyError {
         try {
-            signal.await();//(WAIT_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+            signal.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
