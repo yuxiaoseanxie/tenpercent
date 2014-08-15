@@ -30,7 +30,8 @@ public class ContactsCursorAdapter extends CursorAdapter {
             ContactsContract.Data.MIMETYPE
     };
 
-    private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+    private static final int LIMIT = 10;
+    private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC LIMIT " + LIMIT;
 
 
     private final ContentResolver contentResolver;
