@@ -1,8 +1,12 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -10,6 +14,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -25,7 +30,7 @@ import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -44,6 +49,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private TransitioningImageView image;
     private TextView headerThankYouText;
     private TextView eventNameText;
+
+    private LinearLayout actionsContainer;
 
     private TextView orderNumberText;
     private TextView orderEventDateText;
@@ -66,12 +73,16 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
 
+        this.actionsContainer = (LinearLayout) findViewById(R.id.activity_order_confirmation_actions_container);
+
         this.orderNumberText = (TextView) findViewById(R.id.activity_order_confirmation_number);
         this.orderEventDateText = (TextView) findViewById(R.id.activity_order_confirmation_date);
         this.orderVenueText = (TextView) findViewById(R.id.activity_order_confirmation_venue);
         this.orderCostText = (TextView) findViewById(R.id.activity_order_confirmation_cost);
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_note);
+
+        addActionButtons();
 
         if (null == savedInstanceState) {
             trackScreenLoad();
@@ -114,6 +125,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         eventNameText.setText(getEvent().getName());
 
         String subtitle = getResources().getQuantityString(R.plurals.order_confirmation_title_detail, numberOfTickets, numberOfTickets);
+        //noinspection ConstantConditions
         getActionBar().setSubtitle(subtitle);
     }
 
@@ -164,6 +176,16 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
     }
 
+    private void addActionButtons() {
+        int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+        for (Action action : getActions()) {
+            ConfirmationActionButton button = action.newConfirmationActionButton(this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.bottomMargin = margin;
+            actionsContainer.addView(button, layoutParams);
+        }
+    }
+
     //endregion
 
 
@@ -175,6 +197,14 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     public Cart getCart() {
         return cart;
+    }
+
+    public ArrayList<Action> getActions() {
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(Action.ADD_TO_CALENDAR);
+        actions.add(Action.SHARE);
+        actions.add(Action.SPLIT_COST);
+        return actions;
     }
 
     //endregion
@@ -300,5 +330,32 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             }
         }
         return props;
+    }
+
+
+    private static enum Action {
+        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost),
+        SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share),
+        RIDE_SHARE(R.string.confirmation_action_ride_share, R.string.confirmation_action_tag_line_ride_share, R.drawable.confirmation_book_your_ride),
+        ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar),
+        UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade);
+
+        public final int titleResId;
+        public final int tagLineResId;
+        public final int imageResId;
+
+        public ConfirmationActionButton newConfirmationActionButton(@NonNull Context context) {
+            ConfirmationActionButton actionButton = new ConfirmationActionButton(context);
+            actionButton.setTitle(context.getString(titleResId));
+            actionButton.setTagLine(context.getString(tagLineResId));
+            actionButton.setImageResource(imageResId);
+            return actionButton;
+        }
+
+        private Action(int titleResId, int tagLineResId, int imageResId) {
+            this.titleResId = titleResId;
+            this.tagLineResId = tagLineResId;
+            this.imageResId = imageResId;
+        }
     }
 }

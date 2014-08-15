@@ -62,52 +62,12 @@
             android:baselineAligned="false">
 
             <LinearLayout
+                android:id="@+id/activity_order_confirmation_actions_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:padding="@dimen/activity_vertical_margin"
-                android:orientation="vertical">
-
-                <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    app:image="@drawable/confirmation_add_to_calendar"
-                    app:tagLine="@string/confirmation_action_tag_line_add_to_calendar"
-                    app:title="@string/add_to_calendar" />
-
-                <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    app:image="@drawable/confirmation_book_your_ride"
-                    app:tagLine="@string/confirmation_action_tag_line_ride_share"
-                    app:title="@string/confirmation_action_ride_share" />
-
-                <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    app:image="@drawable/confirmation_share"
-                    app:tagLine="@string/confirmation_action_tag_line_share"
-                    app:title="@string/action_share" />
-
-                <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    app:image="@drawable/confirmation_split_cost"
-                    app:tagLine="@string/confirmation_action_tag_line_split_cost"
-                    app:title="@string/confirmation_action_split_cost" />
-
-                <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:image="@drawable/confirmation_upgrade"
-                    app:tagLine="@string/confirmation_action_tag_line_seat_upgrade"
-                    app:title="@string/confirmation_action_seat_upgrade" />
-
-            </LinearLayout>
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="0dp"
