@@ -46,7 +46,8 @@ public class ContactsCursorAdapter extends CursorAdapter {
             ContactsContract.Data.MIMETYPE
     };
 
-    private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+    private static final int LIMIT = 10;
+    private static final String CONTACTS_SORT_QUERY = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC LIMIT " + LIMIT;
 
 
     private final ContentResolver contentResolver;
@@ -68,11 +69,8 @@ public class ContactsCursorAdapter extends CursorAdapter {
             @Override
             public Cursor runQuery(CharSequence query) {
                 if (TextUtils.isEmpty(query)) {
-                    return contentResolver.query(CONTACT_DATA_URI,
-                                                 CONTACT_PROJECTION,
-                                                 null,
-                                                 null,
-                                                 CONTACTS_SORT_QUERY);
+                    //ignore null queries for performance reasons
+                    return null;
                 } else {
 
                     String wildcardQuery = "%" + query.toString() + "%";
