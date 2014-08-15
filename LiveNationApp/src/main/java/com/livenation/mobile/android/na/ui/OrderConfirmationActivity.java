@@ -83,7 +83,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_note);
 
-        addActionButtons();
+        List<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
+        addActionButtons(confirmationActions);
 
         if (null == savedInstanceState) {
             trackScreenLoad();
@@ -177,13 +178,19 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
     }
 
-    private void addActionButtons() {
+    private void addActionButtons(List<String> confirmationActions) {
         int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
-        for (Action action : getActions()) {
-            ConfirmationActionButton button = action.newConfirmationActionButton(this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            layoutParams.bottomMargin = margin;
-            actionsContainer.addView(button, layoutParams);
+        for (int i = 0, size = Math.min(confirmationActions.size(), 3); i < size; i++) {
+            String name = confirmationActions.get(i);
+            try {
+                Action action = Action.valueOf(name);
+                ConfirmationActionButton button = action.newConfirmationActionButton(this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                layoutParams.bottomMargin = margin;
+                actionsContainer.addView(button, layoutParams);
+            } catch (IllegalArgumentException e) {
+                Log.w(getClass().getSimpleName(), "Invalid action name '" + name + "', ignoring.", e);
+            }
         }
     }
 
@@ -198,14 +205,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     public Cart getCart() {
         return cart;
-    }
-
-    public ArrayList<Action> getActions() {
-        ArrayList<Action> actions = new ArrayList<Action>();
-        actions.add(Action.ADD_TO_CALENDAR);
-        actions.add(Action.SHARE);
-        actions.add(Action.SPLIT_COST);
-        return actions;
     }
 
     //endregion
@@ -335,27 +334,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
 
     private static enum Action {
-        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost) {
-            @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
-            }
-        },
-
-        SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share) {
-            @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
-            }
-        },
-
-        RIDE_SHARE(R.string.confirmation_action_ride_share, R.string.confirmation_action_tag_line_ride_share, R.drawable.confirmation_book_your_ride) {
-            @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
-            }
-        },
-
         ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar) {
             @Override
             protected View.OnClickListener newOnClickListener(@NonNull Context context) {
@@ -363,7 +341,21 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             }
         },
 
+        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
+            @Override
+            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+                return null;
+            }
+        },
+
+        SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share) {
             @Override
             protected View.OnClickListener newOnClickListener(@NonNull Context context) {
                 return null;
