@@ -18,10 +18,13 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
  * Created by cchilton on 4/2/14.
  */
 public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
-    public static final String EXTRA_SEARCH_MODE_KEY = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_SEARCH_MODE_KEY";
-    public static final int EXTRA_SEARCH_MODE_DEFAULT_VALUE = 0;
-    public static final int EXTRA_SEARCH_MODE_ARTIST_VALUE = 1;
-    public static final int EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE = 2;
+    public static final String EXTRA_KEY_SEARCH_MODE = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_KEY_SEARCH_MODE";
+    public static final String EXTRA_KEY_ON_CLICK_ACTION = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_KEY_ON_CLICK_ACTION";
+    public static final int EXTRA_VALUE_SEARCH_MODE_DEFAULT = 0;
+    public static final int EXTRA_VALUE_SEARCH_MODE_ARTIST = 1;
+    public static final int EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES = 2;
+    public static final int EXTRA_VALUE_ON_CLICK_ACTION_OPEN = 0;
+    public static final int EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE = 1;
 
     private SearchForText fragment;
     private EditText input;
@@ -48,10 +51,10 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         input.addTextChangedListener(this);
         fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
         switch (getSearchMode()) {
-            case EXTRA_SEARCH_MODE_ARTIST_VALUE:
+            case EXTRA_VALUE_SEARCH_MODE_ARTIST:
                 editText.setHint(R.string.search_input_hint_artists);
                 break;
-            case EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE:
+            case EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES:
                 editText.setHint(R.string.search_input_hint_artists_venues);
                 break;
             default:
@@ -77,10 +80,16 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
 
     public int getSearchMode() {
         if (getIntent() != null) {
-            int searchMode = getIntent().getIntExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_DEFAULT_VALUE);
-            return searchMode;
+            return getIntent().getIntExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_DEFAULT);
         }
-        return SearchActivity.EXTRA_SEARCH_MODE_DEFAULT_VALUE;
+        return SearchActivity.EXTRA_VALUE_SEARCH_MODE_DEFAULT;
+    }
+
+    public int getOnClickActionMode() {
+        if (getIntent() != null) {
+            return getIntent().getIntExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_OPEN);
+        }
+        return SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_OPEN;
     }
 
     @Override

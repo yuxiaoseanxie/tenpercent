@@ -31,7 +31,7 @@
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/underscore_container_height" />
+            android:layout_height="@dimen/one_dp" />
 
     </LinearLayout>
 

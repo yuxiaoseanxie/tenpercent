@@ -24,7 +24,7 @@
     </RelativeLayout>
 
     <View
-        android:layout_width="@dimen/ui_underscore_height"
+        android:layout_width="@dimen/one_dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/view_refresh_bar_separator_margin"
         android:background="@color/refresh_bar_separator" />

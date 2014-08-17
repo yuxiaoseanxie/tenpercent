@@ -12,31 +12,33 @@
         android:layout_height="@dimen/view_youtube_video_image_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="@dimen/view_youtube_video_padding"
+        android:layout_margin="@dimen/gap_small"
         android:background="@color/black" />
 
     <ImageView
         android:layout_width="@dimen/view_youtube_video_image_width"
         android:layout_height="@dimen/view_youtube_video_image_height"
-        android:layout_margin="@dimen/view_youtube_video_padding"
+        android:layout_margin="@dimen/gap_small"
         android:contentDescription="@string/youtube_video_play"
         android:scaleType="center"
         android:src="@drawable/youtube_play_icon" />
 
     <TextView
         android:id="@+id/view_youtube_video_title"
-        style="@style/list_show_title"
+        style="@style/ln.text.small.bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="@dimen/view_youtube_video_title_left_margin"
+        android:layout_marginLeft="@dimen/gap_small"
         android:layout_toRightOf="@id/view_youtube_video_image"
-        android:text="@string/mock_artist_title_1" />
+        android:text="@string/mock_artist_title_1"
+        android:maxLines="3"
+        android:ellipsize="end" />
 
     <View
         android:id="@+id/view_lineup_divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ui_underscore_height"
+        android:layout_height="@dimen/one_dp"
         android:layout_below="@id/view_youtube_video_image"
         android:background="@drawable/ui_underscore_background" />
 

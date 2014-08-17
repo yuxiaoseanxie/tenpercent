@@ -32,4 +32,6 @@
 
     <string name="mock_order_quantity">Thanks! You purchased tickets to</string>
     <string name="mock_order_event_name">Beyoncé and Jay-Z</string>
+
+    <string name="mock_update_message">A new version of Live Nation is available.</string>
 </resources>

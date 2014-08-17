@@ -26,10 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/view_featured_text_margin_bottom"
-            android:layout_marginLeft="@dimen/view_featured_text_margin_left_right"
-            android:layout_marginRight="@dimen/view_featured_text_margin_left_right"
+            android:layout_marginLeft="@dimen/gap_smaller"
+            android:layout_marginRight="@dimen/gap_smaller"
             android:text="@string/mock_placeholder_artist_title_1"
-            android:textAppearance="@style/featured_item_text" />
+            android:textAppearance="@style/ln.text.small.bold.white" />
     </FrameLayout>
 
 

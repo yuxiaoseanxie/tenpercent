@@ -7,10 +7,8 @@
     <string name="action_share">Share</string>
 
     <string name="featured_title">Featured</string>
-    <string name="featured_see_all">+ See all</string>
 
     <string name="show_lineup">Lineup</string>
-    <string name="show_details">Details</string>
     <string name="venue_upcoming_shows">Upcoming Shows</string>
     <string name="artist_nearby_shows">Nearby Shows</string>
     <string name="artist_all_shows">On Tour</string>
@@ -24,7 +22,7 @@
     <string name="tab_favorites_artists">Artists</string>
     <string name="tab_favorites_venues">Venues</string>
 
-    <string name="venue_detail_link">+ Venue Info</string>
+    <string name="venue_detail_link">Venue Info</string>
     <string name="artist_events_overflow">See All Shows</string>
     <string name="artist_events_no_show">No Scheduled Events</string>
     <string name="artist_videos_overflow">See All Videos</string>
@@ -34,8 +32,6 @@
 
     <string name="ticketbar_options">Options</string>
     <string name="ticketbar_find_ticket">Find Tickets</string>
-
-    <string name="home">Home</string>
 
     <string name="home_menu_search">Search</string>
     <string name="home_menu_legal">Legal &amp; Credits</string>
@@ -56,14 +52,11 @@
     <string name="account_your_orders_title">Your Orders</string>
     <string name="account_notifications">Notifications</string>
     <string name="account_favorites">Your Favorites</string>
-    <string name="account_your_orders_no_upcoming">You have no upcoming shows</string>
     <string name="account_footer_location_title">Your Location</string>
 
-    <string name="location_no_location_set">No location set</string>
     <string name="location_current">Currently Set Location</string>
     <string name="location_manual">Manually Set Location</string>
     <string name="location_previous_locations">Previous Locations</string>
-    <string name="location_youre_nearby">You\'re Nearby</string>
     <string name="location_switch">Use Current Location</string>
     <string name="location_unknown">Unknown</string>
     <string name="location_miles_away">%d mi away</string>
@@ -85,7 +78,6 @@
     <string name="debug_actionbar_title">Debug</string>
     <string name="debug_header_info">INFO</string>
     <string name="debug_header_actions">ACTIONS</string>
-    <string name="debug_copied_toast">Copied</string>
     <string name="debug_item_device_uuid">Device ID</string>
     <string name="debug_item_user_id">User ID</string>
     <string name="debug_item_access_token">Access Token</string>
@@ -162,9 +154,7 @@
     <string name="no_messages">No messages</string>
     <string name="inbox_title">Notifications</string>
     <string name="message_title">Featured</string>
-    <string name="add_message">Add Message</string>
     <string name="mark_read">Mark Read</string>
-    <string name="mark_unread">Mark Unread</string>
     <string name="add_to_calendar">Add To Calendar</string>
     <string name="delete">Delete</string>
     <string name="refresh">Refresh</string>
@@ -187,7 +177,6 @@
     <string name="notif_event_details_format" formatted="false">%s at %s</string>
     <string name="notif_error_loading_message">We had an issue loading this notification\'s message.\nPlease check your connectivity.</string>
 
-    <string name="notif_loading">Loading</string>
     <string name="notif_no_notification_title">You have no notifications.</string>
     <string name="notif_no_notification_description">To receive artist presale and event notifications make sure you\'ve added them as favorites.</string>
 
@@ -240,5 +229,13 @@
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_scanning_description">Scanning your music for recommendations</string>
 
+
+    <!-- Installed App Config -->
+    <string name="commerce_unavailable_error_title">New Version Required</string>
+    <string name="commerce_unavailable_error_message">A new version of the Live Nation app is available on the Play Store. You must update to purchase tickets and view your orders.</string>
+    <string name="commerce_unavailable_error_button_play_store">Play Store</string>
+
+    <string name="update_available">New Version Available</string>
+    <string name="update_now">Update Now</string>
 
 </resources>

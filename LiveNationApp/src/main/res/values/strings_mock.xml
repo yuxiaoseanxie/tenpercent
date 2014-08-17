@@ -32,4 +32,6 @@
 
     <string name="mock_order_quantity" />
     <string name="mock_order_event_name" />
+
+    <string name="mock_update_message" />
 </resources>

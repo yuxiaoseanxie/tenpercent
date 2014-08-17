@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/view_lineup_min_height">
+    android:minHeight="@dimen/list_item_height">
 
     <LinearLayout
         android:id="@+id/view_lineup_favorite_checkbox_container"
@@ -14,8 +14,8 @@
 
         <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
             android:id="@+id/view_lineup_favorite_checkbox"
-            android:layout_width="@dimen/favorite_checkbox_min_height"
-            android:layout_height="@dimen/favorite_checkbox_min_width"
+            android:layout_width="@dimen/minimum_pressable"
+            android:layout_height="@dimen/minimum_pressable"
             android:button="@drawable/checkbox_favorite_padding_selector" />
 
     </LinearLayout>
@@ -28,12 +28,12 @@
         android:layout_gravity="top"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:text="@string/mock_artist_title_1"
-        android:textAppearance="@style/view_lineup_text" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <View
         android:id="@+id/view_lineup_divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/underscore_container_height"
+        android:layout_height="@dimen/one_dp"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:background="@drawable/ui_underscore_background" />

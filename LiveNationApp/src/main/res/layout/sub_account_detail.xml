@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/account_detail_order_history_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height"
+        android:layout_height="@dimen/list_item_height"
         android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:minWidth="@dimen/account_detail_image_min_width"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/your_orders" />
 
@@ -26,12 +26,12 @@
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/account_detail_image_your_orders"
             android:text="@string/account_your_orders_title"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/underscore_container_height"
+            android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_your_orders_title"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
@@ -39,7 +39,7 @@
     <RelativeLayout
         android:id="@+id/account_detail_favorites_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/account_detail_min_height"
+        android:layout_height="@dimen/list_item_height"
         android:background="@drawable/livenation_selector_pressable_background">
 
         <ImageView
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:minWidth="@dimen/account_detail_image_min_width"
+            android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
             android:src="@drawable/favorites" />
 
@@ -58,12 +58,12 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/account_detail_image_favorites"
             android:text="@string/account_favorites"
-            android:textAppearance="@style/account_detail_header" />
+            android:textAppearance="@style/ln.text.large.bold" />
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/underscore_container_height"
+            android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_favorites_title"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>

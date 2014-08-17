@@ -73,9 +73,8 @@ public class MessageFragment extends Fragment {
 
         String messageId = getActivity().getIntent().getStringExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY);
         message = RichPushManager.shared().getRichPushUser().getInbox().getMessage(messageId);
-        message.markRead();
-
         if (message != null) {
+            message.markRead();
             subjectText.setText(message.getTitle());
             dateReceivedText.setText(DATE_RECEIVED_FORMAT.format(message.getSentDate()));
             loadAndCustomizeMessage();
