@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -31,12 +33,10 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
-import com.mobilitus.tm.tickets.models.Order;
 import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -377,6 +377,16 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                     @Override
                     public void onClick(View view) {
                         onShare();
+                    }
+                };
+
+            case SPLIT_COST:
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Total total = cart.getTotal();
+                        int quantity = TicketingUtils.getTicketCountForCart(cart);
+                        CashUtils.startPaybackFlow(OrderConfirmationActivity.this, total, quantity, event);
                     }
                 };
 
