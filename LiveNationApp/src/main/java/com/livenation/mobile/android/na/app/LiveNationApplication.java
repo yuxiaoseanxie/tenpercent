@@ -16,7 +16,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
@@ -34,6 +33,7 @@ import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.service.SessionPersistenceProvider;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -231,7 +231,7 @@ public class LiveNationApplication extends Application {
                     }
                 });
             }
-        });
+        }, new SessionPersistenceProvider.Preferences());
 
         //Analytics
         Props props = new Props();

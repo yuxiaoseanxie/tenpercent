@@ -31,33 +31,32 @@ import java.util.Map;
 public class SquareCashService {
     public static final String ACTION_SESSION_CHANGED = "com.livenation.mobile.android.na.cash.service.SquareCashService.ACTION_SESSION_CHANGED";
 
-    private static final String PERSISTED_SESSION = "PERSISTED_SESSION";
-
     private final Context context;
     private final RequestQueue requestQueue;
     private final CustomerIdProvider customerIdProvider;
+    private final SessionPersistenceProvider persistenceProvider;
     private CashSession session;
 
-    public SquareCashService(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
+    public SquareCashService(@NonNull Context context,
+                             @NonNull RequestQueue requestQueue,
+                             @NonNull CustomerIdProvider customerIdProvider,
+                             @NonNull SessionPersistenceProvider persistenceProvider) {
         this.context = context.getApplicationContext();
         this.requestQueue = requestQueue;
         this.customerIdProvider = customerIdProvider;
+        this.persistenceProvider = persistenceProvider;
 
-        if (getSharedPreferences().contains(PERSISTED_SESSION)) {
-            try {
-                this.session = CashSession.fromJsonString(getSharedPreferences().getString(PERSISTED_SESSION, "{}"), CashSession.class);
-                // TODO: Handle session expiration
-            } catch (IOException e) {
-                Log.w(CashUtils.LOG_TAG, "Could not load session from persistent storage", e);
-            }
-        }
+        this.session = persistenceProvider.loadSession();
     }
     private static SquareCashService instance = null;
     public static SquareCashService getInstance() {
         return instance;
     }
-    public static void init(@NonNull Context context, @NonNull RequestQueue requestQueue, @NonNull CustomerIdProvider customerIdProvider) {
-        instance = new SquareCashService(context, requestQueue, customerIdProvider);
+    public static void init(@NonNull Context context,
+                            @NonNull RequestQueue requestQueue,
+                            @NonNull CustomerIdProvider customerIdProvider,
+                            @NonNull SessionPersistenceProvider persistenceProvider) {
+        instance = new SquareCashService(context, requestQueue, customerIdProvider, persistenceProvider);
     }
 
     //region Building Requests
@@ -128,23 +127,8 @@ public class SquareCashService {
 
     //region Sessions
 
-    private SharedPreferences getSharedPreferences() {
-        return LiveNationApplication.get().getSharedPreferences(CashUtils.PREFS_ID, 0);
-    }
-
     private void setSession(@Nullable CashSession session) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        if (session != null) {
-            try {
-                editor.putString(PERSISTED_SESSION, session.toJsonString());
-            } catch (IOException e) {
-                Log.e(CashUtils.LOG_TAG, "Could not persist session", e);
-            }
-        } else {
-            editor.remove(PERSISTED_SESSION);
-        }
-        editor.apply();
-
+        persistenceProvider.saveSession(session);
         this.session = session;
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_SESSION_CHANGED));
