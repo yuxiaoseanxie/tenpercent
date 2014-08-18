@@ -74,6 +74,9 @@ public class Constants {
         public static final String USER_EMAIL = "user_email";
         public static final String USER_PIC_URL = "user_pic_url";
 
+        //Rating
+        public static final String RATING_DIALOG_CLICKED = "rating_dialog_clicked";
+
     }
 
     public class BroadCastReceiver {

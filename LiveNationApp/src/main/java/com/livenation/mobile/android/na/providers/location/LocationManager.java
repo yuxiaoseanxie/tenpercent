@@ -43,6 +43,7 @@ public class LocationManager implements LocationProvider {
         userLocationProvider = new UserLocationAppProvider(context);
         applyLocationMode(locationMode);
         locationHistory = new LocationHistoryManager(context);
+        applyLocationMode(locationMode);
         this.context = context;
     }
 

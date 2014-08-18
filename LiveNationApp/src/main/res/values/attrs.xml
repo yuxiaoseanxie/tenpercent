@@ -10,4 +10,9 @@
         <attr name="border_color" format="color"/>
         <attr name="shadow" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="ConfirmationActionButton">
+        <attr name="title" format="string" />
+        <attr name="tagLine" format="string" />
+        <attr name="image" format="reference" />
+    </declare-styleable>
 </resources> 
