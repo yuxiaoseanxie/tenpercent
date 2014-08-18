@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashPaymentBlockers;
 import com.livenation.mobile.android.na.cash.ui.CashCompleteRequestActivity;
@@ -73,6 +74,15 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
 
         if (requestCode == WEBSITE_REQUEST_CODE) {
             setupCompleted();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (!isChangingConfigurations()) {
+            SquareCashService.getInstance().clearSession();
         }
     }
 
@@ -140,7 +150,7 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         if (customerStatus.getBlockers() != null && customerStatus.getBlockers().getCard() != null) {
             showPage(Page.CARD);
         } else {
-            showPage(Page.VERIFY);
+            continueToName();
         }
     }
 
