@@ -41,7 +41,7 @@ public class CashRecipientsFragment extends Fragment implements TokenCompleteTex
         ButterKnife.inject(this, view);
 
         toField.setTokenListener(this);
-        noteField.setFilters(new InputFilter[] { new InputFilter.LengthFilter(CashCustomization.MAX_LENGTH) });
+        noteField.setFilters(new InputFilter[] { new InputFilter.LengthFilter(CashCustomization.MAX_STATEMENT_LENGTH) });
         noteField.setText(getString(R.string.cash_field_value_note_fmt, getCashRecipientsActivity().getEvent().getDisplayName()));
 
         return view;
