@@ -194,14 +194,20 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void addActionButtons(List<String> confirmationActions) {
         int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
-        for (int i = 0, size = Math.min(confirmationActions.size(), 3); i < size; i++) {
-            String name = confirmationActions.get(i);
+        int numberAdded = 0;
+        for (String name : confirmationActions) {
             try {
                 Action action = Action.valueOf(name);
+                if (!action.isAvailable(event, cart, isResale))
+                    continue;
+
                 ConfirmationActionButton button = action.newConfirmationActionButton(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
+
+                if (++numberAdded >= 3)
+                    break;
             } catch (IllegalArgumentException e) {
                 Log.w(getClass().getSimpleName(), "Invalid action name '" + name + "', ignoring.", e);
             }
@@ -360,6 +366,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             protected View.OnClickListener newOnClickListener(@NonNull Context context) {
                 return null;
             }
+
+            @Override
+            public boolean isAvailable(Event event, Cart cart, boolean isTmPlus) {
+                return (TicketingUtils.getTicketCountForCart(cart) > 1);
+            }
         },
 
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
@@ -390,6 +401,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
 
         protected abstract View.OnClickListener newOnClickListener(@NonNull Context context);
+        public boolean isAvailable(Event event, Cart cart, boolean isTmPlus) {
+            return true;
+        }
+
         private Action(int titleResId, int tagLineResId, int imageResId) {
             this.titleResId = titleResId;
             this.tagLineResId = tagLineResId;
