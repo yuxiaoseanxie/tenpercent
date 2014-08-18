@@ -14,9 +14,11 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
+import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -27,6 +29,7 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
+import com.mobilitus.tm.tickets.models.Order;
 import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
@@ -198,10 +201,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         for (String name : confirmationActions) {
             try {
                 Action action = Action.valueOf(name);
-                if (!action.isAvailable(event, cart, isResale))
+                if (!action.isAvailable(this))
                     continue;
 
                 ConfirmationActionButton button = action.newConfirmationActionButton(this);
+                button.setOnClickListener(createOnClickListenerForAction(action));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
@@ -353,37 +357,48 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     }
 
 
-    private static enum Action {
-        ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar) {
-            @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
+    private View.OnClickListener createOnClickListenerForAction(@NonNull Action action) {
+        switch (action) {
+            case ADD_TO_CALENDAR:
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CalendarDialogFragment.CalendarItem item = new CalendarDialogFragment.CalendarItem(event.getVenue().getTimeZone(), event.getDisplayName());
+                        item.setStartDate(event.getLocalStartTime());
+                        CalendarUtils.addEventToCalendar(item, event.getId(), OrderConfirmationActivity.this);
+                    }
+                };
+
+            case SHARE:
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onShare();
+                    }
+                };
+
+            default:
                 return null;
-            }
-        },
+        }
+    }
+
+    private static enum Action {
+        ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar),
 
         SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost) {
             @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
-            }
-
-            @Override
-            public boolean isAvailable(Event event, Cart cart, boolean isTmPlus) {
-                return (TicketingUtils.getTicketCountForCart(cart) > 1);
+            public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
+                return (TicketingUtils.getTicketCountForCart(activity.cart) > 1);
             }
         },
 
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
-            @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
-            }
         },
 
         SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share) {
             @Override
-            protected View.OnClickListener newOnClickListener(@NonNull Context context) {
-                return null;
+            public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
+                return activity.isShareAvailable();
             }
         };
 
@@ -396,12 +411,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             actionButton.setTitle(context.getString(titleResId));
             actionButton.setTagLine(context.getString(tagLineResId));
             actionButton.setImageResource(imageResId);
-            actionButton.setOnClickListener(newOnClickListener(context));
             return actionButton;
         }
 
-        protected abstract View.OnClickListener newOnClickListener(@NonNull Context context);
-        public boolean isAvailable(Event event, Cart cart, boolean isTmPlus) {
+        public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
             return true;
         }
 
