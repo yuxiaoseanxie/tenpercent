@@ -237,5 +237,14 @@
 
     <string name="update_available">New Version Available</string>
     <string name="update_now">Update Now</string>
+    
+    <!-- Rating Dialog --> 
+    <string name="rating_dialog_title">Thanks for your purchase!</string>
+    <string name="rating_dialog_subtitle">Let us know how your app\nexperience has been.</string>
+    <string name="rating_dialog_rate_us">Rate Us Highly!</string>
+    <string name="rating_dialog_send_us_feedback">Send Us Feedback</string>
+    <string name="rating_dialog_dont_ask_again">Don\'t Ask Me This Again</string>
+    <string name="rating_dialog_google_play_app_url">https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na</string>
+
 
 </resources>

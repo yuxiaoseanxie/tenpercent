@@ -260,6 +260,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="calendar_dialog_rating_description" parent="ln.text.medium">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="order_confirmation_header_text">
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
@@ -326,6 +330,9 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="rating_button" parent="android:Widget.Button">
     </style>
 
 </resources>
