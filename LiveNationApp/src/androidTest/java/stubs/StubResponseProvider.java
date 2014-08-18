@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 import stubs.converters.JsonConverter;
+import stubs.matchers.BodyMatcher;
+import stubs.matchers.JsonObjectBodyMatcher;
+import stubs.matchers.StringBodyMatcher;
 
 @SuppressWarnings("UnusedDeclaration")
 public class StubResponseProvider {
@@ -32,6 +35,7 @@ public class StubResponseProvider {
 
     private final String outgoingBodyType;
     private final byte[] outgoingBody;
+    private final BodyMatcher outgoingBodyMatcher;
 
     private final HttpResponse response;
     private final long emulatedLoadTime;
@@ -43,6 +47,7 @@ public class StubResponseProvider {
                                 String outgoingBodyType,
                                 byte[] outgoingBody,
                                 HttpResponse response,
+                                BodyMatcher outgoingBodyMatcher,
                                 long emulatedLoadTime) {
         this.method = method;
         this.url = url;
@@ -50,6 +55,7 @@ public class StubResponseProvider {
         this.outgoingBodyType = outgoingBodyType;
         this.outgoingBody = outgoingBody;
         this.response = response;
+        this.outgoingBodyMatcher = outgoingBodyMatcher;
         this.emulatedLoadTime = emulatedLoadTime;
     }
 
@@ -79,7 +85,7 @@ public class StubResponseProvider {
             return (method == request.getMethod() &&
                     equalObjects(url, request.getUrl()) &&
                     equalObjects(outgoingHeaders, request.getHeaders()) &&
-                    Arrays.equals(outgoingBody, request.getBody()));
+                    outgoingBodyMatcher.matches(request.getBody()));
         } catch (AuthFailureError e) {
             return false;
         }
@@ -115,6 +121,7 @@ public class StubResponseProvider {
         Map<String, String> outgoingHeaders;
         String outgoingBodyType;
         byte[] outgoingBody;
+        BodyMatcher outgoingBodyMatcher;
 
         HttpResponse response;
         long emulatedLoadTime;
@@ -124,6 +131,7 @@ public class StubResponseProvider {
             this.stack = stack;
             this.method = Request.Method.GET;
             this.emulatedLoadTime = 200;
+            this.outgoingBodyMatcher = BodyMatcher.ANY;
         }
 
 
@@ -134,12 +142,12 @@ public class StubResponseProvider {
             return this;
         }
 
-        public Builder setUrl(String url) {
+        public Builder setUrl(@NonNull String url) {
             this.url = url;
             return this;
         }
 
-        public Builder setOutgoingHeaders(Map<String, String> outgoingHeaders) {
+        public Builder setOutgoingHeaders(@NonNull Map<String, String> outgoingHeaders) {
             this.outgoingHeaders = outgoingHeaders;
             return this;
         }
@@ -154,8 +162,13 @@ public class StubResponseProvider {
             return this;
         }
 
-        public Builder setResponse(HttpResponse response) {
+        public Builder setResponse(@NonNull HttpResponse response) {
             this.response = response;
+            return this;
+        }
+
+        public Builder setOutgoingBodyMatcher(@NonNull BodyMatcher outgoingBodyMatcher) {
+            this.outgoingBodyMatcher = outgoingBodyMatcher;
             return this;
         }
 
@@ -220,7 +233,7 @@ public class StubResponseProvider {
 
 
         public StubResponseProvider build() {
-            return new StubResponseProvider(method, url, outgoingHeaders, outgoingBodyType, outgoingBody, response, emulatedLoadTime);
+            return new StubResponseProvider(method, url, outgoingHeaders, outgoingBodyType, outgoingBody, response, outgoingBodyMatcher, emulatedLoadTime);
         }
 
         public void add() {

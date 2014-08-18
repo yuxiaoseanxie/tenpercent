@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import stubs.converters.JsonConverter;
+import stubs.matchers.BodyMatcher;
+import stubs.matchers.JsonObjectBodyMatcher;
+import stubs.matchers.StringBodyMatcher;
 
 @SuppressWarnings("UnusedDeclaration")
 public class StubHttpStack implements HttpStack {
@@ -89,19 +92,21 @@ public class StubHttpStack implements HttpStack {
     public StubResponseProvider.Builder stubPost(@NonNull String url,
                                                  @NonNull Map<String, String> headers,
                                                  @NonNull byte[] body,
-                                                 @NonNull String bodyContentType) {
+                                                 @NonNull String bodyContentType,
+                                                 @NonNull BodyMatcher bodyMatcher) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.POST)
                 .setUrl(url)
                 .setOutgoingHeaders(headers)
                 .setOutgoingBody(body)
-                .setOutgoingBodyType(bodyContentType);
+                .setOutgoingBodyType(bodyContentType)
+                .setOutgoingBodyMatcher(bodyMatcher);
     }
 
     public StubResponseProvider.Builder stubPost(@NonNull String url,
                                                  @NonNull Map<String, String> headers,
                                                  @NonNull JSONObject json) {
-        return stubPost(url, headers, json.toString().getBytes(), "application/json");
+        return stubPost(url, headers, json.toString().getBytes(), "application/json", new JsonObjectBodyMatcher(json));
     }
 
     public StubResponseProvider.Builder stubPost(@NonNull String url,
@@ -109,7 +114,7 @@ public class StubHttpStack implements HttpStack {
                                                  @Nullable Object json,
                                                  @NonNull JsonConverter converter) {
         try {
-            return stubPost(url, headers, converter.convertToJsonString(json).getBytes(), "application/json");
+            return stubPost(url, headers, converter.convertToJsonString(json).getBytes(), "application/json", new StringBodyMatcher(converter.convertToJsonString(json)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -118,19 +123,21 @@ public class StubHttpStack implements HttpStack {
     public StubResponseProvider.Builder stubPut(@NonNull String url,
                                                 @NonNull Map<String, String> headers,
                                                 @NonNull byte[] body,
-                                                @NonNull String bodyContentType) {
+                                                @NonNull String bodyContentType,
+                                                @NonNull BodyMatcher bodyMatcher) {
         StubResponseProvider.Builder builder = new StubResponseProvider.Builder(this);
         return builder.setMethod(Request.Method.PUT)
                 .setUrl(url)
                 .setOutgoingHeaders(headers)
                 .setOutgoingBody(body)
-                .setOutgoingBodyType(bodyContentType);
+                .setOutgoingBodyType(bodyContentType)
+                .setOutgoingBodyMatcher(bodyMatcher);
     }
 
     public StubResponseProvider.Builder stubPut(@NonNull String url,
                                                 @NonNull Map<String, String> headers,
                                                 @NonNull JSONObject json) {
-        return stubPut(url, headers, json.toString().getBytes(), "application/json");
+        return stubPut(url, headers, json.toString().getBytes(), "application/json", new JsonObjectBodyMatcher(json));
     }
 
     public StubResponseProvider.Builder stubPut(@NonNull String url,
@@ -138,7 +145,7 @@ public class StubHttpStack implements HttpStack {
                                                 @Nullable Object json,
                                                 @NonNull JsonConverter converter) {
         try {
-            return stubPut(url, headers, converter.convertToJsonString(json).getBytes(), "application/json");
+            return stubPut(url, headers, converter.convertToJsonString(json).getBytes(), "application/json", new StringBodyMatcher(converter.convertToJsonString(json)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
