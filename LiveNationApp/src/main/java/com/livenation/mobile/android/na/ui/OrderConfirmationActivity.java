@@ -16,7 +16,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
-import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
