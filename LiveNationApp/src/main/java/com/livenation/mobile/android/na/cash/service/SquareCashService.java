@@ -1,10 +1,12 @@
 package com.livenation.mobile.android.na.cash.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SquareCashService {
+    public static final String ACTION_SESSION_CHANGED = "com.livenation.mobile.android.na.cash.service.SquareCashService.ACTION_SESSION_CHANGED";
+
     private static final String PERSISTED_SESSION = "PERSISTED_SESSION";
 
     private final Context context;
@@ -142,6 +146,8 @@ public class SquareCashService {
         editor.apply();
 
         this.session = session;
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_SESSION_CHANGED));
     }
 
     public @Nullable CashSession getSession() {
@@ -229,6 +235,14 @@ public class SquareCashService {
         assertSession();
 
         SquareRequest<CashCustomerStatus> request = makeGetRequest("v1/" + getEncodedCustomerId() + "/cash", null, CashCustomerStatus.class, callback, callback);
+        requestQueue.add(request);
+    }
+
+    public void updateUserFullName(@NonNull String name, ApiCallback<CashResponse> callback) {
+        assertSession();
+
+        JSONObject requestBody = makeRequestBody("full_name", name);
+        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/name", requestBody.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 

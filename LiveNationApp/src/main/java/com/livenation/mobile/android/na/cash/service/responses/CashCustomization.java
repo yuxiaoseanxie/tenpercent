@@ -14,7 +14,7 @@ public class CashCustomization extends CashResponse {
     private String subject;
 
     // @JsonProperty("button")
-    // private Button button;
+    // private CashButton button;
 
     @JsonProperty("amount_caption")
     private String amountCaption;

@@ -11,8 +11,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.mobilitus.tm.tickets.models.User;
 
@@ -62,8 +66,19 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
 
     @Override
     public void next() {
-        getCashRequestDetailsActivity().setName(nameField.getText().toString());
-        getCashRequestDetailsActivity().continueToPhoneVerification();
+        SquareCashService.getInstance().updateUserFullName(nameField.getText().toString(), new SquareCashService.ApiCallback<CashResponse>() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
+            }
+
+            @Override
+            public void onResponse(CashResponse response) {
+                getCashRequestDetailsActivity().setName(nameField.getText().toString());
+                getCashRequestDetailsActivity().continueToPhoneVerification();
+            }
+        });
     }
 
 
