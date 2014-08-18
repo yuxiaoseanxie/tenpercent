@@ -124,7 +124,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void displayHeaderInfo() {
         int numberOfTickets = TicketingUtils.getTicketCountForCart(getCart());
-        String quantityString = getResources().getQuantityString(R.plurals.order_confirmation_quantity, numberOfTickets);
+        String quantityString = getResources().getQuantityString(R.plurals.order_confirmation_quantity, numberOfTickets, numberOfTickets);
         headerThankYouText.setText(quantityString);
 
         eventNameText.setText(getEvent().getName());
