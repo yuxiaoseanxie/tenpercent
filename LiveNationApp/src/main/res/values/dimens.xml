@@ -35,6 +35,7 @@
     <dimen name="view_youtube_video_image_width">106dp</dimen>
     <dimen name="view_youtube_video_image_height">60dp</dimen>
     <dimen name="recommendations_button_height">40dp</dimen>
+    <dimen name="recommendations_button_width">290dp</dimen>
     <dimen name="view_featured_image_width">152dp</dimen>
     <dimen name="view_featured_image_height">112dp</dimen>
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>

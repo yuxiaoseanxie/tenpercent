@@ -26,7 +26,7 @@
     <include
         android:id="@android:id/button1"
         layout="@layout/sub_button_connect_to_facebook"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/recommendations_button_width"
         android:layout_height="@dimen/recommendations_button_height" />
 
     <TextView
@@ -39,7 +39,7 @@
     <include
         android:id="@android:id/button2"
         layout="@layout/sub_button_search_favorites"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/recommendations_button_width"
         android:layout_height="@dimen/recommendations_button_height" />
 
 </LinearLayout>

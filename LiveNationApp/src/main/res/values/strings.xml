@@ -54,8 +54,7 @@
     <string name="account_favorites">Your Favorites</string>
     <string name="account_footer_location_title">Your Location</string>
 
-    <string name="location_current">Currently Set Location</string>
-    <string name="location_manual">Manually Set Location</string>
+    <string name="location_current">Current Location</string>
     <string name="location_previous_locations">Previous Locations</string>
     <string name="location_switch">Use Current Location</string>
     <string name="location_unknown">Unknown</string>
@@ -237,6 +236,14 @@
 
     <string name="update_available">New Version Available</string>
     <string name="update_now">Update Now</string>
+    
+    <!-- Rating Dialog --> 
+    <string name="rating_dialog_title">Thanks for your purchase!</string>
+    <string name="rating_dialog_subtitle">Let us know how your app\nexperience has been.</string>
+    <string name="rating_dialog_rate_us">Rate Us Highly!</string>
+    <string name="rating_dialog_send_us_feedback">Send Us Feedback</string>
+    <string name="rating_dialog_dont_ask_again">Don\'t Ask Me This Again</string>
+    <string name="rating_dialog_google_play_app_url">https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na</string>
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
     <string name="confirmation_action_tag_line_ride_share">Arrive like a rock star</string>
     <string name="confirmation_action_ride_share">Book your ride</string>
@@ -245,5 +252,6 @@
     <string name="confirmation_action_split_cost">Split the Cost</string>
     <string name="confirmation_action_tag_line_seat_upgrade">Want a seat upgrade?</string>
     <string name="confirmation_action_seat_upgrade">Get in the List</string>
+
 
 </resources>
