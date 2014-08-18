@@ -135,21 +135,35 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         if (getCart() != null) {
             orderNumberText.setText(getCart().getDisplayOrderID());
             if (getCart().getOrderSummary() != null) {
-                if (!TextUtils.isEmpty(getCart().getOrderSummary().getSeats()))
-                    orderSeatText.setText(getCart().getOrderSummary().getSeats());
-                else if (!TextUtils.isEmpty(getCart().getOrderSummary().getSection()))
-                    orderSeatText.setText(getCart().getOrderSummary().getSection());
-                else
-                    orderSeatText.setText(R.string.data_missing_placeholder);
+                String seats = getCart().getOrderSummary().getSeats();
+                String section = getCart().getOrderSummary().getSection();
+                String seatDescription = "";
+                if (!TextUtils.isEmpty(section)) {
+                    seatDescription += getCart().getOrderSummary().getSection();
+                }
+
+                if (!TextUtils.isEmpty(seats)) {
+                    if (seatDescription.length() > 0)
+                        seatDescription += " – ";
+
+                    seatDescription += seats;
+                }
+
+                if (seatDescription.length() == 0)
+                    seatDescription = getString(R.string.data_missing_placeholder);
+
+                orderSeatText.setText(seatDescription);
             } else {
                 orderSeatText.setText(R.string.data_missing_placeholder);
             }
             com.mobilitus.tm.tickets.models.User user = Ticketing.getTicketService().getUser();
+            String email;
             if (user != null && !TextUtils.isEmpty(user.getEmail())) {
-                orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, user.getEmail()));
+                email = user.getEmail();
             } else {
-                orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, getString(R.string.data_missing_placeholder)));
+                email = getString(R.string.data_missing_placeholder);
             }
+            orderAccountText.setText(getString(R.string.order_confirmation_note_fmt, email));
 
             Total total = getCart().getTotal();
             if (total != null) {
