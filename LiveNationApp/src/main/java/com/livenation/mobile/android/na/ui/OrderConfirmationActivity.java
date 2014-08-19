@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.experience.android.activities.ExpActivityConfig;
+import com.experience.android.activities.ExperienceWebViewActivity;
+import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -31,18 +35,18 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
-import com.mobilitus.tm.tickets.models.Order;
 import com.mobilitus.tm.tickets.models.Total;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     public static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_EVENT";
+    public static final String EXTRA_SHOW_EXPERIENCE = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_SHOW_EXPERIENCE";
 
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private static final SimpleDateFormat DISPLAY_DATE_FORMATTER = new SimpleDateFormat("EEE, MMM d, yyyy\nhh:mm a ZZZZ", Locale.US);
@@ -89,12 +93,15 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_note);
 
-        List<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
+        Set<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
+
         addActionButtons(confirmationActions);
+        applyUpgradeVisibility();
 
         if (null == savedInstanceState) {
             trackScreenLoad();
         }
+
     }
 
     @Override
@@ -198,9 +205,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
     }
 
-    private void addActionButtons(List<String> confirmationActions) {
+    private void addActionButtons(Set<String> confirmationActions) {
         int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
         int numberAdded = 0;
+
         for (String name : confirmationActions) {
             try {
                 Action action = Action.valueOf(name);
@@ -213,8 +221,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
 
-                if (++numberAdded >= 3)
-                    break;
             } catch (IllegalArgumentException e) {
                 Log.w(getClass().getSimpleName(), "Invalid action name '" + name + "', ignoring.", e);
             }
@@ -265,6 +271,35 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 .replace("$VENUE", event.getVenue().getName())
                 .replace("$LINK", event.getWebUrl());
     }
+
+    //endregion
+
+    //region ExperienceApp
+
+    private void applyUpgradeVisibility() {
+        if (actionsContainer.findViewWithTag(Action.UPGRADE.name()) == null) {
+            //feature disabled
+            return;
+        }
+
+        if (getCart() == null) {
+            //cart is missing?!
+            experienceResponseListener.onResponse(false);
+            return;
+        }
+
+        if (getIntent() != null && getIntent().hasExtra(EXTRA_SHOW_EXPERIENCE)) {
+            //response cached
+            experienceResponseListener.onResponse(getIntent().getBooleanExtra(EXTRA_SHOW_EXPERIENCE, false));
+            return;
+        }
+
+        ExperienceAppClient experienceAppClient = new ExperienceAppClient(getApplicationContext());
+
+        //reach out to the experience api
+        experienceAppClient.makeRequest(getCart().getEvent().getEventID(), experienceResponseListener);
+    }
+
 
     //endregion
 
@@ -380,6 +415,24 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                     }
                 };
 
+            case UPGRADE:
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (getCart() != null) {
+                            final Intent intent = new Intent(OrderConfirmationActivity.this, ExperienceWebViewActivity.class);
+
+                            intent.putExtra(ExpActivityConfig.SSO_ORDER_ID, getCart().getOrderID());
+                            intent.putExtra(ExpActivityConfig.SSO_EVENT_ID, getCart().getEvent().getEventID());
+                            intent.putExtra(ExpActivityConfig.SSO_FAN_ID, Ticketing.getTicketService().getUser().getEmail());
+
+                            intent.putExtra(ExpActivityConfig.SSO_TICKET_SYSTEM, ExpActivityConfig.TicketSystem.TICKETMASTER_TAP);
+
+                            startActivity(intent);
+                        }
+                    }
+                };
+
             default:
                 return null;
         }
@@ -396,6 +449,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         },
 
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
+            @Override
+            public boolean isVisible() {
+                return false;
+            }
         },
 
         SHARE(R.string.action_share, R.string.confirmation_action_tag_line_share, R.drawable.confirmation_share) {
@@ -414,6 +471,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             actionButton.setTitle(context.getString(titleResId));
             actionButton.setTagLine(context.getString(tagLineResId));
             actionButton.setImageResource(imageResId);
+            actionButton.setVisibility(isVisible() ? View.VISIBLE : View.GONE);
+            actionButton.setTag(this.name());
             return actionButton;
         }
 
@@ -421,10 +480,32 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             return true;
         }
 
+        public boolean isVisible() { return true; }
+
         private Action(int titleResId, int tagLineResId, int imageResId) {
             this.titleResId = titleResId;
             this.tagLineResId = tagLineResId;
             this.imageResId = imageResId;
         }
     }
+
+    private ExperienceAppClient.ExperienceAppListener experienceResponseListener = new ExperienceAppClient.ExperienceAppListener() {
+        @Override
+        public void onResponse(Boolean response) {
+            getIntent().putExtra(EXTRA_SHOW_EXPERIENCE, response);
+            View view = actionsContainer.findViewWithTag(Action.UPGRADE.name());
+            if (view != null) {
+                view.setVisibility(response ? View.VISIBLE : View.GONE);
+            }
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            getIntent().putExtra(EXTRA_SHOW_EXPERIENCE, false);
+            View view = actionsContainer.findViewWithTag(Action.UPGRADE.name());
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    };
 }

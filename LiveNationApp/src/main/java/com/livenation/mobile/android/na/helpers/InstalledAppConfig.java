@@ -18,12 +18,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.livenation.mobile.android.na.BuildConfig;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InstalledAppConfig {
     public static final String ACTION_INSTALLED_APP_CONFIG_UPDATED = "com.livenation.mobile.android.na.helpers.InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED";
@@ -156,12 +156,14 @@ public class InstalledAppConfig {
         return preferences.getString(UPGRADE_MESSAGE, null);
     }
 
-    public @NonNull List<String> getConfirmationActions() {
+    public @NonNull Set<String> getConfirmationActions() {
         String rawActions = preferences.getString(CONFIRMATION_ACTIONS, null);
         if (!TextUtils.isEmpty(rawActions)) {
-            return Arrays.asList(TextUtils.split(rawActions, ","));
+            String[] actions = TextUtils.split(rawActions, ",");
+            //LinkedHashSet for ordering
+            return new LinkedHashSet<String>(Arrays.asList(actions));
         }
-        return Collections.emptyList();
+        return Collections.emptySet();
     }
 
     public @NonNull String getUpgradePlayStoreLink() {
