@@ -1,8 +1,10 @@
 package square;
 
+import android.support.annotation.Nullable;
 import android.test.InstrumentationTestCase;
 
 import com.android.volley.Response;
+import com.livenation.mobile.android.na.cash.service.SessionPersistenceProvider;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 
@@ -28,6 +30,18 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
             @Override
             public void provideSquareCustomerId(Response.Listener<String> onResponse) {
                 onResponse.onResponse("this-is-a-test-session");
+            }
+        }, new SessionPersistenceProvider() {
+            private CashSession session = new CashSession();
+
+            @Override
+            public @Nullable CashSession loadSession() {
+                return session;
+            }
+
+            @Override
+            public void saveSession(@Nullable CashSession session) {
+                this.session = session;
             }
         });
     }

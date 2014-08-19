@@ -116,10 +116,10 @@ public class ContactsCursorAdapter extends CursorAdapter {
          */
         String phone = null;
         String email = null;
-        if (ContactsContract.CommonDataKinds.Phone.MIMETYPE.equals(mimeType)) {
+        if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
             phone = cursor.getString(cursor.getColumnIndex(PHONE_DATA_COLUMN));
         }
-        if (ContactsContract.CommonDataKinds.Email.MIMETYPE.equals(mimeType)) {
+        if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
             email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
         }
 
