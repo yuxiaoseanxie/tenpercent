@@ -122,4 +122,13 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
         service.requestPhoneVerification("123456789", adapter);
         assertNotNull(adapter.getOrFail());
     }
+
+    public void testVerifyPhoneNumber() throws Exception {
+        JSONObject json = new JSONObject("{\"phone_number\": \"123456789\", \"verification_code\": \"123456\"}");
+        stack.stubPost(makeRouteUrl("/cash/phone-verification"), createHeaders(), json)
+             .andReturnJson(EMPTY_JSON, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
+        service.verifyPhoneNumber("123456789", "123456", adapter);
+    }
 }
