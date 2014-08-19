@@ -28,6 +28,8 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
     private final MockSessionPersistenceProvider persistenceProvider = new MockSessionPersistenceProvider();
     private SquareCashService service;
 
+    private final JSONObject EMPTY_JSON = new JSONObject();
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -103,11 +105,21 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
     public void testUpdateUserFullName() throws Exception {
         JSONObject json = new JSONObject("{\"full_name\": \"John Doe\"}");
         stack.stubPost(makeRouteUrl("/cash/name"), createHeaders(), json)
-             .andReturnJson(new JSONObject(), createEmptyHeaders(), 200);
+             .andReturnJson(EMPTY_JSON, createEmptyHeaders(), 200);
 
         SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
         service.updateUserFullName("John Doe", adapter);
 
+        assertNotNull(adapter.getOrFail());
+    }
+
+    public void testRequestPhoneVerification() throws Exception {
+        JSONObject json = new JSONObject("{\"phone_number\": \"123456789\"}");
+        stack.stubPost(makeRouteUrl("/cash/phone-number"), createHeaders(), json)
+             .andReturnJson(EMPTY_JSON, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
+        service.requestPhoneVerification("123456789", adapter);
         assertNotNull(adapter.getOrFail());
     }
 }
