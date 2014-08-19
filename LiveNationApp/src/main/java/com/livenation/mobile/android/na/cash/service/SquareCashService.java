@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,7 +148,9 @@ public class SquareCashService {
     }
 
     public boolean hasSession() {
-        return (getSession() != null);
+        return (getSession() != null &&
+                getSession().getExpiresAt() != null &&
+                new Date().before(getSession().getExpiresAt()));
     }
 
     protected JSONObject makeRequestBody(@NonNull String... args) {
