@@ -93,7 +93,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.orderSeatText = (TextView) findViewById(R.id.activity_order_confirmation_seats);
         this.orderAccountText = (TextView) findViewById(R.id.activity_order_confirmation_note);
 
-        Set<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
+        List<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
 
         addActionButtons(confirmationActions);
         applyUpgradeVisibility();
@@ -205,7 +205,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
     }
 
-    private void addActionButtons(Set<String> confirmationActions) {
+    private void addActionButtons(List<String> confirmationActions) {
         int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
         int numberAdded = 0;
 

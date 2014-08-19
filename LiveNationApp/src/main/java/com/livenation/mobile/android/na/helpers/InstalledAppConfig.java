@@ -22,8 +22,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 public class InstalledAppConfig {
     public static final String ACTION_INSTALLED_APP_CONFIG_UPDATED = "com.livenation.mobile.android.na.helpers.InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED";
@@ -156,14 +155,12 @@ public class InstalledAppConfig {
         return preferences.getString(UPGRADE_MESSAGE, null);
     }
 
-    public @NonNull Set<String> getConfirmationActions() {
+    public @NonNull List<String> getConfirmationActions() {
         String rawActions = preferences.getString(CONFIRMATION_ACTIONS, null);
         if (!TextUtils.isEmpty(rawActions)) {
-            String[] actions = TextUtils.split(rawActions, ",");
-            //LinkedHashSet for ordering
-            return new LinkedHashSet<String>(Arrays.asList(actions));
+            return Arrays.asList(TextUtils.split(rawActions, ","));
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 
     public @NonNull String getUpgradePlayStoreLink() {
