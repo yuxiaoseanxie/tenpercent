@@ -41,12 +41,11 @@ import com.segment.android.models.Props;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
 
 public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     public static final String EXTRA_EVENT = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_EVENT";
-    public static final String EXTRA_SHOW_EXPERIENCE = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_SHOW_EXPERIENCE";
+    public static final String EXTRA_SHOW_UPGRADABLE = "com.livenation.mobile.android.na.ui.OrderConfirmationActivity.EXTRA_SHOW_UPGRADABLE";
 
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private static final SimpleDateFormat DISPLAY_DATE_FORMATTER = new SimpleDateFormat("EEE, MMM d, yyyy\nhh:mm a ZZZZ", Locale.US);
@@ -55,6 +54,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private Event event;
     private Cart cart;
     private boolean isResale;
+    //temporary workaround on the assumption this field will be later accessible from mTopia via the library
+    private boolean isUpgradable;
 
     private TransitioningImageView image;
     private TextView headerThankYouText;
@@ -79,6 +80,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
         this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
+        this.isUpgradable = getIntent().getBooleanExtra(EXTRA_SHOW_UPGRADABLE, false);
 
         this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
@@ -96,10 +98,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         List<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
 
         addActionButtons(confirmationActions);
-        applyUpgradeVisibility();
 
         if (null == savedInstanceState) {
             trackScreenLoad();
+            fetchUpgradeStatus();
         }
 
     }
@@ -206,6 +208,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     }
 
     private void addActionButtons(List<String> confirmationActions) {
+        //temporary removeViews hack to support the WIP async event upgrade support
+        actionsContainer.removeAllViews();
+
         int margin = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
         int numberAdded = 0;
 
@@ -220,7 +225,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
-
+                
+                //temporarily disabled for testing upgrades
+//                if (++numberAdded >= 3)
+//                    break;
             } catch (IllegalArgumentException e) {
                 Log.w(getClass().getSimpleName(), "Invalid action name '" + name + "', ignoring.", e);
             }
@@ -276,24 +284,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     //region ExperienceApp
 
-    private void applyUpgradeVisibility() {
-        if (actionsContainer.findViewWithTag(Action.UPGRADE.name()) == null) {
-            //feature disabled
-            return;
-        }
-
-        if (getCart() == null) {
-            //cart is missing?!
-            experienceResponseListener.onResponse(false);
-            return;
-        }
-
-        if (getIntent() != null && getIntent().hasExtra(EXTRA_SHOW_EXPERIENCE)) {
-            //response cached
-            experienceResponseListener.onResponse(getIntent().getBooleanExtra(EXTRA_SHOW_EXPERIENCE, false));
-            return;
-        }
-
+    private void fetchUpgradeStatus() {
         ExperienceAppClient experienceAppClient = new ExperienceAppClient(getApplicationContext());
 
         //reach out to the experience api
@@ -450,8 +441,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
             @Override
-            public boolean isVisible() {
-                return false;
+            public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
+                return activity.isUpgradable;
             }
         },
 
@@ -471,7 +462,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             actionButton.setTitle(context.getString(titleResId));
             actionButton.setTagLine(context.getString(tagLineResId));
             actionButton.setImageResource(imageResId);
-            actionButton.setVisibility(isVisible() ? View.VISIBLE : View.GONE);
             actionButton.setTag(this.name());
             return actionButton;
         }
@@ -479,8 +469,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
             return true;
         }
-
-        public boolean isVisible() { return true; }
 
         private Action(int titleResId, int tagLineResId, int imageResId) {
             this.titleResId = titleResId;
@@ -492,20 +480,20 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private ExperienceAppClient.ExperienceAppListener experienceResponseListener = new ExperienceAppClient.ExperienceAppListener() {
         @Override
         public void onResponse(Boolean response) {
-            getIntent().putExtra(EXTRA_SHOW_EXPERIENCE, response);
-            View view = actionsContainer.findViewWithTag(Action.UPGRADE.name());
-            if (view != null) {
-                view.setVisibility(response ? View.VISIBLE : View.GONE);
-            }
+            doResponse(response);
         }
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            getIntent().putExtra(EXTRA_SHOW_EXPERIENCE, false);
-            View view = actionsContainer.findViewWithTag(Action.UPGRADE.name());
-            if (view != null) {
-                view.setVisibility(View.GONE);
-            }
+            doResponse(false);
+        }
+
+        private void doResponse(boolean upgradable) {
+            isUpgradable = upgradable;
+            getIntent().putExtra(EXTRA_SHOW_UPGRADABLE, isUpgradable);
+
+            List<String> confirmationActions = LiveNationApplication.get().getInstalledAppConfig().getConfirmationActions();
+            addActionButtons(confirmationActions);
         }
     };
 }
