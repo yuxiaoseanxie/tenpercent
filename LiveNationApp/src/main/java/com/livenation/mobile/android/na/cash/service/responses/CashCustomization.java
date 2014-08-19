@@ -23,8 +23,10 @@ public class CashCustomization extends CashResponse {
     private String statementDescription;
 
 
-    public CashCustomization(String statementDescription) {
+    public CashCustomization(String statementDescription, String caption) {
         this.statementDescription = statementDescription;
+        this.subject = statementDescription;
+        this.amountCaption = caption;
     }
 
     public String getSubject() {

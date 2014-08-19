@@ -23,6 +23,7 @@ import com.livenation.mobile.android.na.cash.service.responses.CashMoney;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 
 import java.math.BigDecimal;
@@ -85,7 +86,13 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     //region Sending Payments
 
     private ArrayList<CashPayment> buildPayments() {
-        CashCustomization senderCustomization = new CashCustomization(getCashRequestActivity().getNote());
+        Event event = getCashRequestActivity().getEvent();
+        String eventName = event != null? event.getDisplayName() : getString(R.string.data_missing_placeholder);
+        String venue = (event != null && event.getVenue() != null)? event.getVenue().getName() : getString(R.string.data_missing_placeholder);
+        String dateString = event != null? TicketingUtils.formatDate(event.getOnSaleDate()) : getString(R.string.data_missing_placeholder);
+        String description = getCashRequestActivity().getNote();
+        String caption = getString(R.string.cash_request_caption_fmt, eventName, venue, dateString, description);
+        CashCustomization senderCustomization = new CashCustomization(description, caption);
         ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
         for (ContactData contact : getCashRequestActivity().getContacts()) {
             int quantity = quantities.get(contact.getId());
