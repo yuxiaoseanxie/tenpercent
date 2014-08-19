@@ -1,6 +1,10 @@
 package com.livenation.mobile.android.na.cash.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.IsoDateDeserializer;
+
+import java.util.Date;
 
 public class CashSession extends CashResponse {
     public static final String TOKEN_TYPE_BEARER = "bearer";
@@ -8,18 +12,12 @@ public class CashSession extends CashResponse {
     @JsonProperty("access_token")
     private String accessToken;
 
+    @JsonProperty("expires_at")
+    @JsonDeserialize(using = IsoDateDeserializer.class)
+    private Date expiresAt;
+
     @JsonProperty("customer_id")
     private String customerId;
-
-    @JsonProperty("expires_at")
-    private String expiresAt;
-
-    @JsonProperty("state")
-    private String state;
-
-    @JsonProperty("token_type")
-    private String tokenType;
-
 
     public CashSession() {
 
@@ -30,39 +28,31 @@ public class CashSession extends CashResponse {
         return accessToken;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public String getExpiresAt() {
+    public Date getExpiresAt() {
         return expiresAt;
     }
 
-    public String getState() {
-        return state;
+    public void setExpiresAt(Date expiresAt) {
+        this.expiresAt = expiresAt;
     }
 
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public String getCustomerId() {
+        return customerId;
     }
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
-    public void setExpiresAt(String expiresAt) {
-        this.expiresAt = expiresAt;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
+    @Override
+    public String toString() {
+        return "CashSession{" +
+                "accessToken='" + accessToken + '\'' +
+                ", expiresAt='" + expiresAt + '\'' +
+                '}';
     }
 }

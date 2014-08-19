@@ -37,14 +37,6 @@ public class CashUtils {
     //endregion
 
 
-    //region Config
-
-    public static final String CLIENT_ID = "a2jqttf932pokmmkp0xtzz8ku";
-    public static final String CLIENT_SECRET = "31842a1e8aba240fcc85c20d2ed74f83";
-
-    //endregion
-
-
     //region Utilities
 
     public static void dismissKeyboard(@Nullable View view) {

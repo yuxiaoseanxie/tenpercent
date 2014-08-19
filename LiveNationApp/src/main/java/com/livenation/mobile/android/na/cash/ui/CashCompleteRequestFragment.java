@@ -37,6 +37,7 @@ import butterknife.InjectView;
 public class CashCompleteRequestFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     @InjectView(R.id.fragment_cash_complete_amount) TextView amount;
 
+    private ArrayList<ContactData> contacts;
     private ContactDataAdapter adapter;
     private HashMap<String, Integer> quantities;
     private long pricePerTicket;
@@ -48,6 +49,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.contacts = getCashRequestActivity().getContacts();
         this.adapter = new ContactDataAdapter(getActivity(), this);
         this.quantities = getCashRequestActivity().getTicketPerContactQuantities();
         this.pricePerTicket = CashUtils.calculatePricePerTicket(getCashRequestActivity().getTotal(), getCashRequestActivity().getTicketQuantity());
@@ -89,12 +91,12 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         Event event = getCashRequestActivity().getEvent();
         String eventName = event != null? event.getDisplayName() : getString(R.string.data_missing_placeholder);
         String venue = (event != null && event.getVenue() != null)? event.getVenue().getName() : getString(R.string.data_missing_placeholder);
-        String dateString = event != null? TicketingUtils.formatDate(event.getOnSaleDate()) : getString(R.string.data_missing_placeholder);
+        String dateString = event != null? TicketingUtils.formatDate(event.getLocalStartTime()) : getString(R.string.data_missing_placeholder);
         String description = getCashRequestActivity().getNote();
         String caption = getString(R.string.cash_request_caption_fmt, eventName, venue, dateString, description);
         CashCustomization senderCustomization = new CashCustomization(description, caption);
         ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
-        for (ContactData contact : getCashRequestActivity().getContacts()) {
+        for (ContactData contact : contacts) {
             int quantity = quantities.get(contact.getId());
 
             CashPayment payment = CashPayment.newRequest();
@@ -119,12 +121,16 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
 
         ArrayList<CashPayment> payments = buildPayments();
         final AtomicInteger counter = new AtomicInteger(payments.size());
-        for (CashPayment payment : payments) {
+        for (int i = 0, size = payments.size(); i < size; i++) {
+            CashPayment payment = payments.get(i);
+            final int offset = i;
             SquareCashService.getInstance().initiatePayment(payment, new SquareCashService.ApiCallback<CashPayment>() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     if (counter.decrementAndGet() == 0) {
                         loadingDialogFragment.dismiss();
+
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CashUtils.ACTION_REQUESTS_COMPLETED));
                     }
 
                     CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
@@ -139,7 +145,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CashUtils.ACTION_REQUESTS_COMPLETED));
                     }
 
-                    adapter.addAll(getCashRequestActivity().getContacts());
+                    adapter.add(contacts.get(offset));
                 }
             });
         }

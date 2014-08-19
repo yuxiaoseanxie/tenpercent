@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.R;
@@ -18,6 +19,10 @@ import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatu
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,17 +36,14 @@ public class SquareCashService {
 
     private final Context context;
     private final RequestQueue requestQueue;
-    private final CustomerIdProvider customerIdProvider;
     private final SessionPersistenceProvider persistenceProvider;
     private CashSession session;
 
     public SquareCashService(@NonNull Context context,
                              @NonNull RequestQueue requestQueue,
-                             @NonNull CustomerIdProvider customerIdProvider,
                              @NonNull SessionPersistenceProvider persistenceProvider) {
         this.context = context.getApplicationContext();
         this.requestQueue = requestQueue;
-        this.customerIdProvider = customerIdProvider;
         this.persistenceProvider = persistenceProvider;
 
         this.session = persistenceProvider.loadSession();
@@ -52,9 +54,8 @@ public class SquareCashService {
     }
     public static void init(@NonNull Context context,
                             @NonNull RequestQueue requestQueue,
-                            @NonNull CustomerIdProvider customerIdProvider,
                             @NonNull SessionPersistenceProvider persistenceProvider) {
-        instance = new SquareCashService(context, requestQueue, customerIdProvider, persistenceProvider);
+        instance = new SquareCashService(context, requestQueue, persistenceProvider);
     }
 
     //region Building Requests
@@ -79,9 +80,10 @@ public class SquareCashService {
     }
 
     private <T extends CashResponse> void injectHeaders(SquareRequest<T> request) {
-        String authorizationHeader = "Client " + CashUtils.CLIENT_ID + " " + CashUtils.CLIENT_SECRET;
         HashMap<String, String> headers = new HashMap<String, String>();
-        headers.put("Authorization", authorizationHeader);
+        if (hasSession()) {
+            headers.put("Authorization", "Bearer " + session.getAccessToken());
+        }
         headers.put("Content-Type", "application/json");
         request.setHeaders(headers);
     }
@@ -185,16 +187,10 @@ public class SquareCashService {
         if (email == null && phoneNumber == null)
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
-        customerIdProvider.provideSquareCustomerId(new Response.Listener<String>() {
+        LiveNationLibrary.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
             @Override
-            public void onResponse(String squareCustomerId) {
-                // TODO: This can be a valid state
-                if (squareCustomerId == null)
-                    throw new IllegalArgumentException("squareCustomerId may not be null");
-
-                JSONObject body = makeRequestBody("response_type", "token",
-                                                  "client_id", CashUtils.CLIENT_ID,
-                                                  "customer_id", squareCustomerId);
+            public void onResponse(AccessToken accessToken) {
+                JSONObject body = new JSONObject();
                 try {
                     if (phoneNumber != null)
                         body.put("phone_number", phoneNumber);
@@ -205,7 +201,8 @@ public class SquareCashService {
                     throw new RuntimeException("Unexpected JSON exception during body construction", e);
                 }
 
-                SquareRequest<CashSession> request = makePostRequest("oauth2/authorize/cash", body.toString(), CashSession.class, new Response.Listener<CashSession>() {
+                String url = LiveNationLibrary.getHost() + "/users/square-auth?access_token=" + Uri.encode(accessToken.getToken());
+                SquareRequest<CashSession> request = makeRequest(Request.Method.POST, url, body.toString(), CashSession.class, new Response.Listener<CashSession>() {
                     @Override
                     public void onResponse(CashSession response) {
                         setSession(response);
@@ -213,6 +210,11 @@ public class SquareCashService {
                     }
                 }, callback);
                 requestQueue.add(request);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                callback.onErrorResponse(error);
             }
         });
     }

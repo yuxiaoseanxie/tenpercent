@@ -214,24 +214,7 @@ public class LiveNationApplication extends Application {
         setupInternetStateReceiver();
 
 
-        SquareCashService.init(this, Volley.newRequestQueue(this), new SquareCashService.CustomerIdProvider() {
-            @Override
-            public void provideSquareCustomerId(final Response.Listener<String> onResponse) {
-                LiveNationLibrary.getAppInitProvider().getAppInitResponse(new BasicApiCallback<AppInitResponse>() {
-                    @Override
-                    public void onResponse(AppInitResponse response) {
-                        onResponse.onResponse(response.getData().getUserInfo().get("id"));
-                    }
-
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-                        // TODO: handle this
-                        Log.e(CashUtils.LOG_TAG, "Could not retrieve user id", error);
-                        onResponse.onResponse(null);
-                    }
-                });
-            }
-        }, new SessionPersistenceProvider.Preferences());
+        SquareCashService.init(this, Volley.newRequestQueue(this), new SessionPersistenceProvider.Preferences());
 
         //Analytics
         Props props = new Props();
