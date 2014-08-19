@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.cash.service.SessionPersistenceProvider;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
+import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 
 import org.json.JSONObject;
@@ -48,8 +49,12 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
 
     private static Map<String, String> createHeaders() {
         Map<String, String> headers = createHeadersWithContentType("application/json");
-        headers.put("Authorization", "Client a2jqttf932pokmmkp0xtzz8ku 31842a1e8aba240fcc85c20d2ed74f83");
+        headers.put("Authorization", "Bearer 123thisisfake");
         return headers;
+    }
+
+    private String makeRouteUrl(String route) {
+        return service.makeUrl(service.makeRoute(route), null);
     }
 
     private static class MockSessionPersistenceProvider implements SessionPersistenceProvider {
@@ -58,7 +63,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
         public MockSessionPersistenceProvider() {
             cashSession.setAccessToken("123thisisfake");
             cashSession.setCustomerId("this-is-a-test-session");
-            cashSession.setExpiresAt(new Date());
+            cashSession.setExpiresAt(new Date((long)(System.currentTimeMillis() * 1.2)));
         }
 
         @Override
@@ -77,7 +82,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
 
     public void testCustomerStatus() throws Exception {
         JSONObject response = new JSONObject("{\"payments\":[],\"blockers\":{\"url\":\"https://cash.square-sandbox.com/cash/enroll/c7zay6myrvqabdbgb0hfcb5i9\",\"card\":{},\"phone_number\":{}},\"passcode_confirmation_enabled\":false}");
-        stack.stubGet(service.makeUrl(service.makeRoute("/cash"), null), createHeaders())
+        stack.stubGet(makeRouteUrl("/cash"), createHeaders())
              .andReturnJson(response, createEmptyHeaders(), 200);
 
         SyncResponseAdapter<CashCustomerStatus> adapter = new SyncResponseAdapter<CashCustomerStatus>();
@@ -92,5 +97,16 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
         assertNotNull(status.getBlockers().getPhoneNumber());
         assertNull(status.getBlockers().getPasscodeVerification());
         assertFalse(status.isPasswordConfirmationEnabled());
+    }
+
+    public void testUpdateUserFullName() throws Exception {
+        JSONObject json = new JSONObject("{\"full_name\": \"John Doe\"}");
+        stack.stubPost(makeRouteUrl("/cash/name"), createHeaders(), json)
+             .andReturnJson(new JSONObject(), createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
+        service.updateUserFullName("John Doe", adapter);
+
+        assertNotNull(adapter.getOrFail());
     }
 }
