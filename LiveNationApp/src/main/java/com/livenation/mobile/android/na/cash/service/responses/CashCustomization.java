@@ -29,6 +29,10 @@ public class CashCustomization extends CashResponse {
         this.amountCaption = caption;
     }
 
+    public CashCustomization() {
+
+    }
+
     public String getSubject() {
         return subject;
     }
