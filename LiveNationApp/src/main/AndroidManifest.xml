@@ -40,6 +40,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- End segment.io Permissions -->
 
+    <!-- Begin Omniture permission -->
+    <!--<uses-permission android:name="android.permission.INTERNET" /> already there
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> already there -->
+    <!-- End Omniture permission -->
 
     <uses-feature
         android:glEsVersion="0x00020000"
