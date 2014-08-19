@@ -6,7 +6,12 @@ import android.test.InstrumentationTestCase;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.cash.service.SessionPersistenceProvider;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
+import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomization;
+import com.livenation.mobile.android.na.cash.service.responses.CashMoney;
 import com.livenation.mobile.android.na.cash.service.responses.CashPayment;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
@@ -19,6 +24,8 @@ import java.util.Map;
 
 import stubs.StubHttpStack;
 import stubs.SyncResponseAdapter;
+import stubs.converters.JacksonJsonConverter;
+import stubs.converters.JsonConverter;
 
 import static stubs.StubHttpStack.createEmptyHeaders;
 import static stubs.StubHttpStack.createHeadersWithContentType;
@@ -29,6 +36,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
     private SquareCashService service;
 
     private final JSONObject EMPTY_JSON = new JSONObject();
+    private final JsonConverter JSON_CONVERTER = new JacksonJsonConverter(CashResponse.OBJECT_MAPPER);
 
     @Override
     protected void setUp() throws Exception {
@@ -82,6 +90,8 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
     //endregion
 
 
+    //region Sessions
+
     public void testCustomerStatus() throws Exception {
         JSONObject response = new JSONObject("{\"payments\":[],\"blockers\":{\"url\":\"https://cash.square-sandbox.com/cash/enroll/c7zay6myrvqabdbgb0hfcb5i9\",\"card\":{},\"phone_number\":{}},\"passcode_confirmation_enabled\":false,\"full_name\":\"John Doe\"}");
         stack.stubGet(makeRouteUrl("/cash"), createHeaders())
@@ -130,5 +140,82 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
 
         SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
         service.verifyPhoneNumber("123456789", "123456", adapter);
+
+        assertNotNull(adapter.getOrFail());
     }
+
+    //endregion
+
+
+    //region Cards
+
+    public void testLinkCard() throws Exception {
+        CashCardLinkInfo cardLinkInfo = new CashCardLinkInfo();
+        cardLinkInfo.setPostalCode("94158");
+        cardLinkInfo.setSecurityCode("155");
+        cardLinkInfo.setExpiration("12", "16");
+        cardLinkInfo.setNumber("4000000044440000");
+
+        CashCardLinkResponse mockResponse = new CashCardLinkResponse();
+
+        stack.stubPost(makeRouteUrl("/cash/card"), createHeaders(), cardLinkInfo, JSON_CONVERTER)
+             .andReturnJson(mockResponse, JSON_CONVERTER, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashCardLinkResponse> adapter = new SyncResponseAdapter<CashCardLinkResponse>();
+        service.linkCard(cardLinkInfo, adapter);
+
+        assertNotNull(adapter.getOrFail());
+    }
+
+    public void testUnlinkCard() throws Exception {
+        stack.stubDelete(makeRouteUrl("/cash/card"), createHeaders())
+             .andReturnJson(EMPTY_JSON, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashResponse> adapter = new SyncResponseAdapter<CashResponse>();
+        service.unlinkCard(adapter);
+
+        assertNotNull(adapter.getOrFail());
+    }
+
+    public void testInitiatePayment() throws Exception {
+        CashCustomer sender = new CashCustomer();
+        sender.setPhoneNumber("123456789");
+
+        CashPayment payment = CashPayment.newRequest();
+        payment.setAmount(CashMoney.newUSD(1000));
+        payment.setSender(sender);
+        payment.setSenderCustomization(new CashCustomization("Your share of Katy Perry", "Katy Perry at Shoreline Amphitheater on THE WORLD OF TOMORROW"));
+
+        stack.stubPost(makeRouteUrl("/cash/payments"), createHeaders(), payment, JSON_CONVERTER)
+             .andReturnJson(payment, JSON_CONVERTER, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashPayment> adapter = new SyncResponseAdapter<CashPayment>();
+        service.initiatePayment(payment, adapter);
+
+        assertNotNull(adapter.getOrFail());
+    }
+
+    public void testRetrievePayment() throws Exception {
+        CashCustomer sender = new CashCustomer();
+        sender.setPhoneNumber("123456789");
+
+        CashPayment payment = CashPayment.newRequest();
+        payment.setAmount(CashMoney.newUSD(1000));
+        payment.setSender(sender);
+        payment.setSenderCustomization(new CashCustomization("Your share of Katy Perry", "Katy Perry at Shoreline Amphitheater on THE WORLD OF TOMORROW"));
+        payment.setPaymentId("123");
+
+        stack.stubGet(makeRouteUrl("/cash/payments/123"), createHeaders())
+             .andReturnJson(payment, JSON_CONVERTER, createEmptyHeaders(), 200);
+
+        SyncResponseAdapter<CashPayment> adapter = new SyncResponseAdapter<CashPayment>();
+        service.retrievePayment("123", adapter);
+
+        CashPayment response = adapter.getOrFail();
+        assertNotNull(response);
+        assertEquals(response.getPaymentId(), "123");
+
+    }
+
+    //endregion
 }
