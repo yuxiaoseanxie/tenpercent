@@ -28,7 +28,7 @@ public class CalendarUtils {
             endDateInMilliSec = endDate.getTime();
         }
 
-        Intent intent = new Intent(Intent.ACTION_INSERT)
+        Intent intent = new Intent(Intent.ACTION_EDIT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarItem.getStartDate().getTime())
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDateInMilliSec)

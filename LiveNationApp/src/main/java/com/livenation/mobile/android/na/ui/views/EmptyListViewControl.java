@@ -32,7 +32,7 @@ public class EmptyListViewControl extends LinearLayout {
     private static final String VIEW_MODE_STATE_KEY = "viewModeState";
     private static final String INSTANCE_STATE_KEY = "instanceState";
     private final LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    private ViewMode currentMode = ViewMode.LOADING;
+    private ViewMode currentMode;
     private View loading;
     private View retry;
     private View noData;

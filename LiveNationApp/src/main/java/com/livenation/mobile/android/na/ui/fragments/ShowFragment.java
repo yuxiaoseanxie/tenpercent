@@ -206,6 +206,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             if (null != mapLocationCache) {
                 setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
             }
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    venueDetails.performClick();
+                }
+            });
         } else {
             //TODO: Possible No Google play services installed
         }

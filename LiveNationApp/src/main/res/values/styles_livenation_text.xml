@@ -7,6 +7,10 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="ln.text.tiny.gray">
+        <item name="android:textColor">@color/livenation_gray</item>
+    </style>
+
     <style name="ln.text.tiny.allcaps">
         <item name="android:textAllCaps">true</item>
     </style>
@@ -260,13 +264,18 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="calendar_dialog_rating_description" parent="ln.text.medium">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="order_confirmation_header_text">
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="order_confirmation_header_text.large">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">33sp</item>
     </style>
 
     <style name="order_confirmation_section_header_text">
@@ -326,6 +335,9 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="rating_button" parent="android:Widget.Button">
     </style>
 
 </resources>
