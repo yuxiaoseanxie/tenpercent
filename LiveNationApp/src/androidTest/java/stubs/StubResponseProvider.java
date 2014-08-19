@@ -24,8 +24,6 @@ import java.util.Map;
 
 import stubs.converters.JsonConverter;
 import stubs.matchers.BodyMatcher;
-import stubs.matchers.JsonObjectBodyMatcher;
-import stubs.matchers.StringBodyMatcher;
 
 @SuppressWarnings("UnusedDeclaration")
 public class StubResponseProvider {

@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.cash.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
@@ -61,7 +59,11 @@ public class SquareCashService {
 
     //region Building Requests
 
-    private String makeUrl(@NonNull String route, @Nullable Map<String, String> params) {
+    public String makeRoute(String endComponents) {
+        return "v1/" + getEncodedCustomerId() + endComponents;
+    }
+
+    public String makeUrl(@NonNull String route, @Nullable Map<String, String> params) {
         Uri.Builder builder = new Uri.Builder();
 
         builder.scheme("http");
@@ -218,7 +220,7 @@ public class SquareCashService {
     public void retrieveCustomerStatus(ApiCallback<CashCustomerStatus> callback) {
         assertSession();
 
-        SquareRequest<CashCustomerStatus> request = makeGetRequest("v1/" + getEncodedCustomerId() + "/cash", null, CashCustomerStatus.class, callback, callback);
+        SquareRequest<CashCustomerStatus> request = makeGetRequest(makeRoute("/cash"), null, CashCustomerStatus.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -226,7 +228,7 @@ public class SquareCashService {
         assertSession();
 
         JSONObject requestBody = makeRequestBody("full_name", name);
-        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/name", requestBody.toString(), CashResponse.class, callback, callback);
+        SquareRequest<CashResponse> request = makePostRequest(makeRoute("/cash/name"), requestBody.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -234,7 +236,7 @@ public class SquareCashService {
         assertSession();
 
         JSONObject body = makeRequestBody("phone_number", phoneNumber);
-        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/phone-number", body.toString(), CashResponse.class, callback, callback);
+        SquareRequest<CashResponse> request = makePostRequest(makeRoute("/cash/phone-number"), body.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -243,7 +245,7 @@ public class SquareCashService {
 
         JSONObject body = makeRequestBody("phone_number", phoneNumber,
                                           "verification_code", code);
-        SquareRequest<CashResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/phone-verification", body.toString(), CashResponse.class, callback, callback);
+        SquareRequest<CashResponse> request = makePostRequest(makeRoute("/cash/phone-verification"), body.toString(), CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -259,7 +261,7 @@ public class SquareCashService {
             throw new IllegalStateException("invalid card info given");
 
         try {
-            SquareRequest<CashCardLinkResponse> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/card", info.toJsonString(), CashCardLinkResponse.class, callback, callback);
+            SquareRequest<CashCardLinkResponse> request = makePostRequest(makeRoute("/cash/card"), info.toJsonString(), CashCardLinkResponse.class, callback, callback);
             requestQueue.add(request);
         } catch (IOException e) {
             throw new RuntimeException("Could not convert card info into json payload", e);
@@ -269,7 +271,7 @@ public class SquareCashService {
     public void unlinkCard(ApiCallback<CashResponse> callback) {
         assertSession();
 
-        SquareRequest<CashResponse> request = makeDeleteRequest("v1/" + getEncodedCustomerId() + "/cash/card", null, CashResponse.class, callback, callback);
+        SquareRequest<CashResponse> request = makeDeleteRequest(makeRoute("/cash/card"), null, CashResponse.class, callback, callback);
         requestQueue.add(request);
     }
 
@@ -277,7 +279,7 @@ public class SquareCashService {
         assertSession();
 
         try {
-            SquareRequest<CashPayment> request = makePostRequest("v1/" + getEncodedCustomerId() + "/cash/payments", payment.toJsonString(), CashPayment.class, callback, callback);
+            SquareRequest<CashPayment> request = makePostRequest(makeRoute("/cash/payments"), payment.toJsonString(), CashPayment.class, callback, callback);
             requestQueue.add(request);
         } catch (IOException e) {
             throw new IllegalStateException("Could not convert payment to json", e);
@@ -287,7 +289,7 @@ public class SquareCashService {
     public void retrievePayment(@NonNull String paymentId, ApiCallback<CashPayment> callback) {
         assertSession();
 
-        SquareRequest<CashPayment> request = makeGetRequest("v1/" + getEncodedCustomerId() + "/cash/payments/" + paymentId, null, CashPayment.class, callback, callback);
+        SquareRequest<CashPayment> request = makeGetRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class, callback, callback);
         requestQueue.add(request);
     }
 
