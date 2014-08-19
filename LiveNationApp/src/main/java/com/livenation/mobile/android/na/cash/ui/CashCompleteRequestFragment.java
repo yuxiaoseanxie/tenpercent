@@ -92,9 +92,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         String eventName = event != null? event.getDisplayName() : getString(R.string.data_missing_placeholder);
         String venue = (event != null && event.getVenue() != null)? event.getVenue().getName() : getString(R.string.data_missing_placeholder);
         String dateString = event != null? TicketingUtils.formatDate(event.getLocalStartTime()) : getString(R.string.data_missing_placeholder);
-        String description = getCashRequestActivity().getNote();
-        String caption = getString(R.string.cash_request_caption_fmt, eventName, venue, dateString, description);
-        CashCustomization senderCustomization = new CashCustomization(description, caption);
+        String caption = getString(R.string.cash_request_caption_fmt, eventName, venue, dateString);
+        CashCustomization senderCustomization = new CashCustomization(getCashRequestActivity().getNote(), caption);
         ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
         for (ContactData contact : contacts) {
             int quantity = quantities.get(contact.getId());
