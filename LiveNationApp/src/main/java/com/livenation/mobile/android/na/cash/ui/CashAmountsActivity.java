@@ -16,6 +16,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
@@ -87,6 +88,10 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
         return (Total) getIntent().getSerializableExtra(CashUtils.EXTRA_TOTAL);
     }
 
+    public CashCustomerStatus getCustomerStatus() {
+        return (CashCustomerStatus) getIntent().getSerializableExtra(CashUtils.EXTRA_CUSTOMER_STATUS);
+    }
+
     @SuppressWarnings("unchecked")
     public ArrayList<ContactData> getContacts() {
         return (ArrayList<ContactData>) getIntent().getSerializableExtra(CashUtils.EXTRA_CONTACTS);
@@ -111,34 +116,11 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
             startActivity(intent);
         }
 
-        private void requestCustomerStatus() {
-            final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
-            loadingDialogFragment.show(getSupportFragmentManager(), CashLoadingDialogFragment.TAG);
-
-            SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    loadingDialogFragment.dismiss();
-                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
-                    errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
-                }
-
-                @Override
-                public void onResponse(CashCustomerStatus response) {
-                    loadingDialogFragment.dismiss();
-                    if (response.isBlocked()) {
-                        showOnBoarding(response);
-                    } else {
-                        showComplete();
-                    }
-                }
-            });
-        }
-
         @Override
         public void onClick(View view) {
-            if (SquareCashService.getInstance().hasSession()) {
-                requestCustomerStatus();
+            CashCustomerStatus status = getCustomerStatus();
+            if (SquareCashService.getInstance().hasSession() && status != null && !status.isBlocked()) {
+                showComplete();
             } else {
                 showOnBoarding(null);
             }

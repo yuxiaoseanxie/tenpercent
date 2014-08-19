@@ -285,7 +285,7 @@
     <string name="cash_action_request">Request</string>
 
     <string name="cash_contact_name_you">You</string>
-    <string name="cash_logout_text">Not you?</string>
+    <string name="cash_logout_text_fmt">Not %1$s?</string>
 
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
     <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>

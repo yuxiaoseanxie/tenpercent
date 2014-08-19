@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.model.ContactDataAdapter;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashQuantityDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.views.ContactView;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
@@ -79,19 +81,19 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String fullName = getFullName();
+
         this.headerView = new ContactView(getActivity());
         headerView.getPhotoImageView().setImageResource(R.drawable.ic_contact_picture);
-        headerView.setName(getString(R.string.cash_contact_name_you));
+        headerView.setName(fullName);
         headerView.setPrice(TicketingUtils.formatCurrency(null, pricePerTicket));
         headerView.setQuantity(1);
         headerView.setEditable(false);
         getListView().addHeaderView(headerView, null, false);
 
-        this.footerView = LayoutInflater.from(getActivity()).inflate(android.R.layout.simple_list_item_1, getListView(), false);
+        this.footerView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_cash_logout_item, getListView(), false);
         TextView footerText = (TextView) footerView;
-        footerText.setText(getString(R.string.cash_logout_text));
-        footerText.setGravity(Gravity.CENTER);
-        footerText.setBackgroundResource(android.R.drawable.list_selector_background);
+        footerText.setText(getString(R.string.cash_logout_text_fmt, fullName));
         footerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +169,14 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     public int getRemainingQuantity() {
         return remainingQuantity;
+    }
+
+    public String getFullName() {
+        CashCustomerStatus status = getCashAmountsActivity().getCustomerStatus();
+        if (status != null && !TextUtils.isEmpty(status.getFullName()))
+            return status.getFullName();
+        else
+            return getString(R.string.cash_contact_name_you);
     }
 
     public HashMap<String, Integer> getTicketPerContactQuantities() {

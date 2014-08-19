@@ -81,7 +81,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
 
 
     public void testCustomerStatus() throws Exception {
-        JSONObject response = new JSONObject("{\"payments\":[],\"blockers\":{\"url\":\"https://cash.square-sandbox.com/cash/enroll/c7zay6myrvqabdbgb0hfcb5i9\",\"card\":{},\"phone_number\":{}},\"passcode_confirmation_enabled\":false}");
+        JSONObject response = new JSONObject("{\"payments\":[],\"blockers\":{\"url\":\"https://cash.square-sandbox.com/cash/enroll/c7zay6myrvqabdbgb0hfcb5i9\",\"card\":{},\"phone_number\":{}},\"passcode_confirmation_enabled\":false,\"full_name\":\"John Doe\"}");
         stack.stubGet(makeRouteUrl("/cash"), createHeaders())
              .andReturnJson(response, createEmptyHeaders(), 200);
 
@@ -96,6 +96,7 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
         assertNotNull(status.getBlockers().getCard());
         assertNotNull(status.getBlockers().getPhoneNumber());
         assertNull(status.getBlockers().getPasscodeVerification());
+        assertEquals("John Doe", status.getFullName());
         assertFalse(status.isPasswordConfirmationEnabled());
     }
 
