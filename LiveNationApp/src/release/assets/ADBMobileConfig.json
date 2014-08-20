@@ -1,7 +1,7 @@
 {
     "version" : "1.0",
     "analytics" : {
-        "rsids" : “liv-lnlabs-androiddev2",
+        "rsids" : “liv-lnlabs-androidprod2",
         "server" : "metrics.ticketmaster.com",
         "charset" : "UTF-8",
         "ssl" : false,
