@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import stubs.StubHttpStack;
@@ -215,6 +216,49 @@ public class SquareCashServiceTests extends InstrumentationTestCase {
         assertNotNull(response);
         assertEquals(response.getPaymentId(), "123");
 
+    }
+
+    //endregion
+
+
+    //region Component Tests
+
+    public void testServiceAssumptions() {
+        assertEquals(service.makeRoute("/test"), "v1/this-is-a-test-session/test");
+        assertEquals(service.makeUrl("test", null), "http://cash.square-sandbox.com/test");
+
+        Map<String, String> testParams = new LinkedHashMap<String, String>();
+        testParams.put("x", "22");
+        testParams.put("y", "19");
+        assertEquals(service.makeUrl("test", testParams), "http://cash.square-sandbox.com/test?x=22&y=19");
+    }
+
+    public void testErrorResponses() throws Exception {
+        JSONObject json = new JSONObject("{\"error\": \"too.many.lollipops\", \"error_description\": \"user has consumed too many lollipops, try again later.\"}");
+        stack.stubGet(makeRouteUrl("/cash/payments/123"), createHeaders())
+             .andReturnJson(json, createEmptyHeaders(), 400);
+
+        SyncResponseAdapter<CashPayment> adapter = new SyncResponseAdapter<CashPayment>();
+        service.retrievePayment("123", adapter);
+
+        try {
+            adapter.get();
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("too.many.lollipops"));
+            assertTrue(e.getMessage().contains("user has consumed too many lollipops, try again later."));
+
+            return;
+        }
+
+        fail("Error was not propagated");
+    }
+
+    public void testJsonDeserializationAssumptions() {
+        try {
+            CashResponse.OBJECT_MAPPER.readValue("{\"this\": \"field\", \"does\": \"not\", \"exist\": \"in object\"}", CashResponse.class);
+        } catch (Exception e) {
+            fail("Unrecognized fields should be ignored.");
+        }
     }
 
     //endregion
