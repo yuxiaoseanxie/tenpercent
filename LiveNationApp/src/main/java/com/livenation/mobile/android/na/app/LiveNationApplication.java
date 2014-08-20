@@ -20,6 +20,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.adobe.mobile.Config;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -219,6 +220,8 @@ public class LiveNationApplication extends Application {
         raterManager = new AppRaterManager(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(purchaseCompletedBroadcastReceiver, new IntentFilter(Ticketing.ACTION_PURCHASE_CONFIRMED));
 
+        //Omniture
+        Config.setContext(getApplicationContext());
 
     }
 

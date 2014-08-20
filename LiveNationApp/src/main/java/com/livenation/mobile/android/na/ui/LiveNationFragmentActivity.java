@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
+import com.adobe.mobile.Config;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
@@ -29,7 +30,9 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Segment.io
         Analytics.onCreate(this);
+
         if (!LiveNationApplication.get().isMusicSync()) {
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this, new BasicApiCallback<Void>() {
@@ -61,14 +64,20 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onPause() {
-        Analytics.activityPause(this);
         super.onPause();
+        //Segment.io
+        Analytics.activityPause(this);
+        //Omniture
+        Config.pauseCollectingLifecycleData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        //Segment.io
         Analytics.activityResume(this);
+        //Omniture
+        Config.collectLifecycleData();
     }
 
     @Override
