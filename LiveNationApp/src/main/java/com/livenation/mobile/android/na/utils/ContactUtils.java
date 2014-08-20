@@ -38,6 +38,7 @@ public class ContactUtils {
         Intent it = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", emailAddress, null));
         it.putExtra(Intent.EXTRA_SUBJECT, subject);
         it.putExtra(Intent.EXTRA_TEXT, message);
+        it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(it);
     }
 
