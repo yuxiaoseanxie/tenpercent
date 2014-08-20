@@ -16,6 +16,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
@@ -24,7 +25,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class ShowActivity extends DetailBaseFragmentActivity implements SingleEventView {
@@ -149,9 +152,9 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     }
 
     @Override
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
         if (event != null) {
-            Props props = new Props();
+            Map<String, Object> props = new HashMap<String, Object>();
             props.put(AnalyticConstants.EVENT_ID, event.getId());
 
             if (event.getVenue() != null) {
@@ -164,5 +167,13 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
             return props;
         }
         return null;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_SDP, getAnalyticsProps());
+        }
     }
 }

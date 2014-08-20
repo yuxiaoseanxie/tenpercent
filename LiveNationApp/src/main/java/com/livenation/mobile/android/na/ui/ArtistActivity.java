@@ -6,11 +6,15 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.segment.android.models.Props;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ArtistActivity extends DetailBaseFragmentActivity {
     private ArtistFragment artistFragment;
@@ -29,9 +33,9 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     @Override
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
         if (artistFragment != null) {
-            Props props = new Props();
+            Map<String, Object> props = new HashMap<String, Object>();
             if (args.containsKey(SingleArtistPresenter.PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(SingleArtistPresenter.PARAMETER_ARTIST_ID);
                 props.put(AnalyticConstants.ARTIST_ID, artistIdRaw);
@@ -88,5 +92,13 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         }
         props.put(AnalyticConstants.SOURCE, AnalyticsCategory.ADP);
         LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_ADP, getAnalyticsProps());
+        }
     }
 }

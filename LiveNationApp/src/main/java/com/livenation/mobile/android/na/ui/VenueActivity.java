@@ -14,6 +14,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -24,7 +25,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.segment.android.models.Props;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements SingleVenueView, EventsView {
@@ -142,9 +146,9 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     }
 
     @Override
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
         if (venue != null) {
-            Props props = new Props();
+            Map<String, Object> props = new HashMap<String, Object>();
             if (args.containsKey(SingleVenuePresenter.PARAMETER_VENUE_ID)) {
                 String venueIdRaw = args.getString(SingleVenuePresenter.PARAMETER_VENUE_ID);
                 props.put(AnalyticConstants.VENUE_ID, venueIdRaw);
@@ -152,5 +156,14 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
             return props;
         }
         return null;
+    }
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_VDP, getAnalyticsProps());
+        }
     }
 }

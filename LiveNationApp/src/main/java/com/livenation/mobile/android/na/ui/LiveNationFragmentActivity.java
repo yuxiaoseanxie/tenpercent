@@ -17,7 +17,9 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by elodieferrais on 4/2/14.
@@ -87,20 +89,16 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     }
 
     public void trackScreenWithLocation(final String screenName) {
-        Props properties = getAnalyticsProps();
-        if (properties == null) {
-            properties = new Props();
-        }
-        final Props finalProps = properties;
+        final Props properties = getPropsFromMapProperies(getAnalyticsProps());
         LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                finalProps.put("Location", response[0] + "," + response[1]);
+                properties.put("Location", response[0] + "," + response[1]);
                 String name = screenName;
                 if (name == null) {
                     name = getClass().getSimpleName();
                 }
-                LiveNationAnalytics.screen(name, finalProps);
+                LiveNationAnalytics.screen(name, properties);
             }
 
             @Override
@@ -109,7 +107,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
                 if (name == null) {
                     name = getClass().getSimpleName();
                 }
-                LiveNationAnalytics.screen(name, finalProps);
+                LiveNationAnalytics.screen(name, properties);
             }
         });
 
@@ -119,7 +117,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         return this.getClass().getSimpleName();
     }
 
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
         return null;
     }
 
@@ -144,5 +142,18 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
             }
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    private Props getPropsFromMapProperies(Map<String, Object> properties) {
+        Props props = new Props();
+        if (properties == null) {
+            return props;
+        }
+        Iterator<String> iterator = properties.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            props.put(key, properties.get(key));
+        }
+        return props;
     }
 }

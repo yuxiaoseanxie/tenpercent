@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.adapters.HelpListAdapter;
 import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
@@ -55,5 +56,13 @@ public class HelpMenuActivity extends LiveNationFragmentActivity implements Adap
     @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_HELP;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_HELP, null);
+        }
     }
 }
