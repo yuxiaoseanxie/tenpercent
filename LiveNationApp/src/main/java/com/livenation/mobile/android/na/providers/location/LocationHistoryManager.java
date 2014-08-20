@@ -26,7 +26,7 @@ public class LocationHistoryManager {
         restoreState(context);
     }
 
-    public void addLocationHistory(City city, Context context) {
+    public void addLocationHistory(City city) {
         locations.add(city);
         saveState(context);
     }

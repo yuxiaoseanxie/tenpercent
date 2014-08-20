@@ -43,6 +43,7 @@ public class LocationManager implements LocationProvider {
         userLocationProvider = new UserLocationAppProvider(context);
         applyLocationMode(locationMode);
         locationHistory = new LocationHistoryManager(context);
+        applyLocationMode(locationMode);
         this.context = context;
     }
 
@@ -76,8 +77,8 @@ public class LocationManager implements LocationProvider {
         task.execute();
     }
 
-    public void addLocationHistory(City city, Context context) {
-        locationHistory.addLocationHistory(city, context);
+    public void addLocationHistory(City city) {
+        locationHistory.addLocationHistory(city);
     }
 
     public List<City> getLocationHistory() {

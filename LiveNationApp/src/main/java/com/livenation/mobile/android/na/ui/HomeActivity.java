@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -48,16 +47,7 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
-import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
-import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.segment.android.models.Props;
-
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
-
-import java.util.Map;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -116,15 +106,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
-
-        //Hockey App
-        checkForUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
 
         final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
         if (installedAppConfig.isUpdateAdvisable())
@@ -216,7 +202,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
-                buildAndOpenContactEmail();
+                ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 
             case R.id.menu_home_logout_item:
@@ -228,30 +214,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
     }
 
-    private void buildAndOpenContactEmail() {
-
-        final String emailAddress = getString(R.string.contact_email_address);
-        final String subject = getString(R.string.contact_email_subject);
-        final String message = "\n\n" + getString(R.string.contact_email_signature_message)
-                + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
-                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
-                + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
-        ProviderManager providerManager = new ProviderManager();
-        providerManager.getConfigReadyFor(new ConfigCallback() {
-            @Override
-            public void onResponse(LiveNationConfig response) {
-                Map<String, String> userInfo = response.getAppInitResponse().getData().getUserInfo();
-                String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
-                String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
-                ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
-            }
-
-            @Override
-            public void onErrorResponse(int errorCode) {
-                ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
-            }
-        }, ProviderManager.ProviderType.APP_INIT);
-    }
 
     private void updateUpdateRequiredHeader() {
         final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
@@ -311,20 +273,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     private AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
-    }
-
-    //Hockey App
-    private void checkForCrashes() {
-        if (BuildConfig.DEBUG) {
-            CrashManager.register(this, getString(R.string.hockey_app_id));
-        }
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        if (BuildConfig.DEBUG) {
-            UpdateManager.register(this, getString(R.string.hockey_app_id));
-        }
     }
 
     @Override

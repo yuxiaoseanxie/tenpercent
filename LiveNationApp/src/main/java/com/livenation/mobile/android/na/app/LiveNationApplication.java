@@ -31,6 +31,7 @@ import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
+import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -87,6 +88,7 @@ public class LiveNationApplication extends Application {
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private InboxStatusPresenter inboxStatusPresenter;
+    private AppRaterManager raterManager;
     //Migration
     private String oldUserId;
     private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
@@ -97,6 +99,14 @@ public class LiveNationApplication extends Application {
             LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
         }
     };
+
+    private final BroadcastReceiver purchaseCompletedBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            raterManager.purchaseCompleted(LiveNationApplication.this);
+        }
+    };
+
     private BroadcastReceiver internetStateReceiver;
     private InstalledAppConfig installedAppConfig;
 
@@ -205,7 +215,10 @@ public class LiveNationApplication extends Application {
         props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
 
-        //Handle migration
+        //App Rating
+        raterManager = new AppRaterManager(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(purchaseCompletedBroadcastReceiver, new IntentFilter(Ticketing.ACTION_PURCHASE_CONFIRMED));
+
 
     }
 
