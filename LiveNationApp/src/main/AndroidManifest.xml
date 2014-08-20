@@ -45,6 +45,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> already there -->
     <!-- End Omniture permission -->
 
+    <!-- Experience App Permissions -->
+    <!--uses-permission android:name="android.permission.INTERNET" /-->
+    <!--uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -57,6 +64,7 @@
         android:largeHeap="true"
         android:logo="@drawable/logo"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -160,6 +168,33 @@
         <activity
             android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity"
             android:label="@string/message_title" />
+
+        <!-- Experience App -->
+
+        <activity android:name="com.experience.android.activities.ExperienceWebViewActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="Experience">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="expapp5" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="https" android:host="livenation.expapp.com" android:path="/app/deeplink" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.experience.android.integration.zxing.CaptureActivity"
+            android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver

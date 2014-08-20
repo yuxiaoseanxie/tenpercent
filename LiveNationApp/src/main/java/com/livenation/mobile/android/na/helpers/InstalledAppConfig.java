@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -16,7 +17,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.livenation.mobile.android.na.BuildConfig;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class InstalledAppConfig {
     public static final String ACTION_INSTALLED_APP_CONFIG_UPDATED = "com.livenation.mobile.android.na.helpers.InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED";
@@ -29,6 +35,8 @@ public class InstalledAppConfig {
     private static final String UPGRADE_PLAY_STORE_LINK = "upgrade_play_store_link";
 
     private static final String FEATURED_CAROUSEL_CHART = "featured_carousel_chart";
+
+    private static final String CONFIRMATION_ACTIONS = "confirmation_actions";
 
 
     private static final String DEFAULT_FEATURED_CAROUSEL_CHART = "mobile-featured";
@@ -97,6 +105,15 @@ public class InstalledAppConfig {
                 String upgradePlayStoreLink = response.optString(UPGRADE_PLAY_STORE_LINK);
                 editor.putString(UPGRADE_PLAY_STORE_LINK, upgradePlayStoreLink);
 
+                JSONArray confirmationActions = response.optJSONArray(CONFIRMATION_ACTIONS);
+                String accumulator = "";
+                for (int i = 0, size = confirmationActions.length(); i < size; i++) {
+                    accumulator += confirmationActions.optString(i) + ",";
+                }
+                if (accumulator.length() > 0)
+                    accumulator = accumulator.substring(0, accumulator.length() - 1);
+                editor.putString(CONFIRMATION_ACTIONS, accumulator);
+
                 timeOfLastUpdate = System.currentTimeMillis();
 
                 editor.apply();
@@ -136,6 +153,14 @@ public class InstalledAppConfig {
 
     public @Nullable String getUpgradeMessage() {
         return preferences.getString(UPGRADE_MESSAGE, null);
+    }
+
+    public @NonNull List<String> getConfirmationActions() {
+        String rawActions = preferences.getString(CONFIRMATION_ACTIONS, null);
+        if (!TextUtils.isEmpty(rawActions)) {
+            return Arrays.asList(TextUtils.split(rawActions, ","));
+        }
+        return Collections.emptyList();
     }
 
     public @NonNull String getUpgradePlayStoreLink() {

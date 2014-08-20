@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:minHeight="@dimen/list_item_height"
-    android:orientation="horizontal">
+    >
 
+
+    <ImageView
+        android:id="@+id/list_search_city_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/your_location_pin"
+        android:scaleType="centerInside"
+        android:minHeight="@dimen/minimum_pressable"
+        android:minWidth="@dimen/minimum_pressable"/>
 
     <TextView
         android:id="@+id/list_search_city_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/gap_medium"
-        android:drawableLeft="@drawable/your_location_pin"
-        android:drawablePadding="@dimen/gap_medium"
-        android:text="@string/mock_artist_type"
+        android:layout_toRightOf="@+id/list_search_city_logo"
         android:textAppearance="@style/ln.text.large.bold" />
 
+    <View
+        android:id="@+id/list_search_result_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/one_dp"
+        android:layout_alignLeft="@id/list_search_city_title"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ui_underscore_background" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -50,9 +50,6 @@ import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.segment.android.models.Props;
 
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
-
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
     private static final int RC_SSO_REPAIR = 0;
@@ -110,15 +107,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
-
-        //Hockey App
-        checkForUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
 
         final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
         if (installedAppConfig.isUpdateAdvisable())
@@ -286,20 +279,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     private AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
-    }
-
-    //Hockey App
-    private void checkForCrashes() {
-        if (BuildConfig.DEBUG) {
-            CrashManager.register(this, getString(R.string.hockey_app_id));
-        }
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        if (BuildConfig.DEBUG) {
-            UpdateManager.register(this, getString(R.string.hockey_app_id));
-        }
     }
 
     @Override
