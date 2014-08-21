@@ -54,4 +54,9 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     public void screen(String screen, Map<String, String> properties) {
         LiveNationAnalytics.screen(screen, mapToProps(properties));
     }
+
+    @Override
+    public void logError(String error, Map<String, String> properties) {
+        LiveNationAnalytics.track(error, AnalyticsCategory.ERROR, mapToProps(properties));
+    }
 }
