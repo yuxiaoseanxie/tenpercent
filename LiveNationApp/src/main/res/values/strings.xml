@@ -152,13 +152,13 @@
     <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info</string>
 
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
-    <string name="confirmation_action_tag_line_ride_share">Arrive like a rock star</string>
-    <string name="confirmation_action_ride_share">Book your ride</string>
+    <string name="confirmation_action_tag_line_ride_share">Arrive in style</string>
+    <string name="confirmation_action_ride_share">Book a Ride</string>
     <string name="confirmation_action_tag_line_share">Brag, Boast. Share</string>
-    <string name="confirmation_action_tag_line_split_cost">Bought \'em for friends?</string>
-    <string name="confirmation_action_split_cost">Split the Cost</string>
-    <string name="confirmation_action_tag_line_seat_upgrade">Want a seat upgrade?</string>
-    <string name="confirmation_action_seat_upgrade">Get in the List</string>
+    <string name="confirmation_action_tag_line_split_cost">Buying for friends?</string>
+    <string name="confirmation_action_split_cost">Get Paid Back</string>
+    <string name="confirmation_action_tag_line_seat_upgrade">Want a better seat?</string>
+    <string name="confirmation_action_seat_upgrade">Get an Upgrade</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
