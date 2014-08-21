@@ -102,7 +102,7 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_SEARCH, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SEARCH, null);
         }
     }
 }

@@ -134,7 +134,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         drawerToggle.syncState();
         //Omniture
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_HOME, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_HOME, null);
         }
     }
 
@@ -207,7 +207,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
-                OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
+                OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
                 ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 

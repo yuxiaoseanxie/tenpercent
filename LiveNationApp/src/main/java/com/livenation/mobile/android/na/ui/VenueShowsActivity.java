@@ -37,7 +37,7 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_VDP_ALL_SHOWS, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_VDP_ALL_SHOWS, null);
         }
     }
 

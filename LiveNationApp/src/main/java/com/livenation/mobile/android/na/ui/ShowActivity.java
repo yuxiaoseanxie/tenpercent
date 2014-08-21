@@ -173,7 +173,7 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_SDP, getAnalyticsProps());
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SDP, getAnalyticsProps());
         }
     }
 }

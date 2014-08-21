@@ -55,7 +55,7 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
         super.onPostCreate(savedInstanceState);
         //Omniture
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_FAVORITES, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_FAVORITES, null);
         }
     }
 }

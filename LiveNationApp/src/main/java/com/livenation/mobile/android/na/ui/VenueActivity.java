@@ -163,7 +163,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_VDP, getAnalyticsProps());
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_VDP, getAnalyticsProps());
         }
     }
 }

@@ -56,7 +56,7 @@ public class ArtistShowsActivity extends LiveNationFragmentActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_ADP_TOUR, getAnalyticsProps());
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_ADP_TOUR, getAnalyticsProps());
         }
     }
 }

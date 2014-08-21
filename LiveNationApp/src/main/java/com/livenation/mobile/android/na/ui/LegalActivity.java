@@ -144,7 +144,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
         super.onPostCreate(savedInstanceState);
         //Omniture
         if (savedInstanceState == null) {
-            OmnitureTracker.trackAction(AnalyticConstants.OMNITURE_SCREEN_LEGAL_CREDITS, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_LEGAL_CREDITS, null);
         }
     }
 }
