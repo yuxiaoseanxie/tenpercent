@@ -53,8 +53,6 @@ public class RatingDialogFragment extends LiveNationDialogFragment {
         notNow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 LiveNationAnalytics.track(AnalyticConstants.NOT_NOW, AnalyticsCategory.RATEUSMODAL);
-                ContactUtils.buildAndOpenContactUsEmail(getActivity());
-                prefs.setHasBeenClicked(true);
                 getActivity().finish();
             }
         });
