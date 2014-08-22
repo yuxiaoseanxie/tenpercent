@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.app.rating;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,6 +71,10 @@ public class RatingDialogFragment extends LiveNationDialogFragment {
     }
 
     private void rateApp() {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(getString(R.string.rating_dialog_google_play_app_url), getActivity().getPackageName()))));
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(getString(R.string.rating_dialog_market_app_url), getActivity().getPackageName()))));
+        } catch (ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(getString(R.string.rating_dialog_google_play_app_url), getActivity().getPackageName()))));
+        }
     }
 }
