@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.preferences.RatingPreferences;
 import com.livenation.mobile.android.na.ui.dialogs.LiveNationDialogFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
@@ -39,17 +42,17 @@ public class RatingDialogFragment extends LiveNationDialogFragment {
         Button rateButton = (Button) view.findViewById(R.id.rating_dialog_rate);
         rateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                LiveNationAnalytics.track(AnalyticConstants.RATE_US_TAPPED, AnalyticsCategory.RATEUSMODAL);
                 rateApp();
                 prefs.setHasBeenClicked(true);
                 getActivity().finish();
             }
         });
 
-        Button sendUsFeedBack = (Button) view.findViewById(R.id.rating_dialog_rateLater);
-        sendUsFeedBack.setOnClickListener(new View.OnClickListener() {
+        Button notNow = (Button) view.findViewById(R.id.rating_dialog_not_now);
+        notNow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ContactUtils.buildAndOpenContactUsEmail(getActivity());
-                prefs.setHasBeenClicked(true);
+                LiveNationAnalytics.track(AnalyticConstants.NOT_NOW, AnalyticsCategory.RATEUSMODAL);
                 getActivity().finish();
             }
         });
@@ -57,6 +60,7 @@ public class RatingDialogFragment extends LiveNationDialogFragment {
         Button cancelButton = (Button) view.findViewById(R.id.rating_dialog_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                LiveNationAnalytics.track(AnalyticConstants.DONT_SHOW_AGAIN_TAPPED, AnalyticsCategory.RATEUSMODAL);
                 prefs.setHasBeenClicked(true);
                 getActivity().finish();
             }

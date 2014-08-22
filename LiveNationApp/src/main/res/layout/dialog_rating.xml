@@ -40,13 +40,13 @@
         android:text="@string/rating_dialog_rate_us" />
 
     <Button
-        android:id="@+id/rating_dialog_rateLater"
+        android:id="@+id/rating_dialog_not_now"
         style="@style/custom_center_container.green"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/gap_small"
-        android:text="@string/rating_dialog_send_us_feedback" />
+        android:text="@string/rating_dialog_not_now" />
 
     <Button
         android:id="@+id/rating_dialog_cancel"
