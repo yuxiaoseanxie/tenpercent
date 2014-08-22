@@ -68,7 +68,7 @@ public class SquareCashService {
     public String makeUrl(@NonNull String route, @Nullable Map<String, String> params) {
         Uri.Builder builder = new Uri.Builder();
 
-        builder.scheme("http");
+        builder.scheme("https");
         builder.encodedAuthority(context.getString(R.string.square_cash_environment));
         builder.appendEncodedPath(route);
 
