@@ -1,16 +1,12 @@
 {
     "version" : "1.0",
     "analytics" : {
-        "rsids" : “liv-lnlabs-androiddev2",
+        "rsids" : "liv-lnlabs-androiddev2",
         "server" : "metrics.ticketmaster.com",
         "charset" : "UTF-8",
         "ssl" : false,
         "offlineEnabled" : true,
-        "lifecycleTimeout" : 5,
-        "privacyDefault" : "optedin",
-        "poi" : [
-                    ["san francisco",37.757144,-122.44812,7000],
-                    ["santa cruz",36.972935,-122.01725,600]
-                      ]
+        "lifecycleTimeout" : 300,
+        "privacyDefault" : "optedin"
     }
 }
