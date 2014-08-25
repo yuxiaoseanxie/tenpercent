@@ -159,6 +159,7 @@ public class AnalyticConstants {
     public static final String CATEGORY_NOTIFICATION_VALUE = "Notification";
     public static final String CATEGORY_PUSH_NOTIFICATION_VALUE = "Push Notification";
     public static final String CATEGORY_LOCATION_VALUE = "Location";
+    public static final String CATEGORY_RATE_US_MODAL = "RateUsModal";
 
 
     public static final String CATEGORY_ERROR_VALUE = "Error";
@@ -225,6 +226,12 @@ public class AnalyticConstants {
     //Push Notification
     public static final String MESSAGE_VALUE = "Message Value";
     public static final String MESSAGE_ID = "Message Id";
+
+    //App Rating
+    public static final String RATE_US_SHOWN = "Rate Us Shown";
+    public static final String RATE_US_TAPPED = "Rate Us Tapped";
+    public static final String DONT_SHOW_AGAIN_TAPPED = "Don't Show Again Tapped";
+    public static final String NOT_NOW = "Not Now";
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 

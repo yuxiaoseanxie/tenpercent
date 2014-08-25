@@ -75,7 +75,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_order_confirmation);
-        LocalBroadcastManager.getInstance(this).sendBroadcastSync(new Intent(Ticketing.ACTION_PURCHASE_CONFIRMED));
 
         this.event = (Event) getIntent().getSerializableExtra(EXTRA_EVENT);
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
@@ -496,4 +495,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             addActionButtons(confirmationActions);
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).sendBroadcastSync(new Intent(Ticketing.ACTION_PURCHASE_CONFIRMED));
+    }
 }

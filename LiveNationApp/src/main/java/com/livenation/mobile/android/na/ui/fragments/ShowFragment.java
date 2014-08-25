@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -210,6 +211,13 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                 @Override
                 public void onMapClick(LatLng latLng) {
                     venueDetails.performClick();
+                }
+            });
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    venueDetails.performClick();
+                    return true;
                 }
             });
         } else {
