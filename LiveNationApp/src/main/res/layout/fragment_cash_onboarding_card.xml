@@ -24,7 +24,7 @@
         android:imeOptions="actionNext|flagNoExtractUi"
         android:nextFocusForward="@+id/fragment_cash_onboarding_card_month"
         android:textSize="18sp"
-        android:hint="@string/credit_card">
+        android:hint="@string/cash_field_hint_card_number">
 
         <requestFocus />
 
@@ -42,44 +42,36 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:hint="@string/card_month_hint"
+            android:hint="@string/cash_field_hint_card_month"
             android:imeOptions="actionNext|flagNoExtractUi"
             android:inputType="number"
             android:nextFocusForward="@+id/edittext_card_year" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0"
-            android:gravity="center"
-            android:hint="@string/card_month_hint"
-            android:text="@string/card_date_separator"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.TextView" />
 
         <EditText
             android:id="@+id/fragment_cash_onboarding_card_year"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/gap_medium"
             android:gravity="center"
-            android:hint="@string/card_year_hint"
+            android:hint="@string/cash_field_hint_card_year"
             android:imeOptions="actionNext|flagNoExtractUi"
             android:inputType="number"
             android:nextFocusForward="@+id/fragment_cash_onboarding_card_cvv" />
 
-    </LinearLayout>
+        <EditText
+            android:id="@+id/fragment_cash_onboarding_card_cvv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginLeft="@dimen/gap_medium"
+            android:gravity="center"
+            android:hint="@string/cash_field_hint_card_cvv"
+            android:inputType="number"
+            android:imeOptions="actionNext|flagNoExtractUi"
+            android:nextFocusForward="@+id/fragment_cash_onboarding_card_postal"/>
 
-    <EditText
-        android:id="@+id/fragment_cash_onboarding_card_cvv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/inter_item_padding_medium"
-        android:gravity="center"
-        android:hint="@string/dialog_enter_cvv_text_hint"
-        android:inputType="number"
-        android:imeOptions="actionNext|flagNoExtractUi"
-        android:nextFocusForward="@+id/fragment_cash_onboarding_card_postal"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/fragment_cash_onboarding_card_postal"
@@ -89,7 +81,7 @@
         android:inputType="number"
         android:imeOptions="actionGo|flagNoExtractUi"
         android:gravity="center"
-        android:hint="@string/zip"/>
+        android:hint="@string/cash_field_hint_card_zip"/>
 
     <ImageView
         android:layout_width="wrap_content"

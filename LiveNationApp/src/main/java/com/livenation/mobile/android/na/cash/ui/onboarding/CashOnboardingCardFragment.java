@@ -23,6 +23,7 @@ import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
 import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
+import com.livenation.mobile.android.ticketing.utils.forms.validators.CardChecksumValidator;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.MonthValidator;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NumberValidator;
 
@@ -73,6 +74,9 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
     //region Validation
 
     private void setupCardInput() {
+        validationManager.attach(cardNumber, new CardChecksumValidator(), new EditTextValidationListener());
+        cardNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
+
         validationManager.attach(cardExprMonth, new MonthValidator(), new EditTextValidationListener());
         cardExprMonth.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
 
@@ -80,7 +84,11 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
         cardExprYear.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
 
         validationManager.attach(cardCvv, new NumberValidator(), new EditTextValidationListener());
+        cardCvv.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
+
+        // If/when we add support for Canada, we will need to remove these constraints.
         validationManager.attach(cardPostal, new NumberValidator(), new EditTextValidationListener());
+        cardPostal.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
     }
 
     private void tearDownCardInput() {
