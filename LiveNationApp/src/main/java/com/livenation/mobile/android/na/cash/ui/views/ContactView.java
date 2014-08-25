@@ -10,17 +10,14 @@ import android.widget.TextView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.CircularImageView;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 @SuppressWarnings("UnusedDeclaration")
 public class ContactView extends FrameLayout {
-    @InjectView(R.id.view_cash_contact_photo) CircularImageView photoImageView;
-    @InjectView(R.id.view_cash_contact_name) TextView name;
-    @InjectView(R.id.view_cash_contact_price) TextView priceText;
+    private CircularImageView photoImageView;
+    private TextView name;
+    private TextView priceText;
 
-    @InjectView(R.id.view_cash_contact_quantity) TextView quantity;
-    @InjectView(R.id.view_cash_contact_quantity_tag) TextView quantityTag;
+    private TextView quantity;
+    private TextView quantityTag;
 
 
     public ContactView(Context context) {
@@ -82,6 +79,11 @@ public class ContactView extends FrameLayout {
     protected void initialize() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.view_cash_contact, isInEditMode()? null : this, true);
-        ButterKnife.inject(this);
+
+        this.photoImageView = (CircularImageView) findViewById(R.id.view_cash_contact_photo);
+        this.name = (TextView) findViewById(R.id.view_cash_contact_name);
+        this.priceText = (TextView) findViewById(R.id.view_cash_contact_price);
+        this.quantity = (TextView) findViewById(R.id.view_cash_contact_quantity);
+        this.quantityTag = (TextView) findViewById(R.id.view_cash_contact_quantity_tag);
     }
 }

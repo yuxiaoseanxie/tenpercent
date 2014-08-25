@@ -31,12 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 public class CashCompleteRequestFragment extends ListFragment implements ContactDataAdapter.DataProvider {
-    @InjectView(R.id.fragment_cash_complete_amount) TextView amount;
-
     private ArrayList<ContactData> contacts;
     private ContactDataAdapter adapter;
     private HashMap<String, Integer> quantities;
@@ -61,7 +56,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_complete_request, container, false);
-        ButterKnife.inject(this, view);
+
+        TextView amount = (TextView) view.findViewById(R.id.fragment_cash_complete_amount);
 
         long amountRequested = pricePerTicket * (getCashRequestActivity().getTicketQuantity() - 1);
         BigDecimal formatableAmountRequested = BigDecimal.valueOf(amountRequested / 100.0);

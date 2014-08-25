@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private static final int SELECT_QUANTITY_REQUEST_CODE = 0xf;
 
-    @InjectView(R.id.fragment_cash_amounts_artist_text) TextView artistText;
-    @InjectView(R.id.fragment_cash_amounts_date_text) TextView dateText;
-    @InjectView(R.id.fragment_cash_amounts_price_per_ticket_text) TextView pricePerTicketText;
-    @InjectView(R.id.cash_request_total_text) TextView totalText;
+    private TextView artistText;
+    private TextView dateText;
+    private TextView pricePerTicketText;
+    private TextView totalText;
 
     private ContactDataAdapter adapter;
     private ContactView headerView;
@@ -66,7 +62,11 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_amounts, container, false);
-        ButterKnife.inject(this, view);
+
+        this.artistText = (TextView) view.findViewById(R.id.fragment_cash_amounts_artist_text);
+        this.dateText = (TextView) view.findViewById(R.id.fragment_cash_amounts_date_text);
+        this.pricePerTicketText = (TextView) view.findViewById(R.id.fragment_cash_amounts_price_per_ticket_text);
+        this.totalText = (TextView) view.findViewById(R.id.cash_request_total_text);
 
         artistText.setText(getCashAmountsActivity().getEvent().getDisplayName());
         dateText.setText(TicketingUtils.formatDate(getCashAmountsActivity().getEvent().getLocalStartTime()));

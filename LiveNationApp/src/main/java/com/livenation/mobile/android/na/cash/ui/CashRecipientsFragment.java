@@ -17,14 +17,11 @@ import com.livenation.mobile.android.na.cash.ui.views.TokenCompleteTextView;
 
 import java.util.ArrayList;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 public class CashRecipientsFragment extends Fragment implements TokenCompleteTextView.TokenListener<ContactData> {
     public static final String TAG = CashRecipientsFragment.class.getSimpleName();
 
-    @InjectView(R.id.fragment_cash_recipients_field_to) ContactsCompleteTextView toField;
-    @InjectView(R.id.fragment_cash_recipients_field_note) EditText noteField;
+    private ContactsCompleteTextView toField;
+    private EditText noteField;
 
     //region Lifecycle
 
@@ -38,7 +35,9 @@ public class CashRecipientsFragment extends Fragment implements TokenCompleteTex
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_recipients, container, false);
-        ButterKnife.inject(this, view);
+
+        this.toField = (ContactsCompleteTextView) view.findViewById(R.id.fragment_cash_recipients_field_to);
+        this.noteField = (EditText) view.findViewById(R.id.fragment_cash_recipients_field_note);
 
         toField.setTokenListener(this);
         noteField.setFilters(new InputFilter[] { new InputFilter.LengthFilter(CashCustomization.MAX_STATEMENT_LENGTH) });

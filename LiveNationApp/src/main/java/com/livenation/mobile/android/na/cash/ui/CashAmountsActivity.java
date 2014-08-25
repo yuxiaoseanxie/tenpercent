@@ -11,15 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
-import com.livenation.mobile.android.na.cash.service.responses.CashCustomer;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
-import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
-import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;

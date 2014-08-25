@@ -19,12 +19,8 @@ import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnEditorAction;
-
 public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
-    @InjectView(R.id.fragment_cash_onboarding_verify_number) EditText number;
+    private EditText number;
 
     private final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
 
@@ -33,7 +29,10 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_onboarding_phone, container, false);
-        ButterKnife.inject(this, view);
+
+        this.number = (EditText) view.findViewById(R.id.fragment_cash_onboarding_verify_number);
+        number.setOnEditorActionListener(numberEditorListener);
+
         return view;
     }
 
@@ -84,14 +83,16 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     //endregion
 
 
-    @OnEditorAction(R.id.fragment_cash_onboarding_verify_number)
-    public boolean onNumberEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-            next();
+    private final TextView.OnEditorActionListener numberEditorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                next();
 
-            return true;
+                return true;
+            }
+
+            return false;
         }
-
-        return false;
-    }
+    };
 }

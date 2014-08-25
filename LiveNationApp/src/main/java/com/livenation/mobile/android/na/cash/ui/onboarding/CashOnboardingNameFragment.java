@@ -20,12 +20,8 @@ import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.mobilitus.tm.tickets.models.User;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnEditorAction;
-
 public class CashOnboardingNameFragment extends CashOnboardingFragment {
-    @InjectView(R.id.fragment_cash_name_field) EditText nameField;
+    private EditText nameField;
 
     //region Lifecycle
 
@@ -39,7 +35,9 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_onboarding_name, container, false);
-        ButterKnife.inject(this, view);
+
+        this.nameField = (EditText) view.findViewById(R.id.fragment_cash_name_field);
+        nameField.setOnEditorActionListener(nameEditorListener);
 
         if (Ticketing.getTicketService().hasSession() && Ticketing.getTicketService().getUser() != null) {
             String name = "";
@@ -82,16 +80,18 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
     }
 
 
-    @OnEditorAction(R.id.fragment_cash_name_field)
-    public boolean onNameEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-            CashUtils.dismissKeyboard(textView);
+    private final TextView.OnEditorActionListener nameEditorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                CashUtils.dismissKeyboard(textView);
 
-            next();
+                next();
 
-            return true;
+                return true;
+            }
+
+            return false;
         }
-
-        return false;
-    }
+    };
 }

@@ -27,16 +27,12 @@ import com.livenation.mobile.android.ticketing.utils.forms.validators.CardChecks
 import com.livenation.mobile.android.ticketing.utils.forms.validators.MonthValidator;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NumberValidator;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnEditorAction;
-
 public class CashOnboardingCardFragment extends CashOnboardingFragment {
-    @InjectView(R.id.fragment_cash_onboarding_card_number) EditText cardNumber;
-    @InjectView(R.id.fragment_cash_onboarding_card_month) EditText cardExprMonth;
-    @InjectView(R.id.fragment_cash_onboarding_card_year) EditText cardExprYear;
-    @InjectView(R.id.fragment_cash_onboarding_card_cvv) EditText cardCvv;
-    @InjectView(R.id.fragment_cash_onboarding_card_postal) EditText cardPostal;
+    private EditText cardNumber;
+    private EditText cardExprMonth;
+    private EditText cardExprYear;
+    private EditText cardCvv;
+    private EditText cardPostal;
 
     private ValidationManager validationManager;
 
@@ -54,7 +50,12 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cash_onboarding_card, container, false);
-        ButterKnife.inject(this, view);
+
+        this.cardNumber = (EditText) view.findViewById(R.id.fragment_cash_onboarding_card_number);
+        this.cardExprMonth = (EditText) view.findViewById(R.id.fragment_cash_onboarding_card_month);
+        this.cardExprYear = (EditText) view.findViewById(R.id.fragment_cash_onboarding_card_year);
+        this.cardCvv = (EditText) view.findViewById(R.id.fragment_cash_onboarding_card_cvv);
+        this.cardPostal = (EditText) view.findViewById(R.id.fragment_cash_onboarding_card_postal);
 
         setupCardInput();
 
@@ -89,6 +90,7 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
         // If/when we add support for Canada, we will need to remove these constraints.
         validationManager.attach(cardPostal, new NumberValidator(), new EditTextValidationListener());
         cardPostal.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+        cardPostal.setOnEditorActionListener(postalEditorActionListener);
     }
 
     private void tearDownCardInput() {
@@ -142,16 +144,17 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
         });
     }
 
+    private final TextView.OnEditorActionListener postalEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                next();
 
-    @OnEditorAction(R.id.fragment_cash_onboarding_card_postal)
-    public boolean onPostalEditorAction(TextView textView, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_GO) {
-            next();
-
-            return true;
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
+    };
 
     //endregion
 }

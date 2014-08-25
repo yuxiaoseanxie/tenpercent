@@ -162,7 +162,7 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
     }
 
     public void continueToPhoneVerification() {
-        if (customerStatus != null && customerStatus.getBlockers().getPhoneNumber() != null)
+        if (customerStatus != null && customerStatus.getBlockers() != null && customerStatus.getBlockers().getPhoneNumber() != null)
             showPage(Page.VERIFY);
         else
             setupCompleted();

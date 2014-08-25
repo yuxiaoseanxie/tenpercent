@@ -23,9 +23,6 @@ import com.livenation.mobile.android.na.R;
 
 import java.io.InputStream;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 public class ContactsCursorAdapter extends CursorAdapter {
 
     static {
@@ -210,13 +207,15 @@ public class ContactsCursorAdapter extends CursorAdapter {
     //endregion
 
 
-    class ViewHolder {
-        @InjectView(R.id.view_cash_autocomplete_contact_photo) ImageView contactPhoto;
-        @InjectView(R.id.view_cash_autocomplete_contact_name) TextView contactName;
-        @InjectView(R.id.view_cash_autocomplete_contact_info) TextView contactInfo;
+    private class ViewHolder {
+        private ImageView contactPhoto;
+        private TextView contactName;
+        private TextView contactInfo;
 
-        ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+        private ViewHolder(View view) {
+            this.contactPhoto = (ImageView) view.findViewById(R.id.view_cash_autocomplete_contact_photo);
+            this.contactName = (TextView) view.findViewById(R.id.view_cash_autocomplete_contact_name);
+            this.contactInfo = (TextView) view.findViewById(R.id.view_cash_autocomplete_contact_info);
         }
     }
 }
