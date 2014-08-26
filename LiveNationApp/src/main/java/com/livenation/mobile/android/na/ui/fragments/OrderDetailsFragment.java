@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -618,13 +619,8 @@ public class OrderDetailsFragment extends Fragment {
 
     private void displayUpgradeButton() {
         View buttonContainer = mainView.findViewById(R.id.order_detail_upgrade_framelayout);
-        ImageView image = (ImageView) mainView.findViewById(com.livenation.mobile.android.na.R.id.view_confirmation_action_image);
-        TextView title = (TextView) mainView.findViewById(com.livenation.mobile.android.na.R.id.view_confirmation_action_button_title);
-        TextView tagLine = (TextView) mainView.findViewById(com.livenation.mobile.android.na.R.id.view_confirmation_action_button_tag_line);
-        image.setImageResource(R.drawable.confirmation_upgrade);
-        title.setText(R.string.confirmation_action_seat_upgrade);
-        tagLine.setText(R.string.confirmation_action_tag_line_seat_upgrade);
-        buttonContainer.setOnClickListener(new View.OnClickListener() {
+        Button upgadeButton = (Button) mainView.findViewById(com.livenation.mobile.android.na.R.id.order_detail_upgrade_button);
+        upgadeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ticketsCart != null && getActivity() != null) {

@@ -51,10 +51,21 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
+    <View
+        style="@style/Divider"/>
+    <RelativeLayout
         android:id="@+id/order_detail_upgrade_framelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/button_bottombar_height">
+
+        <Button
+            style="@style/BottomBarButton.NoBackground"
+            android:text="@string/confirmation_action_seat_upgrade"
+            android:id="@+id/order_detail_upgrade_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/order_detail_linearlayout_transfer_resale"
