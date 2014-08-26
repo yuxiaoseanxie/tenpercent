@@ -29,6 +29,16 @@
 
     </EditText>
 
+    <Button
+        android:id="@+id/fragment_cash_onboarding_verify_resend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/ln.text.small.italic"
+        android:textColor="@drawable/selector_text_ln_red"
+        android:text="@string/cash_resend_verification_code"
+        android:background="?android:selectableItemBackground"
+        android:visibility="invisible"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
