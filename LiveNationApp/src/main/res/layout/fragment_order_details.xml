@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/order_detail_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/order_detail_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/sub_fragment_event_info" />
+
+                <View
+                    style="@style/Divider"
+                    android:layout_marginBottom="@dimen/inter_item_padding_large"
+                    android:layout_marginTop="@dimen/ticket_element_padding" />
+
+                <TextView
+                    android:id="@+id/order_detail_textview_instructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/outer_padding"
+                    android:paddingRight="@dimen/outer_padding"
+                    android:text="@string/order_details_transfer_instructions"
+                    android:textAppearance="@style/ListViewTextAppearance"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/order_detail_ticket_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.livenation.mobile.android.na.ui.views.ConfirmationActionButton
+        android:id="@+id/order_detail_upgrade_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/order_detail_linearlayout_transfer_resale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/order_detail_button_transfer"
+            style="@style/BottomBarButton"
+            android:layout_weight="1"
+            android:text="@string/button_transfer" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/divider_bottombar" />
+
+        <Button
+            android:id="@+id/order_detail_button_resale"
+            style="@style/BottomBarButton"
+            android:layout_weight="1"
+            android:text="@string/button_resale" />
+
+    </LinearLayout>
+
+</LinearLayout>
