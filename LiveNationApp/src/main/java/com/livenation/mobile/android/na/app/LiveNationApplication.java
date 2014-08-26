@@ -100,13 +100,6 @@ public class LiveNationApplication extends Application {
         }
     };
 
-    private final BroadcastReceiver purchaseCompletedBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            raterManager.purchaseCompleted(LiveNationApplication.this);
-        }
-    };
-
     private BroadcastReceiver internetStateReceiver;
     private InstalledAppConfig installedAppConfig;
 
@@ -214,11 +207,6 @@ public class LiveNationApplication extends Application {
         props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
         props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
-
-        //App Rating
-        raterManager = new AppRaterManager(this);
-        LocalBroadcastManager.getInstance(this).registerReceiver(purchaseCompletedBroadcastReceiver, new IntentFilter(Ticketing.ACTION_PURCHASE_CONFIRMED));
-
 
     }
 
