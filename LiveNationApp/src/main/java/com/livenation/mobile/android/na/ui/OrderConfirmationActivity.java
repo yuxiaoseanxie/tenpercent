@@ -502,8 +502,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         super.onDestroy();
         AppRaterManager raterManager = new AppRaterManager(this);
         int ticketsCount = 1;
-        if (getCart().getTickets() != null) {
-            ticketsCount = getCart().getTickets().size();
+        if (getCart() != null) {
+            ticketsCount = TicketingUtils.getTicketCountForCart(getCart());
         }
         raterManager.purchaseCompleted(getApplicationContext(), ticketsCount);
     }
