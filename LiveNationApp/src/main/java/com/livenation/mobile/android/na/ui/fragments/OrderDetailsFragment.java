@@ -618,7 +618,7 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private void displayUpgradeButton() {
-        View buttonContainer = mainView.findViewById(R.id.order_detail_upgrade_framelayout);
+        View divider = mainView.findViewById(R.id.order_detail_upgrade_divider);
         Button upgadeButton = (Button) mainView.findViewById(com.livenation.mobile.android.na.R.id.order_detail_upgrade_button);
         upgadeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -636,7 +636,8 @@ public class OrderDetailsFragment extends Fragment {
                 }
             }
         });
-        buttonContainer.setVisibility(View.VISIBLE);
+        divider.setVisibility(View.VISIBLE);
+        upgadeButton.setVisibility(View.VISIBLE);
 
     }
 }

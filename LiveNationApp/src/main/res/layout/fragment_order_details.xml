@@ -43,7 +43,7 @@
                     android:id="@+id/order_detail_ticket_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
 
             </LinearLayout>
 
@@ -52,19 +52,15 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
-        style="@style/Divider"/>
-    <RelativeLayout
-        android:id="@+id/order_detail_upgrade_framelayout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_bottombar_height">
+        android:id="@+id/order_detail_upgrade_divider"
+        style="@style/Divider"
+        android:visibility="gone"/>
 
-        <Button
-            style="@style/BottomBarButton.NoBackground"
-            android:text="@string/confirmation_action_seat_upgrade"
-            android:id="@+id/order_detail_upgrade_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        </RelativeLayout>
+    <Button
+        android:id="@+id/order_detail_upgrade_button"
+        style="@style/BottomBarButton.NoBackground"
+        android:visibility="gone"
+        android:text="@string/confirmation_action_seat_upgrade" />
 
 
     <LinearLayout
