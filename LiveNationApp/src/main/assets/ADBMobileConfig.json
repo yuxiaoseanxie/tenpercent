@@ -5,7 +5,7 @@
         "server" : "metrics.ticketmaster.com",
         "charset" : "UTF-8",
         "ssl" : false,
-        "offlineEnabled" : true,
+        "offlineEnabled" : false,
         "lifecycleTimeout" : 300,
         "privacyDefault" : "optedin"
     }
