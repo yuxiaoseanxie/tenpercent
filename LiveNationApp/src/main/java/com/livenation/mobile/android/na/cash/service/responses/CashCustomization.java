@@ -13,8 +13,8 @@ public class CashCustomization extends CashResponse {
     @JsonProperty("subject")
     private String subject;
 
-    // @JsonProperty("button")
-    // private CashButton button;
+    @JsonProperty("button")
+    private CashButton button;
 
     @JsonProperty("amount_caption")
     private String amountCaption;
@@ -72,6 +72,13 @@ public class CashCustomization extends CashResponse {
         this.statementDescription = statementDescription;
     }
 
+    public CashButton getButton() {
+        return button;
+    }
+
+    public void setButton(CashButton button) {
+        this.button = button;
+    }
 
     @Override
     public String toString() {

@@ -298,11 +298,13 @@ public class SquareCashService {
         requestQueue.add(request);
     }
 
+    public void cancelPayment(@NonNull String paymentId, ApiCallback<CashPayment> callback) {
+        SquareRequest<CashPayment> request = makeDeleteRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class, callback, callback);
+        requestQueue.add(request);
+    }
+
     //endregion
 
 
     public interface ApiCallback<T> extends Response.Listener<T>, Response.ErrorListener {}
-    public interface CustomerIdProvider {
-        void provideSquareCustomerId(Response.Listener<String> onResponse);
-    }
 }
