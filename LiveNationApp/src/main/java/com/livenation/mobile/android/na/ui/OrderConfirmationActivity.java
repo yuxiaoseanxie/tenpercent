@@ -17,7 +17,7 @@ import com.experience.android.activities.ExpActivityConfig;
 import com.experience.android.activities.ExperienceWebViewActivity;
 import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
@@ -36,11 +36,12 @@ import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
-import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
@@ -224,7 +225,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
-                
+
                 //temporarily disabled for testing upgrades
 //                if (++numberAdded >= 3)
 //                    break;
@@ -330,49 +331,49 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
         if (getCart() != null) {
             CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
-            Props ticketQuantityProps = getPreBuiltCartProps();
+            Map<String, Object> ticketQuantityProps = getPreBuiltCartProps();
             ticketQuantityProps.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TICKET_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, ticketQuantityProps);
-            Props revenueProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_TICKET_QUANTITY, ticketQuantityProps);
+            Map<String, Object> revenueProps = getPreBuiltCartProps();
             revenueProps.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_REVENUE, AnalyticConstants.CATEGORY_CHECKOUT, revenueProps);
-            Props convFeeProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_REVENUE, revenueProps);
+            Map<String, Object> convFeeProps = getPreBuiltCartProps();
             convFeeProps.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, AnalyticConstants.CATEGORY_CHECKOUT, convFeeProps);
-            Props otherFeesProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, convFeeProps);
+            Map<String, Object> otherFeesProps = getPreBuiltCartProps();
             otherFeesProps.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, AnalyticConstants.CATEGORY_CHECKOUT, otherFeesProps);
-            Props deliveryFeeProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, otherFeesProps);
+            Map<String, Object> deliveryFeeProps = getPreBuiltCartProps();
             deliveryFeeProps.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_DELIVERY_FEE, AnalyticConstants.CATEGORY_CHECKOUT, deliveryFeeProps);
-            Props orderProcessingFeeProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_DELIVERY_FEE, deliveryFeeProps);
+            Map<String, Object> orderProcessingFeeProps = getPreBuiltCartProps();
             orderProcessingFeeProps.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_OTHER_FEE, AnalyticConstants.CATEGORY_CHECKOUT, orderProcessingFeeProps);
-            Props originalFaceValueOfTicketProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_OTHER_FEE, orderProcessingFeeProps);
+            Map<String, Object> originalFaceValueOfTicketProps = getPreBuiltCartProps();
             originalFaceValueOfTicketProps.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, AnalyticConstants.CATEGORY_CHECKOUT, originalFaceValueOfTicketProps);
-            Props upsellUnitsProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, originalFaceValueOfTicketProps);
+            Map<String, Object> upsellUnitsProps = getPreBuiltCartProps();
             upsellUnitsProps.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, upsellUnitsProps);
-            Props upsellRevenueProps = getPreBuiltCartProps();
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_UPSELL_QUANTITY, upsellUnitsProps);
+            Map<String, Object> upsellRevenueProps = getPreBuiltCartProps();
             upsellRevenueProps.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_TOTAL, AnalyticConstants.CATEGORY_CHECKOUT, upsellRevenueProps);
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_UPSELL_TOTAL, upsellRevenueProps);
             Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
-            Props typeProps = getPreBuiltCartProps();
-            String resale  = AnalyticConstants.PROP_TYPE_PRIMARY;
+            Map<String, Object> typeProps = getPreBuiltCartProps();
+            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
             if (isResale) {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
             }
             typeProps.put(AnalyticConstants.PROP_TYPE, resale);
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TYPE, AnalyticConstants.CATEGORY_CHECKOUT, typeProps);
+            OmnitureTracker.trackAction(AnalyticConstants.PROP_TYPE, typeProps);
 
             boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
-            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket? "resale" : "primary"));
+            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket ? "resale" : "primary"));
         }
     }
 
-    private Props getPreBuiltCartProps() {
-        Props props = new Props();
+    private Map<String, Object> getPreBuiltCartProps() {
+        Map<String, Object> props = new HashMap<String, Object>();
         if (event != null) {
             props.put(AnalyticConstants.PROP_EVENT_ID, event.getId());
             props.put(AnalyticConstants.PROP_VENUE_ID, event.getVenue().getId());
