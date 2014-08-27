@@ -82,6 +82,8 @@
 -dontwarn org.joda.**
 -keep class com.bugsnap.** { *; }
 -dontwarn com.bugsnag.**
+-keep class com.experience.** { *; }
+-dontwarn com.experience.**
 
 # Crashyltics debugging
 -keepattributes SourceFile,LineNumberTable
