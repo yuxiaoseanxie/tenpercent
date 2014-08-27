@@ -20,6 +20,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -510,6 +511,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).sendBroadcastSync(new Intent(Ticketing.ACTION_PURCHASE_CONFIRMED));
+        AppRaterManager raterManager = new AppRaterManager(this);
+        int ticketsCount = 1;
+        if (getCart() != null) {
+            ticketsCount = TicketingUtils.getTicketCountForCart(getCart());
+        }
+        raterManager.purchaseCompleted(getApplicationContext(), ticketsCount);
     }
 }
