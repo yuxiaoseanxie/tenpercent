@@ -29,7 +29,6 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
@@ -129,8 +128,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         Intent intent = new Intent(getActivity(), VenueActivity.class);
 
-        Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-        SingleVenuePresenter.embedResult(args, venue);
+        Bundle args = VenueActivity.getArguments(venue);
 
         //Analytics
         Props props = new Props();

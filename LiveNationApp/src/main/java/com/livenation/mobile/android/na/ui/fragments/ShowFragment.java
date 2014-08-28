@@ -32,7 +32,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
@@ -325,8 +324,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Venue venue = event.getVenue();
             Intent intent = new Intent(getActivity(), VenueActivity.class);
 
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
+            Bundle args = VenueActivity.getArguments(venue);
             intent.putExtras(args);
 
             //Analytics

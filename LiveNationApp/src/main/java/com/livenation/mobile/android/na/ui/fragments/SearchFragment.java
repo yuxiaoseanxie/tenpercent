@@ -18,7 +18,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -125,7 +124,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
                 String entityId = Venue.getAlphanumericId(searchResult.getNumericalId());
-                Bundle args = SingleVenuePresenter.getAruguments(entityId);
+                Bundle args = VenueActivity.getArguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;
