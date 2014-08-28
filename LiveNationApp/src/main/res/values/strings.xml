@@ -249,12 +249,16 @@
     <string name="update_now">Update Now</string>
     
     <!-- Rating Dialog --> 
-    <string name="rating_dialog_title">Thanks for your purchase!</string>
-    <string name="rating_dialog_subtitle">Let us know how your app\nexperience has been.</string>
-    <string name="rating_dialog_rate_us">Rate Us Highly!</string>
-    <string name="rating_dialog_not_now">Not now</string>
-    <string name="rating_dialog_dont_ask_again">Don\'t Ask Me This Again</string>
+    <string name="rating_dialog_title">Have a great time!</string>
+
+    <string name="rating_dialog_rate_us">Rate Us Highly</string>
+    <string name="rating_dialog_not_now">Not Now</string>
+    <string name="rating_dialog_dont_ask_again">Don\'t Show This Again</string>
     <string name="rating_dialog_google_play_app_url">https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na</string>
     <string name="rating_dialog_market_app_url">market://details?id=com.livenation.mobile.android.na</string>
+<plurals name="rating_dialog_subtitle">
+    <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+    <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+</plurals>
 
 </resources>

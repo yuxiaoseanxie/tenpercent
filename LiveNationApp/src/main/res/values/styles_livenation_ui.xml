@@ -155,5 +155,14 @@
         <item name="android:textColor">@color/login_sso_button_text</item>
     </style>
 
+    <style name="BottomBarButton.NoBackground" parent="@android:style/Widget.Button">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@drawable/color_selector_accent_red</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_bottombar_height</item>
+    </style>
 
 </resources>

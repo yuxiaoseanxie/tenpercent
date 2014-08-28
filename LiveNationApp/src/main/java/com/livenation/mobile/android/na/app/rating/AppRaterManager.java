@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.app.rating;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Rating;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,11 @@ public class AppRaterManager {
         this.context = context;
     }
 
-    public void purchaseCompleted(Context context) {
+    public void purchaseCompleted(Context context, int ticketCount) {
         if (!prefs.hasBeenClicked()) {
             Intent ratingIntent = new Intent(context, RatingActivity.class);
             ratingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ratingIntent.putExtra(RatingActivity.TICKET_COUNT_KEY, ticketCount);
             context.startActivity(ratingIntent);
         }
     }

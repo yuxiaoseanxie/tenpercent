@@ -112,6 +112,21 @@
             android:label="@string/activity_label_order_confirmation" />
 
         <activity
+            android:name="com.livenation.mobile.android.na.ui.OrderDetailsActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.OrderHistoryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity" />
+        </activity>
+        <activity
+            android:name="com.livenation.mobile.android.na.ui.OrderHistoryActivity"
+            android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.livenation.mobile.android.na.ui.HomeActivity" />
+        </activity>
+
+        <activity
             android:name="com.livenation.mobile.android.na.ui.UrlActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">

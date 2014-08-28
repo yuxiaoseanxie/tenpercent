@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -22,6 +23,11 @@ import com.livenation.mobile.android.na.utils.ContactUtils;
  * Created by elodieferrais on 8/17/14.
  */
 public class RatingDialogFragment extends LiveNationDialogFragment {
+    private int ticketCount = 1;
+
+    public void setTicketCount(int ticketCount) {
+        this.ticketCount = ticketCount;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +39,10 @@ public class RatingDialogFragment extends LiveNationDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_rating, null);
+        TextView textView = (TextView) view.findViewById(R.id.rating_dialog_message);
         final RatingPreferences prefs = new RatingPreferences(getActivity());
 
-
+        textView.setText(getResources().getQuantityText(R.plurals.rating_dialog_subtitle, ticketCount));
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         dialog.setView(view, 0, 0, 0, 0);
         dialog.setCancelable(false);
