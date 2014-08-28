@@ -263,5 +263,10 @@
 
     <!-- App Google Indexing-->
     <string name="web_url_show">http://www.livenation.com/events/</string>
-    <string name="app_url_show">android-app://com.livenation.mobile.android.na.debug/livenation//navigate/</string>
+    <string name="app_url_show">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+    <string name="web_url_artist">http://www.livenation.com/artists/</string>
+    <string name="app_url_artist">android-app://com.livenation.mobile.android/livenation//navigate/</string>
+    <string name="web_url_venue">http://www.livenation.com/venues/</string>
+    <string name="app_url_venue">android-app://com.livenation.mobile.android/livenation//navigate/</string>
+
 </resources>

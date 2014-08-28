@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.R;
@@ -12,6 +13,7 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
@@ -20,6 +22,8 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     private ArtistFragment artistFragment;
     public static final String PARAMETER_ARTIST_ID = "artist_id";
     public static final String PARAMETER_ARTIST_CACHED = "artists_cached";
+    private Uri appUrl;
+    private Artist artist;
 
     //region Lifecycle
 
@@ -38,6 +42,8 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             @Override
             public void onResponse(Artist artist) {
                 artistFragment.setSingleArtist(artist);
+                ArtistActivity.this.artist = artist;
+                googleViewStart(artist);
             }
 
             @Override
@@ -129,5 +135,38 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         bundle.putString(PARAMETER_ARTIST_ID, artist.getId());
         bundle.putSerializable(PARAMETER_ARTIST_CACHED, artist);
         return bundle;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (appUrl == null && artist != null) {
+            googleViewStart(artist);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleViewEnd();
+    }
+
+    private void googleViewStart(Artist artist) {
+        Uri webUrl = Uri.parse(getString(R.string.web_url_artist) + artist.getId());
+        String suffixUrl;
+        if (artist.getId().contains("art")) {
+            suffixUrl = artist.getId();
+        } else {
+            suffixUrl = "art_" + artist.getId();
+        }
+        appUrl = Uri.parse(getString(R.string.app_url_artist) + suffixUrl);
+
+        notifyGoogleViewStart(webUrl, appUrl, artist.getName());
+
+    }
+
+    private void googleViewEnd() {
+        notifyGoogleViewEnd(appUrl);
+        appUrl = null;
     }
 }
