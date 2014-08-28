@@ -30,9 +30,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.na.presenters.views.FavoritesView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -86,7 +84,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
             Favorite favorite = artistAdapter.getItem(position);
             Intent intent = new Intent(getActivity(), ArtistActivity.class);
             String entityId = Artist.getAlphanumericId(favorite.getId());
-            Bundle args = SingleArtistPresenter.getAruguments(entityId);
+            Bundle args = ArtistActivity.getArguments(entityId);
             intent.putExtras(args);
             startActivity(intent);
         }

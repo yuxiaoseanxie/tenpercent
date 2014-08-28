@@ -45,7 +45,6 @@ import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
@@ -83,7 +82,6 @@ public class LiveNationApplication extends Application {
     private static GoogleApiClient googleClient;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
-    private SingleArtistPresenter singleArtistPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
     private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
@@ -182,7 +180,6 @@ public class LiveNationApplication extends Application {
 
         eventsPresenter = new EventsPresenter();
         singleVenuePresenter = new SingleVenuePresenter();
-        singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
@@ -309,10 +306,6 @@ public class LiveNationApplication extends Application {
 
     public EventsPresenter getEventsPresenter() {
         return eventsPresenter;
-    }
-
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return singleArtistPresenter;
     }
 
     public ArtistEventsPresenter getArtistEventsPresenter() {

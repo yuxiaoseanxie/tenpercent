@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -127,8 +126,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
             @Override
             public void onResponse(Artist artist) {
                 Intent intent = new Intent(UrlActivity.this, ArtistActivity.class);
-                intent.putExtras(SingleArtistPresenter.getAruguments(artist.getId()));
-                SingleArtistPresenter.embedResult(intent.getExtras(), artist);
+                Bundle bundle = ArtistActivity.getArguments(artist);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
             }
@@ -158,7 +157,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
             intent.putExtras(ShowActivity.getArguments(id));
         } else if (id.startsWith("art_")) {
             intent = new Intent(this, ArtistActivity.class);
-            intent.putExtras(SingleArtistPresenter.getAruguments(id));
+            intent.putExtras(ArtistActivity.getArguments(id));
         } else if (id.startsWith("ven_")) {
             intent = new Intent(this, VenueActivity.class);
             intent.putExtras(SingleVenuePresenter.getAruguments(id));

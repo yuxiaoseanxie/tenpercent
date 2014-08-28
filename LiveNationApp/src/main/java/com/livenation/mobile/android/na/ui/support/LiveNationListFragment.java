@@ -16,7 +16,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
 
@@ -38,11 +37,6 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
     @Override
     public ArtistEventsPresenter getArtistEventsPresenter() {
         return LiveNationApplication.get().getArtistEventsPresenter();
-    }
-
-    @Override
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return LiveNationApplication.get().getSingleArtistPresenter();
     }
 
 

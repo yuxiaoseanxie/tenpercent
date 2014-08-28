@@ -191,12 +191,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
     private void init() {
-        getSingleArtistPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
         getArtistEventsPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
     }
 
     private void deinit() {
-        getSingleArtistPresenter().cancel(this);
         getArtistEventsPresenter().cancel(this);
     }
 
