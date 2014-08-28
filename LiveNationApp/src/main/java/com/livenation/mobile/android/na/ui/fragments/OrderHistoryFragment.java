@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -73,8 +74,9 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         this.offlinePromptHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message message) {
-                if (getActivity() != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(getActivity(), pageOffset)) {
-                    TicketingUtils.makeToast(getActivity().getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
+                Activity activity = getActivity();
+                if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
+                    TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
                     loadOfflineCache(true);
                 }
 
