@@ -29,7 +29,6 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
@@ -107,8 +106,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
 
         Event event = recommendationItem.get();
 
-        Bundle args = SingleEventPresenter.getAruguments(event.getId());
-        SingleEventPresenter.embedResult(args, event);
+        Bundle args = ShowActivity.getArguments(event);
         intent.putExtras(args);
 
         //Analytics

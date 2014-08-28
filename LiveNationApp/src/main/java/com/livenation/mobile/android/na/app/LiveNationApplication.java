@@ -23,6 +23,8 @@ import android.util.Log;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -44,7 +46,6 @@ import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
@@ -79,9 +80,9 @@ public class LiveNationApplication extends Application {
     private static EnvironmentAppProvider environmentProvider;
     private static AccessTokenAppProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
+    private static GoogleApiClient googleClient;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
-    private SingleEventPresenter singleEventPresenter;
     private SingleArtistPresenter singleArtistPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
     private SingleVenuePresenter singleVenuePresenter;
@@ -151,6 +152,8 @@ public class LiveNationApplication extends Application {
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);
         SsoManager.AuthConfiguration configuration = ssoProviderPersistence.getAuthConfiguration();
+        googleClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
+        googleClient.connect();
         if (configuration != null) {
             ssoManager.setAuthConfiguration(configuration);
         }
@@ -174,12 +177,10 @@ public class LiveNationApplication extends Application {
 
         instance = this;
 
-
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 
         eventsPresenter = new EventsPresenter();
-        singleEventPresenter = new SingleEventPresenter();
         singleVenuePresenter = new SingleVenuePresenter();
         singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
@@ -299,7 +300,7 @@ public class LiveNationApplication extends Application {
             unregisterReceiver(internetStateReceiver);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
-
+        googleClient.disconnect();
     }
 
     public ImageLoader getImageLoader() {
@@ -316,10 +317,6 @@ public class LiveNationApplication extends Application {
 
     public ArtistEventsPresenter getArtistEventsPresenter() {
         return artistEventsPresenter;
-    }
-
-    public SingleEventPresenter getSingleEventPresenter() {
-        return singleEventPresenter;
     }
 
     public SingleVenuePresenter getSingleVenuePresenter() {
@@ -354,4 +351,9 @@ public class LiveNationApplication extends Application {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
     }
+
+    public static GoogleApiClient getGoogleClient() {
+        return googleClient;
+    }
+
 }

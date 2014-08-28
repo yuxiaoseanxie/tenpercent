@@ -29,17 +29,16 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.segment.android.models.Props;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -113,8 +112,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         Intent intent = new Intent(getActivity(), ShowActivity.class);
 
-        Bundle args = SingleEventPresenter.getAruguments(event.getId());
-        SingleEventPresenter.embedResult(args, event);
+        Bundle args = ShowActivity.getArguments(event);
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);

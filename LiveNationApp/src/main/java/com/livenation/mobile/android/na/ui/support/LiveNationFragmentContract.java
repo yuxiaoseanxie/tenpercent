@@ -13,13 +13,11 @@ import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public interface LiveNationFragmentContract {
 
     ImageLoader getImageLoader();
 
-    SingleEventPresenter getSingleEventPresenter();
 
     SingleArtistPresenter getSingleArtistPresenter();
 
