@@ -77,7 +77,6 @@ public class LiveNationApplication extends Application {
     private static EnvironmentAppProvider environmentProvider;
     private static AccessTokenAppProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
-    private static GoogleApiClient googleClient;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
@@ -146,8 +145,6 @@ public class LiveNationApplication extends Application {
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);
         SsoManager.AuthConfiguration configuration = ssoProviderPersistence.getAuthConfiguration();
-        googleClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
-        googleClient.connect();
         if (configuration != null) {
             ssoManager.setAuthConfiguration(configuration);
         }
@@ -292,7 +289,6 @@ public class LiveNationApplication extends Application {
             unregisterReceiver(internetStateReceiver);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
-        googleClient.disconnect();
     }
 
     public ImageLoader getImageLoader() {
@@ -334,10 +330,6 @@ public class LiveNationApplication extends Application {
     private String getIasId() {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
-    }
-
-    public static GoogleApiClient getGoogleClient() {
-        return googleClient;
     }
 
 }

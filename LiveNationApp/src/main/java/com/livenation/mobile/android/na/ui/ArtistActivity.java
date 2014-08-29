@@ -3,6 +3,8 @@ package com.livenation.mobile.android.na.ui;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -13,7 +15,6 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
@@ -23,6 +24,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     public static final String PARAMETER_ARTIST_ID = "artist_id";
     public static final String PARAMETER_ARTIST_CACHED = "artists_cached";
     private Uri appUrl;
+    private GoogleApiClient googleApiClient;
     private Artist artist;
 
     //region Lifecycle
@@ -38,6 +40,8 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
             apiParams.setArtistId(artistId);
         }
+        googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
+        googleApiClient.connect();
         LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
             @Override
             public void onResponse(Artist artist) {
@@ -141,6 +145,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     protected void onStart() {
         super.onStart();
         if (appUrl == null && artist != null) {
+            googleApiClient.connect();
             googleViewStart(artist);
         }
     }
@@ -149,6 +154,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     protected void onStop() {
         super.onStop();
         googleViewEnd();
+        googleApiClient.disconnect();
     }
 
     private void googleViewStart(Artist artist) {
@@ -161,12 +167,12 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         }
         appUrl = Uri.parse(getString(R.string.app_url_artist) + suffixUrl);
 
-        notifyGoogleViewStart(webUrl, appUrl, artist.getName());
+        notifyGoogleViewStart(googleApiClient, webUrl, appUrl, artist.getName());
 
     }
 
     private void googleViewEnd() {
-        notifyGoogleViewEnd(appUrl);
+        notifyGoogleViewEnd(googleApiClient, appUrl);
         appUrl = null;
     }
 }

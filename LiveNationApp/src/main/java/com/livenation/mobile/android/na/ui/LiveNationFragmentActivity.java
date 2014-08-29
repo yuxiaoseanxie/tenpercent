@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
@@ -140,18 +141,18 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 
-    protected void notifyGoogleViewStart(Uri webUrl, Uri appUrl, String title) {
+    protected void notifyGoogleViewStart(GoogleApiClient googleApiClient, Uri webUrl, Uri appUrl, String title) {
         // Call the App Indexing API view method
-        AppIndex.AppIndexApi.view(LiveNationApplication.getGoogleClient(), this,
+        AppIndex.AppIndexApi.view(googleApiClient, this,
                 appUrl,
                 title,
                 webUrl, null);
 
     }
 
-    protected void notifyGoogleViewEnd(Uri appUrl) {
+    protected void notifyGoogleViewEnd(GoogleApiClient googleApiClient, Uri appUrl) {
         if (appUrl != null) {
-            AppIndex.AppIndexApi.viewEnd(LiveNationApplication.getGoogleClient(), this,
+            AppIndex.AppIndexApi.viewEnd(googleApiClient, this,
                     appUrl);
         }
     }

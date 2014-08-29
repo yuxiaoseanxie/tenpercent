@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -36,6 +38,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     public static final String PARAMETER_EVENT_ID = "event_id";
     public static final String PARAMETER_EVENT_CACHED = "event_cached";
 
+    private GoogleApiClient googleApiClient;
     private Event event;
     private Uri appUrl;
 
@@ -51,6 +54,9 @@ public class ShowActivity extends DetailBaseFragmentActivity {
             long eventId = DataModelHelper.getNumericEntityId(eventIdRaw);
             apiParams.setEventId(eventId);
         }
+
+        googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
+        googleApiClient.connect();
         LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
             @Override
             public void onResponse(Event event) {
@@ -99,6 +105,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected void onStart() {
         super.onStart();
         if (appUrl == null && event != null) {
+            googleApiClient.connect();
             googleViewStart(event);
         }
     }
@@ -107,6 +114,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected void onStop() {
         super.onStop();
         googleViewEnd();
+        googleApiClient.disconnect();
     }
 
     @Override
@@ -207,12 +215,12 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         }
         appUrl = Uri.parse(getString(R.string.app_url_show) + suffixUrl);
 
-        notifyGoogleViewStart(webUrl, appUrl, event.getName());
+        notifyGoogleViewStart(googleApiClient, webUrl, appUrl, event.getName());
 
     }
 
     private void googleViewEnd() {
-        notifyGoogleViewEnd(appUrl);
+        notifyGoogleViewEnd(googleApiClient, appUrl);
         appUrl = null;
     }
 }

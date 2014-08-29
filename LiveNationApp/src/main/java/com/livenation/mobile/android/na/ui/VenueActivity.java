@@ -11,6 +11,8 @@ package com.livenation.mobile.android.na.ui;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -40,6 +42,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     private SingleVenueView singleVenueView;
     private EventsView eventsView;
     private Uri appUrl;
+    private GoogleApiClient googleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
         init();
 
+        googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
+        googleApiClient.connect();
         //Get venue detail
         SingleVenueParameters apiParams = new SingleVenueParameters();
         String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
@@ -193,6 +199,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     protected void onStart() {
         super.onStart();
         if (appUrl == null && venue != null) {
+            googleApiClient.connect();
             googleViewStart(venue);
         }
     }
@@ -201,6 +208,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     protected void onStop() {
         super.onStop();
         googleViewEnd();
+        googleApiClient.disconnect();
     }
 
     private void googleViewStart(Venue venue) {
@@ -213,12 +221,12 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         }
         appUrl = Uri.parse(getString(R.string.app_url_artist) + suffixUrl);
 
-        notifyGoogleViewStart(webUrl, appUrl, venue.getName());
+        notifyGoogleViewStart(googleApiClient, webUrl, appUrl, venue.getName());
 
     }
 
     private void googleViewEnd() {
-        notifyGoogleViewEnd(appUrl);
+        notifyGoogleViewEnd(googleApiClient, appUrl);
         appUrl = null;
     }
 }
