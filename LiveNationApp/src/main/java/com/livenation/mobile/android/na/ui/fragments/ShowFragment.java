@@ -32,8 +32,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
@@ -44,9 +42,9 @@ import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -326,8 +324,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Venue venue = event.getVenue();
             Intent intent = new Intent(getActivity(), VenueActivity.class);
 
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
+            Bundle args = VenueActivity.getArguments(venue);
             intent.putExtras(args);
 
             //Analytics
@@ -358,8 +355,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Intent intent = new Intent(getActivity(), ArtistActivity.class);
 
-            Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
-            SingleArtistPresenter.embedResult(args, lineupArtist);
+            Bundle args = ArtistActivity.getArguments(lineupArtist);
             intent.putExtras(args);
 
             startActivity(intent);
