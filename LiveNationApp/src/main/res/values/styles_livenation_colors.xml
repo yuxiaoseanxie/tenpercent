@@ -12,6 +12,7 @@
 
     <color name="livenation_gray">#636363</color>
     <color name="livenation_red">#e11d39</color>
+    <color name="square_green">#22A301</color>
 
     <color name="login_facebook_button_color">#3b5998</color>
     <color name="login_facebook_button_pressed_color">#2e4475</color>

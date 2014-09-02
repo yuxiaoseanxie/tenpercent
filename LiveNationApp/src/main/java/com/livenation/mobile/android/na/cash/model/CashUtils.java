@@ -2,12 +2,16 @@ package com.livenation.mobile.android.na.cash.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashIntroductionDialogFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.mobilitus.tm.tickets.models.Total;
 
@@ -52,17 +56,29 @@ public class CashUtils {
         return pricePerTicket.longValue() * 100;
     }
 
+    public static SharedPreferences getPreferences() {
+        return LiveNationApplication.get().getSharedPreferences(PREFS_ID, 0);
+    }
+
     //endregion
 
 
-    public static void startPaybackFlow(@NonNull Context context,
+    public static void startPaybackFlow(@NonNull FragmentActivity activity,
                                         @NonNull Total total,
                                         int ticketQuantity,
                                         @NonNull Event event) {
-        Intent intent = new Intent(context, CashRecipientsActivity.class);
-        intent.putExtra(EXTRA_TOTAL, total);
-        intent.putExtra(EXTRA_TICKET_QUANTITY, ticketQuantity);
-        intent.putExtra(EXTRA_EVENT, event);
-        context.startActivity(intent);
+        if (CashIntroductionDialogFragment.shouldShow()) {
+            if (activity.getSupportFragmentManager().findFragmentByTag(CashIntroductionDialogFragment.TAG) != null)
+                return;
+
+            CashIntroductionDialogFragment dialogFragment = CashIntroductionDialogFragment.newInstance(total, ticketQuantity, event);
+            dialogFragment.show(activity.getSupportFragmentManager(), CashIntroductionDialogFragment.TAG);
+        } else {
+            Intent intent = new Intent(activity, CashRecipientsActivity.class);
+            intent.putExtra(EXTRA_TOTAL, total);
+            intent.putExtra(EXTRA_TICKET_QUANTITY, ticketQuantity);
+            intent.putExtra(EXTRA_EVENT, event);
+            activity.startActivity(intent);
+        }
     }
 }

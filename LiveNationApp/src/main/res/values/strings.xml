@@ -265,7 +265,7 @@
     <string name="activity_label_cash">Get Paid Back</string>
 
     <string name="cash_call_to_action">Get Paid Back</string>
-    <string name="cash_powered_by">Powered by Square</string>
+    <string name="cash_powered_by">Powered by Square Cash</string>
 
     <string name="cash_field_label_to">To</string>
     <string name="cash_field_hint_to">Name, Email or Phone #</string>
@@ -304,6 +304,11 @@
     <string name="cash_request_caption_fmt">%1$s at %2$s on %3$s</string>
     <string name="cash_resend_verification_code">Resend verification code</string>
     <string name="cash_resend_verification_code_again">Code resent, send another?</string>
+
+    <string name="cash_marketing_tagline">Assign tickets to friends - \nWe’ll do the rest</string>
+    <string name="cash_marketing_line_1">100% free. Safe and secure.</string>
+    <string name="cash_marketing_line_2">All you need is a debit card.</string>
+    <string name="cash_marketing_cta">Get started!</string>
 
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 Ticket | %2$s</item>
