@@ -61,6 +61,8 @@ public class BottomCroppedImageView extends ImageView {
             target.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
+                    //layout has changed (visibility, or other), but we still have not been measured yet, keep waiting.
+                    if (getMeasuredWidth() == 0) return;
                     target.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 
                     calculateCropMatrix(drawable.getIntrinsicWidth());
