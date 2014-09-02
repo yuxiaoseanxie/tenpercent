@@ -206,7 +206,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     }
 
     private void googleViewStart(Event event) {
-        Uri webUrl = Uri.parse(getString(R.string.web_url_show) + event.getId());
+        Uri webUrl = Uri.parse(getString(R.string.web_url_show) + DataModelHelper.getNumericEntityId(event.getId()));
         String suffixUrl;
         if (event.getId().contains("evt")) {
             suffixUrl = event.getId();

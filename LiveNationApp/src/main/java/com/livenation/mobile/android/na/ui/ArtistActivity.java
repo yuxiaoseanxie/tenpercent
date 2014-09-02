@@ -158,7 +158,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     private void googleViewStart(Artist artist) {
-        Uri webUrl = Uri.parse(getString(R.string.web_url_artist) + artist.getId());
+        Uri webUrl = Uri.parse(getString(R.string.web_url_artist) + DataModelHelper.getNumericEntityId(artist.getId()));
         String suffixUrl;
         if (artist.getId().contains("art")) {
             suffixUrl = artist.getId();
