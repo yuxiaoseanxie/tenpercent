@@ -218,6 +218,21 @@
     </style>
 
 
+    <style name="ln.text.order_confirmation_button">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ln.text.order_confirmation_button.title">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ln.text.order_confirmation_button.details">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
     <style name="bottom_bar_button_text">
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>

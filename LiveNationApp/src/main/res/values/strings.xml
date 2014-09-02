@@ -149,7 +149,7 @@
     <string name="order_confirmation_seats">Seats</string>
     <string name="order_confirmation_cost">Purchase Total</string>
     <string name="order_confirmation_note">Confirmation</string>
-    <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info</string>
+    <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info.</string>
 
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
     <string name="confirmation_action_tag_line_ride_share">Arrive in style</string>
