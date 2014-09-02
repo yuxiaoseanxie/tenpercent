@@ -214,12 +214,12 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     private void googleViewStart(Venue venue) {
         Uri webUrl = Uri.parse(getString(R.string.web_url_venue) + venue.getId());
         String suffixUrl;
-        if (venue.getId().contains("art")) {
+        if (venue.getId().contains("ven")) {
             suffixUrl = venue.getId();
         } else {
-            suffixUrl = "art_" + venue.getId();
+            suffixUrl = "ven_" + venue.getId();
         }
-        appUrl = Uri.parse(getString(R.string.app_url_artist) + suffixUrl);
+        appUrl = Uri.parse(getString(R.string.app_url_venue) + suffixUrl);
 
         notifyGoogleViewStart(googleApiClient, webUrl, appUrl, venue.getName());
 
