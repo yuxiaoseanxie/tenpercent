@@ -24,6 +24,8 @@ import com.adobe.mobile.Config;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -32,7 +34,6 @@ import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
-import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -44,9 +45,6 @@ import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
@@ -82,14 +80,10 @@ public class LiveNationApplication extends Application {
     private static SsoProviderPersistence ssoProviderPersistence;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
-    private SingleEventPresenter singleEventPresenter;
-    private SingleArtistPresenter singleArtistPresenter;
     private ArtistEventsPresenter artistEventsPresenter;
-    private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private InboxStatusPresenter inboxStatusPresenter;
-    private AppRaterManager raterManager;
     //Migration
     private String oldUserId;
     private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
@@ -175,14 +169,10 @@ public class LiveNationApplication extends Application {
 
         instance = this;
 
-
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 
         eventsPresenter = new EventsPresenter();
-        singleEventPresenter = new SingleEventPresenter();
-        singleVenuePresenter = new SingleVenuePresenter();
-        singleArtistPresenter = new SingleArtistPresenter();
         artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
@@ -303,7 +293,6 @@ public class LiveNationApplication extends Application {
             unregisterReceiver(internetStateReceiver);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
-
     }
 
     public ImageLoader getImageLoader() {
@@ -314,20 +303,8 @@ public class LiveNationApplication extends Application {
         return eventsPresenter;
     }
 
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return singleArtistPresenter;
-    }
-
     public ArtistEventsPresenter getArtistEventsPresenter() {
         return artistEventsPresenter;
-    }
-
-    public SingleEventPresenter getSingleEventPresenter() {
-        return singleEventPresenter;
-    }
-
-    public SingleVenuePresenter getSingleVenuePresenter() {
-        return singleVenuePresenter;
     }
 
     public VenueEventsPresenter getVenueEventsPresenter() {
@@ -358,4 +335,5 @@ public class LiveNationApplication extends Application {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
     }
+
 }

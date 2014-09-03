@@ -6,6 +6,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.fragments.ArtistShowsListFragment;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class ArtistShowsActivity extends LiveNationFragmentActivity {
     protected Map<String, Object> getAnalyticsProps() {
         Map<String, Object> props = new HashMap<String, Object>();
         String artistId = getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
-        props.put(AnalyticConstants.ARTIST_ID, artistId);
+        props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistId));
         return props;
     }
 

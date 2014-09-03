@@ -2,11 +2,14 @@ package com.livenation.mobile.android.na.ui;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.adobe.mobile.Config;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -163,5 +166,21 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
             props.put(key, properties.get(key));
         }
         return props;
+    }
+
+    protected void notifyGoogleViewStart(GoogleApiClient googleApiClient, Uri webUrl, Uri appUrl, String title) {
+        // Call the App Indexing API view method
+        AppIndex.AppIndexApi.view(googleApiClient, this,
+                appUrl,
+                title,
+                webUrl, null);
+
+    }
+
+    protected void notifyGoogleViewEnd(GoogleApiClient googleApiClient, Uri appUrl) {
+        if (appUrl != null) {
+            AppIndex.AppIndexApi.viewEnd(googleApiClient, this,
+                    appUrl);
+        }
     }
 }

@@ -149,7 +149,7 @@
     <string name="order_confirmation_seats">Seats</string>
     <string name="order_confirmation_cost">Purchase Total</string>
     <string name="order_confirmation_note">Confirmation</string>
-    <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info</string>
+    <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info.</string>
 
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
     <string name="confirmation_action_tag_line_ride_share">Arrive in style</string>
@@ -247,8 +247,8 @@
 
     <string name="update_available">New Version Available</string>
     <string name="update_now">Update Now</string>
-    
-    <!-- Rating Dialog --> 
+
+    <!-- Rating Dialog -->
     <string name="rating_dialog_title">Have a great time!</string>
 
     <string name="rating_dialog_rate_us">Rate Us Highly</string>
@@ -256,9 +256,17 @@
     <string name="rating_dialog_dont_ask_again">Don\'t Show This Again</string>
     <string name="rating_dialog_google_play_app_url">https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na</string>
     <string name="rating_dialog_market_app_url">market://details?id=com.livenation.mobile.android.na</string>
-<plurals name="rating_dialog_subtitle">
-    <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
-    <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
-</plurals>
+    <plurals name="rating_dialog_subtitle">
+        <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+        <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+    </plurals>
+
+    <!-- App Google Indexing-->
+    <string name="web_url_show">http://www.livenation.com/events/</string>
+    <string name="app_url_show">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+    <string name="web_url_artist">http://www.livenation.com/artists/</string>
+    <string name="app_url_artist">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+    <string name="web_url_venue">http://www.livenation.com/venues/</string>
+    <string name="app_url_venue">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
 
 </resources>

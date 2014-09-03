@@ -45,14 +45,6 @@ public class ArtistEventsPresenter
         view.setArtistEvents(events);
     }
 
-    public Bundle getArgs(String artistId, int offset, int limit) {
-        Bundle args = new Bundle();
-        args.putString(PARAMETER_ARTIST_ID, artistId);
-        args.putInt(PARAMETER_OFFSET, offset);
-        args.putInt(PARAMETER_LIMIT, limit);
-        return args;
-    }
-
     public static class ArtistEventsState
             extends BaseResultState<ArtistEvents, ArtistEventsView>
             implements BasicApiCallback<List<Event>> {

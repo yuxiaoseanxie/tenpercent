@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -26,9 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,8 +104,9 @@ public class OrderDetailsFragment extends Fragment {
         this.offlinePromptHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(android.os.Message message) {
-                if (getActivity() != null && OrdersCacheManager.getInstance().hasOrderDetailsSavedForId(getActivity(), ticketsCart.getOrderID())) {
-                    TicketingUtils.makeToast(getActivity().getApplicationContext(), R.string.toast_displaying_offline_order_details, Toast.LENGTH_SHORT).show();
+                Activity activity = getActivity();
+                if (activity != null && OrdersCacheManager.getInstance().hasOrderDetailsSavedForId(activity, ticketsCart.getOrderID())) {
+                    TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_details, Toast.LENGTH_SHORT).show();
                     loadOfflineCache(true);
                 }
 
@@ -285,6 +285,10 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     public void displayTickets() {
+        Activity activity = getActivity();
+        if (activity == null)
+            return;
+
         ticketContainer.removeAllViews();
         ticketViews.clear();
 
@@ -304,7 +308,7 @@ public class OrderDetailsFragment extends Fragment {
         for (int i = 0, count = seats.size(); i < count; i++) {
             Seat seat = seats.get(i);
 
-            TicketView ticketView = new TicketView(getActivity());
+            TicketView ticketView = new TicketView(activity);
             ticketView.setOnClickListener(new OnTicketClickListener(i));
             ticketView.setOnCheckedChangeListener(new OnTicketCheckedListener(i));
             ticketView.displayTicket(seat, i + 1, count);
