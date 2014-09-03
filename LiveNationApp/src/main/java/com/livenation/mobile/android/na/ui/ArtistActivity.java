@@ -48,21 +48,22 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
             Artist artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             artistFragment.setSingleArtist(artist);
+        } else {
+
+            LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
+                @Override
+                public void onResponse(Artist artist) {
+                    artistFragment.setSingleArtist(artist);
+                    ArtistActivity.this.artist = artist;
+                    googleViewStart(artist);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
         }
-
-        LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
-            @Override
-            public void onResponse(Artist artist) {
-                artistFragment.setSingleArtist(artist);
-                ArtistActivity.this.artist = artist;
-                googleViewStart(artist);
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
     }
 
     @Override

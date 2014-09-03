@@ -62,24 +62,25 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         if (args.containsKey(PARAMETER_EVENT_CACHED)) {
             Event event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
             singleEventView.setEvent(event);
+        } else {
+
+
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
+                @Override
+                public void onResponse(Event event) {
+                    ShowActivity.this.event = event;
+                    singleEventView.setEvent(event);
+                    invalidateIsShareAvailable();
+
+                    googleViewStart(event);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
         }
-
-
-        LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
-            @Override
-            public void onResponse(Event event) {
-                ShowActivity.this.event = event;
-                singleEventView.setEvent(event);
-                invalidateIsShareAvailable();
-
-                googleViewStart(event);
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
     }
 
     @Override

@@ -64,26 +64,27 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         if (args.containsKey(PARAMETER_VENUE_CACHED)) {
             Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
             singleVenueView.setVenue(venue);
+        } else {
+
+            //Get venue detail
+            SingleVenueParameters apiParams = new SingleVenueParameters();
+            String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
+            long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
+            apiParams.setVenueId(venueId);
+            LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
+                @Override
+                public void onResponse(Venue venue) {
+                    VenueActivity.this.venue = venue;
+                    singleVenueView.setVenue(venue);
+                    googleViewStart(venue);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
         }
-
-        //Get venue detail
-        SingleVenueParameters apiParams = new SingleVenueParameters();
-        String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
-        long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
-        apiParams.setVenueId(venueId);
-        LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
-            @Override
-            public void onResponse(Venue venue) {
-                VenueActivity.this.venue = venue;
-                singleVenueView.setVenue(venue);
-                googleViewStart(venue);
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
     }
 
 
