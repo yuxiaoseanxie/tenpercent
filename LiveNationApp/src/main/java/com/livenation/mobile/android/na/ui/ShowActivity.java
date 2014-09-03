@@ -62,6 +62,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         if (args.containsKey(PARAMETER_EVENT_CACHED)) {
             Event event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
             singleEventView.setEvent(event);
+            googleViewStart(event);
         } else {
 
 

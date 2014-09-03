@@ -48,6 +48,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
             Artist artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             artistFragment.setSingleArtist(artist);
+            googleViewStart(artist);
         } else {
 
             LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {

@@ -64,6 +64,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         if (args.containsKey(PARAMETER_VENUE_CACHED)) {
             Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
             singleVenueView.setVenue(venue);
+            googleViewStart(venue);
         } else {
 
             //Get venue detail
