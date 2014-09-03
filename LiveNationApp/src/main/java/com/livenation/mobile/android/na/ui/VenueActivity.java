@@ -24,6 +24,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
@@ -58,6 +59,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
+
+        //Use cached event for avoiding the blank page while we are waiting for the http response
+        if (args.containsKey(PARAMETER_VENUE_CACHED)) {
+            Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
+            singleVenueView.setVenue(venue);
+        }
+
         //Get venue detail
         SingleVenueParameters apiParams = new SingleVenueParameters();
         String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
