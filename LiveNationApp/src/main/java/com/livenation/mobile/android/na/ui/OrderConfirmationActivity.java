@@ -503,6 +503,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     };
 
     @Override
+    protected Map<String, Object> getAnalyticsProps() {
+        return getPreBuiltCartProps();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         AppRaterManager raterManager = new AppRaterManager(this);
