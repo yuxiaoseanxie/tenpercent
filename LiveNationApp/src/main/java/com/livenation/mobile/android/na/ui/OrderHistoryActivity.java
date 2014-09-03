@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.activities.AccountActivity;
 import com.livenation.mobile.android.ticketing.activities.BaseActivity;
@@ -162,4 +163,9 @@ public class OrderHistoryActivity extends BaseActivity {
 
     //endregion
 
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ORDERS;
+    }
 }

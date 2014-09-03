@@ -166,4 +166,9 @@ public class VenueActivity extends DetailBaseFragmentActivity implements SingleV
             OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_VDP, getAnalyticsProps());
         }
     }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_VDP;
+    }
 }

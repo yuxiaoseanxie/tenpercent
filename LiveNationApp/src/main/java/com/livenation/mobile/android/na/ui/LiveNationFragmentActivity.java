@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.adobe.mobile.Config;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -55,6 +56,9 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
             trackScreenWithLocation(getScreenName());
+            if (getOmnitureScreenName() != null) {
+                OmnitureTracker.trackState(getOmnitureScreenName(), getAnalyticsProps());
+            }
         }
     }
 
@@ -115,6 +119,10 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     protected String getScreenName() {
         return this.getClass().getSimpleName();
+    }
+
+    protected String getOmnitureScreenName() {
+        return null;
     }
 
     protected Map<String, Object> getAnalyticsProps() {

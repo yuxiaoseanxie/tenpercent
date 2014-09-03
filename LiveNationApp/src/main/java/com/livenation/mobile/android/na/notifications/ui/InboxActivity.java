@@ -450,10 +450,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_NOTIFICATIONS, null);
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_NOTIFICATIONS;
     }
 }

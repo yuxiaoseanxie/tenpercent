@@ -50,12 +50,9 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
         return AnalyticConstants.SCREEN_FAVORITES;
     }
 
+
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //Omniture
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_FAVORITES, null);
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_FAVORITES;
     }
 }

@@ -58,11 +58,9 @@ public class HelpMenuActivity extends LiveNationFragmentActivity implements Adap
         return AnalyticConstants.SCREEN_HELP;
     }
 
+
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_HELP, null);
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_HELP;
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 public class VenueShowsActivity extends LiveNationFragmentActivity {
@@ -33,13 +32,11 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
         return AnalyticConstants.SCREEN_VDP_ALL_SHOWS;
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_VDP_ALL_SHOWS, null);
-        }
-    }
-
     //endregion
+
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_VDP_ALL_SHOWS;
+    }
 }

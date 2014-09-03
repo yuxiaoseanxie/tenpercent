@@ -39,6 +39,11 @@ public class OrderDetailsActivity extends BaseActivity {private Cart eventInfoCa
     }
 
     @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ORDER_DETAILS_SCREEN_LOAD;
+    }
+
+    @Override
     public Properties getScreenProperties() {
         return Analytics.createBaseTrackingProperties(getEventInfoCart().getEvent());
     }

@@ -95,10 +95,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_ADP, getAnalyticsProps());
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ADP;
     }
 }

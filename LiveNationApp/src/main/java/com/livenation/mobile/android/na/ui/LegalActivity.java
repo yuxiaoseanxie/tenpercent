@@ -140,11 +140,7 @@ public class LegalActivity extends LiveNationFragmentActivity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //Omniture
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_LEGAL_CREDITS, null);
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_LEGAL_CREDITS;
     }
 }

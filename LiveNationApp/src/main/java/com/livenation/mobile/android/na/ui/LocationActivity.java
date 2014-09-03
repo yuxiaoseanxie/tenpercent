@@ -75,11 +75,7 @@ public class LocationActivity extends LiveNationFragmentActivity {
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_LOCATION, null);
-        }
-
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_LOCATION;
     }
 }

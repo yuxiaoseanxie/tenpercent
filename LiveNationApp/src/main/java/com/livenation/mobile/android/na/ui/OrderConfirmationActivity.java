@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -327,6 +326,11 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         return props;
     }
 
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ORDER_CONFIRMATION_SCREEN_LOAD;
+    }
+
     private void trackScreenLoad() {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
 
@@ -508,4 +512,5 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
         raterManager.purchaseCompleted(getApplicationContext(), ticketsCount);
     }
+
 }

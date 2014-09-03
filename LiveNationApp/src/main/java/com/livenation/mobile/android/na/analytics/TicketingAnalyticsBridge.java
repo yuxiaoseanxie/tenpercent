@@ -9,12 +9,12 @@ import com.segment.android.models.Props;
 import java.util.Map;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
-    private static Props mapToProps(Map<String, String> properties) {
+    private static Props mapToProps(Map<String, Object> properties) {
         if (properties == null)
             return null;
 
         Props props = new Props();
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
             props.put(entry.getKey(), entry.getValue());
         }
         return props;
@@ -46,17 +46,27 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     }
 
     @Override
-    public void track(String event, String category, Map<String, String> properties) {
+    public void track(String event, String category, Map<String, Object> properties) {
         LiveNationAnalytics.track(event, category, mapToProps(properties));
     }
 
     @Override
-    public void screen(String screen, Map<String, String> properties) {
+    public void screen(String screen, Map<String, Object> properties) {
         LiveNationAnalytics.screen(screen, mapToProps(properties));
     }
 
     @Override
-    public void logError(String error, Map<String, String> properties) {
+    public void logError(String error, Map<String, Object> properties) {
         LiveNationAnalytics.track(error, AnalyticsCategory.ERROR, mapToProps(properties));
+    }
+
+    @Override
+    public void trackOmnitureState(String pageName, Map<String, Object> properties) {
+        OmnitureTracker.trackState(pageName, properties);
+    }
+
+    @Override
+    public void trackOmnitureAction(String actionName, Map<String, Object> properties) {
+        OmnitureTracker.trackAction(actionName, properties);
     }
 }

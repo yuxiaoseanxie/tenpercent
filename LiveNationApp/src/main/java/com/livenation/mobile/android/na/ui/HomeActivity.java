@@ -132,10 +132,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
-        //Omniture
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_HOME, null);
-        }
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_HOME;
     }
 
     @Override

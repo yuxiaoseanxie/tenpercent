@@ -170,10 +170,7 @@ public class ShowActivity extends DetailBaseFragmentActivity implements SingleEv
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SDP, getAnalyticsProps());
-        }
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_SDP;
     }
 }

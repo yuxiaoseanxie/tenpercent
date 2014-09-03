@@ -132,6 +132,17 @@ public class AnalyticConstants {
     public static final String OMNITURE_SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
     public static final String OMNITURE_SCREEN_SDP = "LN_Mob: NA App Android: SDP";
 
+    public static final String OMNITURE_SCREEN_CHECKOUT_BILLING = "LN_Mob: NA App Android: Checkout: Billing";
+    public static final String OMNITURE_SCREEN_CHECKOUT_BILLING__ADD_CC = "LN_Mob: NA App Android: Checkout: Billing: Add CC";
+    public static final String OMNITURE_SCREEN_CHECKOUT_BILLING_EDIT_CC = "LN_Mob: NA App Android: Checkout: Billing: Edit CC";
+    public static final String OMNITURE_SCREEN_CHECKOUT_CART = "LN_Mob: NA App Android: Checkout: Cart";
+    public static final String OMNITURE_SCREEN_CHECKOUT_CART_SHIPPING = "LN_Mob: NA App Android: Checkout: Cart: Shipping";
+    public static final String OMNITURE_SCREEN_CHECKOUT_INTEGRATED_LISTING = "LN_Mob: NA App Android: Checkout: Integrated Listings";
+    public static final String OMNITURE_SCREEN_CHECKOUT_RECAPTCHA = "LN_Mob: NA App Android: Checkout: Recaptcha";
+    public static final String OMNITURE_SCREEN_CHECKOUT_SOLVE_RECAPTCHA = "LN_Mob: NA App Android: Checkout: Solve Recaptcha";
+    public static final String OMNITURE_SCREEN_ORDERS = "LN_Mob: NA App Android: Orders";
+    public static final String OMNITURE_SCREEN_SHARE = "LN_Mob: NA App Android: Share";
+    public static final String OMNITURE_SCREEN_VDP_VENUE_INFO = "LN_Mob: NA App Android: VDP: Venue Info";
     /**
      * Attributes
      */
