@@ -47,6 +47,7 @@
     <dimen name="view_show_venue_details_packing">-3dp</dimen>
     <dimen name="account_footer_item_packing">-5dp</dimen>
     <dimen name="vertical_date_packing">-4dp</dimen>
+    <dimen name="ui_find_tickets_height">56dp</dimen>
 
     <!-- App -->
     <dimen name="app_navigation_drawer_width">290dp</dimen>
