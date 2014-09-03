@@ -24,6 +24,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
@@ -58,24 +59,30 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
-        //Get venue detail
-        SingleVenueParameters apiParams = new SingleVenueParameters();
-        String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
-        long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
-        apiParams.setVenueId(venueId);
-        LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
-            @Override
-            public void onResponse(Venue venue) {
-                VenueActivity.this.venue = venue;
-                singleVenueView.setVenue(venue);
-                googleViewStart(venue);
-            }
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
+        //Use cached event for avoiding the blank page while we are waiting for the http response
+        if (args.containsKey(PARAMETER_VENUE_CACHED)) {
+            Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
+            setVenue(venue);
+        } else {
+
+            //Get venue detail
+            SingleVenueParameters apiParams = new SingleVenueParameters();
+            String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
+            long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
+            apiParams.setVenueId(venueId);
+            LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
+                @Override
+                public void onResponse(Venue venue) {
+                    setVenue(venue);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
+        }
     }
 
 
@@ -93,6 +100,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         }
         eventsView.setEvents(events);
         invalidateIsShareAvailable();
+    }
+
+    private void setVenue(Venue venue) {
+        VenueActivity.this.venue = venue;
+        singleVenueView.setVenue(venue);
+        invalidateIsShareAvailable();
+        googleViewStart(venue);
     }
 
     private void init() {
