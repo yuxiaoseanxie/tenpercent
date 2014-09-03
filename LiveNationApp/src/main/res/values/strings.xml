@@ -306,7 +306,7 @@
     <string name="cash_request_total">Request Total</string>
     <string name="cash_request_caption_fmt">%1$s at %2$s on %3$s</string>
 
-    <string name="cash_marketing_tagline">Assign tickets to friends - \nWe’ll do the rest</string>
+    <string name="cash_marketing_tagline">We\'ll do the work – and the math</string>
     <string name="cash_marketing_line_1">100% free. Safe and secure.</string>
     <string name="cash_marketing_line_2">All you need is a debit card.</string>
     <string name="cash_marketing_cta">Get started!</string>
