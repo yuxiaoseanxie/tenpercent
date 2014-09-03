@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.cash.model;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +25,7 @@ public class CashUtils {
     public static final String LOG_TAG = "Cash";
     public static final String PREFS_ID = "Cash";
     public static final String ACTION_REQUESTS_COMPLETED = "com.livenation.mobile.android.na.cash.ACTION_REQUESTS_COMPLETED";
+    public static final String HELP_URL = "https://squareup.com/help/en-us/topic/139-square-cash";
 
     //endregion
 
@@ -58,6 +60,10 @@ public class CashUtils {
 
     public static SharedPreferences getPreferences() {
         return LiveNationApplication.get().getSharedPreferences(PREFS_ID, 0);
+    }
+
+    public static void showHelpWebsite(@NonNull Context fromContext) {
+        fromContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HELP_URL)));
     }
 
     //endregion

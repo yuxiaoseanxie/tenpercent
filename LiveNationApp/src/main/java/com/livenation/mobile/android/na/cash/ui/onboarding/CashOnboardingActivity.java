@@ -39,6 +39,9 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_onboarding);
 
+        View footer = findViewById(R.id.activity_cash_onboarding_info_footer);
+        footer.setOnClickListener(footerClickListener);
+
         if (savedInstanceState != null) {
             this.customerStatus = (CashCustomerStatus) savedInstanceState.getSerializable(SAVED_CUSTOMER_STATUS);
             this.phoneNumber = savedInstanceState.getString(SAVED_PHONE_NUMBER);
@@ -206,6 +209,14 @@ public class CashOnboardingActivity extends LiveNationFragmentActivity {
     }
 
     //endregion
+
+
+    private final View.OnClickListener footerClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            CashUtils.showHelpWebsite(CashOnboardingActivity.this);
+        }
+    };
 
 
     private static enum Page {

@@ -29,11 +29,4 @@
 
     </EditText>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/inter_item_padding_large"
-        android:src="@drawable/cash_powered_by"
-        android:contentDescription="@string/cash_powered_by"/>
-
 </LinearLayout>

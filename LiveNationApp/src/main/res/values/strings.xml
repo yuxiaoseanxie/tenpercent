@@ -266,6 +266,7 @@
 
     <string name="cash_call_to_action">Get Paid Back</string>
     <string name="cash_powered_by">Powered by Square Cash</string>
+    <string name="cash_name">Cash</string>
 
     <string name="cash_field_label_to">To</string>
     <string name="cash_field_hint_to">Name, Email or Phone #</string>
@@ -286,7 +287,7 @@
     <string name="cash_enter_card_text">Next, add a bank by entering a Visa or Mastercard debit card.</string>
     <string name="cash_name_text">Please confirm your first and last name.</string>
 
-    <string name="cash_verification_code_text_fmt">Cool! We've texted your code to %1$s.</string>
+    <string name="cash_verification_code_text_fmt">Cool! We\'ve texted your code to %1$s.</string>
     <string name="cash_verification_code_hint">Verification Code</string>
     <string name="cash_resend_verification_code">Resend verification code?</string>
     <string name="cash_resend_verification_code_again">Sent. Resend again?</string>

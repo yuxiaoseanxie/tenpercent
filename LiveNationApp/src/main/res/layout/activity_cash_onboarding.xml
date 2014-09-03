@@ -5,9 +5,60 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <FrameLayout
-        android:id="@+id/activity_request_details_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/activity_request_details_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <RelativeLayout
+            android:id="@+id/activity_cash_onboarding_info_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/gap_large"
+            android:gravity="center_vertical"
+            android:background="?android:selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/activity_cash_onboarding_powered_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/gap_large"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/cash_powered_by"
+                android:contentDescription="@string/cash_powered_by"/>
+
+            <TextView
+                android:id="@+id/activity_cash_onboarding_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/activity_cash_onboarding_powered_by"
+                android:textAppearance="@style/ln.text.small.bold.gray"
+                android:text="@string/cash_name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/activity_cash_onboarding_powered_by"
+                android:layout_below="@id/activity_cash_onboarding_name"
+                android:textAppearance="@style/ln.text.small.gray"
+                android:text="@string/cash_powered_by"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/cash_icon_help"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </ScrollView>
