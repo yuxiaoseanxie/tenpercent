@@ -63,8 +63,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_VENUE_CACHED)) {
             Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
-            singleVenueView.setVenue(venue);
-            googleViewStart(venue);
+            setVenue(venue);
         } else {
 
             //Get venue detail
@@ -75,9 +74,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
             LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
                 @Override
                 public void onResponse(Venue venue) {
-                    VenueActivity.this.venue = venue;
-                    singleVenueView.setVenue(venue);
-                    googleViewStart(venue);
+                    setVenue(venue);
                 }
 
                 @Override
@@ -103,6 +100,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         }
         eventsView.setEvents(events);
         invalidateIsShareAvailable();
+    }
+
+    private void setVenue(Venue venue) {
+        VenueActivity.this.venue = venue;
+        singleVenueView.setVenue(venue);
+        invalidateIsShareAvailable();
+        googleViewStart(venue);
     }
 
     private void init() {

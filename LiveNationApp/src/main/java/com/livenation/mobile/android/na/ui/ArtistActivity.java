@@ -47,16 +47,13 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
             Artist artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
-            artistFragment.setSingleArtist(artist);
-            googleViewStart(artist);
+            setArtist(artist);
         } else {
 
             LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
                 @Override
                 public void onResponse(Artist artist) {
-                    artistFragment.setSingleArtist(artist);
-                    ArtistActivity.this.artist = artist;
-                    googleViewStart(artist);
+                    setArtist(artist);
                 }
 
                 @Override
@@ -125,6 +122,13 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     //endregion
+
+    private void setArtist(Artist artist) {
+        artistFragment.setSingleArtist(artist);
+        ArtistActivity.this.artist = artist;
+        invalidateIsShareAvailable();
+        googleViewStart(artist);
+    }
 
     private void trackActionBarAction(String event, Props props) {
         if (props == null) {
