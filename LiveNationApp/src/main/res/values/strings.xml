@@ -282,28 +282,28 @@
     <string name="cash_content_description_contact_photo">Contact Photo</string>
     <string name="cash_select_quantity">Select Ticket Quantity</string>
     
-    <string name="cash_phone_number_text">Which mobile phone number should we send your receipt to?</string>
-    <string name="cash_enter_card_text">Add a debit card to get paid back instantly</string>
-    <string name="cash_name_text">Please confirm your first and last name</string>
-    
-    <string name="cash_verification_code_text">Please enter the verification code sent</string>
-    <string name="verification_code">Verification Code</string>
-    
-    <string name="cash_confirmation_title_fmt">Requested %1$s from friends</string>
-    <string name="cash_confirmation_explanation">We\'ll let you know when your request is approved</string>
-    <string name="cash_check_mark_content_description">We\'ll let you know when your request is approved</string>
+    <string name="cash_phone_number_text">Enter your mobile number to get started.</string>
+    <string name="cash_enter_card_text">Next, add a bank by entering a Visa or Mastercard debit card.</string>
+    <string name="cash_name_text">Please confirm your first and last name.</string>
+
+    <string name="cash_verification_code_text_fmt">Cool! We've texted your code to %1$s.</string>
+    <string name="cash_verification_code_hint">Verification Code</string>
+    <string name="cash_resend_verification_code">Resend verification code?</string>
+    <string name="cash_resend_verification_code_again">Sent. Resend again?</string>
+
+    <string name="cash_confirmation_title_fmt">Success!\nYou\'ve requested %1$s</string>
+    <string name="cash_confirmation_explanation">We\'ll let you know when it\'s approved</string>
+    <string name="cash_check_mark_content_description">We\'ll let you know when it\'s approved</string>
     <string name="cash_action_done">Done</string>
     <string name="cash_action_request">Request</string>
 
-    <string name="cash_contact_name_you">You</string>
+    <string name="cash_contact_you_placeholder">You</string>
     <string name="cash_logout_text_fmt">Not %1$s?</string>
 
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
     <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>
     <string name="cash_request_total">Request Total</string>
     <string name="cash_request_caption_fmt">%1$s at %2$s on %3$s</string>
-    <string name="cash_resend_verification_code">Resend verification code</string>
-    <string name="cash_resend_verification_code_again">Code resent, send another?</string>
 
     <string name="cash_marketing_tagline">Assign tickets to friends - \nWe’ll do the rest</string>
     <string name="cash_marketing_line_1">100% free. Safe and secure.</string>

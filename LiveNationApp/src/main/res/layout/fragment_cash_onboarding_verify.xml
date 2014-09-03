@@ -8,12 +8,13 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/fragment_cash_onboarding_verify_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/inter_item_padding_large"
         android:gravity="center"
         android:textAppearance="@style/Cash.Text.Header1"
-        android:text="@string/cash_verification_code_text"/>
+        android:text="@string/cash_verification_code_text_fmt"/>
 
     <EditText
         android:id="@+id/fragment_cash_onboarding_verify_code"
@@ -23,7 +24,7 @@
         android:inputType="phone"
         android:imeOptions="actionGo"
         android:textSize="18sp"
-        android:hint="@string/verification_code">
+        android:hint="@string/cash_verification_code_hint">
 
         <requestFocus />
 

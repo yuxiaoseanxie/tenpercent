@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneNumberUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,10 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
         this.resend = (Button) view.findViewById(R.id.fragment_cash_onboarding_verify_resend);
         resend.setOnClickListener(resendCodeClickListener);
         resend.setVisibility(View.INVISIBLE);
+
+        TextView title = (TextView) view.findViewById(R.id.fragment_cash_onboarding_verify_title);
+        String formattedPhoneNumber = PhoneNumberUtils.formatNumber(getPhoneNumber());
+        title.setText(getString(R.string.cash_verification_code_text_fmt, formattedPhoneNumber));
 
         return view;
     }

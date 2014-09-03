@@ -176,7 +176,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         if (status != null && !TextUtils.isEmpty(status.getFullName()))
             return status.getFullName();
         else
-            return getString(R.string.cash_contact_name_you);
+            return getString(R.string.cash_contact_you_placeholder);
     }
 
     public HashMap<String, Integer> getTicketPerContactQuantities() {
