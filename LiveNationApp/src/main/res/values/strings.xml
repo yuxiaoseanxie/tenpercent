@@ -277,8 +277,8 @@
     <string name="cash_powered_by">Powered by Square Cash</string>
     <string name="cash_name">Cash</string>
 
-    <string name="cash_field_label_to">To</string>
-    <string name="cash_field_hint_to">Name, Email or Phone #</string>
+    <string name="cash_field_label_to">Add friends you want\nto pay you back</string>
+    <string name="cash_field_hint_to">Type a name, email or phone #</string>
     <string name="cash_field_label_note">Note</string>
     <string name="cash_field_value_note_fmt">Your share of %1$s</string>
 
