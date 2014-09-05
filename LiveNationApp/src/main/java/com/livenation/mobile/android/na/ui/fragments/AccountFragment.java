@@ -115,11 +115,13 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     @Override
     public void onGetCity(City city) {
+        if (!isAdded()) return;
         locationText.setText(city.getName());
     }
 
     @Override
     public void onGetCityFailure(double lat, double lng) {
+        if (!isAdded()) return;
         locationText.setText(getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng));
     }
 
