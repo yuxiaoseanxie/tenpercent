@@ -120,7 +120,7 @@ dependencies {
     compile project(':facebookSDK')
     compile project(':Ticketing')
     compile 'com.android.support:support-v13:20.0.0'
-    compile 'com.google.android.gms:play-services:5.0.+'
+    compile 'com.google.android.gms:play-services:5.0.89'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'
 	compile('io.segment.analytics.android:all:1.4.1+@aar') {
