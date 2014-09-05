@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
@@ -35,9 +34,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/underscore_container_height"
+        android:layout_height="@dimen/one_dp"
         android:layout_marginBottom="@dimen/fragment_location_auto_switch_margin_bottom"
-        android:layout_marginTop="@dimen/fragment_location_auto_switch_margin_top"
+        android:layout_marginTop="@dimen/gap_smaller"
         android:background="@drawable/ui_underscore_background" />
 
     <Switch
@@ -45,7 +44,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/your_location"
-        android:drawablePadding="@dimen/fragment_location_auto_switch_drawable_padding"
+        android:drawablePadding="@dimen/gap_smaller"
+        android:minHeight="52dp"
+        android:textAppearance="@style/ln.text.medium.bold.red"
         android:text="@string/location_switch"
         android:thumb="@drawable/livenation_switch_inner_holo_light"
         android:track="@drawable/livenation_switch_track_holo_light" />

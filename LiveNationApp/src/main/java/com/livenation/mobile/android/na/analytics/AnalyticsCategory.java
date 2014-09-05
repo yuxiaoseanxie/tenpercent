@@ -22,7 +22,8 @@ public enum AnalyticsCategory {
     HOUSEKEEPING(AnalyticConstants.CATEGORY_HOUSEKEEPING_VALUE),
     ERROR(AnalyticConstants.CATEGORY_ERROR_VALUE),
     UNKNOWN(AnalyticConstants.CATEGORY_UNKNOWN),
-    PUSHNOTIFICATION(AnalyticConstants.CATEGORY_PUSH_NOTIFICATION_VALUE);
+    PUSHNOTIFICATION(AnalyticConstants.CATEGORY_PUSH_NOTIFICATION_VALUE),
+    RATEUSMODAL(AnalyticConstants.CATEGORY_RATE_US_MODAL);
 
 
     public String categoryName;

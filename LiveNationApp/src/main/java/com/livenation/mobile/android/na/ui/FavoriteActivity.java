@@ -29,7 +29,9 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
         switch (item.getItemId()) {
             case R.id.menu_home_search_item:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VENUES_VALUE);
+                intent.putExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES);
+                intent.putExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
+
                 startActivity(intent);
                 return true;
         }

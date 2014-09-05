@@ -8,8 +8,6 @@
 
 package com.livenation.mobile.android.na.presenters.support;
 
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.support.BaseState.StateListener;
 
 import java.util.ArrayList;
@@ -66,10 +64,6 @@ public abstract class BasePresenter<T2 extends PresenterView, T extends BaseStat
 
     public List<T> getStates() {
         return activeStates;
-    }
-
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
     }
 
     public String getTag() {

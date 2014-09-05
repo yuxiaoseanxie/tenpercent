@@ -14,20 +14,11 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LocationManager;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.FavoritesPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract {
-
-    @Override
-    public LocationManager getLocationManager() {
-        return LiveNationApplication.get().getLocationManager();
-    }
 
     @Override
     public ImageLoader getImageLoader() {
@@ -40,18 +31,8 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     }
 
     @Override
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return LiveNationApplication.get().getSingleArtistPresenter();
-    }
-
-    @Override
     public ArtistEventsPresenter getArtistEventsPresenter() {
         return LiveNationApplication.get().getArtistEventsPresenter();
-    }
-
-    @Override
-    public FavoritesPresenter getFavoritesPresenter() {
-        return LiveNationApplication.get().getFavoritesPresenter();
     }
 
     @Override
@@ -59,23 +40,17 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
         return LiveNationApplication.get().getAccountPresenters();
     }
 
-    @Override
-    public SingleEventPresenter getSingleEventPresenter() {
-        return LiveNationApplication.get().getSingleEventPresenter();
-    }
-
     public void addFragment(int containerId, Fragment fragment, String tag) {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(containerId, fragment, tag);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     public void removeFragment(Fragment fragment) {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
-
 }

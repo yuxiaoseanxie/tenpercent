@@ -15,7 +15,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -60,7 +59,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.dividerHeight = (int) getResources().getDimension(R.dimen.underscore_container_height);
+        this.dividerHeight = (int) getResources().getDimension(R.dimen.one_dp);
         this.dividerLeftMargin = (int) getResources().getDimension(R.dimen.ui_gutter_width);
         this.dividerBackground = getResources().getDrawable(R.drawable.ui_underscore_background);
     }
@@ -157,7 +156,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
     }
 
 
-    private View getShowMoreItemsView() {
+    public View getShowMoreItemsView() {
         return showMoreItemsView;
     }
 
@@ -200,8 +199,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
             Intent intent = new Intent(getActivity(), ShowActivity.class);
 
-            Bundle args = SingleEventPresenter.getAruguments(event.getId());
-            SingleEventPresenter.embedResult(args, event);
+            Bundle args = ShowActivity.getArguments(event);
             intent.putExtras(args);
 
             startActivity(intent);

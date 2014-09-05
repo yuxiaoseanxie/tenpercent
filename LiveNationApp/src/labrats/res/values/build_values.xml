@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_api_key">AIzaSyAvrAEFr9l3O6Rvb8R2i-acnhrAgOV5mBo</string>
+    <string name="youtube_api_key">AIzaSyAmVqIc2WXXvc3MdDKJjXSAJf33rS2ACTY</string>
+    <string name="facebook_app_id">387261387994194</string>
+
+    <string name="hockey_app_id">62d029731ea1db7b47794460598c054a</string>
+
+    <string name="urbanairship_permission">
+        com.livenation.mobile.android.na.labrats.permission.UA_DATA
+    </string>
+    <string name="urbanairship_authorities">
+        com.livenation.mobile.android.na.labrats.urbanairship.provider
+    </string>
+</resources>

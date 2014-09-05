@@ -13,7 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -25,15 +25,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
@@ -45,14 +47,7 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.segment.android.models.Props;
-
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
-
-import java.util.Map;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -63,10 +58,13 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private SlidingTabLayout slidingTabLayout;
     private boolean hasUnreadNotifications;
     private BroadcastReceiver broadcastReceiver;
+    private LinearLayout contentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
+
+        contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
@@ -96,28 +94,37 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                invalidateOptionsMenu();
+                if (InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED.equals(intent.getAction())) {
+                    updateUpdateRequiredHeader();
+                } else {
+                    invalidateOptionsMenu();
+                }
             }
         };
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGIN));
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
 
-        //Hockey App
-        checkForUpdates();
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkForCrashes();
+
+        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+        if (installedAppConfig.isUpdateAdvisable())
+            installedAppConfig.update();
+
+        updateUpdateRequiredHeader();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
 
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        localBroadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -195,42 +202,43 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
-                buildAndOpenContactEmail();
+                ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 
             case R.id.menu_home_logout_item:
                 LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
-                LoginHelper.logout(this);
+                LoginHelper.logout(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void buildAndOpenContactEmail() {
 
-        final String emailAddress = getString(R.string.contact_email_address);
-        final String subject = getString(R.string.contact_email_subject);
-        final String message = "\n\n" + getString(R.string.contact_email_signature_message)
-                + getString(R.string.contact_email_signature_message_appversion) + BuildConfig.VERSION_NAME
-                + getString(R.string.contact_email_signature_message_device) + Build.MANUFACTURER + "  " + Build.MODEL
-                + getString(R.string.contact_email_signature_message_platform) + Build.VERSION.SDK_INT;
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
-            @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                Map<String, String> userInfo = apiService.getApiConfig().getAppInitResponse().getData().getUserInfo();
-                String userId = userInfo.get(AppInitData.USER_INFO_ID_KEY);
-                String signature = message + getString(R.string.contact_email_signature_message_userid) + userId;
-                ContactUtils.emailTo(emailAddress, subject, signature, HomeActivity.this);
+    private void updateUpdateRequiredHeader() {
+        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+
+        View updateRequiredLayout = contentLayout.findViewById(R.id.sub_update_required_layout);
+        if (installedAppConfig.isUpgradeRequired()) {
+            if (updateRequiredLayout == null) {
+                updateRequiredLayout = getLayoutInflater().inflate(R.layout.sub_update_required, contentLayout, false);
+                contentLayout.addView(updateRequiredLayout, 1); // After the tab strip
             }
 
-            @Override
-            public void onApiServiceNotAvailable() {
-                ContactUtils.emailTo(emailAddress, subject, message, HomeActivity.this);
-            }
-        });
+            TextView text = (TextView) updateRequiredLayout.findViewById(R.id.sub_update_required_text);
+            text.setText(installedAppConfig.getUpgradeMessage());
 
-
+            Button button = (Button) updateRequiredLayout.findViewById(R.id.sub_update_required_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri playStore = Uri.parse(installedAppConfig.getUpgradePlayStoreLink());
+                    startActivity(new Intent(Intent.ACTION_VIEW, playStore));
+                }
+            });
+        } else if (updateRequiredLayout != null) {
+            contentLayout.removeView(updateRequiredLayout);
+        }
     }
 
     @Override
@@ -265,20 +273,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     private AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
-    }
-
-    //Hockey App
-    private void checkForCrashes() {
-        if (BuildConfig.DEBUG) {
-            CrashManager.register(this, getString(R.string.hockey_app_id));
-        }
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        if (BuildConfig.DEBUG) {
-            UpdateManager.register(this, getString(R.string.hockey_app_id));
-        }
     }
 
     @Override

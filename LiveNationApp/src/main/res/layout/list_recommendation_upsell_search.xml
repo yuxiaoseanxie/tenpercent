@@ -9,13 +9,15 @@
     android:paddingRight="@dimen/activity_vertical_margin">
 
     <TextView
-        style="@style/text.primary.recommendations_upsell_title_text"
+        style="@style/recommendations_upsell_title"
+        android:textAppearance="@style/ln.text.small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recommendations_favorite_upsell_large_title" />
 
     <TextView
-        style="@style/text.secondary.recommendations_upsell_general_text"
+        style="@style/recommendations_upsell_general"
+        android:textAppearance="@style/ln.text.small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recommendations_favorite_upsell_large_text2" />
@@ -23,7 +25,7 @@
     <include
         android:id="@android:id/button1"
         layout="@layout/sub_button_search_favorites"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/recommendations_button_width"
         android:layout_height="@dimen/recommendations_button_height" />
 
 </LinearLayout>

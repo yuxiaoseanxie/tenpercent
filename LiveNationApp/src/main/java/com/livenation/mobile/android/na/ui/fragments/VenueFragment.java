@@ -25,19 +25,19 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
+import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.livenation.mobile.android.na.utils.MapUtils;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -62,6 +62,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
     private LatLng mapLocationCache = null;
+    private final static int MAX_INLINE = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +93,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
         }
         mapFragment.setMapReadyListener(this);
+
+        showsFragment.setMaxEvents(MAX_INLINE);
+        showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
+
+        showsFragment.setShowMoreItemsView(showMoreView);
     }
 
     @Override
@@ -124,7 +132,9 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         double lng = Double.valueOf(venue.getLng());
         setMapLocation(lat, lng);
 
-        favoriteCheckBox.bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.VDP);
+        favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
+        showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
+
     }
 
     @Override
@@ -149,27 +159,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private void loadBoxOfficeInfo(final long venueId) {
-        LiveNationApplication.get().getConfigManager().bindApi(new ApiServiceBinder() {
+        SingleVenueParameters parameters = new SingleVenueParameters();
+        parameters.setVenueId(venueId);
+        LiveNationApplication.getLiveNationProxy().getSingleVenue(parameters, new BasicApiCallback<Venue>() {
             @Override
-            public void onApiServiceAttached(LiveNationApiService apiService) {
-                SingleVenueParameters parameters = new SingleVenueParameters();
-                parameters.setVenueId(venueId);
-                apiService.getSingleVenue(parameters, new ApiService.BasicApiCallback<Venue>() {
-                    @Override
-                    public void onResponse(Venue fullVenue) {
-                        displayBoxOfficeInfo(fullVenue);
-                    }
-
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-                        Log.e(getClass().getName(), "Could not load box office info. " + error);
-                    }
-                });
+            public void onResponse(Venue fullVenue) {
+                displayBoxOfficeInfo(fullVenue);
             }
 
             @Override
-            public void onApiServiceNotAvailable() {
-                Log.e(getClass().getName(), "Could not load box office info. Api error");
+            public void onErrorResponse(LiveNationError error) {
+                Log.e(getClass().getName(), "Could not load box office info. " + error);
             }
         });
     }
@@ -264,6 +264,29 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP, props);
 
             MapUtils.redirectToMapApplication(lat, lng, address, context);
+        }
+    }
+
+
+    private class ShowAllEventsOnClickListener implements View.OnClickListener {
+        private final Venue venue;
+
+        private ShowAllEventsOnClickListener(Venue venue) {
+            this.venue = venue;
+        }
+
+        @Override
+        public void onClick(View view) {
+            //Analytics
+            Props props = new Props();
+            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
+            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+
+            LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_SHOWS_TAP, AnalyticsCategory.VDP, props);
+
+            Intent intent = new Intent(getActivity(), VenueShowsActivity.class);
+            intent.putExtras(VenueShowsActivity.getArguments(venue));
+            startActivity(intent);
         }
     }
 }

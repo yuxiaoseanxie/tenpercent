@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Title"
-        android:textAppearance="@style/list_show_title" />
+        android:textAppearance="@style/ln.text.medium" />
 
     <TextView
         android:id="@+id/action_detail"
@@ -25,6 +25,6 @@
         android:layout_marginLeft="8dp"
         android:gravity="right"
         android:text="Action"
-        android:textAppearance="@style/list_show_location" />
+        android:textAppearance="@style/ln.text.small" />
 
 </LinearLayout>

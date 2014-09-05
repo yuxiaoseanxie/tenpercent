@@ -19,15 +19,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
+import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.utils.BitmapRequest;
 import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class AccountUserFragment extends LiveNationFragment implements
         AccountUserView, Response.Listener<Bitmap>, Response.ErrorListener {
@@ -35,7 +36,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     private TextView email;
 
     private ImageView image;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver logoutBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onResume();
@@ -53,16 +54,28 @@ public class AccountUserFragment extends LiveNationFragment implements
         email = (TextView) view.findViewById(R.id.fragment_account_user_email);
         image = (ImageView) view.findViewById(R.id.fragment_account_user_image);
 
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.LOGOUT));
-        return view;
-    }
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).registerReceiver(logoutBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        //User cached data
         User user = LoginHelper.getSavedUser();
-        SsoManager.AuthConfiguration authConfiguration = LoginHelper.getAuthConfiguration();
-        setUser(user, authConfiguration);
+        setUser(user, LoginHelper.getAuthConfiguration());
+
+        LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
+            @Override
+            public void onResponse(boolean hasChanged, String accessToken, User user) {
+                if (hasChanged) {
+                    setUser(user, LoginHelper.getAuthConfiguration());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                //When the login fail, the user is automatically removed and the "logout" broadcast is triggered.
+                //That's we this fragment should be destroy when the onErrorResponse method is called.
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -74,7 +87,19 @@ public class AccountUserFragment extends LiveNationFragment implements
 
         name.setText(user.getDisplayName());
         email.setText(user.getEmail());
-        email.setCompoundDrawablesWithIntrinsicBounds(authConfiguration.getSsoProviderId().getLogoResId(), 0, 0, 0);
+        int logoId = -1;
+        if (authConfiguration.getSsoProviderId() != null) {
+            switch (authConfiguration.getSsoProviderId()) {
+                case SSO_FACEBOOK:
+                    logoId = R.drawable.facebook_logo;
+                    break;
+                case SSO_GOOGLE:
+                    logoId = R.drawable.google_plus_logo;
+                    break;
+            }
+
+        }
+        email.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
 
         bitmapRequest = new BitmapRequest(Request.Method.GET, user.getUrl(), this, this);
         requestQueue.add(bitmapRequest);
@@ -99,7 +124,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void onResponse(Bitmap bitmap) {
         if (bitmap != null) {
-            bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.imageview_stroke_width));
+            bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.one_dp));
             image.setImageBitmap(bitmap);
         } else {
             image.setImageBitmap(null);
@@ -110,7 +135,7 @@ public class AccountUserFragment extends LiveNationFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(logoutBroadcastReceiver);
 
     }
 }

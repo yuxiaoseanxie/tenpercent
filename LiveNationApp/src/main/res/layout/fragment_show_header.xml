@@ -10,9 +10,10 @@
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
-        <com.livenation.mobile.android.na.ui.views.BottomCroppedImageView
+        <com.livenation.mobile.android.na.ui.views.TransitioningImageView
             android:id="@+id/fragment_show_image"
             android:layout_width="match_parent"
+            android:background="@color/black"
             android:layout_height="@dimen/detail_page_image_height" />
     </FrameLayout>
 
@@ -21,10 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/fragment_show_frame_foreground"
-        android:layout_marginBottom="@dimen/detail_page_title_margin_bottom"
-        android:layout_marginLeft="@dimen/detail_page_title_margin_left"
-        android:layout_marginRight="@dimen/detail_page_title_margin_right"
+        android:layout_marginBottom="@dimen/gap_medium"
+        android:layout_marginLeft="@dimen/gap_medium"
+        android:layout_marginRight="@dimen/gap_medium"
         android:text="@string/mock_placeholder_artist_title_1"
-        android:textAppearance="@style/show_artist_title"></TextView>
+        android:textAppearance="@style/ln.text.xlarge.bold.white"></TextView>
 
 </RelativeLayout>

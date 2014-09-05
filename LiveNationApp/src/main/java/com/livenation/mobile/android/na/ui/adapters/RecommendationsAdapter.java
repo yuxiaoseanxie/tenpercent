@@ -9,20 +9,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.helpers.SsoManager;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.List;
 import java.util.TimeZone;
@@ -57,6 +57,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         int itemType = getItemViewType(position);
         switch (itemType) {
             case ITEM_TYPE_UPSELL_DISCREET:
@@ -87,13 +88,12 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         String imageUrl = null;
 
         if (event.getLineup().size() > 0) {
-            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap", "mobile_detail"});
+            String imageKey = event.getLineup().get(0).getBestImageKey(new String[]{"tap"});
             imageUrl = event.getLineup().get(0).getImageURL(imageKey);
         }
 
-        holder.getImage().setDefaultImageResId(drawableId);
-        holder.getImage().setErrorImageResId(drawableId);
-        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader());
+        holder.getImage().setDefaultImage(drawableId);
+        holder.getImage().setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE);
 
         TimeZone timeZone;
         if (event.getVenue().getTimeZone() != null) {
@@ -223,7 +223,8 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     private void launchArtistSearch() {
         LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
         Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(SearchActivity.EXTRA_SEARCH_MODE_KEY, SearchActivity.EXTRA_SEARCH_MODE_ARTIST_VALUE);
+        intent.putExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST);
+        intent.putExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
         getContext().startActivity(intent);
     }
 
@@ -255,14 +256,14 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         private final TextView title;
         private final TextView location;
         private final VerticalDate date;
-        private final NetworkImageView image;
+        private final TransitioningImageView image;
         private final View divider;
 
         public EventViewHolder(View view) {
             this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
-            this.image = (NetworkImageView) view.findViewById(R.id.list_item_show_image);
+            this.image = (TransitioningImageView) view.findViewById(R.id.list_item_show_image);
             this.divider = view.findViewById(R.id.list_item_show_divider);
         }
 
@@ -278,7 +279,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             return date;
         }
 
-        public NetworkImageView getImage() {
+        public TransitioningImageView getImage() {
             return image;
         }
 

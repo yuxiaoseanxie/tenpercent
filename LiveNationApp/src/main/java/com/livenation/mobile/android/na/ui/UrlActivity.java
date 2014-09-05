@@ -12,14 +12,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.apiconfig.ConfigManager;
-import com.livenation.mobile.android.na.app.ApiServiceBinder;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Entity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -70,9 +64,9 @@ public class UrlActivity extends LiveNationFragmentActivity {
         return multiGetParameters;
     }
 
-    public <T> void fetchEntity(LiveNationApiService service, final String id, final Response.Listener<T> success) {
+    public <T> void fetchEntity(final String id, final Response.Listener<T> success) {
         MultiGetParameters multiGetParameters = buildMultiGetParameters(id);
-        service.multiGet(multiGetParameters, new ApiService.BasicApiCallback<List<Entity>>() {
+        LiveNationApplication.getLiveNationProxy().multiGet(multiGetParameters, new BasicApiCallback<List<Entity>>() {
             @Override
             public void onResponse(List<Entity> response) {
                 if (response.size() == 0) {
@@ -90,7 +84,6 @@ public class UrlActivity extends LiveNationFragmentActivity {
             public void onErrorResponse(LiveNationError error) {
                 Log.e(getClass().getName(), "multi-get failed: " + error);
                 displayError(R.string.url_error_platform);
-
                 finish();
             }
         });
@@ -99,15 +92,16 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
     // Handles Urls of forms livenation:///event/:id
     //                       livenation:///events/:id
-    public void dispatchEvent(LiveNationApiService service, Uri data) {
+    public void dispatchEvent(Uri data) {
         String id = Event.makeTypedId(data.getLastPathSegment());
 
-        fetchEntity(service, id, new Response.Listener<Event>() {
+        fetchEntity(id, new Response.Listener<Event>() {
             @Override
             public void onResponse(Event event) {
                 Intent intent = new Intent(UrlActivity.this, ShowActivity.class);
-                intent.putExtras(SingleEventPresenter.getAruguments(event.getId()));
-                SingleEventPresenter.embedResult(intent.getExtras(), event);
+                Bundle extras = ShowActivity.getArguments(event);
+                ;
+                intent.putExtras(extras);
                 startActivity(intent);
                 finish();
             }
@@ -118,7 +112,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
     //                       livenation:///artist/:id/events
     //                       livenation:///artists/:id
     //                       livenation:///artists/:id/events
-    public void dispatchArtist(LiveNationApiService service, Uri data) {
+    public void dispatchArtist(Uri data) {
         List<String> pathSegments = data.getPathSegments();
         String id = Artist.makeTypedId(data.getLastPathSegment());
 
@@ -127,12 +121,12 @@ public class UrlActivity extends LiveNationFragmentActivity {
             id = Artist.makeTypedId(pathSegments.get(1));
         }
 
-        fetchEntity(service, id, new Response.Listener<Artist>() {
+        fetchEntity(id, new Response.Listener<Artist>() {
             @Override
             public void onResponse(Artist artist) {
                 Intent intent = new Intent(UrlActivity.this, ArtistActivity.class);
-                intent.putExtras(SingleArtistPresenter.getAruguments(artist.getId()));
-                SingleArtistPresenter.embedResult(intent.getExtras(), artist);
+                Bundle bundle = ArtistActivity.getArguments(artist);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
             }
@@ -159,13 +153,13 @@ public class UrlActivity extends LiveNationFragmentActivity {
         Intent intent = null;
         if (id.startsWith("evt_")) {
             intent = new Intent(this, ShowActivity.class);
-            intent.putExtras(SingleEventPresenter.getAruguments(id));
+            intent.putExtras(ShowActivity.getArguments(id));
         } else if (id.startsWith("art_")) {
             intent = new Intent(this, ArtistActivity.class);
-            intent.putExtras(SingleArtistPresenter.getAruguments(id));
+            intent.putExtras(ArtistActivity.getArguments(id));
         } else if (id.startsWith("ven_")) {
             intent = new Intent(this, VenueActivity.class);
-            intent.putExtras(SingleVenuePresenter.getAruguments(id));
+            intent.putExtras(VenueActivity.getArguments(id));
         } else {
             Log.i(getClass().getName(), "Unhandled incoming url " + data);
             displayError(R.string.url_error_bad_url);
@@ -185,29 +179,17 @@ public class UrlActivity extends LiveNationFragmentActivity {
         if (isNavigate(data)) {
             dispatchNavigate(data);
         } else {
-            getApiHelper().bindApi(new ApiServiceBinder() {
-                @Override
-                public void onApiServiceAttached(LiveNationApiService apiService) {
-                    trackDeepLinks(data);
-                    List<String> pathSegments = data.getPathSegments();
-                    if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
-                        dispatchEvent(apiService, data);
-                    } else if (pathSegments.size() > 0 && (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists"))) {
-                        dispatchArtist(apiService, data);
-                    } else {
-                        Intent intent = new Intent(UrlActivity.this, OnBoardingActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onApiServiceNotAvailable() {
-                    displayError(R.string.url_error_no_conneciton);
-
-                    finish();
-                }
-            });
+            trackDeepLinks(data);
+            List<String> pathSegments = data.getPathSegments();
+            if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
+                dispatchEvent(data);
+            } else if (pathSegments.size() > 0 && (pathSegments.get(0).equals("artist") || pathSegments.get(0).equals("artists"))) {
+                dispatchArtist(data);
+            } else {
+                Intent intentToOpen = new Intent(UrlActivity.this, OnBoardingActivity.class);
+                startActivity(intentToOpen);
+                finish();
+            }
         }
     }
 
@@ -244,10 +226,5 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
 
-    }
-
-
-    private ConfigManager getApiHelper() {
-        return LiveNationApplication.get().getConfigManager();
     }
 }

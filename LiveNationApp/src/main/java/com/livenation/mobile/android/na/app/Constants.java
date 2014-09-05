@@ -16,30 +16,6 @@ public class Constants {
     //arbitary elay between user keypresses and sending user text to the API
     public static final int TEXT_CHANGED_POST_DELAY = 667;
 
-    public static enum Environment {
-        Production("https://api.livenation.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
-        ProductionDirect("https://prod-faceoff.herokuapp.com", "0361b9ba-9381-11e3-bc4c-bad30bc9cabe"),
-        Staging("http://stg.api.livenation.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
-        StagingDirect("https://stg-faceoff.herokuapp.com", "9e34bce8-5ea3-11e3-a9e5-5a59eb79d850"),
-        Integration("https://int-faceoff.herokuapp.com", "486e2ff6-98f5-11e3-b37c-ca4ec9c3f32c");
-
-        private final String host;
-        private final String clientId;
-
-        Environment(String host, String clientId) {
-            this.host = host;
-            this.clientId = clientId;
-        }
-
-        public String getClientId() {
-            return clientId;
-        }
-
-        public String getHost() {
-            return host;
-        }
-    }
-
     public class Notifications {
         public static final String EXTRA_TYPE = "type";
 
@@ -75,6 +51,7 @@ public class Constants {
         public static final String MUSIC_SYNC_LAST_SYNC_DATE_KEY = "music_sync_last_sync_date_key";
         public static final String DEBUG_MODE_DATA = "debug_mode_data";
         public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
+        public static final String ENVIRONMENT = "environment";
         public static final String DEVICE_UUID = "device_uuid";
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
         public static final String API_NAME = "api";
@@ -87,12 +64,23 @@ public class Constants {
         public static final String PREF_NAME = "TM_USER_PREF";
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
         public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
+        //Authentification
+        public static final String AUTHENTIFICATION_NAME = "auth_configuration";
+        public static final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
+        public static final String PARAMETER_TIMESTAMP = "timestamp";
+        public static final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
+        public static final String USER_ID = "user_id";
+        public static final String USER_NAME = "user_name";
+        public static final String USER_EMAIL = "user_email";
+        public static final String USER_PIC_URL = "user_pic_url";
+
+        //Rating
+        public static final String RATING_DIALOG_CLICKED = "rating_dialog_clicked";
 
     }
 
     public class BroadCastReceiver {
-        public static final String LOGOUT = "logout";
         public static final String MUSIC_LIBRARY_UPDATE = "music_library_update";
-        public static final String LOGIN = "music_library_update";
     }
+
 }

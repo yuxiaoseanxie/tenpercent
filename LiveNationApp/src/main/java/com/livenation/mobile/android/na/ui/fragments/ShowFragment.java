@@ -19,30 +19,32 @@ import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
+import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -64,7 +66,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     private TextView calendarText;
     private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
-    private NetworkImageView artistImage;
+    private TransitioningImageView artistImage;
     private ShowVenueView venueDetails;
     private Button findTicketsOptions;
     private Button findTickets;
@@ -80,7 +82,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                 false);
         artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
         lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
-        artistImage = (NetworkImageView) result.findViewById(R.id.fragment_show_image);
+        artistImage = (TransitioningImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
         calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
@@ -138,9 +140,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             OnVenueDetailsClick onVenueClick = new OnVenueDetailsClick(event);
             venueDetails.setOnClickListener(onVenueClick);
 
-            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, getFavoritesPresenter(), getActivity(), AnalyticsCategory.SDP);
+            OnVenueFavoriteClick onVenueFavoriteClick = new OnVenueFavoriteClick(venue, AnalyticsCategory.SDP);
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
-            venueDetails.getFavorite().bindToFavorite(Favorite.FAVORITE_VENUE, venue.getName(), venue.getNumericId(), getFavoritesPresenter(), AnalyticsCategory.SDP);
+            venueDetails.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.SDP);
 
             double lat = Double.valueOf(venue.getLat());
             double lng = Double.valueOf(venue.getLng());
@@ -159,7 +161,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
         findTickets.setOnClickListener(onFindTicketsClick);
 
-        artistImage.setDefaultImageResId(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), event.getNumericId()));
+        artistImage.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), event.getNumericId()));
 
         String imageUrl = null;
         //TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
@@ -171,7 +173,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            view.bindToFavoriteArtist(lineup, getFavoritesPresenter());
+            view.bindToFavoriteArtist(lineup);
 
             view.setOnClickListener(new OnLineupViewClick(lineup, event));
 
@@ -190,7 +192,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         }
         if (null != imageUrl) {
-            artistImage.setImageUrl(imageUrl, getImageLoader());
+            artistImage.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
     }
 
@@ -203,6 +205,19 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             if (null != mapLocationCache) {
                 setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
             }
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    venueDetails.performClick();
+                }
+            });
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    venueDetails.performClick();
+                    return true;
+                }
+            });
         } else {
             //TODO: Possible No Google play services installed
         }
@@ -221,15 +236,24 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
 
+    private InstalledAppConfig getInstalledAppConfig() {
+        return LiveNationApplication.get().getInstalledAppConfig();
+    }
+
 
     //region Find Tickets
 
     protected void showTicketOffering(TicketOffering offering) {
         String buyLink = offering.getPurchaseUrl();
         if (Ticketing.isTicketmasterUrl(buyLink)) {
-            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
-            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-            Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
+            if (getInstalledAppConfig().isCommerceAvailable()) {
+                Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
+                confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
+                Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
+            } else {
+                CommerceUnavailableDialogFragment dialogFragment = new CommerceUnavailableDialogFragment();
+                dialogFragment.show(getFragmentManager(), CommerceUnavailableDialogFragment.TAG);
+            }
         } else {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
             Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
@@ -300,8 +324,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Venue venue = event.getVenue();
             Intent intent = new Intent(getActivity(), VenueActivity.class);
 
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
+            Bundle args = VenueActivity.getArguments(venue);
             intent.putExtras(args);
 
             //Analytics
@@ -332,8 +355,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Intent intent = new Intent(getActivity(), ArtistActivity.class);
 
-            Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
-            SingleArtistPresenter.embedResult(args, lineupArtist);
+            Bundle args = ArtistActivity.getArguments(lineupArtist);
             intent.putExtras(args);
 
             startActivity(intent);

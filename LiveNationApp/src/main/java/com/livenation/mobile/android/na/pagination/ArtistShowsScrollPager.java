@@ -2,12 +2,14 @@ package com.livenation.mobile.android.na.pagination;
 
 import android.widget.ArrayAdapter;
 
-import com.livenation.mobile.android.platform.api.service.ApiService;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +26,27 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
     }
 
     @Override
-    protected void fetch(final LiveNationApiService apiService, int offset, int limit, final ApiService.BasicApiCallback callback) {
+    protected void fetch(int offset, int limit, final BasicApiCallback callback) {
         ArtistEventsParameters params = new ArtistEventsParameters();
         params.setPage(offset, limit);
         params.setArtistId(artistId);
 
-        apiService.getArtistEvents(params, new ApiService.BasicApiCallback<List<Event>>() {
+        LiveNationApplication.getLiveNationProxy().getArtistEvents(params, new BasicApiCallback<List<Event>>() {
             @Override
-            public void onResponse(List<Event> response) {
-                double lat = apiService.getApiConfig().getLat();
-                double lng = apiService.getApiConfig().getLng();
-                ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
-                callback.onResponse(artistEvents.getAll());
+            public void onResponse(final List<Event> response) {
+                LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
+                    @Override
+                    public void onResponse(Double[] latlong) {
+                        ArtistEvents artistEvents = ArtistEvents.from((ArrayList<Event>) response, latlong[0], latlong[1]);
+                        callback.onResponse(artistEvents.getAll());
+                    }
+
+                    @Override
+                    public void onErrorResponse() {
+                        //TODO Define an empty view or "retry view"
+                    }
+                });
+
             }
 
             @Override

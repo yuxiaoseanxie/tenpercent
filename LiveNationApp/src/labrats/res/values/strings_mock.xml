@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="mock_venue_title_1">Big Beat Boutique</string>
+    <string name="mock_artist_title_1">Fatboy Slim</string>
+    <string name="mock_show_time">8:00 PM PST</string>
+
+    <string name="mock_placeholder_venue_title_1">Venue Name</string>
+    <string name="mock_placeholder_artist_title_1">Artist Title</string>
+
+    <string name="mock_placeholder_venue_details_1">Venue Details</string>
+    <string name="mock_show_venue_details">Venue Details</string>
+
+    <string name="mock_venue_telephone">(323) 962-7000</string>
+    <string name="mock_venue_location">6215 Sunset Blvd, Los Angeles, California</string>
+    <string name="mock_venue_title_linebreak_1">6215 Sunset Blvd \nLos Angeles, California</string>
+    <string name="mock_venue_distance">0.9 mi</string>
+
+    <string name="mock_date_day">18</string>
+    <string name="mock_date_dotw">MON</string>
+    <string name="mock_date_month">NOV</string>
+
+    <string name="mock_show_calendar_date_time">Fri Dec 3. 2013 at 8:00PM</string>
+    <string name="mock_account_footer_location_detail">San Francisco, CA</string>
+
+    <string name="mock_favorite_title_1">Awesome venue</string>
+
+    <string name="mock_overflow">Show All</string>
+    <string name="mock_artist_bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+        anim id est laborum.
+    </string>
+
+    <string name="mock_artist_type">Artist</string>
+
+    <string name="mock_order_quantity">Thanks! You purchased tickets to</string>
+    <string name="mock_order_event_name">Beyoncé and Jay-Z</string>
+</resources>
