@@ -328,7 +328,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected String getOmnitureScreenName() {
-        return AnalyticConstants.OMNITURE_SCREEN_ORDER_CONFIRMATION_SCREEN_LOAD;
+        return AnalyticConstants.OMNITURE_SCREEN_CHECKOUT_CONFIRMATION_SCREEN_LOAD;
     }
 
     private void trackScreenLoad() {

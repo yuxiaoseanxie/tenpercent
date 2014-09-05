@@ -162,15 +162,12 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
     @Override
     protected Map<String, Object> getAnalyticsProps() {
-        if (venue != null) {
-            Map<String, Object> props = new HashMap<String, Object>();
-            if (args.containsKey(VenueActivity.PARAMETER_VENUE_ID)) {
-                String venueIdRaw = args.getString(VenueActivity.PARAMETER_VENUE_ID);
-                props.put(AnalyticConstants.VENUE_ID, DataModelHelper.getNumericEntityId(venueIdRaw));
-            }
-            return props;
+        Map<String, Object> props = new HashMap<String, Object>();
+        if (args.containsKey(VenueActivity.PARAMETER_VENUE_ID)) {
+            String venueIdRaw = args.getString(VenueActivity.PARAMETER_VENUE_ID);
+            props.put(AnalyticConstants.VENUE_ID, DataModelHelper.getNumericEntityId(venueIdRaw));
         }
-        return null;
+        return props;
     }
 
 
