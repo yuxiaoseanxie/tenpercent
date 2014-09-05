@@ -318,7 +318,7 @@
     <string name="cash_marketing_tagline">We\'ll do the work – and the math</string>
     <string name="cash_marketing_line_1">100% free. Safe and secure.</string>
     <string name="cash_marketing_line_2">All you need is a debit card.</string>
-    <string name="cash_marketing_cta">Get started!</string>
+    <string name="cash_marketing_cta">Sounds good!</string>
 
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 Ticket | %2$s</item>
