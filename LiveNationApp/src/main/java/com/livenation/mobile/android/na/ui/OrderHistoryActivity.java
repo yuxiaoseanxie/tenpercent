@@ -39,6 +39,7 @@ public class OrderHistoryActivity extends BaseActivity {
 
         fragment = (OrderHistoryFragment) getSupportFragmentManager().findFragmentById(R.id.activity_order_history_fragment);
 
+        //noinspection ConstantConditions
         getActionBar().setTitle(R.string.activity_order_history);
     }
 
@@ -102,6 +103,7 @@ public class OrderHistoryActivity extends BaseActivity {
         startActivityForResult(new Intent(this, AccountActivity.class), LOGIN_ACTIVITY_CODE);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void updateActionBar() {
         if (!Ticketing.getTicketService().hasSession()) {
             getActionBar().setSubtitle(null);
