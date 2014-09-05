@@ -190,7 +190,10 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
     private void setEvent(Event event) {
         final SingleEventView singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
-
+        if (singleEventView == null) {
+            //user exited the activity before the network response came back
+            return;
+        }
         ShowActivity.this.event = event;
         singleEventView.setEvent(event);
         invalidateIsShareAvailable();
