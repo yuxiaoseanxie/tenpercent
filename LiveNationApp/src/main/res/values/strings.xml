@@ -225,6 +225,7 @@
     <string name="calendar_dialog_end_date_prefix_past">Ended</string>
     <string name="calendar_event_description_url_base">http://livenation.com/events/</string>
     <string name="calendar_add_event_not_possible_message">Cannot add to calendar. This sale has ended.</string>
+    <string name="calendar_add_event_not_supported_message">We couldn't find any supported calendar application</string>
 
     <!-- On boarding -->
     <string name="onboarding_connect_description">Get the best of everything!\nConnect your account.</string>
