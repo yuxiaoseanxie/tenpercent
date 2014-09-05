@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract {
@@ -28,11 +27,6 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     @Override
     public EventsPresenter getEventsPresenter() {
         return LiveNationApplication.get().getEventsPresenter();
-    }
-
-    @Override
-    public ArtistEventsPresenter getArtistEventsPresenter() {
-        return LiveNationApplication.get().getArtistEventsPresenter();
     }
 
     @Override
