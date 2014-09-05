@@ -16,7 +16,6 @@ import com.experience.android.activities.ExpActivityConfig;
 import com.experience.android.activities.ExperienceWebViewActivity;
 import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
@@ -333,48 +332,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private void trackScreenLoad() {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
-
-        if (getCart() != null) {
-            CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
-            Map<String, Object> ticketQuantityProps = getPreBuiltCartProps();
-            ticketQuantityProps.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_TICKET_QUANTITY, ticketQuantityProps);
-            Map<String, Object> revenueProps = getPreBuiltCartProps();
-            revenueProps.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_REVENUE, revenueProps);
-            Map<String, Object> convFeeProps = getPreBuiltCartProps();
-            convFeeProps.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, convFeeProps);
-            Map<String, Object> otherFeesProps = getPreBuiltCartProps();
-            otherFeesProps.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, otherFeesProps);
-            Map<String, Object> deliveryFeeProps = getPreBuiltCartProps();
-            deliveryFeeProps.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_DELIVERY_FEE, deliveryFeeProps);
-            Map<String, Object> orderProcessingFeeProps = getPreBuiltCartProps();
-            orderProcessingFeeProps.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_OTHER_FEE, orderProcessingFeeProps);
-            Map<String, Object> originalFaceValueOfTicketProps = getPreBuiltCartProps();
-            originalFaceValueOfTicketProps.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, originalFaceValueOfTicketProps);
-            Map<String, Object> upsellUnitsProps = getPreBuiltCartProps();
-            upsellUnitsProps.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_UPSELL_QUANTITY, upsellUnitsProps);
-            Map<String, Object> upsellRevenueProps = getPreBuiltCartProps();
-            upsellRevenueProps.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_UPSELL_TOTAL, upsellRevenueProps);
-            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
-            Map<String, Object> typeProps = getPreBuiltCartProps();
-            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
-            if (isResale) {
-                resale = AnalyticConstants.PROP_TYPE_RESALE;
-            }
-            typeProps.put(AnalyticConstants.PROP_TYPE, resale);
-            OmnitureTracker.trackAction(AnalyticConstants.PROP_TYPE, typeProps);
-
-            boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
-            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket ? "resale" : "primary"));
-        }
     }
 
     private Map<String, Object> getPreBuiltCartProps() {
@@ -504,7 +461,27 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected Map<String, Object> getAnalyticsProps() {
-        return getPreBuiltCartProps();
+        Map<String, Object> props = new HashMap<String, Object>();
+        if (getCart() != null) {
+            props = Analytics.createBaseTrackingProperties(getCart().getEvent()).toMap();
+            CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
+            props.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
+            props.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
+            props.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
+            props.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
+            props.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
+            props.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
+            props.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
+            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isResale) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            props.put(AnalyticConstants.PROP_TYPE, resale);
+        }
+        return props;
     }
 
     @Override

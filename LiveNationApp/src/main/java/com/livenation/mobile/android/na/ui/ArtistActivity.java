@@ -15,6 +15,7 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
@@ -45,19 +46,25 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         }
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
-        LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
-            @Override
-            public void onResponse(Artist artist) {
-                artistFragment.setSingleArtist(artist);
-                ArtistActivity.this.artist = artist;
-                googleViewStart(artist);
-            }
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
+        //Use cached event for avoiding the blank page while we are waiting for the http response
+        if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
+            artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
+            setArtist(artist);
+        } else {
+
+            LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
+                @Override
+                public void onResponse(Artist artist) {
+                    setArtist(artist);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
+        }
     }
 
     @Override
@@ -118,6 +125,13 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     //endregion
+
+    private void setArtist(Artist artist) {
+        artistFragment.setSingleArtist(artist);
+        ArtistActivity.this.artist = artist;
+        invalidateIsShareAvailable();
+        googleViewStart(artist);
+    }
 
     private void trackActionBarAction(String event, Props props) {
         if (props == null) {

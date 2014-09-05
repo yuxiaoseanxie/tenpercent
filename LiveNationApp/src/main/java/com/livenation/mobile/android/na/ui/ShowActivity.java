@@ -48,8 +48,6 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_show);
 
-        final SingleEventView singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
-
         SingleEventParameters apiParams = new SingleEventParameters();
         if (args.containsKey(PARAMETER_EVENT_ID)) {
             String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
@@ -59,21 +57,26 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
-        LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
-            @Override
-            public void onResponse(Event event) {
-                ShowActivity.this.event = event;
-                singleEventView.setEvent(event);
-                invalidateIsShareAvailable();
 
-                googleViewStart(event);
-            }
+        //Use cached event for avoiding the blank page while we are waiting for the http response
+        if (args.containsKey(PARAMETER_EVENT_CACHED)) {
+            event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
+            setEvent(event);
+        } else {
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error message
-            }
-        });
+
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
+                @Override
+                public void onResponse(Event event) {
+                    setEvent(event);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //TODO display an error message
+                }
+            });
+        }
     }
 
     @Override
@@ -171,8 +174,12 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected Map<String, Object> getAnalyticsProps() {
+        Map<String, Object> props = new HashMap<String, Object>();
+
+        if (args.containsKey(PARAMETER_EVENT_ID)) {
+            props.put(AnalyticConstants.EVENT_ID, args.getString(PARAMETER_EVENT_ID));
+        }
         if (event != null) {
-            Map<String, Object> props = new HashMap<String, Object>();
             props.put(AnalyticConstants.EVENT_ID, event.getNumericId());
 
             if (event.getVenue() != null) {
@@ -181,15 +188,22 @@ public class ShowActivity extends DetailBaseFragmentActivity {
             if (event.getLineup() != null && event.getLineup().size() > 0) {
                 props.put(AnalyticConstants.ARTIST_ID, event.getLineup().get(0).getNumericId());
             }
-
-            return props;
         }
-        return null;
+        return props;
     }
 
     @Override
     protected String getOmnitureScreenName() {
         return AnalyticConstants.OMNITURE_SCREEN_SDP;
+    }
+
+    private void setEvent(Event event) {
+        final SingleEventView singleEventView = (SingleEventView) getSupportFragmentManager().findFragmentById(R.id.activity_show_content);
+
+        ShowActivity.this.event = event;
+        singleEventView.setEvent(event);
+        invalidateIsShareAvailable();
+        googleViewStart(event);
     }
 
     public static Bundle getArguments(String eventIdRaw) {
