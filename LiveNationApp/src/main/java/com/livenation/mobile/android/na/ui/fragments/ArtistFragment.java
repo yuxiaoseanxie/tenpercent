@@ -199,6 +199,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         LiveNationApplication.getProviderManager().getConfigReadyFor(new ConfigCallback() {
             @Override
             public void onResponse(LiveNationConfig config) {
+                if (getActivity() == null) return;
                 final double lat = config.getLat();
                 final double lng = config.getLng();
 
@@ -212,6 +213,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, new BasicApiCallback<List<Event>>() {
                     @Override
                     public void onResponse(List<Event> response) {
+                        if (getActivity() == null) return;
                         ArtistEvents result = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
                         setArtistEvents(result);
                     }
