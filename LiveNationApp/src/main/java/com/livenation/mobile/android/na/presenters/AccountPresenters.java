@@ -4,38 +4,27 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
-import com.livenation.mobile.android.na.presenters.views.AccountSaveUserView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
-import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class AccountPresenters {
     private final SsoManager ssoManager;
 
     private final SaveAuthTokenPresenter saveAuthTokenPresenter;
-    private final SaveUserPresenter saveUserPresenter;
     private final SignOutPresenter signOutPresenter;
 
     public AccountPresenters() {
 
         ssoManager = LiveNationApplication.getSsoManager();
         saveAuthTokenPresenter = new SaveAuthTokenPresenter(ssoManager);
-        saveUserPresenter = new SaveUserPresenter(ssoManager);
         signOutPresenter = new SignOutPresenter(ssoManager);
     }
 
     public SaveAuthTokenPresenter getSetAuthToken() {
         return saveAuthTokenPresenter;
-    }
-
-    public SaveUserPresenter getSetUser() {
-        return saveUserPresenter;
     }
 
     public SignOutPresenter getSignOut() {
@@ -62,33 +51,6 @@ public class AccountPresenters {
             view.onSaveAuthTokenSuccess();
         }
 
-    }
-
-    public static class SaveUserPresenter extends BaseSsoPresenter<AccountSaveUserView> implements Presenter<AccountSaveUserView> {
-        private static String ARG_USER = "sso_user";
-
-        public SaveUserPresenter(SsoManager ssoManager) {
-            super(ssoManager);
-        }
-
-        @Override
-        public void initialize(Context context, Bundle args, final AccountSaveUserView view) {
-            if (LoginHelper.getSavedUser() == null) {
-                LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
-                    @Override
-                    public void onResponse(boolean hasChanged, String accessToken, User user) {
-                        view.onSaveUserSuccess(user);
-                    }
-
-                    @Override
-                    public void onErrorResponse(LiveNationError error) {
-
-                    }
-                });
-            } else {
-                view.onSaveUserSuccess(LoginHelper.getSavedUser());
-            }
-        }
     }
 
     public static class SignOutPresenter extends BaseSsoPresenter<AccountSignOutView> implements Presenter<AccountSignOutView> {
