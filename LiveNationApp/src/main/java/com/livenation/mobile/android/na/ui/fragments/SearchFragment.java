@@ -18,9 +18,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.SearchForText;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -127,7 +124,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
                 String entityId = Venue.getAlphanumericId(searchResult.getNumericalId());
-                Bundle args = SingleVenuePresenter.getAruguments(entityId);
+                Bundle args = VenueActivity.getArguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;
@@ -139,7 +136,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
                 String entityId = Artist.getAlphanumericId(searchResult.getNumericalId());
-                Bundle args = SingleArtistPresenter.getAruguments(entityId);
+                Bundle args = ArtistActivity.getArguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;
@@ -151,7 +148,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
                 Intent intent = new Intent(getActivity(), ShowActivity.class);
                 String entityId = Event.makeTypedId(searchResult.getNumericalId().toString());
-                Bundle args = SingleEventPresenter.getAruguments(entityId);
+                Bundle args = ShowActivity.getArguments(entityId);
                 intent.putExtras(args);
                 startActivity(intent);
                 break;

@@ -225,6 +225,7 @@
     <string name="calendar_dialog_end_date_prefix_past">Ended</string>
     <string name="calendar_event_description_url_base">http://livenation.com/events/</string>
     <string name="calendar_add_event_not_possible_message">Cannot add to calendar. This sale has ended.</string>
+    <string name="calendar_add_event_not_supported_message">We couldn't find any supported calendar application</string>
 
     <!-- On boarding -->
     <string name="onboarding_connect_description">Get the best of everything!\nConnect your account.</string>
@@ -247,8 +248,8 @@
 
     <string name="update_available">New Version Available</string>
     <string name="update_now">Update Now</string>
-    
-    <!-- Rating Dialog --> 
+
+    <!-- Rating Dialog -->
     <string name="rating_dialog_title">Have a great time!</string>
 
     <string name="rating_dialog_rate_us">Rate Us Highly</string>
@@ -256,10 +257,18 @@
     <string name="rating_dialog_dont_ask_again">Don\'t Show This Again</string>
     <string name="rating_dialog_google_play_app_url">https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na</string>
     <string name="rating_dialog_market_app_url">market://details?id=com.livenation.mobile.android.na</string>
-<plurals name="rating_dialog_subtitle">
-    <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
-    <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
-</plurals>
+    <plurals name="rating_dialog_subtitle">
+        <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+        <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
+    </plurals>
+
+    <!-- App Google Indexing-->
+    <string name="web_url_show">http://www.livenation.com/events/</string>
+    <string name="app_url_show">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+    <string name="web_url_artist">http://www.livenation.com/artists/</string>
+    <string name="app_url_artist">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+    <string name="web_url_venue">http://www.livenation.com/venues/</string>
+    <string name="app_url_venue">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
 
     <!-- Square Cash -->
     <string name="activity_label_cash">Get Paid Back</string>
