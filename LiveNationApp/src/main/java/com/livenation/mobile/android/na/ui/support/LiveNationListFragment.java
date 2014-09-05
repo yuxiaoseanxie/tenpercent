@@ -14,7 +14,6 @@ import android.support.v4.app.ListFragment;
 import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 
 public abstract class LiveNationListFragment extends ListFragment implements LiveNationFragmentContract {
@@ -33,12 +32,6 @@ public abstract class LiveNationListFragment extends ListFragment implements Liv
     public EventsPresenter getEventsPresenter() {
         return LiveNationApplication.get().getEventsPresenter();
     }
-
-    @Override
-    public ArtistEventsPresenter getArtistEventsPresenter() {
-        return LiveNationApplication.get().getArtistEventsPresenter();
-    }
-
 
     @Override
     public AccountPresenters getAccountPresenters() {
