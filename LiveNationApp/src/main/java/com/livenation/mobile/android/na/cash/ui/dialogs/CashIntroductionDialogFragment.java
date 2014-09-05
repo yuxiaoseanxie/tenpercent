@@ -19,7 +19,7 @@ import com.mobilitus.tm.tickets.models.Total;
 
 public class CashIntroductionDialogFragment extends DialogFragment {
     public static final String TAG = CashIntroductionDialogFragment.class.getSimpleName();
-    private static final String PREF_HAS_SHOWN_INTRO = "has_shown_cash_intro";
+    private static final String PREF_HAS_SHOWN_INTRO = "has_shown_intro";
 
     public static boolean shouldShow() {
         return !CashUtils.getPreferences().getBoolean(PREF_HAS_SHOWN_INTRO, false);

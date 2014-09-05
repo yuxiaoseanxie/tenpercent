@@ -73,18 +73,10 @@ public class CashUtils {
                                         @NonNull Total total,
                                         int ticketQuantity,
                                         @NonNull Event event) {
-        if (CashIntroductionDialogFragment.shouldShow()) {
-            if (activity.getSupportFragmentManager().findFragmentByTag(CashIntroductionDialogFragment.TAG) != null)
-                return;
-
-            CashIntroductionDialogFragment dialogFragment = CashIntroductionDialogFragment.newInstance(total, ticketQuantity, event);
-            dialogFragment.show(activity.getSupportFragmentManager(), CashIntroductionDialogFragment.TAG);
-        } else {
-            Intent intent = new Intent(activity, CashRecipientsActivity.class);
-            intent.putExtra(EXTRA_TOTAL, total);
-            intent.putExtra(EXTRA_TICKET_QUANTITY, ticketQuantity);
-            intent.putExtra(EXTRA_EVENT, event);
-            activity.startActivity(intent);
-        }
+        Intent intent = new Intent(activity, CashRecipientsActivity.class);
+        intent.putExtra(EXTRA_TOTAL, total);
+        intent.putExtra(EXTRA_TICKET_QUANTITY, ticketQuantity);
+        intent.putExtra(EXTRA_EVENT, event);
+        activity.startActivity(intent);
     }
 }

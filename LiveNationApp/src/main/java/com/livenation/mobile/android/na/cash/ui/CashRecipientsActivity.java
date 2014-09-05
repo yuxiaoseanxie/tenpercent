@@ -16,6 +16,7 @@ import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashIntroductionDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -42,9 +43,21 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
         this.fragment = (CashRecipientsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_recipients_fragment);
 
+        //noinspection ConstantConditions
         getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getTicketQuantity(), getTicketQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(requestsCompletedReceiver, new IntentFilter(CashUtils.ACTION_REQUESTS_COMPLETED));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (CashIntroductionDialogFragment.shouldShow() &&
+            getSupportFragmentManager().findFragmentByTag(CashIntroductionDialogFragment.TAG) == null) {
+            CashIntroductionDialogFragment dialogFragment = CashIntroductionDialogFragment.newInstance(getTotal(), getTicketQuantity(), getEvent());
+            dialogFragment.show(getSupportFragmentManager(), CashIntroductionDialogFragment.TAG);
+        }
     }
 
     @Override
