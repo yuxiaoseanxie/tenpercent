@@ -127,7 +127,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onResponse(LiveNationConfig response) {
         refreshUser(LoginHelper.isLogout());
-        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(), getActivity(), this);
+        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(),  this);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
     @Override
     public void onLocationUpdated(int mode, double lat, double lng) {
-        LiveNationApplication.getLocationProvider().reverseGeocodeCity(lat, lng, getActivity(), this);
+        LiveNationApplication.getLocationProvider().reverseGeocodeCity(lat, lng, this);
     }
 
     //Click listener
