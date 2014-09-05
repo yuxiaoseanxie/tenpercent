@@ -173,8 +173,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         favoriteCheckBox.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.ADP);
 
         youTube.setArtistName(artist.getName());
-
-        ((ArtistActivity) getActivity()).invalidateIsShareAvailable();
     }
 
     @Override
