@@ -53,6 +53,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private Event event;
     private Cart cart;
+    private CartAnalytic charges;
     private boolean isResale;
     //temporary workaround on the assumption this field will be later accessible from mTopia via the library
     private boolean isUpgradable;
@@ -107,6 +108,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        if (charges == null) {
+            charges = Analytics.calculateChargesForCart(getCart());
+        }
         super.onPostCreate(savedInstanceState);
 
         displayImage();
@@ -334,20 +338,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
     }
 
-    private Map<String, Object> getPreBuiltCartProps() {
-        Map<String, Object> props = new HashMap<String, Object>();
-        if (event != null) {
-            props.put(AnalyticConstants.PROP_EVENT_ID, event.getId());
-            props.put(AnalyticConstants.PROP_VENUE_ID, event.getVenue().getId());
-            Artist artist = event.getLineup().get(0);
-            if (artist != null) {
-                props.put(AnalyticConstants.PROP_ARTIST_ID, event.getLineup().get(0));
-            }
-        }
-        return props;
-    }
-
-
     private View.OnClickListener createOnClickListenerForAction(@NonNull Action action) {
         switch (action) {
             case ADD_TO_CALENDAR:
@@ -464,7 +454,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         Map<String, Object> props = new HashMap<String, Object>();
         if (getCart() != null) {
             props = Analytics.createBaseTrackingProperties(getCart().getEvent()).toMap();
-            CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
+            charges = Analytics.calculateChargesForCart(getCart());
             props.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
             props.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
             props.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());

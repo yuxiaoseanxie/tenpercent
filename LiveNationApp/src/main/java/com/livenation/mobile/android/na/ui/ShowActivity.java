@@ -244,4 +244,14 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         notifyGoogleViewEnd(googleApiClient, appUrl);
         appUrl = null;
     }
+
+    @Override
+    protected Map<String, Object> getOmnitureProductsProps() {
+        if (args.containsKey(PARAMETER_EVENT_ID)) {
+            HashMap cdata = new HashMap<String, Object>();
+            cdata.put("&&products", ";" + args.getString(PARAMETER_EVENT_ID) );
+            return cdata;
+        }
+        return null;
+    }
 }

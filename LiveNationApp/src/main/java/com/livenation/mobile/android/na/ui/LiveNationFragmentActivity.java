@@ -21,6 +21,7 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,21 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         if (savedInstanceState == null) {
             trackScreenWithLocation(getScreenName());
             if (getOmnitureScreenName() != null) {
-                OmnitureTracker.trackState(getOmnitureScreenName(), getAnalyticsProps());
+                Map<String, Object> omnitureProps = getAnalyticsProps();
+                Map<String, Object> omnitureProductsProps = getOmnitureProductsProps();
+                if (omnitureProps == null) {
+                    omnitureProps = omnitureProductsProps;
+                } else {
+
+                    if (omnitureProductsProps != null) {
+                        Iterator<String> iterator = omnitureProductsProps.keySet().iterator();
+                        while (iterator.hasNext()) {
+                            String key = iterator.next();
+                            omnitureProps.put(key, omnitureProductsProps.get(key));
+                        }
+                    }
+                }
+                OmnitureTracker.trackState(getOmnitureScreenName(), omnitureProps);
             }
         }
     }
@@ -129,6 +144,11 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     }
 
     protected Map<String, Object> getAnalyticsProps() {
+        return null;
+    }
+
+
+    protected Map<String, Object> getOmnitureProductsProps() {
         return null;
     }
 
