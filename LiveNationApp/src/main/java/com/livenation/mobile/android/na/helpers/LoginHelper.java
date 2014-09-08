@@ -26,6 +26,11 @@ public class LoginHelper {
     }
 
     public static void getUpdatedUser(final SsoUpdatedUserCallback callback, Activity activity) {
+        if (activity == null) {
+            callback.onResponse(false, getAuthConfiguration().getAccessToken(), LoginHelper.getSavedUser());
+            return;
+        }
+        
         SsoManager.AuthConfiguration authConfiguration = getAuthConfiguration();
         if (authConfiguration == null) {
             if (callback != null) {
