@@ -215,6 +215,9 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private void loadTicketsCart() {
+        if (ticketsCart == null || ticketsCart.getEvent() == null)
+            return;
+
         setRefreshing(true);
         if (Ticketing.isConnectedToInternet()) {
             offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
@@ -240,6 +243,10 @@ public class OrderDetailsFragment extends Fragment {
 
                     OrderDetailsFragment.this.hasLoadedTicketsCart = true;
                     OrderDetailsFragment.this.ticketsCart = fullCart;
+                    if (eventInfoCart.getEvent() == null) {
+                        OrderDetailsFragment.this.eventInfoCart = fullCart;
+                        updateEventInfo();
+                    }
 
                     displayTickets();
 
@@ -279,9 +286,18 @@ public class OrderDetailsFragment extends Fragment {
     //region Displaying Information
 
     private void updateEventInfo() {
-        eventTitle.setText(eventInfoCart.getEvent().getName());
-        eventVenue.setText(eventInfoCart.getEvent().getVenue().getName());
-        eventDate.setText(TicketingUtils.formatDate(eventInfoCart.getEvent().getShowTime()));
+        if (eventInfoCart != null && eventInfoCart.getEvent() != null) {
+            eventTitle.setText(eventInfoCart.getEvent().getName());
+            if (eventInfoCart.getEvent().getVenue() != null)
+                eventVenue.setText(eventInfoCart.getEvent().getVenue().getName());
+            else
+                eventVenue.setText(R.string.data_missing_placeholder);
+            eventDate.setText(TicketingUtils.formatDate(eventInfoCart.getEvent().getShowTime()));
+        } else {
+            eventTitle.setText(R.string.data_missing_placeholder);
+            eventVenue.setText(R.string.data_missing_placeholder);
+            eventDate.setText(R.string.data_missing_placeholder);
+        }
     }
 
     public void displayTickets() {

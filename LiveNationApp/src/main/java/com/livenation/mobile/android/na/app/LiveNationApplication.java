@@ -47,7 +47,6 @@ import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
@@ -85,7 +84,6 @@ public class LiveNationApplication extends Application {
     private static SsoProviderPersistence ssoProviderPersistence;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
-    private ArtistEventsPresenter artistEventsPresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private InboxStatusPresenter inboxStatusPresenter;
@@ -178,7 +176,6 @@ public class LiveNationApplication extends Application {
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 
         eventsPresenter = new EventsPresenter();
-        artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
         inboxStatusPresenter = new InboxStatusPresenter();
@@ -305,10 +302,6 @@ public class LiveNationApplication extends Application {
 
     public EventsPresenter getEventsPresenter() {
         return eventsPresenter;
-    }
-
-    public ArtistEventsPresenter getArtistEventsPresenter() {
-        return artistEventsPresenter;
     }
 
     public VenueEventsPresenter getVenueEventsPresenter() {
