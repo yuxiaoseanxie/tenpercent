@@ -92,6 +92,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         if (locationManager.getLocationHistory().size() > 0) {
             showActiveLocation(locationManager.getLocationHistory().get(0));
         }
+
         //get our actual location, so that we can show valid "distance from you in miles" values.
         locationManager.getSystemLocationProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
@@ -99,7 +100,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
                 //we now have our actual location, lets get a name for it.
                 final double lat = response[0];
                 final double lng = response[1];
-                locationManager.reverseGeocodeCity(lat, lng, getActivity(), new LocationManager.GetCityCallback() {
+                locationManager.reverseGeocodeCity(lat, lng, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City city) {
                         actualLocation = city;
@@ -126,15 +127,13 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         //isChecked() == false and then you setChecked(false);
         onCheckedChanged(autoLocationSwitch, autoLocationSwitch.isChecked());
 
-        final Context appContext = getActivity().getApplicationContext();
-
         //retrieve a city for where the API is currently configured
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
                 final double lat = response[0];
                 final double lng = response[1];
-                locationManager.reverseGeocodeCity(lat, lng, appContext, new LocationManager.GetCityCallback() {
+                locationManager.reverseGeocodeCity(lat, lng, new LocationManager.GetCityCallback() {
                     @Override
                     public void onGetCity(City apiLocation) {
                         showActiveLocation(apiLocation);

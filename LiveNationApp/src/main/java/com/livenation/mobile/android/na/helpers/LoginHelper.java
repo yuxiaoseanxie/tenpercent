@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -24,7 +25,7 @@ public class LoginHelper {
         return ssoProviderPersistence.readUser();
     }
 
-    public static void getUpdatedUser(final SsoUpdatedUserCallback callback) {
+    public static void getUpdatedUser(final SsoUpdatedUserCallback callback, Activity activity) {
         SsoManager.AuthConfiguration authConfiguration = getAuthConfiguration();
         if (authConfiguration == null) {
             if (callback != null) {
@@ -69,7 +70,7 @@ public class LoginHelper {
                 public void onLoginCanceled() {
                     //Should never happen in this case
                 }
-            }, null);
+            }, activity);
         }
     }
 
