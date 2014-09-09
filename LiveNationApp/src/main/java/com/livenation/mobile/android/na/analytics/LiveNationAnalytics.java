@@ -45,6 +45,7 @@ public class LiveNationAnalytics {
 
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.screen(screenTitle, props);
+        traceLog(screenTitle, "Screen", props.toString());
     }
 
     static private void traceLog(String eventTitle, String category, String data) {
