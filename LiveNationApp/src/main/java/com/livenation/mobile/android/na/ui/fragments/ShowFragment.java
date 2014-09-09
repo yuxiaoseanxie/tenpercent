@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -149,6 +150,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                 double lat = Double.valueOf(venue.getLat());
                 double lng = Double.valueOf(venue.getLng());
                 setMapLocation(lat, lng);
+            } else {
+                new LibraryErrorTracker().track("This venue does not have a longitute and/or a latitude. Venue Id:" + venue.getId(), null);
             }
         } else {
             venueDetails.setOnClickListener(null);
