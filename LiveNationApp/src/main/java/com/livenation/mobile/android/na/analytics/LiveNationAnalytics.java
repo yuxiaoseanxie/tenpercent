@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.analytics;
 
 
+import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
@@ -47,6 +49,6 @@ public class LiveNationAnalytics {
 
     static private void traceLog(String eventTitle, String category, String data) {
         String title = String.format("%s: %s", eventTitle, category);
-        Crashlytics.log(0, title, data);
+        Crashlytics.log(Log.VERBOSE, title, data);
     }
 }
