@@ -144,10 +144,12 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
             venueDetails.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.SDP);
 
-            double lat = Double.valueOf(venue.getLat());
-            double lng = Double.valueOf(venue.getLng());
-            setMapLocation(lat, lng);
-
+            //Longitude and Latitude can be null
+            if (venue.getLat() != null && venue.getLng() != null) {
+                double lat = Double.valueOf(venue.getLat());
+                double lng = Double.valueOf(venue.getLng());
+                setMapLocation(lat, lng);
+            }
         } else {
             venueDetails.setOnClickListener(null);
         }
