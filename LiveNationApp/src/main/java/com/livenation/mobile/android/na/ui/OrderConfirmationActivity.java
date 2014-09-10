@@ -108,9 +108,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        if (charges == null) {
-            charges = Analytics.calculateChargesForCart(getCart());
-        }
         super.onPostCreate(savedInstanceState);
 
         displayImage();
@@ -454,17 +451,16 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         Map<String, Object> props = new HashMap<String, Object>();
         if (getCart() != null) {
             props = Analytics.createBaseTrackingProperties(getCart().getEvent()).toMap();
-            charges = Analytics.calculateChargesForCart(getCart());
-            props.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
-            props.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
-            props.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
-            props.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
-            props.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
-            props.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
-            props.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
-            props.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
-            props.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
-            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
+            props.put(AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity());
+            props.put(AnalyticConstants.PROP_REVENUE, getCharges().getRevenue());
+            props.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee());
+            props.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, getCharges().getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_DELIVERY_FEE, getCharges().getDeliveryFee());
+            props.put(AnalyticConstants.PROP_OTHER_FEE, getCharges().getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, getCharges().getOriginalFaceValueOfTicket());
+            props.put(AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits());
+            props.put(AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue());
+            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + getCharges());
             String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
             if (isResale) {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
@@ -472,6 +468,41 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
             props.put(AnalyticConstants.PROP_TYPE, resale);
         }
         return props;
+    }
+
+    private CartAnalytic getCharges() {
+        if (charges == null && getCart()!= null) {
+            charges = Analytics.calculateChargesForCart(getCart());
+        }
+        return charges;
+    }
+
+    @Override
+    protected Map<String, Object> getOmnitureProductsProps() {
+        HashMap cdata = new HashMap<String, Object>();
+        String data = ";";
+        if (getCart()!= null) {
+            data += getCart().getEvent().getEventID();
+        }
+        if (getCharges() != null) {
+            data += ";" + getCharges().getTicketQuantity();
+            data += ";" + getCharges().getRevenue();
+            data += ";" + getCharges().getConvFee();
+            data += ";" + getCharges().getOtherFees();
+            data += ";" + getCharges().getDeliveryFee();
+            data += ";" + getCharges().getOrderProcessingFee();
+            data += ";" + getCharges().getOriginalFaceValueOfTicket();
+            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isResale) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            data += ";" + resale;
+            data += ";" + getCharges().getUpsellUnits();
+
+            data += ";" + getCharges().getUpsellRevenue();
+        }
+        cdata.put("&&products", ";" + data);
+        return cdata;
     }
 
     @Override
