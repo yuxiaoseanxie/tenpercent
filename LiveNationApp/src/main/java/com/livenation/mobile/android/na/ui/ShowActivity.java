@@ -177,7 +177,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         Map<String, Object> props = new HashMap<String, Object>();
 
         if (args.containsKey(PARAMETER_EVENT_ID)) {
-            props.put(AnalyticConstants.EVENT_ID, args.getString(PARAMETER_EVENT_ID));
+            props.put(AnalyticConstants.EVENT_ID, DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
         }
         if (event != null) {
             props.put(AnalyticConstants.EVENT_ID, event.getNumericId());
@@ -249,7 +249,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected Map<String, Object> getOmnitureProductsProps() {
         if (args.containsKey(PARAMETER_EVENT_ID)) {
             HashMap cdata = new HashMap<String, Object>();
-            cdata.put("&&products", ";" + args.getString(PARAMETER_EVENT_ID) );
+            cdata.put("&&products", ";" + DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
             return cdata;
         }
         return null;

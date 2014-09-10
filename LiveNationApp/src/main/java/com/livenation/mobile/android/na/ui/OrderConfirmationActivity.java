@@ -480,9 +480,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     @Override
     protected Map<String, Object> getOmnitureProductsProps() {
         HashMap cdata = new HashMap<String, Object>();
-        String data = ";";
+        String data = "";
         if (getCart()!= null) {
-            data += getCart().getEvent().getEventID();
+            data += ";" +getCart().getEvent().getEventID();
         }
         if (getCharges() != null) {
             data += ";" + getCharges().getTicketQuantity();
@@ -501,7 +501,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
             data += ";" + getCharges().getUpsellRevenue();
         }
-        cdata.put("&&products", ";" + data);
+        cdata.put("&&products", data);
         return cdata;
     }
 
