@@ -487,19 +487,18 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         if (getCharges() != null) {
             data += ";" + getCharges().getTicketQuantity();
             data += ";" + getCharges().getRevenue();
-            data += ";" + getCharges().getConvFee();
-            data += ";" + getCharges().getOtherFees();
-            data += ";" + getCharges().getDeliveryFee();
-            data += ";" + getCharges().getOrderProcessingFee();
-            data += ";" + getCharges().getOriginalFaceValueOfTicket();
+            data += ";event20=" + getCharges().getConvFee();
+            data += "|event21=" + getCharges().getOtherFees();
+            data += "|event19=" + getCharges().getDeliveryFee();
+            data += "|event26=" + getCharges().getOrderProcessingFee();
+            data += "|event41=" + getCharges().getOriginalFaceValueOfTicket();
+            data += "|event17=" + getCharges().getUpsellUnits();
+            data += "|event18=" + getCharges().getUpsellRevenue();
             String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
             if (isResale) {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
             }
-            data += ";" + resale;
-            data += ";" + getCharges().getUpsellUnits();
-
-            data += ";" + getCharges().getUpsellRevenue();
+            data += ";eVar43=" + resale;
         }
         cdata.put("&&products", data);
         return cdata;
