@@ -466,6 +466,10 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
             }
             props.put(AnalyticConstants.PROP_TYPE, resale);
+
+            if (getCart().getDeliveryMethod() != null) {
+                props.put(AnalyticConstants.PROP_DELIVERY_METHOD, getCart().getDeliveryMethod().getName());
+            }
         }
         return props;
     }
