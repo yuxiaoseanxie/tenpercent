@@ -16,7 +16,7 @@ repositories {
 }
 
 def computeVersionCode() {
-    return 66
+    return 67
 }
 
 def computeVersionName(def versionCode) {
