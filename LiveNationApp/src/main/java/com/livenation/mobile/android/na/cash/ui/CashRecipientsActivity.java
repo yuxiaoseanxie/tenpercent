@@ -1,10 +1,14 @@
 package com.livenation.mobile.android.na.cash.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,13 +81,6 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        nextItem.getActionView().setEnabled(fragment.hasContactsSelected());
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     //endregion
 
 
@@ -131,8 +128,30 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
             });
         }
 
+        private void showNoContactsMessage() {
+            DialogFragment noContactsDialogFragment = new DialogFragment() {
+                @Override
+                public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CashRecipientsActivity.this);
+                    builder.setTitle(R.string.error_title_generic);
+                    builder.setMessage(R.string.cash_no_contacts_error_message);
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    return builder.create();
+                }
+            };
+            noContactsDialogFragment.show(getSupportFragmentManager(), "NoContactsDialogFragment");
+        }
+
         @Override
         public void onClick(View view) {
+            if (!fragment.hasContactsSelected()) {
+                fragment.forceCompletion();
+                if (!fragment.hasContactsSelected()) {
+                    showNoContactsMessage();
+                    return;
+                }
+            }
+
             if (SquareCashService.getInstance().hasSession())
                 requestCustomerStatus();
             else

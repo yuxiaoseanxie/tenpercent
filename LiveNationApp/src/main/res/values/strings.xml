@@ -311,6 +311,7 @@
     <string name="cash_logout_text_fmt">Not %1$s?</string>
 
     <string name="cash_generic_error">An unknown error has occurred. Http status code %1$d</string>
+    <string name="cash_no_contacts_error_message">You must type one or more name, email, or phone number before continuing.</string>
     <string name="cash_recipients_explanation">Type the names of the people you bought tickets for that you\'d like to pay you back</string>
     <string name="cash_request_total">Request Total</string>
     <string name="cash_request_caption_fmt">%1$s at %2$s on %3$s</string>
