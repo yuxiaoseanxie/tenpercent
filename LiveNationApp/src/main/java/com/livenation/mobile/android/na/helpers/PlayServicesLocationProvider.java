@@ -18,12 +18,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.api.service.livenation.analytics.ErrorTracker;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayServicesLocationProvider implements LocationProvider {
 
@@ -31,8 +35,6 @@ public class PlayServicesLocationProvider implements LocationProvider {
     public static final int STATUS_GOOGLE_PLAY_SUCCESS = 0;
     public static final int STATUS_GOOGLE_PLAY_FAILURE_RECOVERABLE = 1;
     public static final int STATUS_GOOGLE_PLAY_FAILURE_GIVEUP = 2;
-
-    private List<State> activeStates = new ArrayList<State>();
 
     public static int getGooglePlayServiceStatus(Context context) {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
@@ -53,8 +55,6 @@ public class PlayServicesLocationProvider implements LocationProvider {
             return;
         }
         State state = new State(callback, LiveNationApplication.get().getApplicationContext());
-        //stop it from getting GC'd
-        activeStates.add(state);
         state.run();
     }
 
@@ -84,32 +84,49 @@ public class PlayServicesLocationProvider implements LocationProvider {
 
         @Override
         public void onConnected(Bundle connectionHint) {
-            Location location = client.getLastLocation();
-            if (null != location) {
-                double lat = location.getLatitude();
-                double lng = location.getLongitude();
-                Double[] locationArray = new Double[]{lat, lng};
-                callback.onResponse(locationArray);
-                cleanUp();
-            } else {
-                handler = new Handler();
-                if (retryCount < RETRY_LIMIT) {
-                    handler.postDelayed(this, 1000);
-                    retryCount++;
-                } else {
+            //Check to avoid DeadObjectException
+            if (client!= null && client.isConnected()) {
+                try {
+                    Location location = client.getLastLocation();
+                    if (null != location) {
+                        double lat = location.getLatitude();
+                        double lng = location.getLongitude();
+                        Double[] locationArray = new Double[]{lat, lng};
+                        callback.onResponse(locationArray);
+                        client.disconnect();
+                    } else {
+                        retry();
+                    }
+                } catch (IllegalStateException ex) {
+                    new LibraryErrorTracker().track("PlayServicesLocationProvider:IllegalStateException:" + ex.toString(), null);
                     callback.onErrorResponse();
-                    cleanUp();
                 }
+
+
+            } else {
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put("Client", client);
+                if (client != null) {
+                    data.put("isConnected", client.isConnected());
+                }
+                new LibraryErrorTracker().track("PlayServicesLocationProvider:DeadObjectException", data);
+                callback.onErrorResponse();
             }
-            client.disconnect();
+
+        }
+
+        private void retry() {
+            handler = new Handler();
+            if (retryCount < RETRY_LIMIT) {
+                handler.postDelayed(this, 1000);
+                retryCount++;
+            } else {
+                callback.onErrorResponse();
+            }
         }
 
         @Override
         public void onDisconnected() {
-        }
-
-        private void cleanUp() {
-            activeStates.remove(this);
         }
 
     }
