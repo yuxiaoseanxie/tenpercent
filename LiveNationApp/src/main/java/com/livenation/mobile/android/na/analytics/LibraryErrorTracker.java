@@ -12,7 +12,7 @@ import java.util.Map;
 public class LibraryErrorTracker implements ErrorTracker {
 
     @Override
-    public void track(String logTitle, Map<String, String> properties) {
+    public void track(String logTitle, Map<String, Object> properties) {
 
         Props props = new Props();
         if (properties != null) {
