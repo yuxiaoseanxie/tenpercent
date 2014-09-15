@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -63,6 +65,10 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
+
+        //Initialize apsalar
+        Apsalar.setFBAppId(getString(R.string.facebook_app_id));
+        Apsalar.startSession(this, getString(R.string.apsalar_key), getString(R.string.apsalar_secret));
 
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
 
@@ -121,6 +127,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
     @Override
     protected void onDestroy() {
+        try {
+            Apsalar.unregisterApsalarReceiver();
+        } catch (Exception e) {
+            ;
+        }
         super.onDestroy();
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());

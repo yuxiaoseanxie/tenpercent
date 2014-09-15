@@ -5,4 +5,8 @@
 
     <!--Whether to print additional debug information as you develop.-->
     <string name="analytics_debug">false</string>
+
+    <!-- Apsalar -->
+    <string name="apsalar_key">LiveNation</string>
+    <string name="apsalar_secret">WvdXwEXL</string>
 </resources>
