@@ -153,6 +153,10 @@ public class SquareCashService {
                 new Date().before(getSession().getExpiresAt()));
     }
 
+    public @Nullable String getStoredPhoneNumber() {
+        return persistenceProvider.retrievePhoneNumber();
+    }
+
     protected JSONObject makeRequestBody(@NonNull String... args) {
         JSONObject json = new JSONObject();
         if (args.length > 0) {
@@ -208,6 +212,7 @@ public class SquareCashService {
                 SquareRequest<CashSession> request = makeRequest(Request.Method.POST, url, body.toString(), CashSession.class, new Response.Listener<CashSession>() {
                     @Override
                     public void onResponse(CashSession response) {
+                        persistenceProvider.storePhoneNumber(phoneNumber);
                         setSession(response);
                         callback.onResponse(response);
                     }

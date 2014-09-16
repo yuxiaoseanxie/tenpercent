@@ -32,6 +32,7 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
 
         this.number = (EditText) view.findViewById(R.id.fragment_cash_onboarding_verify_number);
         number.setOnEditorActionListener(numberEditorListener);
+        number.setText(SquareCashService.getInstance().getStoredPhoneNumber());
 
         return view;
     }
@@ -86,7 +87,7 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     private final TextView.OnEditorActionListener numberEditorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-            if (actionId == EditorInfo.IME_ACTION_GO) {
+            if (actionId == EditorInfo.IME_ACTION_GO || keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                 next();
 
                 return true;

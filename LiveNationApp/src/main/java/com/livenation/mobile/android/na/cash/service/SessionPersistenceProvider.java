@@ -14,8 +14,12 @@ public interface SessionPersistenceProvider {
     @Nullable CashSession loadSession();
     void saveSession(@Nullable CashSession session);
 
+    void storePhoneNumber(@Nullable String phoneNumber);
+    @Nullable String retrievePhoneNumber();
+
     public static class Preferences implements SessionPersistenceProvider {
         private static final String PERSISTED_SESSION = "PERSISTED_SESSION";
+        private static final String PHONE_NUMBER = "PHONE_NUMBER";
 
         private final SharedPreferences sharedPreferences;
 
@@ -23,9 +27,8 @@ public interface SessionPersistenceProvider {
             this.sharedPreferences = LiveNationApplication.get().getSharedPreferences(CashUtils.PREFS_ID, 0);
         }
 
-        @Nullable
         @Override
-        public CashSession loadSession() {
+        public @Nullable CashSession loadSession() {
             if (sharedPreferences.contains(PERSISTED_SESSION)) {
                 try {
                     return CashSession.fromJsonString(sharedPreferences.getString(PERSISTED_SESSION, "{}"), CashSession.class);
@@ -49,6 +52,23 @@ public interface SessionPersistenceProvider {
                 editor.remove(PERSISTED_SESSION);
             }
             editor.apply();
+        }
+
+
+        @Override
+        public void storePhoneNumber(@Nullable String phoneNumber) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (phoneNumber != null) {
+                editor.putString(PHONE_NUMBER, phoneNumber);
+            } else {
+                editor.remove(PHONE_NUMBER);
+            }
+            editor.apply();
+        }
+
+        @Override
+        public @Nullable String retrievePhoneNumber() {
+            return sharedPreferences.getString(PHONE_NUMBER, null);
         }
     }
 }
