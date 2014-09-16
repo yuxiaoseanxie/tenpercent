@@ -150,7 +150,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setSingleArtist(Artist artist) {
-        if (artist == null)
+        if (artist == null || getActivity() == null)
             return;
 
         this.artist = artist;
