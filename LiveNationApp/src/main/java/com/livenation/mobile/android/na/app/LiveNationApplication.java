@@ -51,6 +51,7 @@ import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.SsoAppManager;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
@@ -139,7 +140,7 @@ public class LiveNationApplication extends Application {
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
         accessTokenProvider = new AccessTokenAppProvider(this);
-        ssoManager = new SsoManager(this);
+        ssoManager = new SsoAppManager(this);
         ssoManager.addSsoProvider(new FacebookSsoProvider(this));
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);

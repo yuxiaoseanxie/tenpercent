@@ -110,6 +110,24 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        //Apsalar
+        String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+        if (isResale) {
+            resale = AnalyticConstants.PROP_TYPE_RESALE;
+        }
+        Ticketing.getAnalytics().trackApsalarEvent(com.livenation.mobile.android.na.analytics.AnalyticConstants.APSALAR_PURCHASE_CONFIRMATION,
+                AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity(),
+                AnalyticConstants.PROP_REVENUE, getCharges().getRevenue(),
+                AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee(),
+                AnalyticConstants.PROP_ORDER_PROCESSING_FEE, getCharges().getOrderProcessingFee(),
+                AnalyticConstants.PROP_DELIVERY_FEE, getCharges().getDeliveryFee(),
+                AnalyticConstants.PROP_OTHER_FEE, getCharges().getOrderProcessingFee(),
+                AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, getCharges().getOriginalFaceValueOfTicket(),
+                AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits(),
+                AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
+                AnalyticConstants.PROP_TYPE, resale,
+                AnalyticConstants.PROP_DELIVERY_METHOD, getCart().getDeliveryMethod().getName());
+
         displayImage();
         displayHeaderInfo();
         displayDetails();
@@ -475,7 +493,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     }
 
     private CartAnalytic getCharges() {
-        if (charges == null && getCart()!= null) {
+        if (charges == null && getCart() != null) {
             charges = Analytics.calculateChargesForCart(getCart());
         }
         return charges;
@@ -485,8 +503,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     protected Map<String, Object> getOmnitureProductsProps() {
         HashMap cdata = new HashMap<String, Object>();
         String data = "";
-        if (getCart()!= null) {
-            data += ";" +getCart().getEvent().getEventID();
+        if (getCart() != null) {
+            data += ";" + getCart().getEvent().getEventID();
         }
         if (getCharges() != null) {
             data += ";" + getCharges().getTicketQuantity();

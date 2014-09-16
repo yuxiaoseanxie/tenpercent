@@ -19,6 +19,7 @@ import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -309,7 +310,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
-
+            Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP);
             showTicketOffering(ticketOffering);
         }
     }

@@ -133,6 +133,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         } catch (Exception e) {
             ;
         }
+        Apsalar.endSession();
         super.onDestroy();
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());

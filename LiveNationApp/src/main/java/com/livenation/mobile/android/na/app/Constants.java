@@ -56,6 +56,7 @@ public class Constants {
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
         public static final String API_NAME = "api";
         public static final String API_ACCESS_TOKEN = "access_token";
+        public static final String API_ACCESS_TOKEN_TYPE = "type";
         public static final String IAS_NAME = "ias_name";
         public static final String IAS_USER_ID = "ias_user_id";
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
