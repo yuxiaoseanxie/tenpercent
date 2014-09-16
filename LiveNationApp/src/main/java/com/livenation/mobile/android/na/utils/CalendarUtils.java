@@ -67,7 +67,7 @@ public class CalendarUtils {
 
     private static void launchCalendar(Intent intent, Activity activity) {
         PackageManager manager = activity.getPackageManager();
-        List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, 0);
+        List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (resolveInfos.size() > 0) {
             activity.startActivity(intent);
         }else{
