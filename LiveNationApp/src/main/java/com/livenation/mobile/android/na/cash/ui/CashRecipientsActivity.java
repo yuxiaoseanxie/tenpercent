@@ -115,7 +115,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     loadingDialogFragment.dismiss();
-                    if (error.networkResponse.statusCode == 401) {
+                    if (error.networkResponse.statusCode >= 400 &&
+                        error.networkResponse.statusCode <= 499) {
                         SquareCashService.getInstance().clearSession();
                         showAmountsActivity(null);
                     } else {
@@ -147,7 +148,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (!fragment.hasContactsSelected()) {
                 fragment.forceCompletion();
                 if (!fragment.hasContactsSelected()) {
