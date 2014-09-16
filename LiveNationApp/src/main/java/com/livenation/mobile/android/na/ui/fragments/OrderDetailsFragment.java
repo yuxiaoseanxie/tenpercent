@@ -597,7 +597,7 @@ public class OrderDetailsFragment extends Fragment {
 
         public static ResaleDialog newInstance(Cart cart) {
             Bundle args = new Bundle();
-            args.putSerializable(EXTRA_URI, TicketingUtils.getResaleTransferUri(cart).toString());
+            args.putString(EXTRA_URI, TicketingUtils.getResaleTransferUri(cart).toString());
             ResaleDialog fragment = new ResaleDialog();
             fragment.setArguments(args);
             return fragment;
