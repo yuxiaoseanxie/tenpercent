@@ -34,7 +34,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                 @Override
                 public void onResponse(Void response) {
-                    sharedPreferences.edit().remove(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE).commit();
+                    sharedPreferences.edit().remove(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE).apply();
                     LiveNationApplication.get().setIsMusicSync(true);
                 }
 
