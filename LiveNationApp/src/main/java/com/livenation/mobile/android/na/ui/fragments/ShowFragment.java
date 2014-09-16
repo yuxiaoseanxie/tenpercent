@@ -52,6 +52,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
@@ -367,7 +368,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         }
     }
 
-    private class OnCalendarViewClick implements View.OnClickListener {
+    private class OnCalendarViewClick extends OnThrottledClickListener {
         private CalendarDialogFragment dialogFragment;
         private Event event;
 
@@ -378,6 +379,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
+            super.onClick(view);
             if (dialogFragment.isAdded()) return;
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);
