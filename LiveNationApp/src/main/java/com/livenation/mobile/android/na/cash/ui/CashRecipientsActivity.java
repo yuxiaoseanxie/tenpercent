@@ -114,10 +114,14 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
             SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // TODO: Check for session token invalid error here.
                     loadingDialogFragment.dismiss();
-                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
-                    errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
+                    if (error.networkResponse.statusCode == 401) {
+                        SquareCashService.getInstance().clearSession();
+                        showAmountsActivity(null);
+                    } else {
+                        CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                        errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
+                    }
                 }
 
                 @Override
