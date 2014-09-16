@@ -33,4 +33,10 @@ public class VenueShowsActivity extends LiveNationFragmentActivity {
     }
 
     //endregion
+
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_VDP_ALL_SHOWS;
+    }
 }

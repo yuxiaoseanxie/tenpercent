@@ -20,6 +20,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.adobe.mobile.Config;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -194,6 +195,9 @@ public class LiveNationApplication extends Application {
         props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
         props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
+
+        //Omniture
+        Config.setContext(getApplicationContext());
 
     }
 
