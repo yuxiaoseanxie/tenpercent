@@ -28,7 +28,6 @@ import com.mobilitus.tm.tickets.models.Total;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;

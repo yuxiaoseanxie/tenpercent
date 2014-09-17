@@ -22,7 +22,6 @@ import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
-import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 
 public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     private static final long RESEND_ENABLE_DELAY = 2000;
@@ -119,7 +118,7 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
             @Override
             public void onResponse(CashResponse response) {
                 loadingDialogFragment.dismiss();
-                getCashRequestDetailsActivity().setupCompleted();
+                getCashRequestDetailsActivity().continueToIdentity();
             }
         });
     }
@@ -130,7 +129,7 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     private final TextView.OnEditorActionListener codeEditorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-            if (actionId == EditorInfo.IME_ACTION_GO || keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            if (actionId == EditorInfo.IME_ACTION_GO || (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                 next();
 
                 return true;

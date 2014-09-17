@@ -15,6 +15,9 @@ public class CashPaymentBlockers extends CashResponse {
     @JsonProperty(value = "passcode_verification", required = false)
     private Object passcodeVerification;
 
+    @JsonProperty(value = "identity_verification", required = false)
+    private Object identityVerification;
+
 
     public String getUrl() {
         return url;
@@ -32,12 +35,16 @@ public class CashPaymentBlockers extends CashResponse {
         return passcodeVerification;
     }
 
+    public Object getIdentityVerification() {
+        return identityVerification;
+    }
 
     public boolean isBlocked() {
         return (getUrl() != null ||
                 getCard() != null ||
                 getPhoneNumber() != null ||
-                getPasscodeVerification() != null);
+                getPasscodeVerification() != null ||
+                getIdentityVerification() != null);
     }
 
 
@@ -48,6 +55,7 @@ public class CashPaymentBlockers extends CashResponse {
                 ", card=" + card +
                 ", phoneNumber=" + phoneNumber +
                 ", passcodeVerification=" + passcodeVerification +
+                ", identityVerification=" + identityVerification +
                 '}';
     }
 }
