@@ -28,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +80,7 @@ public class SquareCashService {
     }
 
     private <T extends CashResponse> void injectHeaders(SquareRequest<T> request) {
-        HashMap<String, String> headers = new HashMap<String, String>();
+        HashMap<String, String> headers = new HashMap<>();
         if (hasSession()) {
             headers.put("Authorization", "Bearer " + session.getAccessToken());
         }
@@ -98,7 +97,7 @@ public class SquareCashService {
                                                                   @NonNull Response.ErrorListener errorListener) {
         Log.i(CashUtils.LOG_TAG, "Outgoing request to '" + url + "' with body: " + requestBody);
 
-        SquareRequest<T> request = new SquareRequest<T>(method, url, responseClass, requestBody, listener, errorListener);
+        SquareRequest<T> request = new SquareRequest<>(method, url, responseClass, requestBody, listener, errorListener);
         injectHeaders(request);
         return request;
     }
@@ -148,9 +147,7 @@ public class SquareCashService {
     }
 
     public boolean hasSession() {
-        return (getSession() != null &&
-                getSession().getExpiresAt() != null &&
-                new Date().before(getSession().getExpiresAt()));
+        return (getSession() != null);
     }
 
     public @Nullable String getStoredPhoneNumber() {
