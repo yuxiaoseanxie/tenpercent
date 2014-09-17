@@ -55,7 +55,6 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         ArrayList<ContactData> contacts = getCashAmountsActivity().getContacts();
         this.adapter = new ContactDataAdapter(getActivity(), this, contacts);
 
-        setListAdapter(adapter);
         setRetainInstance(true);
     }
 
@@ -102,6 +101,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         });
         if (SquareCashService.getInstance().hasSession())
             getListView().addFooterView(footerText, null, false);
+
+        setListAdapter(adapter);
     }
 
     @Override
