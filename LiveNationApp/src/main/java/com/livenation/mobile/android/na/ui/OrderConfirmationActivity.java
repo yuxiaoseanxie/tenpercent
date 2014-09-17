@@ -55,6 +55,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private Cart cart;
     private CartAnalytic charges;
     private boolean isResale;
+    private String deliveryMethod;
     //temporary workaround on the assumption this field will be later accessible from mTopia via the library
     private boolean isUpgradable;
 
@@ -81,7 +82,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
         this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
         this.isUpgradable = getIntent().getBooleanExtra(EXTRA_SHOW_UPGRADABLE, false);
-
+        this.deliveryMethod = getIntent().getStringExtra(Constants.EXTRA_DELIVERY_METHOD);
         this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
@@ -311,9 +312,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         if (getCart().getOrderSummary() != null) {
             props.put(AnalyticConstants.PROP_SECTION, getCart().getOrderSummary().getSection());
         }
-        if (getCart().getDeliveryMethod() != null) {
-            props.put(AnalyticConstants.PROP_DELIVERY_OPTION, getCart().getDeliveryMethod().getName());
-        }
+        props.put(AnalyticConstants.PROP_DELIVERY_OPTION, deliveryMethod);
         if (getCart().getEvent() != null) {
             props.put(AnalyticConstants.PROP_TM_EVENT_ID, getCart().getEvent().getEventID());
         }
@@ -466,10 +465,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 resale = AnalyticConstants.PROP_TYPE_RESALE;
             }
             props.put(AnalyticConstants.PROP_TYPE, resale);
+            props.put(AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod);
 
-            if (getCart().getDeliveryMethod() != null) {
-                props.put(AnalyticConstants.PROP_DELIVERY_METHOD, getCart().getDeliveryMethod().getName());
-            }
         }
         return props;
     }
