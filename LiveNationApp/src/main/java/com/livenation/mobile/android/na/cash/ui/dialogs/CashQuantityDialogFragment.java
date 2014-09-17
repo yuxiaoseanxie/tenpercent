@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
 import com.livenation.mobile.android.na.R;
@@ -42,16 +43,17 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
 
         NumberPicker numberPicker = new NumberPicker(getActivity());
         numberPicker.setWrapSelectorWheel(true);
-        numberPicker.setMinValue(1);
+        numberPicker.setMinValue(0);
         numberPicker.setMaxValue(getQuantity());
         numberPicker.setValue(getValue());
         numberPicker.setOnValueChangedListener(this);
-        String[] displayedValues = new String[getQuantity()];
+        numberPicker.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+        String[] displayedValues = new String[getQuantity() + 1];
         BigDecimal pricePerTicket = getPricePerTicket();
-        for (int i = 1, quantity = getQuantity(); i <= quantity; i++) {
+        for (int i = 0, quantity = getQuantity(); i <= quantity; i++) {
             BigDecimal amount = pricePerTicket.multiply(BigDecimal.valueOf(i));
             String amountString = TicketingUtils.formatCurrency(null, amount);
-            displayedValues[i - 1] = getResources().getQuantityString(R.plurals.cash_ticket_quantity_picker, i, i, amountString);
+            displayedValues[i] = getResources().getQuantityString(R.plurals.cash_ticket_quantity_picker, i, i, amountString);
         }
         numberPicker.setDisplayedValues(displayedValues);
         builder.setView(numberPicker);
@@ -102,7 +104,7 @@ public class CashQuantityDialogFragment extends DialogFragment implements Number
 
 
     @Override
-    public void onValueChange(NumberPicker numberPicker, int oldValue, int newValue) {
+    public void onValueChange(@NonNull NumberPicker numberPicker, int oldValue, int newValue) {
         setValue(newValue);
     }
 }

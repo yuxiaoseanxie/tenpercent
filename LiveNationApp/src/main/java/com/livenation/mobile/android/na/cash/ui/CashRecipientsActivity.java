@@ -28,12 +28,11 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
 public class CashRecipientsActivity extends LiveNationFragmentActivity {
-    private MenuItem nextItem;
     private CashRecipientsFragment fragment;
 
     private final BroadcastReceiver requestsCompletedReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(@NonNull Context context, @NonNull Intent intent) {
             finish();
         }
     };
@@ -75,7 +74,7 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cash, menu);
 
-        this.nextItem = menu.findItem(R.id.action_next);
+        MenuItem nextItem = menu.findItem(R.id.action_next);
         nextItem.getActionView().setOnClickListener(new NextClickListener());
 
         return super.onCreateOptionsMenu(menu);
@@ -115,7 +114,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     loadingDialogFragment.dismiss();
-                    if (error.networkResponse.statusCode >= 400 &&
+                    if (error.networkResponse != null &&
+                        error.networkResponse.statusCode >= 400 &&
                         error.networkResponse.statusCode <= 499) {
                         SquareCashService.getInstance().clearSession();
                         showAmountsActivity(null);
@@ -134,17 +134,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
         }
 
         private void showNoContactsMessage() {
-            DialogFragment noContactsDialogFragment = new DialogFragment() {
-                @Override
-                public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CashRecipientsActivity.this);
-                    builder.setTitle(R.string.error_title_generic);
-                    builder.setMessage(R.string.cash_no_contacts_error_message);
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    return builder.create();
-                }
-            };
-            noContactsDialogFragment.show(getSupportFragmentManager(), "NoContactsDialogFragment");
+            DialogFragment noContactsDialogFragment = new NoContactsErrorDialogFragment();
+            noContactsDialogFragment.show(getSupportFragmentManager(), NoContactsErrorDialogFragment.TAG);
         }
 
         @Override
@@ -161,6 +152,19 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
                 requestCustomerStatus();
             else
                 showAmountsActivity(null);
+        }
+    }
+
+    public static class NoContactsErrorDialogFragment extends DialogFragment {
+        public static final String TAG = NoContactsErrorDialogFragment.class.getSimpleName();
+
+        @Override
+        public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.error_title_generic);
+            builder.setMessage(R.string.cash_no_contacts_error_message);
+            builder.setPositiveButton(android.R.string.ok, null);
+            return builder.create();
         }
     }
 }

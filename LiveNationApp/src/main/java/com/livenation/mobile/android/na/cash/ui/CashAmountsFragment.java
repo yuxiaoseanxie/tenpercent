@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class CashAmountsFragment extends ListFragment implements ContactDataAdapter.DataProvider {
@@ -95,7 +96,7 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
         footerText.setText(getString(R.string.cash_logout_text_fmt, fullName));
         footerText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 logout();
             }
         });
@@ -181,7 +182,14 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     }
 
     public HashMap<String, Integer> getTicketPerContactQuantities() {
-        return quantities;
+        HashMap<String, Integer> filteredQuantities = new HashMap<>(quantities);
+        Iterator<Map.Entry<String, Integer>> entries = filteredQuantities.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<String, Integer> entry = entries.next();
+            if (entry.getValue() == 0)
+                entries.remove();
+        }
+        return filteredQuantities;
     }
 
     //endregion
@@ -189,10 +197,8 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
 
     //region List View
 
-
-    @NonNull
     @Override
-    public String getPrice(int position, @NonNull ContactData contact) {
+    public @NonNull String getPrice(int position, @NonNull ContactData contact) {
         int quantity = quantities.get(contact.getId());
         BigDecimal price = pricePerTicket.multiply(BigDecimal.valueOf(quantity));
         return TicketingUtils.formatCurrency(null, price);

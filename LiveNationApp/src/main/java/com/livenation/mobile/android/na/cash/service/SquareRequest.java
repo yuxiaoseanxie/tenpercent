@@ -67,18 +67,18 @@ public class SquareRequest<T extends CashResponse> extends JsonRequest<T> {
             // Temporary support for crashes on their server.
             if (json.has("message")) {
                 String errorMessage = json.getString("message");
-                return new VolleyError(errorMessage, outerError);
+                return new StupidVolleyError(errorMessage, outerError);
             }
 
             String error = json.getString("error");
             String description = json.optString("error_description");
-            return new VolleyError(error + ": " + description, outerError);
+            return new StupidVolleyError(error + ": " + description, outerError);
         } catch (JSONException e) {
             if (outerError != null) {
                 Log.w(CashUtils.LOG_TAG, "Json parsing error for error, ignoring.", e);
                 return outerError;
             } else {
-                return new VolleyError("Malformed error response", e);
+                return new StupidVolleyError("Malformed error response", e, null);
             }
         }
     }

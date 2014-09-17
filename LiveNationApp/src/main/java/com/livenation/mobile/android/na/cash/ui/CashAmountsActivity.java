@@ -1,10 +1,14 @@
 package com.livenation.mobile.android.na.cash.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,13 +27,15 @@ import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;
 
     private final BroadcastReceiver requestsCompletedReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(@NonNull Context context, @NonNull Intent intent) {
             finish();
         }
     };
@@ -43,6 +49,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
         this.fragment = (CashAmountsFragment) getSupportFragmentManager().findFragmentById(R.id.activity_cash_amounts_fragment);
 
+        //noinspection ConstantConditions
         getActionBar().setSubtitle(getResources().getQuantityString(R.plurals.cash_transaction_detail, getTicketQuantity(), getTicketQuantity(), TicketingUtils.formatCurrency(null, getTotal().getGrandTotal())));
 
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(requestsCompletedReceiver, new IntentFilter(CashUtils.ACTION_REQUESTS_COMPLETED));
@@ -97,29 +104,51 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     private class NextClickListener implements View.OnClickListener {
-        private void showOnBoarding(CashCustomerStatus status) {
+        private void showOnBoarding(CashCustomerStatus status, HashMap<String, Integer> quantities) {
             Intent intent = new Intent(CashAmountsActivity.this, CashOnboardingActivity.class);
             intent.putExtras(getIntent().getExtras());
-            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
+            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, quantities);
             intent.putExtra(CashUtils.EXTRA_CUSTOMER_STATUS, status);
             startActivity(intent);
         }
 
-        private void showComplete() {
+        private void showComplete(HashMap<String, Integer> quantities) {
             Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
             intent.putExtras(getIntent().getExtras());
-            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, fragment.getTicketPerContactQuantities());
+            intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, quantities);
             startActivity(intent);
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
+            HashMap<String, Integer> quantities = fragment.getTicketPerContactQuantities();
+            if (quantities.isEmpty()) {
+                NoQuantitySelectedDialogFragment dialogFragment = new NoQuantitySelectedDialogFragment();
+                dialogFragment.show(getSupportFragmentManager(), NoQuantitySelectedDialogFragment.TAG);
+                return;
+            }
+
             CashCustomerStatus status = getCustomerStatus();
             if (SquareCashService.getInstance().hasSession() && status != null && !status.isBlocked()) {
-                showComplete();
+                showComplete(quantities);
             } else {
-                showOnBoarding(null);
+                showOnBoarding(null, quantities);
             }
+        }
+    }
+
+
+    public static class NoQuantitySelectedDialogFragment extends DialogFragment {
+        public static final String TAG = NoQuantitySelectedDialogFragment.class.getSimpleName();
+
+        @Override
+        public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.error_title_generic);
+            builder.setMessage(R.string.square_cash_error_zero_quantities);
+            builder.setPositiveButton(android.R.string.ok, null);
+
+            return builder.create();
         }
     }
 }
