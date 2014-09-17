@@ -56,12 +56,14 @@ public abstract class BaseDecoratedScrollPager<TItemTypeOutput extends IdEquals<
             throw new IllegalStateException("Setting the adapter before the adding a footer is broken on many flavours of Android");
         }
         listView.setOnScrollListener(this);
-        listView.addFooterView(footerBugHack);
+        //listView.addFooterView(footerBugHack);
+        listView.getWrappedList().addFooterView(footerBugHack, null, false);
     }
 
     public void connectListView(ListView listView) {
         listView.setOnScrollListener(this);
-        listView.addFooterView(footerBugHack);
+        //listView.addFooterView(footerBugHack);
+        listView.addFooterView(footerBugHack, null, false);
     }
 
     public void connectSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
