@@ -57,10 +57,10 @@ public class ArtistShowsListFragment extends LiveNationListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if (position < adapter.getCount()) {
+        //if (position < adapter.getCount()) {
             Event event = adapter.getItem(position);
             Bundle arguments = ShowActivity.getArguments(event);
             startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
-        }
+        //}
     }
 }
