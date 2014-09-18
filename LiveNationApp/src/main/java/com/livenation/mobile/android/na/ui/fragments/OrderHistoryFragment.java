@@ -7,6 +7,7 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
-import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
 import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
@@ -38,7 +37,9 @@ import com.livenation.mobile.android.ticketing.utils.orders.ValueCallback;
 import com.livenation.mobile.android.ticketing.widgets.VerticalDateView;
 import com.mobilitus.tm.tickets.TicketLibrary;
 import com.mobilitus.tm.tickets.interfaces.ResponseListener;
-import com.mobilitus.tm.tickets.models.*;
+import com.mobilitus.tm.tickets.models.Cart;
+import com.mobilitus.tm.tickets.models.Event;
+import com.mobilitus.tm.tickets.models.OrderHistory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,7 +74,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         this.loadedCarts = new ArrayList<Cart>();
         this.offlinePromptHandler = new Handler(new Handler.Callback() {
             @Override
-            public boolean handleMessage(Message message) {
+            public boolean handleMessage(@NonNull Message message) {
                 Activity activity = getActivity();
                 if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
                     TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
@@ -146,7 +147,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         this.emptyStateViewNoOrders = inflater.inflate(R.layout.sub_order_history_empty_no_content, emptyView, false);
         emptyStateViewNoOrders.findViewById(R.id.button_find_a_show).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 getActivity().finish();
             }
         });
@@ -372,7 +373,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onItemClick(@NonNull AdapterView<?> adapterView, @NonNull View view, int position, long id) {
         Cart cart = historyAdapter.getItem(position);
         showDetailsForCart(cart);
     }
@@ -398,7 +399,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
             if (view == null) {
                 view = mInflater.inflate(R.layout.item_order_history, parent, false);
@@ -409,9 +410,15 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             Cart cart = getItem(position);
 
             Event event = cart.getEvent();
-            holder.date.setDate(new Date(event.getShowTime()));
-            holder.eventTitle.setText(event.getName());
-            holder.address.setText(event.getVenue().getName());
+            if (event != null) {
+                holder.date.setDate(new Date(event.getShowTime()));
+                holder.eventTitle.setText(event.getName());
+                holder.address.setText(event.getVenue().getName());
+            } else {
+                holder.date.setDate(new Date());
+                holder.eventTitle.setText(R.string.data_missing_placeholder);
+                holder.address.setText(R.string.data_missing_placeholder);
+            }
             holder.orderDate.setText(TicketingUtils.formatShortDate(cart.getOrderDate()));
 
             holder.orderId.setText(cart.getDisplayOrderID());
@@ -456,7 +463,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         private int lastTotalItemCount;
 
         @Override
-        public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        public void onScroll(@NonNull AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             if (totalItemCount == 0) {
                 return;
             }

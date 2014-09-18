@@ -61,6 +61,12 @@
     <init>(...);
 }
 
+# App - Ticketing
+# Leave models alone. Jackson uses reflection heavily to work correctly, proguard destroys this
+-keep class com.mobilitus.tm.tickets.models.** {
+    *;
+}
+
 # Facebook
 
 -keep class com.facebook.** { *; } 

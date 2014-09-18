@@ -72,7 +72,9 @@ public class LocationManager implements LocationProvider {
         return userLocationProvider;
     }
 
-    public void reverseGeocodeCity(double lat, double lng, Context context, GetCityCallback callback) {
+    public void reverseGeocodeCity(double lat, double lng, GetCityCallback callback) {
+        Context context = LiveNationApplication.get().getApplicationContext();
+
         ReverseGeocode task = new ReverseGeocode(context, lat, lng, callback);
         task.execute();
     }

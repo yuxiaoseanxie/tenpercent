@@ -1,6 +1,9 @@
 package com.livenation.mobile.android.na.analytics;
 
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
@@ -28,6 +31,7 @@ public class LiveNationAnalytics {
         props.put(AnalyticConstants.CATEGORY, category);
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
+        traceLog(eventTitle, category, props.toString());
     }
 
     static public void track(String eventTitle, AnalyticsCategory category) {
@@ -41,5 +45,11 @@ public class LiveNationAnalytics {
 
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
+        traceLog(screenTitle, "Screen", props.toString());
+    }
+
+    static private void traceLog(String eventTitle, String category, String data) {
+        String title = String.format("%s: %s", eventTitle, category);
+        Crashlytics.log(Log.VERBOSE, title, data);
     }
 }

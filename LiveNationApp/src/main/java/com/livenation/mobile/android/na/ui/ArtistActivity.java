@@ -38,12 +38,6 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         super.onCreate(savedInstanceState, R.layout.activity_artist);
         artistFragment = (ArtistFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_fragment);
 
-        SingleArtistParameters apiParams = new SingleArtistParameters();
-        if (args.containsKey(PARAMETER_ARTIST_ID)) {
-            String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
-            long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
-            apiParams.setArtistId(artistId);
-        }
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
 
@@ -52,6 +46,12 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             setArtist(artist);
         } else {
+            SingleArtistParameters apiParams = new SingleArtistParameters();
+            if (args.containsKey(PARAMETER_ARTIST_ID)) {
+                String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
+                long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
+                apiParams.setArtistId(artistId);
+            }
 
             LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
                 @Override

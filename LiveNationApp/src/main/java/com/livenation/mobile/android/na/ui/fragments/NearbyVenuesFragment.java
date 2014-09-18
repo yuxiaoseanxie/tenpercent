@@ -99,6 +99,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         super.onDestroyView();
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
+        scrollPager.reset();
     }
 
     @Override

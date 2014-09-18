@@ -1,11 +1,13 @@
 package com.livenation.mobile.android.na.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
@@ -24,7 +26,16 @@ public class LoginHelper {
         return ssoProviderPersistence.readUser();
     }
 
-    public static void getUpdatedUser(final SsoUpdatedUserCallback callback) {
+    public static void getUpdatedUser(final SsoUpdatedUserCallback callback, Activity activity) {
+        if (activity == null) {
+            if (LoginHelper.isLogin()) {
+                callback.onResponse(false, getAuthConfiguration().getAccessToken(), LoginHelper.getSavedUser());
+            } else {
+                callback.onErrorResponse(new LiveNationError(ErrorDictionary.ERROR_CODE_SSO_FACEBOOK_LOGIN_ACTIVITY_NULL));
+            }
+            return;
+        }
+
         SsoManager.AuthConfiguration authConfiguration = getAuthConfiguration();
         if (authConfiguration == null) {
             if (callback != null) {
@@ -69,7 +80,7 @@ public class LoginHelper {
                 public void onLoginCanceled() {
                     //Should never happen in this case
                 }
-            }, null);
+            }, activity);
         }
     }
 

@@ -12,20 +12,32 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.segment.android.models.Props;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
     private final static int BIO_TRUNCATION_LENGTH = 300;
@@ -107,13 +119,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         init();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        deinit();
-    }
-
     //endregion
 
 
@@ -145,7 +150,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setSingleArtist(Artist artist) {
-        if (artist == null)
+        if (artist == null || getActivity() == null)
             return;
 
         this.artist = artist;
@@ -168,8 +173,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         favoriteCheckBox.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.ADP);
 
         youTube.setArtistName(artist.getName());
-
-        ((ArtistActivity) getActivity()).invalidateIsShareAvailable();
     }
 
     @Override
@@ -191,11 +194,38 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
     private void init() {
-        getArtistEventsPresenter().initialize(getActivity(), getActivity().getIntent().getExtras(), this);
-    }
+        LiveNationApplication.getProviderManager().getConfigReadyFor(new ConfigCallback() {
+            @Override
+            public void onResponse(LiveNationConfig config) {
+                if (getActivity() == null) return;
+                final double lat = config.getLat();
+                final double lng = config.getLng();
 
-    private void deinit() {
-        getArtistEventsPresenter().cancel(this);
+                ArtistEventsParameters apiParams = new ArtistEventsParameters();
+
+                String artistIdRaw = getActivity().getIntent().getStringExtra(ArtistActivity.PARAMETER_ARTIST_ID);
+                apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
+
+                apiParams.setPage(0, 10);
+
+                LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, new BasicApiCallback<List<Event>>() {
+                    @Override
+                    public void onResponse(List<Event> response) {
+                        if (getActivity() == null) return;
+                        ArtistEvents result = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
+                        setArtistEvents(result);
+                    }
+
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse(int errorCode) {
+            }
+        }, ProviderManager.ProviderType.LOCATION);
     }
 
     //endregion
@@ -214,6 +244,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowAllEventsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            if (artist == null) {
+                return;
+            }
             //Analytics
             Props props = new Props();
             props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
