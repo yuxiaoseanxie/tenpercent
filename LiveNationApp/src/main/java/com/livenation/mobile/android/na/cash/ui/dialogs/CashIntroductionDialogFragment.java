@@ -62,10 +62,6 @@ public class CashIntroductionDialogFragment extends DialogFragment {
                     .apply();
 
             dismiss();
-
-            Intent intent = new Intent(getActivity(), CashRecipientsActivity.class);
-            intent.putExtras(getArguments());
-            startActivity(intent);
         }
     };
 
