@@ -159,6 +159,8 @@ public class LiveNationApplication extends Application {
 
         Crashlytics.start(this);
         Analytics.initialize(this);
+        //override segment logging. this should be false already due to debug being disabled :(
+        com.segment.android.Logger.setLog(false);
 
         //Object useful wild app
         providerManager = new ProviderManager();
