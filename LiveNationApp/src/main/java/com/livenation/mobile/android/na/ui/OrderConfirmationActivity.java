@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.experience.android.activities.ExpActivityConfig;
 import com.experience.android.activities.ExperienceWebViewActivity;
 import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.app.rating.AppRaterManager;
@@ -38,11 +36,12 @@ import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Total;
-import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
@@ -55,7 +54,9 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
 
     private Event event;
     private Cart cart;
+    private CartAnalytic charges;
     private boolean isResale;
+    private String deliveryMethod;
     //temporary workaround on the assumption this field will be later accessible from mTopia via the library
     private boolean isUpgradable;
 
@@ -82,7 +83,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
         this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
         this.isUpgradable = getIntent().getBooleanExtra(EXTRA_SHOW_UPGRADABLE, false);
-
+        this.deliveryMethod = getIntent().getStringExtra(Constants.EXTRA_DELIVERY_METHOD);
         this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
@@ -226,7 +227,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
-                
+
                 //temporarily disabled for testing upgrades
 //                if (++numberAdded >= 3)
 //                    break;
@@ -312,9 +313,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         if (getCart().getOrderSummary() != null) {
             props.put(AnalyticConstants.PROP_SECTION, getCart().getOrderSummary().getSection());
         }
-        if (getCart().getDeliveryMethod() != null) {
-            props.put(AnalyticConstants.PROP_DELIVERY_OPTION, getCart().getDeliveryMethod().getName());
-        }
+        props.put(AnalyticConstants.PROP_DELIVERY_OPTION, deliveryMethod);
         if (getCart().getEvent() != null) {
             props.put(AnalyticConstants.PROP_TM_EVENT_ID, getCart().getEvent().getEventID());
         }
@@ -327,65 +326,14 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         return props;
     }
 
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_CHECKOUT_CONFIRMATION_SCREEN_LOAD;
+    }
+
     private void trackScreenLoad() {
         Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
-
-        if (getCart() != null) {
-            CartAnalytic charges = Analytics.calculateChargesForCart(getCart());
-            Props ticketQuantityProps = getPreBuiltCartProps();
-            ticketQuantityProps.put(AnalyticConstants.PROP_TICKET_QUANTITY, charges.getTicketQuantity());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TICKET_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, ticketQuantityProps);
-            Props revenueProps = getPreBuiltCartProps();
-            revenueProps.put(AnalyticConstants.PROP_REVENUE, charges.getRevenue());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_REVENUE, AnalyticConstants.CATEGORY_CHECKOUT, revenueProps);
-            Props convFeeProps = getPreBuiltCartProps();
-            convFeeProps.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, charges.getConvFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, AnalyticConstants.CATEGORY_CHECKOUT, convFeeProps);
-            Props otherFeesProps = getPreBuiltCartProps();
-            otherFeesProps.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, charges.getOrderProcessingFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, AnalyticConstants.CATEGORY_CHECKOUT, otherFeesProps);
-            Props deliveryFeeProps = getPreBuiltCartProps();
-            deliveryFeeProps.put(AnalyticConstants.PROP_DELIVERY_FEE, charges.getDeliveryFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_DELIVERY_FEE, AnalyticConstants.CATEGORY_CHECKOUT, deliveryFeeProps);
-            Props orderProcessingFeeProps = getPreBuiltCartProps();
-            orderProcessingFeeProps.put(AnalyticConstants.PROP_OTHER_FEE, charges.getOrderProcessingFee());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_OTHER_FEE, AnalyticConstants.CATEGORY_CHECKOUT, orderProcessingFeeProps);
-            Props originalFaceValueOfTicketProps = getPreBuiltCartProps();
-            originalFaceValueOfTicketProps.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, charges.getOriginalFaceValueOfTicket());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, AnalyticConstants.CATEGORY_CHECKOUT, originalFaceValueOfTicketProps);
-            Props upsellUnitsProps = getPreBuiltCartProps();
-            upsellUnitsProps.put(AnalyticConstants.PROP_UPSELL_QUANTITY, charges.getUpsellUnits());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_QUANTITY, AnalyticConstants.CATEGORY_CHECKOUT, upsellUnitsProps);
-            Props upsellRevenueProps = getPreBuiltCartProps();
-            upsellRevenueProps.put(AnalyticConstants.PROP_UPSELL_TOTAL, charges.getUpsellRevenue());
-            LiveNationAnalytics.track(AnalyticConstants.PROP_UPSELL_TOTAL, AnalyticConstants.CATEGORY_CHECKOUT, upsellRevenueProps);
-            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + charges);
-            Props typeProps = getPreBuiltCartProps();
-            String resale  = AnalyticConstants.PROP_TYPE_PRIMARY;
-            if (isResale) {
-                resale = AnalyticConstants.PROP_TYPE_RESALE;
-            }
-            typeProps.put(AnalyticConstants.PROP_TYPE, resale);
-            LiveNationAnalytics.track(AnalyticConstants.PROP_TYPE, AnalyticConstants.CATEGORY_CHECKOUT, typeProps);
-
-            boolean isResaleTicket = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
-            Log.i(getClass().getSimpleName(), "Ticket Type: " + (isResaleTicket? "resale" : "primary"));
-        }
     }
-
-    private Props getPreBuiltCartProps() {
-        Props props = new Props();
-        if (event != null) {
-            props.put(AnalyticConstants.PROP_EVENT_ID, event.getId());
-            props.put(AnalyticConstants.PROP_VENUE_ID, event.getVenue().getId());
-            Artist artist = event.getLineup().get(0);
-            if (artist != null) {
-                props.put(AnalyticConstants.PROP_ARTIST_ID, event.getLineup().get(0));
-            }
-        }
-        return props;
-    }
-
 
     private View.OnClickListener createOnClickListenerForAction(@NonNull Action action) {
         switch (action) {
@@ -509,6 +457,66 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     };
 
     @Override
+    protected Map<String, Object> getAnalyticsProps() {
+        Map<String, Object> props = new HashMap<String, Object>();
+        if (getCart() != null) {
+            props = Analytics.createBaseTrackingProperties(getCart().getEvent()).toMap();
+            props.put(AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity());
+            props.put(AnalyticConstants.PROP_REVENUE, getCharges().getRevenue());
+            props.put(AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee());
+            props.put(AnalyticConstants.PROP_ORDER_PROCESSING_FEE, getCharges().getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_DELIVERY_FEE, getCharges().getDeliveryFee());
+            props.put(AnalyticConstants.PROP_OTHER_FEE, getCharges().getOrderProcessingFee());
+            props.put(AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, getCharges().getOriginalFaceValueOfTicket());
+            props.put(AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits());
+            props.put(AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue());
+            Log.i(getClass().getSimpleName(), "Charges for cart " + getCart() + ": " + getCharges());
+            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isResale) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            props.put(AnalyticConstants.PROP_TYPE, resale);
+            props.put(AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod);
+
+        }
+        return props;
+    }
+
+    private CartAnalytic getCharges() {
+        if (charges == null && getCart()!= null) {
+            charges = Analytics.calculateChargesForCart(getCart());
+        }
+        return charges;
+    }
+
+    @Override
+    protected Map<String, Object> getOmnitureProductsProps() {
+        HashMap cdata = new HashMap<String, Object>();
+        String data = "";
+        if (getCart()!= null) {
+            data += ";" +getCart().getEvent().getEventID();
+        }
+        if (getCharges() != null) {
+            data += ";" + getCharges().getTicketQuantity();
+            data += ";" + getCharges().getRevenue();
+            data += ";event20=" + getCharges().getConvFee();
+            data += "|event21=" + getCharges().getOtherFees();
+            data += "|event19=" + getCharges().getDeliveryFee();
+            data += "|event26=" + getCharges().getOrderProcessingFee();
+            data += "|event41=" + getCharges().getOriginalFaceValueOfTicket();
+            data += "|event17=" + getCharges().getUpsellUnits();
+            data += "|event18=" + getCharges().getUpsellRevenue();
+            String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+            if (isResale) {
+                resale = AnalyticConstants.PROP_TYPE_RESALE;
+            }
+            data += ";eVar43=" + resale;
+        }
+        cdata.put("&&products", data);
+        return cdata;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         AppRaterManager raterManager = new AppRaterManager(this);
@@ -518,4 +526,5 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         }
         raterManager.purchaseCompleted(getApplicationContext(), ticketsCount);
     }
+
 }

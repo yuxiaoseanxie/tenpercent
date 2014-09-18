@@ -44,7 +44,7 @@ public class LiveNationAnalytics {
             props = new Props();
 
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
-        Analytics.screen(screenTitle, props);
+        Analytics.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
         traceLog(screenTitle, "Screen", props.toString());
     }
 

@@ -34,7 +34,9 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -106,6 +108,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
+        AppRaterManager raterManager = new AppRaterManager(this);
+        raterManager.purchaseCompleted(getApplicationContext(), 3);
     }
 
     @Override
@@ -131,6 +135,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_HOME;
     }
 
     @Override
@@ -202,6 +211,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
+                OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
                 ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 

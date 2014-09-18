@@ -41,6 +41,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- End segment.io Permissions -->
 
+    <!-- Begin Omniture permission -->
+    <!--<uses-permission android:name="android.permission.INTERNET" /> already there
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> already there -->
+    <!-- End Omniture permission -->
+
     <!-- Begin Experience App Permissions-->
     <!-- android.permission.VIBRATE already there -->
     <!-- android.permission.INTERNET already there -->
