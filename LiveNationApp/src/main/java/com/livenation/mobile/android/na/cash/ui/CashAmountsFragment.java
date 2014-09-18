@@ -107,6 +107,13 @@ public class CashAmountsFragment extends ListFragment implements ContactDataAdap
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        setListAdapter(null);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
