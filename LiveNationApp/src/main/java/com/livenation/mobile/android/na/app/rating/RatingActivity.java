@@ -1,6 +1,9 @@
 package com.livenation.mobile.android.na.app.rating;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -16,9 +19,11 @@ public class RatingActivity extends LiveNationFragmentActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        showRateDialog();
-
+        if (savedInstanceState == null) {
+            showRateDialog();
+        }
     }
+
 
     private void showRateDialog() {
         final RatingDialogFragment dialog = new RatingDialogFragment();
