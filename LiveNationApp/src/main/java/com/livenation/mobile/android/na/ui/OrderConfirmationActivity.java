@@ -37,10 +37,10 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Cart;
+import com.mobilitus.tm.tickets.models.DeliveryMethod;
 import com.mobilitus.tm.tickets.models.Total;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -86,7 +86,12 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
         this.cart = (Cart) getIntent().getSerializableExtra(Constants.EXTRA_CART);
         this.isResale = getIntent().getBooleanExtra(Constants.EXTRA_IS_CART_TMPLUS, false);
         this.isUpgradable = getIntent().getBooleanExtra(EXTRA_SHOW_UPGRADABLE, false);
-        this.deliveryMethod = getIntent().getStringExtra(Constants.EXTRA_DELIVERY_METHOD);
+        DeliveryMethod deliveryMethod = (DeliveryMethod) getIntent().getSerializableExtra(Constants.EXTRA_DELIVERY_METHOD);
+        if (deliveryMethod != null) {
+            this.deliveryMethod = deliveryMethod.getName();
+        } else {
+            this.deliveryMethod = "default";
+        }
         this.image = (TransitioningImageView) findViewById(R.id.activity_order_confirmation_image);
         this.headerThankYouText = (TextView) findViewById(R.id.activity_order_confirmation_quantity);
         this.eventNameText = (TextView) findViewById(R.id.activity_order_confirmation_event_name);
@@ -135,7 +140,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                         AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits(),
                         AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
                         AnalyticConstants.PROP_TYPE, resale,
-                        AnalyticConstants.PROP_DELIVERY_METHOD, getCart().getDeliveryMethod().getName());
+                        AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod);
             }
 
             @Override
@@ -155,7 +160,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                         AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits(),
                         AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
                         AnalyticConstants.PROP_TYPE, resale,
-                        AnalyticConstants.PROP_DELIVERY_METHOD, getCart().getDeliveryMethod().getName());
+                        AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod);
             }
         });
 
