@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.adobe.mobile.Config;
+import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -21,7 +23,6 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +31,21 @@ import java.util.Map;
  * Created by elodieferrais on 4/2/14.
  */
 public abstract class LiveNationFragmentActivity extends FragmentActivity {
+    private static boolean isApsalarStarted = false;
+    protected static Class apsalarSessionActivity = null;
 
     protected void onCreate(Bundle savedInstanceState, int res) {
         super.onCreate(savedInstanceState);
+
+        if (!isApsalarStarted) {
+            //Initialize apsalar
+            isApsalarStarted = true;
+            apsalarSessionActivity = getClass();
+            Apsalar.setFBAppId(getString(R.string.facebook_app_id));
+            Apsalar.startSession(this, getString(R.string.apsalar_key), getString(R.string.apsalar_secret));
+
+        }
+
         setContentView(res);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -202,5 +215,20 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
             AppIndex.AppIndexApi.viewEnd(googleApiClient, this,
                     appUrl);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (this.getClass() == apsalarSessionActivity) {
+            try {
+                Apsalar.unregisterApsalarReceiver();
+            } catch (Exception e) {
+                LiveNationLibrary.getErrorTracker().track("Apsalar Error:" + e.toString(), null);
+            }
+            Apsalar.endSession();
+        }
+
+        super.onDestroy();
     }
 }
