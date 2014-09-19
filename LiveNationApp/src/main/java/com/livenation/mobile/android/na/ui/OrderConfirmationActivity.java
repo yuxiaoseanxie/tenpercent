@@ -233,9 +233,8 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 layoutParams.bottomMargin = margin;
                 actionsContainer.addView(button, layoutParams);
 
-                //temporarily disabled for testing upgrades
-//                if (++numberAdded >= 3)
-//                    break;
+                if (++numberAdded >= 3)
+                    break;
             } catch (IllegalArgumentException e) {
                 Log.w(getClass().getSimpleName(), "Invalid action name '" + name + "', ignoring.", e);
             }
