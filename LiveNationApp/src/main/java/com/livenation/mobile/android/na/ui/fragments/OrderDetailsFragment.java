@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -584,28 +585,43 @@ public class OrderDetailsFragment extends Fragment {
 
             track();
 
-            DialogFragment resaleDialog = new DialogFragment() {
-                @NonNull
-                @Override
-                public Dialog onCreateDialog(Bundle savedInstanceState) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.dialog_resale_title);
-                    builder.setMessage(R.string.dialog_resale_message);
-                    builder.setPositiveButton(R.string.dialog_resale_confirm_positive, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            TicketingUtils.openResaleTransferPlaceholder(getActivity(), getTicketsCart());
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, null);
-                    return builder.create();
-                }
-            };
+            DialogFragment resaleDialog = ResaleDialog.newInstance(getTicketsCart());
             resaleDialog.show(getFragmentManager(), "ResaleDialogFragment");
         }
     }
 
     //endregion
+
+    public static class ResaleDialog extends DialogFragment {
+        private static final String EXTRA_URI = "uri";
+
+        public static ResaleDialog newInstance(Cart cart) {
+            Bundle args = new Bundle();
+            args.putString(EXTRA_URI, TicketingUtils.getResaleTransferUri(cart).toString());
+            ResaleDialog fragment = new ResaleDialog();
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Uri uri = Uri.parse(getArguments().getString(EXTRA_URI));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.dialog_resale_title);
+            builder.setMessage(R.string.dialog_resale_message);
+            builder.setPositiveButton(R.string.dialog_resale_confirm_positive, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+
+            return builder.create();
+        }
+    }
 
     private static enum SelectionMode {
         NONE,
