@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.init.Environment;
 import com.mobilitus.tm.tickets.models.Total;
 
 import java.math.BigDecimal;
@@ -43,6 +44,20 @@ public class CashUtils {
 
 
     //region Utilities
+
+    public static String getHostForEnvironment(Environment environment) {
+        switch (environment) {
+            default:
+            case Production:
+            case ProductionDirect:
+                return "connect.squareup.com";
+
+            case Staging:
+            case StagingDirect:
+            case Integration:
+                return "cash.square-sandbox.com";
+        }
+    }
 
     public static void dismissKeyboard(@Nullable View view) {
         if (view != null) {

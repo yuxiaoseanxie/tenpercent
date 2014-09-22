@@ -68,7 +68,7 @@ public class SquareCashService {
         Uri.Builder builder = new Uri.Builder();
 
         builder.scheme("https");
-        builder.encodedAuthority(context.getString(R.string.square_cash_environment));
+        builder.encodedAuthority(CashUtils.getHostForEnvironment(LiveNationLibrary.getEnvironmentProvider().getEnvironment()));
         builder.appendEncodedPath(route);
 
         if (params != null) {
