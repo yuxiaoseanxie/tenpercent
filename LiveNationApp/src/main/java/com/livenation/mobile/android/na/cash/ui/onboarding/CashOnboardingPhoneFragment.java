@@ -18,13 +18,28 @@ import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatu
 import com.livenation.mobile.android.na.cash.service.responses.CashSession;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
+import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
+import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
+import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
 
 public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     private EditText number;
 
+    private ValidationManager validationManager;
+
     private final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
 
     //region Lifecycle
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.validationManager = new ValidationManager();
+
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +49,16 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
         number.setOnEditorActionListener(numberEditorListener);
         number.setText(SquareCashService.getInstance().getStoredPhoneNumber());
 
+        validationManager.attach(number, NotEmptyValidator.getInstance(), new EditTextValidationListener());
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        validationManager.detach(number);
     }
 
     //endregion

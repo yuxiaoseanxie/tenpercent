@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,8 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         long amountRequested = pricePerTicket * (getCashRequestActivity().getTicketQuantity() - 1);
         BigDecimal formatableAmountRequested = BigDecimal.valueOf(amountRequested / 100.0);
         amount.setText(getString(R.string.cash_confirmation_title_fmt, TicketingUtils.formatCurrency(null, formatableAmountRequested)));
+
+        Log.i(getClass().getSimpleName(), "getTicketQuantity: " + getCashRequestActivity().getTicketQuantity());
 
         return view;
     }

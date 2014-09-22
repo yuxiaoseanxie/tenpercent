@@ -18,16 +18,23 @@ import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
+import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
+import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
 import com.mobilitus.tm.tickets.models.User;
 
 public class CashOnboardingNameFragment extends CashOnboardingFragment {
     private EditText nameField;
+
+    private ValidationManager validationManager;
 
     //region Lifecycle
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.validationManager = new ValidationManager();
 
         setRetainInstance(true);
     }
@@ -56,14 +63,26 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
             nameField.setText(name);
         }
 
+        validationManager.attach(nameField, NotEmptyValidator.getInstance(), new EditTextValidationListener());
+
         return view;
     }
 
-    //endregion
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        validationManager.detach(nameField);
+    }
+
+//endregion
 
 
     @Override
     public void next() {
+        if (!validationManager.isValid())
+            return;
+
         SquareCashService.getInstance().updateUserFullName(nameField.getText().toString(), new SquareCashService.ApiCallback<CashResponse>() {
             @Override
             public void onErrorResponse(VolleyError error) {

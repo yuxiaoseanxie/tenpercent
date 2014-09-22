@@ -22,6 +22,9 @@ import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
+import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
+import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
+import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
 
 public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     private static final long RESEND_ENABLE_DELAY = 2000;
@@ -29,11 +32,15 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     private EditText code;
     private Button resend;
 
+    private ValidationManager validationManager;
+
     private boolean requestedCode = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.validationManager = new ValidationManager();
 
         setRetainInstance(true);
     }
@@ -53,7 +60,16 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
         String formattedPhoneNumber = PhoneNumberUtils.formatNumber(getPhoneNumber());
         title.setText(getString(R.string.cash_verification_code_text_fmt, formattedPhoneNumber));
 
+        validationManager.attach(code, NotEmptyValidator.getInstance(), new EditTextValidationListener());
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        validationManager.detach(code);
     }
 
     @Override
