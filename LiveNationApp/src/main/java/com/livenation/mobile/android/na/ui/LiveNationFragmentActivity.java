@@ -227,6 +227,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
                 LiveNationLibrary.getErrorTracker().track("Apsalar Error:" + e.toString(), null);
             }
             Apsalar.endSession();
+            isApsalarStarted = false;
         }
 
         super.onDestroy();
