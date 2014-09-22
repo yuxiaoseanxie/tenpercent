@@ -118,6 +118,9 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
 
     @Override
     public void next() {
+        if (!validationManager.isValid())
+            return;
+
         CashUtils.dismissKeyboard(code);
 
         final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();

@@ -85,6 +85,9 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
 
     @Override
     public void next() {
+        if (!validationManager.isValid())
+            return;
+
         CashUtils.dismissKeyboard(number);
 
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);

@@ -28,6 +28,7 @@ import com.mobilitus.tm.tickets.models.Total;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;
@@ -103,11 +104,20 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
 
     private class NextClickListener implements View.OnClickListener {
+        private int calculateTotalUsedQuantity(HashMap<String, Integer> quantities) {
+            int sum = 1;
+            for (Map.Entry<String, Integer> entry : quantities.entrySet())
+                sum += entry.getValue();
+
+            return sum;
+        }
+
         private void showOnBoarding(CashCustomerStatus status, HashMap<String, Integer> quantities) {
             Intent intent = new Intent(CashAmountsActivity.this, CashOnboardingActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, quantities);
             intent.putExtra(CashUtils.EXTRA_CUSTOMER_STATUS, status);
+            intent.putExtra(CashUtils.EXTRA_USED_TICKET_QUANTITY, calculateTotalUsedQuantity(quantities));
             startActivity(intent);
         }
 
@@ -115,6 +125,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
             Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
             intent.putExtras(getIntent().getExtras());
             intent.putExtra(CashUtils.EXTRA_TICKET_PER_CONTACT_QUANTITIES, quantities);
+            intent.putExtra(CashUtils.EXTRA_USED_TICKET_QUANTITY, calculateTotalUsedQuantity(quantities));
             startActivity(intent);
         }
 

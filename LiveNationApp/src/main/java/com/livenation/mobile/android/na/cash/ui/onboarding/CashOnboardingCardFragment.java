@@ -108,7 +108,7 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
 
     @Override
     public void next() {
-        if (validationManager.isValid())
+        if (!validationManager.isValid())
             return;
 
         CashUtils.dismissKeyboard(getActivity().getCurrentFocus());

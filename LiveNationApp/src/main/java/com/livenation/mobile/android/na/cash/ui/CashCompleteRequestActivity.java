@@ -53,6 +53,10 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
         return getIntent().getIntExtra(CashUtils.EXTRA_TICKET_QUANTITY, 0);
     }
 
+    public int getUsedTicketQuantity() {
+        return getIntent().getIntExtra(CashUtils.EXTRA_USED_TICKET_QUANTITY, 0);
+    }
+
     public Total getTotal() {
         return (Total) getIntent().getSerializableExtra(CashUtils.EXTRA_TOTAL);
     }
