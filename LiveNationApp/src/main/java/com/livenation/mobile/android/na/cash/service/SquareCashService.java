@@ -196,6 +196,8 @@ public class SquareCashService {
             public void onResponse(AccessToken accessToken) {
                 JSONObject body = new JSONObject();
                 try {
+                    body.put("force_new", "true");
+
                     if (phoneNumber != null)
                         body.put("phone_number", phoneNumber);
 
