@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.ui.HomeActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
@@ -445,5 +446,10 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
                     })
                     .create();
         }
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_NOTIFICATIONS;
     }
 }

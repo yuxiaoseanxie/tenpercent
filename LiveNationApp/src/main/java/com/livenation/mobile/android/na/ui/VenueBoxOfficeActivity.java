@@ -97,4 +97,9 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
             return VenueBoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getSections());
         }
     }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_VDP_VENUE_INFO;
+    }
 }

@@ -31,7 +31,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements EventsView {
@@ -62,7 +64,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_VENUE_CACHED)) {
-            Venue venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
+            venue = (Venue) args.getSerializable(PARAMETER_VENUE_CACHED);
             setVenue(venue);
         } else {
 
@@ -173,17 +175,15 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     }
 
     @Override
-    protected Props getAnalyticsProps() {
-        if (venue != null) {
-            Props props = new Props();
-            if (args.containsKey(VenueActivity.PARAMETER_VENUE_ID)) {
-                String venueIdRaw = args.getString(VenueActivity.PARAMETER_VENUE_ID);
-                props.put(AnalyticConstants.VENUE_ID, venueIdRaw);
-            }
-            return props;
+    protected Map<String, Object> getAnalyticsProps() {
+        Map<String, Object> props = new HashMap<String, Object>();
+        if (args.containsKey(VenueActivity.PARAMETER_VENUE_ID)) {
+            String venueIdRaw = args.getString(VenueActivity.PARAMETER_VENUE_ID);
+            props.put(AnalyticConstants.VENUE_ID, DataModelHelper.getNumericEntityId(venueIdRaw));
         }
-        return null;
+        return props;
     }
+
 
     public static Bundle getArguments(String venueIdRaw) {
         Bundle bundle = new Bundle();
@@ -219,6 +219,11 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     }
 
     @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_VDP;
+    }
+
+
     protected void onStop() {
         super.onStop();
         googleViewEnd();

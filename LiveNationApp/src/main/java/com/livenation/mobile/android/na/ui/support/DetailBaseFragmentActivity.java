@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 
@@ -75,6 +77,7 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, getShareSubject());
         shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
         startActivity(Intent.createChooser(shareIntent, getShareIntentChooserTitle()));
+        OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SHARE, null);
     }
 
     protected void onSearch() {

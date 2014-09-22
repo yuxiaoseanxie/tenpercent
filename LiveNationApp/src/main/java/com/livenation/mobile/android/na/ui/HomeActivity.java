@@ -34,7 +34,9 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
@@ -134,6 +136,11 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     }
 
     @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_HOME;
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.syncState();
@@ -202,6 +209,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case R.id.menu_home_contact_item:
                 LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
                 LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
+                OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
                 ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
                 return true;
 
