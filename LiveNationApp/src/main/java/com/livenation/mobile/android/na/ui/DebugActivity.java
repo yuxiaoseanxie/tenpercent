@@ -26,6 +26,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
+import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
@@ -226,6 +227,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         actionsAdapter.notifyDataSetChanged();
         LiveNationApplication.getEnvironmentProvider().setEnvironment(environment);
         LiveNationApplication.getAccessTokenProvider().clear();
+        SquareCashService.getInstance().clearSession();
         NotificationsRegistrationManager.getInstance().register();
     }
 
