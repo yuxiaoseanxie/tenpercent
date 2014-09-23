@@ -21,13 +21,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
+import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
@@ -191,7 +194,10 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         CommerceRecordingModeItem commerceRecordingModeItem = new CommerceRecordingModeItem(getString(R.string.debug_item_commerce_session_recording));
         actions.add(commerceRecordingModeItem);
 
-        //Square Cash Item
+        //Square Cash
+        DeleteCashUserItem deleteCashUserItem = new DeleteCashUserItem(getString(R.string.debug_action_delete_cash_user));
+        actions.add(deleteCashUserItem);
+
         ShowCashFlowItem showCashFlowItem = new ShowCashFlowItem(getString(R.string.cash_call_to_action));
         actions.add(showCashFlowItem);
     }
@@ -542,6 +548,37 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         @Override
         public int getType() {
             return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class DeleteCashUserItem extends DebugItem {
+        private DeleteCashUserItem(String name) {
+            super(name, "");
+        }
+
+        @Override
+        public void doAction(Context context) {
+            final LoadingDialogFragment loadingDialogFragment = new LoadingDialogFragment();
+            loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.TAG);
+            SquareCashService.getInstance().deleteUser(new SquareCashService.ApiCallback<CashResponse>() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loadingDialogFragment.dismissAllowingStateLoss();
+
+                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                    errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
+                }
+
+                @Override
+                public void onResponse(CashResponse response) {
+                    loadingDialogFragment.dismissAllowingStateLoss();
+                }
+            });
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_ACTION;
         }
     }
 

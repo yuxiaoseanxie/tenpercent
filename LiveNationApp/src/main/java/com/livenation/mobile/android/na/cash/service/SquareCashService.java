@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
@@ -224,6 +226,29 @@ public class SquareCashService {
                 callback.onErrorResponse(error);
             }
         });
+    }
+
+    public void deleteUser(final ApiCallback<CashResponse> callback) {
+        if (persistenceProvider.loadSession() == null) {
+            callback.onErrorResponse(new VolleyError("No user to delete."));
+            return;
+        }
+
+        SquareRequest<CashResponse> request = makeDeleteRequest(makeRoute("/cash"), null, CashResponse.class, new Response.Listener<CashResponse>() {
+            @Override
+            public void onResponse(CashResponse response) {
+                callback.onResponse(response);
+            }
+        }, callback);
+
+        try {
+            Map<String, String> headers = request.getHeaders();
+            headers.put("Authorization", context.getString(R.string.cash_debug_delete_auth_header));
+            request.setHeaders(headers);
+        } catch (AuthFailureError ignored) {
+        }
+
+        requestQueue.add(request);
     }
 
     public void retrieveCustomerStatus(ApiCallback<CashCustomerStatus> callback) {

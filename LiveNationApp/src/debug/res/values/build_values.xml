@@ -8,4 +8,6 @@
 
     <string name="urbanairship_permission">com.livenation.mobile.android.na.debug.permission.UA_DATA</string>
     <string name="urbanairship_authorities">com.livenation.mobile.android.na.debug.urbanairship.provider</string>
+
+    <string name="cash_debug_delete_auth_header">Client a2jqttf932pokmmkp0xtzz8ku 31842a1e8aba240fcc85c20d2ed74f83</string>
 </resources>

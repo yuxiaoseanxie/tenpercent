@@ -321,6 +321,7 @@
     <string name="cash_marketing_line_2">All you need is a debit card.</string>
     <string name="cash_marketing_cta">Sounds good!</string>
     <string name="square_cash_error_zero_quantities">You must assign a quantity of 1 or more to at least one recipient.</string>
+    <string name="debug_action_delete_cash_user">Delete Cash User</string>
 
     <plurals name="cash_transaction_detail">
         <item quantity="one">1 Ticket | %2$s</item>
