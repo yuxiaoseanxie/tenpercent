@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.cash.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class CashCompleteRequestActivity extends LiveNationFragmentActivity {
         nextView.setText(R.string.cash_action_done);
         nextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 finish();
             }
         });

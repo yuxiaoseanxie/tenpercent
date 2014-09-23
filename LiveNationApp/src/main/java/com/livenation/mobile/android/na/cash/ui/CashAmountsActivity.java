@@ -34,6 +34,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindActivity;
+
 public class CashAmountsActivity extends LiveNationFragmentActivity {
     private CashAmountsFragment fragment;
 
@@ -140,18 +145,22 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
                 @Override
                 public void onResponse(CashSession response) {
-                    service.retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
+                    Observable<CashCustomerStatus> status = bindActivity(CashAmountsActivity.this, service.retrieveCustomerStatus());
+                    status.subscribe(new Observer<CashCustomerStatus>() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
+                        public void onCompleted() {
                             loadingDialogFragment.dismiss();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
                             showOnBoarding(null, quantities);
                         }
 
                         @Override
-                        public void onResponse(CashCustomerStatus response) {
-                            loadingDialogFragment.dismiss();
-                            if (response.isBlocked())
-                                showOnBoarding(response, quantities);
+                        public void onNext(CashCustomerStatus customerStatus) {
+                            if (customerStatus.isBlocked())
+                                showOnBoarding(customerStatus, quantities);
                             else
                                 showComplete(quantities);
                         }

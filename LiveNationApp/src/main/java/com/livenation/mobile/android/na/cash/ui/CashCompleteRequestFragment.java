@@ -31,6 +31,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindFragment;
+
 public class CashCompleteRequestFragment extends ListFragment implements ContactDataAdapter.DataProvider {
     private ArrayList<ContactData> contacts;
     private ContactDataAdapter adapter;
@@ -90,7 +95,7 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         String dateString = event != null? TicketingUtils.formatDate(event.getLocalStartTime()) : getString(R.string.data_missing_placeholder);
         String caption = getString(R.string.cash_request_caption_fmt, eventName, venue, dateString);
         CashCustomization senderCustomization = new CashCustomization(getCashRequestActivity().getNote(), caption);
-        ArrayList<CashPayment> payments = new ArrayList<CashPayment>();
+        ArrayList<CashPayment> payments = new ArrayList<>();
         for (ContactData contact : contacts) {
             int quantity = quantities.get(contact.getId());
 
@@ -119,27 +124,26 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
         for (int i = 0, size = payments.size(); i < size; i++) {
             CashPayment payment = payments.get(i);
             final int offset = i;
-            SquareCashService.getInstance().initiatePayment(payment, new SquareCashService.ApiCallback<CashPayment>() {
+
+            Observable<CashPayment> observable = bindFragment(this, SquareCashService.getInstance().initiatePayment(payment));
+            observable.subscribe(new Observer<CashPayment>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
+                public void onCompleted() {
                     if (counter.decrementAndGet() == 0) {
                         loadingDialogFragment.dismiss();
 
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CashUtils.ACTION_REQUESTS_COMPLETED));
                     }
+                }
 
-                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                @Override
+                public void onError(Throwable e) {
+                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                     errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
                 }
 
                 @Override
-                public void onResponse(CashPayment response) {
-                    if (counter.decrementAndGet() == 0) {
-                        loadingDialogFragment.dismiss();
-
-                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(CashUtils.ACTION_REQUESTS_COMPLETED));
-                    }
-
+                public void onNext(CashPayment cashPayment) {
                     adapter.add(contacts.get(offset));
                 }
             });

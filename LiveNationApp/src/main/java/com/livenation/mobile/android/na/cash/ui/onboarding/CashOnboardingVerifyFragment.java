@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneNumberUtils;
 import android.view.KeyEvent;
@@ -25,6 +26,11 @@ import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragmen
 import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
 import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
+
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindFragment;
 
 public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
     private static final long RESEND_ENABLE_DELAY = 2000;
@@ -96,11 +102,16 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
         final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
-        SquareCashService.getInstance().requestPhoneVerification(getPhoneNumber(), new SquareCashService.ApiCallback<CashResponse>() {
+        Observable<CashResponse> observable = bindFragment(this, SquareCashService.getInstance().requestPhoneVerification(getPhoneNumber()));
+        observable.subscribe(new Observer<CashResponse>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
                 loadingDialogFragment.dismiss();
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
 
                 resendEnabler.removeMessages(0);
@@ -108,9 +119,7 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
             }
 
             @Override
-            public void onResponse(CashResponse response) {
-                loadingDialogFragment.dismiss();
-
+            public void onNext(CashResponse cashResponse) {
                 scheduleEnableResend();
             }
         });
@@ -126,17 +135,21 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
         final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
-        SquareCashService.getInstance().verifyPhoneNumber(getPhoneNumber(), code.getText().toString(), new SquareCashService.ApiCallback<CashResponse>() {
+        Observable<CashResponse> observable = bindFragment(this, SquareCashService.getInstance().verifyPhoneNumber(getPhoneNumber(), code.getText().toString()));
+        observable.subscribe(new Observer<CashResponse>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
                 loadingDialogFragment.dismiss();
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
-            public void onResponse(CashResponse response) {
-                loadingDialogFragment.dismiss();
+            public void onNext(CashResponse cashResponse) {
                 getCashRequestDetailsActivity().continueToIdentity();
             }
         });
@@ -159,7 +172,7 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
 
     private final View.OnClickListener resendCodeClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             requestedCode = false;
             requestCode();
 
@@ -187,7 +200,7 @@ public class CashOnboardingVerifyFragment extends CashOnboardingFragment {
 
     private final Handler resendEnabler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @Override
-        public boolean handleMessage(Message message) {
+        public boolean handleMessage(@NonNull Message message) {
             enableResend();
 
             return true;

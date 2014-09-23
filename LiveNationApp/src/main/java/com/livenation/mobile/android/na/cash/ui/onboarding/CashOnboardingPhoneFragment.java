@@ -22,6 +22,11 @@ import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
 import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
 
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindFragment;
+
 public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     private EditText number;
 
@@ -67,18 +72,22 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
     //region Handshake
 
     private void retrieveCustomerStatus() {
-        SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
+        Observable<CashCustomerStatus> observable = bindFragment(this, SquareCashService.getInstance().retrieveCustomerStatus());
+        observable.subscribe(new Observer<CashCustomerStatus>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
                 loadingDialogFragment.dismiss();
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
-            public void onResponse(CashCustomerStatus response) {
-                loadingDialogFragment.dismiss();
-                getCashRequestDetailsActivity().continueWithCustomerStatus(response);
+            public void onNext(CashCustomerStatus customerStatus) {
+                getCashRequestDetailsActivity().continueWithCustomerStatus(customerStatus);
             }
         });
     }

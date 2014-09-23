@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,11 @@ import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextVal
 import com.livenation.mobile.android.ticketing.utils.forms.validators.CardChecksumValidator;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.MonthValidator;
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NumberValidator;
+
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindFragment;
 
 public class CashOnboardingCardFragment extends CashOnboardingFragment {
     private EditText cardNumber;
@@ -121,25 +125,27 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
 
         final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
-        SquareCashService.getInstance().linkCard(linkInfo, new SquareCashService.ApiCallback<CashCardLinkResponse>() {
+        Observable<CashCardLinkResponse> observable = bindFragment(this, SquareCashService.getInstance().linkCard(linkInfo));
+        observable.subscribe(new Observer<CashCardLinkResponse>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
                 loadingDialogFragment.dismiss();
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
-            public void onResponse(CashCardLinkResponse response) {
-                Log.i(CashUtils.LOG_TAG, "Got response " + response);
-                loadingDialogFragment.dismiss();
-
-                if (response.isValid()) {
+            public void onNext(CashCardLinkResponse cashCardLinkResponse) {
+                if (cashCardLinkResponse.isValid()) {
                     getCashRequestDetailsActivity().continueToName();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(R.string.error_title_generic);
-                    builder.setMessage(response.getErrorMessage());
+                    builder.setMessage(cashCardLinkResponse.getErrorMessage());
                     builder.setPositiveButton(android.R.string.ok, null);
                     builder.show();
                 }

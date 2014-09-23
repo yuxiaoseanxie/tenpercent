@@ -27,6 +27,11 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
 import com.mobilitus.tm.tickets.models.Total;
 
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindActivity;
+
 public class CashRecipientsActivity extends LiveNationFragmentActivity {
     private CashRecipientsFragment fragment;
 
@@ -110,13 +115,19 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
             final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
             loadingDialogFragment.show(getSupportFragmentManager(), CashLoadingDialogFragment.TAG);
 
-            SquareCashService.getInstance().retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
+            Observable<CashCustomerStatus> observable = bindActivity(CashRecipientsActivity.this, SquareCashService.getInstance().retrieveCustomerStatus());
+            observable.subscribe(new Observer<CashCustomerStatus>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
+                public void onCompleted() {
                     loadingDialogFragment.dismiss();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    VolleyError error = (VolleyError) e;
                     if (error.networkResponse != null &&
-                        error.networkResponse.statusCode >= 400 &&
-                        error.networkResponse.statusCode <= 499) {
+                            error.networkResponse.statusCode >= 400 &&
+                            error.networkResponse.statusCode <= 499) {
                         SquareCashService.getInstance().clearSession();
                         showAmountsActivity(null);
                     } else {
@@ -126,9 +137,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
                 }
 
                 @Override
-                public void onResponse(CashCustomerStatus response) {
-                    loadingDialogFragment.dismiss();
-                    showAmountsActivity(response);
+                public void onNext(CashCustomerStatus customerStatus) {
+                    showAmountsActivity(customerStatus);
                 }
             });
         }

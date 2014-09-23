@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.cash.ui.dialogs;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -11,7 +10,6 @@ import android.widget.Button;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
-import com.livenation.mobile.android.na.cash.ui.CashRecipientsActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.mobilitus.tm.tickets.models.Total;
 

@@ -136,5 +136,9 @@ dependencies {
 	compile('io.segment.analytics.android:all:1.4.4+@aar') {
         transitive = true
     }
+
+    compile 'com.netflix.rxjava:rxjava-core:0.20.3'
+    compile 'com.netflix.rxjava:rxjava-android:0.20.3'
+
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }

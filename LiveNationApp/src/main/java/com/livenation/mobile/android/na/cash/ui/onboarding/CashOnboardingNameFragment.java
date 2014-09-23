@@ -23,6 +23,11 @@ import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextVal
 import com.livenation.mobile.android.ticketing.utils.forms.validators.NotEmptyValidator;
 import com.mobilitus.tm.tickets.models.User;
 
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.observables.AndroidObservable.bindFragment;
+
 public class CashOnboardingNameFragment extends CashOnboardingFragment {
     private EditText nameField;
 
@@ -83,15 +88,21 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
         if (!validationManager.isValid())
             return;
 
-        SquareCashService.getInstance().updateUserFullName(nameField.getText().toString(), new SquareCashService.ApiCallback<CashResponse>() {
+        Observable<CashResponse> observable = bindFragment(this, SquareCashService.getInstance().updateUserFullName(nameField.getText().toString()));
+        observable.subscribe(new Observer<CashResponse>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
-            public void onResponse(CashResponse response) {
+            public void onNext(CashResponse cashResponse) {
                 getCashRequestDetailsActivity().setName(nameField.getText().toString());
                 getCashRequestDetailsActivity().continueToPhoneVerification();
             }
