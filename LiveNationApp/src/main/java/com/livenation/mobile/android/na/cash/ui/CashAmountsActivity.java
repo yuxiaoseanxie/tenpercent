@@ -10,16 +10,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.model.ContactData;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashCustomerStatus;
+import com.livenation.mobile.android.na.cash.service.responses.CashSession;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.na.cash.ui.onboarding.CashOnboardingActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -121,6 +125,41 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
             startActivity(intent);
         }
 
+        private void tryImplicitSessionOpen(final HashMap<String, Integer> quantities) {
+            final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
+            loadingDialogFragment.show(getSupportFragmentManager(), CashLoadingDialogFragment.TAG);
+
+            final SquareCashService service = SquareCashService.getInstance();
+            String phoneNumber = service.getStoredPhoneNumber();
+            service.startSession(null, phoneNumber, new SquareCashService.ApiCallback<CashSession>() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loadingDialogFragment.dismiss();
+                    showOnBoarding(null, quantities);
+                }
+
+                @Override
+                public void onResponse(CashSession response) {
+                    service.retrieveCustomerStatus(new SquareCashService.ApiCallback<CashCustomerStatus>() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loadingDialogFragment.dismiss();
+                            showOnBoarding(null, quantities);
+                        }
+
+                        @Override
+                        public void onResponse(CashCustomerStatus response) {
+                            loadingDialogFragment.dismiss();
+                            if (response.isBlocked())
+                                showOnBoarding(response, quantities);
+                            else
+                                showComplete(quantities);
+                        }
+                    });
+                }
+            });
+        }
+
         private void showComplete(HashMap<String, Integer> quantities) {
             Intent intent = new Intent(CashAmountsActivity.this, CashCompleteRequestActivity.class);
             intent.putExtras(getIntent().getExtras());
@@ -141,6 +180,8 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
             CashCustomerStatus status = getCustomerStatus();
             if (SquareCashService.getInstance().hasSession() && status != null && !status.isBlocked()) {
                 showComplete(quantities);
+            } else if (!TextUtils.isEmpty(SquareCashService.getInstance().getStoredPhoneNumber())) {
+                tryImplicitSessionOpen(quantities);
             } else {
                 showOnBoarding(null, quantities);
             }
