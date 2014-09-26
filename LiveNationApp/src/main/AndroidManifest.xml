@@ -111,10 +111,12 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderConfirmationActivity"
+            android:launchMode="singleTop"
             android:label="@string/activity_label_order_confirmation" />
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderDetailsActivity"
+            android:launchMode="singleTop"
             android:parentActivityName="com.livenation.mobile.android.na.ui.OrderHistoryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -122,6 +124,7 @@
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderHistoryActivity"
+            android:launchMode="singleTop"
             android:parentActivityName="com.livenation.mobile.android.na.ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
