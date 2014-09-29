@@ -45,47 +45,51 @@ public class LoginHelper {
         } else if (authConfiguration.getTimestamp() != null && Math.abs(authConfiguration.getTimestamp() - System.currentTimeMillis()) < USER_UPDATE_PERIOD) {
             callback.onResponse(false, getAuthConfiguration().getAccessToken(), getSavedUser());
         } else {
-            ssoManager.login(authConfiguration.getSsoProviderId(), false, new SsoLoginCallback() {
-                @Override
-                public void onLoginSucceed(String accessToken, User user) {
-                    if (callback != null) {
-                        boolean hasTokenChanged = !accessToken.equals(getAuthConfiguration().getAccessToken());
-                        if (hasTokenChanged) {
-                            LiveNationApplication.getAccessTokenProvider().clearCache();
-                        }
-                        callback.onResponse(hasTokenChanged, getAuthConfiguration().getAccessToken(), user);
-                    }
-                }
-
-                @Override
-                public void onLoginFailed(final LiveNationError error) {
-                    ssoManager.logout(new SsoLogoutCallback() {
-                        @Override
-                        public void onLogoutSucceed() {
-                            if (callback != null) {
-                                callback.onErrorResponse(error);
-                            }
-                        }
-
-                        @Override
-                        public void onLogoutFailed(LiveNationError error) {
-                            if (callback != null) {
-                                callback.onErrorResponse(error);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onLoginCanceled() {
-                    //Should never happen in this case
-                }
-            }, activity);
+            login(authConfiguration.getSsoProviderId(), false, callback, activity);
         }
     }
 
     public static SsoManager.AuthConfiguration getAuthConfiguration() {
         return ssoProviderPersistence.getAuthConfiguration();
+    }
+
+    public static void login(final SsoManager.SSO_TYPE ssoType, boolean allowForeground, final SsoUpdatedUserCallback callback, Activity activity) {
+        ssoManager.login(ssoType, allowForeground, new SsoLoginCallback() {
+            @Override
+            public void onLoginSucceed(String ssoAccessToken, User user) {
+                if (callback != null) {
+                    boolean hasTokenChanged = !ssoAccessToken.equals(getAuthConfiguration().getAccessToken());
+                    if (hasTokenChanged) {
+                        LiveNationApplication.getAccessTokenProvider().clearCache();
+                    }
+                    callback.onResponse(hasTokenChanged, getAuthConfiguration().getAccessToken(), user);
+                }
+            }
+
+            @Override
+            public void onLoginFailed(final LiveNationError error) {
+                ssoManager.logout(new SsoLogoutCallback() {
+                    @Override
+                    public void onLogoutSucceed() {
+                        if (callback != null) {
+                            callback.onErrorResponse(error);
+                        }
+                    }
+
+                    @Override
+                    public void onLogoutFailed(LiveNationError error) {
+                        if (callback != null) {
+                            callback.onErrorResponse(error);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onLoginCanceled() {
+                //Should never happen in this case
+            }
+        }, activity);
     }
 
     public static boolean isLogout() {

@@ -212,7 +212,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         accessTokenItem.setValue("...");
         actionsAdapter.notifyDataSetChanged();
         LiveNationApplication.getEnvironmentProvider().setEnvironment(environment);
-        LiveNationApplication.getAccessTokenProvider().clear();
+        LiveNationApplication.getAccessTokenProvider().clearCache();
         NotificationsRegistrationManager.getInstance().register();
     }
 
