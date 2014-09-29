@@ -134,7 +134,8 @@ public class CashOnboardingCardFragment extends CashOnboardingFragment {
 
             @Override
             public void onError(Throwable e) {
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
+                loadingDialogFragment.dismiss();
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 

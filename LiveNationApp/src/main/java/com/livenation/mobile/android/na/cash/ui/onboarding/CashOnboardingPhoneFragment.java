@@ -101,16 +101,22 @@ public class CashOnboardingPhoneFragment extends CashOnboardingFragment {
 
         loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
 
-        SquareCashService.getInstance().startSession(null, number.getText().toString(), new SquareCashService.ApiCallback<CashSession>() {
+        Observable<CashSession> observable = bindFragment(CashOnboardingPhoneFragment.this, SquareCashService.getInstance().startSession(null, number.getText().toString()));
+        observable.subscribe(new Observer<CashSession>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onCompleted() {
                 loadingDialogFragment.dismiss();
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                loadingDialogFragment.dismiss();
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 
             @Override
-            public void onResponse(CashSession response) {
+            public void onNext(CashSession session) {
                 getCashRequestDetailsActivity().setPhoneNumber(number.getText().toString());
                 retrieveCustomerStatus();
             }

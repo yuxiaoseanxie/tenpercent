@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.model.ContactData;
@@ -136,15 +135,20 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
             final SquareCashService service = SquareCashService.getInstance();
             String phoneNumber = service.getStoredPhoneNumber();
-            service.startSession(null, phoneNumber, new SquareCashService.ApiCallback<CashSession>() {
+            Observable<CashSession> observable = bindActivity(CashAmountsActivity.this, service.startSession(null, phoneNumber));
+            observable.subscribe(new Observer<CashSession>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
+                public void onCompleted() {
                     loadingDialogFragment.dismiss();
+                }
+
+                @Override
+                public void onError(Throwable e) {
                     showOnBoarding(null, quantities);
                 }
 
                 @Override
-                public void onResponse(CashSession response) {
+                public void onNext(CashSession session) {
                     Observable<CashCustomerStatus> status = bindActivity(CashAmountsActivity.this, service.retrieveCustomerStatus());
                     status.subscribe(new Observer<CashCustomerStatus>() {
                         @Override
@@ -154,6 +158,7 @@ public class CashAmountsActivity extends LiveNationFragmentActivity {
 
                         @Override
                         public void onError(Throwable e) {
+                            loadingDialogFragment.dismiss();
                             showOnBoarding(null, quantities);
                         }
 

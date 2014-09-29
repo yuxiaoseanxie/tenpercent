@@ -12,6 +12,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
+import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkInfo;
 import com.livenation.mobile.android.na.cash.service.responses.CashCardLinkResponse;
@@ -33,8 +35,11 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Observer;
-import rx.subjects.BehaviorSubject;
-import rx.subjects.ReplaySubject;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.functions.Func0;
+import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 public class SquareCashService {
     public static final String ACTION_SESSION_CHANGED = "com.livenation.mobile.android.na.cash.service.SquareCashService.ACTION_SESSION_CHANGED";
@@ -84,12 +89,17 @@ public class SquareCashService {
         return builder.build().toString();
     }
 
-    private <T extends CashResponse> void injectHeaders(SquareRequest<T> request) {
+    private <T extends CashResponse> void injectHeaders(@NonNull SquareRequest<T> request,
+                                                        @Nullable Map<String, String> extraHeaders) {
         HashMap<String, String> headers = new HashMap<>();
         if (hasSession()) {
             headers.put("Authorization", "Bearer " + session.getAccessToken());
         }
         headers.put("Content-Type", "application/json");
+
+        if (extraHeaders != null)
+            headers.putAll(extraHeaders);
+
         request.setHeaders(headers);
     }
 
@@ -97,35 +107,42 @@ public class SquareCashService {
     private <T extends CashResponse> Observable<T> doRequest(int method,
                                                              @NonNull String url,
                                                              @Nullable String requestBody,
-                                                             @NonNull Class<T> responseClass) {
+                                                             @NonNull Class<T> responseClass,
+                                                             @Nullable Map<String, String> extraHeaders) {
         Log.i(CashUtils.LOG_TAG, "Outgoing request to '" + url + "' with body: " + requestBody);
 
-        ReplaySubject<T> subject = ReplaySubject.create(1);
-        VolleyObservableAdapter<T> adapter = new VolleyObservableAdapter<>(subject);
-        SquareRequest<T> request = new SquareRequest<>(method, url, responseClass, requestBody, adapter, adapter);
-
-        injectHeaders(request);
-        requestQueue.add(request);
-
-        return subject;
+        final PublishSubject<T> subject = PublishSubject.create();
+        final VolleyObservableAdapter<T> adapter = new VolleyObservableAdapter<>(subject);
+        final SquareRequest<T> request = new SquareRequest<>(method, url, responseClass, requestBody, adapter, adapter);
+        injectHeaders(request, extraHeaders);
+        return Observable.defer(new Func0<Observable<T>>() {
+            @Override
+            public Observable<T> call() {
+                requestQueue.add(request);
+                return subject;
+            }
+        });
     }
 
     private <T extends CashResponse> Observable<T> doGetRequest(@NonNull String route,
                                                                 @Nullable Map<String, String> params,
-                                                                @NonNull Class<T> responseClass) {
-        return doRequest(SquareRequest.Method.GET, makeUrl(route, params), null, responseClass);
+                                                                @NonNull Class<T> responseClass,
+                                                                @Nullable Map<String, String> extraHeaders) {
+        return doRequest(SquareRequest.Method.GET, makeUrl(route, params), null, responseClass, extraHeaders);
     }
 
     private <T extends CashResponse> Observable<T> doDeleteRequest(@NonNull String route,
                                                                    @Nullable Map<String, String> params,
-                                                                   @NonNull Class<T> responseClass) {
-        return doRequest(SquareRequest.Method.DELETE, makeUrl(route, params), null, responseClass);
+                                                                   @NonNull Class<T> responseClass,
+                                                                   @Nullable Map<String, String> extraHeaders) {
+        return doRequest(SquareRequest.Method.DELETE, makeUrl(route, params), null, responseClass, extraHeaders);
     }
 
     private <T extends CashResponse> Observable<T> doPostRequest(@NonNull String route,
                                                                  @Nullable String requestBody,
-                                                                 @NonNull Class<T> responseClass) {
-        return doRequest(SquareRequest.Method.POST, makeUrl(route, null), requestBody, responseClass);
+                                                                 @NonNull Class<T> responseClass,
+                                                                 @Nullable Map<String, String> extraHeaders) {
+        return doRequest(SquareRequest.Method.POST, makeUrl(route, null), requestBody, responseClass, extraHeaders);
     }
 
     //endregion
@@ -189,95 +206,98 @@ public class SquareCashService {
             throw new RuntimeException("session required");
     }
 
-    public void startSession(final String email, final String phoneNumber, final ApiCallback<CashSession> callback) {
+    public Observable<CashSession> startSession(final String email, final String phoneNumber) {
         if (email == null && phoneNumber == null)
             throw new IllegalArgumentException("email or phoneNumber must be supplied");
 
-        LiveNationLibrary.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
+        return Observable.create(new Observable.OnSubscribe<CashSession>() {
             @Override
-            public void onResponse(AccessToken accessToken) {
-                JSONObject body = new JSONObject();
-                try {
-                    body.put("force_new", "true");
-
-                    if (phoneNumber != null)
-                        body.put("phone_number", phoneNumber);
-
-                    if (email != null)
-                        body.put("email", email);
-                } catch (JSONException e) {
-                    throw new RuntimeException("Unexpected JSON exception during body construction", e);
-                }
-
-                String url = LiveNationLibrary.getHost() + "/users/square-auth?access_token=" + Uri.encode(accessToken.getToken());
-                Observable<CashSession> request = doRequest(Request.Method.POST, url, body.toString(), CashSession.class);
-                request.subscribe(new Observer<CashSession>() {
+            public void call(final Subscriber<? super CashSession> subscriber) {
+                LiveNationLibrary.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
                     @Override
-                    public void onCompleted() {
+                    public void onResponse(AccessToken accessToken) {
+                        JSONObject body = new JSONObject();
+                        try {
+                            body.put("force_new", "true");
 
+                            if (phoneNumber != null)
+                                body.put("phone_number", phoneNumber);
+
+                            if (email != null)
+                                body.put("email", email);
+                        } catch (JSONException e) {
+                            subscriber.onError(e);
+                            subscriber.onCompleted();
+
+                            return;
+                        }
+
+                        String url = LiveNationLibrary.getHost() + "/users/square-auth?access_token=" + Uri.encode(accessToken.getToken());
+                        Observable<CashSession> request = doRequest(Request.Method.POST, url, body.toString(), CashSession.class, null);
+                        request.subscribe(new Observer<CashSession>() {
+                            @Override
+                            public void onCompleted() {
+                                subscriber.onCompleted();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                subscriber.onError(e);
+                            }
+
+                            @Override
+                            public void onNext(CashSession session) {
+                                setSession(session);
+                                subscriber.onNext(session);
+                            }
+                        });
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        callback.onErrorResponse((VolleyError) e);
-                    }
-
-                    @Override
-                    public void onNext(CashSession session) {
-                        setSession(session);
-                        callback.onResponse(session);
+                    public void onErrorResponse(LiveNationError error) {
+                        subscriber.onError(error);
+                        subscriber.onCompleted();
                     }
                 });
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                callback.onErrorResponse(error);
             }
         });
     }
 
-    public void deleteUser(final ApiCallback<CashResponse> callback) {
+    public Observable<CashResponse> deleteUser() {
         if (persistenceProvider.loadSession() == null) {
-            callback.onErrorResponse(new VolleyError("No user to delete."));
-            return;
+            return Observable.error(new VolleyError("No user to delete."));
         }
 
-        /*SquareRequest<CashResponse> request = doDeleteRequest(makeRoute("/cash"), null, CashResponse.class, new Response.Listener<CashResponse>() {
+        HashMap<String, String> extraHeaders = new HashMap<>();
+        extraHeaders.put("Authorization", context.getString(R.string.cash_debug_delete_auth_header));
+        Observable<CashResponse> request = doDeleteRequest(makeRoute("/cash"), null, CashResponse.class, extraHeaders);
+        request.doOnNext(new Action1<CashResponse>() {
             @Override
-            public void onResponse(CashResponse response) {
-                callback.onResponse(response);
+            public void call(CashResponse cashResponse) {
+                setSession(null);
             }
-        }, callback);
-
-        try {
-            Map<String, String> headers = request.getHeaders();
-            headers.put("Authorization", context.getString(R.string.cash_debug_delete_auth_header));
-            request.setHeaders(headers);
-        } catch (AuthFailureError ignored) {
-        }
-
-        requestQueue.add(request);*/
+        });
+        return request;
     }
 
     public Observable<CashCustomerStatus> retrieveCustomerStatus() {
         assertSession();
 
-        return doGetRequest(makeRoute("/cash"), null, CashCustomerStatus.class);
+        return doGetRequest(makeRoute("/cash"), null, CashCustomerStatus.class, null);
     }
 
     public Observable<CashResponse> updateUserFullName(@NonNull String name) {
         assertSession();
 
         JSONObject requestBody = makeRequestBody("full_name", name);
-        return doPostRequest(makeRoute("/cash/name"), requestBody.toString(), CashResponse.class);
+        return doPostRequest(makeRoute("/cash/name"), requestBody.toString(), CashResponse.class, null);
     }
 
     public Observable<CashResponse> requestPhoneVerification(@NonNull String phoneNumber) {
         assertSession();
 
         JSONObject body = makeRequestBody("phone_number", phoneNumber);
-        return doPostRequest(makeRoute("/cash/phone-number"), body.toString(), CashResponse.class);
+        return doPostRequest(makeRoute("/cash/phone-number"), body.toString(), CashResponse.class, null);
     }
 
     public Observable<CashResponse> verifyPhoneNumber(@NonNull String phoneNumber, @NonNull String code) {
@@ -285,7 +305,7 @@ public class SquareCashService {
 
         JSONObject body = makeRequestBody("phone_number", phoneNumber,
                 "verification_code", code);
-        return doPostRequest(makeRoute("/cash/phone-verification"), body.toString(), CashResponse.class);
+        return doPostRequest(makeRoute("/cash/phone-verification"), body.toString(), CashResponse.class, null);
     }
 
     //endregion
@@ -300,7 +320,7 @@ public class SquareCashService {
             throw new IllegalStateException("invalid card info given");
 
         try {
-            return doPostRequest(makeRoute("/cash/card"), info.toJsonString(), CashCardLinkResponse.class);
+            return doPostRequest(makeRoute("/cash/card"), info.toJsonString(), CashCardLinkResponse.class, null);
         } catch (IOException e) {
             throw new RuntimeException("Could not convert card info into json payload", e);
         }
@@ -309,14 +329,14 @@ public class SquareCashService {
     public Observable<CashResponse> unlinkCard() {
         assertSession();
 
-        return doDeleteRequest(makeRoute("/cash/card"), null, CashResponse.class);
+        return doDeleteRequest(makeRoute("/cash/card"), null, CashResponse.class, null);
     }
 
     public Observable<CashPayment> initiatePayment(@NonNull CashPayment payment) {
         assertSession();
 
         try {
-            return doPostRequest(makeRoute("/cash/payments"), payment.toJsonString(), CashPayment.class);
+            return doPostRequest(makeRoute("/cash/payments"), payment.toJsonString(), CashPayment.class, null);
         } catch (IOException e) {
             throw new IllegalStateException("Could not convert payment to json", e);
         }
@@ -325,11 +345,11 @@ public class SquareCashService {
     public Observable<CashPayment> retrievePayment(@NonNull String paymentId) {
         assertSession();
 
-        return doGetRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class);
+        return doGetRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class, null);
     }
 
     public Observable<CashPayment> cancelPayment(@NonNull String paymentId) {
-        return doDeleteRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class);
+        return doDeleteRequest(makeRoute("/cash/payments/") + paymentId, null, CashPayment.class, null);
     }
 
     //endregion

@@ -138,7 +138,10 @@ public class CashCompleteRequestFragment extends ListFragment implements Contact
 
                 @Override
                 public void onError(Throwable e) {
-                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
+                    if (counter.decrementAndGet() == 0)
+                        loadingDialogFragment.dismiss();
+
+                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(e);
                     errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
                 }
 

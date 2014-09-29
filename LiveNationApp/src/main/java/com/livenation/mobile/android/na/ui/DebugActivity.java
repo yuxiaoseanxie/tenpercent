@@ -64,8 +64,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.Observer;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+import static rx.android.observables.AndroidObservable.bindActivity;
 
 /**
  * Created by km on 2/28/14.
@@ -560,18 +564,23 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         public void doAction(Context context) {
             final LoadingDialogFragment loadingDialogFragment = new LoadingDialogFragment();
             loadingDialogFragment.show(getSupportFragmentManager(), LoadingDialogFragment.TAG);
-            SquareCashService.getInstance().deleteUser(new SquareCashService.ApiCallback<CashResponse>() {
+            Observable<CashResponse> observable = bindActivity(DebugActivity.this, SquareCashService.getInstance().deleteUser());
+            observable.subscribe(new Observer<CashResponse>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
+                public void onCompleted() {
                     loadingDialogFragment.dismissAllowingStateLoss();
+                }
 
-                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(error);
+                @Override
+                public void onError(Throwable e) {
+                    loadingDialogFragment.dismissAllowingStateLoss();
+                    CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(e);
                     errorDialogFragment.show(getSupportFragmentManager(), CashErrorDialogFragment.TAG);
                 }
 
                 @Override
-                public void onResponse(CashResponse response) {
-                    loadingDialogFragment.dismissAllowingStateLoss();
+                public void onNext(CashResponse cashResponse) {
+
                 }
             });
         }

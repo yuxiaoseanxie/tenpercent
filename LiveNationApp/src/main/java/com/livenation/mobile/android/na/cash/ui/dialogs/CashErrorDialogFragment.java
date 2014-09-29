@@ -19,7 +19,7 @@ public class CashErrorDialogFragment extends DialogFragment {
 
     //region Lifecycle
 
-    public static CashErrorDialogFragment newInstance(VolleyError error) {
+    public static CashErrorDialogFragment newInstance(Throwable error) {
         CashErrorDialogFragment errorDialogFragment = new CashErrorDialogFragment();
 
         Bundle arguments = new Bundle();
@@ -38,15 +38,23 @@ public class CashErrorDialogFragment extends DialogFragment {
         setCancelable(true);
     }
 
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Override
     public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(R.string.error_title_generic);
-        if (TextUtils.isEmpty(getError().getMessage()))
-            builder.setMessage(getString(R.string.cash_generic_error, getError().networkResponse.statusCode));
-        else
-            builder.setMessage(getError().getMessage());
+        Throwable error = getError();
+        if (TextUtils.isEmpty(error.getMessage())) {
+            if (error instanceof VolleyError) {
+                VolleyError volleyError = (VolleyError) error;
+                builder.setMessage(getString(R.string.cash_generic_error, volleyError.networkResponse.statusCode));
+            } else {
+                builder.setMessage(R.string.cash_generic_error_no_status_code);
+            }
+        } else {
+            builder.setMessage(error.getMessage());
+        }
         builder.setPositiveButton(android.R.string.ok, null);
 
         return builder.create();
@@ -55,7 +63,7 @@ public class CashErrorDialogFragment extends DialogFragment {
     //endregion
 
 
-    public VolleyError getError() {
-        return (VolleyError) getArguments().getSerializable(ARG_ERROR);
+    public Throwable getError() {
+        return (Throwable) getArguments().getSerializable(ARG_ERROR);
     }
 }

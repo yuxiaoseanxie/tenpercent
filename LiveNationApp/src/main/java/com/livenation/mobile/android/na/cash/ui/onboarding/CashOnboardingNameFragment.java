@@ -17,6 +17,7 @@ import com.livenation.mobile.android.na.cash.model.CashUtils;
 import com.livenation.mobile.android.na.cash.service.SquareCashService;
 import com.livenation.mobile.android.na.cash.service.responses.CashResponse;
 import com.livenation.mobile.android.na.cash.ui.dialogs.CashErrorDialogFragment;
+import com.livenation.mobile.android.na.cash.ui.dialogs.CashLoadingDialogFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.utils.forms.ValidationManager;
 import com.livenation.mobile.android.ticketing.utils.forms.listeners.EditTextValidationListener;
@@ -88,16 +89,20 @@ public class CashOnboardingNameFragment extends CashOnboardingFragment {
         if (!validationManager.isValid())
             return;
 
+        final CashLoadingDialogFragment loadingDialogFragment = new CashLoadingDialogFragment();
+        loadingDialogFragment.show(getFragmentManager(), CashLoadingDialogFragment.TAG);
+
         Observable<CashResponse> observable = bindFragment(this, SquareCashService.getInstance().updateUserFullName(nameField.getText().toString()));
         observable.subscribe(new Observer<CashResponse>() {
             @Override
             public void onCompleted() {
-
+                loadingDialogFragment.dismissAllowingStateLoss();
             }
 
             @Override
             public void onError(Throwable e) {
-                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance((VolleyError) e);
+                loadingDialogFragment.dismissAllowingStateLoss();
+                CashErrorDialogFragment errorDialogFragment = CashErrorDialogFragment.newInstance(e);
                 errorDialogFragment.show(getFragmentManager(), CashErrorDialogFragment.TAG);
             }
 

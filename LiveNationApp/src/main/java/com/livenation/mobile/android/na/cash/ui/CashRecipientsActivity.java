@@ -124,6 +124,8 @@ public class CashRecipientsActivity extends LiveNationFragmentActivity {
 
                 @Override
                 public void onError(Throwable e) {
+                    loadingDialogFragment.dismiss();
+
                     VolleyError error = (VolleyError) e;
                     if (error.networkResponse != null &&
                             error.networkResponse.statusCode >= 400 &&
