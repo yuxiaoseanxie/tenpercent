@@ -66,6 +66,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
 
+
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);

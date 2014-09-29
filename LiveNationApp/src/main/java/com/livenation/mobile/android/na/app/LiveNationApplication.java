@@ -43,11 +43,13 @@ import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
+import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
 import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.SsoAppManager;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
@@ -143,8 +145,8 @@ public class LiveNationApplication extends Application {
         //Declare object used to start the library
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
-        accessTokenProvider = new AccessTokenProvider();
-        ssoManager = new SsoManager(this);
+        accessTokenProvider = new AccessTokenAppProvider();
+        ssoManager = new SsoAppManager(this);
         ssoManager.addSsoProvider(new FacebookSsoProvider(this));
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);

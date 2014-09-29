@@ -135,6 +135,13 @@ public class AnalyticConstants {
     public static final String OMNITURE_SCREEN_ORDERS = "LN_Mob: NA App Android: Orders";
     public static final String OMNITURE_SCREEN_SHARE = "LN_Mob: NA App Android: Share";
     public static final String OMNITURE_SCREEN_VDP_VENUE_INFO = "LN_Mob: NA App Android: VDP: Venue Info";
+
+    //Apsalar
+    public static final String APSALAR_LN_LOGIN = "Livenation Login";
+    public static final String APSALAR_FIND_TICKET_TAP = "Find Ticket Tap";
+    public static final String APSALAR_PURCHASE_CONFIRMATION = "Purchase Confirmation";
+
+
     /**
      * Attributes
      */
@@ -211,6 +218,7 @@ public class AnalyticConstants {
     public static final String AIS_USER_ID = "AIS User ID";
     public static final String ANDROID_DEVICE_ID = "Android Device ID";
     public static final String TOKEN = "Token";
+    public static final String TOKEN_TYPE = "Token type";
     public static final String GRANTED_ACCESS_TO_MUSIC_LIBRARY = "Granted Access to Music Library";
 
     //Music Library Analysis

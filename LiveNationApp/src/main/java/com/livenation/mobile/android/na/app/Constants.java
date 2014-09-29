@@ -54,7 +54,7 @@ public class Constants {
         public static final String ENVIRONMENT = "environment";
         public static final String DEVICE_UUID = "device_uuid";
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
-        public static final String API_NAME = "api";
+
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
         public static final String ON_BOARDING_HAS_BEEN_DISPLAYED = "on_boarding_has_been_displayed";
         //1.X key

@@ -223,6 +223,12 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <receiver android:exported="true" android:name="com.apsalar.sdk.ApsalarReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"></action>
+                <action android:name="com.apsalar.sdk.SOFT_RESET"></action>
+            </intent-filter>
+        </receiver>
         <receiver android:name="com.urbanairship.CoreReceiver" />
         <receiver
             android:name="com.urbanairship.push.GCMPushReceiver"

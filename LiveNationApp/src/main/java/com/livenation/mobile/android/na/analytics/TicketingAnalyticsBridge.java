@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.analytics;
 
 import android.app.Activity;
 
+import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
@@ -68,5 +69,10 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     @Override
     public void trackOmnitureAction(String actionName, Map<String, Object> properties) {
         OmnitureTracker.trackAction(actionName, properties);
+    }
+
+    @Override
+    public void trackApsalarEvent(String actionName, Object...obj) {
+        Apsalar.event(actionName, obj);
     }
 }
