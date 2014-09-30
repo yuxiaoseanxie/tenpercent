@@ -12,7 +12,6 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
  */
 public class AccessTokenAppProvider extends com.livenation.mobile.android.platform.init.provider.AccessTokenProvider {
     private static AccessTokenPreferences accessTokenPreferences;
-    private static boolean isExecutingRequest = false;
 
     public AccessTokenAppProvider(Context context) {
         accessTokenPreferences = new AccessTokenPreferences(context);
@@ -24,25 +23,16 @@ public class AccessTokenAppProvider extends com.livenation.mobile.android.platfo
             callback.onResponse(accessTokenPreferences.readAccessToken());
             return;
         }
-        if (isExecutingRequest) {
-            while (isExecutingRequest) {
-                ;
-            }
-            getAccessToken(callback);
-        }
-        isExecutingRequest = true;
         super.getAccessToken(new BasicApiCallback<AccessToken>() {
             @Override
             public void onResponse(AccessToken response) {
                 accessTokenPreferences.saveAccessToken(response);
                 callback.onResponse(response);
-                isExecutingRequest = false;
             }
 
             @Override
             public void onErrorResponse(LiveNationError error) {
                 callback.onErrorResponse(error);
-                isExecutingRequest = false;
             }
         });
     }
