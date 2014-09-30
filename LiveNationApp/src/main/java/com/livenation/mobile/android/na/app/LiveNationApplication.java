@@ -21,6 +21,7 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.adobe.mobile.Config;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -180,7 +181,10 @@ public class LiveNationApplication extends Application {
 
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
-        imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
+
+        RequestQueue imageQueue = Volley.newRequestQueue(getApplicationContext());
+        imageQueue.getCache().clear();
+        imageLoader = new ImageLoader(imageQueue, cache);
 
         installedAppConfig = new InstalledAppConfig(this, Volley.newRequestQueue(getApplicationContext()));
         if (installedAppConfig.isUpdateAdvisable())
