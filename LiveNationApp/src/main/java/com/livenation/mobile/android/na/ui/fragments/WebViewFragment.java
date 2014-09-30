@@ -66,4 +66,8 @@ public class WebViewFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    public WebView getWebView() {
+        return webView;
+    }
+
 }
