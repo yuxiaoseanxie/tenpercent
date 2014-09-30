@@ -94,7 +94,9 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
         @Override
         public Fragment getItem(int position) {
             BoxOfficeTabs mapping = BoxOfficeTabs.values()[position];
-            return VenueBoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getSections());
+            VenueBoxOfficeTabFragment fragment = VenueBoxOfficeTabFragment.newInstance(boxOfficeInfo, mapping.getSections());
+            fragment.setVenueId(venue.getId());
+            return fragment;
         }
     }
 

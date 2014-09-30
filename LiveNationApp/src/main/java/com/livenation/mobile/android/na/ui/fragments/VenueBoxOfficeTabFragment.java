@@ -10,9 +10,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class VenueBoxOfficeTabFragment extends Fragment {
@@ -21,6 +24,7 @@ public class VenueBoxOfficeTabFragment extends Fragment {
     private String[] displayedSections;
     private ScrollView scrollView;
     private TextView text;
+    private String venueId = "Unknown";
 
     //region Lifecycle
     private int textScrollY;
@@ -93,6 +97,11 @@ public class VenueBoxOfficeTabFragment extends Fragment {
     }
 
     private void render() {
+        if (getBoxOfficeInfo() == null) {
+            Map<String, Object> info = new HashMap<>();
+            info.put(AnalyticConstants.VENUE_ID, venueId);
+            LiveNationLibrary.getErrorTracker().track("Box Office Info is empty.", info);
+        }
         Map<String, String> values = getBoxOfficeInfo().getValues();
 
         String content = "";
@@ -113,6 +122,10 @@ public class VenueBoxOfficeTabFragment extends Fragment {
         }
 
         text.setText(Html.fromHtml(content));
+    }
+
+    public void setVenueId(String id) {
+        venueId = id;
     }
 
     //endregion
