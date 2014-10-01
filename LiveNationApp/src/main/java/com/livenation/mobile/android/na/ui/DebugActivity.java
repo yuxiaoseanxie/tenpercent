@@ -29,6 +29,7 @@ import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.MusicLibraryScannerHelper;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
+import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
@@ -41,6 +42,7 @@ import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+import com.mobilitus.tm.tickets.TicketLibrary;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -65,6 +67,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     private DebugItem deviceIdItem;
     private DebugItem accessTokenItem;
     private DebugItem environmentItem;
+    private DebugItem ticketingEnvironmentItem;
     private DebugItem locationItem;
     private DebugItem scanItem;
     private DebugItem versionName;
@@ -163,6 +166,10 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         environmentItem = new HostDebugItem(getString(R.string.debug_item_environment), getEnvironment().toString());
         actions.add(environmentItem);
 
+        //Ticketing Environment Item
+        ticketingEnvironmentItem = new TicketingDebugItem(getString(R.string.debug_item_ticketing_environment), getTicketingEnvironment().toString());
+        actions.add(ticketingEnvironmentItem);
+
         //Scan Item
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferences.DEBUG_MODE_DATA, MODE_PRIVATE);
         Boolean isDebugModeActivited = sharedPreferences.getBoolean(Constants.SharedPreferences.DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED, false);
@@ -214,6 +221,16 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         LiveNationApplication.getEnvironmentProvider().setEnvironment(environment);
         LiveNationApplication.getAccessTokenProvider().clear();
         NotificationsRegistrationManager.getInstance().register();
+    }
+
+    private Ticketing.Environment getTicketingEnvironment() {
+        TicketingEnvironmentPreferences prefs = new TicketingEnvironmentPreferences(this);
+        return prefs.getConfiguredEnvironment();
+    }
+
+    private void setTicketingEnvironment(Ticketing.Environment environment) {
+        TicketingEnvironmentPreferences prefs = new TicketingEnvironmentPreferences(this);
+        prefs.setConfiguredEnvironment(environment);
     }
 
     @Override
@@ -384,6 +401,39 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
                     PendingIntent mPendingIntent = PendingIntent.getActivity(DebugActivity.this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                    System.exit(0);
+                }
+            });
+
+            builder.create().show();
+
+        }
+
+        @Override
+        public int getType() {
+            return DebugItem.TYPE_ACTION;
+        }
+    }
+
+    private class TicketingDebugItem extends DebugItem {
+        private TicketingDebugItem(String name, String value) {
+            super(name, value);
+        }
+
+        @Override
+        public void doAction(Context context) {
+            final String[] items = new String[Ticketing.Environment.values().length];
+            for (int i = 0; i < items.length; i++) {
+                items[i] = Ticketing.Environment.values()[i].toString();
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(DebugActivity.this);
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Ticketing.Environment environment = Ticketing.Environment.values()[i];
+                    setTicketingEnvironment(environment);
+                    ticketingEnvironmentItem.setValue(environment.toString());
                     System.exit(0);
                 }
             });
