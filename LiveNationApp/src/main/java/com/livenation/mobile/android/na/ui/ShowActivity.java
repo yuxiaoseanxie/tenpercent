@@ -30,7 +30,9 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class ShowActivity extends DetailBaseFragmentActivity {
@@ -58,7 +60,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_EVENT_CACHED)) {
-            Event event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
+            event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
             setEvent(event);
         } else {
 
@@ -171,21 +173,28 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     }
 
     @Override
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
+        Map<String, Object> props = new HashMap<String, Object>();
+
+        if (args.containsKey(PARAMETER_EVENT_ID)) {
+            props.put(AnalyticConstants.EVENT_ID, DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
+        }
         if (event != null) {
-            Props props = new Props();
-            props.put(AnalyticConstants.EVENT_ID, event.getId());
+            props.put(AnalyticConstants.EVENT_ID, event.getNumericId());
 
             if (event.getVenue() != null) {
-                props.put(AnalyticConstants.VENUE_ID, event.getVenue().getId());
+                props.put(AnalyticConstants.VENUE_ID, event.getVenue().getNumericId());
             }
             if (event.getLineup() != null && event.getLineup().size() > 0) {
-                props.put(AnalyticConstants.ARTIST_ID, event.getLineup().get(0).getId());
+                props.put(AnalyticConstants.ARTIST_ID, event.getLineup().get(0).getNumericId());
             }
-
-            return props;
         }
-        return null;
+        return props;
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_SDP;
     }
 
     private void setEvent(Event event) {
@@ -237,5 +246,15 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     private void googleViewEnd() {
         notifyGoogleViewEnd(googleApiClient, appUrl);
         appUrl = null;
+    }
+
+    @Override
+    protected Map<String, Object> getOmnitureProductsProps() {
+        if (args.containsKey(PARAMETER_EVENT_ID)) {
+            HashMap cdata = new HashMap<String, Object>();
+            cdata.put("&&products", ";" + DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
+            return cdata;
+        }
+        return null;
     }
 }

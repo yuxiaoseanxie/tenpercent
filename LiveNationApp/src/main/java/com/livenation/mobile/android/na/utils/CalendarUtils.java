@@ -55,7 +55,7 @@ public class CalendarUtils {
             endDateInMilliSec = endDate.getTime();
         }
 
-        Intent intent = new Intent(Intent.ACTION_INSERT)
+        Intent intent = new Intent(Intent.ACTION_EDIT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendarItem.getStartDate().getTime())
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDateInMilliSec)
@@ -67,7 +67,7 @@ public class CalendarUtils {
 
     private static void launchCalendar(Intent intent, Activity activity) {
         PackageManager manager = activity.getPackageManager();
-        List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, 0);
+        List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (resolveInfos.size() > 0) {
             activity.startActivity(intent);
         }else{

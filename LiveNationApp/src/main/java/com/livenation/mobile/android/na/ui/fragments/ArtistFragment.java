@@ -150,7 +150,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setSingleArtist(Artist artist) {
-        if (artist == null)
+        if (artist == null || getActivity() == null)
             return;
 
         this.artist = artist;
@@ -244,6 +244,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private class ShowAllEventsOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            if (artist == null) {
+                return;
+            }
             //Analytics
             Props props = new Props();
             props.put(AnalyticConstants.ARTIST_NAME, artist.getName());

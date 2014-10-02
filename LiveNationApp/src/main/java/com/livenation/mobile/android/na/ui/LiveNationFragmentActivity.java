@@ -7,20 +7,24 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
+import com.adobe.mobile.Config;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by elodieferrais on 4/2/14.
@@ -33,7 +37,9 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Segment.io
         Analytics.onCreate(this);
+
         if (!LiveNationApplication.get().isMusicSync()) {
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this, new BasicApiCallback<Void>() {
@@ -54,6 +60,23 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
             trackScreenWithLocation(getScreenName());
+            if (getOmnitureScreenName() != null) {
+                Map<String, Object> omnitureProps = getAnalyticsProps();
+                Map<String, Object> omnitureProductsProps = getOmnitureProductsProps();
+                if (omnitureProps == null) {
+                    omnitureProps = omnitureProductsProps;
+                } else {
+
+                    if (omnitureProductsProps != null) {
+                        Iterator<String> iterator = omnitureProductsProps.keySet().iterator();
+                        while (iterator.hasNext()) {
+                            String key = iterator.next();
+                            omnitureProps.put(key, omnitureProductsProps.get(key));
+                        }
+                    }
+                }
+                OmnitureTracker.trackState(getOmnitureScreenName(), omnitureProps);
+            }
         }
     }
 
@@ -65,14 +88,20 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onPause() {
-        Analytics.activityPause(this);
         super.onPause();
+        //Segment.io
+        Analytics.activityPause(this);
+        //Omniture
+        Config.pauseCollectingLifecycleData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        //Segment.io
         Analytics.activityResume(this);
+        //Omniture
+        Config.collectLifecycleData();
     }
 
     @Override
@@ -82,20 +111,16 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     }
 
     public void trackScreenWithLocation(final String screenName) {
-        Props properties = getAnalyticsProps();
-        if (properties == null) {
-            properties = new Props();
-        }
-        final Props finalProps = properties;
+        final Props properties = getPropsFromMapProperies(getAnalyticsProps());
         LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                finalProps.put("Location", response[0] + "," + response[1]);
+                properties.put("Location", response[0] + "," + response[1]);
                 String name = screenName;
                 if (name == null) {
                     name = getClass().getSimpleName();
                 }
-                LiveNationAnalytics.screen(name, finalProps);
+                LiveNationAnalytics.screen(name, properties);
             }
 
             @Override
@@ -104,7 +129,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
                 if (name == null) {
                     name = getClass().getSimpleName();
                 }
-                LiveNationAnalytics.screen(name, finalProps);
+                LiveNationAnalytics.screen(name, properties);
             }
         });
 
@@ -114,7 +139,16 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         return this.getClass().getSimpleName();
     }
 
-    protected Props getAnalyticsProps() {
+    protected String getOmnitureScreenName() {
+        return null;
+    }
+
+    protected Map<String, Object> getAnalyticsProps() {
+        return null;
+    }
+
+
+    protected Map<String, Object> getOmnitureProductsProps() {
         return null;
     }
 
@@ -139,6 +173,19 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
             }
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    private Props getPropsFromMapProperies(Map<String, Object> properties) {
+        Props props = new Props();
+        if (properties == null) {
+            return props;
+        }
+        Iterator<String> iterator = properties.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            props.put(key, properties.get(key));
+        }
+        return props;
     }
 
     protected void notifyGoogleViewStart(GoogleApiClient googleApiClient, Uri webUrl, Uri appUrl, String title) {

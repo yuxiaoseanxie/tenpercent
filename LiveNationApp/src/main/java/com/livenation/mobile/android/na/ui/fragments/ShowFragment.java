@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -51,6 +52,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
@@ -144,10 +146,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
             venueDetails.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.SDP);
 
-            double lat = Double.valueOf(venue.getLat());
-            double lng = Double.valueOf(venue.getLng());
-            setMapLocation(lat, lng);
-
+            //Longitude and Latitude can be null
+            if (venue.getLat() != null && venue.getLng() != null) {
+                double lat = Double.valueOf(venue.getLat());
+                double lng = Double.valueOf(venue.getLng());
+                setMapLocation(lat, lng);
+            } else {
+                new LibraryErrorTracker().track("This venue does not have a longitute and/or a latitude. Venue Id:" + venue.getId(), null);
+            }
         } else {
             venueDetails.setOnClickListener(null);
         }
@@ -362,7 +368,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         }
     }
 
-    private class OnCalendarViewClick implements View.OnClickListener {
+    private class OnCalendarViewClick extends OnThrottledClickListener {
         private CalendarDialogFragment dialogFragment;
         private Event event;
 
@@ -373,6 +379,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
+            super.onClick(view);
             if (dialogFragment.isAdded()) return;
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);

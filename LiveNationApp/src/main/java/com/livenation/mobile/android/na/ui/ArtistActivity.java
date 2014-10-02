@@ -20,6 +20,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ArtistActivity extends DetailBaseFragmentActivity {
     private ArtistFragment artistFragment;
     public static final String PARAMETER_ARTIST_ID = "artist_id";
@@ -40,7 +43,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
-            Artist artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
+            artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             setArtist(artist);
         } else {
             SingleArtistParameters apiParams = new SingleArtistParameters();
@@ -70,12 +73,12 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     }
 
     @Override
-    protected Props getAnalyticsProps() {
+    protected Map<String, Object> getAnalyticsProps() {
         if (artistFragment != null) {
-            Props props = new Props();
+            Map<String, Object> props = new HashMap<String, Object>();
             if (args.containsKey(ArtistActivity.PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(ArtistActivity.PARAMETER_ARTIST_ID);
-                props.put(AnalyticConstants.ARTIST_ID, artistIdRaw);
+                props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistIdRaw));
             }
             return props;
         }
@@ -136,6 +139,11 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         }
         props.put(AnalyticConstants.SOURCE, AnalyticsCategory.ADP);
         LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ADP;
     }
 
     public static Bundle getArguments(String artistIdRaw) {
