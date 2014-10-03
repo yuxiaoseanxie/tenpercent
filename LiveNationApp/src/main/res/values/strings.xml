@@ -83,6 +83,7 @@
     <string name="debug_item_apid">APID</string>
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
+    <string name="debug_item_ticketing_environment">Ticketing Environment</string>
     <string name="debug_item_scan">Scan: %s artist(s)</string>
     <string name="debug_item_commerce_qa_mode">Commerce QA Mode</string>
     <string name="debug_item_commerce_qa_mode_on">On</string>

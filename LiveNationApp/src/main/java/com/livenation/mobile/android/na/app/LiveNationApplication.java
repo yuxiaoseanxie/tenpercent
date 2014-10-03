@@ -41,6 +41,7 @@ import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
+import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -253,7 +254,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
         ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
         ticketingConfig.setOrderHistoryUploadHandler(new OrderHistoryUploadHelper());
-        ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
+        ticketingConfig.setEnvironment(getTicketingEnvironment(getApplicationContext()));
         Ticketing.init(ticketingConfig);
         Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
@@ -308,6 +309,11 @@ public class LiveNationApplication extends Application {
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateSsoAccessTokenReceiver);
+    }
+
+    public Ticketing.Environment getTicketingEnvironment(Context context) {
+        TicketingEnvironmentPreferences preferences = new TicketingEnvironmentPreferences(context);
+        return preferences.getConfiguredEnvironment();
     }
 
     public ImageLoader getImageLoader() {
