@@ -25,8 +25,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -60,6 +58,7 @@ import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
@@ -77,7 +76,7 @@ public class LiveNationApplication extends Application {
     private static ProviderManager providerManager;
     private static LiveNationProxy liveNationProxy;
     private static EnvironmentAppProvider environmentProvider;
-    private static AccessTokenAppProvider accessTokenProvider;
+    private static AccessTokenProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
@@ -92,6 +91,13 @@ public class LiveNationApplication extends Application {
             Props props = new Props();
             props.put(AnalyticConstants.AIS_USER_ID, oldUserId);
             LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
+        }
+    };
+
+    private final BroadcastReceiver updateSsoAccessTokenReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            accessTokenProvider.getAccessToken(null);
         }
     };
 
@@ -124,7 +130,7 @@ public class LiveNationApplication extends Application {
         return environmentProvider;
     }
 
-    public static AccessTokenAppProvider getAccessTokenProvider() {
+    public static AccessTokenProvider getAccessTokenProvider() {
         return accessTokenProvider;
     }
 
@@ -140,7 +146,7 @@ public class LiveNationApplication extends Application {
         //Declare object used to start the library
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
-        accessTokenProvider = new AccessTokenAppProvider(this);
+        accessTokenProvider = new AccessTokenAppProvider();
         ssoManager = new SsoAppManager(this);
         ssoManager.addSsoProvider(new FacebookSsoProvider(this));
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
@@ -153,6 +159,10 @@ public class LiveNationApplication extends Application {
         //Migration
         oldUserId = getIasId();
         LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
+
+        //ssoProvider token - server update
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateSsoAccessTokenReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.SSO_ACCESS_TOKEN_UPDATE_INTENT_FILTER));
+
 
         //Start Library
         LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
@@ -297,6 +307,7 @@ public class LiveNationApplication extends Application {
             unregisterReceiver(internetStateReceiver);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateSsoAccessTokenReceiver);
     }
 
     public ImageLoader getImageLoader() {

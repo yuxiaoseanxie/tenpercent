@@ -22,7 +22,7 @@ public class SsoAppManager extends SsoManager {
         super.login(ssoType, allowForeground, new SsoLoginCallback() {
             @Override
             public void onLoginSucceed(String accessToken, User user) {
-                LiveNationApplication.getAccessTokenProvider().clear();
+                LiveNationApplication.getAccessTokenProvider().clearCache();
                 callback.onLoginSucceed(accessToken, user);
             }
 

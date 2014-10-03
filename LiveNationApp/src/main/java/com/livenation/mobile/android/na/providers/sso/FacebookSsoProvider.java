@@ -58,11 +58,11 @@ public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSs
         Session session = new Builder(LiveNationApplication.get().getApplicationContext()).build();
         Session.StatusCallback statusCallback = new FacebookSessionWorker(new SsoLoginCallback() {
             @Override
-            public void onLoginSucceed(String accessToken, User user) {
-                saveAuthConfiguration(getType(), accessToken);
+            public void onLoginSucceed(String ssoAccessToken, User user) {
+                saveAuthConfiguration(getType(), ssoAccessToken);
                 saveUser(user, getType());
                 if (callback != null) {
-                    callback.onLoginSucceed(accessToken, user);
+                    callback.onLoginSucceed(ssoAccessToken, user);
                 }
             }
 
