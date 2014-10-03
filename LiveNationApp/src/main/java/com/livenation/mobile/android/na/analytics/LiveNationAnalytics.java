@@ -48,7 +48,7 @@ public class LiveNationAnalytics {
         traceLog(screenTitle, "Screen", props.toString());
     }
 
-    static private void traceLog(String eventTitle, String category, String data) {
+    static public void traceLog(String eventTitle, String category, String data) {
         String title = String.format("%s: %s", eventTitle, category);
         Crashlytics.log(Log.VERBOSE, title, data);
     }
