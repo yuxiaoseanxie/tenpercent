@@ -31,7 +31,7 @@ public class LiveNationAnalytics {
         props.put(AnalyticConstants.CATEGORY, category);
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
-        traceLog(eventTitle, category, props.toString());
+        logTrace(eventTitle, category + ": " + props.toString());
     }
 
     static public void track(String eventTitle, AnalyticsCategory category) {
@@ -45,11 +45,10 @@ public class LiveNationAnalytics {
 
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
-        traceLog(screenTitle, "Screen", props.toString());
+        logTrace("Screen", screenTitle + ": "  + props.toString());
     }
 
-    static public void traceLog(String eventTitle, String category, String data) {
-        String title = String.format("%s: %s", eventTitle, category);
-        Crashlytics.log(Log.VERBOSE, title, data);
+    static public void logTrace(String tag, String data) {
+         Crashlytics.log(Log.VERBOSE, tag, data);
     }
 }
