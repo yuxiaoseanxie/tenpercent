@@ -51,6 +51,7 @@ public class MusicSyncHelper {
                         successToast.setText("Music Scan done! 0 artist has been synchronyzed");
                         successToast.show();
                     }
+                    responseCallback.onResponse(null);
                 }
             }
 
