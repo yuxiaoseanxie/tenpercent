@@ -16,6 +16,5 @@ public class AccessTokenAppProvider extends AccessTokenProvider {
             //Apsalar
             Apsalar.event(AnalyticConstants.APSALAR_LN_LOGIN, AnalyticConstants.TOKEN, accessTokenValue.getToken(), AnalyticConstants.TOKEN_TYPE, accessTokenValue.getType());
         }
-
     }
 }
