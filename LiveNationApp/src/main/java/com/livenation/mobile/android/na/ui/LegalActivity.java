@@ -146,22 +146,13 @@ public class LegalActivity extends LiveNationFragmentActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(event.getAction() == KeyEvent.ACTION_DOWN){
-            switch(keyCode)
-            {
-                case KeyEvent.KEYCODE_BACK:
-                    int index = getActionBar().getSelectedNavigationIndex();
-                    WebViewFragment webViewFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(tagsByIndex[index]);
-                    if(webViewFragment != null && webViewFragment.getWebView() != null && webViewFragment.getWebView().canGoBack()){
-                        webViewFragment.getWebView().goBack();
-                    }else{
-                        finish();
-                    }
-                    return true;
-            }
-
+    public void onBackPressed() {
+        int index = getActionBar().getSelectedNavigationIndex();
+        WebViewFragment webViewFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(tagsByIndex[index]);
+        if(webViewFragment != null && webViewFragment.getWebView() != null && webViewFragment.getWebView().canGoBack()){
+            webViewFragment.getWebView().goBack();
+        }else{
+            finish();
         }
-        return super.onKeyDown(keyCode, event);
     }
 }
