@@ -67,6 +67,11 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     }
 
     @Override
+    public void logTrace(String category, String event) {
+        LiveNationAnalytics.traceLog("Trace", category, event);
+    }
+
+    @Override
     public void trackOmnitureState(String pageName, Map<String, Object> properties) {
         OmnitureTracker.trackState(pageName, properties);
     }
