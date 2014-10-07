@@ -226,6 +226,13 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
+        <!-- Apsalar Google Ad activity strange thing -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+        </activity>
+        <!-- End Apsalar Ad Activity strange thing -->
+
         <receiver android:exported="true" android:name="com.apsalar.sdk.ApsalarReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"></action>
