@@ -35,8 +35,8 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     protected static Class apsalarSessionActivity = null;
 
     protected void onCreate(Bundle savedInstanceState, int res) {
+        LiveNationAnalytics.logTrace("Activity", "Create: " + getClass().getName() + " savedInstance: " + (savedInstanceState==null?"null":"not null"));
         super.onCreate(savedInstanceState);
-
         if (!isApsalarStarted) {
             //Initialize apsalar
             isApsalarStarted = true;
@@ -70,6 +70,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        LiveNationAnalytics.logTrace("Activity", "Post Create: " + getClass().getName());
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
             trackScreenWithLocation(getScreenName());
@@ -95,12 +96,14 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onStart() {
+        LiveNationAnalytics.logTrace("Activity", "Start: " + getClass().getName());
         super.onStart();
         Analytics.activityStart(this);
     }
 
     @Override
     protected void onPause() {
+        LiveNationAnalytics.logTrace("Activity", "Pause: " + getClass().getName());
         super.onPause();
         //Segment.io
         Analytics.activityPause(this);
@@ -110,6 +113,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onResume() {
+        LiveNationAnalytics.logTrace("Activity", "Resume: " + getClass().getName());
         super.onResume();
         //Segment.io
         Analytics.activityResume(this);
@@ -119,6 +123,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
     @Override
     protected void onStop() {
+        LiveNationAnalytics.logTrace("Activity", "Stop: " + getClass().getName());
         super.onStop();
         Analytics.activityStop(this);
     }
