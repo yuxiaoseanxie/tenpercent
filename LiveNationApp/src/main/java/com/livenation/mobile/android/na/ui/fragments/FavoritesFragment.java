@@ -217,6 +217,15 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         List<Favorite> favs = new ArrayList<Favorite>(favorites);
         Collections.sort(favs, favoriteComparator);
 
+        final int venueScrollPosition = venueList.getFirstVisiblePosition();
+        final View venueItemView = venueList.getWrappedList().getChildAt(0);
+        int venueOffset = (venueItemView == null) ? 0 : venueItemView.getTop();
+        final int artistScrollPosition = artistList.getFirstVisiblePosition();
+        final View artistItemView = artistList.getWrappedList().getChildAt(0);
+        int artistOffset = (artistItemView == null) ? 0 : artistItemView.getTop();
+
+
+
         List<Favorite> artistFavorites = filterFavorites(favs, "artist");
         artistAdapter.clear();
         artistAdapter.addAll(artistFavorites);
@@ -232,6 +241,9 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         if (artistAdapter.getCount() == 0) {
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
         }
+
+        venueList.setSelectionFromTop(venueScrollPosition, venueOffset);
+        artistList.setSelectionFromTop(artistScrollPosition, artistOffset);
 
     }
 
