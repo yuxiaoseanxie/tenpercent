@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.analytics;
 
 import android.app.Activity;
 
+import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
 import com.segment.android.Analytics;
 import com.segment.android.models.Props;
@@ -23,26 +24,31 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     @Override
     public void activityCreated(Activity activity) {
         // Currently not applicable.
+        LiveNationAnalytics.traceLog("LifeCycle", "Activity created", activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityStarted(Activity activity) {
         Analytics.activityStart(activity);
+        LiveNationAnalytics.traceLog("LifeCycle", "Activity started", activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityPaused(Activity activity) {
         Analytics.activityPause(activity);
+        LiveNationAnalytics.traceLog("LifeCycle", "Activity paused", activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityResumed(Activity activity) {
         Analytics.activityResume(activity);
+        LiveNationAnalytics.traceLog("LifeCycle", "Activity resumed", activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityStopped(Activity activity) {
         Analytics.activityStop(activity);
+        LiveNationAnalytics.traceLog("LifeCycle", "Activity stopped", activity.getClass().getSimpleName());
     }
 
     @Override
@@ -68,5 +74,10 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     @Override
     public void trackOmnitureAction(String actionName, Map<String, Object> properties) {
         OmnitureTracker.trackAction(actionName, properties);
+    }
+
+    @Override
+    public void trackApsalarEvent(String actionName, Object...obj) {
+        Apsalar.event(actionName, obj);
     }
 }

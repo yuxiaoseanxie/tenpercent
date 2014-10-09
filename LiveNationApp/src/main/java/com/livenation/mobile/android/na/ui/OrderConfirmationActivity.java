@@ -24,8 +24,11 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.analytics.Analytics;
@@ -116,6 +119,57 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
+        //Apsalar
+        LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
+            @Override
+            public void onResponse(AccessToken response) {
+                String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+                if (isResale) {
+                    resale = AnalyticConstants.PROP_TYPE_RESALE;
+                }
+
+                String userEmail = null;
+                if (getCart() != null && getCart().getBuyer() != null) {
+                    userEmail = getCart().getBuyer().getEmail();
+                }
+
+                Ticketing.getAnalytics().trackApsalarEvent(com.livenation.mobile.android.na.analytics.AnalyticConstants.APSALAR_PURCHASE_CONFIRMATION,
+                        com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN, response.getToken(), com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN_TYPE, response.getType(),
+                        AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity(),
+                        AnalyticConstants.PROP_REVENUE, getCharges().getRevenue(),
+                        AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee(),
+                        AnalyticConstants.PROP_ORDER_PROCESSING_FEE, getCharges().getOrderProcessingFee(),
+                        AnalyticConstants.PROP_DELIVERY_FEE, getCharges().getDeliveryFee(),
+                        AnalyticConstants.PROP_OTHER_FEE, getCharges().getOrderProcessingFee(),
+                        AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, getCharges().getOriginalFaceValueOfTicket(),
+                        AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits(),
+                        AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
+                        AnalyticConstants.PROP_TYPE, resale,
+                        AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod,
+                        AnalyticConstants.PROP_TM_USER_ID, userEmail);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                String resale = AnalyticConstants.PROP_TYPE_PRIMARY;
+                if (isResale) {
+                    resale = AnalyticConstants.PROP_TYPE_RESALE;
+                }
+                Ticketing.getAnalytics().trackApsalarEvent(com.livenation.mobile.android.na.analytics.AnalyticConstants.APSALAR_PURCHASE_CONFIRMATION,
+                        AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity(),
+                        AnalyticConstants.PROP_REVENUE, getCharges().getRevenue(),
+                        AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee(),
+                        AnalyticConstants.PROP_ORDER_PROCESSING_FEE, getCharges().getOrderProcessingFee(),
+                        AnalyticConstants.PROP_DELIVERY_FEE, getCharges().getDeliveryFee(),
+                        AnalyticConstants.PROP_OTHER_FEE, getCharges().getOrderProcessingFee(),
+                        AnalyticConstants.PROP_ORIGINAL_FACE_VALUE, getCharges().getOriginalFaceValueOfTicket(),
+                        AnalyticConstants.PROP_UPSELL_QUANTITY, getCharges().getUpsellUnits(),
+                        AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
+                        AnalyticConstants.PROP_TYPE, resale,
+                        AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod);
+            }
+        });
 
         displayImage();
         displayHeaderInfo();

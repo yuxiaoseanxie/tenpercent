@@ -52,12 +52,10 @@ public class Constants {
         public static final String DEBUG_MODE_DATA = "debug_mode_data";
         public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
         public static final String ENVIRONMENT = "environment";
+        public static final String TICKETING_ENVIRONMENT = "ticketing_environment";
         public static final String DEVICE_UUID = "device_uuid";
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
-        public static final String API_NAME = "api";
-        public static final String API_ACCESS_TOKEN = "access_token";
-        public static final String IAS_NAME = "ias_name";
-        public static final String IAS_USER_ID = "ias_user_id";
+
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
         public static final String ON_BOARDING_HAS_BEEN_DISPLAYED = "on_boarding_has_been_displayed";
         //1.X key

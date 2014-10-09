@@ -42,7 +42,7 @@ public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginC
     }
 
     @Override
-    public void onLoginSucceed(String accessToken, User user) {
+    public void onLoginSucceed(String ssoAccessToken, User user) {
         setResult(RESULT_OK);
         finish();
     }

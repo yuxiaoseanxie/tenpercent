@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -142,5 +143,16 @@ public class LegalActivity extends LiveNationFragmentActivity {
     @Override
     protected String getOmnitureScreenName() {
         return AnalyticConstants.OMNITURE_SCREEN_LEGAL_CREDITS;
+    }
+
+    @Override
+    public void onBackPressed() {
+        int index = getActionBar().getSelectedNavigationIndex();
+        WebViewFragment webViewFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(tagsByIndex[index]);
+        if(webViewFragment != null && webViewFragment.getWebView() != null && webViewFragment.getWebView().canGoBack()){
+            webViewFragment.getWebView().goBack();
+        }else{
+            finish();
+        }
     }
 }
