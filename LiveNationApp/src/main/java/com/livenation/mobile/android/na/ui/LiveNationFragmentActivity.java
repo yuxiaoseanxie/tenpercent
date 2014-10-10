@@ -54,6 +54,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         Analytics.onCreate(this);
 
         if (!LiveNationApplication.get().isMusicSync()) {
+            LiveNationApplication.get().setIsMusicSync(true);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(this, new BasicApiCallback<Void>() {
                 @Override
@@ -63,6 +64,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
+                    LiveNationApplication.get().setIsMusicSync(false);
                 }
             });
         }

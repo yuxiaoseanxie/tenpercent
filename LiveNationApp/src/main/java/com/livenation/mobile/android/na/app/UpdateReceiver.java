@@ -29,6 +29,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         final Boolean isMusicScanAllowed = sharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
 
         if (isMusicScanAllowed) {
+            LiveNationApplication.get().setIsMusicSync(true);
             sendGrantedAccessToMusicLibraryAnalytics(isMusicScanAllowed);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
@@ -41,6 +42,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                 @Override
                 public void onErrorResponse(LiveNationError error) {
                     //Nothing to do
+                    LiveNationApplication.get().setIsMusicSync(false);
                 }
             });
         }

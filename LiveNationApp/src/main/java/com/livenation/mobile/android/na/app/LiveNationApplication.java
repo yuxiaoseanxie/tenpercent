@@ -86,14 +86,7 @@ public class LiveNationApplication extends Application {
     private InboxStatusPresenter inboxStatusPresenter;
     //Migration
     private String oldUserId;
-    private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Props props = new Props();
-            props.put(AnalyticConstants.AIS_USER_ID, oldUserId);
-            LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
-        }
-    };
+    private BroadcastReceiver updateOldAppBroadcastReceiver;
 
     private final BroadcastReceiver updateSsoAccessTokenReceiver = new BroadcastReceiver() {
         @Override
@@ -159,7 +152,18 @@ public class LiveNationApplication extends Application {
 
         //Migration
         oldUserId = getIasId();
-        LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
+        if (oldUserId != null) {
+            updateOldAppBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    Props props = new Props();
+                    props.put(AnalyticConstants.AIS_USER_ID, oldUserId);
+                    LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
+                    LocalBroadcastManager.getInstance(LiveNationApplication.this).unregisterReceiver(updateOldAppBroadcastReceiver);
+                }
+            };
+            LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
+        }
 
         //ssoProvider token - server update
         LocalBroadcastManager.getInstance(this).registerReceiver(updateSsoAccessTokenReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.SSO_ACCESS_TOKEN_UPDATE_INTENT_FILTER));
@@ -307,7 +311,6 @@ public class LiveNationApplication extends Application {
         if (internetStateReceiver != null) {
             unregisterReceiver(internetStateReceiver);
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateSsoAccessTokenReceiver);
     }
 
