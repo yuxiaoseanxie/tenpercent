@@ -62,6 +62,9 @@ public class Constants {
         public static final String PREF_NAME = "TM_USER_PREF";
         public static final String INSTALLATION_ID = "INSTALLATION_ID";
         public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
+
+        public static final String IAS_NAME = "ias_name";
+        public static final String IAS_USER_ID = "ias_user_id";
         //Authentification
         public static final String AUTHENTIFICATION_NAME = "auth_configuration";
         public static final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
