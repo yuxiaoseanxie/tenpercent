@@ -1,7 +1,9 @@
 package com.livenation.mobile.android.na.providers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -12,6 +14,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.segment.android.models.Props;
 
@@ -36,6 +39,9 @@ public class AccessTokenAppProvider extends AccessTokenProvider {
                     SharedPreferences newPrefs = LiveNationApplication.get().getApplicationContext().getSharedPreferences(Constants.SharedPreferences.IAS_NAME, Context.MODE_PRIVATE);
                     newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, oldId).commit();
                     oldPrefs.edit().clear().commit();
+
+                    //Migration
+                    LocalBroadcastManager.getInstance(LiveNationLibrary.getContext()).sendBroadcast(new Intent(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
 
                 }
                 callback.onResponse(response);
