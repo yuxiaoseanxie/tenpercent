@@ -61,6 +61,12 @@
     <init>(...);
 }
 
+# App - Ticketing
+# Leave models alone. Jackson uses reflection heavily to work correctly, proguard destroys this
+-keep class com.mobilitus.tm.tickets.models.** {
+    *;
+}
+
 # Facebook
 
 -keep class com.facebook.** { *; } 
@@ -87,3 +93,12 @@
 
 # Crashyltics debugging
 -keepattributes SourceFile,LineNumberTable
+
+# Disable logging
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}

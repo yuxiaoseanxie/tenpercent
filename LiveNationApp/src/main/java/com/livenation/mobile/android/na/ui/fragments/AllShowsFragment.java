@@ -27,17 +27,16 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -139,8 +138,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         props.put(AnalyticConstants.CELL_POSITION, position);
         LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.ALL_SHOWS, props);
 
-        Bundle args = SingleEventPresenter.getAruguments(event.getId());
-        SingleEventPresenter.embedResult(args, event);
+        Bundle args = ShowActivity.getArguments(event);
         intent.putExtras(args);
 
         startActivity(intent);
@@ -218,7 +216,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         public void onClick(View v) {
             String eventId = Event.makeTypedId(chart.getChartableId().toString());
             Intent intent = new Intent(getActivity(), ShowActivity.class);
-            intent.putExtras(SingleEventPresenter.getAruguments(eventId));
+            intent.putExtras(ShowActivity.getArguments(eventId));
             startActivity(intent);
         }
     }

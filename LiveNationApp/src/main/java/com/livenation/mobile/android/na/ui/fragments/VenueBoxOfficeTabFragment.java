@@ -16,6 +16,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.Map;
 
 public class VenueBoxOfficeTabFragment extends Fragment {
+    private static final String BOX_OFFICE_INFO = "box_office_info";
+    private static final String DISPLAYED_SECTIONS = "displayed sections";
     private static final String SECTION_TERMINATOR = "<br><br>\n";
     private BoxOffice boxOfficeInfo;
     private String[] displayedSections;
@@ -27,8 +29,10 @@ public class VenueBoxOfficeTabFragment extends Fragment {
 
     public static VenueBoxOfficeTabFragment newInstance(BoxOffice boxOfficeInfo, String[] displayedSections) {
         VenueBoxOfficeTabFragment fragment = new VenueBoxOfficeTabFragment();
-        fragment.setBoxOfficeInfo(boxOfficeInfo);
-        fragment.setDisplayedSections(displayedSections);
+        Bundle args = new Bundle();
+        args.putSerializable(BOX_OFFICE_INFO, boxOfficeInfo);
+        args.putStringArray(DISPLAYED_SECTIONS, displayedSections);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -36,6 +40,8 @@ public class VenueBoxOfficeTabFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boxOfficeInfo = (BoxOffice) getArguments().getSerializable(BOX_OFFICE_INFO);
+        displayedSections = getArguments().getStringArray(DISPLAYED_SECTIONS);
         setRetainInstance(true);
     }
 
@@ -75,10 +81,6 @@ public class VenueBoxOfficeTabFragment extends Fragment {
         return boxOfficeInfo;
     }
 
-    public void setBoxOfficeInfo(BoxOffice boxOfficeInfo) {
-        this.boxOfficeInfo = boxOfficeInfo;
-    }
-
     public String[] getDisplayedSections() {
         return displayedSections;
     }
@@ -87,10 +89,6 @@ public class VenueBoxOfficeTabFragment extends Fragment {
 
 
     //region Rendering
-
-    public void setDisplayedSections(String[] displayedSections) {
-        this.displayedSections = displayedSections;
-    }
 
     private void render() {
         Map<String, String> values = getBoxOfficeInfo().getValues();

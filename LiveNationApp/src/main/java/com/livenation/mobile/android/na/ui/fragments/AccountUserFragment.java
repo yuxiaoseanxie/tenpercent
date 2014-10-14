@@ -73,7 +73,7 @@ public class AccountUserFragment extends LiveNationFragment implements
                 //When the login fail, the user is automatically removed and the "logout" broadcast is triggered.
                 //That's we this fragment should be destroy when the onErrorResponse method is called.
             }
-        });
+        }, getActivity());
 
         return view;
     }

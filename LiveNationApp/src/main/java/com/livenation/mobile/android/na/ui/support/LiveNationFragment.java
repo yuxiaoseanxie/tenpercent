@@ -11,14 +11,13 @@ package com.livenation.mobile.android.na.ui.support;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 
 public abstract class LiveNationFragment extends Fragment implements LiveNationFragmentContract {
 
@@ -33,26 +32,18 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     }
 
     @Override
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return LiveNationApplication.get().getSingleArtistPresenter();
-    }
-
-    @Override
-    public ArtistEventsPresenter getArtistEventsPresenter() {
-        return LiveNationApplication.get().getArtistEventsPresenter();
-    }
-
-    @Override
     public AccountPresenters getAccountPresenters() {
         return LiveNationApplication.get().getAccountPresenters();
     }
 
-    @Override
-    public SingleEventPresenter getSingleEventPresenter() {
-        return LiveNationApplication.get().getSingleEventPresenter();
-    }
-
     public void addFragment(int containerId, Fragment fragment, String tag) {
+        if (getActivity() == null) {
+            Log.e("AddFragment", "Called after activity destroyed");
+            if (!BuildConfig.DEBUG) {
+                //don't allow app to crash in production builds
+                return;
+            }
+        }
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(containerId, fragment, tag);
@@ -60,6 +51,13 @@ public abstract class LiveNationFragment extends Fragment implements LiveNationF
     }
 
     public void removeFragment(Fragment fragment) {
+        if (getActivity() == null) {
+            Log.e("RemoveFragment", "Called after activity destroyed");
+            if (!BuildConfig.DEBUG) {
+                //don't allow app to crash in production builds
+                return;
+            }
+        }
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.remove(fragment);

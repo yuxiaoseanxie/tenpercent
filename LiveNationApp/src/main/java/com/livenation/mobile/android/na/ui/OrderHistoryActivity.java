@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.activities.AccountActivity;
 import com.livenation.mobile.android.ticketing.activities.BaseActivity;
@@ -39,6 +41,7 @@ public class OrderHistoryActivity extends BaseActivity {
 
         fragment = (OrderHistoryFragment) getSupportFragmentManager().findFragmentById(R.id.activity_order_history_fragment);
 
+        //noinspection ConstantConditions
         getActionBar().setTitle(R.string.activity_order_history);
     }
 
@@ -102,6 +105,7 @@ public class OrderHistoryActivity extends BaseActivity {
         startActivityForResult(new Intent(this, AccountActivity.class), LOGIN_ACTIVITY_CODE);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void updateActionBar() {
         if (!Ticketing.getTicketService().hasSession()) {
             getActionBar().setSubtitle(null);
@@ -162,4 +166,9 @@ public class OrderHistoryActivity extends BaseActivity {
 
     //endregion
 
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_ORDERS;
+    }
 }

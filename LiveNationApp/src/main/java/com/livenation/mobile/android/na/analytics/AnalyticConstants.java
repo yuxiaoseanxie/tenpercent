@@ -101,20 +101,46 @@ public class AnalyticConstants {
     /**
      * Screen name
      */
-    public static final String SCREEN_HOME = "LN_Mob: NA App Android: Home";
-    public static final String SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
-    public static final String SCREEN_LEGAL_CREDITS = "LN_Mob: NA App Android: Legal";
-    public static final String SCREEN_VDP = "LN_Mob: NA App Android: VDP";
-    public static final String SCREEN_VDP_ALL_SHOWS = "LN_Mob: NA App Android: VDP: All Shows";
-    public static final String SCREEN_ADP = "LN_Mob: NA App Android: Artist";
-    public static final String SCREEN_ADP_TOUR = "LN_Mob: NA App Android: Artist: Tours";
-    public static final String SCREEN_LOCATION = "LN_Mob: NA App Android: Location";
-    public static final String SCREEN_NOTIFICATIONS = "LN_Mob: NA App Android: Notifications";
-    public static final String SCREEN_CONTACTS_US = "LN_Mob: NA App Android: Contact Us";
-    public static final String SCREEN_HELP = "LN_Mob: NA App Android: Help";
-    public static final String SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
-    public static final String SCREEN_SDP = "LN_Mob: NA App Android: SDP";
+    public static final String SCREEN_FAVORITES = "Favorites";
+    public static final String SCREEN_LEGAL_CREDITS = "Legal";
+    public static final String SCREEN_VDP_ALL_SHOWS = "All Shows";
+    public static final String SCREEN_LOCATION = "Location";
+    public static final String SCREEN_CONTACTS_US = "Contact Us";
+    public static final String SCREEN_HELP = "Help";
+    public static final String SCREEN_SEARCH = "Search";
     public static final String SCREEN_ONBOARDING = "Onboarding screen";
+    public static final String SCREEN_ADP = "ADP";
+    public static final String SCREEN_SDP = "SDP";
+    public static final String SCREEN_VDP = "VDP";
+    public static final String SCREEN_NOTIFICATIONS = "Notifications";
+    public static final String SCREEN_HOME = "Home Screen Load";
+    public static final String SCREEN_ADP_TOUR = "ADP Tour";
+
+
+    //Omniture Analytics
+    public static final String OMNITURE_SCREEN_HOME = "LN_Mob: NA App Android: Home";
+    public static final String OMNITURE_SCREEN_FAVORITES = "LN_Mob: NA App Android: Favorites";
+    public static final String OMNITURE_SCREEN_LEGAL_CREDITS = "LN_Mob: NA App Android: Legal";
+    public static final String OMNITURE_SCREEN_VDP = "LN_Mob: NA App Android: VDP";
+    public static final String OMNITURE_SCREEN_VDP_ALL_SHOWS = "LN_Mob: NA App Android: VDP: All Shows";
+    public static final String OMNITURE_SCREEN_ADP = "LN_Mob: NA App Android: Artist";
+    public static final String OMNITURE_SCREEN_ADP_TOUR = "LN_Mob: NA App Android: Artist: Tours";
+    public static final String OMNITURE_SCREEN_LOCATION = "LN_Mob: NA App Android: Location";
+    public static final String OMNITURE_SCREEN_NOTIFICATIONS = "LN_Mob: NA App Android: Notifications";
+    public static final String OMNITURE_SCREEN_CONTACTS_US = "LN_Mob: NA App Android: Contact Us";
+    public static final String OMNITURE_SCREEN_HELP = "LN_Mob: NA App Android: Help";
+    public static final String OMNITURE_SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
+    public static final String OMNITURE_SCREEN_SDP = "LN_Mob: NA App Android: SDP";
+
+    public static final String OMNITURE_SCREEN_ORDERS = "LN_Mob: NA App Android: Orders";
+    public static final String OMNITURE_SCREEN_SHARE = "LN_Mob: NA App Android: Share";
+    public static final String OMNITURE_SCREEN_VDP_VENUE_INFO = "LN_Mob: NA App Android: VDP: Venue Info";
+
+    //Apsalar
+    public static final String APSALAR_LN_LOGIN = "Livenation Login";
+    public static final String APSALAR_FIND_TICKET_TAP = "Find Ticket Tap";
+    public static final String APSALAR_PURCHASE_CONFIRMATION = "Purchase Confirmation";
+
 
     /**
      * Attributes
@@ -192,6 +218,7 @@ public class AnalyticConstants {
     public static final String AIS_USER_ID = "AIS User ID";
     public static final String ANDROID_DEVICE_ID = "Android Device ID";
     public static final String TOKEN = "Token";
+    public static final String TOKEN_TYPE = "Token type";
     public static final String GRANTED_ACCESS_TO_MUSIC_LIBRARY = "Granted Access to Music Library";
 
     //Music Library Analysis

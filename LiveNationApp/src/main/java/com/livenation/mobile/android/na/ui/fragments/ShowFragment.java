@@ -19,6 +19,7 @@ import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,13 +28,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
@@ -44,15 +44,19 @@ import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
@@ -146,10 +150,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             venueDetails.getFavorite().setOnClickListener(onVenueFavoriteClick);
             venueDetails.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.SDP);
 
-            double lat = Double.valueOf(venue.getLat());
-            double lng = Double.valueOf(venue.getLng());
-            setMapLocation(lat, lng);
-
+            //Longitude and Latitude can be null
+            if (venue.getLat() != null && venue.getLng() != null) {
+                double lat = Double.valueOf(venue.getLat());
+                double lng = Double.valueOf(venue.getLng());
+                setMapLocation(lat, lng);
+            } else {
+                new LibraryErrorTracker().track("This venue does not have a longitute and/or a latitude. Venue Id:" + venue.getId(), null);
+            }
         } else {
             venueDetails.setOnClickListener(null);
         }
@@ -306,7 +314,17 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
+            LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
+                @Override
+                public void onResponse(AccessToken response) {
+                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP, AnalyticConstants.TOKEN, response.getToken(), AnalyticConstants.TOKEN_TYPE, response.getType());
+                }
 
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP);
+                }
+            });
             showTicketOffering(ticketOffering);
         }
     }
@@ -326,8 +344,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             Venue venue = event.getVenue();
             Intent intent = new Intent(getActivity(), VenueActivity.class);
 
-            Bundle args = SingleVenuePresenter.getAruguments(venue.getId());
-            SingleVenuePresenter.embedResult(args, venue);
+            Bundle args = VenueActivity.getArguments(venue);
             intent.putExtras(args);
 
             //Analytics
@@ -358,15 +375,14 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             Intent intent = new Intent(getActivity(), ArtistActivity.class);
 
-            Bundle args = SingleArtistPresenter.getAruguments(lineupArtist.getId());
-            SingleArtistPresenter.embedResult(args, lineupArtist);
+            Bundle args = ArtistActivity.getArguments(lineupArtist);
             intent.putExtras(args);
 
             startActivity(intent);
         }
     }
 
-    private class OnCalendarViewClick implements View.OnClickListener {
+    private class OnCalendarViewClick extends OnThrottledClickListener {
         private CalendarDialogFragment dialogFragment;
         private Event event;
 
@@ -377,6 +393,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         @Override
         public void onClick(View view) {
+            super.onClick(view);
             if (dialogFragment.isAdded()) return;
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.CALENDAR_ROW_TAP, AnalyticsCategory.SDP, props);

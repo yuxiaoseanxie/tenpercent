@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -215,6 +216,9 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private void loadTicketsCart() {
+        if (ticketsCart == null || ticketsCart.getEvent() == null)
+            return;
+
         setRefreshing(true);
         if (Ticketing.isConnectedToInternet()) {
             offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
@@ -240,6 +244,10 @@ public class OrderDetailsFragment extends Fragment {
 
                     OrderDetailsFragment.this.hasLoadedTicketsCart = true;
                     OrderDetailsFragment.this.ticketsCart = fullCart;
+                    if (eventInfoCart.getEvent() == null) {
+                        OrderDetailsFragment.this.eventInfoCart = fullCart;
+                        updateEventInfo();
+                    }
 
                     displayTickets();
 
@@ -279,9 +287,18 @@ public class OrderDetailsFragment extends Fragment {
     //region Displaying Information
 
     private void updateEventInfo() {
-        eventTitle.setText(eventInfoCart.getEvent().getName());
-        eventVenue.setText(eventInfoCart.getEvent().getVenue().getName());
-        eventDate.setText(TicketingUtils.formatDate(eventInfoCart.getEvent().getShowTime()));
+        if (eventInfoCart != null && eventInfoCart.getEvent() != null) {
+            eventTitle.setText(eventInfoCart.getEvent().getName());
+            if (eventInfoCart.getEvent().getVenue() != null)
+                eventVenue.setText(eventInfoCart.getEvent().getVenue().getName());
+            else
+                eventVenue.setText(R.string.data_missing_placeholder);
+            eventDate.setText(TicketingUtils.formatDate(eventInfoCart.getEvent().getShowTime()));
+        } else {
+            eventTitle.setText(R.string.data_missing_placeholder);
+            eventVenue.setText(R.string.data_missing_placeholder);
+            eventDate.setText(R.string.data_missing_placeholder);
+        }
     }
 
     public void displayTickets() {
@@ -568,28 +585,43 @@ public class OrderDetailsFragment extends Fragment {
 
             track();
 
-            DialogFragment resaleDialog = new DialogFragment() {
-                @NonNull
-                @Override
-                public Dialog onCreateDialog(Bundle savedInstanceState) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.dialog_resale_title);
-                    builder.setMessage(R.string.dialog_resale_message);
-                    builder.setPositiveButton(R.string.dialog_resale_confirm_positive, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            TicketingUtils.openResaleTransferPlaceholder(getActivity(), getTicketsCart());
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.cancel, null);
-                    return builder.create();
-                }
-            };
+            DialogFragment resaleDialog = ResaleDialog.newInstance(getTicketsCart());
             resaleDialog.show(getFragmentManager(), "ResaleDialogFragment");
         }
     }
 
     //endregion
+
+    public static class ResaleDialog extends DialogFragment {
+        private static final String EXTRA_URI = "uri";
+
+        public static ResaleDialog newInstance(Cart cart) {
+            Bundle args = new Bundle();
+            args.putString(EXTRA_URI, TicketingUtils.getResaleTransferUri(cart).toString());
+            ResaleDialog fragment = new ResaleDialog();
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Uri uri = Uri.parse(getArguments().getString(EXTRA_URI));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.dialog_resale_title);
+            builder.setMessage(R.string.dialog_resale_message);
+            builder.setPositiveButton(R.string.dialog_resale_confirm_positive, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, null);
+
+            return builder.create();
+        }
+    }
 
     private static enum SelectionMode {
         NONE,

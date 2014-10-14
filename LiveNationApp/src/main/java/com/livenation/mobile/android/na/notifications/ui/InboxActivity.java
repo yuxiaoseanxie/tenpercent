@@ -26,8 +26,8 @@ import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.HomeActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
@@ -358,7 +358,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         Bundle extras = message.getExtras();
         if (extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
             Intent intent = new Intent(this, ShowActivity.class);
-            Bundle args = SingleEventPresenter.getAruguments(extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
+            Bundle args = ShowActivity.getArguments(extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
             intent.putExtras(args);
             this.startActivity(intent);
         } else {
@@ -446,5 +446,10 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
                     })
                     .create();
         }
+    }
+
+    @Override
+    protected String getOmnitureScreenName() {
+        return AnalyticConstants.OMNITURE_SCREEN_NOTIFICATIONS;
     }
 }

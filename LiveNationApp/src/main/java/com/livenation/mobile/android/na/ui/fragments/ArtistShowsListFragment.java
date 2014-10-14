@@ -7,7 +7,6 @@ import android.widget.ListView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.ArtistShowsScrollPager;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
@@ -58,9 +57,10 @@ public class ArtistShowsListFragment extends LiveNationListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Event event = adapter.getItem(position);
-        Bundle arguments = SingleEventPresenter.getAruguments(event.getId());
-        SingleEventPresenter.embedResult(arguments, event);
-        startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
+        if (position < adapter.getCount()) {
+            Event event = adapter.getItem(position);
+            Bundle arguments = ShowActivity.getArguments(event);
+            startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
+        }
     }
 }

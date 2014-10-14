@@ -20,6 +20,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.adobe.mobile.Config;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
@@ -31,7 +33,6 @@ import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
-import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -40,12 +41,9 @@ import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
+import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.ArtistEventsPresenter;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
-import com.livenation.mobile.android.na.presenters.SingleArtistPresenter;
-import com.livenation.mobile.android.na.presenters.SingleEventPresenter;
-import com.livenation.mobile.android.na.presenters.SingleVenuePresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
@@ -53,6 +51,7 @@ import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
+import com.livenation.mobile.android.na.providers.sso.SsoAppManager;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
@@ -60,6 +59,7 @@ import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.Analytics;
@@ -77,18 +77,13 @@ public class LiveNationApplication extends Application {
     private static ProviderManager providerManager;
     private static LiveNationProxy liveNationProxy;
     private static EnvironmentAppProvider environmentProvider;
-    private static AccessTokenAppProvider accessTokenProvider;
+    private static AccessTokenProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
-    private SingleEventPresenter singleEventPresenter;
-    private SingleArtistPresenter singleArtistPresenter;
-    private ArtistEventsPresenter artistEventsPresenter;
-    private SingleVenuePresenter singleVenuePresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private AccountPresenters accountPresenters;
     private InboxStatusPresenter inboxStatusPresenter;
-    private AppRaterManager raterManager;
     //Migration
     private String oldUserId;
     private final BroadcastReceiver updateOldAppBroadcastReceiver = new BroadcastReceiver() {
@@ -97,6 +92,13 @@ public class LiveNationApplication extends Application {
             Props props = new Props();
             props.put(AnalyticConstants.AIS_USER_ID, oldUserId);
             LiveNationAnalytics.track(AnalyticConstants.UPDATED, AnalyticsCategory.HOUSEKEEPING, props);
+        }
+    };
+
+    private final BroadcastReceiver updateSsoAccessTokenReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            accessTokenProvider.getAccessToken(null);
         }
     };
 
@@ -129,7 +131,7 @@ public class LiveNationApplication extends Application {
         return environmentProvider;
     }
 
-    public static AccessTokenAppProvider getAccessTokenProvider() {
+    public static AccessTokenProvider getAccessTokenProvider() {
         return accessTokenProvider;
     }
 
@@ -145,8 +147,8 @@ public class LiveNationApplication extends Application {
         //Declare object used to start the library
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
-        accessTokenProvider = new AccessTokenAppProvider(this);
-        ssoManager = new SsoManager(this);
+        accessTokenProvider = new AccessTokenAppProvider();
+        ssoManager = new SsoAppManager(this);
         ssoManager.addSsoProvider(new FacebookSsoProvider(this));
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
         ssoProviderPersistence = new SsoProviderPersistence(this);
@@ -159,6 +161,10 @@ public class LiveNationApplication extends Application {
         oldUserId = getIasId();
         LocalBroadcastManager.getInstance(this).registerReceiver(updateOldAppBroadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
 
+        //ssoProvider token - server update
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateSsoAccessTokenReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.SSO_ACCESS_TOKEN_UPDATE_INTENT_FILTER));
+
+
         //Start Library
         LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
         LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
@@ -167,6 +173,8 @@ public class LiveNationApplication extends Application {
 
         Crashlytics.start(this);
         Analytics.initialize(this);
+        //override segment logging. this should be false already due to debug being disabled :(
+        com.segment.android.Logger.setLog(false);
 
         //Object useful wild app
         providerManager = new ProviderManager();
@@ -174,22 +182,20 @@ public class LiveNationApplication extends Application {
 
         instance = this;
 
-
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 
         eventsPresenter = new EventsPresenter();
-        singleEventPresenter = new SingleEventPresenter();
-        singleVenuePresenter = new SingleVenuePresenter();
-        singleArtistPresenter = new SingleArtistPresenter();
-        artistEventsPresenter = new ArtistEventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
         accountPresenters = new AccountPresenters();
         inboxStatusPresenter = new InboxStatusPresenter();
 
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
-        imageLoader = new ImageLoader(Volley.newRequestQueue(getApplicationContext()), cache);
+
+        RequestQueue imageQueue = Volley.newRequestQueue(getApplicationContext());
+        imageQueue.getCache().clear();
+        imageLoader = new ImageLoader(imageQueue, cache);
 
         installedAppConfig = new InstalledAppConfig(this, Volley.newRequestQueue(getApplicationContext()));
         if (installedAppConfig.isUpdateAdvisable())
@@ -207,6 +213,9 @@ public class LiveNationApplication extends Application {
         props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook(this));
         props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle(this));
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
+
+        //Omniture
+        Config.setContext(getApplicationContext());
 
     }
 
@@ -245,7 +254,7 @@ public class LiveNationApplication extends Application {
         ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
         ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
         ticketingConfig.setOrderHistoryUploadHandler(new OrderHistoryUploadHelper());
-        ticketingConfig.setEnvironment(Ticketing.Environment.PRODUCTION);
+        ticketingConfig.setEnvironment(getTicketingEnvironment(getApplicationContext()));
         Ticketing.init(ticketingConfig);
         Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
@@ -299,7 +308,12 @@ public class LiveNationApplication extends Application {
             unregisterReceiver(internetStateReceiver);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateOldAppBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateSsoAccessTokenReceiver);
+    }
 
+    public Ticketing.Environment getTicketingEnvironment(Context context) {
+        TicketingEnvironmentPreferences preferences = new TicketingEnvironmentPreferences(context);
+        return preferences.getConfiguredEnvironment();
     }
 
     public ImageLoader getImageLoader() {
@@ -308,22 +322,6 @@ public class LiveNationApplication extends Application {
 
     public EventsPresenter getEventsPresenter() {
         return eventsPresenter;
-    }
-
-    public SingleArtistPresenter getSingleArtistPresenter() {
-        return singleArtistPresenter;
-    }
-
-    public ArtistEventsPresenter getArtistEventsPresenter() {
-        return artistEventsPresenter;
-    }
-
-    public SingleEventPresenter getSingleEventPresenter() {
-        return singleEventPresenter;
-    }
-
-    public SingleVenuePresenter getSingleVenuePresenter() {
-        return singleVenuePresenter;
     }
 
     public VenueEventsPresenter getVenueEventsPresenter() {
@@ -354,4 +352,5 @@ public class LiveNationApplication extends Application {
         SharedPreferences prefs = getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         return prefs.getString(Constants.SharedPreferences.INSTALLATION_ID, null);
     }
+
 }
