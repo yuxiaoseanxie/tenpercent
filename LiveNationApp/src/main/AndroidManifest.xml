@@ -101,7 +101,8 @@
             android:label="@string/activity_label_artist" />
         <activity
             android:name="com.livenation.mobile.android.na.ui.FavoriteActivity"
-            android:label="@string/activity_label_favorites" />
+            android:label="@string/activity_label_favorites"
+            android:launchMode="singleTop"/>
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity" />
         <activity android:name="com.livenation.mobile.android.na.ui.DebugActivity"></activity>
         <activity
