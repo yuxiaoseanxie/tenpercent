@@ -127,7 +127,7 @@ public class EmptyListViewControl extends LinearLayout {
         inactive = inflater.inflate(R.layout.view_empty_list_inactive, this, false);
         loading = inflater.inflate(R.layout.view_empty_list_loading, this, false);
         retry = inflater.inflate(R.layout.view_empty_list_retry, this, false);
-        noData = new View(context);
+        noData = inflater.inflate(R.layout.view_empty_list_no_data, this, false);
 
         setViewMode(ViewMode.LOADING);
     }
