@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<lint></lint>
+<lint>
+
+    <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
+    <issue id="TypographyDashes">
+        <ignore path="res/values/livenation_lib.xml" />
+        <ignore path="res/values/com_crashlytics_export_strings.xml" />
+        <!-- For "-" is the licence key of the third parties libraries -->
+    </issue>
+
+    <issue id="NewApi">
+        <ignore path="res/values/styles_livenation_text.xml" />
+        <!-- For android:fontFamily sans-serif-condensed used sometimes-->
+    </issue>
+
+</lint>
