@@ -49,7 +49,7 @@ public class AccessTokenAppProvider extends AccessTokenProvider {
 
             @Override
             public void onErrorResponse(LiveNationError error) {
-                onErrorResponse(error);
+                callback.onErrorResponse(error);
             }
         });
     }
