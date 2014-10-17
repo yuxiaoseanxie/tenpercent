@@ -23,8 +23,8 @@ import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
-import com.livenation.mobile.android.platform.api.service.livenation.LiveNationApiService;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -47,8 +47,8 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     private final String[] SEARCH_INCLUDE_ARTISTS_VENUES = new String[]{"venues", "artists"};
     private final String[] SEARCH_INCLUDE_ARTISTS = new String[]{"artists"};
     private SearchAdapter adapter;
-    private LiveNationApiService apiService;
-
+    private EmptyListViewControl emptyListViewControl;
+    private int pendingRequestCount = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +75,23 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setOnItemClickListener(this);
+
+        emptyListViewControl = (EmptyListViewControl) view.findViewById(R.id.fragment_search_empty_list_control);
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         return view;
     }
 
     @Override
     public void searchFor(String text) {
         if (TextUtils.isEmpty(text)) return;
+         synchronized (this) {
+             pendingRequestCount++;
+         }
+        if (adapter.getCount() == 0) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);
+        } else {
+            adapter.startHighlightedMode();
+        }
         AutoCompleteSearchParameters params = new AutoCompleteSearchParameters();
         params.setIncludes(searchIncludes);
         params.setSearchQuery(text);
@@ -106,9 +117,18 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
     @Override
     public void onResponse(List<SearchResult> response) {
         adapter.clear();
+        pendingRequestCount--;
+        emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
+        if (pendingRequestCount == 0) {
+            adapter.stopHighlightedMode();
+        }
+        if (response.size() == 0) {
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }
         for (SearchResult searchResult : response) {
             adapter.add(searchResult);
         }
+
     }
 
     private void openSearchItem(int position) {
@@ -164,6 +184,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
     public class SearchAdapter extends ArrayAdapter<SearchResult> {
         private LayoutInflater inflater;
+        private int textColor = android.R.color.black;
 
         public SearchAdapter(Context context, List<SearchResult> items) {
             super(context, android.R.layout.simple_list_item_1, items);
@@ -186,6 +207,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
 
             SearchResult searchResult = getItem(position);
             holder.getTitle().setText(searchResult.getName());
+            holder.getTitle().setTextColor(getResources().getColor(textColor));
             holder.getType().setText(searchResult.getObjectType().toLowerCase());
 
             holder.getCheckBox().setVisibility(View.VISIBLE);
@@ -235,5 +257,13 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             }
         }
 
+        public void startHighlightedMode() {
+            this.textColor = android.R.color.darker_gray;
+            notifyDataSetChanged();
+        }
+
+        public void stopHighlightedMode() {
+            this.textColor = android.R.color.black;
+        }
     }
 }
