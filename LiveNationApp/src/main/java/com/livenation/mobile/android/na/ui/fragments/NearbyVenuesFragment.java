@@ -29,16 +29,22 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
+import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.models.Props;
+
+import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -109,18 +115,26 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
             //user clicked the footer/loading view
             return;
         }
+        List<TicketOffering> offerings = event.getTicketOfferings();
 
-        Intent intent = new Intent(getActivity(), ShowActivity.class);
-
-        Bundle args = ShowActivity.getArguments(event);
+        if (EventUtils.isSDPAvoidable(event)) {
+            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
+            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
+            confirmIntent.putExtra(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
+            Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, offerings.get(0).getPurchaseUrl());
+        } else {
+            Intent intent = new Intent(getActivity(), ShowActivity.class);
+            Bundle args = ShowActivity.getArguments(event);
+            intent.putExtras(args);
+            getActivity().startActivity(intent);
+        }
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
         LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
 
-        intent.putExtras(args);
-        getActivity().startActivity(intent);
+
     }
 
     @Override

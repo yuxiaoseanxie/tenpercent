@@ -35,7 +35,7 @@ public class OrderDetailsActivity extends BaseActivity {private Cart eventInfoCa
 
     @Override
     protected String getScreenName() {
-        return AnalyticConstants.ORDER_DETAILS_SCREEN_LOAD;
+        return AnalyticConstants.SCREEN_ORDER_DETAILS;
     }
 
     @Override
