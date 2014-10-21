@@ -390,7 +390,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     }
 
     private void trackScreenLoad() {
-        Ticketing.getAnalytics().track(AnalyticConstants.ORDER_CONFIRMATION_SCREEN_LOAD, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
+        Ticketing.getAnalytics().track(AnalyticConstants.SCREEN_CONFIRMATION, AnalyticConstants.CATEGORY_CONFIRMATION, getProperties());
     }
 
     private View.OnClickListener createOnClickListenerForAction(@NonNull Action action) {
