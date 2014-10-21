@@ -5,8 +5,9 @@
     <issue id="HardcodedText" severity="error"/>
     <issue id="HardcodedText" severity="error"/>
     <issue id="ContentDescription" severity="ignore"/>
-
-
+    <issue id="InefficientWeight" severity="error"/>
+    <issue id="ObsoleteLayoutParam" severity="error"/>
+    <issue id="UnusedAttribute" severity="error"/>
 
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
