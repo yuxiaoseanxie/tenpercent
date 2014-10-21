@@ -47,7 +47,7 @@
             <TextView
                 android:id="@+id/fragment_message_view"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/widget_margin"
                 android:textColorLink="@color/notification_link_color" />
         </ScrollView>
