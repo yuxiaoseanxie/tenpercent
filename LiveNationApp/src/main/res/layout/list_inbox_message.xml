@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:contentDescription="Inbox message"
+    android:contentDescription="@string/mock_inbox_message"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="8dp">
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="info"
+            android:text="@string/mock_inbox_message_info"
             android:textAppearance="@style/list_inbox_message_info" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:focusableInTouchMode="false"
             android:paddingBottom="3dp"
             android:paddingTop="3dp"
-            android:text="title"
+            android:text="@string/mock_inbox_message_title"
             android:textAppearance="@style/list_inbox_message_title" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="detail"
+            android:text="@string/mock_inbox_message_detail"
             android:textAppearance="@style/list_inbox_message_details" />
     </LinearLayout>
 

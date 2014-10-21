@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Title"
+        android:text="@string/mock_debug_title"
         android:textAppearance="@style/ln.text.medium" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="8dp"
         android:gravity="right"
-        android:text="Action"
+        android:text="@string/mock_debug_action"
         android:textAppearance="@style/ln.text.small" />
 
 </LinearLayout>
