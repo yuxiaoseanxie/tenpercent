@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="TypographyDashes" severity="warning"/>
+    <issue id="NewApi" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="ContentDescription" severity="ignore"/>
+
+
+
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
