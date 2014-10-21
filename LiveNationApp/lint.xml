@@ -16,6 +16,11 @@
         <!-- For "-" is the licence key of the third parties libraries -->
     </issue>
 
+    <issue id="UnusedAttribute">
+        <ignore path="res/layout/refresh_bar.xml"/>
+        <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
+    </issue>
+
     <issue id="NewApi">
         <ignore path="res/values/styles_livenation_text.xml" />
         <!-- For android:fontFamily sans-serif-condensed used sometimes-->
