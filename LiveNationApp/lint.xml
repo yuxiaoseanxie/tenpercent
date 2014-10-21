@@ -1,2 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<lint></lint>
+<lint>
+    <issue id="TypographyDashes" severity="warning"/>
+    <issue id="NewApi" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="ContentDescription" severity="ignore"/>
+    <issue id="InefficientWeight" severity="error"/>
+    <issue id="ObsoleteLayoutParam" severity="error"/>
+    <issue id="UnusedAttribute" severity="error"/>
+
+
+    <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
+    <issue id="TypographyDashes">
+        <ignore path="res/values/livenation_lib.xml" />
+        <ignore path="res/values/com_crashlytics_export_strings.xml" />
+        <!-- For "-" is the licence key of the third parties libraries -->
+    </issue>
+
+    <issue id="UnusedAttribute">
+        <ignore path="res/layout/refresh_bar.xml"/>
+        <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
+    </issue>
+
+    <issue id="NewApi">
+        <ignore path="res/values/styles_livenation_text.xml" />
+        <!-- For android:fontFamily sans-serif-condensed used sometimes-->
+    </issue>
+
+</lint>

@@ -38,4 +38,14 @@
 
     <string name="mock_order_quantity">Thanks! You purchased tickets to</string>
     <string name="mock_order_event_name">Beyoncé and Jay-Z</string>
+
+
+    <string name="mock_debug_title">Title</string>
+    <string name="mock_debug_action">Action</string>
+
+    <string name="mock_inbox_message_title">title</string>
+    <string name="mock_inbox_message_info">info</string>
+    <string name="mock_inbox_message_detail">detail</string>
+    <string name="mock_inbox_message">Inbox message</string>
+
 </resources>
