@@ -23,7 +23,9 @@
 
     <issue id="UnusedAttribute">
         <ignore path="res/layout/refresh_bar.xml"/>
+        <ignore path="AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
+        <!-- For android:parentActivityName used in API level 16 and greater-->
     </issue>
 
     <issue id="NewApi">
