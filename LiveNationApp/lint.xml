@@ -11,7 +11,7 @@
     <issue id="UselessParent" severity="error"/>
     <issue id="IconDuplicates" severity="error"/>
     <issue id="IconLocation" severity="error"/>
-
+    <issue id="MenuTitle" severity="error"/>
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
