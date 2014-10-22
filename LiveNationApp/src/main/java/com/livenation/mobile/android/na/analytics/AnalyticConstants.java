@@ -200,7 +200,6 @@ public class AnalyticConstants {
 
     //Sdp
     public static final String TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";
-    public static final String TYPE_OF_DATE = "Type of Date";
 
     //Video
     public static final String VIDEO_NAME = "Video name";
