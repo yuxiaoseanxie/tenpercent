@@ -9,7 +9,7 @@
     <issue id="ObsoleteLayoutParam" severity="error"/>
     <issue id="UnusedAttribute" severity="error"/>
     <issue id="UselessParent" severity="error"/>
-
+    <issue id="IconDuplicates" severity="error"/>
 
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
