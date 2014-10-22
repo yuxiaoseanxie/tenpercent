@@ -71,26 +71,14 @@
                     android:text="@string/mock_venue_distance" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/list_venue_header_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/list_venue_header_location_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/list_venue_nearby_header_padding"
-                    android:paddingRight="@dimen/gap_small"
-                    android:src="@drawable/venue_location_red" />
-
-                <TextView
-                    android:id="@+id/list_venue_header_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mock_venue_location"
-                    android:textAppearance="@style/ln.text.small.italic.gray" />
-            </LinearLayout>
+                android:drawableLeft="@drawable/venue_location_red"
+                android:drawablePadding="@dimen/gap_small"
+                android:text="@string/mock_venue_location"
+                android:textAppearance="@style/ln.text.small.italic.gray" />
 
 
         </LinearLayout>
