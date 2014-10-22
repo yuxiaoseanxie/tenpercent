@@ -8,6 +8,8 @@
     <issue id="InefficientWeight" severity="error"/>
     <issue id="ObsoleteLayoutParam" severity="error"/>
     <issue id="UnusedAttribute" severity="error"/>
+    <issue id="UselessParent" severity="error"/>
+
 
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
