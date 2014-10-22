@@ -106,7 +106,6 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        Intent intent = new Intent(getActivity(), ShowActivity.class);
         RecommendationItem recommendationItem = (RecommendationItem) parent.getItemAtPosition(position);
 
         if (recommendationItem == null || recommendationItem.get() == null) {
@@ -115,19 +114,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         }
 
         Event event = recommendationItem.get();
-
-        List<TicketOffering> offerings = event.getTicketOfferings();
-        if (EventUtils.isSDPAvoidable(event)) {
-            Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
-            confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-            confirmIntent.putExtra(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
-            Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, offerings.get(0).getPurchaseUrl());
-
-        } else {
-            Bundle args = ShowActivity.getArguments(event);
-            intent.putExtras(args);
-            startActivity(intent);
-        }
+        EventUtils.redirectToSDPOrEDP(event, getActivity());
 
 
         //Analytics
