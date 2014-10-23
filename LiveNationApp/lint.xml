@@ -14,9 +14,9 @@
     <issue id="IconDensities" severity="error"/>
     <issue id="MenuTitle" severity="error"/>
     <issue id="SuspiciousImport" severity="error"/>
-    <issue id="LintError" severity="ignore"/>
     <issue id="UnusedResources" severity="error"/>
     <issue id="CommitPrefEdits" severity="error"/>
+    <issue id="DefaultLocale" severity="error"/>
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
