@@ -61,6 +61,7 @@ import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
@@ -115,7 +116,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         artistTitle.setText(event.getName());
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT, Locale.getDefault());
         TimeZone timeZone;
         if (event.getVenue().getTimeZone() != null) {
             timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());

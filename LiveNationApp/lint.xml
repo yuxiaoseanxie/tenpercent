@@ -18,6 +18,8 @@
     <issue id="CommitPrefEdits" severity="error"/>
     <issue id="DefaultLocale" severity="error"/>
     <issue id="OldTargetApi" severity="error"/>
+    <issue id="ShowToast" severity="error"/>
+    <issue id="SimpleDateFormat" severity="error"/>
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
@@ -40,4 +42,8 @@
         <!-- For setBackground we checked the os version before-->
     </issue>
 
+
+    <issue id="ShowToast" severity="error">
+        <ignore path="src/main/java/com/livenation/mobile/android/na/helpers/MusicSyncHelper.java"/>
+    </issue>
 </lint>

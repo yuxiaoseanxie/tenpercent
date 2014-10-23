@@ -19,12 +19,13 @@ import com.livenation.mobile.android.na.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class VerticalDate extends LinearLayout {
-    private final SimpleDateFormat DAY_FORMATTER = new SimpleDateFormat("d");
-    private final SimpleDateFormat DOTW_FORMATTER = new SimpleDateFormat("EEE");
-    private final SimpleDateFormat MONTH_FORMATTER = new SimpleDateFormat("MMM");
+    private final SimpleDateFormat DAY_FORMATTER = new SimpleDateFormat("d", Locale.getDefault());
+    private final SimpleDateFormat DOTW_FORMATTER = new SimpleDateFormat("EEE", Locale.getDefault());
+    private final SimpleDateFormat MONTH_FORMATTER = new SimpleDateFormat("MMM", Locale.getDefault());
 
     private TextView dateDotw;
     private TextView dateDay;
