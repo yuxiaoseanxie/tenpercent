@@ -13,23 +13,27 @@
     <issue id="IconLocation" severity="error"/>
     <issue id="IconDensities" severity="error"/>
     <issue id="MenuTitle" severity="error"/>
+    <issue id="SuspiciousImport" severity="error"/>
+    <issue id="LintError" severity="ignore"/>
+    <issue id="UnusedResources" severity="error"/>
+    <issue id="CommitPrefEdits" severity="error"/>
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
-        <ignore path="res/values/livenation_lib.xml" />
-        <ignore path="res/values/com_crashlytics_export_strings.xml" />
+        <ignore path="src/main/res/values/livenation_lib.xml" />
+        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml" />
         <!-- For "-" is the licence key of the third parties libraries -->
     </issue>
 
     <issue id="UnusedAttribute">
-        <ignore path="res/layout/refresh_bar.xml"/>
-        <ignore path="AndroidManifest.xml"/>
+        <ignore path="src/main/res/layout/refresh_bar.xml"/>
+        <ignore path="src/main/AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
         <!-- For android:parentActivityName used in API level 16 and greater-->
     </issue>
 
     <issue id="NewApi">
-        <ignore path="res/values/styles_livenation_text.xml" />
+        <ignore path="src/main/res/values/styles_livenation_text.xml" />
         <!-- For android:fontFamily sans-serif-condensed used sometimes-->
     </issue>
 
