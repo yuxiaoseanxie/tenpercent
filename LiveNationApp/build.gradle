@@ -42,7 +42,7 @@ android {
         versionCode computeVersionCode()
         versionName computeVersionName(versionCode)
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
