@@ -51,7 +51,18 @@ android {
             String gitSha = computeGitSha(project.projectDir)
             buildConfigField "String", "GIT_SHA_$name", "\"$gitSha\""
         }
-    }
+
+        lintOptions {
+            // if true, generate an XML report for use by for example Jenkins
+            xmlReport true
+            //file to write report to (if not specified, defaults to lint-results.xml)
+            xmlOutput file("lint-report.xml")
+            // if true, generate an HTML report (with issue explanations, sourcecode, etc)
+            htmlReport true
+            // optional path to report (default will be lint-results.html in the builddir)
+            htmlOutput file("lint-report.html")
+        }
+        }
 
     signingConfigs {
 
