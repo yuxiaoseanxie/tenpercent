@@ -38,7 +38,7 @@ public class TicketingEnvironmentPreferences {
     public void setConfiguredEnvironment(Ticketing.Environment environment) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         try {
-            editor.putString(Constants.SharedPreferences.TICKETING_ENVIRONMENT, SerializableHelper.toString(environment)).commit();
+            editor.putString(Constants.SharedPreferences.TICKETING_ENVIRONMENT, SerializableHelper.toString(environment)).apply();
         } catch (IOException e) {
             Log.e(TicketingEnvironmentPreferences.class.getSimpleName(), "Environment cannot be saved: " + environment.name());
         }

@@ -21,7 +21,7 @@ public class RatingPreferences {
     }
 
     public void setHasBeenClicked(boolean hasBeenShown) {
-        sharedPreferences.edit().putBoolean(Constants.SharedPreferences.RATING_DIALOG_CLICKED, hasBeenShown).commit();
+        sharedPreferences.edit().putBoolean(Constants.SharedPreferences.RATING_DIALOG_CLICKED, hasBeenShown).apply();
     }
 
 

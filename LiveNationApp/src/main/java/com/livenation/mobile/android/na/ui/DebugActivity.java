@@ -477,7 +477,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
                     }
                     scanItem.setValue(scanOption.message);
                     actionsAdapter.notifyDataSetChanged();
-                    editor.commit();
+                    editor.apply();
                 }
             });
 
