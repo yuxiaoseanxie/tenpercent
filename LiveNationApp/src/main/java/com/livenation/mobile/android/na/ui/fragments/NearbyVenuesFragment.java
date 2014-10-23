@@ -29,10 +29,10 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
-import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -110,17 +110,14 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
             return;
         }
 
-        Intent intent = new Intent(getActivity(), ShowActivity.class);
-
-        Bundle args = ShowActivity.getArguments(event);
+        EventUtils.redirectToSDPOrEDP(event, getActivity());
 
         //Analytics
         Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
         LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
 
-        intent.putExtras(args);
-        getActivity().startActivity(intent);
+
     }
 
     @Override
