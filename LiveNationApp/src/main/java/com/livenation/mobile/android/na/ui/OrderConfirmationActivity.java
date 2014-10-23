@@ -129,11 +129,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                     resale = AnalyticConstants.PROP_TYPE_RESALE;
                 }
 
-                String userEmail = null;
-                if (getCart() != null && getCart().getBuyer() != null) {
-                    userEmail = getCart().getBuyer().getEmail();
-                }
-
                 Ticketing.getAnalytics().trackApsalarEvent(com.livenation.mobile.android.na.analytics.AnalyticConstants.APSALAR_PURCHASE_CONFIRMATION,
                         com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN, response.getToken(), com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN_TYPE, response.getType(),
                         AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity(),
@@ -147,7 +142,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                         AnalyticConstants.PROP_UPSELL_TOTAL, getCharges().getUpsellRevenue(),
                         AnalyticConstants.PROP_TYPE, resale,
                         AnalyticConstants.PROP_DELIVERY_METHOD, deliveryMethod,
-                        AnalyticConstants.PROP_TM_USER_ID, userEmail);
+                        AnalyticConstants.PROP_TM_USER_ID, Ticketing.getTicketService().getUser().getEmail());
             }
 
             @Override

@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/list_calender_item_start_date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/calendar_dialog_cell_date" />
@@ -57,7 +57,7 @@
 
         <TextView
             android:id="@+id/list_calender_item_end_date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/calendar_dialog_cell_date" />

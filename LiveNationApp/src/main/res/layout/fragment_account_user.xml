@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/fragment_account_user_image"
+        android:layout_width="@dimen/sso_image_size"
+        android:layout_height="@dimen/sso_image_size"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/fragment_account_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:textAppearance="@style/ln.text.large.bold" />
 
-        <ImageView
-            android:id="@+id/fragment_account_user_image"
-            android:layout_width="@dimen/sso_image_size"
-            android:layout_height="@dimen/sso_image_size"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/fragment_account_user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/ln.text.large.bold" />
-
-        <TextView
-            android:id="@+id/fragment_account_user_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/facebook_logo"
-            android:drawablePadding="@dimen/gap_tiny"
-            android:textAppearance="@style/ln.text.small.gray" />
-    </LinearLayout>
-
-</RelativeLayout>
+    <TextView
+        android:id="@+id/fragment_account_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/facebook_logo"
+        android:drawablePadding="@dimen/gap_tiny"
+        android:textAppearance="@style/ln.text.small.gray" />
+</LinearLayout>
