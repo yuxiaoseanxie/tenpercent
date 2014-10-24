@@ -16,6 +16,12 @@ public class DefaultImageHelper {
 
     private static void initializeDefaultTapImages(Context context) {
         TypedArray defaultImageArray = context.getResources().obtainTypedArray(R.array.hero_tap_images);
+        /** This is required for caching purpose. When you call recycle it means that this object
+         * can be reused from this point. Internally TypedArray contains few arrays so in order
+         * not to allocate memory each time when TypedArray is used it is cached in Resources
+         * class as static field
+         */
+        defaultImageArray.recycle();
         int size = defaultImageArray.length();
         defaultTapImages = new int[size];
         for (int i = 0; i < size; i++) {
@@ -26,6 +32,7 @@ public class DefaultImageHelper {
 
     private static void initializeDefaultDpImages(Context context) {
         TypedArray defaultImageArray = context.getResources().obtainTypedArray(R.array.hero_images);
+        defaultImageArray.recycle();
         int size = defaultImageArray.length();
         defaultDpImages = new int[size];
         for (int i = 0; i < size; i++) {

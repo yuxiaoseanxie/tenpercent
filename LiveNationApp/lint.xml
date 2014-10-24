@@ -21,6 +21,8 @@
     <issue id="ShowToast" severity="error"/>
     <issue id="SimpleDateFormat" severity="error"/>
     <issue id="InflateParams" severity="error"/>
+    <issue id="GradleOverrides" severity="error"/>
+
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
@@ -62,6 +64,10 @@
         <!-- To create our own tabs -->
         <ignore path="src/main/java/com/livenation/mobile/android/na/notifications/ui/InboxActivity.java"/>
         <!-- To create a PopMenu -->
+    </issue>
+
+    <issue id="SetJavaScriptEnabled">
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/fragments/WebViewFragment.java"/>
     </issue>
 
 </lint>
