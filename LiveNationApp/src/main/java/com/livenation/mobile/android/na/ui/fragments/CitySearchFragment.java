@@ -91,7 +91,7 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
             View view = null;
 
             if (null == convertView) {
-                view = inflater.inflate(R.layout.list_search_city_item, null);
+                view = inflater.inflate(R.layout.list_search_city_item, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             } else {

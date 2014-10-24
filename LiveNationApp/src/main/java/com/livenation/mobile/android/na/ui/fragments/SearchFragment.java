@@ -198,7 +198,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             View view = null;
 
             if (null == convertView) {
-                view = inflater.inflate(R.layout.list_search_result, null);
+                view = inflater.inflate(R.layout.list_search_result, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             } else {

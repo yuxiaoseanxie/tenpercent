@@ -51,7 +51,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         View view = null;
 
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_show_nearby_item, null);
+            view = inflater.inflate(R.layout.list_show_nearby_item, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
@@ -83,7 +83,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_venue_nearby_header, null);
+            view = inflater.inflate(R.layout.list_venue_nearby_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {

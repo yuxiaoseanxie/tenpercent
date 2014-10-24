@@ -71,7 +71,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         View view;
         EventViewHolder holder;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_show_item_v2, null);
+            view = inflater.inflate(R.layout.list_show_item_v2, parent, false);
             holder = new EventViewHolder(view);
             view.setTag(holder);
         } else {
@@ -119,7 +119,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_recommended_header, null);
+            view = inflater.inflate(R.layout.list_recommended_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {

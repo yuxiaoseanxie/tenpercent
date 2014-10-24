@@ -51,7 +51,17 @@
     <issue id="InflateParams">
         <ignore path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java"/>
         <!-- For the header view added to the list-->
-
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/CalendarDialogFragment.java"/>
+        <ignore path="src/main/java/com/livenation/mobile/android/na/app/rating/RatingDialogFragment.java"/>
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/TicketOfferingsDialogFragment.java"/>
+        <!-- DialogFragment -->
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/CitySearchActivity.java"/>
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/SearchActivity.java"/>
+        <!-- ActionBar custom view -->
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/fragments/FavoritesFragment.java"/>
+        <!-- To create our own tabs -->
+        <ignore path="src/main/java/com/livenation/mobile/android/na/notifications/ui/InboxActivity.java"/>
+        <!-- To create a PopMenu -->
     </issue>
 
 </lint>

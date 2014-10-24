@@ -37,7 +37,7 @@ public class EventStickyHeaderAdapter extends EventAdapter implements StickyList
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_show_header, null);
+            view = inflater.inflate(R.layout.list_show_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {
