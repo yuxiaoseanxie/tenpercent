@@ -78,7 +78,6 @@
     <string name="debug_header_info">INFO</string>
     <string name="debug_header_actions">ACTIONS</string>
     <string name="debug_item_device_uuid">Device ID</string>
-    <string name="debug_item_user_id">User ID</string>
     <string name="debug_item_access_token">Access Token</string>
     <string name="debug_item_apid">APID</string>
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
@@ -130,7 +129,6 @@
     <string name="box_office_child_rules">Child Rules</string>
 
     <string name="url_error_bad_entity">Item not found</string>
-    <string name="url_error_no_conneciton">Internet connection required</string>
     <string name="url_error_platform">Please try again later</string>
     <string name="url_error_bad_url">Bad URL</string>
 
@@ -144,7 +142,6 @@
         <item quantity="one">Congrats! You’ve got a ticket to</item>
         <item quantity="other">Congrats! You’ve got %1$d tickets to</item>
     </plurals>
-    <string name="order_confirmation_details_title">Order Details</string>
     <string name="order_confirmation_number">Order Number</string>
     <string name="order_confirmation_date">Date &amp; Time</string>
     <string name="order_confirmation_venue_name">Venue</string>
@@ -154,8 +151,6 @@
     <string name="order_confirmation_note_fmt">You\'ll receive an email at %1$s with complete ticket info.</string>
 
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
-    <string name="confirmation_action_tag_line_ride_share">Arrive in style</string>
-    <string name="confirmation_action_ride_share">Book a Ride</string>
     <string name="confirmation_action_tag_line_share">Brag, Boast. Share</string>
     <string name="confirmation_action_tag_line_split_cost">Buying for friends?</string>
     <string name="confirmation_action_split_cost">Get Paid Back</string>
