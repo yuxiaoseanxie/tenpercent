@@ -80,8 +80,16 @@ public class HelpMenuFragment extends ListFragment implements Response.ErrorList
     @Override
     public void onResponse(JSONObject response) {
         try {
-            JSONArray helpMenuItem = response.getJSONArray(TOPICS_KEY);
-            buildList(helpMenuItem);
+            final JSONArray helpMenuItem = response.getJSONArray(TOPICS_KEY);
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buildList(helpMenuItem);
+                    }
+                });
+            }
+
 
         } catch (JSONException e) {
             onErrorResponse(new VolleyError(e));
