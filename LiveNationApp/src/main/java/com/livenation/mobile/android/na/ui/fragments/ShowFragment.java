@@ -47,6 +47,7 @@ import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVen
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -313,6 +314,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             TicketOffering ticketOffering = offerings.get(0);
 
             Props props = AnalyticsHelper.getPropsForEvent(event);
+            props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, EventUtils.isSDPAvoidable(event, v.getContext()));
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
             LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
                 @Override
