@@ -272,4 +272,7 @@
     <string name="web_url_venue">http://www.livenation.com/venues/</string>
     <string name="app_url_venue">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
 
+    <!-- Config File -->
+    <string name="config_file_url">https://s3.amazonaws.com/adr-static-content/en_US/help/manifest.json</string>
+
 </resources>
