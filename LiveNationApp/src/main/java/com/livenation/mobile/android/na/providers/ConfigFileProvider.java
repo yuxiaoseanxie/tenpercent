@@ -22,10 +22,7 @@ import org.json.JSONObject;
 public class ConfigFileProvider {
     private RequestQueue queue;
     private Context context;
-    private int VALID_PERIOD = 60 * 30 * 1000;
     static private ConfigFile configFile;
-    private long syncDate;
-
 
     public ConfigFileProvider(Context context) {
         this.context = context;
@@ -37,16 +34,15 @@ public class ConfigFileProvider {
     }
 
     public void getConfigFile(final BasicApiCallback<ConfigFile> callback) {
-        if (configFile == null && ((syncDate - System.currentTimeMillis()) > VALID_PERIOD)) {
+        if (configFile != null) {
             callback.onResponse(configFile);
             return;
         } else {
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, context.getString(R.string.help_url_json), null, new Response.Listener<JSONObject>() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, context.getString(R.string.config_file_url), null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    boolean isSdpOn = response.optBoolean("isSdpOn", true);
+                    boolean isSdpOn = response.optBoolean("skip_SDP_feature", false);
                     configFile = new ConfigFile(isSdpOn);
-                    syncDate = System.currentTimeMillis();
                     callback.onResponse(configFile);
                 }
             }, new Response.ErrorListener() {
@@ -60,10 +56,10 @@ public class ConfigFileProvider {
     }
 
     public class ConfigFile {
-        public boolean skipSDP;
+        public boolean skipSDPFeature;
 
-        public ConfigFile(boolean skipSDP) {
-            this.skipSDP = skipSDP;
+        public ConfigFile(boolean skipSDPFeature) {
+            this.skipSDPFeature = skipSDPFeature;
         }
     }
 }
