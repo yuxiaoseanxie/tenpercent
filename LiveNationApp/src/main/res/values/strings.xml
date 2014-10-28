@@ -273,6 +273,6 @@
     <string name="app_url_venue">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
 
     <!-- Config File -->
-    <string name="config_file_url">https://s3.amazonaws.com/adr-static-content/en_US/help/manifest.json</string>
+    <string name="config_file_url">https://adr-static-content.s3.amazonaws.com/config/debug.json</string>
 
 </resources>
