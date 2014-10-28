@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
@@ -302,7 +304,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             List<TicketOffering> offerings = event.getTicketOfferings();
             if (offerings.isEmpty()) {
                 Toast.makeText(getActivity().getApplicationContext(),
@@ -313,9 +315,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             TicketOffering ticketOffering = offerings.get(0);
 
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, EventUtils.isSDPAvoidable(event, v.getContext()));
+            final Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
+
             LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
                 @Override
                 public void onResponse(AccessToken response) {

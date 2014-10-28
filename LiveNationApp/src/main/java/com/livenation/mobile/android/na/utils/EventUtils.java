@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class EventUtils {
 
-    static private boolean isSDPAvoidable(Event event, ConfigFileProvider.ConfigFile configFile, Context context) {
+    static public boolean isSDPAvoidable(Event event, ConfigFileProvider.ConfigFile configFile, Context context) {
         List<TicketOffering> offerings = event.getTicketOfferings();
 
         final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
