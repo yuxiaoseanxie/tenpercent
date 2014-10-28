@@ -55,6 +55,7 @@ public class Constants {
         public static final String TICKETING_ENVIRONMENT = "ticketing_environment";
         public static final String DEVICE_UUID = "device_uuid";
         public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
+        public static final String AB_TESTING = "ab_testing";
 
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
         public static final String ON_BOARDING_HAS_BEEN_DISPLAYED = "on_boarding_has_been_displayed";
@@ -77,6 +78,10 @@ public class Constants {
 
         //Rating
         public static final String RATING_DIALOG_CLICKED = "rating_dialog_clicked";
+
+        //AB-testing
+        public static final String IS_NEW_USER = "is_new_user";
+
 
     }
 
