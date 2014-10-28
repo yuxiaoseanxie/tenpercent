@@ -52,7 +52,7 @@ public class EventUtils {
         List<TicketOffering> offerings = event.getTicketOfferings();
         Intent confirmIntent = new Intent(activity, OrderConfirmationActivity.class);
         confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-        confirmIntent.putExtra(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
+        confirmIntent.putExtra(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, false);
         Ticketing.showFindTicketsActivityForUrl(activity, confirmIntent, offerings.get(0).getPurchaseUrl());
 
     }

@@ -128,7 +128,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
             @Override
             public void onResponse(ConfigFileProvider.ConfigFile response) {
-                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, EventUtils.isSDPAvoidable(event, response, view.getContext()));
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, !EventUtils.isSDPAvoidable(event, response, view.getContext()));
                 LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
             }
 
