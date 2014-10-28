@@ -32,6 +32,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
@@ -39,8 +40,10 @@ import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.Recom
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.utils.EventUtils;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.models.Props;
 
@@ -104,7 +107,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
+    public void onItemClick(AdapterView<?> parent, final View view, int position,
                             long id) {
         RecommendationItem recommendationItem = (RecommendationItem) parent.getItemAtPosition(position);
 
@@ -113,14 +116,29 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
             return;
         }
 
-        Event event = recommendationItem.get();
+        final Event event = recommendationItem.get();
         EventUtils.redirectToSDPOrEDP(event, getActivity());
 
 
         //Analytics
-        Props props = AnalyticsHelper.getPropsForEvent(event);
+        final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
-        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
+
+        ConfigFileProvider provider = new ConfigFileProvider(view.getContext());
+        provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
+            @Override
+            public void onResponse(ConfigFileProvider.ConfigFile response) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, EventUtils.isSDPAvoidable(event, response, view.getContext()));
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
+            }
+        });
+
 
     }
 

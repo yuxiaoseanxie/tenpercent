@@ -29,14 +29,17 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.segment.android.models.Props;
 
@@ -103,8 +106,8 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Event event = (Event) parent.getItemAtPosition(position);
+    public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+        final Event event = (Event) parent.getItemAtPosition(position);
         if (event == null) {
             //user clicked the footer/loading view
             return;
@@ -113,9 +116,24 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         EventUtils.redirectToSDPOrEDP(event, getActivity());
 
         //Analytics
-        Props props = AnalyticsHelper.getPropsForEvent(event);
+        final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
-        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
+
+        ConfigFileProvider provider = new ConfigFileProvider(view.getContext());
+        provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
+            @Override
+            public void onResponse(ConfigFileProvider.ConfigFile response) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, EventUtils.isSDPAvoidable(event, response, view.getContext()));
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.NEARBY, props);
+            }
+        });
+
 
 
     }
