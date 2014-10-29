@@ -21,24 +21,24 @@ public class DefaultImageHelper {
          * not to allocate memory each time when TypedArray is used it is cached in Resources
          * class as static field
          */
-        defaultImageArray.recycle();
         int size = defaultImageArray.length();
         defaultTapImages = new int[size];
         for (int i = 0; i < size; i++) {
             int resourceId = Integer.valueOf(defaultImageArray.getResourceId(i, -1));
             defaultTapImages[i] = resourceId;
         }
+        defaultImageArray.recycle();
     }
 
     private static void initializeDefaultDpImages(Context context) {
         TypedArray defaultImageArray = context.getResources().obtainTypedArray(R.array.hero_images);
-        defaultImageArray.recycle();
         int size = defaultImageArray.length();
         defaultDpImages = new int[size];
         for (int i = 0; i < size; i++) {
             int resourceId = Integer.valueOf(defaultImageArray.getResourceId(i, -1));
             defaultDpImages[i] = resourceId;
         }
+        defaultImageArray.recycle();
     }
 
     public static int computeDefaultTapDrawableId(Context context, long randomSeed) {

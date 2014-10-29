@@ -7,7 +7,7 @@
 
     <string name="mock_placeholder_artist_title_1">Artist Title</string>
 
-    <string name="mock_venue_telephone">(323) 962-7000</string>
+    <string name="mock_venue_telephone">(323) 962&amp;#8211;7000</string>
     <string name="mock_venue_location">6215 Sunset Blvd, Los Angeles, California</string>
     <string name="mock_venue_title_linebreak_1">6215 Sunset Blvd \nLos Angeles, California</string>
     <string name="mock_venue_distance">0.9 mi</string>

@@ -36,6 +36,7 @@
         <ignore path="src/main/AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
         <!-- For android:parentActivityName used in API level 16 and greater-->
+        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
     </issue>
 
     <issue id="NewApi">
