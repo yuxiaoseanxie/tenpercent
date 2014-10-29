@@ -36,7 +36,21 @@
         <ignore path="src/main/AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
         <!-- For android:parentActivityName used in API level 16 and greater-->
+    </issue>
+
+    <issue id="UnusedResources">
         <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
+    </issue>
+
+    <issue id="StringFormatInvalid">
+        <ignore path="src/main/res/values/strings.xml"/>
+    </issue>
+
+    <issue id="Overdraw">
+        <ignore path="src/main/res/layout/on_boarding_scanning_view.xml"/>
+        <ignore path="src/main/res/layout/view_decorated_edittext.xml"/>
+        <ignore path="src/main/res/layout/dialog_rating.xml"/>
+        <ignore path="src/main/res/layout/dialog_ticket_offerings.xml"/>
     </issue>
 
     <issue id="NewApi">
