@@ -71,4 +71,9 @@
         <ignore path="src/main/java/com/livenation/mobile/android/na/ui/fragments/WebViewFragment.java"/>
     </issue>
 
+    <issue id="ClickableViewAccessibility">
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java"/>
+    </issue>
+
+
 </lint>
