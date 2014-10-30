@@ -22,6 +22,7 @@
     <issue id="SimpleDateFormat" severity="error"/>
     <issue id="InflateParams" severity="error"/>
     <issue id="GradleOverrides" severity="error"/>
+    <issue id="StringFormatInvalid" severity="error"/>
 
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
@@ -36,10 +37,6 @@
         <ignore path="src/main/AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
         <!-- For android:parentActivityName used in API level 16 and greater-->
-    </issue>
-
-    <issue id="UnusedResources">
-        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
     </issue>
 
     <issue id="StringFormatInvalid">
