@@ -27,6 +27,8 @@
         android:layout_alignTop="@id/list_generic_show_date"
         android:layout_toRightOf="@id/list_item_show_image"
         android:text="@string/mock_artist_title_1"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:textAppearance="@style/ln.text.medium.bold" />
 
     <TextView
