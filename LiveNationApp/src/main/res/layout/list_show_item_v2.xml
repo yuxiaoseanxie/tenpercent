@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/gap_medium"
         android:layout_toRightOf="@id/list_generic_show_date" />
 
-    <TextView
+    <com.livenation.mobile.android.na.ui.views.LayoutedTextView
         android:id="@+id/list_generic_show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,9 @@
         android:layout_alignLeft="@id/list_generic_show_title"
         android:layout_below="@id/list_generic_show_title"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/ln.text.small.gray" />
+        android:textAppearance="@style/ln.text.small.gray"
+        android:maxLines="2"
+        android:ellipsize="end"/>
 
     <View
         android:id="@+id/list_item_show_divider"
