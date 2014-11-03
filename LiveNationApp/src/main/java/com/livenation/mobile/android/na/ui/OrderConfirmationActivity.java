@@ -434,13 +434,6 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
     private static enum Action {
         ADD_TO_CALENDAR(R.string.add_to_calendar, R.string.confirmation_action_tag_line_add_to_calendar, R.drawable.confirmation_add_to_calendar),
 
-        SPLIT_COST(R.string.confirmation_action_split_cost, R.string.confirmation_action_tag_line_split_cost, R.drawable.confirmation_split_cost) {
-            @Override
-            public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
-                return (TicketingUtils.getTicketCountForCart(activity.cart) > 1);
-            }
-        },
-
         UPGRADE(R.string.confirmation_action_seat_upgrade, R.string.confirmation_action_tag_line_seat_upgrade, R.drawable.confirmation_upgrade) {
             @Override
             public boolean isAvailable(@NonNull OrderConfirmationActivity activity) {
