@@ -135,6 +135,7 @@ public class LiveNationApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(UpdateReceiver.class.getSimpleName(), "onCreate of the Application called1");
 
         instance = this;
         //Declare object used to start the library
