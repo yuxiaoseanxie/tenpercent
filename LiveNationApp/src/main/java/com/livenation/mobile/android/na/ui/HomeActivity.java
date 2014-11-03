@@ -257,7 +257,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case RC_SSO_REPAIR:
                 if (resultCode != RESULT_OK) {
                     //the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
-                    getAccountPresenters().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
+                    onSignOut();
                     //finish the app. this will reset any tokens in memory.
                     //alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
                     finish();
@@ -277,11 +277,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     @Override
     public void onSaveAuthTokenFailure() {
         throw new IllegalStateException("Should not happen..");
-    }
-
-
-    private AccountPresenters getAccountPresenters() {
-        return LiveNationApplication.get().getAccountPresenters();
     }
 
     @Override

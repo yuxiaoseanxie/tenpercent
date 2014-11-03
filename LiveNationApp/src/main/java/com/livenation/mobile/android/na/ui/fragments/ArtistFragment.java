@@ -161,7 +161,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         artistImageView.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), artist.getNumericId()));
         if (imageKey != null) {
             String imageUrl = artist.getImageURL(imageKey);
-            artistImageView.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+            artistImageView.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
 
         String bio = artist.getBio();

@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
@@ -10,12 +11,11 @@ import com.livenation.mobile.android.na.pagination.VenueShowsScrollPager;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
-import com.livenation.mobile.android.na.ui.support.LiveNationListFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
-public class VenueShowsListFragment extends LiveNationListFragment {
+public class VenueShowsListFragment extends ListFragment {
     private EventAdapter adapter;
     private VenueShowsScrollPager venueShowsScrollPager;
 

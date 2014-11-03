@@ -42,7 +42,6 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
-    private Fragment profileFragment;
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
