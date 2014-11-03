@@ -25,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.ui.fragments.AccountFragment;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
@@ -61,13 +63,22 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private boolean hasUnreadNotifications;
     private BroadcastReceiver broadcastReceiver;
     private LinearLayout contentLayout;
+    private ViewGroup accountContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
 
-
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
+        accountContainer = (ViewGroup) findViewById(R.id.activity_home_account_container);
+
+        AccountFragment accountFragment = (AccountFragment) getSupportFragmentManager().findFragmentByTag(AccountFragment.class.getSimpleName());
+        if (accountFragment == null) {
+            accountFragment = new AccountFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_home_account_container, accountFragment, AccountFragment.class.getSimpleName()).commitAllowingStateLoss();
+        }
+
+
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
@@ -109,6 +120,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
+
     }
 
     @Override
