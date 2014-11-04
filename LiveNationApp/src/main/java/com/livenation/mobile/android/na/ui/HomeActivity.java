@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,14 +36,13 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
-import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.ui.fragments.AccountFragment;
@@ -63,21 +62,23 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     private boolean hasUnreadNotifications;
     private BroadcastReceiver broadcastReceiver;
     private LinearLayout contentLayout;
-    private ViewGroup accountContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_landing);
 
-        contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
-        accountContainer = (ViewGroup) findViewById(R.id.activity_home_account_container);
+        //Ab-testing
+        final SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
+        if (!sharedPreferences.contains(Constants.SharedPreferences.IS_NEW_USER)) {
+            sharedPreferences.edit().putBoolean(Constants.SharedPreferences.IS_NEW_USER, true).apply();
+        }
 
+        contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
         AccountFragment accountFragment = (AccountFragment) getSupportFragmentManager().findFragmentByTag(AccountFragment.class.getSimpleName());
         if (accountFragment == null) {
             accountFragment = new AccountFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.activity_home_account_container, accountFragment, AccountFragment.class.getSimpleName()).commitAllowingStateLoss();
         }
-
 
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);

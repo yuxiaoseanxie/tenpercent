@@ -169,8 +169,7 @@ public class LiveNationApplication extends Application {
 
 
         //Start Library
-        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
-        LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
+        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, accessTokenProvider,  oldUserId);
         LiveNationLibrary.setSsoProvider(ssoManager);
         LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
 

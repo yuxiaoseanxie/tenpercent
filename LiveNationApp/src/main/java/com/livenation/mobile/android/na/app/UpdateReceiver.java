@@ -28,9 +28,11 @@ public class UpdateReceiver extends BroadcastReceiver {
         final SharedPreferences oldSharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         final Boolean isMusicScanAllowed = oldSharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
 
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(Constants.SharedPreferences.IS_NEW_USER, false).apply();
 
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
+        if (!sharedPreferences.contains(Constants.SharedPreferences.IS_NEW_USER)) {
+            sharedPreferences.edit().putBoolean(Constants.SharedPreferences.IS_NEW_USER, false).apply();
+        }
 
         if (isMusicScanAllowed) {
             LiveNationApplication.get().setIsMusicSync(true);
