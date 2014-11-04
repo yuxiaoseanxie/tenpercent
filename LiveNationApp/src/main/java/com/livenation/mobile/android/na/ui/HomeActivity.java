@@ -38,15 +38,14 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.app.rating.AppRaterManager;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
-import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
+import com.livenation.mobile.android.na.ui.fragments.AccountFragment;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
@@ -75,6 +74,12 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
 
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
+        AccountFragment accountFragment = (AccountFragment) getSupportFragmentManager().findFragmentByTag(AccountFragment.class.getSimpleName());
+        if (accountFragment == null) {
+            accountFragment = new AccountFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_home_account_container, accountFragment, AccountFragment.class.getSimpleName()).commitAllowingStateLoss();
+        }
+
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,
@@ -116,6 +121,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
+
     }
 
     @Override
@@ -264,7 +270,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
             case RC_SSO_REPAIR:
                 if (resultCode != RESULT_OK) {
                     //the attempt to fix the SSO config with the user failed, lets wipe the auth configuration.
-                    getAccountPresenters().getSignOut().initialize(HomeActivity.this, null, HomeActivity.this);
+                    onSignOut();
                     //finish the app. this will reset any tokens in memory.
                     //alternatively, the serviceApi.setSsoProvider() could be set to null here, but lets not try to be clever.
                     finish();
@@ -284,11 +290,6 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     @Override
     public void onSaveAuthTokenFailure() {
         throw new IllegalStateException("Should not happen..");
-    }
-
-
-    private AccountPresenters getAccountPresenters() {
-        return LiveNationApplication.get().getAccountPresenters();
     }
 
     @Override

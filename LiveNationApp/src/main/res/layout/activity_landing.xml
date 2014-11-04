@@ -25,18 +25,10 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/activity_home_account_container"
         android:layout_width="@dimen/app_navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ffFFffFF"
-        android:tag="drawer_content">
-
-        <fragment
-            android:id="@+id/fragment_account"
-            android:name="com.livenation.mobile.android.na.ui.fragments.AccountFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-
+        android:background="@android:color/white"/>
 </android.support.v4.widget.DrawerLayout>

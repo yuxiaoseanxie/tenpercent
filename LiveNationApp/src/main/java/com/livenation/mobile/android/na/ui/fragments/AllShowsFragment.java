@@ -177,7 +177,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
             View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
             TransitioningImageView image = (TransitioningImageView) view.findViewById(android.R.id.icon);
-            image.setImageUrl(chart.getImageUrl(), getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+            image.setImageUrl(chart.getImageUrl(), LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
 
             TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(chart.getArtistName());

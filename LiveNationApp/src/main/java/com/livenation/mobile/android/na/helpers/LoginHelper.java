@@ -20,7 +20,6 @@ public class LoginHelper {
     private static int USER_UPDATE_PERIOD = 1000 * 60 * 5;
     private static SsoProviderPersistence ssoProviderPersistence = LiveNationApplication.getSsoProviderPersistence();
     private static SsoManager ssoManager = LiveNationApplication.getSsoManager();
-    private static Context applicationContext = LiveNationApplication.get().getApplicationContext();
 
     public static User getSavedUser() {
         return ssoProviderPersistence.readUser();

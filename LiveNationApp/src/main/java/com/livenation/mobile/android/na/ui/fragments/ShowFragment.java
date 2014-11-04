@@ -205,7 +205,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         }
         if (null != imageUrl) {
-            artistImage.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+            artistImage.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
     }
 
