@@ -23,7 +23,7 @@ import com.segment.android.models.Props;
 public class UpdateReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(UpdateReceiver.class.getSimpleName(), "Package Updated, UpdateReceiver Called1");
+        Log.d(UpdateReceiver.class.getSimpleName(), "Package Updated, UpdateReceiver Called");
 
         final SharedPreferences oldSharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         final Boolean isMusicScanAllowed = oldSharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
