@@ -69,7 +69,7 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OnBoardingActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/LNTheme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
