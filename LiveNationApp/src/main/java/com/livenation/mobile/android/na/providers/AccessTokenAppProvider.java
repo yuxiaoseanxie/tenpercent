@@ -37,8 +37,8 @@ public class AccessTokenAppProvider extends AccessTokenProvider {
                     LiveNationAnalytics.track(AnalyticConstants.MIGRATION_COMPLETED, AnalyticsCategory.HOUSEKEEPING, props);
 
                     SharedPreferences newPrefs = LiveNationApplication.get().getApplicationContext().getSharedPreferences(Constants.SharedPreferences.IAS_NAME, Context.MODE_PRIVATE);
-                    newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, oldId).commit();
-                    oldPrefs.edit().clear().commit();
+                    newPrefs.edit().putString(Constants.SharedPreferences.IAS_USER_ID, oldId).apply();
+                    oldPrefs.edit().clear().apply();
 
                     //Migration
                     LocalBroadcastManager.getInstance(LiveNationLibrary.getContext()).sendBroadcast(new Intent(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));

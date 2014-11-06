@@ -37,6 +37,7 @@ import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by cchilton on 4/2/14.
@@ -197,7 +198,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             View view = null;
 
             if (null == convertView) {
-                view = inflater.inflate(R.layout.list_search_result, null);
+                view = inflater.inflate(R.layout.list_search_result, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             } else {
@@ -208,7 +209,7 @@ public class SearchFragment extends LiveNationFragment implements SearchForText,
             SearchResult searchResult = getItem(position);
             holder.getTitle().setText(searchResult.getName());
             holder.getTitle().setTextColor(getResources().getColor(textColor));
-            holder.getType().setText(searchResult.getObjectType().toLowerCase());
+            holder.getType().setText(searchResult.getObjectType().toLowerCase(Locale.getDefault()));
 
             holder.getCheckBox().setVisibility(View.VISIBLE);
             Favorite favorite = new Favorite();

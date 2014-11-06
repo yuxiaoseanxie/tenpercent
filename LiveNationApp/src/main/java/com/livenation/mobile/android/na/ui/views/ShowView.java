@@ -13,6 +13,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class ShowView extends LinearLayout {
@@ -76,7 +77,7 @@ public class ShowView extends LinearLayout {
 
     public static enum DisplayMode {
         VENUE {
-            private final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz");
+            private final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz", Locale.getDefault());
 
             @Override
             String getTitle(Event event) {

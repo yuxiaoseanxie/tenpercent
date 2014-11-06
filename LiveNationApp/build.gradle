@@ -30,19 +30,32 @@ def computeGitSha(File rootDir) {
 }
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion '20'
+    compileSdkVersion 21
+    buildToolsVersion '21'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    lintOptions {
+        // if true, generate an XML report for use by for example Jenkins
+        xmlReport true
+        //file to write report to (if not specified, defaults to lint-results.xml)
+        xmlOutput file("lint-report.xml")
+        // if true, generate an HTML report (with issue explanations, sourcecode, etc)
+        htmlReport true
+        // optional path to report (default will be lint-results.html in the builddir)
+        htmlOutput file("lint-report.html")
+
+        abortOnError true
+    }
+
     defaultConfig {
         versionCode computeVersionCode()
         versionName computeVersionName(versionCode)
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
@@ -113,7 +126,6 @@ android {
         labrats {
             applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
-
             signingConfig signingConfigs.debug
         }
     }
@@ -128,7 +140,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:5.0.89'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'
-	compile('io.segment.analytics.android:all:1.4.4+@aar') {
+    compile('io.segment.analytics.android:all:1.4.4+@aar') {
         transitive = true
     }
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'

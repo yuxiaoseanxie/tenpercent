@@ -21,4 +21,8 @@
         <item name="android:editTextBackground">@drawable/livenation_edit_text_holo_light</item>
     </style>
 
+    <style name="LNTheme.NoTitleBar" parent="android:Theme.NoTitleBar">
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
+
 </resources>

@@ -15,6 +15,8 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by cchilton on 4/2/14.
  */
@@ -30,12 +32,8 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
     private SearchForText fragment;
     private EditText input;
 
-    private Handler limiter = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            fragment.searchFor(input.getText().toString());
-        }
-    };
+    private final LimiterHandler limiter = new LimiterHandler(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +45,13 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         getActionBar().setCustomView(view);
 
         DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);
-
-        input = editText.getEditText();
-        input.addTextChangedListener(this);
         fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
+        input = editText.getEditText();
+
+        limiter.setFragment(fragment);
+        limiter.setInput(input);
+
+        input.addTextChangedListener(this);
         switch (getSearchMode()) {
             case EXTRA_VALUE_SEARCH_MODE_ARTIST:
                 editText.setHint(R.string.search_input_hint_artists);
@@ -103,6 +104,32 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         super.onPostCreate(savedInstanceState);
         if (savedInstanceState == null) {
             OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SEARCH, null);
+        }
+    }
+
+    private static class LimiterHandler extends Handler {
+        private final WeakReference<LiveNationFragmentActivity> mActivity;
+        private SearchForText fragment;
+        private EditText input;
+
+        public LimiterHandler(LiveNationFragmentActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        public void setFragment(SearchForText fragment) {
+            this.fragment = fragment;
+        }
+
+        public void setInput(EditText input) {
+            this.input = input;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            LiveNationFragmentActivity activity = mActivity.get();
+            if (activity != null) {
+                fragment.searchFor(input.getText().toString());
+            }
         }
     }
 }

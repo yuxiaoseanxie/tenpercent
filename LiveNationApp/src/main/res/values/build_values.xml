@@ -6,7 +6,6 @@
 
     <string name="urbanairship_permission"></string>
     <string name="urbanairship_authorities"></string>
-    <string name="hockey_app_id"></string>
 
     <string name="experience_url">https://livenation.expapp.com/upgrade?app=true&amp;appId=5&amp;utm_source=livenation&amp;utm_medium=app</string>
     <string name="activity_title">Get experience</string>
