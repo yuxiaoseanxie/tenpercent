@@ -39,6 +39,12 @@
         <!-- For android:parentActivityName used in API level 16 and greater-->
     </issue>
 
+    <issue id="UnusedResources">
+        <ignore path="src/main/res/values/build_values.xml"/>
+        <!-- For ExperienceApp data-->
+        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
+    </issue>
+
     <issue id="StringFormatInvalid">
         <ignore path="src/main/res/values/strings.xml"/>
     </issue>
