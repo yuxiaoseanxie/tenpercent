@@ -16,7 +16,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
-import com.livenation.mobile.android.na.ui.SearchActivity;
+import com.livenation.mobile.android.na.ui.FavoriteSearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
 import com.livenation.mobile.android.na.ui.views.LayoutedTextView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -223,9 +223,9 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     private void launchArtistSearch() {
         LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.RECOMMENDATIONS);
-        Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST);
-        intent.putExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
+        Intent intent = new Intent(getContext(), FavoriteSearchActivity.class);
+        intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_SEARCH_MODE, FavoriteSearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST);
+        intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_ON_CLICK_ACTION, FavoriteSearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
         getContext().startActivity(intent);
     }
 

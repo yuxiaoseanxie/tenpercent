@@ -15,7 +15,6 @@ import android.view.MenuItem;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 
 
 public class FavoriteActivity extends LiveNationFragmentActivity {
@@ -29,9 +28,9 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home_search_item:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES);
-                intent.putExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
+                Intent intent = new Intent(this, FavoriteSearchActivity.class);
+                intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_SEARCH_MODE, FavoriteSearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES);
+                intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_ON_CLICK_ACTION, FavoriteSearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
 
                 startActivity(intent);
                 return true;

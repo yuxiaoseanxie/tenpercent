@@ -9,31 +9,21 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SearchForText;
+import com.livenation.mobile.android.na.ui.fragments.SearchFragment;
 import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
 /**
- * Created by cchilton on 4/2/14.
+ * Created by elodieferrais on 11/5/14.
  */
-public class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
-    public static final String EXTRA_KEY_SEARCH_MODE = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_KEY_SEARCH_MODE";
-    public static final String EXTRA_KEY_ON_CLICK_ACTION = "com.livenation.mobile.android.na.ui.SearchActivity.EXTRA_KEY_ON_CLICK_ACTION";
-    public static final int EXTRA_VALUE_SEARCH_MODE_DEFAULT = 0;
-    public static final int EXTRA_VALUE_SEARCH_MODE_ARTIST = 1;
-    public static final int EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES = 2;
-    public static final int EXTRA_VALUE_ON_CLICK_ACTION_OPEN = 0;
-    public static final int EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE = 1;
-
-    private SearchForText fragment;
+public abstract class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
+    private SearchFragment fragment;
     private EditText input;
-
     private Handler limiter = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            fragment.searchFor(input.getText().toString());
+            fragment.searchForText(input.getText().toString());
         }
     };
 
@@ -43,25 +33,24 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
 
         getActionBar().setDisplayShowCustomEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
+
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);
         getActionBar().setCustomView(view);
+
+        fragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("search");
+
+        if (fragment == null) {
+            fragment = getFragmentInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_search_container, fragment, "search").commit();
+        }
 
         DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);
 
         input = editText.getEditText();
         input.addTextChangedListener(this);
-        fragment = (SearchForText) getSupportFragmentManager().findFragmentByTag("search");
-        switch (getSearchMode()) {
-            case EXTRA_VALUE_SEARCH_MODE_ARTIST:
-                editText.setHint(R.string.search_input_hint_artists);
-                break;
-            case EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES:
-                editText.setHint(R.string.search_input_hint_artists_venues);
-                break;
-            default:
-                //leave with XML default
-                break;
-        }
+
+        editText.setHint(getSearchMode().hintId);
+
     }
 
     @Override
@@ -79,30 +68,21 @@ public class SearchActivity extends LiveNationFragmentActivity implements TextWa
         limiter.sendEmptyMessageDelayed(0, Constants.TEXT_CHANGED_POST_DELAY);
     }
 
-    public int getSearchMode() {
-        if (getIntent() != null) {
-            return getIntent().getIntExtra(SearchActivity.EXTRA_KEY_SEARCH_MODE, SearchActivity.EXTRA_VALUE_SEARCH_MODE_DEFAULT);
-        }
-        return SearchActivity.EXTRA_VALUE_SEARCH_MODE_DEFAULT;
-    }
+    abstract protected SEARCH_MODE getSearchMode();
 
-    public int getOnClickActionMode() {
-        if (getIntent() != null) {
-            return getIntent().getIntExtra(SearchActivity.EXTRA_KEY_ON_CLICK_ACTION, SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_OPEN);
-        }
-        return SearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_OPEN;
-    }
+    abstract protected SearchFragment getFragmentInstance();
 
-    @Override
-    protected String getScreenName() {
-        return AnalyticConstants.SCREEN_SEARCH;
-    }
+    public enum SEARCH_MODE {
+        ARTISTS(R.string.search_input_hint_artists),
+        ARTISTS_VENUES(R.string.search_input_hint_artists_venues),
+        ARTISTS_VENUES_SHOWS(R.string.search_input_hint_events_artists_venues),
+        CITY(R.string.city_search_input_hint);
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_SEARCH, null);
+        protected int hintId;
+
+        SEARCH_MODE(int hintId) {
+            this.hintId = hintId;
         }
+
     }
 }

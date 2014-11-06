@@ -12,6 +12,5 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/view_search_actionbar_input_margin_bottom"
         android:layout_marginLeft="@dimen/gap_tiny"
-        android:layout_marginRight="@dimen/gap_tiny"
-        custom:hint="@string/search_input_hint_default" />
+        android:layout_marginRight="@dimen/gap_tiny" />
 </RelativeLayout>

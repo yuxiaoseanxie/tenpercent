@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import com.livenation.mobile.android.na.ui.FavoriteSearchActivity;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
-import com.livenation.mobile.android.na.ui.SearchActivity;
 
 public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActivity {
     protected Bundle args;
@@ -81,7 +81,7 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
     }
 
     protected void onSearch() {
-        startActivity(new Intent(this, SearchActivity.class));
+        startActivity(new Intent(this, FavoriteSearchActivity.class));
     }
 
     //endregion

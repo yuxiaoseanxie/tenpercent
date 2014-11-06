@@ -208,7 +208,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
                 props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
 
                 LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
-                startActivity(new Intent(this, SearchActivity.class));
+                startActivity(new Intent(this, FavoriteSearchActivity.class));
                 return true;
             case R.id.menu_home_help_item:
                 startActivity(new Intent(this, HelpMenuActivity.class));
