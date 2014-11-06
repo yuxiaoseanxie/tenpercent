@@ -35,14 +35,12 @@ import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
-import com.livenation.mobile.android.ticketing.Ticketing;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
     private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
-    private Fragment profileFragment;
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
@@ -52,10 +50,12 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
         }
     };
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //Do not set RetainInstance to true because is the savedInstanceState to null
+        //setRetainInstance(false);
     }
 
     @Override
@@ -74,8 +74,10 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
         locationText = (TextView) result.findViewById(R.id.account_footer_location_detail);
 
-        //Get location for update the screen
-        LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+        if (savedInstanceState == null) {
+            //Get location for update the screen
+            LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+        }
 
         //Register for being notify when the location change
         registerBroadcastReceiverForUpdate();
@@ -93,24 +95,34 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Context context = getActivity();;
+        Context context = getActivity();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
         LocalBroadcastManager.getInstance(context).unregisterReceiver(loginLogoutReceiver);
     }
 
     public void refreshUser(boolean isLogout) {
-        Fragment profileFragment = getChildFragmentManager().findFragmentByTag(PROFILE_FRAGMENT_TAG);
-        if (null != profileFragment) {
-            removeFragment(profileFragment);
-        }
+        String fragmentClassNameToRemove;
+        String fragmentClassNameToAdd;
+        Fragment fragmentToAdd;
 
         if (isLogout) {
-            profileFragment = new AccountSignInFragment();
+            fragmentClassNameToRemove = AccountUserFragment.class.getSimpleName();
+            fragmentClassNameToAdd = AccountSignInFragment.class.getSimpleName();
+            fragmentToAdd = new AccountSignInFragment();
         } else {
-            profileFragment = new AccountUserFragment();
+            fragmentClassNameToRemove = AccountSignInFragment.class.getSimpleName();
+            fragmentClassNameToAdd = AccountUserFragment.class.getSimpleName();
+            fragmentToAdd = new AccountUserFragment();
         }
 
-        addFragment(R.id.account_header_provider_container, profileFragment, PROFILE_FRAGMENT_TAG);
+        Fragment fragmentToRemove = getChildFragmentManager().findFragmentByTag(fragmentClassNameToRemove);
+        if (null != fragmentToRemove) {
+            removeFragment(fragmentToRemove);
+        }
+
+        if (null == getChildFragmentManager().findFragmentByTag(fragmentClassNameToAdd)) {
+            addFragment(R.id.account_header_provider_container, fragmentToAdd, fragmentClassNameToAdd);
+        }
     }
 
     @Override
@@ -129,7 +141,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onResponse(LiveNationConfig response) {
         refreshUser(LoginHelper.isLogout());
-        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(),  this);
+        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(), this);
     }
 
     @Override

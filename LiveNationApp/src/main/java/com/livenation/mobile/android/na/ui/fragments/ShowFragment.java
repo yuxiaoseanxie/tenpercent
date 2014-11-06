@@ -8,6 +8,7 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
@@ -47,6 +49,7 @@ import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVen
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -203,7 +206,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
         }
         if (null != imageUrl) {
-            artistImage.setImageUrl(imageUrl, getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+            artistImage.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
     }
 
@@ -302,7 +305,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             List<TicketOffering> offerings = event.getTicketOfferings();
             if (offerings.isEmpty()) {
                 Toast.makeText(getActivity().getApplicationContext(),
@@ -313,8 +316,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             TicketOffering ticketOffering = offerings.get(0);
 
-            Props props = AnalyticsHelper.getPropsForEvent(event);
+            final Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
+
             LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
                 @Override
                 public void onResponse(AccessToken response) {

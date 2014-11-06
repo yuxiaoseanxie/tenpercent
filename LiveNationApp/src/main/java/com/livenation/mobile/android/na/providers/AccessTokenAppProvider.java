@@ -44,12 +44,16 @@ public class AccessTokenAppProvider extends AccessTokenProvider {
                     LocalBroadcastManager.getInstance(LiveNationLibrary.getContext()).sendBroadcast(new Intent(com.livenation.mobile.android.platform.Constants.MIGRATION_UPDATE_INTENT_FILTER));
 
                 }
-                callback.onResponse(response);
+                if (callback != null) {
+                    callback.onResponse(response);
+                }
             }
 
             @Override
             public void onErrorResponse(LiveNationError error) {
-                callback.onErrorResponse(error);
+                if (callback != null) {
+                    callback.onErrorResponse(error);
+                }
             }
         });
     }

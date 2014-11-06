@@ -18,6 +18,7 @@ import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
 import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
+import com.livenation.mobile.android.na.ui.views.LayoutedTextView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
@@ -256,18 +257,29 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
     }
 
     private class EventViewHolder {
-        private final TextView title;
+        private final LayoutedTextView title;
         private final TextView location;
         private final VerticalDate date;
         private final TransitioningImageView image;
         private final View divider;
 
         public EventViewHolder(View view) {
-            this.title = (TextView) view.findViewById(R.id.list_generic_show_title);
+            this.title = (LayoutedTextView) view.findViewById(R.id.list_generic_show_title);
             this.location = (TextView) view.findViewById(R.id.list_generic_show_location);
             this.date = (VerticalDate) view.findViewById(R.id.list_generic_show_date);
             this.image = (TransitioningImageView) view.findViewById(R.id.list_item_show_image);
             this.divider = view.findViewById(R.id.list_item_show_divider);
+
+            title.setOnLayoutListener(new LayoutedTextView.OnLayoutListener() {
+                @Override
+                public void onLayouted(TextView view) {
+                    int lineCount = view.getLineCount();
+                    if (lineCount > 2) {
+                        location.setMaxLines(1);
+                        location.invalidate();
+                    }
+                }
+            });
         }
 
         public TextView getTitle() {

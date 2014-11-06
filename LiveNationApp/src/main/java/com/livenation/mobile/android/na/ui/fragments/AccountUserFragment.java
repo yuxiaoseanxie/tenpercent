@@ -60,20 +60,24 @@ public class AccountUserFragment extends LiveNationFragment implements
         User user = LoginHelper.getSavedUser();
         setUser(user, LoginHelper.getAuthConfiguration());
 
-        LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
-            @Override
-            public void onResponse(boolean hasChanged, String accessToken, User user) {
-                if (hasChanged) {
-                    setUser(user, LoginHelper.getAuthConfiguration());
+        if (savedInstanceState == null) {
+            LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
+                @Override
+                public void onResponse(boolean hasChanged, String accessToken, User user) {
+                    if (hasChanged) {
+                        setUser(user, LoginHelper.getAuthConfiguration());
+                    }
                 }
-            }
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //When the login fail, the user is automatically removed and the "logout" broadcast is triggered.
-                //That's we this fragment should be destroy when the onErrorResponse method is called.
-            }
-        }, getActivity());
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    //When the login fail, the user is automatically removed and the "logout" broadcast is triggered.
+                    //That's we this fragment should be destroy when the onErrorResponse method is called.
+                }
+            }, getActivity());
+        }
+
+
 
         return view;
     }
@@ -118,7 +122,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        //TODO default image
+        image.setImageResource(R.drawable.placeholder_account_photo);
     }
 
     @Override
@@ -127,8 +131,7 @@ public class AccountUserFragment extends LiveNationFragment implements
             bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.one_dp));
             image.setImageBitmap(bitmap);
         } else {
-            image.setImageBitmap(null);
-            //TODO default image
+            image.setImageResource(R.drawable.placeholder_account_photo);
         }
     }
 

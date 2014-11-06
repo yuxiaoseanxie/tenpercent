@@ -21,9 +21,11 @@ public class BitmapRequest extends Request<Bitmap> {
 
     private final Response.Listener<Bitmap> listener;
 
+
     public BitmapRequest(int method, String url, Response.ErrorListener errorListener, Response.Listener<Bitmap> listener) {
         super(method, url, errorListener);
         this.listener = listener;
+        setShouldCache(true);
     }
 
     @Override

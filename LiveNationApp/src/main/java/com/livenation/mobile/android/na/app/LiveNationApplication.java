@@ -82,7 +82,6 @@ public class LiveNationApplication extends Application {
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private VenueEventsPresenter venueEventsPresenter;
-    private AccountPresenters accountPresenters;
     private InboxStatusPresenter inboxStatusPresenter;
     //Migration
     private String oldUserId;
@@ -170,8 +169,7 @@ public class LiveNationApplication extends Application {
 
 
         //Start Library
-        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, oldUserId);
-        LiveNationLibrary.setAccessTokenProvider(accessTokenProvider);
+        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, accessTokenProvider,  oldUserId);
         LiveNationLibrary.setSsoProvider(ssoManager);
         LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
 
@@ -191,7 +189,6 @@ public class LiveNationApplication extends Application {
 
         eventsPresenter = new EventsPresenter();
         venueEventsPresenter = new VenueEventsPresenter();
-        accountPresenters = new AccountPresenters();
         inboxStatusPresenter = new InboxStatusPresenter();
 
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
@@ -329,10 +326,6 @@ public class LiveNationApplication extends Application {
 
     public VenueEventsPresenter getVenueEventsPresenter() {
         return venueEventsPresenter;
-    }
-
-    public AccountPresenters getAccountPresenters() {
-        return accountPresenters;
     }
 
     public InboxStatusPresenter getInboxStatusPresenter() {

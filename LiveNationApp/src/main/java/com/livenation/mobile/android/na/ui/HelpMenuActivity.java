@@ -45,9 +45,8 @@ public class HelpMenuActivity extends LiveNationFragmentActivity implements Adap
 
     @Override
     public void onBackPressed() {
-        if (currentfragment != null) {
+        if (getFragmentManager() != null && getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-            currentfragment = null;
         } else {
             super.onBackPressed();
         }

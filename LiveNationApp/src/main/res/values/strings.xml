@@ -152,8 +152,6 @@
 
     <string name="confirmation_action_tag_line_add_to_calendar">Need a reminder?</string>
     <string name="confirmation_action_tag_line_share">Brag, Boast. Share</string>
-    <string name="confirmation_action_tag_line_split_cost">Buying for friends?</string>
-    <string name="confirmation_action_split_cost">Get Paid Back</string>
     <string name="confirmation_action_tag_line_seat_upgrade">Want a better seat?</string>
     <string name="confirmation_action_seat_upgrade">Get an Upgrade</string>
 
@@ -266,5 +264,8 @@
     <string name="app_url_artist">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
     <string name="web_url_venue">http://www.livenation.com/venues/</string>
     <string name="app_url_venue">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
+
+    <!-- Config File -->
+    <string name="config_file_url">https://adr-static-content.s3.amazonaws.com/config/debug.json</string>
 
 </resources>

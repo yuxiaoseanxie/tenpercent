@@ -31,17 +31,22 @@ import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
+import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.ticketing.Ticketing;
 import com.segment.android.models.Props;
 
 import java.util.ArrayList;
@@ -121,27 +126,38 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
+    public void onItemClick(AdapterView<?> parent, final View view, int position,
                             long id) {
-        Intent intent = new Intent(view.getContext(), ShowActivity.class);
         //Since this listview has a header view (featured), we can not use adapter.getItem(x) as x
         //will be offset by the number of header views. This is the alternative according to:
         // http://stackoverflow.com/questions/11106397/listview-addheaderview-causes-position-to-increase-by-one
-        Event event = (Event) parent.getItemAtPosition(position);
+        final Event event = (Event) parent.getItemAtPosition(position);
         if (event == null) {
             //user clicked the footer/loading view
             return;
         }
 
+        List<TicketOffering> offerings = event.getTicketOfferings();
+        EventUtils.redirectToSDPOrEDP(event, getActivity());
+
         //Analytics
-        Props props = AnalyticsHelper.getPropsForEvent(event);
+        final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
-        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.ALL_SHOWS, props);
 
-        Bundle args = ShowActivity.getArguments(event);
-        intent.putExtras(args);
+        ConfigFileProvider provider = new ConfigFileProvider(view.getContext());
+        provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
+            @Override
+            public void onResponse(ConfigFileProvider.ConfigFile response) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, !EventUtils.isSDPAvoidable(event, response, view.getContext()));
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.ALL_SHOWS, props);
+            }
 
-        startActivity(intent);
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
+                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.ALL_SHOWS, props);
+            }
+        });
     }
 
     private void setFeatured(List<Chart> featured) {
@@ -161,7 +177,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
             View view = inflater.inflate(R.layout.view_featured_item, chartingContainer, false);
 
             TransitioningImageView image = (TransitioningImageView) view.findViewById(android.R.id.icon);
-            image.setImageUrl(chart.getImageUrl(), getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+            image.setImageUrl(chart.getImageUrl(), LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
 
             TextView text = (TextView) view.findViewById(android.R.id.text1);
             text.setText(chart.getArtistName());
