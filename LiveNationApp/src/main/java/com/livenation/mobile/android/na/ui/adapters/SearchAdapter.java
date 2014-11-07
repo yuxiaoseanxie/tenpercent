@@ -8,7 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.SearchResult;
+import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
+import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 
 import java.util.List;
 
@@ -32,16 +33,23 @@ public abstract class SearchAdapter<ResultType> extends ArrayAdapter<ResultType>
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        if (null == convertView) {
-            view = inflater.inflate(getLayoutCellId(), parent, false);
+
+        if (convertView == null) {
+            view = inflater.inflate(getLayoutCellId(), null);
+            final SearchViewHolder viewHolder = new SearchViewHolder();
+            view.setTag(viewHolder);
+            viewHolder.title = (TextView) view.findViewById(R.id.list_search_title);
+            viewHolder.type = (TextView) view.findViewById(R.id.list_search_type);
+            viewHolder.checkBox = (FavoriteCheckBox) view.findViewById(R.id.list_search_checkbox);
+
         } else {
             view = convertView;
         }
 
-        TextView title = (TextView) view.findViewById(getTitleTextViewId());
+        SearchViewHolder holder = (SearchViewHolder) view.getTag();
 
-        if (title != null) {
-            title.setTextColor(view.getResources().getColor(textColor));
+        if (holder.title != null) {
+            holder.title.setTextColor(view.getResources().getColor(textColor));
         }
 
         return view;
@@ -57,5 +65,4 @@ public abstract class SearchAdapter<ResultType> extends ArrayAdapter<ResultType>
     }
 
     protected abstract int getLayoutCellId();
-    protected abstract int getTitleTextViewId();
 }

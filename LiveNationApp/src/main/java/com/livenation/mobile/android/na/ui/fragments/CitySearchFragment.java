@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
+import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SearchCitiesParameters;
@@ -54,14 +54,14 @@ public class CitySearchFragment extends SearchFragment<City> {
             super(context, items);
         }
 
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = super.getView(position, convertView, parent);
-            TextView title = (TextView) view.findViewById(R.id.list_search_city_title);
+
+            SearchViewHolder holder = (SearchViewHolder) view.getTag();
 
             City city = getItem(position);
-            title.setText(city.getName());
+            holder.title.setText(city.getName());
 
             return view;
         }
@@ -69,11 +69,6 @@ public class CitySearchFragment extends SearchFragment<City> {
         @Override
         protected int getLayoutCellId() {
             return R.layout.list_search_city_item;
-        }
-
-        @Override
-        protected int getTitleTextViewId() {
-            return R.id.list_search_city_title;
         }
     }
 }

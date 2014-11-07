@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -18,7 +17,7 @@ import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
-import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -131,7 +130,7 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
     }
 
     private void favoriteItemClick(View view) {
-        View checkbox = view.findViewById(R.id.list_search_result_checkbox);
+        View checkbox = view.findViewById(R.id.list_search_checkbox);
         checkbox.performClick();
     }
 
@@ -151,31 +150,28 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = super.getView(position, convertView, parent);
 
-            TextView type = (TextView) view.findViewById(R.id.list_search_result_type_box);
-            TextView title = (TextView) view.findViewById(R.id.list_search_result_text);
-            FavoriteCheckBox checkBox = (FavoriteCheckBox) view.findViewById(R.id.list_search_result_checkbox);
-
+            SearchViewHolder holder = (SearchViewHolder) view.getTag();
             SearchResult searchResult = getItem(position);
-            title.setText(searchResult.getName());
-            type.setText(searchResult.getObjectType().toLowerCase());
+            holder.title.setText(searchResult.getName());
+            holder.type.setText(searchResult.getObjectType().toLowerCase());
+            holder.checkBox.setVisibility(View.VISIBLE);
 
-            checkBox.setVisibility(View.VISIBLE);
             Favorite favorite = new Favorite();
             favorite.setName(searchResult.getName());
             favorite.setId(searchResult.getNumericalId());
             switch (searchResult.getSearchResultType()) {
                 case Artist: {
                     favorite.setIntType(Favorite.FAVORITE_ARTIST);
-                    checkBox.bindToFavorite(favorite, AnalyticsCategory.SEARCH);
+                    holder.checkBox.bindToFavorite(favorite, AnalyticsCategory.SEARCH);
                     break;
                 }
                 case Venue: {
                     favorite.setIntType(Favorite.FAVORITE_VENUE);
-                    checkBox.bindToFavorite(favorite, AnalyticsCategory.SEARCH);
+                    holder.checkBox.bindToFavorite(favorite, AnalyticsCategory.SEARCH);
                     break;
                 }
                 default:
-                    checkBox.setVisibility(View.INVISIBLE);
+                    holder.checkBox.setVisibility(View.INVISIBLE);
             }
 
             return view;
@@ -186,10 +182,6 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
             return R.layout.list_search_result;
         }
 
-        @Override
-        protected int getTitleTextViewId() {
-            return R.id.list_search_result_text;
-        }
     }
 
     public enum CLICK_MODE {
