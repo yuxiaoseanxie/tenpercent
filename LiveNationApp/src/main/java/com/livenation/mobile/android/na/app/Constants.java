@@ -13,7 +13,7 @@ public class Constants {
     public static final int DEFAULT_RADIUS = 50;
     public static final float METERS_IN_A_MILE = 1609.34f;
 
-    //arbitary elay between user keypresses and sending user text to the API
+    //arbitary delay between user keypresses and sending user text to the API
     public static final int TEXT_CHANGED_POST_DELAY = 667;
 
     public class Notifications {
