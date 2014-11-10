@@ -81,7 +81,7 @@ public class MusicSyncHelper {
                 LiveNationAnalytics.track(AnalyticConstants.AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED, AnalyticsCategory.HOUSEKEEPING, props);
 
                 SharedPreferences.Editor editor = context.getSharedPreferences(Constants.SharedPreferences.MUSIC_SYNC_NAME, Context.MODE_PRIVATE).edit();
-                editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).commit();
+                editor.putLong(Constants.SharedPreferences.MUSIC_SYNC_LAST_SYNC_DATE_KEY, Calendar.getInstance().getTimeInMillis()).apply();
                 if (isToastShowable) {
                     successToast.setText("Music Scan done! " + String.valueOf(musicLibrary.getData().size()) + " artist(s) has been synchronyzed");
                     successToast.show();

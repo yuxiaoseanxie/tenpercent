@@ -283,7 +283,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     public void setOnBoardingAlreadyDisplayed() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.SharedPreferences.ON_BOARDING_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.SharedPreferences.ON_BOARDING_HAS_BEEN_DISPLAYED, true).commit();
+        editor.putBoolean(Constants.SharedPreferences.ON_BOARDING_HAS_BEEN_DISPLAYED, true).apply();
     }
 
     private void goToTheApp() {

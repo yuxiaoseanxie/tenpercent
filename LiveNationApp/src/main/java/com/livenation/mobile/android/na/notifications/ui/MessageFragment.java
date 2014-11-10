@@ -39,12 +39,13 @@ import com.urbanairship.richpush.RichPushMessage;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Fragment that displays a rich push activity_message in a RichPushMessageView
  */
 public class MessageFragment extends Fragment {
-    private static final SimpleDateFormat DATE_RECEIVED_FORMAT = new SimpleDateFormat("MMM d, yyyy  h:mm a");
+    private static final SimpleDateFormat DATE_RECEIVED_FORMAT = new SimpleDateFormat("MMM d, yyyy  h:mm a", Locale.getDefault());
 
     private RichPushMessage message;
     private TextView messageView;

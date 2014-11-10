@@ -5,11 +5,7 @@
     <string name="mock_artist_title_1" />
     <string name="mock_show_time" />
 
-    <string name="mock_placeholder_venue_title_1" />
     <string name="mock_placeholder_artist_title_1" />
-
-    <string name="mock_placeholder_venue_details_1" />
-    <string name="mock_show_venue_details" />
 
     <string name="mock_venue_telephone" />
     <string name="mock_venue_location" />

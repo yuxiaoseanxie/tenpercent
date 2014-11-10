@@ -40,7 +40,7 @@ public class EnvironmentPreferences {
     public void setConfiguredEnvironment(Environment environment) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         try {
-            editor.putString(Constants.SharedPreferences.ENVIRONMENT, SerializableHelper.toString(environment)).commit();
+            editor.putString(Constants.SharedPreferences.ENVIRONMENT, SerializableHelper.toString(environment)).apply();
         } catch (IOException e) {
             Log.e(EnvironmentPreferences.class.getSimpleName(), "Environment cannot be saved: " + environment.getHost());
         }

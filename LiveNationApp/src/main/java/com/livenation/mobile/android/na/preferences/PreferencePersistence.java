@@ -47,7 +47,7 @@ public class PreferencePersistence {
 
     public boolean reset() {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
-        prefs.edit().clear().commit();
+        prefs.edit().clear().apply();
         return true;
     }
 

@@ -22,6 +22,7 @@ import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -31,7 +32,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter, ConfigCallback {
     private static final String START_TIME_FORMAT = "h:mm a zzz";
-    private static final SimpleDateFormat START_TIME_FORMATTER = new SimpleDateFormat("h:mm a zzz");
+    private static final SimpleDateFormat START_TIME_FORMATTER = new SimpleDateFormat(START_TIME_FORMAT, Locale.getDefault());
     private static float METERS_IN_A_MILE = 1609.34f;
     private LayoutInflater inflater;
     private Double lat;
@@ -50,7 +51,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         View view = null;
 
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_show_nearby_item, null);
+            view = inflater.inflate(R.layout.list_show_nearby_item, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {
@@ -82,7 +83,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_venue_nearby_header, null);
+            view = inflater.inflate(R.layout.list_venue_nearby_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {

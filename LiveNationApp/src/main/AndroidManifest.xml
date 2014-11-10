@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.livenation.mobile.android.na"
-    android:versionCode="1"
-    android:versionName="1.0">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.livenation.mobile.android.na">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -73,7 +69,7 @@
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OnBoardingActivity"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/LNTheme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -178,10 +174,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <!-- Hockey App -->
-        <activity android:name="net.hockeyapp.android.UpdateActivity" />
-
-
         <!-- Urban Airship config -->
         <activity
             android:name="com.livenation.mobile.android.na.notifications.ui.InboxActivity"
@@ -234,7 +226,7 @@
         </activity>
         <!-- End Apsalar Ad Activity strange thing -->
 
-        <receiver android:exported="true" android:name="com.apsalar.sdk.ApsalarReceiver">
+        <receiver tools:ignore="ExportedReceiver" android:exported="true" android:name="com.apsalar.sdk.ApsalarReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"></action>
                 <action android:name="com.apsalar.sdk.SOFT_RESET"></action>

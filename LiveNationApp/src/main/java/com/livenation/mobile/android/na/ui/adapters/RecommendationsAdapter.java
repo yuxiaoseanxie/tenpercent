@@ -72,7 +72,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         View view;
         EventViewHolder holder;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_show_item_v2, null);
+            view = inflater.inflate(R.layout.list_show_item_v2, parent, false);
             holder = new EventViewHolder(view);
             view.setTag(holder);
         } else {
@@ -120,7 +120,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_recommended_header, null);
+            view = inflater.inflate(R.layout.list_recommended_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {
@@ -129,15 +129,18 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
 
         TextView text = holder.getText();
-        ImageView swoocher = holder.getSwoocher();
         switch (getItem(position).getTag()) {
             case EVENT_POPULAR:
                 text.setText(getContext().getString(R.string.recommendations_title_popular));
-                swoocher.setVisibility(View.VISIBLE);
+                text.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.swoosh_divider, 0, 0);
+                text.setCompoundDrawablePadding(getContext().getResources().getDimensionPixelSize(R.dimen.gap_medium));
+                text.setPadding(text.getPaddingLeft(), 0, text.getPaddingRight(), text.getPaddingBottom());
                 break;
             default:
                 text.setText(getContext().getString(R.string.recommendations_title_personal));
-                swoocher.setVisibility(View.GONE);
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                text.setCompoundDrawablePadding(0);
+                text.setPadding(text.getPaddingLeft(), getContext().getResources().getDimensionPixelSize(R.dimen.gap_medium),text.getPaddingRight(), text.getPaddingBottom());
         }
 
         return view;
@@ -302,19 +305,13 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     private class ViewHeaderHolder {
         private final TextView text;
-        private final ImageView swoocher;
 
         public ViewHeaderHolder(View view) {
             this.text = (TextView) view.findViewById(R.id.list_recommended_header_textview);
-            this.swoocher = (ImageView) view.findViewById(R.id.list_recommended_header_swoocher);
         }
 
         public TextView getText() {
             return text;
-        }
-
-        public ImageView getSwoocher() {
-            return swoocher;
         }
     }
 }

@@ -296,7 +296,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
 
 
             if (null == convertView) {
-                view = inflater.inflate(R.layout.favorite_item, null);
+                view = inflater.inflate(R.layout.favorite_item, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             } else {
@@ -317,7 +317,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
             View view = null;
             ViewHeaderHolder holder = null;
             if (null == convertView) {
-                view = inflater.inflate(R.layout.favorite_item_header, null);
+                view = inflater.inflate(R.layout.favorite_item_header, parent, false);
                 holder = new ViewHeaderHolder(view);
                 view.setTag(holder);
             } else {

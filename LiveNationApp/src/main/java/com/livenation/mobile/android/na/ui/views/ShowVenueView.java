@@ -10,8 +10,6 @@ package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,32 +23,26 @@ public class ShowVenueView extends LinearLayout {
 
     public ShowVenueView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init();
     }
 
     public ShowVenueView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
     public ShowVenueView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    private void init() {
+        inflate(getContext(), R.layout.view_show_venue_details, this);
 
-        //TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
-        //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-        View view = inflater.inflate(R.layout.view_show_venue_details, null);
-
-        favorite = (FavoriteCheckBox) view.findViewById(R.id.view_show_venue_favorite_checkbox);
-        title = (TextView) view.findViewById(R.id.view_show_venue_title);
-        location = (TextView) view.findViewById(R.id.venue_detail_location);
-        telephone = (TextView) view.findViewById(R.id.venue_detail_telephone);
-
-        addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        favorite = (FavoriteCheckBox) findViewById(R.id.view_show_venue_favorite_checkbox);
+        title = (TextView) findViewById(R.id.view_show_venue_title);
+        location = (TextView) findViewById(R.id.venue_detail_location);
+        telephone = (TextView) findViewById(R.id.venue_detail_telephone);
     }
 
     public TextView getTitle() {

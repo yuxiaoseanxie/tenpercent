@@ -57,7 +57,7 @@ public abstract class BaseInboxFragment extends ListFragment implements View.OnC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.fragment_inbox_list_empty_view, null, false);
+        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.fragment_inbox_list_empty_view, getListView(), false);
         ((ViewGroup) getListView().getParent()).addView(view);
 
         LinearLayout favoriteButton = (LinearLayout) view.findViewById(R.id.notif_no_notification_favorite_button);

@@ -27,31 +27,26 @@ public class LineupView extends LinearLayout {
 
     public LineupView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init();
     }
+
 
     public LineupView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
     public LineupView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    private void init() {
+        inflate(getContext(), R.layout.view_lineup, this);
 
-        //TODO: Specifying this view as the rootview causes a stack overflow in the XML IDE
-        //No biggy, but at the moment there's a redundant LinearLayout (PERFORMANCE!!)
-        View view = inflater.inflate(R.layout.view_lineup, null);
-
-        favorite = (FavoriteCheckBox) view.findViewById(R.id.view_lineup_favorite_checkbox);
-        title = (TextView) view.findViewById(R.id.view_lineup_title);
-        divider = view.findViewById(R.id.view_lineup_divider);
-
-        addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        favorite = (FavoriteCheckBox) findViewById(R.id.view_lineup_favorite_checkbox);
+        title = (TextView) findViewById(R.id.view_lineup_title);
+        divider = findViewById(R.id.view_lineup_divider);
     }
 
     public TextView getTitle() {
