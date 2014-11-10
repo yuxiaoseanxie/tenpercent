@@ -149,7 +149,7 @@
             android:name="com.livenation.mobile.android.na.ui.LocationActivity"
             android:label="@string/activity_label_location" />
 
-        <activity android:name="com.livenation.mobile.android.na.ui.SearchActivity" />
+        <activity android:name=".ui.FavoriteSearchActivity" />
 
         <activity android:name="com.livenation.mobile.android.na.ui.CitySearchActivity" />
 

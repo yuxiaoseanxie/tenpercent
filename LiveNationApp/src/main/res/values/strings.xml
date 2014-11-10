@@ -94,7 +94,7 @@
     <string name="recommendations_title_personal">Recommended for you</string>
     <string name="recommendations_title_popular">Popular shows</string>
 
-    <string name="search_input_hint_default">Events, Artists, Venues</string>
+    <string name="search_input_hint_events_artists_venues">Events, Artists, Venues</string>
     <string name="search_input_hint_artists">Search Artists</string>
     <string name="search_input_hint_artists_venues">Search Artists, Venues</string>
 

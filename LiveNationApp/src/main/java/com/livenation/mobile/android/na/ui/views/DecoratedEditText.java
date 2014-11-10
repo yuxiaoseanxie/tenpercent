@@ -106,14 +106,6 @@ public class DecoratedEditText extends LinearLayout implements TextWatcher {
         clear = (ImageButton) view.findViewById(android.R.id.button1);
         hint = (TextView) view.findViewById(android.R.id.hint);
 
-        if (null != attrs) {
-            TypedArray a = context.obtainStyledAttributes(attrs,
-                    R.styleable.DecoratedEditText, 0, 0);
-            String hintText = a.getString(R.styleable.DecoratedEditText_hint);
-            hint.setText(hintText);
-            a.recycle();
-        }
-
         editText.addTextChangedListener(this);
         if (TextUtils.isEmpty(editText.getText())) {
             setViewState(ViewState.STATE_EMPTY);

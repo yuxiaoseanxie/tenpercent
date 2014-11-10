@@ -3,24 +3,17 @@ package com.livenation.mobile.android.na.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.SearchForText;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
+import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SearchCitiesParameters;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,37 +21,15 @@ import java.util.List;
 /**
  * Created by cchilton on 4/2/14.
  */
-public class CitySearchFragment extends LiveNationFragment implements SearchForText, BasicApiCallback<List<City>>, ListView.OnItemClickListener {
+public class CitySearchFragment extends SearchFragment<City> {
     public static final String DATA_RESULT_KEY = "search_result";
-    private SearchAdapter adapter;
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        adapter = new SearchAdapter(getActivity(), new ArrayList<City>());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
-        listView.setAdapter(adapter);
-        listView.setDivider(null);
-        listView.setOnItemClickListener(this);
-        return view;
-    }
-
-    public void searchFor(String text) {
-        if (TextUtils.isEmpty(text)) return;
+    public void searchFor(String text, BasicApiCallback<List<City>> callback) {
         SearchCitiesParameters params = new SearchCitiesParameters();
         params.setSearchQuery(text);
-
-        LiveNationApplication.getLiveNationProxy().searchCities(params, this);
-    }
-
-    @Override
-    public void onErrorResponse(LiveNationError error) {
+        LiveNationApplication.getLiveNationProxy().searchCities(params, callback);
 
     }
 
@@ -72,50 +43,32 @@ public class CitySearchFragment extends LiveNationFragment implements SearchForT
     }
 
     @Override
-    public void onResponse(List<City> response) {
-        adapter.clear();
-        adapter.addAll(response);
+    public SearchAdapter<City> getAdapter() {
+        return new CitySearchAdapter(getActivity(), new ArrayList<City>());
     }
 
-    public class SearchAdapter extends ArrayAdapter<City> {
-        private LayoutInflater inflater;
 
-        public SearchAdapter(Context context, List<City> items) {
-            super(context, android.R.layout.simple_list_item_1, items);
-            inflater = LayoutInflater.from(context);
+    public class CitySearchAdapter extends SearchAdapter<City> {
+
+        public CitySearchAdapter(Context context, List<City> items) {
+            super(context, items);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            View view = null;
+            View view = super.getView(position, convertView, parent);
 
-            if (null == convertView) {
-                view = inflater.inflate(R.layout.list_search_city_item, parent, false);
-                holder = new ViewHolder(view);
-                view.setTag(holder);
-            } else {
-                view = convertView;
-                holder = (ViewHolder) convertView.getTag();
-            }
+            SearchViewHolder holder = (SearchViewHolder) view.getTag();
 
             City city = getItem(position);
-            holder.getTitle().setText(city.getName());
+            holder.title.setText(city.getName());
 
             return view;
         }
 
-        private class ViewHolder {
-            private final TextView title;
-
-            public ViewHolder(View view) {
-                this.title = (TextView) view.findViewById(R.id.list_search_city_title);
-            }
-
-            public TextView getTitle() {
-                return title;
-            }
+        @Override
+        protected int getLayoutCellId() {
+            return R.layout.list_search_city_item;
         }
-
     }
 }

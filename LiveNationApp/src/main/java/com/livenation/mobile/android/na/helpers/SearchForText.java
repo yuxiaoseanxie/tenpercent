@@ -7,5 +7,5 @@ package com.livenation.mobile.android.na.helpers;
  * SearchFragment with.
  */
 public interface SearchForText {
-    public void searchFor(String text);
+    public void searchForText(String text);
 }

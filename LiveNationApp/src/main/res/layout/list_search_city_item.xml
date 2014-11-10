@@ -19,7 +19,7 @@
         android:minWidth="@dimen/minimum_pressable"/>
 
     <TextView
-        android:id="@+id/list_search_city_title"
+        android:id="@+id/list_search_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -31,7 +31,7 @@
         android:id="@+id/list_search_result_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
-        android:layout_alignLeft="@id/list_search_city_title"
+        android:layout_alignLeft="@id/list_search_title"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
 
