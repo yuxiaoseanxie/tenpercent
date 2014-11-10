@@ -145,7 +145,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         view = createTab(getActivity(), title);
         tabSpec = tabHost.newTabSpec(TAB_TAG_ARTISTS);
         tabSpec.setIndicator(view);
-        tabSpec.setContent(R.id.fragment_favorite_artists_list);
+        tabSpec.setContent(R.id.fragment_favorites_artists);
         tabHost.addTab(tabSpec);
         tabHost.setOnTabChangedListener(this);
 
@@ -153,7 +153,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         view = createTab(getActivity(), title);
         tabSpec = tabHost.newTabSpec(TAB_TAG_VENUES);
         tabSpec.setIndicator(view);
-        tabSpec.setContent(R.id.fragment_favorite_venues_list);
+        tabSpec.setContent(R.id.fragment_favorites_venues);
 
         tabHost.addTab(tabSpec);
 
@@ -223,7 +223,6 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         final int artistScrollPosition = artistList.getFirstVisiblePosition();
         final View artistItemView = artistList.getWrappedList().getChildAt(0);
         int artistOffset = (artistItemView == null) ? 0 : artistItemView.getTop();
-
 
 
         List<Favorite> artistFavorites = filterFavorites(favs, "artist");
