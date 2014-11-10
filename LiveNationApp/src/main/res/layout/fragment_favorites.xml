@@ -30,16 +30,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
+                        android:id="@+id/fragment_favorite_artists_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_artists_list"
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
                         android:layout_weight="1" />
 
-                    <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
-                        android:id="@+id/fragment_favorite_artists_empty"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -48,16 +48,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
+                        android:id="@+id/fragment_favorite_venues_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_venues_list"
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
                         android:layout_weight="1" />
 
-                    <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
-                        android:id="@+id/fragment_favorite_venues_empty"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

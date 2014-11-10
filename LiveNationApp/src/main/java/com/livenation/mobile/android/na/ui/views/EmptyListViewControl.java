@@ -95,16 +95,16 @@ public class EmptyListViewControl extends LinearLayout {
         removeAllViews();
         switch (mode) {
             case INACTIVE:
-                addView(inactive, containerParams);
+                addView(inactive);
                 break;
             case LOADING:
-                addView(loading, containerParams);
+                addView(loading);
                 break;
             case NO_DATA:
-                addView(noData, containerParams);
+                addView(noData);
                 break;
             case RETRY:
-                addView(retry, containerParams);
+                addView(retry);
                 break;
             default:
         }

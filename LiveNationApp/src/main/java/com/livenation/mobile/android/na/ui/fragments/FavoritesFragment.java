@@ -145,7 +145,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         view = createTab(getActivity(), title);
         tabSpec = tabHost.newTabSpec(TAB_TAG_ARTISTS);
         tabSpec.setIndicator(view);
-        tabSpec.setContent(R.id.fragment_favorite_artists_list);
+        tabSpec.setContent(R.id.fragment_favorites_artists);
         tabHost.addTab(tabSpec);
         tabHost.setOnTabChangedListener(this);
 
@@ -153,7 +153,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         view = createTab(getActivity(), title);
         tabSpec = tabHost.newTabSpec(TAB_TAG_VENUES);
         tabSpec.setIndicator(view);
-        tabSpec.setContent(R.id.fragment_favorite_venues_list);
+        tabSpec.setContent(R.id.fragment_favorites_venues);
 
         tabHost.addTab(tabSpec);
 
@@ -225,7 +225,6 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         int artistOffset = (artistItemView == null) ? 0 : artistItemView.getTop();
 
 
-
         List<Favorite> artistFavorites = filterFavorites(favs, "artist");
         artistAdapter.clear();
         artistAdapter.addAll(artistFavorites);
@@ -236,12 +235,15 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
 
         if (venueAdapter.getCount() == 0) {
             venueEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        } else {
+            venueEmptyView.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         }
 
         if (artistAdapter.getCount() == 0) {
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
+        }  else {
+            artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         }
-
         venueList.setSelectionFromTop(venueScrollPosition, venueOffset);
         artistList.setSelectionFromTop(artistScrollPosition, artistOffset);
 
