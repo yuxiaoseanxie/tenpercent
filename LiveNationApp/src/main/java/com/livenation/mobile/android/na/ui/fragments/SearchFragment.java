@@ -49,7 +49,11 @@ public abstract class SearchFragment<ResultType> extends LiveNationFragment impl
 
     @Override
     public void searchForText(String text) {
-        if (TextUtils.isEmpty(text)) return;
+        if (TextUtils.isEmpty(text)) {
+            adapter.clear();
+            emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
+            return;
+        }
         synchronized (this) {
             pendingRequestCount++;
         }
