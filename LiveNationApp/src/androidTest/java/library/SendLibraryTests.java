@@ -10,6 +10,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.LibraryAffinitiesParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
+
+import mock.AccessTokenProviderMock;
 import mock.DeviceIdProviderMock;
 import mock.EnvironmentProviderMock;
 import mock.LocationProviderMock;
@@ -28,12 +30,12 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2<TestActiv
     protected void setUp() throws Exception {
         super.setUp();
 
-        LiveNationLibrary.start(getActivity(), new EnvironmentProviderMock(), new DeviceIdProviderMock(), new LocationProviderMock(), null);
+        LiveNationLibrary.start(getActivity(), new EnvironmentProviderMock(), new DeviceIdProviderMock(), new LocationProviderMock(), new AccessTokenProviderMock(),  null);
 
         this.proxy = new LiveNationProxy();
     }
 
-    public void testSendAffinitiesWithOnSuccesResponse() {
+    public void testSendAffinitiesWithOnSuccessResponse() {
         MusicLibrary musicLibrary = new MusicLibrary();
         MusicLibraryEntry musicLibraryEntry = new MusicLibraryEntry("U2");
         musicLibraryEntry.setPlayCount(2);
@@ -46,14 +48,14 @@ public class SendLibraryTests extends ActivityInstrumentationTestCase2<TestActiv
         proxy.sendLibraryAffinities(parameters, new BasicApiCallback<Void>() {
             @Override
             public void onResponse(Void response) {
+                assertTrue(true);
                 startApiCall.countDown();
             }
 
             @Override
             public void onErrorResponse(LiveNationError error) {
+                assertTrue(false);
                 startApiCall.countDown();
-
-                fail("onFailure method: " + error);
             }
         });
         try {
