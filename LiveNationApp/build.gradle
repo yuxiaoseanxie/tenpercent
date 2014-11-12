@@ -133,6 +133,16 @@ android {
     }
 }
 
+//Runs checks that requires a connected device or emulator. they will run on all connected devices in parallel.
+task test() {
+    println ':Ticketing:connectedCheck running'
+    println ':LabsPlatform:connectedCheck running'
+    println ':LiveNationApp:connectedCheck'
+}
+test.dependsOn(':Ticketing:connectedCheck')
+test.dependsOn(':LabsPlatform:connectedCheck')
+test.dependsOn(':LiveNationApp:connectedCheck')
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')
