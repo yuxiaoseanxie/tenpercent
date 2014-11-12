@@ -57,6 +57,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
 
+
+        testApplicationId "com.livenation.mobile.android.na.test"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
 
         for (Project project : rootProject.subprojects) {
