@@ -40,15 +40,64 @@ Copy and paste the following variable names and update paths and passwords.
 	LNKeyPassword= ...
 
 It will then be possible to build and run the project.
+Running lint
+=========================
+You can run only lint
+
+	./gradlew lint
+or you can assemble the project and run lint
+
+	./gradlew check
+	
+It generated 2 reports
+
+* lint-report.html [open][lint1]
+* lint-report.xml [open][lint2]
+
+[lint1]: LiveNationApp/lint-report.html
+[lint2]: LiveNationApp/lint-report.xml
 
 
-Running UIAutomator tests
+
+Running tests
 =========================
 
-Experimental: UIAutomator tests can be run from the root of the app folder (adr-appLiveNation/) via the command line, eg:
+The following command run the sets of test of the application but also the tests of the Ticketing library and the Platform Library.
 
-./gradlew uiRun
+It generates 3 apk in project/build/outputs/apk:
 
-Will run the UIAutomator tests specified by the 'UiAutomator/build.gradle' file
+* LiveNationApp-debug-test-unaligned.apk [Folder link][link1]
+* LabsPlatform-debug-test-unaligned.apk [Folder link][link2]
+* Ticketing-debug-test-unaligned.apk [Folder link][link3]
 
+[link1]: LiveNationApp/build/outputs/apk
+[link2]: ../adr-libsLabsPlatform/LabsPlatform/build/outputs/apk
+[link3]: ../adr-libTicketing/Ticketing/build/outputs/apk
+
+and 3 reports in project/build/outputs/reports/androidTests/connected called index.html.
+
+
+	./gradlew test
+	
+
+###To run a single project
+
+You need to specify the module before to launch the command
+
+	./gradlew :Ticketing:connectedCheck
+	./gradlew :LabsPlatform:connectedCheck
+	./gradlew :LiveNationApp:connectedCheck
+	
+###To run a single test
+
+To run one test at a time, rigth click on the method name or the class test and click on run. 
+
+![exemple icon](docs/assets/example1.png)
+
+===
+
+Do not forget to specify in the run/debug configuration the specific instrumentation runner as com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner
+
+
+![exemple icon](docs/assets/example2.png)
 

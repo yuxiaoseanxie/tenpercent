@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
 import com.livenation.mobile.android.platform.init.Environment;
@@ -23,14 +24,19 @@ public class EnvironmentPreferences {
 
     public Environment getConfiguredEnvironment() {
         String environmentSerialize = sharedPreferences.getString(Constants.SharedPreferences.ENVIRONMENT, null);
-        Environment env = Environment.Production;
+        Environment env;
+        if (BuildConfig.DEBUG) {
+            env = Environment.Staging;
+        } else {
+            env = Environment.Production;
+        }
         if (environmentSerialize != null && !environmentSerialize.isEmpty()) {
             try {
                 env = (Environment) SerializableHelper.fromString(environmentSerialize);
             } catch (IOException e) {
-                return Environment.Production;
+                return env;
             } catch (ClassNotFoundException e) {
-                return Environment.Production;
+                return env;
             }
         }
 

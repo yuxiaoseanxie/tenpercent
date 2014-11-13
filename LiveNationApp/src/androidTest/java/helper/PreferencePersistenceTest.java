@@ -1,4 +1,4 @@
-package com.livenation.mobile.android.na.helpers;
+package helper;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -11,16 +11,16 @@ import com.livenation.mobile.android.na.ui.TestActivity;
 public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 {
 
     private static final String NAME = "test_name";
-    private final PreferencePersistence preferencePersistence = new PreferencePersistence(NAME);
+    private PreferencePersistence preferencePersistence;
 
     public PreferencePersistenceTest() {
         super(TestActivity.class);
     }
 
     @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        preferencePersistence.reset();
+    protected void setUp() throws Exception {
+        super.setUp();
+        preferencePersistence = new PreferencePersistence(NAME, getActivity());
     }
 
     public void testWriteAndReadSuccess() {
@@ -28,14 +28,14 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
         final String VALUE = "value_test";
         preferencePersistence.write(KEY, VALUE);
 
-        String readValue = preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.readString(KEY);
         assertEquals(VALUE, readValue);
     }
 
     public void testReadFailed() {
         final String KEY = "key_test_which_does_not_exist";
 
-        String readValue = preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.readString(KEY);
         assertNull(readValue);
     }
 
@@ -45,7 +45,7 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
         preferencePersistence.write(KEY, VALUE);
         preferencePersistence.reset();
 
-        String readValue = preferencePersistence.read(KEY, getActivity());
+        String readValue = preferencePersistence.readString(KEY);
         assertNull(null, readValue);
     }
 
