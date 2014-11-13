@@ -31,7 +31,7 @@ def computeGitSha(File rootDir) {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion '21'
+    buildToolsVersion '21.1.1'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
