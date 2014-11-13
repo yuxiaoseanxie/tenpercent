@@ -2,9 +2,9 @@ package com.livenation.mobile.android.na.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.BuildConfig;
 import android.util.Log;
 
+import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
 import com.livenation.mobile.android.platform.init.Environment;
@@ -26,21 +26,17 @@ public class EnvironmentPreferences {
         String environmentSerialize = sharedPreferences.getString(Constants.SharedPreferences.ENVIRONMENT, null);
         Environment env;
         if (BuildConfig.DEBUG) {
-            Log.d("Elodie", "env debug");
             env = Environment.Staging;
         } else {
-            Log.d("Elodie", "env prod");
             env = Environment.Production;
         }
         if (environmentSerialize != null && !environmentSerialize.isEmpty()) {
             try {
                 env = (Environment) SerializableHelper.fromString(environmentSerialize);
             } catch (IOException e) {
-                Log.d("Elodie", "IOException e");
-                return Environment.Production;
+                return env;
             } catch (ClassNotFoundException e) {
-                Log.d("Elodie", "ClassNotFoundException e");
-                return Environment.Production;
+                return env;
             }
         }
 
