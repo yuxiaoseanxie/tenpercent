@@ -12,8 +12,8 @@ import retrofit.http.Query;
 public interface UberService {
 
     @GET("/v1/products")
-    public UberProducts getProducts(@Query("latitude") float latitude, @Query("longitude") float longitude);
+    UberProducts getProducts(@Query("latitude") float latitude, @Query("longitude") float longitude);
 
     @GET("/v1/estimates/price")
-    public UberPrices getEstimates(@Query("start_latitude") float startLat, @Query("start_longitude") float startLng, @Query("end_latitude") float endLat, @Query("end_longitude") float endLng);
+    UberPrices getEstimates(@Query("start_latitude") float startLat, @Query("start_longitude") float startLng, @Query("end_latitude") float endLat, @Query("end_longitude") float endLng);
 }
