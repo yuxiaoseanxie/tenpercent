@@ -56,6 +56,18 @@ public class UberHelper {
         return builder.build().create(UberService.class);
     }
 
+    /**
+     * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
+     *
+     * Uber's Fare Estimate (Prices) objects do not contain the capacity information for the product.
+     * We retrieve the capacity information via a separate API call. This function merges the data
+     * objects from the two API calls into one list.
+     *
+     * @param prices A list of Uber fare estimations between point A and B
+     * @param products A list of Uber products offered at point A
+     * @return A merged list of "LiveNationEstimate" which contains a fare estimate and its associated Uber Product. The
+     * Product will be null if no matching Fare->Product is found
+     */
     public static ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products) {
         ArrayList<LiveNationEstimate> priceCapacities = new ArrayList<LiveNationEstimate>();
         Map<String, UberProduct> productMap = new HashMap<String, UberProduct>();
