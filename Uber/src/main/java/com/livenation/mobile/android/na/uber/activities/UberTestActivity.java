@@ -8,10 +8,11 @@ import com.livenation.mobile.android.na.uber.R;
 /**
  * Created by cchilton on 11/17/14.
  */
-public class UberActivity extends FragmentActivity {
+public class UberTestActivity extends FragmentActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uber);
+        setContentView(R.layout.activity_uber_test);
     }
 }

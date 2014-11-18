@@ -1,10 +1,12 @@
 package com.livenation.mobile.android.na.uber.service;
 
-import com.livenation.mobile.android.na.uber.service.model.UberPrices;
-import com.livenation.mobile.android.na.uber.service.model.UberProducts;
+
+import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
 
 import retrofit.http.GET;
 import retrofit.http.Query;
+import rx.Observable;
 
 /**
  * Created by cchilton on 11/17/14.
@@ -12,8 +14,8 @@ import retrofit.http.Query;
 public interface UberService {
 
     @GET("/v1/products")
-    UberProducts getProducts(@Query("latitude") float latitude, @Query("longitude") float longitude);
+    Observable<UberProductResponse> getProducts(@Query("latitude") float latitude, @Query("longitude") float longitude);
 
     @GET("/v1/estimates/price")
-    UberPrices getEstimates(@Query("start_latitude") float startLat, @Query("start_longitude") float startLng, @Query("end_latitude") float endLat, @Query("end_longitude") float endLng);
+    Observable<UberPriceResponse> getEstimates(@Query("start_latitude") float startLat, @Query("start_longitude") float startLng, @Query("end_latitude") float endLat, @Query("end_longitude") float endLng);
 }

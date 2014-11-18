@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">uber</string>
-    <string name="pickup">Pickup:</string>
-    <string name="dropoff">Dropoff:</string>
-    <string name="current_location">Current Location</string>
+    <plurals name="uber_capacity">
+        <item quantity="one">Capacity: 1 person</item>
+        <item quantity="other">Capacity: %d people</item>
+    </plurals>
 </resources>
