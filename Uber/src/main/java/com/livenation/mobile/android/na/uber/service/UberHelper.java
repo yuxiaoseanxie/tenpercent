@@ -69,7 +69,7 @@ public class UberHelper {
      * Product will be null if no matching Fare->Product is found
      */
     public static ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products) {
-        ArrayList<LiveNationEstimate> priceCapacities = new ArrayList<LiveNationEstimate>();
+        ArrayList<LiveNationEstimate> estimates = new ArrayList<LiveNationEstimate>();
         Map<String, UberProduct> productMap = new HashMap<String, UberProduct>();
 
         for (UberProduct product : products) {
@@ -77,15 +77,12 @@ public class UberHelper {
         }
 
         for (UberPrice price : prices) {
-            UberProduct product = null;
-            String productId = price.getProductId();
-            if (productMap.containsKey(productId)) {
-                product = productMap.get(productId);
-            }
-            LiveNationEstimate priceCapacity = new LiveNationEstimate(price, product);
-            priceCapacities.add(priceCapacity);
+            UberProduct product = productMap.get(price.getProductId());
+            LiveNationEstimate estimate = new LiveNationEstimate(price, product);
+            estimates.add(estimate);
         }
-        return priceCapacities;
+
+        return estimates;
     }
 
     public static void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
