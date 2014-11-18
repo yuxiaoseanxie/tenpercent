@@ -24,7 +24,7 @@ import java.util.List;
  * Created by cchilton on 11/18/14.
  */
 public class UberDialogFragment extends DialogFragment implements AdapterView.OnItemClickListener {
-    private PriceCapacityAdapter adapter;
+    private EstimationAdapter adapter;
 
     public static final String EXTRA_UBER_ESTIMATES = UberDialogFragment.class.getSimpleName() + ".UBER_ESTIMATES";
 
@@ -41,7 +41,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ArrayList<LiveNationEstimate> items = (ArrayList<LiveNationEstimate>) getArguments().getSerializable(EXTRA_UBER_ESTIMATES);
-        adapter = new PriceCapacityAdapter(getActivity(), items);
+        adapter = new EstimationAdapter(getActivity(), items);
     }
 
     @Override
@@ -66,10 +66,10 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         //getTargetFragment().onActivityResult();
     }
 
-    private class PriceCapacityAdapter extends ArrayAdapter<LiveNationEstimate> {
+    private class EstimationAdapter extends ArrayAdapter<LiveNationEstimate> {
         private final LayoutInflater inflater;
 
-        public PriceCapacityAdapter(Context context, List<LiveNationEstimate> estimates) {
+        public EstimationAdapter(Context context, List<LiveNationEstimate> estimates) {
             super(context, android.R.layout.simple_list_item_1);
             inflater = LayoutInflater.from(context);
             addAll(estimates);
