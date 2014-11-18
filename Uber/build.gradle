@@ -35,4 +35,13 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.4'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.4'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.2.4'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.android.support:support-v13:20.0.0'
+    compile 'com.google.android.gms:play-services:5.0.89'
+    androidTestCompile ('com.jakewharton.espresso:espresso:1.1-r3') {
+        exclude group: 'com.squareup.dagger', module: 'dagger'
+        exclude group: 'org.hamcrest', module: 'hamcrest-integration'
+    }
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    compile 'com.squareup.dagger:dagger:1.2.2'
 }
