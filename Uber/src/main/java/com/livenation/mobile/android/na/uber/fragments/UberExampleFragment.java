@@ -2,6 +2,7 @@ package com.livenation.mobile.android.na.uber.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -56,7 +57,10 @@ public class UberExampleFragment extends Fragment implements UberHelper.UberDial
         switch (requestCode) {
             case DIALOG_SELECT_UBER_RESULT:
                 LiveNationEstimate estimate = (LiveNationEstimate) data.getExtras().getSerializable(UberDialogFragment.EXTRA_RESULT_ESTIMATE);
-                Toast.makeText(getActivity(), "Estimate selected: " + estimate.getProduct().getDisplayName(), Toast.LENGTH_SHORT).show();
+                String clientId = getString(R.string.uber_client_id);
+                Uri uri = UberHelper.getUberLaunchUri(clientId, estimate.getProduct().getProductId(), LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1], LOCATION_SF[0], LOCATION_SF[1], "Live Nation Labs", "340 Brannan St San Francisco, CA 94107");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 break;
         }
     }

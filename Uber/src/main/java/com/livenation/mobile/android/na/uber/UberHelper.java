@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.uber;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -102,7 +103,24 @@ public class UberHelper {
         String clientId = context.getResources().getString(R.string.uber_client_id);
         return String.format("https://m.uber.com./sign-up?client_id=%s", clientId);
     }
-    
+
+    public static Uri getUberLaunchUri(String clientId, String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
+        Uri uberUri = Uri.parse("uber://");
+        Uri.Builder builder = uberUri.buildUpon();
+
+        builder.appendQueryParameter("action", "setPickup");
+        builder.appendQueryParameter("client_id", clientId);
+        builder.appendQueryParameter("pickup", "my_location");
+        builder.appendQueryParameter("pickup[latitude]", Float.valueOf(pickupLat).toString());
+        builder.appendQueryParameter("pickup[longitude]", Float.valueOf(pickupLng).toString());
+        builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
+        builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
+        builder.appendQueryParameter("product_id", productId);
+        builder.appendQueryParameter("dropoff[nickname]", dropoffName);
+
+        return builder.build();
+    }
+
     public static void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
         UberService service = getUberService();
         //prep observable Uber API call 1
