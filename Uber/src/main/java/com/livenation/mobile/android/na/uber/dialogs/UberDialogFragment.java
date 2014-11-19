@@ -52,13 +52,15 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         @SuppressLint("InflateParams")
-        View titleView = inflater.inflate(R.layout.dialog_uber_estimates, null);
+        View content = inflater.inflate(R.layout.dialog_uber_estimates, null);
+        View title = inflater.inflate(R.layout.dialog_title_uber_estimates, null);
+        builder.setCustomTitle(title);
 
-        ListView listView = (ListView) titleView.findViewById(android.R.id.list);
+        ListView listView = (ListView) content.findViewById(android.R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
-        builder.setView(titleView);
+        builder.setView(content);
 
         return builder.create();
     }
@@ -110,11 +112,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             private final TextView title;
             private final TextView cost;
             private final TextView capacity;
+            private final TextView time;
 
             public ViewHolder(View root) {
                 this.title = (TextView) root.findViewById(R.id.uber_list_price_estimate_title);
-                this.cost = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
-                this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_cost);
+                this.cost = (TextView) root.findViewById(R.id.uber_list_price_estimate_cost);
+                this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
+                this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
             }
 
             public TextView getCost() {
@@ -127,6 +131,10 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
             public TextView getCapacity() {
                 return capacity;
+            }
+
+            public TextView getTime() {
+                return time;
             }
         }
     }

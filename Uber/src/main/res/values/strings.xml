@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">uber</string>
     <plurals name="uber_capacity">
-        <item quantity="one">Capacity: 1 person</item>
-        <item quantity="other">Capacity: %d people</item>
+        <item quantity="one">Max 1 person</item>
+        <item quantity="other">Max %d people</item>
     </plurals>
+    <string name="uber_dialog_title">Uber Fare Estimates</string>
+    <string name="uber_dialog_title_secondary">From your current location</string>
+
 </resources>
