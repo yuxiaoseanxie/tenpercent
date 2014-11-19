@@ -1,17 +1,17 @@
 package com.livenation.mobile.android.na.uber.service.model;
 
-import android.content.res.Resources;
+import java.io.Serializable;
 
 /**
  * Created by cchilton on 11/18/14.
- *
+ * <p/>
  * Wrapper class for List Adapters.
- *
+ * <p/>
  * This class wraps both the Uber Product model and the Uber Price model.
- *
+ * <p/>
  * We need this to show the car's person capacity of each Uber Estimate to our users
  */
-public class LiveNationEstimate {
+public class LiveNationEstimate implements Serializable {
     private final UberProduct product;
     private final UberPrice price;
 

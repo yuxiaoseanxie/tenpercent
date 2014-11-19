@@ -1,9 +1,11 @@
 package com.livenation.mobile.android.na.uber.dialogs;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -27,7 +29,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     private EstimationAdapter adapter;
 
     public static final String EXTRA_UBER_ESTIMATES = UberDialogFragment.class.getSimpleName() + ".UBER_ESTIMATES";
-
+    public static final String EXTRA_RESULT_ESTIMATE = UberDialogFragment.class.getSimpleName() + ".UBER_SELECTED_ESTIMATE";
 
     public static UberDialogFragment newInstance(ArrayList<LiveNationEstimate> estimates) {
         Bundle args = new Bundle();
@@ -63,7 +65,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //getTargetFragment().onActivityResult();
+        if (getTargetFragment() != null) {
+            LiveNationEstimate estimate = (LiveNationEstimate) parent.getItemAtPosition(position);
+            Intent data = new Intent();
+            data.putExtra(EXTRA_RESULT_ESTIMATE, estimate);
+            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
+            dismiss();
+        }
     }
 
     private class EstimationAdapter extends ArrayAdapter<LiveNationEstimate> {
