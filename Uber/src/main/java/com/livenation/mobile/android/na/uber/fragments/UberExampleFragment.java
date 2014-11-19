@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.livenation.mobile.android.na.uber.R;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
-import com.livenation.mobile.android.na.uber.service.UberHelper;
+import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 
 /**

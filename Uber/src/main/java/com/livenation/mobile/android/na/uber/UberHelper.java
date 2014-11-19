@@ -1,12 +1,12 @@
-package com.livenation.mobile.android.na.uber.service;
+package com.livenation.mobile.android.na.uber;
 
 
 import android.support.v4.app.DialogFragment;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.livenation.mobile.android.na.uber.BuildConfig;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.UberService;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPrice;
 import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
@@ -124,4 +124,5 @@ public class UberHelper {
         void onGetUberDialogComplete(DialogFragment dialog);
         void onGetUberDialogError();
     }
+
 }
