@@ -98,6 +98,11 @@ public class UberHelper {
         return false;
     }
 
+    public static String getUberSignupLink(Context context) {
+        String clientId = context.getResources().getString(R.string.uber_client_id);
+        return String.format("https://m.uber.com./sign-up?client_id=%s", clientId);
+    }
+    
     public static void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
         UberService service = getUberService();
         //prep observable Uber API call 1
