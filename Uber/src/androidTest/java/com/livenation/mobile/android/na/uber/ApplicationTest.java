@@ -3,7 +3,6 @@ package com.livenation.mobile.android.na.uber;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import com.livenation.mobile.android.na.uber.service.UberHelper;
 import com.livenation.mobile.android.na.uber.service.UberService;
 import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
@@ -12,12 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.observers.TestSubscriber;
-import rx.schedulers.Schedulers;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
