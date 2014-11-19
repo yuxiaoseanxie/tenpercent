@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.uber;
 
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.support.v4.app.DialogFragment;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -83,6 +85,17 @@ public class UberHelper {
         }
 
         return estimates;
+    }
+
+    public static boolean isUberAppInstalled(Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException ignored) {
+            //no uber app installed
+        }
+        return false;
     }
 
     public static void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
