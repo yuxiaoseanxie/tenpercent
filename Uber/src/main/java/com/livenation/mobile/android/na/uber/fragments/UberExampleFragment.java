@@ -19,7 +19,7 @@ import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 /**
  * Created by cchilton on 11/17/14.
  */
-public class UberTestFragment extends Fragment implements UberHelper.UberDialogCallback {
+public class UberExampleFragment extends Fragment implements UberHelper.UberDialogCallback {
     private static final float[] LOCATION_SF = {37.7833f, -122.4167f};
     private static final float[] LOCATION_EAST_BAY = {37.5423f, -122.04f};
     private static final int DIALOG_SELECT_UBER_RESULT = 1;
