@@ -13,28 +13,30 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.uber.R;
+import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
-import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 
 /**
  * Created by cchilton on 11/17/14.
  */
-public class UberExampleFragment extends Fragment implements UberHelper.UberDialogCallback {
+public class UberExampleFragment extends Fragment implements UberClient.UberDialogCallback {
     private static final float[] LOCATION_SF = {37.7833f, -122.4167f};
     private static final float[] LOCATION_EAST_BAY = {37.5423f, -122.04f};
     private static final int DIALOG_SELECT_UBER_RESULT = 1;
+    private UberClient uberClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        uberClient = new UberClient(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_uber_test, container, false);
-        UberHelper.getUberDialogFragment(LOCATION_SF[0], LOCATION_SF[1], LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1], this);
+        uberClient.getUberDialogFragment(LOCATION_SF[0], LOCATION_SF[1], LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1], this);
         return view;
     }
 
@@ -57,8 +59,7 @@ public class UberExampleFragment extends Fragment implements UberHelper.UberDial
         switch (requestCode) {
             case DIALOG_SELECT_UBER_RESULT:
                 LiveNationEstimate estimate = (LiveNationEstimate) data.getExtras().getSerializable(UberDialogFragment.EXTRA_RESULT_ESTIMATE);
-                String clientId = getString(R.string.uber_client_id);
-                Uri uri = UberHelper.getUberLaunchUri(clientId, estimate.getProduct().getProductId(), LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1], LOCATION_SF[0], LOCATION_SF[1], "Live Nation Labs", "340 Brannan St San Francisco, CA 94107");
+                Uri uri = uberClient.getUberLaunchUri(estimate.getProduct().getProductId(), LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1], LOCATION_SF[0], LOCATION_SF[1], "Live Nation Labs", "340 Brannan St San Francisco, CA 94107");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
                 break;

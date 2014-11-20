@@ -21,18 +21,18 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    private UberService uberService;
+    private UberClient uberClient;
     private static final float[] LOCATION_SF = {37.7833f, -122.4167f};
     private static final float[] LOCATION_EAST_BAY = {37.5423f, -122.04f};
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        uberService = UberHelper.getUberService();
+        uberClient = new UberClient(getContext());
     }
 
     public void testGetProducts() {
-        Observable<UberProductResponse> products = uberService.getProducts(LOCATION_SF[0], LOCATION_SF[1]);
+        Observable<UberProductResponse> products = uberClient.getService().getProducts(LOCATION_SF[0], LOCATION_SF[1]);
         TestSubscriber<UberProductResponse> testSubscriber = new TestSubscriber<UberProductResponse>();
         products.subscribe(testSubscriber);
         testSubscriber.awaitTerminalEvent(10, TimeUnit.SECONDS);
@@ -42,7 +42,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
     public void testGetEstimates() {
-        Observable<UberPriceResponse> prices = uberService.getEstimates(LOCATION_SF[0], LOCATION_SF[1], LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1]);
+        Observable<UberPriceResponse> prices = uberClient.getService().getEstimates(LOCATION_SF[0], LOCATION_SF[1], LOCATION_EAST_BAY[0], LOCATION_EAST_BAY[1]);
         TestSubscriber<UberPriceResponse> testSubscriber = new TestSubscriber<UberPriceResponse>();
         prices.subscribe(testSubscriber);
         testSubscriber.awaitTerminalEvent(10, TimeUnit.SECONDS);

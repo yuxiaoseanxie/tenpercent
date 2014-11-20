@@ -1,6 +1,5 @@
 package com.livenation.mobile.android.na.uber;
 
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -33,70 +32,29 @@ import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by cchilton on 11/17/14.
+ * Created by cchilton on 11/20/14.
  */
-public class UberHelper {
+public class UberClient {
     //TEMPORARY TESTING TOKEN!
     private final static String API_SERVER_TOKEN = "n_8uFl4o06CW6hZinwNV68aitRno92eWpfgFIjcp";
     private final static String API_PARAM_TOKEN_NAME = "server_token";
     private final static String API_ENDPOINT = "https://api.uber.com";
+    private final Context context;
+    private final String clientId;
+    private final UberService service;
 
-    public static UberService getUberService() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        RestAdapter.Builder builder = new RestAdapter.Builder();
-        builder.setEndpoint(API_ENDPOINT);
-        builder.setConverter(new JacksonConverter(objectMapper));
-        builder.setRequestInterceptor(new RequestInterceptor() {
-            @Override
-            public void intercept(RequestFacade request) {
-                request.addQueryParam(API_PARAM_TOKEN_NAME, API_SERVER_TOKEN);
-            }
-        });
-
-        if (BuildConfig.DEBUG) {
-            builder.setLogLevel(RestAdapter.LogLevel.FULL);
-        }
-        return builder.build().create(UberService.class);
+    public UberClient(Context context) {
+        this.context = context.getApplicationContext();
+        this.clientId = context.getString(R.string.uber_client_id);
+        this.service = createUberService();
     }
 
-    /**
-     * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
-     * <p/>
-     * Uber's Fare Estimate (Prices) objects do not contain the capacity information for the product.
-     * We retrieve the capacity information via a separate API call. This function merges the data
-     * objects from the two API calls into one list.
-     *
-     * @param prices   A list of Uber fare estimations between point A and B
-     * @param products A list of Uber products offered at point A
-     * @return A merged list of "LiveNationEstimate" which contains a fare estimate and its associated Uber Product. The
-     * Product will be null if no matching Fare->Product is found
-     */
-    public static ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products, List<UberTime> times) {
-        ArrayList<LiveNationEstimate> estimates = new ArrayList<LiveNationEstimate>();
-        Map<String, UberProduct> productMap = new HashMap<String, UberProduct>();
-        Map<String, UberTime> timeMap = new HashMap<String, UberTime>();
-
-        for (UberProduct product : products) {
-            productMap.put(product.getProductId(), product);
-        }
-
-        for (UberTime time : times) {
-            timeMap.put(time.getProductId(), time);
-        }
-
-        for (UberPrice price : prices) {
-            UberProduct product = productMap.get(price.getProductId());
-            UberTime time = timeMap.get(price.getProductId());
-            LiveNationEstimate estimate = new LiveNationEstimate(price, product, time);
-            estimates.add(estimate);
-        }
-
-        return estimates;
+    public UberService getService() {
+        return service;
     }
 
-    public static boolean isUberAppInstalled(Context context) {
+    public boolean isUberAppInstalled() {
         PackageManager pm = context.getPackageManager();
         try {
             pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
@@ -107,12 +65,11 @@ public class UberHelper {
         return false;
     }
 
-    public static String getUberSignupLink(Context context) {
-        String clientId = context.getResources().getString(R.string.uber_client_id);
+    public String getUberSignupLink() {
         return String.format("https://m.uber.com./sign-up?client_id=%s", clientId);
     }
 
-    public static Uri getUberLaunchUri(String clientId, String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
+    public Uri getUberLaunchUri(String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
         Uri uberUri = Uri.parse("uber://");
         Uri.Builder builder = uberUri.buildUpon();
 
@@ -129,8 +86,7 @@ public class UberHelper {
         return builder.build();
     }
 
-    public static void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
-        UberService service = getUberService();
+    public void getUberDialogFragment(float startLat, float startLng, float endLat, float endLng, final UberDialogCallback callback) {
         //prep observable Uber API call 1
         Observable<UberProductResponse> productsObservable = service.getProducts(startLat, startLng);
 
@@ -154,7 +110,7 @@ public class UberHelper {
             public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
                 //once both API calls complete, merge the result of both calls into one list
                 //Note: neither the API calls nor this operation occur on the UI thread
-                return UberHelper.getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
+                return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<LiveNationEstimate>>() {
             @Override
@@ -167,9 +123,64 @@ public class UberHelper {
         }, onError);
     }
 
-    public static interface UberDialogCallback {
-        void onGetUberDialogComplete(DialogFragment dialog);
-        void onGetUberDialogError();
+    /**
+     * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
+     * <p/>
+     * Uber's Fare Estimate (Prices) objects do not contain the capacity information for the product.
+     * We retrieve the capacity information via a separate API call. This function merges the data
+     * objects from the two API calls into one list.
+     *
+     * @param prices   A list of Uber fare estimations between point A and B
+     * @param products A list of Uber products offered at point A
+     * @return A merged list of "LiveNationEstimate" which contains a fare estimate and its associated Uber Product. The
+     * Product will be null if no matching Fare->Product is found
+     */
+    private ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products, List<UberTime> times) {
+        ArrayList<LiveNationEstimate> estimates = new ArrayList<LiveNationEstimate>();
+        Map<String, UberProduct> productMap = new HashMap<String, UberProduct>();
+        Map<String, UberTime> timeMap = new HashMap<String, UberTime>();
+
+        for (UberProduct product : products) {
+            productMap.put(product.getProductId(), product);
+        }
+
+        for (UberTime time : times) {
+            timeMap.put(time.getProductId(), time);
+        }
+
+        for (UberPrice price : prices) {
+            UberProduct product = productMap.get(price.getProductId());
+            UberTime time = timeMap.get(price.getProductId());
+            LiveNationEstimate estimate = new LiveNationEstimate(price, product, time);
+            estimates.add(estimate);
+        }
+
+        return estimates;
     }
 
+    private UberService createUberService() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        RestAdapter.Builder builder = new RestAdapter.Builder();
+        builder.setEndpoint(API_ENDPOINT);
+        builder.setConverter(new JacksonConverter(objectMapper));
+        builder.setRequestInterceptor(new RequestInterceptor() {
+            @Override
+            public void intercept(RequestFacade request) {
+                request.addQueryParam(API_PARAM_TOKEN_NAME, API_SERVER_TOKEN);
+            }
+        });
+
+        if (BuildConfig.DEBUG) {
+            builder.setLogLevel(RestAdapter.LogLevel.FULL);
+        }
+        return builder.build().create(UberService.class);
+    }
+
+    public static interface UberDialogCallback {
+        void onGetUberDialogComplete(DialogFragment dialog);
+
+        void onGetUberDialogError();
+    }
 }
