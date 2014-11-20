@@ -102,6 +102,15 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             if (estimate.hasProduct()) {
                 int count = estimate.getProduct().getCapacity();
                 holder.getCapacity().setText(getResources().getQuantityString(R.plurals.uber_capacity, count, count));
+            } else {
+                holder.getCapacity().setText("");
+            }
+
+            if (estimate.hasTime()) {
+                int time = estimate.getTime().getEstimate();
+                holder.getTime().setText(getResources().getQuantityString(R.plurals.uber_times, time, time));
+            } else {
+                holder.getTime().setText("");
             }
 
             holder.getCost().setText(estimate.getPrice().getEstimate());
@@ -118,7 +127,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 this.title = (TextView) root.findViewById(R.id.uber_list_price_estimate_title);
                 this.cost = (TextView) root.findViewById(R.id.uber_list_price_estimate_cost);
                 this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
-                this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
+                this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_time);
             }
 
             public TextView getCost() {
@@ -133,9 +142,8 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 return capacity;
             }
 
-            public TextView getTime() {
-                return time;
-            }
+            public TextView getTime() { return time; }
+
         }
     }
 }

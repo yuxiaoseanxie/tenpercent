@@ -4,6 +4,10 @@
         <item quantity="one">Max 1 person</item>
         <item quantity="other">Max %d people</item>
     </plurals>
+    <plurals name="uber_times">
+        <item quantity="one">In 1 min</item>
+        <item quantity="other">In %d min</item>
+    </plurals>
     <string name="uber_dialog_title">Uber Fare Estimates</string>
     <string name="uber_dialog_title_secondary">From your current location</string>
 

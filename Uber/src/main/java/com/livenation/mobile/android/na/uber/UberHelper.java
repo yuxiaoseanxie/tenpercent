@@ -15,6 +15,8 @@ import com.livenation.mobile.android.na.uber.service.model.UberPrice;
 import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberProduct;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberTime;
+import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +29,7 @@ import retrofit.converter.JacksonConverter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func2;
+import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 
 /**
@@ -61,27 +63,33 @@ public class UberHelper {
 
     /**
      * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
-     *
+     * <p/>
      * Uber's Fare Estimate (Prices) objects do not contain the capacity information for the product.
      * We retrieve the capacity information via a separate API call. This function merges the data
      * objects from the two API calls into one list.
      *
-     * @param prices A list of Uber fare estimations between point A and B
+     * @param prices   A list of Uber fare estimations between point A and B
      * @param products A list of Uber products offered at point A
      * @return A merged list of "LiveNationEstimate" which contains a fare estimate and its associated Uber Product. The
      * Product will be null if no matching Fare->Product is found
      */
-    public static ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products) {
+    public static ArrayList<LiveNationEstimate> getProductEstimates(List<UberPrice> prices, List<UberProduct> products, List<UberTime> times) {
         ArrayList<LiveNationEstimate> estimates = new ArrayList<LiveNationEstimate>();
         Map<String, UberProduct> productMap = new HashMap<String, UberProduct>();
+        Map<String, UberTime> timeMap = new HashMap<String, UberTime>();
 
         for (UberProduct product : products) {
             productMap.put(product.getProductId(), product);
         }
 
+        for (UberTime time : times) {
+            timeMap.put(time.getProductId(), time);
+        }
+
         for (UberPrice price : prices) {
             UberProduct product = productMap.get(price.getProductId());
-            LiveNationEstimate estimate = new LiveNationEstimate(price, product);
+            UberTime time = timeMap.get(price.getProductId());
+            LiveNationEstimate estimate = new LiveNationEstimate(price, product, time);
             estimates.add(estimate);
         }
 
@@ -129,6 +137,9 @@ public class UberHelper {
         //prep observable Uber API call 2
         Observable<UberPriceResponse> pricesObservable = service.getEstimates(startLat, startLng, endLat, endLng);
 
+        //prep observable Uber API call 3
+        Observable<UberTimeResponse> timesObservable = service.getTimes(startLat, startLng);
+
         //Declare our little error handler (could do this inline below, but this is more verbose
         Action1 onError = new Action1() {
             @Override
@@ -138,12 +149,12 @@ public class UberHelper {
         };
 
         //listen for both API calls to complete
-        Observable.combineLatest(productsObservable, pricesObservable, new Func2<UberProductResponse, UberPriceResponse, ArrayList<LiveNationEstimate>>() {
+        Observable.combineLatest(productsObservable, pricesObservable, timesObservable, new Func3<UberProductResponse, UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
             @Override
-            public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices) {
+            public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
                 //once both API calls complete, merge the result of both calls into one list
                 //Note: neither the API calls nor this operation occur on the UI thread
-                return UberHelper.getProductEstimates(uberPrices.getPrices(),uberProducts.getProducts());
+                return UberHelper.getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<LiveNationEstimate>>() {
             @Override

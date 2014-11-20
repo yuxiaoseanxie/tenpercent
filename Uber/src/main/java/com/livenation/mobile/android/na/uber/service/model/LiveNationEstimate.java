@@ -14,10 +14,12 @@ import java.io.Serializable;
 public class LiveNationEstimate implements Serializable {
     private final UberProduct product;
     private final UberPrice price;
+    private final UberTime time;
 
-    public LiveNationEstimate(UberPrice price, UberProduct uberProduct) {
+    public LiveNationEstimate(UberPrice price, UberProduct uberProduct, UberTime time) {
         this.price = price;
         this.product = uberProduct;
+        this.time = time;
     }
 
     public UberProduct getProduct() {
@@ -28,8 +30,12 @@ public class LiveNationEstimate implements Serializable {
         return price;
     }
 
+    public UberTime getTime() { return time; }
+
     public boolean hasProduct() {
         return product != null;
     }
+
+    public boolean hasTime() { return time != null; }
 
 }
