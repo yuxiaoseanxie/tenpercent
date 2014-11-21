@@ -1,0 +1,14 @@
+<resources>
+    <plurals name="uber_capacity">
+        <item quantity="one">Max 1 person</item>
+        <item quantity="other">Max %d people</item>
+    </plurals>
+    <plurals name="uber_times">
+        <item quantity="one">In 1 min</item>
+        <item quantity="other">In %d min</item>
+    </plurals>
+    <string name="uber_dialog_title">Uber Fare Estimates</string>
+    <string name="uber_dialog_title_secondary">From your current location</string>
+    <string name="uber_popup_book_ride">Book a ride with Uber in %d min</string>
+    <string name="uber_popup_free_ride">Get your first ride free (Up to $30)*</string>
+</resources>

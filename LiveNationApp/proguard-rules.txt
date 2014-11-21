@@ -102,3 +102,15 @@
     public static int d(...);
     public static int e(...);
 }
+
+# Retrofit warnings
+# https://github.com/square/retrofit/issues/435
+-dontwarn rx.**
+-dontwarn retrofit.appengine.UrlFetchClient
+-dontwarn com.squareup.okhttp.*
+-keepattributes *Annotation*
+-keepattributes Signature
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+@retrofit.http.* <methods>;
+}
