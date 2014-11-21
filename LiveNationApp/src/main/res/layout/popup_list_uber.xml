@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/popup_list_item_height"
+    android:orientation="vertical"
+    android:padding="@dimen/popup_list_item_padding">
 
     <TextView
+        android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"
         android:text="@string/uber_popup_book_ride"
-        android:id="@android:id/text1" />
+        android:textAppearance="@style/ln.text.medium.bold" />
 
     <TextView
+        android:id="@android:id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/uber_popup_free_ride"
-        android:id="@android:id/text2" />
+        android:textAppearance="@style/ln.text.small.gray" />
 </LinearLayout>

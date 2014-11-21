@@ -10,6 +10,8 @@
     <dimen name="minimum_pressable">48dp</dimen>
     <dimen name="ui_gutter_width">58dp</dimen>
     <dimen name="list_item_height">80dp</dimen>
+    <dimen name="popup_list_item_height">60dp</dimen>
+    <dimen name="popup_list_item_padding">8dp</dimen>
     <dimen name="one_dp">1dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
 

@@ -127,11 +127,6 @@ public class UberClient {
         }, onError);
     }
 
-    public View getUberMenuItemView(ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        return inflater.inflate(R.layout.menu_view_uber_estimation, parent, false);
-    }
-
     /**
      * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
      * <p/>

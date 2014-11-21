@@ -15,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,6 +58,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private TextView venueTitle;
     private TextView location;
     private TextView telephone;
+    private ImageButton travelOptions;
     private View venueInfo;
     private View phonebox;
     private ShowsListNonScrollingFragment showsFragment;
@@ -74,7 +78,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         venueInfo = result.findViewById(R.id.venue_detail_venue_info_link);
         favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
         phonebox = result.findViewById(R.id.venue_detail_phone_box);
-
+        travelOptions = (ImageButton) result.findViewById(R.id.venue_travel_button);
         return result;
     }
 
@@ -127,6 +131,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         location.setOnClickListener(new OnAddressClick(venue, LiveNationApplication.get().getApplicationContext()));
+        travelOptions.setOnClickListener(new OnTravelOptionsClick());
 
         double lat = Double.valueOf(venue.getLat());
         double lng = Double.valueOf(venue.getLng());
@@ -134,7 +139,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
         showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
-
     }
 
     @Override
@@ -289,4 +293,53 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             startActivity(intent);
         }
     }
+
+    private class OnTravelOptionsClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            final int width = getActivity().getResources().getDimensionPixelSize(R.dimen.venue_travel_popup_width);
+
+            ListPopupWindow popup = new ListPopupWindow(getActivity());
+            popup.setWidth(width);
+            popup.setAdapter(new TravelAdapter());
+            popup.setAnchorView(travelOptions);
+            popup.show();
+        }
+    }
+
+    enum TravelOption {uber, maps}
+
+    private class TravelAdapter extends BaseAdapter {
+        private final int minimumHeight = getActivity().getResources().getDimensionPixelSize(R.dimen.popup_list_item_height);
+        private final int padding = getActivity().getResources().getDimensionPixelSize(R.dimen.popup_list_item_padding);
+        private final LayoutInflater inflater = LayoutInflater.from(getActivity());
+
+        @Override
+        public int getCount() {
+            return TravelOption.values().length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return TravelOption.values()[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TravelOption option = TravelOption.values()[position];
+            switch (option) {
+                case uber:
+                    return inflater.inflate(R.layout.popup_list_uber, parent, false);
+                case maps:
+                    return inflater.inflate(R.layout.popup_list_maps, parent, false);
+            }
+            throw new IllegalArgumentException();
+        }
+    }
+
 }
