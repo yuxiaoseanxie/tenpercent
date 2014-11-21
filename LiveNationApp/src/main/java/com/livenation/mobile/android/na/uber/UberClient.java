@@ -43,7 +43,7 @@ public class UberClient {
     //TEMPORARY TESTING TOKEN!
     private final static String API_SERVER_TOKEN = "n_8uFl4o06CW6hZinwNV68aitRno92eWpfgFIjcp";
     private final static String API_PARAM_TOKEN_NAME = "server_token";
-    private final static String API_ENDPOINT = "https://api.com.livenation.mobile.android.na.uber.com";
+    private final static String API_ENDPOINT = "https://api.uber.com";
     private final Context context;
     private final String clientId;
     private final UberService service;
