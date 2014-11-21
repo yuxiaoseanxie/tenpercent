@@ -1,4 +1,4 @@
-package uber;
+package com.livenation.mobile.android.na.uber;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -26,15 +26,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func3;
 import rx.schedulers.Schedulers;
-import uber.dialogs.UberDialogFragment;
-import uber.service.UberService;
-import uber.service.model.LiveNationEstimate;
-import uber.service.model.UberPrice;
-import uber.service.model.UberPriceResponse;
-import uber.service.model.UberProduct;
-import uber.service.model.UberProductResponse;
-import uber.service.model.UberTime;
-import uber.service.model.UberTimeResponse;
+import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.UberService;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.na.uber.service.model.UberPrice;
+import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberProduct;
+import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberTime;
+import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 
 /**
  * Created by cchilton on 11/20/14.
@@ -43,7 +43,7 @@ public class UberClient {
     //TEMPORARY TESTING TOKEN!
     private final static String API_SERVER_TOKEN = "n_8uFl4o06CW6hZinwNV68aitRno92eWpfgFIjcp";
     private final static String API_PARAM_TOKEN_NAME = "server_token";
-    private final static String API_ENDPOINT = "https://api.uber.com";
+    private final static String API_ENDPOINT = "https://api.com.livenation.mobile.android.na.uber.com";
     private final Context context;
     private final String clientId;
     private final UberService service;
@@ -64,17 +64,17 @@ public class UberClient {
             pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException ignored) {
-            //no uber app installed
+            //no com.livenation.mobile.android.na.uber app installed
         }
         return false;
     }
 
     public String getUberSignupLink() {
-        return String.format("https://m.uber.com./sign-up?client_id=%s", clientId);
+        return String.format("https://m.com.livenation.mobile.android.na.uber.com./sign-up?client_id=%s", clientId);
     }
 
     public Uri getUberLaunchUri(String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
-        Uri uberUri = Uri.parse("uber://");
+        Uri uberUri = Uri.parse("com.livenation.mobile.android.na.uber://");
         Uri.Builder builder = uberUri.buildUpon();
 
         builder.appendQueryParameter("action", "setPickup");

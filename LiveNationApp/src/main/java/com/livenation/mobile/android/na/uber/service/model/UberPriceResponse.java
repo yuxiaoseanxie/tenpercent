@@ -1,4 +1,4 @@
-package uber.service.model;
+package com.livenation.mobile.android.na.uber.service.model;
 
 import java.util.List;
 

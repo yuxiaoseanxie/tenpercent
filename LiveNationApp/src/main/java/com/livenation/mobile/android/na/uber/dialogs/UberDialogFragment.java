@@ -1,4 +1,4 @@
-package uber.dialogs;
+package com.livenation.mobile.android.na.uber.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,7 +22,7 @@ import com.livenation.mobile.android.na.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 
 /**
  * Created by cchilton on 11/18/14.

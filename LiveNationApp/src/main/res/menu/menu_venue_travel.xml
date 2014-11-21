@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_venue_travel_uber" android:showAsAction="always" android:actionLayout="@layout/menu_view_uber_estimation" android:title="wtf"/>
-    <item android:id="@+id/menu_venue_travel_google_maps" android:title="@string/venue_travel_google_maps"/>
-</menu>

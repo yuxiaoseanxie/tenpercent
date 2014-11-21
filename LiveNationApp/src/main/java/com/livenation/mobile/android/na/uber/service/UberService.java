@@ -1,12 +1,12 @@
-package uber.service;
+package com.livenation.mobile.android.na.uber.service;
 
 
 import retrofit.http.GET;
 import retrofit.http.Query;
 import rx.Observable;
-import uber.service.model.UberPriceResponse;
-import uber.service.model.UberProductResponse;
-import uber.service.model.UberTimeResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 
 /**
  * Created by cchilton on 11/17/14.
