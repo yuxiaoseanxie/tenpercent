@@ -4,14 +4,20 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.UberService;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.na.uber.service.model.UberPrice;
+import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberProduct;
+import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
+import com.livenation.mobile.android.na.uber.service.model.UberTime;
+import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,15 +32,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func3;
 import rx.schedulers.Schedulers;
-import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
-import com.livenation.mobile.android.na.uber.service.UberService;
-import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
-import com.livenation.mobile.android.na.uber.service.model.UberPrice;
-import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
-import com.livenation.mobile.android.na.uber.service.model.UberProduct;
-import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
-import com.livenation.mobile.android.na.uber.service.model.UberTime;
-import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 
 /**
  * Created by cchilton on 11/20/14.
@@ -125,6 +122,11 @@ public class UberClient {
             }
 
         }, onError);
+    }
+
+    public Observable<UberTimeResponse> getQuickEstimate(float lat, float lng) {
+        Observable<UberTimeResponse> timeObservable = service.getTimes(lat, lng);
+        return timeObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     /**

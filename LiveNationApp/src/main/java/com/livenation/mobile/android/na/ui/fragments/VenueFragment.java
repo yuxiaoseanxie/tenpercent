@@ -31,6 +31,9 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
+import com.livenation.mobile.android.na.uber.UberClient;
+import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -47,9 +50,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.segment.android.models.Props;
 
 import java.util.List;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
@@ -332,13 +339,53 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TravelOption option = TravelOption.values()[position];
+            if (convertView != null) return convertView;
             switch (option) {
                 case uber:
-                    return inflater.inflate(R.layout.popup_list_uber, parent, false);
+                    View view = inflater.inflate(R.layout.popup_list_uber, parent, false);
+                    UberViewWrapper wrapper = new UberViewWrapper(view);
+                    view.setTag(wrapper);
+                    return view;
                 case maps:
                     return inflater.inflate(R.layout.popup_list_maps, parent, false);
             }
             throw new IllegalArgumentException();
+        }
+    }
+
+    private class UberViewWrapper implements ProviderCallback<Double[]>, Action1<UberTimeResponse> {
+        private final TextView text;
+        private final UberClient uberClient;
+        private DeviceLocationProvider locationProvider;
+
+
+        private UberViewWrapper(View root) {
+            this.text = (TextView) root.findViewById(android.R.id.text1);
+            uberClient = new UberClient(getActivity());
+            locationProvider = new DeviceLocationProvider();
+
+            locationProvider.getLocation(this);
+        }
+
+        @Override
+        public void onResponse(Double[] location) {
+            float lat = location[0].floatValue();
+            float lng = location[1].floatValue();
+            uberClient.getQuickEstimate(lat, lng).subscribe(this);
+        }
+
+        @Override
+        public void onErrorResponse() {
+
+        }
+
+        @Override
+        public void call(UberTimeResponse uberTimeResponse) {
+            int seconds = uberTimeResponse.getTimes().get(0).getEstimate();
+            int mins = (int) Math.ceil((float) seconds / 60f);
+            String value = getResources().getString(R.string.uber_popup_book_ride_mins);
+            value = String.format(value, mins);
+            text.setText(value);
         }
     }
 
