@@ -141,11 +141,6 @@ public class UberClient {
         return dialog;
     }
 
-    public Observable<UberTimeResponse> getQuickEstimate(float lat, float lng) {
-        Observable<UberTimeResponse> timeObservable = service.getTimes(lat, lng);
-        return timeObservable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-    }
-
     /**
      * Merge function that combines the result of the Uber Products() API response and the Uber Prices() API endpoint
      * <p/>
