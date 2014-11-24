@@ -71,7 +71,7 @@ public class UberClient {
     }
 
     public String getUberSignupLink() {
-        return String.format("https://m.com.livenation.mobile.android.na.uber.com./sign-up?client_id=%s", clientId);
+        return String.format("https://m.uber.com/sign-up?client_id=%s", clientId);
     }
 
     public Uri getUberLaunchUri(String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
