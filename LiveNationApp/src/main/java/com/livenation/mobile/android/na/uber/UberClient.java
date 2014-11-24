@@ -66,7 +66,7 @@ public class UberClient {
             pm.getPackageInfo(ExternalApplicationAnalytics.UBER.getPackageName(), PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException ignored) {
-            //no com.livenation.mobile.android.na.uber app installed
+            //no uber app installed
         }
         return false;
     }
