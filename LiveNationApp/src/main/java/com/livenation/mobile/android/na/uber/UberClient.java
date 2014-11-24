@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.UberService;
@@ -62,7 +63,7 @@ public class UberClient {
     public boolean isUberAppInstalled() {
         PackageManager pm = context.getPackageManager();
         try {
-            pm.getPackageInfo("com.ubercab", PackageManager.GET_ACTIVITIES);
+            pm.getPackageInfo(ExternalApplicationAnalytics.UBER.getPackageName(), PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException ignored) {
             //no com.livenation.mobile.android.na.uber app installed
