@@ -137,11 +137,14 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         location.setOnClickListener(new OnAddressClick(venue, LiveNationApplication.get().getApplicationContext()));
-        travelOptions.setOnClickListener(new OnTravelOptionsClick());
-
-        double lat = Double.valueOf(venue.getLat());
-        double lng = Double.valueOf(venue.getLng());
-        setMapLocation(lat, lng);
+        if (venue.getLat() != null && venue.getLng() != null) {
+            double lat = Double.valueOf(venue.getLat());
+            double lng = Double.valueOf(venue.getLng());
+            setMapLocation(lat, lng);
+            travelOptions.setOnClickListener(new OnTravelOptionsClick());
+        } else {
+            travelOptions.setVisibility(View.GONE);
+        }
 
         favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
         showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
