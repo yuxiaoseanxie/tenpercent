@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +16,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 
 /**
  * Created by cchilton on 11/18/14.
@@ -32,19 +32,31 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
     public static final String EXTRA_UBER_ESTIMATES = UberDialogFragment.class.getSimpleName() + ".UBER_ESTIMATES";
     public static final String EXTRA_RESULT_ESTIMATE = UberDialogFragment.class.getSimpleName() + ".UBER_SELECTED_ESTIMATE";
+    public static final String UBER_DIALOG_TAG = UberDialogFragment.class.getSimpleName() + ".UBER_DIALOG";
 
-    public static UberDialogFragment newInstance(ArrayList<LiveNationEstimate> estimates) {
-        Bundle args = new Bundle();
-        args.putSerializable(EXTRA_UBER_ESTIMATES, estimates);
+    public static UberDialogFragment newInstance(@Nullable ArrayList<LiveNationEstimate> estimates) {
         UberDialogFragment dialog = new UberDialogFragment();
-        dialog.setArguments(args);
+        dialog.setArguments(new Bundle());
         return dialog;
+    }
+
+    public void setPriceEstimates(ArrayList<LiveNationEstimate> estimates) {
+        getArguments().putSerializable(EXTRA_UBER_ESTIMATES, estimates);
+        adapter.clear();
+        adapter.addAll(estimates);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<LiveNationEstimate> items = (ArrayList<LiveNationEstimate>) getArguments().getSerializable(EXTRA_UBER_ESTIMATES);
+
+        ArrayList<LiveNationEstimate> items = new ArrayList<LiveNationEstimate>();
+        if (getArguments() != null && getArguments().containsKey(EXTRA_UBER_ESTIMATES)) {
+            items = (ArrayList<LiveNationEstimate>) getArguments().getSerializable(EXTRA_UBER_ESTIMATES);
+
+        }
+
         adapter = new EstimationAdapter(getActivity(), items);
     }
 
@@ -58,7 +70,10 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         View title = inflater.inflate(R.layout.dialog_title_uber_estimates, null);
         builder.setCustomTitle(title);
 
+        View emptyView = content.findViewById(android.R.id.empty);
+
         ListView listView = (ListView) content.findViewById(android.R.id.list);
+        listView.setEmptyView(emptyView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -76,6 +91,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
             dismiss();
         }
+    }
+
+    public void onUberError() {
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), R.string.uber_dialog_failed, Toast.LENGTH_SHORT).show();
+        }
+        dismissAllowingStateLoss();
     }
 
     private class EstimationAdapter extends ArrayAdapter<LiveNationEstimate> {
@@ -109,7 +131,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             }
 
             if (estimate.hasTime()) {
-                int time = estimate.getTime().getEstimate();
+                int time = estimate.getTime().getEstimateMins();
                 holder.getTime().setText(getResources().getQuantityString(R.plurals.uber_times, time, time));
             } else {
                 holder.getTime().setText("");
@@ -144,7 +166,9 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 return capacity;
             }
 
-            public TextView getTime() { return time; }
+            public TextView getTime() {
+                return time;
+            }
 
         }
     }

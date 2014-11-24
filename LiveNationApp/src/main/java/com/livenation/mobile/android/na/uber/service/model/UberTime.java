@@ -22,4 +22,9 @@ public class UberTime {
 
     public int getEstimate() { return estimate; }
 
+    public int getEstimateMins() {
+        int mins = (int) Math.ceil((float) getEstimate() / 60f);
+        return mins;
+    }
+
 }

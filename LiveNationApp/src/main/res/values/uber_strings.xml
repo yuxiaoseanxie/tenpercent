@@ -17,5 +17,5 @@
     <string name="venue_travel_uber_present">Open in Google Maps</string>
     <string name="venue_travel_uber_missing_title">Book a Ride with Uber</string>
     <string name="venue_travel_uber_missing_detail">Get your first ride free (Up to $30)*</string>
-
+    <string name="uber_dialog_failed">Failed to retrieve Uber prices</string>
 </resources>
