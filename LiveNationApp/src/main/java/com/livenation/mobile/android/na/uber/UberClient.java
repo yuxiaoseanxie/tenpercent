@@ -75,7 +75,7 @@ public class UberClient {
     }
 
     public Uri getUberLaunchUri(String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
-        Uri uberUri = Uri.parse("com.livenation.mobile.android.na.uber://");
+        Uri uberUri = Uri.parse("uber://");
         Uri.Builder builder = uberUri.buildUpon();
 
         builder.appendQueryParameter("action", "setPickup");
