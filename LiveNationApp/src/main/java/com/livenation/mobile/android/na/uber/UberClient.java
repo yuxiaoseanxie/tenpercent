@@ -196,6 +196,10 @@ public class UberClient {
         return builder.build().create(UberService.class);
     }
 
+    /**
+     * Return an Observable DeviceLocationProvider to make the getUberDialogFragment() method pretty
+     * @return Observable DeviceLocationProvider
+     */
     private Observable<Double[]> getObservableLocation() {
         Observable<Double[]> observable = Observable.create(new Observable.OnSubscribe<Double[]>() {
             @Override
