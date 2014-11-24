@@ -8,8 +8,10 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -35,6 +37,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
@@ -57,8 +60,10 @@ import java.util.List;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
+    private static final int ACTIVITY_RESULT_UBER = 1;
     private final String SHOWS_FRAGMENT_TAG = "shows";
     private final String MAP_FRAGMENT_TAG = "maps";
+    private UberClient uberClient;
     private TextView venueTitle;
     private TextView location;
     private TextView telephone;
@@ -72,6 +77,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private LatLng mapLocationCache = null;
     private final static int MAX_INLINE = 3;
     private Venue venue;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        uberClient = new UberClient(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -170,6 +181,23 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             //TODO: Possible No Google play services installed
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case ACTIVITY_RESULT_UBER:
+                LiveNationEstimate estimate = (LiveNationEstimate) data.getSerializableExtra(UberDialogFragment.EXTRA_RESULT_ESTIMATE);
+                String productId = estimate.getProduct().getProductId();
+                String address = venue.getAddress() != null ? venue.getAddress().getSmallFriendlyAddress(false) : "";
+                Float lat = Float.valueOf(venue.getLat());
+                Float lng = Float.valueOf(venue.getLng());
+                Uri uri = uberClient.getUberLaunchUri(productId, lat, lng, venue.getName(), address);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                getActivity().startActivity(intent);
+                break;
+        }
     }
 
     private void loadBoxOfficeInfo(final long venueId) {
@@ -319,12 +347,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     TravelOption option = TravelOption.values()[position];
                     switch (option) {
                         case uber:
-                            UberClient uberClient = new UberClient(getActivity());
                             if (uberClient.isUberAppInstalled()) {
                                 //show uber price estimates
                                 float lat = Float.valueOf(venue.getLat());
                                 float lng = Float.valueOf(venue.getLng());
                                 DialogFragment dialog = uberClient.getUberDialogFragment(lat, lng);
+                                dialog.setTargetFragment(VenueFragment.this, ACTIVITY_RESULT_UBER);
                                 dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
                             } else {
                                 //no uber app installed, show sign up link
@@ -347,7 +375,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     private class TravelAdapter extends BaseAdapter {
         private final LayoutInflater inflater = LayoutInflater.from(getActivity());
-        private final UberClient uberClient = new UberClient(getActivity());
 
         @Override
         public int getCount() {

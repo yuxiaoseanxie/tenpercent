@@ -75,15 +75,13 @@ public class UberClient {
         return Uri.parse(String.format("https://m.uber.com/sign-up?client_id=%s", clientId));
     }
 
-    public Uri getUberLaunchUri(String productId, float pickupLat, float pickupLng, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
+    public Uri getUberLaunchUri(String productId, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
         Uri uberUri = Uri.parse("uber://");
         Uri.Builder builder = uberUri.buildUpon();
 
         builder.appendQueryParameter("action", "setPickup");
         builder.appendQueryParameter("client_id", clientId);
         builder.appendQueryParameter("pickup", "my_location");
-        builder.appendQueryParameter("pickup[latitude]", Float.valueOf(pickupLat).toString());
-        builder.appendQueryParameter("pickup[longitude]", Float.valueOf(pickupLng).toString());
         builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
         builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
         builder.appendQueryParameter("product_id", productId);
