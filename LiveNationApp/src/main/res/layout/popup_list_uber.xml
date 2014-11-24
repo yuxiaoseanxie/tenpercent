@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/popup_list_item_height"
     android:orientation="vertical"
+    android:gravity="center_vertical"
     android:padding="@dimen/popup_list_item_padding">
 
     <TextView

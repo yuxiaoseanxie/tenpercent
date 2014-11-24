@@ -143,6 +143,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             setMapLocation(lat, lng);
             travelOptions.setOnClickListener(new OnTravelOptionsClick());
         } else {
+            //hide travel options to unroutable venue
             travelOptions.setVisibility(View.GONE);
         }
 
@@ -319,10 +320,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     switch (option) {
                         case uber:
                             UberClient uberClient = new UberClient(getActivity());
-                            float lat = Float.valueOf(venue.getLat());
-                            float lng = Float.valueOf(venue.getLng());
-                            DialogFragment dialog = uberClient.getUberDialogFragment(lat, lng);
-                            dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+                            if (uberClient.isUberAppInstalled()) {
+                                //show uber price estimates
+                                float lat = Float.valueOf(venue.getLat());
+                                float lng = Float.valueOf(venue.getLng());
+                                DialogFragment dialog = uberClient.getUberDialogFragment(lat, lng);
+                                dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+                            } else {
+                                //no uber app installed, show sign up link
+                                Intent intent = new Intent(Intent.ACTION_VIEW, uberClient.getUberSignupLink());
+                                startActivity(intent);
+                            }
                             break;
 
                         case maps:
@@ -339,6 +347,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     private class TravelAdapter extends BaseAdapter {
         private final LayoutInflater inflater = LayoutInflater.from(getActivity());
+        private final UberClient uberClient = new UberClient(getActivity());
 
         @Override
         public int getCount() {
@@ -361,7 +370,15 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             if (convertView != null) return convertView;
             switch (option) {
                 case uber:
-                    return inflater.inflate(R.layout.popup_list_uber, parent, false);
+                    View root = inflater.inflate(R.layout.popup_list_uber, parent, false);
+                    View firstRide = root.findViewById(android.R.id.text2);
+
+                    if (uberClient.isUberAppInstalled()) {
+                        //hide "get your first ride free!" text
+                        firstRide.setVisibility(View.GONE);
+                    }
+
+                    return root;
                 case maps:
                     return inflater.inflate(R.layout.popup_list_maps, parent, false);
             }
