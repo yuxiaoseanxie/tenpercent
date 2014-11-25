@@ -128,6 +128,8 @@ android {
         }
 
         labrats {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt', 'proguard-rules-debug.txt'
             applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
             signingConfig signingConfigs.debug

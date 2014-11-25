@@ -419,7 +419,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     private void showEstimates(final float endLat, final float endLng) {
 
-        final UberDialogFragment dialog = UberDialogFragment.newInstance(null);
+        final UberDialogFragment dialog = UberDialogFragment.newInstance();
 
         final Action1<Throwable> onError = new Action1<Throwable>() {
             @Override
