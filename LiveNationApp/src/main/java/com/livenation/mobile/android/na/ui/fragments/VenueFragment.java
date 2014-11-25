@@ -17,10 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,8 +28,10 @@ import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvi
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.uber.UberClient;
@@ -40,6 +39,7 @@ import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
+import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -340,22 +341,15 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private class OnTravelOptionsClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            final int width = getActivity().getResources().getDimensionPixelSize(R.dimen.venue_travel_popup_width);
 
-            ListPopupWindow popup = new ListPopupWindow(getActivity());
-            popup.setWidth(width);
-            popup.setAdapter(new TravelAdapter());
-            popup.setAnchorView(travelOptions);
-            popup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            TravelListPopupWindow popupWindow = new TravelListPopupWindow(getActivity(), travelOptions) {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    TravelOption option = TravelOption.values()[position];
-                    switch (option) {
+                public void onOptionClicked(TravelOption travelOption) {
+                    switch (travelOption) {
                         case uber:
-                            if (uberClient.isUberAppInstalled()) {
+                            if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), getActivity())) {
                                 float lat = Float.valueOf(venue.getLat());
                                 float lng = Float.valueOf(venue.getLng());
-
                                 //show uber price estimates
                                 showEstimates(lat, lng);
                             } else {
@@ -370,50 +364,9 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                             break;
                     }
                 }
-            });
-            popup.show();
-        }
-    }
+            };
 
-    enum TravelOption {uber, maps}
-
-    private class TravelAdapter extends BaseAdapter {
-        private final LayoutInflater inflater = LayoutInflater.from(getActivity());
-
-        @Override
-        public int getCount() {
-            return TravelOption.values().length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return TravelOption.values()[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TravelOption option = TravelOption.values()[position];
-            if (convertView != null) return convertView;
-            switch (option) {
-                case uber:
-                    View root = inflater.inflate(R.layout.popup_list_uber, parent, false);
-                    View firstRide = root.findViewById(android.R.id.text2);
-
-                    if (uberClient.isUberAppInstalled()) {
-                        //hide "get your first ride free!" text
-                        firstRide.setVisibility(View.GONE);
-                    }
-
-                    return root;
-                case maps:
-                    return inflater.inflate(R.layout.popup_list_maps, parent, false);
-            }
-            throw new IllegalArgumentException();
+            popupWindow.show();
         }
     }
 
@@ -429,7 +382,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         };
 
         //get current location
-        //
         ObservableProvider.getObservableLocation().subscribe(new Action1<Double[]>() {
             @Override
             public void call(Double[] startPoint) {
@@ -443,7 +395,12 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                                 //Display estimates
                                 dialog.setPriceEstimates(liveNationEstimates);
                             }
-                        }, onError);
+                        }, onError, new Action0() {
+                            @Override
+                            public void call() {
+                                Log.d("aa", "aa");
+                            }
+                        });
             }
         }, onError);
 

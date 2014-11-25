@@ -93,9 +93,7 @@ public class UberClient {
                 Observable<UberTimeResponse> timesObservable = service.getTimes(startLat, startLng);
                 //Declare our little error handler (could do this inline below, but this is more verbose
                 //listen for both API calls to complete
-                Observable.
-                        combineLatest(productsObservable, pricesObservable,
-                                timesObservable, new Func3<UberProductResponse,
+                Observable.combineLatest(productsObservable, pricesObservable,timesObservable, new Func3<UberProductResponse,
                                         UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
                                     @Override
                                     public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
@@ -103,7 +101,7 @@ public class UberClient {
                                         //Note: neither the API calls nor this operation occur on the UI thread
                                         return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
                                     }
-                                });
+                                }).subscribe(subscriber);
             }
 
         });
