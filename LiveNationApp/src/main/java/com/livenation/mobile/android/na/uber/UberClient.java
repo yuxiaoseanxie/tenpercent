@@ -76,6 +76,7 @@ public class UberClient {
         builder.appendQueryParameter("pickup", "my_location");
         builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
         builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
+        builder.appendQueryParameter("dropoff[formatted_address]", dropoffAddress);
         builder.appendQueryParameter("product_id", productId);
         builder.appendQueryParameter("dropoff[nickname]", dropoffName);
 
