@@ -91,7 +91,7 @@ public class UberClient {
     }
 
     public DialogFragment getUberDialogFragment(final float endLat, final float endLng) {
-        final UberDialogFragment dialog = UberDialogFragment.newInstance(null);
+        final UberDialogFragment dialog = UberDialogFragment.newInstance();
 
         Observable<Double[]> locationProvider = getObservableLocation();
 
