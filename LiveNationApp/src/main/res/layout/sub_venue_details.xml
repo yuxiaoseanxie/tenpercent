@@ -71,8 +71,8 @@
         android:id="@+id/venue_travel_button"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/minimum_pressable"
+        android:layout_height="@dimen/minimum_pressable"
         android:scaleType="center"
         android:background="@null"
         android:src="@drawable/red_overflow_button" />
