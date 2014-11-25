@@ -120,12 +120,16 @@ android {
         }
 
         debug {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt', 'proguard-rules-debug.txt'
             applicationIdSuffix ".debug"
             versionNameSuffix " debug"
             signingConfig signingConfigs.debug
         }
 
         labrats {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt', 'proguard-rules-debug.txt'
             applicationIdSuffix ".labrats"
             versionNameSuffix " labrats"
             signingConfig signingConfigs.debug
@@ -150,8 +154,13 @@ dependencies {
     compile project(':Ticketing')
     compile 'com.android.support:support-v13:20.0.0'
     compile 'com.google.android.gms:play-services:5.0.89'
+
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'
+    compile 'io.reactivex:rxandroid:0.22.0'
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.squareup.retrofit:converter-jackson:1.2.1'
+
     compile('io.segment.analytics.android:all:1.4.4+@aar') {
         transitive = true
     }
