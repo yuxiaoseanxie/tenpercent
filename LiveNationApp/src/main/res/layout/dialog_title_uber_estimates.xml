@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"
-        android:textAppearance="@style/uber_text_title"
+        android:textAppearance="@style/ln.text.medium.bold"
         android:text="@string/uber_dialog_title" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textAppearance="@style/uber_text_title_secondary"
+        android:textAppearance="@style/ln.text.medium"
         android:text="@string/uber_dialog_title_secondary" />
 
 </LinearLayout>
