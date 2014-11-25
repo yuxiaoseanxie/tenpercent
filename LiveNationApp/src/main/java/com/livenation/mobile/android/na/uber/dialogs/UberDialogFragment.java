@@ -54,7 +54,6 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         ArrayList<LiveNationEstimate> items = new ArrayList<LiveNationEstimate>();
         if (getArguments() != null && getArguments().containsKey(EXTRA_UBER_ESTIMATES)) {
             items = (ArrayList<LiveNationEstimate>) getArguments().getSerializable(EXTRA_UBER_ESTIMATES);
-
         }
 
         adapter = new EstimationAdapter(getActivity(), items);
