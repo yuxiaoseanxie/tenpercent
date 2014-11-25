@@ -3,15 +3,12 @@ package com.livenation.mobile.android.na.uber;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.DialogFragment;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
-import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
-import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.UberService;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPrice;
@@ -20,8 +17,6 @@ import com.livenation.mobile.android.na.uber.service.model.UberProduct;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberTime;
 import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
-import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
-import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +28,7 @@ import retrofit.RestAdapter;
 import retrofit.converter.JacksonConverter;
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func3;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by cchilton on 11/20/14.
@@ -90,55 +82,33 @@ public class UberClient {
         return builder.build();
     }
 
-    public DialogFragment getUberDialogFragment(final float endLat, final float endLng) {
-        final UberDialogFragment dialog = UberDialogFragment.newInstance(null);
-
-        Observable<Double[]> locationProvider = getObservableLocation();
-
-        final Action1 onError = new Action1() {
+    public Observable<ArrayList<LiveNationEstimate>> getEstimates(final float startLat, final float startLng, final float endLat, final float endLng) {
+        Observable<ArrayList<LiveNationEstimate>> observable = Observable.create(new Observable.OnSubscribe<ArrayList<LiveNationEstimate>>() {
             @Override
-            public void call(Object o) {
-                dialog.onUberError();
-            }
-        };
-
-        locationProvider.subscribe(new Action1<Double[]>() {
-            @Override
-            public void call(Double[] doubles) {
-                float startLat = doubles[0].floatValue();
-                float startLng = doubles[1].floatValue();
-                //prep observable Uber API call 1
+            public void call(final Subscriber<? super ArrayList<LiveNationEstimate>> subscriber) {
                 Observable<UberProductResponse> productsObservable = service.getProducts(startLat, startLng);
-
                 //prep observable Uber API call 2
                 Observable<UberPriceResponse> pricesObservable = service.getEstimates(startLat, startLng, endLat, endLng);
-
                 //prep observable Uber API call 3
                 Observable<UberTimeResponse> timesObservable = service.getTimes(startLat, startLng);
-
                 //Declare our little error handler (could do this inline below, but this is more verbose
-
                 //listen for both API calls to complete
-                Observable.combineLatest(productsObservable, pricesObservable, timesObservable, new Func3<UberProductResponse, UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
-                    @Override
-                    public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
-                        //once both API calls complete, merge the result of both calls into one list
-                        //Note: neither the API calls nor this operation occur on the UI thread
-                        return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
-                    }
-                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<ArrayList<LiveNationEstimate>>() {
-                    @Override
-                    public void call(ArrayList<LiveNationEstimate> priceCapacities) {
-                        //Execute provided callback with dialog object on Androids UI thread
-
-                        dialog.setPriceEstimates(priceCapacities);
-                    }
-
-                }, onError);
+                Observable.
+                        combineLatest(productsObservable, pricesObservable,
+                                timesObservable, new Func3<UberProductResponse,
+                                        UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
+                                    @Override
+                                    public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
+                                        //once both API calls complete, merge the result of both calls into one list
+                                        //Note: neither the API calls nor this operation occur on the UI thread
+                                        return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
+                                    }
+                                });
             }
-        }, onError);
 
-        return dialog;
+        });
+
+        return observable;
     }
 
     /**
@@ -194,30 +164,5 @@ public class UberClient {
             builder.setLogLevel(RestAdapter.LogLevel.FULL);
         }
         return builder.build().create(UberService.class);
-    }
-
-    /**
-     * Return an Observable DeviceLocationProvider to make the getUberDialogFragment() method pretty
-     * @return Observable DeviceLocationProvider
-     */
-    private Observable<Double[]> getObservableLocation() {
-        Observable<Double[]> observable = Observable.create(new Observable.OnSubscribe<Double[]>() {
-            @Override
-            public void call(final Subscriber<? super Double[]> subscriber) {
-                LocationProvider locationProvider = new DeviceLocationProvider();
-                locationProvider.getLocation(new ProviderCallback<Double[]>() {
-                    @Override
-                    public void onResponse(Double[] response) {
-                        subscriber.onNext(response);
-                    }
-
-                    @Override
-                    public void onErrorResponse() {
-                        subscriber.onError(null);
-                    }
-                });
-            }
-        });
-        return observable;
     }
 }

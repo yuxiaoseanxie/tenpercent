@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvider;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -56,7 +56,12 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
@@ -348,12 +353,11 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     switch (option) {
                         case uber:
                             if (uberClient.isUberAppInstalled()) {
-                                //show uber price estimates
                                 float lat = Float.valueOf(venue.getLat());
                                 float lng = Float.valueOf(venue.getLng());
-                                DialogFragment dialog = uberClient.getUberDialogFragment(lat, lng);
-                                dialog.setTargetFragment(VenueFragment.this, ACTIVITY_RESULT_UBER);
-                                dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+
+                                //show uber price estimates
+                                showEstimates(lat, lng);
                             } else {
                                 //no uber app installed, show sign up link
                                 Intent intent = new Intent(Intent.ACTION_VIEW, uberClient.getUberSignupLink());
@@ -412,5 +416,40 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             throw new IllegalArgumentException();
         }
     }
+
+    private void showEstimates(final float endLat, final float endLng) {
+
+        final UberDialogFragment dialog = UberDialogFragment.newInstance(null);
+
+        final Action1<Throwable> onError = new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                dialog.onUberError();
+            }
+        };
+
+        //get current location
+        //
+        ObservableProvider.getObservableLocation().subscribe(new Action1<Double[]>() {
+            @Override
+            public void call(Double[] startPoint) {
+                //get estimates
+                uberClient.getEstimates(startPoint[0].floatValue(), startPoint[1].floatValue(), endLat, endLng)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ArrayList<LiveNationEstimate>>() {
+                            @Override
+                            public void call(ArrayList<LiveNationEstimate> liveNationEstimates) {
+                                //Display estimates
+                                dialog.setPriceEstimates(liveNationEstimates);
+                            }
+                        }, onError);
+            }
+        }, onError);
+
+        dialog.setTargetFragment(VenueFragment.this, ACTIVITY_RESULT_UBER);
+        dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+    }
+
 
 }
