@@ -34,7 +34,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     public static final String EXTRA_RESULT_ESTIMATE = UberDialogFragment.class.getSimpleName() + ".UBER_SELECTED_ESTIMATE";
     public static final String UBER_DIALOG_TAG = UberDialogFragment.class.getSimpleName() + ".UBER_DIALOG";
 
-    public static UberDialogFragment newInstance(@Nullable ArrayList<LiveNationEstimate> estimates) {
+    public static UberDialogFragment newInstance() {
         UberDialogFragment dialog = new UberDialogFragment();
         dialog.setArguments(new Bundle());
         return dialog;
