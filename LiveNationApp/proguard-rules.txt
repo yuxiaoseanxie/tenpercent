@@ -67,6 +67,13 @@
     *;
 }
 
+# App - Uber
+# Leave model classes alone.  Jackson uses reflection heavily to work correctly, proguard destroys this
+
+-keepclassmembers class com.livenation.mobile.android.na.uber.service.model.** {
+    *;
+}
+
 # Facebook
 
 -keep class com.facebook.** { *; } 
