@@ -35,7 +35,7 @@ public class StubTests extends InstrumentationTestCase {
 
     public void testSuccessfulStringStub() {
         stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnString(TEST_BODY, createBasicHeaders("text/plain"), 200);
+                .andReturnString(TEST_BODY, createBasicHeaders("text/plain"), 200);
 
         SyncResponseAdapter<String> adapter = new SyncResponseAdapter<String>();
         queue.add(new StringRequest(Request.Method.GET, TEST_URL, adapter, adapter));
@@ -48,7 +48,7 @@ public class StubTests extends InstrumentationTestCase {
         JSONObject stubbedResponse = new JSONObject();
         stubbedResponse.put("worked", true);
         stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnJson(stubbedResponse, emptyHeaders(), 200);
+                .andReturnJson(stubbedResponse, emptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.GET, TEST_URL, null, adapter, adapter));
@@ -59,7 +59,7 @@ public class StubTests extends InstrumentationTestCase {
 
     public void testSuccessfulGetJacksonConverterStub() {
         stack.stubGet(TEST_URL, emptyHeaders())
-             .andReturnJson(new TestObject(), JACKSON_JSON_CONVERTER, emptyHeaders(), 200);
+                .andReturnJson(new TestObject(), JACKSON_JSON_CONVERTER, emptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.GET, TEST_URL, null, adapter, adapter));
@@ -77,7 +77,7 @@ public class StubTests extends InstrumentationTestCase {
         responseBody.put("destroyed", true);
 
         stack.stubPost(TEST_URL, emptyHeaders(), postBody)
-             .andReturnJson(responseBody, emptyHeaders(), 200);
+                .andReturnJson(responseBody, emptyHeaders(), 200);
 
         SyncResponseAdapter<JSONObject> adapter = new SyncResponseAdapter<JSONObject>();
         queue.add(new JsonObjectRequest(Request.Method.POST, TEST_URL, postBody, adapter, adapter));
@@ -89,7 +89,8 @@ public class StubTests extends InstrumentationTestCase {
 
     private static class TestObject {
         @SuppressWarnings("unused")
-        @JsonProperty("worked") boolean worked = true;
+        @JsonProperty("worked")
+        boolean worked = true;
     }
 
     public void testUnstubbedUrls() {

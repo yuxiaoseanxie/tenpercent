@@ -17,7 +17,6 @@
     </style>
 
 
-
     <style name="ui_long_text">
         <item name="android:padding">@dimen/gap_medium</item>
         <item name="android:textAppearance">@style/ln.text.small</item>

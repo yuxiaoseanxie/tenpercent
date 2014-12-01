@@ -32,12 +32,12 @@
     <string name="mock_update_message" />
 
 
-    <string name="mock_debug_title"/>
-    <string name="mock_debug_action"/>
+    <string name="mock_debug_title" />
+    <string name="mock_debug_action" />
 
 
-    <string name="mock_inbox_message_title"/>
-    <string name="mock_inbox_message_info"/>
-    <string name="mock_inbox_message_detail"/>
-    <string name="mock_inbox_message"/>
+    <string name="mock_inbox_message_title" />
+    <string name="mock_inbox_message_info" />
+    <string name="mock_inbox_message_detail" />
+    <string name="mock_inbox_message" />
 </resources>

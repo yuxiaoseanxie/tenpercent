@@ -7,15 +7,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.activities.AccountActivity;
 import com.livenation.mobile.android.ticketing.activities.BaseActivity;
 import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
 import com.livenation.mobile.android.ticketing.dialogs.LoadingDialogFragment;
-import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
 import com.livenation.mobile.android.ticketing.utils.orders.OrdersCacheManager;
 import com.mobilitus.tm.tickets.TicketLibrary;
 import com.mobilitus.tm.tickets.interfaces.BaseResponseListener;

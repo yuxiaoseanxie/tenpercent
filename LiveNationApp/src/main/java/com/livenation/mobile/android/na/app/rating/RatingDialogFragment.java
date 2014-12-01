@@ -17,7 +17,6 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.preferences.RatingPreferences;
 import com.livenation.mobile.android.na.ui.dialogs.LiveNationDialogFragment;
-import com.livenation.mobile.android.na.utils.ContactUtils;
 
 /**
  * Created by elodieferrais on 8/17/14.

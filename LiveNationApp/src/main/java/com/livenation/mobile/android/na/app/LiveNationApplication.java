@@ -42,7 +42,6 @@ import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
-import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
@@ -169,7 +168,7 @@ public class LiveNationApplication extends Application {
 
 
         //Start Library
-        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, accessTokenProvider,  oldUserId);
+        LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, accessTokenProvider, oldUserId);
         LiveNationLibrary.setSsoProvider(ssoManager);
         LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
 

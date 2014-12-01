@@ -36,7 +36,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     private LocationAdapter adapter;
 
     private TextView currentLocationText;
- 
+
     private City actualLocation;
     private City configuredLocation;
 

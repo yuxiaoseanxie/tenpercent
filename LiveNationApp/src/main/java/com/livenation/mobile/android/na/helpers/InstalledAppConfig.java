@@ -139,23 +139,33 @@ public class InstalledAppConfig {
         return timeOfLastUpdate;
     }
 
-    public @Nullable String getMinimumCheckoutVersion() {
+    public
+    @Nullable
+    String getMinimumCheckoutVersion() {
         return preferences.getString(MINIMUM_CHECKOUT_VERSION, null);
     }
 
-    public @NonNull String getFeaturedCarouselChartName() {
+    public
+    @NonNull
+    String getFeaturedCarouselChartName() {
         return preferences.getString(FEATURED_CAROUSEL_CHART, DEFAULT_FEATURED_CAROUSEL_CHART);
     }
 
-    public @Nullable String getUpgradeMaximumVersion() {
+    public
+    @Nullable
+    String getUpgradeMaximumVersion() {
         return preferences.getString(UPGRADE_MAXIMUM_VERSION, null);
     }
 
-    public @Nullable String getUpgradeMessage() {
+    public
+    @Nullable
+    String getUpgradeMessage() {
         return preferences.getString(UPGRADE_MESSAGE, null);
     }
 
-    public @NonNull List<String> getConfirmationActions() {
+    public
+    @NonNull
+    List<String> getConfirmationActions() {
         String rawActions = preferences.getString(CONFIRMATION_ACTIONS, null);
         if (!TextUtils.isEmpty(rawActions)) {
             return Arrays.asList(TextUtils.split(rawActions, ","));
@@ -163,7 +173,9 @@ public class InstalledAppConfig {
         return Collections.emptyList();
     }
 
-    public @NonNull String getUpgradePlayStoreLink() {
+    public
+    @NonNull
+    String getUpgradePlayStoreLink() {
         return preferences.getString(UPGRADE_PLAY_STORE_LINK, DEFAULT_PLAY_STORE_LINK);
     }
 

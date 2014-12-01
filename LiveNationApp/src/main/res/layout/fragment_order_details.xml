@@ -56,7 +56,7 @@
     <View
         android:id="@+id/order_detail_upgrade_divider"
         style="@style/Divider"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/order_detail_upgrade_button"

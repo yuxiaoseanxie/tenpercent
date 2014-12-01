@@ -10,7 +10,6 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;

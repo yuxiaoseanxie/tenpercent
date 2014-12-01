@@ -82,7 +82,7 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
     }
 
     @Override
-    public void trackApsalarEvent(String actionName, Object...obj) {
+    public void trackApsalarEvent(String actionName, Object... obj) {
         Apsalar.event(actionName, obj);
     }
 }

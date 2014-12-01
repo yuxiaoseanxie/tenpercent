@@ -35,7 +35,7 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     protected static Class apsalarSessionActivity = null;
 
     protected void onCreate(Bundle savedInstanceState, int res) {
-        LiveNationAnalytics.logTrace("Activity", "Create: " + getClass().getName() + " savedInstance: " + (savedInstanceState==null?"null":"not null"));
+        LiveNationAnalytics.logTrace("Activity", "Create: " + getClass().getName() + " savedInstance: " + (savedInstanceState == null ? "null" : "not null"));
         super.onCreate(savedInstanceState);
         if (!isApsalarStarted) {
             //Initialize apsalar

@@ -45,10 +45,10 @@ public class LiveNationAnalytics {
 
         props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
         Analytics.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
-        logTrace("Screen", screenTitle + ": "  + props.toString());
+        logTrace("Screen", screenTitle + ": " + props.toString());
     }
 
     static public void logTrace(String tag, String data) {
-         Crashlytics.log(Log.VERBOSE, tag, data);
+        Crashlytics.log(Log.VERBOSE, tag, data);
     }
 }

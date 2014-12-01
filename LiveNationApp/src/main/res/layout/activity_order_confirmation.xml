@@ -44,7 +44,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7"/>
+                    android:shadowRadius="7" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_event_name"
@@ -59,7 +59,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7"/>
+                    android:shadowRadius="7" />
             </LinearLayout>
 
         </FrameLayout>

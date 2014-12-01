@@ -1,8 +1,6 @@
 package com.livenation.mobile.android.na.providers;
 
 import android.content.Context;
-import android.os.SystemClock;
-import android.text.format.Time;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

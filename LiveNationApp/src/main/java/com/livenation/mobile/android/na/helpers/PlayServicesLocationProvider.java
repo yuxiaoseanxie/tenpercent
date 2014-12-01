@@ -20,13 +20,10 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.platform.api.service.livenation.analytics.ErrorTracker;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PlayServicesLocationProvider implements LocationProvider {
@@ -85,7 +82,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
         @Override
         public void onConnected(Bundle connectionHint) {
             //Check to avoid DeadObjectException
-            if (client!= null && client.isConnected()) {
+            if (client != null && client.isConnected()) {
                 try {
                     Location location = client.getLastLocation();
                     if (null != location) {

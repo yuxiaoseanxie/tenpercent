@@ -24,7 +24,9 @@ public class CommerceUnavailableDialogFragment extends DialogFragment {
     }
 
     @Override
-    public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
+    public
+    @NonNull
+    Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.commerce_unavailable_error_title);
         builder.setMessage(R.string.commerce_unavailable_error_message);

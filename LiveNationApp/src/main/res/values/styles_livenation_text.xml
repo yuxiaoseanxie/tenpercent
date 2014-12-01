@@ -159,7 +159,7 @@
 
     <style name="ln.text.xlarge.bold">
         <item name="android:textStyle">bold</item>
-	</style>
+    </style>
 
     <style name="ln.text.xlarge.bold.white">
         <item name="android:textColor">@color/white</item>
@@ -352,7 +352,6 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="rating_button" parent="android:Widget.Button">
-    </style>
+    <style name="rating_button" parent="android:Widget.Button"></style>
 
 </resources>

@@ -138,7 +138,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
 
-
     //region Empty State
 
     private void setupEmptyStateViews() {
@@ -379,7 +378,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     //endregion
-
 
 
     private static enum EmptyState {

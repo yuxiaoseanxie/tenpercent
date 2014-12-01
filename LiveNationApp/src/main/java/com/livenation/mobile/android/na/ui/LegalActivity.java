@@ -4,13 +4,11 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.KeyEvent;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 import java.util.ArrayList;
@@ -149,9 +147,9 @@ public class LegalActivity extends LiveNationFragmentActivity {
     public void onBackPressed() {
         int index = getActionBar().getSelectedNavigationIndex();
         WebViewFragment webViewFragment = (WebViewFragment) getFragmentManager().findFragmentByTag(tagsByIndex[index]);
-        if(webViewFragment != null && webViewFragment.getWebView() != null && webViewFragment.getWebView().canGoBack()){
+        if (webViewFragment != null && webViewFragment.getWebView() != null && webViewFragment.getWebView().canGoBack()) {
             webViewFragment.getWebView().goBack();
-        }else{
+        } else {
             finish();
         }
     }

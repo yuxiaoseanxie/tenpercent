@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
-    android:minHeight="@dimen/list_item_height"
-    >
+    android:minHeight="@dimen/list_item_height">
 
 
     <ImageView
@@ -16,7 +15,7 @@
         android:src="@drawable/your_location_pin"
         android:scaleType="centerInside"
         android:minHeight="@dimen/minimum_pressable"
-        android:minWidth="@dimen/minimum_pressable"/>
+        android:minWidth="@dimen/minimum_pressable" />
 
     <TextView
         android:id="@+id/list_search_title"

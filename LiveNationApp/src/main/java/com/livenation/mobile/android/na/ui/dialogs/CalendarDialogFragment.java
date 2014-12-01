@@ -64,7 +64,7 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
     }
 
     private void init(Event event) {
-        String timeZone = event.getVenue() != null? event.getVenue().getTimeZone() : null;
+        String timeZone = event.getVenue() != null ? event.getVenue().getTimeZone() : null;
 
         List<CalendarItem> calendarItemList = new ArrayList<CalendarItem>();
         //Add Show date item

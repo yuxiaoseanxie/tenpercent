@@ -11,7 +11,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
-import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.segment.android.models.Props;
 
 public class OnFavoriteClickListener {

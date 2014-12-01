@@ -11,11 +11,11 @@
         android:minHeight="@dimen/fan_man_min_height"
         android:scaleType="center"
         android:src="@drawable/footer_fan_man"
-        android:layout_margin="@dimen/widget_margin"/>
+        android:layout_margin="@dimen/widget_margin" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/view_empty_list_no_data"
-        android:textAppearance="@style/ln.text.medium.gray"
-        />
+        android:textAppearance="@style/ln.text.medium.gray" />
 </LinearLayout>

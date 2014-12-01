@@ -135,7 +135,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         });
 
 
-
     }
 
     @Override
