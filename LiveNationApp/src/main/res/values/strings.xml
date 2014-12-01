@@ -157,6 +157,10 @@
     <string name="confirmation_action_tag_line_seat_upgrade">Want a better seat?</string>
     <string name="confirmation_action_seat_upgrade">Get an Upgrade</string>
 
+    <!-- Order details -->
+    <string name="order_details_header_next_show">Next show</string>
+    <string name="order_details_header_other_shows">All other shows</string>
+
     <!-- Notifications -->
     <string name="no_messages">No messages</string>
     <string name="inbox_title">Notifications</string>

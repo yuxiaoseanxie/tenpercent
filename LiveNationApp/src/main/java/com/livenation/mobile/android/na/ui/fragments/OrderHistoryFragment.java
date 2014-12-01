@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +43,9 @@ import com.mobilitus.tm.tickets.models.OrderHistory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final int LIMIT_PER_PAGE = 10;
@@ -97,10 +99,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         setupEmptyStateViews();
 
         this.historyAdapter = new HistoryAdapter(getActivity());
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
         listView.setAdapter(historyAdapter);
         listView.setOnItemClickListener(this);
-        listView.setOnScrollListener(new InfiniteScrollListener());
+        listView.setOnScrollListener(new InfiniteScrollListener(swipeRefreshLayout, listView));
+        listView.setAreHeadersSticky(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -136,7 +139,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     public OrderHistoryActivity getOrderHistoryActivity() {
         return (OrderHistoryActivity) getActivity();
     }
-
 
 
     //region Empty State
@@ -381,7 +383,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     //endregion
 
 
-
     private static enum EmptyState {
         EMPTY,
         LOADING,
@@ -389,8 +390,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         SIGNED_OUT,
     }
 
-    private class HistoryAdapter extends ArrayAdapter<Cart> {
+    private class HistoryAdapter extends ArrayAdapter<Cart> implements StickyListHeadersAdapter {
         private LayoutInflater mInflater;
+
+        private final int ITEM_TYPE_NEXT_SHOW = 0;
+        private final int ITEM_TYPE_OTHER_SHOWS = 1;
 
         public HistoryAdapter(Context context) {
             super(context, R.layout.item_order_history);
@@ -426,6 +430,19 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             return view;
         }
 
+        @Override
+        public View getHeaderView(int position, View view, ViewGroup viewGroup) {
+            if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
+                return mInflater.inflate(R.layout.header_order_history_next_show, viewGroup, false);
+            }
+            return mInflater.inflate(R.layout.header_order_history_other_shows, viewGroup, false);
+        }
+
+        @Override
+        public long getHeaderId(int position) {
+            if (position == 0) return ITEM_TYPE_NEXT_SHOW;
+            return ITEM_TYPE_OTHER_SHOWS;
+        }
 
         private class ViewHolder {
             final VerticalDateView date;
@@ -461,9 +478,28 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         private int lastFirstVisibleItem;
         private int lastVisibleItemCount;
         private int lastTotalItemCount;
+        private SwipeRefreshLayout refreshLayout;
+        private StickyListHeadersListView listView;
+
+        public InfiniteScrollListener(SwipeRefreshLayout refreshLayout, StickyListHeadersListView listView) {
+            this.refreshLayout = refreshLayout;
+            this.listView = listView;
+        }
 
         @Override
         public void onScroll(@NonNull AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            //start: StickyListHeaders workaround
+            //workaround a compatibility issue with swiperefreshlayout and StickyListHeaders
+            //stolen from: https://gist.github.com/Frikish/10025057
+            View childView = listView.getWrappedList().getChildAt(0);
+            int top = (childView == null) ? 0 : childView.getTop();
+            if (top >= 0) {
+                refreshLayout.setEnabled(true);
+            } else {
+                refreshLayout.setEnabled(false);
+            }
+            //end: stickylistheaders workaround
+
             if (totalItemCount == 0) {
                 return;
             }
