@@ -24,8 +24,13 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/on_boarding_scanning_imageview"
+            android:layout_toEndOf="@id/on_boarding_scanning_imageview"
             android:paddingLeft="@dimen/on_boarding_scan_message_padding"
+            android:paddingRight="@dimen/on_boarding_scan_message_padding"
+            android:paddingStart="@dimen/on_boarding_scan_message_padding"
+            android:paddingEnd="@dimen/on_boarding_scan_message_padding"
             android:text="@string/onboarding_scanning_description"
+            android:gravity="center"
             android:textAppearance="@style/onboarding_scan_text" />
     </RelativeLayout>
 

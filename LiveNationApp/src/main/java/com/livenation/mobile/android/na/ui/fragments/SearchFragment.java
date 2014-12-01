@@ -25,7 +25,6 @@ public abstract class SearchFragment<ResultType> extends LiveNationFragment impl
     protected SearchAdapter<ResultType> adapter;
     private EmptyListViewControl emptyListViewControl;
     private int pendingRequestCount = 0;
-    private LayoutInflater inflater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

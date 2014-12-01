@@ -6,6 +6,8 @@
     android:paddingBottom="@dimen/ui_ticket_offering_padding"
     android:paddingLeft="@dimen/ui_dialog_list_separator_padding_left"
     android:paddingRight="@dimen/ui_ticket_offering_padding"
+    android:paddingStart="@dimen/ui_dialog_list_separator_padding_left"
+    android:paddingEnd="@dimen/ui_ticket_offering_padding"
     android:paddingTop="@dimen/ui_ticket_offering_padding"
     android:text="@string/mock_artist_title_1"
     android:textAppearance="@style/ln.text.medium.bold" />

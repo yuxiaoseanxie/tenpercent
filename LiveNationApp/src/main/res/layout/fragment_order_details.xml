@@ -35,6 +35,8 @@
                     android:gravity="center"
                     android:paddingLeft="@dimen/outer_padding"
                     android:paddingRight="@dimen/outer_padding"
+                    android:paddingStart="@dimen/outer_padding"
+                    android:paddingEnd="@dimen/outer_padding"
                     android:text="@string/order_details_transfer_instructions"
                     android:textAppearance="@style/ListViewTextAppearance"
                     android:visibility="gone" />

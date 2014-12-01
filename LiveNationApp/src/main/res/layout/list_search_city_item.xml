@@ -24,7 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/gap_medium"
+        android:layout_marginStart="@dimen/gap_medium"
         android:layout_toRightOf="@+id/list_search_city_logo"
+        android:layout_toEndOf="@+id/list_search_city_logo"
         android:textAppearance="@style/ln.text.large.bold" />
 
     <View
@@ -32,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
         android:layout_alignLeft="@id/list_search_title"
+        android:layout_alignStart="@id/list_search_title"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
 
