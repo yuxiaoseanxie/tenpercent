@@ -13,10 +13,13 @@ import com.mobilitus.tm.tickets.models.Venue;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by cchilton on 12/2/14.
@@ -94,5 +97,62 @@ public class UberHelper {
     public static String getUberVenueName(Venue venue) {
         if (venue == null) return "";
         return venue.getName();
+    }
+
+    public static Observable<LiveNationEstimate> getQuickEstimate(final UberClient uberClient, final float startLat, final float startLng, final float endLat, final float endLng) {
+        final PublishSubject<LiveNationEstimate> result = PublishSubject.create();
+
+        uberClient.getEstimates(startLat, startLng, endLat, endLng).
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).
+                filter(new Func1<ArrayList<LiveNationEstimate>, Boolean>() {
+                    @Override
+                    public Boolean call(ArrayList<LiveNationEstimate> liveNationEstimates) {
+                        //filter out any api responses with no uber suggestions (eg for people in france :) )
+                        return (liveNationEstimates.size() > 0);
+                    }
+                }).
+                subscribe(new Action1<ArrayList<LiveNationEstimate>>() {
+                    @Override
+                    public void call(ArrayList<LiveNationEstimate> liveNationEstimates) {
+                        //select the fastest uber product from the results
+                        LiveNationEstimate fastest = null;
+                        for (LiveNationEstimate estimate : liveNationEstimates) {
+                            if (fastest == null) {
+                                fastest = estimate;
+                                continue;
+                            }
+                            if (fastest.getTime().getEstimate() < estimate.getTime().getEstimate()) {
+                                fastest = estimate;
+                            }
+                        }
+                        //emit the fastest result
+                        result.onNext(fastest);
+                    }
+                });
+
+        return result;
+    }
+
+    public static Observable<LiveNationEstimate> getQuickEstimate(final UberClient uberClient, final float endLat, final float endLng) {
+        final PublishSubject<LiveNationEstimate> result = PublishSubject.create();
+
+        ObservableProvider.getObservableLocation().subscribe(new Action1<Double[]>() {
+            @Override
+            public void call(Double[] doubles) {
+                float lat = doubles[0].floatValue();
+                float lng = doubles[1].floatValue();
+                //perform api request
+                getQuickEstimate(uberClient, lat, lng, endLat, endLng).
+                        subscribe(new Action1<LiveNationEstimate>() {
+                            @Override
+                            public void call(LiveNationEstimate liveNationEstimate) {
+                                result.onNext(liveNationEstimate);
+                            }
+                        });
+            }
+        });
+
+        return result;
     }
 }

@@ -12,6 +12,7 @@
     <string name="uber_dialog_title">Uber Fare Estimates</string>
     <string name="uber_dialog_title_secondary">From your current location</string>
     <string name="uber_popup_book_ride_soon">Book a ride with Uber</string>
+    <string name="uber_popup_book_ride_mins">Book a ride with Uber in %d min</string>
     <string name="uber_popup_free_ride">Get your first ride free (Up to $30)*</string>
     <string name="uber_dialog_failed">Failed to retrieve Uber prices</string>
 </resources>

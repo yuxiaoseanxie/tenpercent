@@ -36,6 +36,7 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
@@ -57,6 +58,9 @@ import com.segment.android.models.Props;
 
 import java.util.List;
 
+import rx.functions.Action1;
+import rx.subjects.ReplaySubject;
+
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private static final int ACTIVITY_RESULT_UBER = 1;
@@ -76,6 +80,10 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private LatLng mapLocationCache = null;
     private final static int MAX_INLINE = 3;
     private Venue venue;
+    //create a replay subject for our fastest uber estimation.
+    //this allows the API operation for the fastest uber to be cached, so the result is available instantly to anyone who subscribes to this object
+    //This is useful when the UI that shows the estimate is repeatedly created and destroyed, as we can cache the estimate
+    private ReplaySubject<LiveNationEstimate> fastestUber = ReplaySubject.create(1);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,10 +156,19 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         location.setOnClickListener(new OnAddressClick(venue, LiveNationApplication.get().getApplicationContext()));
         if (venue.getLat() != null && venue.getLng() != null) {
-            double lat = Double.valueOf(venue.getLat());
-            double lng = Double.valueOf(venue.getLng());
+            Double lat = Double.valueOf(venue.getLat());
+            Double lng = Double.valueOf(venue.getLng());
             setMapLocation(lat, lng);
             travelOptions.setOnClickListener(new OnTravelOptionsClick());
+            //now that we have the venue, find out the fastest uber available to its location, and
+            //stash it in our fastestUber member variable
+            UberHelper.getQuickEstimate(uberClient, lat.floatValue(), lng.floatValue()).
+                    subscribe(new Action1<LiveNationEstimate>() {
+                        @Override
+                        public void call(LiveNationEstimate liveNationEstimate) {
+                            fastestUber.onNext(liveNationEstimate);
+                        }
+                    });
         } else {
             //hide travel options to unroutable venue
             travelOptions.setVisibility(View.GONE);
@@ -329,7 +346,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
 
-            TravelListPopupWindow popupWindow = new TravelListPopupWindow(getActivity(), travelOptions) {
+            TravelListPopupWindow popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
                 @Override
                 public void onOptionClicked(TravelOption travelOption) {
                     switch (travelOption) {
