@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -83,19 +84,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /**this.offlinePromptHandler = new Handler(new Handler.Callback() {
-        @Override public boolean handleMessage(@NonNull Message message) {
-        Activity activity = getActivity();
-        if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
-        TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
-        loadOfflineCache(true);
-        }
-
-        return true;
-        }
-        });
-         **/
         setRetainInstance(true);
     }
 
@@ -329,7 +317,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
                 Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
 
-                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE && pageOffset <=40) {
+                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE) {
                     fetchOrderHistory(pageOffset + LIMIT_PER_PAGE, previousCarts, cartsCallback);
                 } else {
                     cartsCallback.onResponse(previousCarts);
