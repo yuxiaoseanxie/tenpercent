@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -100,12 +101,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
+
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
 
         setupEmptyStateViews();
 
         StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(new ListScrollListener(swipeRefreshLayout, listView));
         listView.setAreHeadersSticky(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -488,6 +491,37 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 emptyView.setVisibility(View.VISIBLE);
             else
                 emptyView.setVisibility(View.GONE);
+        }
+    }
+
+    private class ListScrollListener implements AbsListView.OnScrollListener {
+        private SwipeRefreshLayout refreshLayout;
+        private StickyListHeadersListView listView;
+
+        public ListScrollListener(SwipeRefreshLayout refreshLayout, StickyListHeadersListView listView) {
+            this.refreshLayout = refreshLayout;
+            this.listView = listView;
+        }
+
+        @Override
+        public void onScroll(@NonNull AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            //start: StickyListHeaders workaround
+            //workaround a compatibility issue with swiperefreshlayout and StickyListHeaders
+            //stolen from: https://gist.github.com/Frikish/10025057
+            View childView = listView.getWrappedList().getChildAt(0);
+            int top = (childView == null) ? 0 : childView.getTop();
+            if (top >= 0) {
+                refreshLayout.setEnabled(true);
+            } else {
+                refreshLayout.setEnabled(false);
+            }
+            //end: stickylistheaders workaround
+
+        }
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
         }
     }
 }
