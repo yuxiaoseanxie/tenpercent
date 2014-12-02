@@ -1,12 +1,9 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,15 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
 import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
@@ -48,7 +45,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private static final int LIMIT_PER_PAGE = 10;
+    private static final int LIMIT_PER_PAGE = 20;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -56,37 +53,39 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private View emptyStateViewNoOrders;
     private ViewGroup emptyView;
 
-    private EmptyState emptyState = EmptyState.EMPTY;
-
     private EmptyStateObserver emptyStateObserver;
     private HistoryAdapter historyAdapter;
-    private ArrayList<Cart> loadedCarts;
+    //private Handler offlinePromptHandler;
+    private boolean isFetching = false;
 
-    private int pageOffset = 0;
-    private boolean hasMore = false;
-    private Handler offlinePromptHandler;
-    private boolean isRefreshing = false;
+    PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
+        @Override
+        public void onCountdownFinished() {
+            loadOrRefreshFullHistory();
+        }
 
+        @Override
+        public void onPollingCancelled() {
+        }
+    };
     //region Lifecycle
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.loadedCarts = new ArrayList<Cart>();
-        this.offlinePromptHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message message) {
-                Activity activity = getActivity();
-                if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
-                    TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
-                    loadOfflineCache(true);
-                }
+        /**this.offlinePromptHandler = new Handler(new Handler.Callback() {
+        @Override public boolean handleMessage(@NonNull Message message) {
+        Activity activity = getActivity();
+        if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
+        TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
+        loadOfflineCache(true);
+        }
 
-                return true;
-            }
+        return true;
+        }
         });
-
+         **/
         setRetainInstance(true);
     }
 
@@ -96,32 +95,35 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
+
         setupEmptyStateViews();
 
-        this.historyAdapter = new HistoryAdapter(getActivity());
         StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
-        listView.setAdapter(historyAdapter);
         listView.setOnItemClickListener(this);
-        listView.setOnScrollListener(new InfiniteScrollListener(swipeRefreshLayout, listView));
         listView.setAreHeadersSticky(false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadSinglePage(true);
+                loadOrRefreshFullHistory();
             }
         });
+
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_color_1, R.color.refresh_color_2, R.color.refresh_color_3, R.color.refresh_color_4);
+        swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
+        swipeRefreshLayout.setRefreshing(isFetching);
 
         this.emptyStateObserver = new EmptyStateObserver();
-        historyAdapter.registerDataSetObserver(emptyStateObserver);
 
-        swipeRefreshLayout.setRefreshing(isRefreshing);
-        if (!loadedCarts.isEmpty()) {
-            historyAdapter.addAll(loadedCarts);
+        if (historyAdapter == null) {
+            this.historyAdapter = new HistoryAdapter(getActivity());
+            listView.setAdapter(historyAdapter);
+            loadOrRefreshFullHistory();
         } else {
-            loadSinglePage(true);
+            listView.setAdapter(historyAdapter);
+            historyAdapter.notifyDataSetChanged();
         }
+        historyAdapter.registerDataSetObserver(emptyStateObserver);
 
         return view;
     }
@@ -155,12 +157,21 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         });
 
         this.emptyStateViewLoading = inflater.inflate(R.layout.sub_order_history_empty_loading, emptyView, false);
+    }
 
-        setEmptyState(emptyState);
+    public void clearUserData() {
+        if (historyAdapter != null) {
+            historyAdapter.clear();
+        }
+        if (isFetching) {
+            isFetching = false;
+        }
+
+        swipeRefreshLayout.setRefreshing(false);
+        setEmptyState(EmptyState.SIGNED_OUT);
     }
 
     private void setEmptyState(EmptyState state) {
-        this.emptyState = state;
         emptyView.removeAllViews();
 
         switch (state) {
@@ -181,27 +192,13 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private void updateEmptyState() {
-        if (isRefreshing()) {
-            setEmptyState(EmptyState.LOADING);
-        } else if (Ticketing.getTicketService().hasSession()) {
-            setEmptyState(EmptyState.NO_ORDERS);
-        } else {
-            setEmptyState(EmptyState.SIGNED_OUT);
-        }
-    }
-
     //endregion
 
 
     //region Loading Orders
 
-    public boolean isRefreshing() {
-        return isRefreshing;
-    }
-
     public void setRefreshing(boolean isRefreshing) {
-        this.isRefreshing = isRefreshing;
+        this.isFetching = isRefreshing;
         swipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
@@ -213,154 +210,68 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         new UploadOrderHistoryTask().execute(orderHistory);
     }
 
-    private void loadOfflineCache(final boolean isWaitingForOnlineOrders) {
-        OrdersCacheManager.getInstance().loadOrderHistory(getActivity(), pageOffset, new ValueCallback<OrderHistory>() {
+    private void loadOfflineCache(final BasicApiCallback<List<Cart>> callback) {
+        OrdersCacheManager.getInstance().loadOrderHistoryFromCache(getActivity(), new ValueCallback<OrderHistory>() {
             @Override
             public void onValueLoaded(OrderHistory response) {
-                if (!Ticketing.getTicketService().hasSession()) {
-                    hasMore = false;
-                    setRefreshing(false);
-                    return;
-                }
-
-                if (!isWaitingForOnlineOrders)
-                    setRefreshing(false);
-
 
                 ArrayList<Cart> carts = response.getOrders();
-                if (carts != null) {
-                    historyAdapter.addAll(carts);
-                    loadedCarts.addAll(carts);
+                if (carts == null) {
+                    carts = new ArrayList<Cart>();
                 }
-
-
-                hasMore = (carts != null && carts.size() >= LIMIT_PER_PAGE);
-
-                updateEmptyState();
+                callback.onResponse(carts);
             }
 
             @Override
             public void onValueLoadFailed(Throwable error) {
-                if (!Ticketing.getTicketService().hasSession()) {
-                    hasMore = false;
-                    setRefreshing(false);
-                    return;
-                }
-
-                if (!isWaitingForOnlineOrders)
-                    setRefreshing(false);
-
+                callback.onErrorResponse(new LiveNationError(error));
                 Log.e(getClass().getSimpleName(), "Could not load cache", error);
             }
         });
     }
 
-    public void loadSinglePage(final boolean clearAlreadyLoadedOrders) {
-        if (isRefreshing())
+    public void loadOrRefreshFullHistory() {
+        if (isFetching)
             return;
 
         swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
+
+        historyAdapter.clear();
+        isFetching = true;
+        swipeRefreshLayout.setRefreshing(true);
+        setEmptyState(EmptyState.LOADING);
+
         getOrderHistoryActivity().updateActionBar();
+
         if (!Ticketing.getTicketService().hasSession()) {
-            historyAdapter.clear();
-            loadedCarts.clear();
-
-            updateEmptyState();
-            hasMore = false;
-
             return;
         }
 
-        if (clearAlreadyLoadedOrders)
-            pageOffset = 0;
+        BasicApiCallback<List<Cart>> callback = new BasicApiCallback<List<Cart>>() {
+            @Override
+            public void onResponse(List<Cart> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                isFetching = false;
+                if (!Ticketing.getTicketService().hasSession()) {
+                    return;
+                }
 
-        setRefreshing(true);
-        updateEmptyState();
+                historyAdapter.addAll(response);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                swipeRefreshLayout.setRefreshing(false);
+                isFetching = false;
+            }
+        };
+
         if (Ticketing.isConnectedToInternet()) {
-            if (clearAlreadyLoadedOrders && pageOffset == 0)
-                offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
-
-            PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
-                @Override
-                public void onCountdownFinished() {
-                    loadSinglePage(clearAlreadyLoadedOrders);
-                }
-
-                @Override
-                public void onPollingCancelled() {
-                    setRefreshing(false);
-                }
-            };
-            final TimedEvent getOrderHistoryEvent = Ticketing.getAnalytics().startTimedEvent(TicketLibrary.Method.GET_ORDER_HISTORY);
-            getOrderHistoryEvent.getProperties().put("Pagination Offset", pageOffset);
-            Ticketing.getTicketService().getOrderHistory(pageOffset, LIMIT_PER_PAGE, new ResponseListener<OrderHistory>() {
-
-                @Override
-                public void onSuccess(int requestId, OrderHistory response) {
-                    setRefreshing(false);
-                    offlinePromptHandler.removeMessages(0);
-
-                    if (!Ticketing.getTicketService().hasSession()) {
-                        hasMore = false;
-                        return;
-                    }
-
-                    if (pageOffset == 0)
-                        uploadOrderHistory(response.getOrders());
-                    OrdersCacheManager.getInstance().saveOrderHistory(getActivity(), response);
-
-                    ArrayList<Cart> carts = response.getOrders();
-                    if (clearAlreadyLoadedOrders) {
-                        historyAdapter.clear();
-                        loadedCarts.clear();
-                    }
-
-                    if (carts != null) {
-                        historyAdapter.addAll(carts);
-                        loadedCarts.addAll(carts);
-                        hasMore = (carts.size() >= LIMIT_PER_PAGE);
-                    } else {
-                        hasMore = false;
-                    }
-
-                    updateEmptyState();
-
-                    Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
-                }
-            }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
-                @Override
-                public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
-                    offlinePromptHandler.removeMessages(0);
-
-                    if (!Ticketing.getTicketService().hasSession()) {
-                        hasMore = false;
-                        setRefreshing(false);
-                        return;
-                    }
-
-                    if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(getActivity(), pageOffset)) {
-                        Log.e(getClass().getName(), "Could not load orders. Error: " + error);
-                        loadOfflineCache(false);
-                    } else {
-                        setRefreshing(false);
-                        super.onError(requestId, httpStatusCode, error);
-                    }
-                }
-            }.finishTimedEvent(getOrderHistoryEvent));
+            //offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
+            fetchOrderHistory(0, new ArrayList<Cart>(),callback);
         } else {
-            loadOfflineCache(false);
+            loadOfflineCache(callback);
         }
-    }
-
-    private void loadNextPage() {
-        if (!hasMore || isRefreshing())
-            return;
-
-        if (!Ticketing.isConnectedToInternet() && !OrdersCacheManager.getInstance().hasOrderHistorySaved(getActivity(), pageOffset))
-            return;
-
-        pageOffset += LIMIT_PER_PAGE;
-        loadSinglePage(false);
     }
 
     //endregion
@@ -381,6 +292,53 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     //endregion
+
+    private void fetchOrderHistory(final int pageOffset, @NonNull final List<Cart> previousCarts, final BasicApiCallback<List<Cart>> cartsCallback) {
+        final Context context = getActivity().getApplicationContext();
+
+        //Analytics
+        final TimedEvent getOrderHistoryEvent = Ticketing.getAnalytics().startTimedEvent(TicketLibrary.Method.GET_ORDER_HISTORY);
+        getOrderHistoryEvent.getProperties().put("Pagination Offset", pageOffset);
+
+        Ticketing.getTicketService().getOrderHistory(pageOffset, LIMIT_PER_PAGE, new ResponseListener<OrderHistory>() {
+
+            @Override
+            public void onSuccess(int requestId, OrderHistory response) {
+                //offlinePromptHandler.removeMessages(0);
+
+                uploadOrderHistory(response.getOrders());
+                OrdersCacheManager.getInstance().saveOrderHistory(context, response);
+
+                ArrayList<Cart> carts = response.getOrders();
+                historyAdapter.clear();
+
+                if (previousCarts != null) {
+                    previousCarts.addAll(carts);
+                }
+
+                Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
+
+                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE && pageOffset <=40) {
+                    fetchOrderHistory(pageOffset + LIMIT_PER_PAGE, previousCarts, cartsCallback);
+                } else {
+                    cartsCallback.onResponse(previousCarts);
+                }
+            }
+        }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
+            @Override
+            public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
+                //offlinePromptHandler.removeMessages(0);
+
+                if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(context)) {
+                    Log.e(getClass().getName(), "Could not load orders. Error: " + error);
+                    loadOfflineCache(cartsCallback);
+                } else {
+                    super.onError(requestId, httpStatusCode, error);
+                    cartsCallback.onErrorResponse(new LiveNationError(error.getCode(), error.getMessage()));
+                }
+            }
+        }.finishTimedEvent(getOrderHistoryEvent));
+    }
 
 
     private static enum EmptyState {
@@ -471,57 +429,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 emptyView.setVisibility(View.VISIBLE);
             else
                 emptyView.setVisibility(View.GONE);
-        }
-    }
-
-    private class InfiniteScrollListener implements AbsListView.OnScrollListener {
-        private int lastFirstVisibleItem;
-        private int lastVisibleItemCount;
-        private int lastTotalItemCount;
-        private SwipeRefreshLayout refreshLayout;
-        private StickyListHeadersListView listView;
-
-        public InfiniteScrollListener(SwipeRefreshLayout refreshLayout, StickyListHeadersListView listView) {
-            this.refreshLayout = refreshLayout;
-            this.listView = listView;
-        }
-
-        @Override
-        public void onScroll(@NonNull AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            //start: StickyListHeaders workaround
-            //workaround a compatibility issue with swiperefreshlayout and StickyListHeaders
-            //stolen from: https://gist.github.com/Frikish/10025057
-            View childView = listView.getWrappedList().getChildAt(0);
-            int top = (childView == null) ? 0 : childView.getTop();
-            if (top >= 0) {
-                refreshLayout.setEnabled(true);
-            } else {
-                refreshLayout.setEnabled(false);
-            }
-            //end: stickylistheaders workaround
-
-            if (totalItemCount == 0) {
-                return;
-            }
-
-            if ((totalItemCount - visibleItemCount) <= firstVisibleItem) {
-                if (lastFirstVisibleItem == firstVisibleItem &&
-                        lastVisibleItemCount == visibleItemCount &&
-                        lastTotalItemCount == totalItemCount) {
-                    return;
-                }
-
-                loadNextPage();
-
-                lastFirstVisibleItem = firstVisibleItem;
-                lastVisibleItemCount = visibleItemCount;
-                lastTotalItemCount = totalItemCount;
-            }
-        }
-
-        @Override
-        public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-
         }
     }
 }
