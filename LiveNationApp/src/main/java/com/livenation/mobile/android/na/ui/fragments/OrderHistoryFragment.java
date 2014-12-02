@@ -322,6 +322,17 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
     //endregion
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case ACTIVITY_RESULT_UBER:
+                Intent intent = UberHelper.getUberAppLaunchIntent(uberClient, data);
+                getActivity().startActivity(intent);
+                break;
+        }
+    }
+
     private void fetchOrderHistory(final int pageOffset, @NonNull final List<Cart> previousCarts, final BasicApiCallback<List<Cart>> cartsCallback) {
         final Context context = getActivity().getApplicationContext();
 
