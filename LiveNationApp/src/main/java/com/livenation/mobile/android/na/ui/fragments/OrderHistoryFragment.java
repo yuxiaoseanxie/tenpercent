@@ -38,6 +38,8 @@ import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -66,6 +68,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         @Override
         public void onPollingCancelled() {
+        }
+    };
+
+    Comparator<Cart> comparator = new Comparator<Cart>() {
+        @Override
+        public int compare(Cart lhs, Cart rhs) {
+            Long diff = rhs.getEvent().getShowTime() - lhs.getEvent().getShowTime();
+            return diff.intValue();
         }
     };
     //region Lifecycle
@@ -256,6 +266,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     return;
                 }
 
+                Collections.sort(response, comparator);
                 historyAdapter.addAll(response);
             }
 
