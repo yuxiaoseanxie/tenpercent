@@ -32,11 +32,22 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
     public static final String EXTRA_UBER_ESTIMATES = UberDialogFragment.class.getSimpleName() + ".UBER_ESTIMATES";
     public static final String EXTRA_RESULT_ESTIMATE = UberDialogFragment.class.getSimpleName() + ".UBER_SELECTED_ESTIMATE";
+    public static final String EXTRA_RESULT_ADDRESS = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_ADDRESS";
+    public static final String EXTRA_RESULT_LATITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_LATITUDE";
+    public static final String EXTRA_RESULT_LONGITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_LONGITUDE";
+    public static final String EXTRA_RESULT_NAME = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_NAME";
+
+
     public static final String UBER_DIALOG_TAG = UberDialogFragment.class.getSimpleName() + ".UBER_DIALOG";
 
-    public static UberDialogFragment newInstance() {
+    public static UberDialogFragment newInstance(float lat, float lng, String destinationAddress, String destinationName) {
         UberDialogFragment dialog = new UberDialogFragment();
         dialog.setArguments(new Bundle());
+        dialog.getArguments().putString(EXTRA_RESULT_ADDRESS, destinationAddress);
+        dialog.getArguments().putFloat(EXTRA_RESULT_LATITUDE, lat);
+        dialog.getArguments().putFloat(EXTRA_RESULT_LONGITUDE, lng);
+        dialog.getArguments().putString(EXTRA_RESULT_NAME, destinationName);
+
         return dialog;
     }
 
@@ -87,6 +98,10 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             LiveNationEstimate estimate = (LiveNationEstimate) parent.getItemAtPosition(position);
             Intent data = new Intent();
             data.putExtra(EXTRA_RESULT_ESTIMATE, estimate);
+            data.putExtra(EXTRA_RESULT_NAME, getArguments().getString(EXTRA_RESULT_NAME));
+            data.putExtra(EXTRA_RESULT_ADDRESS, getArguments().getString(EXTRA_RESULT_ADDRESS));
+            data.putExtra(EXTRA_RESULT_LATITUDE, getArguments().getFloat(EXTRA_RESULT_LATITUDE));
+            data.putExtra(EXTRA_RESULT_LONGITUDE, getArguments().getFloat(EXTRA_RESULT_LONGITUDE));
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
             dismiss();
         }
@@ -120,23 +135,23 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             }
 
             LiveNationEstimate estimate = getItem(position);
-            holder.getTitle().setText(estimate.getPrice().getDisplayName());
+            holder.title.setText(estimate.getPrice().getDisplayName());
 
             if (estimate.hasProduct()) {
                 int count = estimate.getProduct().getCapacity();
-                holder.getCapacity().setText(getResources().getQuantityString(R.plurals.uber_capacity, count, count));
+                holder.capacity.setText(getResources().getQuantityString(R.plurals.uber_capacity, count, count));
             } else {
-                holder.getCapacity().setText("");
+                holder.capacity.setText("");
             }
 
             if (estimate.hasTime()) {
                 int time = estimate.getTime().getEstimateMins();
-                holder.getTime().setText(getResources().getQuantityString(R.plurals.uber_times, time, time));
+                holder.time.setText(getResources().getQuantityString(R.plurals.uber_times, time, time));
             } else {
-                holder.getTime().setText("");
+                holder.time.setText("");
             }
 
-            holder.getCost().setText(estimate.getPrice().getEstimate());
+            holder.cost.setText(estimate.getPrice().getEstimate());
             return convertView;
         }
 
@@ -152,23 +167,6 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
                 this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_time);
             }
-
-            public TextView getCost() {
-                return cost;
-            }
-
-            public TextView getTitle() {
-                return title;
-            }
-
-            public TextView getCapacity() {
-                return capacity;
-            }
-
-            public TextView getTime() {
-                return time;
-            }
-
         }
     }
 }
