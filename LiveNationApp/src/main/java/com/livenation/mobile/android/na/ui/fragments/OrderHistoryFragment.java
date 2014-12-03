@@ -45,6 +45,7 @@ import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -86,7 +87,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         @Override
         public int compare(Cart lhs, Cart rhs) {
             Long diff = rhs.getEvent().getShowTime() - lhs.getEvent().getShowTime();
-            return diff.intValue();
+            Long sign = 0l;
+            if (diff != 0) {
+                sign = diff / Math.abs(diff);
+            }
+            return sign.intValue();
         }
     };
     //region Lifecycle
@@ -268,7 +273,30 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 }
 
                 Collections.sort(response, comparator);
-                historyAdapter.addAll(response);
+
+                //Put the "Next show" at the first position, otherwise the first section is "All other shows"
+                int position = 0;
+                long now = Calendar.getInstance().getTimeInMillis();
+                while (position < response.size()
+                        && response.get(position).getEvent().getShowTime() - now > 0
+                        && !isNextShow(response, position)) {
+                    position++;
+                }
+
+                List<Cart> carts = new ArrayList<>();
+
+                if (position != 0) {
+                    Cart nextShow = response.get(position);
+                    response.remove(position);
+
+                    carts.add(nextShow);
+                    carts.addAll(response);
+
+                } else {
+                    carts = response;
+                }
+
+                historyAdapter.addAll(carts);
             }
 
             @Override
@@ -280,10 +308,30 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         if (Ticketing.isConnectedToInternet()) {
             //offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
-            fetchOrderHistory(0, new ArrayList<Cart>(),callback);
+            fetchOrderHistory(0, new ArrayList<Cart>(), callback);
         } else {
             loadOfflineCache(callback);
         }
+    }
+
+    private boolean isNextShow(List<Cart> response, int position) {
+        Cart currentCart = response.get(position);
+
+        long now = Calendar.getInstance().getTimeInMillis();
+        if (currentCart.getEvent().getShowTime() - now < 0) {
+            return false;
+        }
+
+        Cart nextCart = null;
+        if (position + 1 < response.size()) {
+            nextCart = response.get(position + 1);
+        }
+
+        if (nextCart == null || nextCart.getEvent().getShowTime() - now < 0) {
+            return true;
+        }
+
+        return false;
     }
 
     //endregion
@@ -405,7 +453,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
-            if (view == null) {
+            if (view == null || view.getTag() == null) {
                 view = mInflater.inflate(R.layout.item_order_history, parent, false);
                 view.setTag(new ViewHolder(view));
             }
@@ -444,14 +492,21 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         public View getHeaderView(int position, View view, ViewGroup viewGroup) {
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 return mInflater.inflate(R.layout.header_order_history_next_show, viewGroup, false);
+            } else {
+                return mInflater.inflate(R.layout.header_order_history_other_shows, viewGroup, false);
             }
-            return mInflater.inflate(R.layout.header_order_history_other_shows, viewGroup, false);
         }
 
         @Override
         public long getHeaderId(int position) {
-            if (position == 0) return ITEM_TYPE_NEXT_SHOW;
-            return ITEM_TYPE_OTHER_SHOWS;
+            Cart currentCart = getItem(position);
+            long result = ITEM_TYPE_OTHER_SHOWS;
+
+            long now = Calendar.getInstance().getTimeInMillis();
+            if (currentCart.getEvent().getShowTime() - now > 0 && position == 0) {
+                result = ITEM_TYPE_NEXT_SHOW;
+            }
+            return result;
         }
 
         private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
@@ -553,4 +608,5 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         }
     }
+
 }

@@ -155,7 +155,7 @@ dependencies {
     compile 'com.android.support:support-v13:20.0.0'
     compile 'com.google.android.gms:play-services:5.0.89'
 
-    compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
+    compile('se.emilsjolander:stickylistheaders:2.5.2').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'
     compile 'io.reactivex:rxandroid:0.22.0'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
