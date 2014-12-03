@@ -122,6 +122,10 @@ public class UberHelper {
                                 fastest = estimate;
                                 continue;
                             }
+
+                            if (fastest.getTime() == null || estimate.getTime() == null)
+                                continue;
+
                             if (fastest.getTime().getEstimate() < estimate.getTime().getEstimate()) {
                                 fastest = estimate;
                             }
