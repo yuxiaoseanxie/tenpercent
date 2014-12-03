@@ -43,6 +43,7 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
+import com.mobilitus.tm.tickets.models.Venue;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -271,6 +272,23 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         BasicApiCallback<List<Cart>> callback = new BasicApiCallback<List<Cart>>() {
             @Override
             public void onResponse(List<Cart> response) {
+                response = new ArrayList<>();
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                Cart cart = new Cart();
+                Event event = new Event();
+                event.setName("aa");
+                event.setShowTime(calendar.getTimeInMillis());
+                Venue venue = new Venue();
+                venue.setAddress1("aaa");
+                venue.setAddress2("bbb");
+                event.setVenue(venue);
+                cart.setDisplayOrderID("eee");
+                cart.setOrderDate(calendar.getTimeInMillis());
+                cart.setEvent(event);
+                response.add(cart);
+
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
                 if (!Ticketing.getTicketService().hasSession()) {
@@ -284,7 +302,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 long now = Calendar.getInstance().getTimeInMillis();
                 while (position < response.size()
                         && (response.get(position).getEvent() == null
-                        || response.get(position).getEvent().getShowTime() - now > 0)
+                            || response.get(position).getEvent().getShowTime() - now > 0)
                         && !isNextShow(response, position)) {
                     position++;
                 }
@@ -491,7 +509,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             holder.uberContent.removeAllViews();
 
-            if (position == 0) {
+            if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 if (uberClient.isUberAppInstalled()) {
                     holder.uberContent.addView(getUberRideView(parent, cart));
                 } else {
