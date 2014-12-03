@@ -43,7 +43,6 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
-import com.mobilitus.tm.tickets.models.Venue;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -272,22 +271,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         BasicApiCallback<List<Cart>> callback = new BasicApiCallback<List<Cart>>() {
             @Override
             public void onResponse(List<Cart> response) {
-                response = new ArrayList<>();
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
-                Cart cart = new Cart();
-                Event event = new Event();
-                event.setName("aa");
-                event.setShowTime(calendar.getTimeInMillis());
-                Venue venue = new Venue();
-                venue.setAddress1("aaa");
-                venue.setAddress2("bbb");
-                event.setVenue(venue);
-                cart.setDisplayOrderID("eee");
-                cart.setOrderDate(calendar.getTimeInMillis());
-                cart.setEvent(event);
-                response.add(cart);
 
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
