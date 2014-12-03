@@ -71,6 +71,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private HistoryAdapter historyAdapter;
     //private Handler offlinePromptHandler;
     private boolean isFetching = false;
+    private EmptyState emptyState;
 
     PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
         @Override
@@ -141,6 +142,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
         historyAdapter.registerDataSetObserver(emptyStateObserver);
 
+        setEmptyState(emptyState);
         return view;
     }
 
@@ -188,8 +190,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void setEmptyState(EmptyState state) {
+        if (state == null) {
+            return;
+        }
         emptyView.removeAllViews();
-
+        this.emptyState = state;
         switch (state) {
             case EMPTY:
                 break;
@@ -278,14 +283,15 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 int position = 0;
                 long now = Calendar.getInstance().getTimeInMillis();
                 while (position < response.size()
-                        && response.get(position).getEvent().getShowTime() - now > 0
+                        && (response.get(position).getEvent() == null
+                        || response.get(position).getEvent().getShowTime() - now > 0)
                         && !isNextShow(response, position)) {
                     position++;
                 }
 
                 List<Cart> carts = new ArrayList<>();
 
-                if (position != 0) {
+                if (position != 0 && position < response.size()) {
                     Cart nextShow = response.get(position);
                     response.remove(position);
 
@@ -296,6 +302,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     carts = response;
                 }
 
+                if (carts.isEmpty()) {
+                    setEmptyState(EmptyState.NO_ORDERS);
+                } else {
+                    setEmptyState(EmptyState.EMPTY);
+                }
                 historyAdapter.addAll(carts);
             }
 
@@ -303,6 +314,9 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             public void onErrorResponse(LiveNationError error) {
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
+                if (emptyState == EmptyState.LOADING) {
+                    setEmptyState(EmptyState.EMPTY);
+                }
             }
         };
 
@@ -318,7 +332,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         Cart currentCart = response.get(position);
 
         long now = Calendar.getInstance().getTimeInMillis();
-        if (currentCart.getEvent().getShowTime() - now < 0) {
+        if (currentCart.getEvent() == null || currentCart.getEvent().getShowTime() - now < 0) {
             return false;
         }
 
@@ -408,7 +422,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
                 Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
 
-                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE) {
+                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE && pageOffset == 0) {
                     fetchOrderHistory(pageOffset + LIMIT_PER_PAGE, previousCarts, cartsCallback);
                 } else {
                     cartsCallback.onResponse(previousCarts);
@@ -503,7 +517,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             long result = ITEM_TYPE_OTHER_SHOWS;
 
             long now = Calendar.getInstance().getTimeInMillis();
-            if (currentCart.getEvent().getShowTime() - now > 0 && position == 0) {
+            if (currentCart.getEvent() != null && currentCart.getEvent().getShowTime() - now > 0 && position == 0) {
                 result = ITEM_TYPE_NEXT_SHOW;
             }
             return result;
