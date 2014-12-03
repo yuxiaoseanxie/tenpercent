@@ -73,6 +73,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private ImageButton travelOptions;
     private View venueInfo;
     private View phonebox;
+    private TravelListPopupWindow popupWindow;
     private ShowsListNonScrollingFragment showsFragment;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
@@ -127,6 +128,14 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         showMoreView.setTitle(R.string.artist_events_overflow);
 
         showsFragment.setShowMoreItemsView(showMoreView);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
     }
 
     @Override
@@ -346,7 +355,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
 
-            TravelListPopupWindow popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
+            popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
                 @Override
                 public void onOptionClicked(TravelOption travelOption) {
                     switch (travelOption) {
