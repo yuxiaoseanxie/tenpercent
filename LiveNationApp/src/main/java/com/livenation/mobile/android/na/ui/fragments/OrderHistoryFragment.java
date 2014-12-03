@@ -470,7 +470,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
             float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
 
-            UberHelper.getQuickEstimate(uberClient, 37.7833f, -122.4167f).
+            UberHelper.getQuickEstimate(uberClient, lat, lng).
                     subscribe(new Action1<LiveNationEstimate>() {
                         @Override
                         public void call(LiveNationEstimate liveNationEstimate) {
