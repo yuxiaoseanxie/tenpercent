@@ -8,16 +8,18 @@ import android.widget.ListPopupWindow;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.adapters.TravelAdapter;
 
+import rx.subjects.Subject;
+
 /**
  * Created by elodieferrais on 11/25/14.
  */
 public abstract class TravelListPopupWindow extends ListPopupWindow {
-    public TravelListPopupWindow(Activity activity, View anchor) {
+    public TravelListPopupWindow(Activity activity, View anchor, Subject fastestUber) {
         super(activity);
 
         final int width = activity.getResources().getDimensionPixelSize(R.dimen.venue_travel_popup_width);
         setWidth(width);
-        setAdapter(new TravelAdapter(activity));
+        setAdapter(new TravelAdapter(activity, fastestUber));
         setAnchorView(anchor);
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

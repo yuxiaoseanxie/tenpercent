@@ -23,6 +23,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -49,6 +50,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import rx.functions.Action1;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -322,6 +324,17 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
     //endregion
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case ACTIVITY_RESULT_UBER:
+                Intent intent = UberHelper.getUberAppLaunchIntent(uberClient, data);
+                getActivity().startActivity(intent);
+                break;
+        }
+    }
+
     private void fetchOrderHistory(final int pageOffset, @NonNull final List<Cart> previousCarts, final BasicApiCallback<List<Cart>> cartsCallback) {
         final Context context = getActivity().getApplicationContext();
 
@@ -453,7 +466,23 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
 
         private View getUberRideView(@NonNull ViewGroup parent, final Cart cart) {
-            View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
+            final View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
+            float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
+            float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
+
+            UberHelper.getQuickEstimate(uberClient, lat, lng).
+                    subscribe(new Action1<LiveNationEstimate>() {
+                        @Override
+                        public void call(LiveNationEstimate liveNationEstimate) {
+                            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                            TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                            String uberTitle = getResources().getString(R.string.uber_popup_book_ride_mins);
+                            uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
+                            text1.setText(uberTitle);
+                            text2.setText(liveNationEstimate.getPrice().getEstimate());
+                        }
+                    });
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

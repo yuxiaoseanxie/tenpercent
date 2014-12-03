@@ -23,12 +23,14 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@android:id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/uber_popup_book_ride_soon"
                 android:textAppearance="@style/ln.text.medium.bold" />
 
             <TextView
+                android:id="@android:id/text2"
                 style="@style/ln.text.small.gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
