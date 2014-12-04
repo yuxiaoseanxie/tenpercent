@@ -113,6 +113,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(new ListScrollListener(swipeRefreshLayout, listView));
         listView.setAreHeadersSticky(false);
+        listView.setEmptyView(emptyView);
         footerBugHack = new FrameLayout(view.getContext());
         footerBugHack.addView(emptyViewFooter);
 
@@ -134,6 +135,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         this.emptyStateObserver = new EmptyStateObserver();
         setEmptyState(emptyState);
+
         setupEmptyStateViews();
 
         if (historyAdapter == null) {
