@@ -56,7 +56,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private static final int LIMIT_PER_PAGE = 20;
+    private static final int LIMIT_PER_PAGE = 5;
     private static final int ACTIVITY_RESULT_UBER = 1;
 
     private UberClient uberClient;
@@ -73,6 +73,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private boolean isFetching = false;
     private EmptyState emptyState;
     private List<Cart> orders;
+    private boolean hasMorePages = true;
 
     PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
         @Override
@@ -115,6 +116,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onRefresh() {
                 orders.clear();
+                historyAdapter.clear();
+                hasMorePages = true;
                 loadHistory(0);
             }
         });
@@ -244,15 +247,19 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     public void loadHistory(final int offset) {
-        if (isFetching && orders.size() == offset)
+        if (isFetching && orders.size() == (offset - LIMIT_PER_PAGE)) {
             return;
+        }
+
 
         swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
 
-        historyAdapter.clear();
         isFetching = true;
-        swipeRefreshLayout.setRefreshing(true);
-        setEmptyState(EmptyState.LOADING);
+
+        if (orders.size() == 0) {
+            setEmptyState(EmptyState.LOADING);
+            swipeRefreshLayout.setRefreshing(true);
+        }
 
         getOrderHistoryActivity().updateActionBar();
 
@@ -268,6 +275,9 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 if (offset != orders.size()) {
                     return;
                 }
+
+                hasMorePages = (orders.size() % LIMIT_PER_PAGE == 0 || response.size() == 0);
+
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
                 if (!Ticketing.getTicketService().hasSession()) {
@@ -284,6 +294,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     if (sortedCarts.size() == orders.size()) {
                         orders = sortedCarts;
                         setEmptyState(EmptyState.EMPTY);
+                        historyAdapter.clear();
                         historyAdapter.addAll(orders);
                     }
                 }
@@ -431,12 +442,10 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onSuccess(int requestId, OrderHistory response) {
                 //offlinePromptHandler.removeMessages(0);
-
                 uploadOrderHistory(response.getOrders());
                 OrdersCacheManager.getInstance().saveOrderHistory(context, response);
 
                 ArrayList<Cart> carts = response.getOrders();
-                historyAdapter.clear();
 
                 if (previousCarts != null) {
                     previousCarts.addAll(carts);
@@ -611,6 +620,9 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     private class ListScrollListener implements AbsListView.OnScrollListener {
+        private int lastFirstVisibleItem;
+        private int lastVisibleItemCount;
+        private int lastTotalItemCount;
         private SwipeRefreshLayout refreshLayout;
         private StickyListHeadersListView listView;
 
@@ -633,6 +645,23 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             }
             //end: stickylistheaders workaround
 
+            if (totalItemCount == 0) {
+                return;
+            }
+
+            if ((totalItemCount - visibleItemCount) <= firstVisibleItem) {
+                if (lastFirstVisibleItem == firstVisibleItem &&
+                        lastVisibleItemCount == visibleItemCount &&
+                        lastTotalItemCount == totalItemCount) {
+                    return;
+                }
+
+                loadNextPage();
+
+                lastFirstVisibleItem = firstVisibleItem;
+                lastVisibleItemCount = visibleItemCount;
+                lastTotalItemCount = totalItemCount;
+            }
         }
 
         @Override
@@ -641,4 +670,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     }
 
+    private void loadNextPage() {
+        if (!hasMorePages || isFetching) {
+            return;
+        }
+
+        loadHistory(orders.size());
+    }
 }
