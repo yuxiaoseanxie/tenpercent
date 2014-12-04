@@ -92,7 +92,7 @@ public class OrderHistoryActivity extends BaseActivity {
         if (requestCode == LOGIN_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (Ticketing.getTicketService().hasSession())
-                    fragment.loadOrRefreshFullHistory();
+                    fragment.loadHistory(0);
                 invalidateOptionsMenu();
             } else {
                 finish();

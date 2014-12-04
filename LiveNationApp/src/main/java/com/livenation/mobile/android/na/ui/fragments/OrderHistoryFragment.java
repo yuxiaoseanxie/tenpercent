@@ -72,11 +72,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     //private Handler offlinePromptHandler;
     private boolean isFetching = false;
     private EmptyState emptyState;
+    private List<Cart> orders;
 
     PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
         @Override
         public void onCountdownFinished() {
-            loadOrRefreshFullHistory();
+            loadHistory(orders.size());
         }
 
         @Override
@@ -84,17 +85,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     };
 
-    Comparator<Cart> comparator = new Comparator<Cart>() {
-        @Override
-        public int compare(Cart lhs, Cart rhs) {
-            Long diff = rhs.getEvent().getShowTime() - lhs.getEvent().getShowTime();
-            Long sign = 0l;
-            if (diff != 0) {
-                sign = diff / Math.abs(diff);
-            }
-            return sign.intValue();
-        }
-    };
     //region Lifecycle
 
     @Override
@@ -105,13 +95,15 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
 
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
-
+        if (orders == null) {
+            orders = Collections.synchronizedList(new ArrayList<Cart>());
+        }
         setupEmptyStateViews();
 
         StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
@@ -122,7 +114,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadOrRefreshFullHistory();
+                orders.clear();
+                loadHistory(0);
             }
         });
 
@@ -131,18 +124,18 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         swipeRefreshLayout.setRefreshing(isFetching);
 
         this.emptyStateObserver = new EmptyStateObserver();
+        setEmptyState(emptyState);
 
         if (historyAdapter == null) {
             this.historyAdapter = new HistoryAdapter(getActivity());
             listView.setAdapter(historyAdapter);
-            loadOrRefreshFullHistory();
+            loadHistory(0);
         } else {
             listView.setAdapter(historyAdapter);
             historyAdapter.notifyDataSetChanged();
         }
         historyAdapter.registerDataSetObserver(emptyStateObserver);
 
-        setEmptyState(emptyState);
         return view;
     }
 
@@ -227,12 +220,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private void uploadOrderHistory(List<Cart> orderHistory) {
         if (TicketingUtils.isCollectionEmpty(orderHistory) || !UploadOrderHistoryTask.shouldUpload())
             return;
-
         new UploadOrderHistoryTask().execute(orderHistory);
     }
 
-    private void loadOfflineCache(final BasicApiCallback<List<Cart>> callback) {
-        OrdersCacheManager.getInstance().loadOrderHistoryFromCache(getActivity(), new ValueCallback<OrderHistory>() {
+    private void loadOfflineCache(final BasicApiCallback<List<Cart>> callback, int offset) {
+        OrdersCacheManager.getInstance().loadOrderHistoryFromCache(getActivity(), offset, new ValueCallback<OrderHistory>() {
             @Override
             public void onValueLoaded(OrderHistory response) {
 
@@ -251,8 +243,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         });
     }
 
-    public void loadOrRefreshFullHistory() {
-        if (isFetching)
+    public void loadHistory(final int offset) {
+        if (isFetching && orders.size() == offset)
             return;
 
         swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
@@ -265,6 +257,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         getOrderHistoryActivity().updateActionBar();
 
         if (!Ticketing.getTicketService().hasSession()) {
+            setEmptyState(EmptyState.SIGNED_OUT);
             return;
         }
 
@@ -272,43 +265,28 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             @Override
             public void onResponse(List<Cart> response) {
 
+                if (offset != orders.size()) {
+                    return;
+                }
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
                 if (!Ticketing.getTicketService().hasSession()) {
                     return;
                 }
 
-                Collections.sort(response, comparator);
+                orders.addAll(response);
 
-                //Put the "Next show" at the first position, otherwise the first section is "All other shows"
-                int position = 0;
-                long now = Calendar.getInstance().getTimeInMillis();
-                while (position < response.size()
-                        && (response.get(position).getEvent() == null
-                            || response.get(position).getEvent().getShowTime() - now > 0)
-                        && !isNextShow(response, position)) {
-                    position++;
-                }
-
-                List<Cart> carts = new ArrayList<>();
-
-                if (position != 0 && position < response.size()) {
-                    Cart nextShow = response.get(position);
-                    response.remove(position);
-
-                    carts.add(nextShow);
-                    carts.addAll(response);
-
-                } else {
-                    carts = response;
-                }
-
-                if (carts.isEmpty()) {
+                if (orders.isEmpty()) {
                     setEmptyState(EmptyState.NO_ORDERS);
                 } else {
-                    setEmptyState(EmptyState.EMPTY);
+                    List<Cart> sortedCarts = sortCarts(orders);
+                    //Check that we did not refresh the list by this time
+                    if (sortedCarts.size() == orders.size()) {
+                        orders = sortedCarts;
+                        setEmptyState(EmptyState.EMPTY);
+                        historyAdapter.addAll(orders);
+                    }
                 }
-                historyAdapter.addAll(carts);
             }
 
             @Override
@@ -323,13 +301,56 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         if (Ticketing.isConnectedToInternet()) {
             //offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
-            fetchOrderHistory(0, new ArrayList<Cart>(), callback);
+            fetchOrderHistory(offset, new ArrayList<Cart>(), callback);
         } else {
-            loadOfflineCache(callback);
+            loadOfflineCache(callback, offset);
         }
     }
 
-    private boolean isNextShow(List<Cart> response, int position) {
+    static private List<Cart> sortCarts(List<Cart> orders) {
+        List<Cart> copy = new ArrayList<>(orders);
+
+        Comparator<Cart> comparator = new Comparator<Cart>() {
+            @Override
+            public int compare(Cart lhs, Cart rhs) {
+                Long diff = rhs.getEvent().getShowTime() - lhs.getEvent().getShowTime();
+                Long sign = 0l;
+                if (diff != 0) {
+                    sign = diff / Math.abs(diff);
+                }
+                return sign.intValue();
+            }
+        };
+
+        Collections.sort(copy, comparator);
+
+        //Put the "Next show" at the first position, otherwise the first section is "All other shows"
+        int position = 0;
+        long now = Calendar.getInstance().getTimeInMillis();
+        while (position < copy.size()
+                && (copy.get(position).getEvent() == null
+                || copy.get(position).getEvent().getShowTime() - now > 0)
+                && !isNextShow(orders, position)) {
+            position++;
+        }
+
+        List<Cart> carts = new ArrayList<>();
+
+        if (position != 0 && position < orders.size()) {
+            Cart nextShow = copy.get(position);
+            copy.remove(position);
+
+            carts.add(nextShow);
+            carts.addAll(copy);
+
+        } else {
+            carts = orders;
+        }
+
+        return carts;
+    }
+
+    static private boolean isNextShow(List<Cart> response, int position) {
         Cart currentCart = response.get(position);
 
         long now = Calendar.getInstance().getTimeInMillis();
@@ -422,21 +443,17 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 }
 
                 Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
+                cartsCallback.onResponse(previousCarts);
 
-                if (response.getOrders() != null && response.getOrders().size() >= LIMIT_PER_PAGE && pageOffset == 0) {
-                    fetchOrderHistory(pageOffset + LIMIT_PER_PAGE, previousCarts, cartsCallback);
-                } else {
-                    cartsCallback.onResponse(previousCarts);
-                }
             }
         }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
             @Override
             public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
                 //offlinePromptHandler.removeMessages(0);
 
-                if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(context)) {
+                if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(context, pageOffset)) {
                     Log.e(getClass().getName(), "Could not load orders. Error: " + error);
-                    loadOfflineCache(cartsCallback);
+                    loadOfflineCache(cartsCallback, pageOffset);
                 } else {
                     super.onError(requestId, httpStatusCode, error);
                     cartsCallback.onErrorResponse(new LiveNationError(error.getCode(), error.getMessage()));
