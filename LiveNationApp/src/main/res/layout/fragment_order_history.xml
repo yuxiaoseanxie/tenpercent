@@ -16,10 +16,12 @@
 
             />
 
-        <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
+        <LinearLayout
             android:id="@android:id/empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical" />
     </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

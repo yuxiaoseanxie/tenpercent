@@ -65,15 +65,16 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private View emptyStateViewLoading;
     private View emptyStateViewNoOrders;
-    private EmptyListViewControl emptyView;
+    private ViewGroup emptyView;
     private EmptyListViewControl emptyViewFooter;
     private ViewGroup footerBugHack;
     private EmptyStateObserver emptyStateObserver;
     private HistoryAdapter historyAdapter;
     //private Handler offlinePromptHandler;
     private boolean isFetching = false;
-    private EmptyListViewControl.ViewMode emptyState;
+    private EmptyState emptyState;
     private List<Cart> orders;
     private boolean hasMorePages = true;
 
@@ -102,7 +103,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
-        this.emptyView = (EmptyListViewControl) view.findViewById(android.R.id.empty);
+        this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
         this.emptyViewFooter = new EmptyListViewControl(view.getContext());
 
         if (orders == null) {
@@ -178,6 +179,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 getActivity().finish();
             }
         });
+
+        this.emptyStateViewLoading = inflater.inflate(R.layout.sub_order_history_empty_loading, emptyView, false);
     }
 
     public void clearUserData() {
@@ -189,16 +192,38 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
 
         swipeRefreshLayout.setRefreshing(false);
-        getOrderHistoryActivity().showAccountActivity();
+        setEmptyState(EmptyState.SIGNED_OUT);
     }
 
-    private void setEmptyState(EmptyListViewControl.ViewMode state) {
-        Log.d("Elodie", "state" + String.valueOf(state));
+    private static enum EmptyState {
+        EMPTY,
+        LOADING,
+        NO_ORDERS,
+        SIGNED_OUT,
+    }
+
+    private void setEmptyState(EmptyState state) {
         if (state == null) {
             return;
         }
+        emptyView.removeAllViews();
         this.emptyState = state;
-        emptyView.setViewMode(state);
+        switch (state) {
+            case EMPTY:
+                break;
+
+            case NO_ORDERS:
+                emptyView.addView(emptyStateViewNoOrders);
+                break;
+
+            case LOADING:
+                emptyView.addView(emptyStateViewLoading);
+                break;
+
+            case SIGNED_OUT:
+                getOrderHistoryActivity().showAccountActivity();
+                break;
+        }
     }
 
     //endregion
@@ -248,7 +273,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         isFetching = true;
         if (orders.size() == 0) {
             swipeRefreshLayout.setRefreshing(true);
-            setEmptyState(EmptyListViewControl.ViewMode.LOADING);
+            setEmptyState(EmptyState.LOADING);
             emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         } else {
             emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.LOADING);
@@ -258,14 +283,13 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         if (!Ticketing.getTicketService().hasSession()) {
             isFetching = false;
-            getOrderHistoryActivity().showAccountActivity();
+            setEmptyState(EmptyState.SIGNED_OUT);
             return;
         }
 
         BasicApiCallback<List<Cart>> callback = new BasicApiCallback<List<Cart>>() {
             @Override
             public void onResponse(List<Cart> response) {
-
                 if (offset != orders.size()) {
                     return;
                 }
@@ -280,7 +304,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
                 orders.addAll(response);
 
-                if (orders.isEmpty() || !hasMorePages) {
+                if (orders.isEmpty()) {
+                    setEmptyState(EmptyState.NO_ORDERS);
+                    return;
+                }
+                if (!hasMorePages) {
                     emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
                 } else {
                     List<Cart> sortedCarts = sortCarts(orders);
@@ -297,8 +325,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             public void onErrorResponse(LiveNationError error) {
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
-                if (emptyState == EmptyListViewControl.ViewMode.LOADING) {
-                    setEmptyState(EmptyListViewControl.ViewMode.INACTIVE);
+                if (emptyState == EmptyState.LOADING) {
+                    setEmptyState(EmptyState.EMPTY);
                 }
             }
         };
