@@ -101,7 +101,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
-
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
         this.emptyViewFooter = new EmptyListViewControl(view.getContext());
@@ -234,6 +233,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     public void setRefreshing(boolean isRefreshing) {
         this.isFetching = isRefreshing;
         swipeRefreshLayout.setRefreshing(isRefreshing);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        historyAdapter.unregisterDataSetObserver(emptyStateObserver);
     }
 
     @SuppressWarnings("unchecked")
