@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow.TravelOption;
@@ -72,6 +73,8 @@ public class TravelAdapter extends BaseAdapter {
                             text2.setText(liveNationEstimate.getPrice().getEstimate());
                         }
                     });
+                } else {
+                    text2.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
                 }
 
                 return root;
