@@ -30,9 +30,9 @@
 
             <TextView
                 style="@style/ln.text.small.gray"
+                android:id="@+id/uber_free_ride_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/uber_popup_free_ride" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </LinearLayout>

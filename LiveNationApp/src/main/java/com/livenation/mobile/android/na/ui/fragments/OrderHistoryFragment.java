@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
@@ -570,6 +571,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
             View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
+            TextView text = (TextView) view.findViewById(R.id.uber_free_ride_text);
+            text.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
