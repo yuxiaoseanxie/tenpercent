@@ -48,6 +48,7 @@ import com.mobilitus.tm.tickets.models.OrderHistory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -77,6 +78,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private EmptyState emptyState;
     private List<Cart> orders;
     private boolean hasMorePages = true;
+    StickyListHeadersListView listView;
 
     PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
         @Override
@@ -101,6 +103,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
+
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
         this.emptyViewFooter = new EmptyListViewControl(view.getContext());
@@ -109,7 +112,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             orders = Collections.synchronizedList(new ArrayList<Cart>());
         }
 
-        StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
+        listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(new ListScrollListener(swipeRefreshLayout, listView));
         listView.setAreHeadersSticky(false);
@@ -136,9 +139,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         this.emptyStateObserver = new EmptyStateObserver();
         setEmptyState(emptyState);
 
-        setupEmptyStateViews();
-
         if (historyAdapter == null) {
+            setupEmptyStateViews();
             this.historyAdapter = new HistoryAdapter(getActivity());
             listView.setAdapter(historyAdapter);
             loadHistory(0);
@@ -154,8 +156,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         historyAdapter.unregisterDataSetObserver(emptyStateObserver);
+        emptyView.removeAllViews();
     }
 
     //endregion
@@ -235,12 +237,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         swipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        historyAdapter.unregisterDataSetObserver(emptyStateObserver);
-    }
-
     @SuppressWarnings("unchecked")
     private void uploadOrderHistory(List<Cart> orderHistory) {
         if (TicketingUtils.isCollectionEmpty(orderHistory) || !UploadOrderHistoryTask.shouldUpload())
@@ -299,7 +295,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     return;
                 }
 
-                hasMorePages = (response.size() % LIMIT_PER_PAGE == 0 || response.size() == 0);
+                hasMorePages = (response.size() % LIMIT_PER_PAGE == 0 && response.size() != 0);
 
                 swipeRefreshLayout.setRefreshing(false);
                 isFetching = false;
@@ -307,12 +303,16 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     return;
                 }
 
+                int top = listView.getWrappedList().getChildAt(0).getTop();
+                int topVisiblePosition = listView.getFirstVisiblePosition();
+
                 orders.addAll(response);
 
                 if (orders.isEmpty()) {
                     setEmptyState(EmptyState.NO_ORDERS);
                     return;
                 }
+
                 if (!hasMorePages) {
                     emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
                 } else {
@@ -322,6 +322,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                         orders = sortedCarts;
                         historyAdapter.clear();
                         historyAdapter.addAll(orders);
+                        listView.setSelection(topVisiblePosition);
+                        listView.getWrappedList().getChildAt(0).setTop(top);
                     }
                 }
             }
@@ -505,7 +507,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         public HistoryAdapter(Context context) {
             super(context, R.layout.item_order_history);
-
             mInflater = LayoutInflater.from(context);
         }
 
@@ -663,7 +664,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             }
             //end: stickylistheaders workaround
 
-            if (totalItemCount == 0) {
+            //1 because the header  count in the totalItemCount
+            if (totalItemCount <= 1) {
                 return;
             }
 
