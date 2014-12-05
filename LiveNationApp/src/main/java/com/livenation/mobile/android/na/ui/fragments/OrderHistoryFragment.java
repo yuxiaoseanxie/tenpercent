@@ -303,9 +303,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     return;
                 }
 
-                int top = listView.getWrappedList().getChildAt(0).getTop();
-                int topVisiblePosition = listView.getFirstVisiblePosition();
-
                 orders.addAll(response);
 
                 if (orders.isEmpty()) {
@@ -316,15 +313,17 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 if (!hasMorePages) {
                     emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
                 } else {
-                    List<Cart> sortedCarts = sortCarts(orders);
-                    //Check that we did not refresh the list by this time
-                    if (sortedCarts.size() == orders.size()) {
-                        orders = sortedCarts;
-                        historyAdapter.clear();
+                    if (orders.size() <= LIMIT_PER_PAGE) {
+                        List<Cart> sortedCarts = sortCarts(orders);
+                        //Check that we did not refresh the list by this time
+                        if (sortedCarts.size() == orders.size()) {
+                            orders = sortedCarts;
+                            historyAdapter.addAll(orders);
+                        }
+                    } else {
                         historyAdapter.addAll(orders);
-                        listView.setSelection(topVisiblePosition);
-                        listView.getWrappedList().getChildAt(0).setTop(top);
                     }
+
                 }
             }
 
