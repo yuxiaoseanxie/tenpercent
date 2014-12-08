@@ -38,4 +38,5 @@ public class LiveNationEstimate implements Serializable {
 
     public boolean hasTime() { return time != null; }
 
+    public boolean hasPrice() { return price != null; }
 }
