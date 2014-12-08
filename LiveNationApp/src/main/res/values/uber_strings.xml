@@ -13,6 +13,7 @@
     <string name="uber_dialog_title_secondary">From your current location</string>
     <string name="uber_popup_book_ride_soon">Book a ride with Uber</string>
     <string name="uber_popup_book_ride_mins">Book a ride with Uber in %d min</string>
+    <string name="uber_order_book_ride_mins">Uber in %d min -</string>
     <string name="uber_dialog_failed">Failed to retrieve Uber prices</string>
     <string name="uber_free_ride_default">Get your first ride free (Up to $30)*</string>
 
