@@ -31,6 +31,7 @@
 
             <TextView
                 style="@style/ln.text.small.gray"
+                android:layout_marginTop="@dimen/uber_new_rider_linespacing"
                 android:id="@+id/uber_free_ride_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
