@@ -85,18 +85,16 @@ public class UberClient {
         return builder.build();
     }
 
-    public Observable<ArrayList<LiveNationEstimate>> getEstimates(float startLat, float startLng, final float endLat, final float endLng) {
-        final float startLatFake = 37.774929f;
-        final float startLngFake = -122.419416f;
+    public Observable<ArrayList<LiveNationEstimate>> getEstimates(final float startLat, final float startLng, final float endLat, final float endLng) {
 
         Observable<ArrayList<LiveNationEstimate>> observable = Observable.create(new Observable.OnSubscribe<ArrayList<LiveNationEstimate>>() {
             @Override
             public void call(final Subscriber<? super ArrayList<LiveNationEstimate>> subscriber) {
-                Observable<UberProductResponse> productsObservable = service.getProducts(startLatFake, startLngFake);
+                Observable<UberProductResponse> productsObservable = service.getProducts(startLat, startLng);
                 //prep observable Uber API call 2
-                Observable<UberPriceResponse> pricesObservable = service.getEstimates(startLatFake, startLngFake, endLat, endLng);
+                Observable<UberPriceResponse> pricesObservable = service.getEstimates(startLat, startLng, endLat, endLng);
                 //prep observable Uber API call 3
-                Observable<UberTimeResponse> timesObservable = service.getTimes(startLatFake, startLngFake);
+                Observable<UberTimeResponse> timesObservable = service.getTimes(startLat, startLng);
                 //Declare our little error handler (could do this inline below, but this is more verbose
                 //listen for both API calls to complete
                 Observable.combineLatest(productsObservable, pricesObservable,timesObservable, new Func3<UberProductResponse,
