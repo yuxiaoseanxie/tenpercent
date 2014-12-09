@@ -69,8 +69,8 @@
 
     <ImageButton
         android:id="@+id/venue_travel_button"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/venue_detail_venue_info_link"
         android:layout_width="@dimen/minimum_pressable"
         android:layout_height="@dimen/minimum_pressable"
         android:scaleType="center"
