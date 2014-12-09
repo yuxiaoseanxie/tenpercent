@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -106,6 +105,17 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         builder.setView(content);
 
         return builder.create();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Override the default Android Title Divider color. This is the only way I could find to do this..
+        int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
+        View titleDivider = getDialog().findViewById(titleDividerId);
+        if (titleDivider != null)
+            titleDivider.setBackgroundColor(getResources().getColor(R.color.accent_red));
     }
 
     @Override
