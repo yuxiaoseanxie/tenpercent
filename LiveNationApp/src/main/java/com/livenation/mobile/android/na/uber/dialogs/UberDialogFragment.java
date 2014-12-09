@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -101,6 +103,12 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         listView.setEmptyView(emptyView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
+
+        ColorDrawable drawable = new ColorDrawable(R.color.livenation_gray);
+        int insetSize = getResources().getDimensionPixelSize(R.dimen.gap_smaller);
+        InsetDrawable inset = new InsetDrawable(drawable, insetSize, 0, insetSize, 0);
+        listView.setDivider(inset);
+        listView.setDividerHeight(1);  //intentional 1px size
 
         builder.setView(content);
 

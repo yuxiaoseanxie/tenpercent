@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/gap_smaller"
-    android:paddingLeft="@dimen/gap_smaller"
-    android:paddingRight="@dimen/gap_smaller"
+    android:paddingLeft="@dimen/gap_small"
+    android:paddingRight="@dimen/gap_small"
     android:paddingTop="@dimen/gap_smaller">
 
     <LinearLayout
