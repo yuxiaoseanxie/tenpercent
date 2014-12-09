@@ -354,12 +354,18 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     private class OnTravelOptionsClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            //Analytics
+            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_MENU_TAP, AnalyticsCategory.VDP, getUberProps());
 
             popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
                 @Override
                 public void onOptionClicked(TravelOption travelOption) {
+
                     switch (travelOption) {
                         case uber:
+                            //Analytics
+                            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_UBER_TAP, AnalyticsCategory.VDP, getUberProps());
+
                             if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), getActivity())) {
                                 //show uber price estimates
                                 showEstimates(venue);
@@ -379,6 +385,17 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
             popupWindow.show();
         }
+    }
+
+    private Props getUberProps() {
+        Props props = new Props();
+        boolean isUberInstalled = AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), LiveNationApplication.get().getApplicationContext());
+        String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
+        if (isUberInstalled) {
+            uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
+        }
+        props.put(AnalyticConstants.UBER_APP, uber_app_value);
+        return props;
     }
 
     private void showEstimates(Venue venue) {

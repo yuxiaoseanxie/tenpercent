@@ -39,7 +39,7 @@ public class UberHelper {
         //get current location
         ObservableProvider.getObservableLocation().subscribe(new Action1<Double[]>() {
             @Override
-            public void call(Double[] startPoint) {
+            public void call(final Double[] startPoint) {
                 //get estimates
                 uberClient.getEstimates(startPoint[0].floatValue(), startPoint[1].floatValue(), endLat, endLng)
                         .subscribeOn(Schedulers.io())
@@ -49,11 +49,11 @@ public class UberHelper {
                             public void call(ArrayList<LiveNationEstimate> liveNationEstimates) {
                                 //Display estimates
                                 dialog.setPriceEstimates(liveNationEstimates);
+                                dialog.setOriginLocation(startPoint[0].floatValue(), startPoint[1].floatValue());
                             }
                         }, onError, new Action0() {
                             @Override
                             public void call() {
-                                Log.d("aa", "aa");
                             }
                         });
             }

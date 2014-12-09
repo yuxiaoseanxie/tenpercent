@@ -5,10 +5,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
+import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +44,8 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     public static final String EXTRA_RESULT_ADDRESS = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_ADDRESS";
     public static final String EXTRA_RESULT_LATITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_LATITUDE";
     public static final String EXTRA_RESULT_LONGITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_LONGITUDE";
+    public static final String EXTRA_ORIGIN_LATITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_ORIGIN_LATITUDE";
+    public static final String EXTRA_ORIGIN_LONGITUDE = UberDialogFragment.class.getSimpleName() + ".UBER_ORIGIN_LONGITUDE";
     public static final String EXTRA_RESULT_NAME = UberDialogFragment.class.getSimpleName() + ".UBER_DESTINATION_NAME";
 
 
@@ -56,6 +67,11 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         adapter.clear();
         adapter.addAll(estimates);
         adapter.notifyDataSetChanged();
+    }
+
+    public void setOriginLocation(float lat, float lng) {
+        getArguments().putFloat(EXTRA_ORIGIN_LATITUDE, lat);
+        getArguments().putFloat(EXTRA_ORIGIN_LONGITUDE, lng);
     }
 
     @Override
@@ -104,7 +120,23 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             data.putExtra(EXTRA_RESULT_LONGITUDE, getArguments().getFloat(EXTRA_RESULT_LONGITUDE));
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
             dismiss();
+
+            Props props = new Props();
+            props.put(AnalyticConstants.UBER_PRODUCT, estimate.getProduct().getDisplayName());
+
+            props.put(AnalyticConstants.UBER_USER_CURRENT_LOCATION, String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LATITUDE)) + ", " +
+                    String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LONGITUDE)));
+            props.put(AnalyticConstants.UBER_USER_CURRENT_DESTINATION, getArguments().getString(EXTRA_RESULT_NAME)+ ", " +
+                    String.valueOf(getArguments().getFloat(EXTRA_RESULT_LATITUDE))+ ", " +
+                    String.valueOf(getArguments().getFloat(EXTRA_RESULT_LONGITUDE)));
+            LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_PRODUCT_OPTION_TAP, AnalyticsCategory.UBER_MODAL, props);
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_DISMISS, AnalyticsCategory.UBER_MODAL);
     }
 
     public void onUberError() {
@@ -112,6 +144,31 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             Toast.makeText(getActivity(), R.string.uber_dialog_failed, Toast.LENGTH_SHORT).show();
         }
         dismissAllowingStateLoss();
+    }
+
+    private void trackUberAnalytics() {
+        Fragment fragment = getTargetFragment();
+        String originValue = null;
+        if (fragment instanceof VenueFragment) {
+            originValue = AnalyticConstants.UBER_ORIGIN_VDP;
+        } else if (fragment instanceof OrderHistoryFragment){
+            originValue = AnalyticConstants.UBER_ORIGIN_YOUR_ORDERS;
+        }
+        Props props = new Props();
+        props.put(AnalyticConstants.UBER_ORIGIN, originValue);
+        LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_LOAD, AnalyticsCategory.UBER_MODAL, props);
+    }
+
+    @Override
+    public int show(FragmentTransaction transaction, String tag) {
+        trackUberAnalytics();
+        return super.show(transaction, tag);
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        trackUberAnalytics();
+        super.show(manager, tag);
     }
 
     private class EstimationAdapter extends ArrayAdapter<LiveNationEstimate> {

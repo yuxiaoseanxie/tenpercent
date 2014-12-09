@@ -21,7 +21,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
@@ -46,6 +51,7 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
+import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -339,7 +345,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         };
 
         if (Ticketing.isConnectedToInternet()) {
-            //offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
             fetchOrderHistory(offset, new ArrayList<Cart>(), callback);
         } else {
             loadOfflineCache(callback, offset);
@@ -469,7 +474,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             @Override
             public void onSuccess(int requestId, OrderHistory response) {
-                //offlinePromptHandler.removeMessages(0);
                 uploadOrderHistory(response.getOrders());
                 OrdersCacheManager.getInstance().saveOrderHistory(context, response);
 
@@ -486,8 +490,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
             @Override
             public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
-                //offlinePromptHandler.removeMessages(0);
-
                 if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(context, pageOffset)) {
                     Log.e(getClass().getName(), "Could not load orders. Error: " + error);
                     loadOfflineCache(cartsCallback, pageOffset);
@@ -577,6 +579,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 @Override
                 public void onClick(View v) {
                     onUberSignupClick(cart);
+                    trakUberAnalytics(false);
                 }
             });
             return view;
@@ -604,9 +607,20 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 @Override
                 public void onClick(View v) {
                     onUberRideClick(cart);
+                    trakUberAnalytics(true);
                 }
             });
             return view;
+        }
+
+        private void trakUberAnalytics(boolean isUberInstalled) {
+            Props props = new Props();
+            String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
+            if (isUberInstalled) {
+                uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
+            }
+            props.put(AnalyticConstants.UBER_APP, uber_app_value);
+            LiveNationAnalytics.track(AnalyticConstants.UBER_YOUR_ORDERS_TAP, AnalyticsCategory.YOUR_ORDERS, props);
         }
 
         private class ViewHolder {

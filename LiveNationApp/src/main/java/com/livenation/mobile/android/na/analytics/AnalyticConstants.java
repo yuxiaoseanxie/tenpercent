@@ -98,6 +98,14 @@ public class AnalyticConstants {
     //Music Library Analysis
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
+    //Uber
+    public static final String UBER_VDP_MENU_TAP = "VDP Address Menu Tap";
+    public static final String UBER_VDP_UBER_TAP = "VDP Uber Tap";
+    public static final String UBER_YOUR_ORDERS_TAP = "Your Orders Uber Tap";
+    public static final String UBER_MODAL_LOAD = "Uber Modal Load";
+    public static final String UBER_MODAL_PRODUCT_OPTION_TAP = "Uber Modal Product Option Tap";
+    public static final String UBER_MODAL_DISMISS = "Uber Modal Dismiss";
+
     /**
      * Screen name
      */
@@ -170,6 +178,8 @@ public class AnalyticConstants {
     public static final String CATEGORY_PUSH_NOTIFICATION_VALUE = "Push Notification";
     public static final String CATEGORY_LOCATION_VALUE = "Location";
     public static final String CATEGORY_RATE_US_MODAL = "RateUsModal";
+    public static final String CATEGORY_YOUR_ORDERS = "Your Orders";
+    public static final String CATEGORY_UBER_MODAL = "Uber Modal";
 
 
     public static final String CATEGORY_ERROR_VALUE = "Error";
@@ -242,6 +252,18 @@ public class AnalyticConstants {
     public static final String RATE_US_TAPPED = "Rate Us Tapped";
     public static final String DONT_SHOW_AGAIN_TAPPED = "Don't Show Again Tapped";
     public static final String NOT_NOW = "Not Now";
+
+    //Uber
+    public static final String UBER_APP = "uber app";
+    public static final String UBER_APP_UNINSTALLED = "uninstalled";
+    public static final String UBER_APP_INSTALLED = "installed";
+    public static final String UBER_ORIGIN = "origin";
+    public static final String UBER_ORIGIN_VDP = "vdp";
+    public static final String UBER_ORIGIN_YOUR_ORDERS = "your orders";
+    public static final String UBER_PRODUCT = "uber product";
+    public static final String UBER_USER_CURRENT_LOCATION = "user current location";
+    public static final String UBER_USER_CURRENT_DESTINATION = "destination";
+
 
     public static final String TRACK_URL_SCHEMES = "Track URL Schemes";
 
