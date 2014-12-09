@@ -57,7 +57,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         dialog.getArguments().putString(EXTRA_RESULT_ADDRESS, destinationAddress);
         dialog.getArguments().putFloat(EXTRA_RESULT_LATITUDE, lat);
         dialog.getArguments().putFloat(EXTRA_RESULT_LONGITUDE, lng);
-        dialog.getArguments().putString(EXTRA_RESULT_NAME, destinationName);
+        dialog.getArguments().putString(EXTRA_RESULT_NAME, destinationName + "(" + destinationAddress + ")");
 
         return dialog;
     }
