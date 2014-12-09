@@ -3,6 +3,7 @@ package com.livenation.mobile.android.na.uber;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,17 +36,18 @@ import rx.functions.Func3;
  */
 public class UberClient {
     //TEMPORARY TESTING TOKEN!
-    private final static String API_SERVER_TOKEN = "n_8uFl4o06CW6hZinwNV68aitRno92eWpfgFIjcp";
     private final static String API_PARAM_TOKEN_NAME = "server_token";
     private final static String API_ENDPOINT = "https://api.uber.com";
     private final Context context;
     private final String clientId;
     private final UberService service;
+    private final String token;
 
-    public UberClient(Context context) {
+    public UberClient(@NonNull Context context) {
         this.context = context.getApplicationContext();
         this.clientId = context.getString(R.string.uber_client_id);
         this.service = createUberService();
+        this.token = context.getString(R.string.uber_token);
     }
 
     public UberService getService() {
@@ -84,6 +86,7 @@ public class UberClient {
     }
 
     public Observable<ArrayList<LiveNationEstimate>> getEstimates(final float startLat, final float startLng, final float endLat, final float endLng) {
+
         Observable<ArrayList<LiveNationEstimate>> observable = Observable.create(new Observable.OnSubscribe<ArrayList<LiveNationEstimate>>() {
             @Override
             public void call(final Subscriber<? super ArrayList<LiveNationEstimate>> subscriber) {
@@ -155,7 +158,7 @@ public class UberClient {
         builder.setRequestInterceptor(new RequestInterceptor() {
             @Override
             public void intercept(RequestFacade request) {
-                request.addQueryParam(API_PARAM_TOKEN_NAME, API_SERVER_TOKEN);
+                request.addQueryParam(API_PARAM_TOKEN_NAME, token);
             }
         });
 

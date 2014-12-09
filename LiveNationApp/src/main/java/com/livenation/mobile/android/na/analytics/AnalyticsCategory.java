@@ -23,7 +23,9 @@ public enum AnalyticsCategory {
     ERROR(AnalyticConstants.CATEGORY_ERROR_VALUE),
     UNKNOWN(AnalyticConstants.CATEGORY_UNKNOWN),
     PUSHNOTIFICATION(AnalyticConstants.CATEGORY_PUSH_NOTIFICATION_VALUE),
-    RATEUSMODAL(AnalyticConstants.CATEGORY_RATE_US_MODAL);
+    RATEUSMODAL(AnalyticConstants.CATEGORY_RATE_US_MODAL),
+    YOUR_ORDERS(AnalyticConstants.CATEGORY_YOUR_ORDERS),
+    UBER_MODAL(AnalyticConstants.CATEGORY_UBER_MODAL);
 
 
     public String categoryName;

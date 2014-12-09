@@ -12,5 +12,6 @@
     <string name="activity_title">Get experience</string>
 
     <!-- Uber Client ID -->
-    <string name="uber_client_id">uVGJWJ9JJCe0fBPRDlDt5t6muI2zh-UG</string>
+    <string name="uber_client_id">ZFneHoL_OZAz8gqY_jiB0deA2GVStQzm</string>
+    <string name="uber_token">IIZsYJmrwblTK1W_HsZY62jULS11HbvM1fReo0Bt</string>
 </resources>
