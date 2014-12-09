@@ -593,7 +593,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                         public void call(LiveNationEstimate liveNationEstimate) {
                             TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                             TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                            String uberTitle = getResources().getString(R.string.uber_popup_book_ride_mins);
+                            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
                             uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
                             text1.setText(uberTitle);
                             text2.setText(liveNationEstimate.getPrice().getEstimate());
