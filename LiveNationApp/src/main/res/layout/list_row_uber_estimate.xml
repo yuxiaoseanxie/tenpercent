@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/gap_tiny"
+    android:paddingBottom="@dimen/gap_smaller"
     android:paddingLeft="@dimen/gap_smaller"
     android:paddingRight="@dimen/gap_smaller"
-    android:paddingTop="@dimen/gap_tiny">
+    android:paddingTop="@dimen/gap_smaller">
 
     <LinearLayout
         android:layout_width="0dp"
