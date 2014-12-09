@@ -52,35 +52,8 @@ public class UberClient {
         return service;
     }
 
-    public boolean isUberAppInstalled() {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(ExternalApplicationAnalytics.UBER.getPackageName(), PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException ignored) {
-            //no uber app installed
-        }
-        return false;
-    }
-
-    public Uri getUberSignupLink() {
-        return Uri.parse(String.format("https://m.uber.com/sign-up?client_id=%s", clientId));
-    }
-
-    public Uri getUberLaunchUri(String productId, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
-        Uri uberUri = Uri.parse("uber://");
-        Uri.Builder builder = uberUri.buildUpon();
-
-        builder.appendQueryParameter("action", "setPickup");
-        builder.appendQueryParameter("client_id", clientId);
-        builder.appendQueryParameter("pickup", "my_location");
-        builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
-        builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
-        builder.appendQueryParameter("dropoff[formatted_address]", dropoffAddress);
-        builder.appendQueryParameter("product_id", productId);
-        builder.appendQueryParameter("dropoff[nickname]", dropoffName);
-
-        return builder.build();
+    public String getClientId() {
+        return  clientId;
     }
 
     public Observable<ArrayList<LiveNationEstimate>> getEstimates(final float startLat, final float startLng, final float endLat, final float endLng) {

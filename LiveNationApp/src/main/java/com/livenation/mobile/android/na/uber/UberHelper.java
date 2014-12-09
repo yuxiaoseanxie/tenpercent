@@ -1,11 +1,14 @@
 package com.livenation.mobile.android.na.uber;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvider;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.mobilitus.tm.tickets.models.Venue;
@@ -61,7 +64,17 @@ public class UberHelper {
         return dialog;
     }
 
-    public static Intent getUberAppLaunchIntent(UberClient uberClient, Intent data) {
+    public static Intent getUberAppLaunchIntent(String clientId) {
+        return getUberAppLaunchIntent(clientId, null);
+    }
+
+    public static Intent getUberAppLaunchIntent(String clientId, Intent data) {
+        if (data == null || !data.hasExtra(UberDialogFragment.EXTRA_RESULT_ESTIMATE)) {
+            Uri uri = getUberAppLaunchUri(clientId);
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+            return intent;
+        }
+
         LiveNationEstimate estimate = (LiveNationEstimate) data.getSerializableExtra(UberDialogFragment.EXTRA_RESULT_ESTIMATE);
         String productId = estimate.getProduct().getProductId();
         String address = data.getStringExtra(UberDialogFragment.EXTRA_RESULT_ADDRESS);
@@ -69,9 +82,13 @@ public class UberHelper {
         Float lat = data.getFloatExtra(UberDialogFragment.EXTRA_RESULT_LATITUDE, 0f);
         Float lng = data.getFloatExtra(UberDialogFragment.EXTRA_RESULT_LONGITUDE, 0f);
 
-        Uri uri = uberClient.getUberLaunchUri(productId, lat, lng, addressName, address);
+        Uri uri = getUberAppLaunchUri(clientId, productId, lat, lng, addressName, address);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         return intent;
+    }
+
+    public static Uri getUberSignupLink(String clientId) {
+        return Uri.parse(String.format("https://m.uber.com/sign-up?client_id=%s", clientId));
     }
 
     public static String getUberVenueAddress(Venue venue) {
@@ -93,10 +110,13 @@ public class UberHelper {
         return out.toString();
     }
 
-
     public static String getUberVenueName(Venue venue) {
         if (venue == null) return "";
         return venue.getName();
+    }
+
+    public static boolean isUberAppInstalled(Context context) {
+        return AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), context);
     }
 
     public static Observable<LiveNationEstimate> getQuickEstimate(final UberClient uberClient, final float startLat, final float startLng, final float endLat, final float endLng) {
@@ -161,5 +181,29 @@ public class UberHelper {
         });
 
         return result;
+    }
+
+    private static Uri getUberAppLaunchUri(String clientId, String productId, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
+        Uri uberUri = getUberAppLaunchUri(clientId);
+        Uri.Builder builder = uberUri.buildUpon();
+
+        builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
+        builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
+        builder.appendQueryParameter("dropoff[formatted_address]", dropoffAddress);
+        builder.appendQueryParameter("product_id", productId);
+        builder.appendQueryParameter("dropoff[nickname]", dropoffName);
+
+        return builder.build();
+    }
+
+    private static Uri getUberAppLaunchUri(String clientId) {
+        Uri uberUri = Uri.parse("uber://");
+        Uri.Builder builder = uberUri.buildUpon();
+
+        builder.appendQueryParameter("action", "setPickup");
+        builder.appendQueryParameter("client_id", clientId);
+        builder.appendQueryParameter("pickup", "my_location");
+
+        return builder.build();
     }
 }

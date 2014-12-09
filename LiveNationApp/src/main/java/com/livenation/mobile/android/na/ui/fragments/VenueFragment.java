@@ -210,12 +210,15 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case ACTIVITY_RESULT_UBER:
-                Intent intent = UberHelper.getUberAppLaunchIntent(uberClient, data);
-                getActivity().startActivity(intent);
-                break;
+                if (resultCode ==  Activity.RESULT_OK) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
+                    getActivity().startActivity(intent);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
+                    getActivity().startActivity(intent);
+                }
         }
     }
 
@@ -365,7 +368,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                                 showEstimates(venue);
                             } else {
                                 //no uber app installed, show sign up link
-                                Intent intent = new Intent(Intent.ACTION_VIEW, uberClient.getUberSignupLink());
+                                Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId()));
                                 startActivity(intent);
                             }
                             break;
