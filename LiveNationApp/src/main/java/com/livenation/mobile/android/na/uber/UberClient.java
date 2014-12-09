@@ -86,7 +86,6 @@ public class UberClient {
     }
 
     public Observable<ArrayList<LiveNationEstimate>> getEstimates(final float startLat, final float startLng, final float endLat, final float endLng) {
-
         Observable<ArrayList<LiveNationEstimate>> observable = Observable.create(new Observable.OnSubscribe<ArrayList<LiveNationEstimate>>() {
             @Override
             public void call(final Subscriber<? super ArrayList<LiveNationEstimate>> subscriber) {
@@ -97,15 +96,15 @@ public class UberClient {
                 Observable<UberTimeResponse> timesObservable = service.getTimes(startLat, startLng);
                 //Declare our little error handler (could do this inline below, but this is more verbose
                 //listen for both API calls to complete
-                Observable.combineLatest(productsObservable, pricesObservable,timesObservable, new Func3<UberProductResponse,
-                                        UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
-                                    @Override
-                                    public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
-                                        //once both API calls complete, merge the result of both calls into one list
-                                        //Note: neither the API calls nor this operation occur on the UI thread
-                                        return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
-                                    }
-                                }).subscribe(subscriber);
+                Observable.combineLatest(productsObservable, pricesObservable, timesObservable, new Func3<UberProductResponse,
+                        UberPriceResponse, UberTimeResponse, ArrayList<LiveNationEstimate>>() {
+                    @Override
+                    public ArrayList<LiveNationEstimate> call(UberProductResponse uberProducts, UberPriceResponse uberPrices, UberTimeResponse uberTimes) {
+                        //once both API calls complete, merge the result of both calls into one list
+                        //Note: neither the API calls nor this operation occur on the UI thread
+                        return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
+                    }
+                }).subscribe(subscriber);
             }
 
         });

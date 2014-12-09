@@ -6,8 +6,6 @@
     <string name="urbanairship_permission">com.livenation.mobile.android.na.permission.UA_DATA</string>
     <string name="urbanairship_authorities">com.livenation.mobile.android.na.urbanairship.provider</string>
 
-
-
     <!-- Uber Client ID -->
     <string name="uber_client_id">wgaUcqTEgDCYlQb_wqBB8zo5-hthS0ep</string>
     <string name="uber_token">ewLusR1TbVJWH24Fi4_e753O62x12sHxC8FBCX5F</string>
