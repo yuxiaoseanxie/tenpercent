@@ -435,7 +435,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void onUberSignupClick(Cart cart) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uberClient.getUberSignupLink());
+        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId()));
         startActivity(intent);
     }
 
@@ -457,8 +457,13 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case ACTIVITY_RESULT_UBER:
-                Intent intent = UberHelper.getUberAppLaunchIntent(uberClient, data);
-                getActivity().startActivity(intent);
+                if (resultCode ==  Activity.RESULT_OK) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
+                    getActivity().startActivity(intent);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
+                    getActivity().startActivity(intent);
+                }
                 break;
         }
     }
@@ -540,7 +545,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             holder.uberContent.removeAllViews();
 
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
-                if (uberClient.isUberAppInstalled()) {
+                if (UberHelper.isUberAppInstalled(getActivity())) {
                     holder.uberContent.addView(getUberRideView(parent, cart));
                 } else {
                     holder.uberContent.addView(getUberSignUpView(parent, cart));

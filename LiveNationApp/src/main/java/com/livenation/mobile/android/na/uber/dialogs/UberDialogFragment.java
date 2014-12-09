@@ -140,10 +140,8 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     }
 
     public void onUberError() {
-        if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.uber_dialog_failed, Toast.LENGTH_SHORT).show();
-        }
         dismissAllowingStateLoss();
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
     }
 
     private void trackUberAnalytics() {
