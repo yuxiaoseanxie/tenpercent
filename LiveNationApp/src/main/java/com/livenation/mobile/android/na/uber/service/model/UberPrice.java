@@ -16,9 +16,9 @@ public class UberPrice implements Serializable {
     private String displayName;
     private String estimate;
     @JsonProperty("low_estimate")
-    private int lowEstimate;
+    private Integer lowEstimate;
     @JsonProperty("high_estimate")
-    private int highEstimate;
+    private Integer highEstimate;
     @JsonProperty("surge_multiplier")
     private float surgeMultiplier;
     private int duration;
@@ -40,11 +40,11 @@ public class UberPrice implements Serializable {
         return estimate;
     }
 
-    public int getLowEstimate() {
+    public Integer getLowEstimate() {
         return lowEstimate;
     }
 
-    public int getHighEstimate() {
+    public Integer getHighEstimate() {
         return highEstimate;
     }
 
