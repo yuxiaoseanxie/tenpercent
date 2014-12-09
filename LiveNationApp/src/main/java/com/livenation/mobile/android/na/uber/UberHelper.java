@@ -116,22 +116,25 @@ public class UberHelper {
                     @Override
                     public void call(ArrayList<LiveNationEstimate> liveNationEstimates) {
                         //select the fastest uber product from the results
-                        LiveNationEstimate fastest = null;
+                        LiveNationEstimate cheapest = null;
                         for (LiveNationEstimate estimate : liveNationEstimates) {
-                            if (fastest == null) {
-                                fastest = estimate;
+                            if (cheapest == null) {
+                                if (estimate.hasPrice() && estimate.getPrice().getLowEstimate() != null) {
+                                    cheapest = estimate;
+                                }
                                 continue;
                             }
 
-                            if (fastest.getTime() == null || estimate.getTime() == null)
+                            if (!estimate.hasPrice() || estimate.getPrice().getLowEstimate() == null)
                                 continue;
 
-                            if (estimate.getTime().getEstimate() < fastest.getTime().getEstimate()) {
-                                fastest = estimate;
+                            //check whether the current iteration is cheaper than our current target
+                            if (estimate.getPrice().getLowEstimate() < cheapest.getPrice().getLowEstimate()) {
+                                cheapest = estimate;
                             }
                         }
                         //emit the fastest result
-                        result.onNext(fastest);
+                        result.onNext(cheapest);
                     }
                 });
 

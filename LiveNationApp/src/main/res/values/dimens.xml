@@ -50,6 +50,10 @@
     <dimen name="account_footer_item_packing">-5dp</dimen>
     <dimen name="ui_find_tickets_height">56dp</dimen>
     <dimen name="venue_travel_popup_width">330dp</dimen>
+    <dimen name="uber_dialog_title_spacing">-3dp</dimen>
+
+    <!-- Uber -->
+    <dimen name="uber_new_rider_linespacing">-1dp</dimen>
 
     <!-- App -->
     <dimen name="app_navigation_drawer_width">290dp</dimen>
