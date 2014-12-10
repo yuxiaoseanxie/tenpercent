@@ -23,9 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -43,12 +48,15 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
+import com.segment.android.models.Props;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import rx.functions.Action1;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -536,24 +544,54 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
             View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
+            TextView text = (TextView) view.findViewById(R.id.uber_free_ride_text);
+            text.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onUberSignupClick(cart);
+                    trackUberAnalytics(false);
                 }
             });
             return view;
         }
 
         private View getUberRideView(@NonNull ViewGroup parent, final Cart cart) {
-            View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
+            final View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
+            float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
+            float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
+
+            UberHelper.getQuickEstimate(uberClient, lat, lng).
+                    subscribe(new Action1<LiveNationEstimate>() {
+                        @Override
+                        public void call(LiveNationEstimate liveNationEstimate) {
+                            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                            TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
+                            uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
+                            text1.setText(uberTitle);
+                            text2.setText(liveNationEstimate.getPrice().getEstimate());
+                        }
+                    });
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onUberRideClick(cart);
+                    trackUberAnalytics(true);
                 }
             });
             return view;
+        }
+
+        private void trackUberAnalytics(boolean isUberInstalled) {
+            Props props = new Props();
+            String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
+            if (isUberInstalled) {
+                uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
+            }
+            props.put(AnalyticConstants.UBER_APP, uber_app_value);
+            LiveNationAnalytics.track(AnalyticConstants.UBER_YOUR_ORDERS_TAP, AnalyticsCategory.YOUR_ORDERS, props);
         }
 
         private class ViewHolder {
