@@ -43,8 +43,9 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
-
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -425,6 +426,29 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     }
 
+    private static Cart getNextShow(List<Cart> response) {
+
+        Cart nextShow = null;
+        for (Cart target : response) {
+            if (nextShow == null) {
+                if (isNextShowCandidate(target)) {
+                    nextShow = target;
+                }
+            } else {
+                boolean isSooner = target.getEvent().getShowTime() < nextShow.getEvent().getShowTime();
+                if (isNextShowCandidate(target) && isSooner) {
+                    nextShow = target;
+                }
+            }
+        }
+        return nextShow;
+    }
+
+    private static boolean isNextShowCandidate(Cart cart) {
+        long now = Calendar.getInstance().getTimeInMillis();
+        return (cart.getEvent().getShowTime() >= now);
+    }
+
     private static enum EmptyState {
         EMPTY,
         LOADING,
@@ -492,8 +516,20 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         @Override
         public long getHeaderId(int position) {
-            if (position == 0) return ITEM_TYPE_NEXT_SHOW;
+            Cart cart = getItem(position);
+            if (position == 0 && isNextShowCandidate(cart)) return ITEM_TYPE_NEXT_SHOW;
             return ITEM_TYPE_OTHER_SHOWS;
+        }
+
+        @Override
+        public void addAll(Collection<? extends Cart> collection) {
+            List objects = (List) collection;
+            Cart nextShow = getNextShow(objects);
+            if (nextShow != null) {
+                objects.remove(nextShow);
+                objects.add(0, nextShow);
+            }
+            super.addAll(objects);
         }
 
         private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
