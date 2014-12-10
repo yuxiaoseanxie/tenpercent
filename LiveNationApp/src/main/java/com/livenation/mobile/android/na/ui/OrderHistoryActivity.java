@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -92,7 +93,7 @@ public class OrderHistoryActivity extends BaseActivity {
         if (requestCode == LOGIN_ACTIVITY_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (Ticketing.getTicketService().hasSession())
-                    fragment.loadHistory(0);
+                    fragment.loadSinglePage(true);
                 invalidateOptionsMenu();
             } else {
                 finish();
@@ -128,7 +129,7 @@ public class OrderHistoryActivity extends BaseActivity {
             public void onSuccess(int i, TicketResponse ticketResponse) {
                 loadingDialogFragment.dismissAllowingStateLoss();
 
-                fragment.clearUserData();
+                fragment.loadSinglePage(true);
                 invalidateOptionsMenu();
 
                 Ticketing.getAnalytics().finishTimedEvent(logoutEvent);
@@ -142,7 +143,7 @@ public class OrderHistoryActivity extends BaseActivity {
                 // Even if we fail to logout on the server, the local
                 // state has been wiped out by the time this callback
                 // method is invoked, so we just treat it as a success.
-                fragment.clearUserData();
+                fragment.loadSinglePage(true);
                 invalidateOptionsMenu();
 
                 logoutEvent.updatePropertiesForError(httpStatusCode, error);
