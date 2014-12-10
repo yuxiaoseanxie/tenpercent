@@ -5,7 +5,6 @@
     android:background="@drawable/your_orders_action_cell_background">
 
     <LinearLayout
-        android:layout_marginLeft="@dimen/gap_large"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
