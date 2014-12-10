@@ -503,7 +503,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             holder.uberContent.removeAllViews();
 
-            if (position == 0) {
+            if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 if (UberHelper.isUberAppInstalled(getActivity())) {
                     holder.uberContent.addView(getUberRideView(parent, cart));
                 } else {
