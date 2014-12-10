@@ -523,11 +523,13 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         @Override
         public void addAll(Collection<? extends Cart> collection) {
-            List objects = (List) collection;
-            Cart nextShow = getNextShow(objects);
-            if (nextShow != null) {
-                objects.remove(nextShow);
-                objects.add(0, nextShow);
+            List objects = new ArrayList(collection);
+            if (getCount() == 0) {
+                Cart nextShow = getNextShow(objects);
+                if (nextShow != null) {
+                    objects.remove(nextShow);
+                    objects.add(0, nextShow);
+                }
             }
             super.addAll(objects);
         }
