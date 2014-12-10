@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -103,9 +104,26 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
+        ColorDrawable drawable = new ColorDrawable(R.color.livenation_gray);
+        int insetSize = getResources().getDimensionPixelSize(R.dimen.gap_smaller);
+        InsetDrawable inset = new InsetDrawable(drawable, insetSize, 0, insetSize, 0);
+        listView.setDivider(inset);
+        listView.setDividerHeight(1);  //intentional 1px size
+
         builder.setView(content);
 
         return builder.create();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Override the default Android Title Divider color. This is the only way I could find to do this..
+        int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
+        View titleDivider = getDialog().findViewById(titleDividerId);
+        if (titleDivider != null)
+            titleDivider.setBackgroundColor(getResources().getColor(R.color.accent_red));
     }
 
     @Override

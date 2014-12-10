@@ -19,6 +19,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/uber_dialog_title_spacing"
         android:text="@string/uber_dialog_title_secondary"
-        android:textAppearance="@style/ln.text.medium.gray" />
+        android:textAppearance="@style/ln.text.small.gray" />
 
 </LinearLayout>
