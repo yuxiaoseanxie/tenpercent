@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -22,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.uber.UberClient;
+import com.livenation.mobile.android.na.uber.UberHelper;
+import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -48,7 +52,10 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private static final int LIMIT_PER_PAGE = 10;
+    private static final int LIMIT_PER_PAGE = 20;
+    private static final int ACTIVITY_RESULT_UBER = 1;
+
+    private UberClient uberClient;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -88,6 +95,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         });
 
         setRetainInstance(true);
+        this.uberClient = new UberClient(getActivity());
     }
 
     @Override
@@ -374,11 +382,30 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         startActivity(intent);
     }
 
+    //region list item clicks
+
     @Override
     public void onItemClick(@NonNull AdapterView<?> adapterView, @NonNull View view, int position, long id) {
         Cart cart = historyAdapter.getItem(position);
         showDetailsForCart(cart);
     }
+
+    private void onUberSignupClick(Cart cart) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId()));
+        startActivity(intent);
+    }
+
+    private void onUberRideClick(final Cart cart) {
+        float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
+        float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
+        String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
+        String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
+
+        DialogFragment dialog = UberHelper.getUberEstimateDialog(uberClient, lat, lng, venueAddress, venueName);
+        dialog.setTargetFragment(OrderHistoryFragment.this, ACTIVITY_RESULT_UBER);
+        dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+    }
+
 
     //endregion
 
@@ -427,6 +454,16 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             holder.orderId.setText(cart.getDisplayOrderID());
 
+            holder.uberContent.removeAllViews();
+
+            if (position == 0) {
+                if (UberHelper.isUberAppInstalled(getActivity())) {
+                    holder.uberContent.addView(getUberRideView(parent, cart));
+                } else {
+                    holder.uberContent.addView(getUberSignUpView(parent, cart));
+                }
+            }
+
             return view;
         }
 
@@ -444,12 +481,35 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             return ITEM_TYPE_OTHER_SHOWS;
         }
 
+        private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
+            View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onUberSignupClick(cart);
+                }
+            });
+            return view;
+        }
+
+        private View getUberRideView(@NonNull ViewGroup parent, final Cart cart) {
+            View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onUberRideClick(cart);
+                }
+            });
+            return view;
+        }
+
         private class ViewHolder {
             final VerticalDateView date;
             final TextView eventTitle;
             final TextView address;
             final TextView orderId;
             final TextView orderDate;
+            final ViewGroup uberContent;
 
             public ViewHolder(View view) {
                 this.date = (VerticalDateView) view.findViewById(R.id.item_order_history_date);
@@ -457,7 +517,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 this.address = (TextView) view.findViewById(R.id.item_order_history_address);
                 this.orderId = (TextView) view.findViewById(R.id.item_order_history_id);
                 this.orderDate = (TextView) view.findViewById(R.id.item_order_history_order_date);
-
+                this.uberContent = (ViewGroup) view.findViewById(R.id.item_order_history_uber);
             }
         }
     }
