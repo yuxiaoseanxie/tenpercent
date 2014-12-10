@@ -408,7 +408,22 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
 
     //endregion
-
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+        switch (requestCode) {
+            case ACTIVITY_RESULT_UBER:
+                if (resultCode ==  Activity.RESULT_OK) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
+                    getActivity().startActivity(intent);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
+                    getActivity().startActivity(intent);
+                }
+                break;
+        }
+    }
 
     private static enum EmptyState {
         EMPTY,
