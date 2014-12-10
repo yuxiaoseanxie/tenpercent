@@ -5,9 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -17,25 +18,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.uber.UberClient;
-import com.livenation.mobile.android.na.uber.UberHelper;
-import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
-import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
 import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
@@ -51,111 +39,89 @@ import com.mobilitus.tm.tickets.interfaces.ResponseListener;
 import com.mobilitus.tm.tickets.models.Cart;
 import com.mobilitus.tm.tickets.models.Event;
 import com.mobilitus.tm.tickets.models.OrderHistory;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import rx.functions.Action1;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private static final int LIMIT_PER_PAGE = 20;
-    private static final int ACTIVITY_RESULT_UBER = 1;
-
-    private UberClient uberClient;
+    private static final int LIMIT_PER_PAGE = 10;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private View emptyStateViewLoading;
     private View emptyStateViewNoOrders;
     private ViewGroup emptyView;
-    private EmptyListViewControl emptyViewFooter;
-    private ViewGroup footerBugHack;
+
+    private EmptyState emptyState = EmptyState.EMPTY;
+
     private EmptyStateObserver emptyStateObserver;
     private HistoryAdapter historyAdapter;
-    //private Handler offlinePromptHandler;
-    private boolean isFetching = false;
-    private EmptyState emptyState;
-    private List<Cart> orders;
-    private boolean hasMorePages = true;
-    StickyListHeadersListView listView;
+    private ArrayList<Cart> loadedCarts;
 
-    PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
-        @Override
-        public void onCountdownFinished() {
-            loadHistory(orders.size());
-        }
-
-        @Override
-        public void onPollingCancelled() {
-        }
-    };
+    private int pageOffset = 0;
+    private boolean hasMore = false;
+    private Handler offlinePromptHandler;
+    private boolean isRefreshing = false;
 
     //region Lifecycle
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.loadedCarts = new ArrayList<Cart>();
+        this.offlinePromptHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message message) {
+                Activity activity = getActivity();
+                if (activity != null && OrdersCacheManager.getInstance().hasOrderHistorySaved(activity, pageOffset)) {
+                    TicketingUtils.makeToast(activity.getApplicationContext(), R.string.toast_displaying_offline_order_history, Toast.LENGTH_SHORT).show();
+                    loadOfflineCache(true);
+                }
+
+                return true;
+            }
+        });
+
         setRetainInstance(true);
-        this.uberClient = new UberClient(getActivity());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_history, container, false);
 
         this.swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_order_history_swipe_layout);
         this.emptyView = (ViewGroup) view.findViewById(android.R.id.empty);
-        this.emptyViewFooter = new EmptyListViewControl(view.getContext());
+        setupEmptyStateViews();
 
-        if (orders == null) {
-            orders = Collections.synchronizedList(new ArrayList<Cart>());
-        }
-
-        listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
+        this.historyAdapter = new HistoryAdapter(getActivity());
+        StickyListHeadersListView listView = (StickyListHeadersListView) view.findViewById(android.R.id.list);
+        listView.setAdapter(historyAdapter);
         listView.setOnItemClickListener(this);
-        listView.setOnScrollListener(new ListScrollListener(swipeRefreshLayout, listView));
+        listView.setOnScrollListener(new InfiniteScrollListener(swipeRefreshLayout, listView));
         listView.setAreHeadersSticky(false);
-        listView.setEmptyView(emptyView);
-        footerBugHack = new FrameLayout(view.getContext());
-        footerBugHack.addView(emptyViewFooter);
-
-        listView.getWrappedList().addFooterView(footerBugHack, null, false);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                orders.clear();
-                historyAdapter.clear();
-                hasMorePages = true;
-                loadHistory(0);
+                loadSinglePage(true);
             }
         });
-
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh_color_1, R.color.refresh_color_2, R.color.refresh_color_3, R.color.refresh_color_4);
-        swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
-        swipeRefreshLayout.setRefreshing(isFetching);
 
         this.emptyStateObserver = new EmptyStateObserver();
-        setEmptyState(emptyState);
-
-        if (historyAdapter == null) {
-            setupEmptyStateViews();
-            this.historyAdapter = new HistoryAdapter(getActivity());
-            listView.setAdapter(historyAdapter);
-            loadHistory(0);
-        } else {
-            listView.setAdapter(historyAdapter);
-            historyAdapter.notifyDataSetChanged();
-        }
         historyAdapter.registerDataSetObserver(emptyStateObserver);
+
+        swipeRefreshLayout.setRefreshing(isRefreshing);
+        if (!loadedCarts.isEmpty()) {
+            historyAdapter.addAll(loadedCarts);
+        } else {
+            loadSinglePage(true);
+        }
 
         return view;
     }
@@ -163,8 +129,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         historyAdapter.unregisterDataSetObserver(emptyStateObserver);
-        emptyView.removeAllViews();
     }
 
     //endregion
@@ -189,33 +155,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         });
 
         this.emptyStateViewLoading = inflater.inflate(R.layout.sub_order_history_empty_loading, emptyView, false);
-    }
 
-    public void clearUserData() {
-        if (historyAdapter != null) {
-            historyAdapter.clear();
-        }
-        if (isFetching) {
-            isFetching = false;
-        }
-
-        swipeRefreshLayout.setRefreshing(false);
-        setEmptyState(EmptyState.SIGNED_OUT);
-    }
-
-    private static enum EmptyState {
-        EMPTY,
-        LOADING,
-        NO_ORDERS,
-        SIGNED_OUT,
+        setEmptyState(emptyState);
     }
 
     private void setEmptyState(EmptyState state) {
-        if (state == null) {
-            return;
-        }
-        emptyView.removeAllViews();
         this.emptyState = state;
+        emptyView.removeAllViews();
+
         switch (state) {
             case EMPTY:
                 break;
@@ -234,13 +181,27 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     }
 
+    private void updateEmptyState() {
+        if (isRefreshing()) {
+            setEmptyState(EmptyState.LOADING);
+        } else if (Ticketing.getTicketService().hasSession()) {
+            setEmptyState(EmptyState.NO_ORDERS);
+        } else {
+            setEmptyState(EmptyState.SIGNED_OUT);
+        }
+    }
+
     //endregion
 
 
     //region Loading Orders
 
+    public boolean isRefreshing() {
+        return isRefreshing;
+    }
+
     public void setRefreshing(boolean isRefreshing) {
-        this.isFetching = isRefreshing;
+        this.isRefreshing = isRefreshing;
         swipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
@@ -248,170 +209,158 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private void uploadOrderHistory(List<Cart> orderHistory) {
         if (TicketingUtils.isCollectionEmpty(orderHistory) || !UploadOrderHistoryTask.shouldUpload())
             return;
+
         new UploadOrderHistoryTask().execute(orderHistory);
     }
 
-    private void loadOfflineCache(final BasicApiCallback<List<Cart>> callback, int offset) {
-        OrdersCacheManager.getInstance().loadOrderHistoryFromCache(getActivity(), offset, new ValueCallback<OrderHistory>() {
+    private void loadOfflineCache(final boolean isWaitingForOnlineOrders) {
+        OrdersCacheManager.getInstance().loadOrderHistory(getActivity(), pageOffset, new ValueCallback<OrderHistory>() {
             @Override
             public void onValueLoaded(OrderHistory response) {
+                if (!Ticketing.getTicketService().hasSession()) {
+                    hasMore = false;
+                    setRefreshing(false);
+                    return;
+                }
+
+                if (!isWaitingForOnlineOrders)
+                    setRefreshing(false);
+
 
                 ArrayList<Cart> carts = response.getOrders();
-                if (carts == null) {
-                    carts = new ArrayList<Cart>();
+                if (carts != null) {
+                    historyAdapter.addAll(carts);
+                    loadedCarts.addAll(carts);
                 }
-                callback.onResponse(carts);
+
+
+                hasMore = (carts != null && carts.size() >= LIMIT_PER_PAGE);
+
+                updateEmptyState();
             }
 
             @Override
             public void onValueLoadFailed(Throwable error) {
-                callback.onErrorResponse(new LiveNationError(error));
+                if (!Ticketing.getTicketService().hasSession()) {
+                    hasMore = false;
+                    setRefreshing(false);
+                    return;
+                }
+
+                if (!isWaitingForOnlineOrders)
+                    setRefreshing(false);
+
                 Log.e(getClass().getSimpleName(), "Could not load cache", error);
             }
         });
     }
 
-    public void loadHistory(final int offset) {
-        if (isFetching && orders.size() == (offset - LIMIT_PER_PAGE)) {
+    public void loadSinglePage(final boolean clearAlreadyLoadedOrders) {
+        if (isRefreshing())
             return;
-        }
 
         swipeRefreshLayout.setEnabled(Ticketing.getTicketService().hasSession());
-
-        isFetching = true;
-        if (orders.size() == 0) {
-            swipeRefreshLayout.setRefreshing(true);
-            setEmptyState(EmptyState.LOADING);
-            emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
-        } else {
-            emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.LOADING);
-        }
-
         getOrderHistoryActivity().updateActionBar();
-
         if (!Ticketing.getTicketService().hasSession()) {
-            isFetching = false;
-            setEmptyState(EmptyState.SIGNED_OUT);
+            historyAdapter.clear();
+            loadedCarts.clear();
+
+            updateEmptyState();
+            hasMore = false;
+
             return;
         }
 
-        BasicApiCallback<List<Cart>> callback = new BasicApiCallback<List<Cart>>() {
-            @Override
-            public void onResponse(List<Cart> response) {
-                if (offset != orders.size()) {
-                    return;
+        if (clearAlreadyLoadedOrders)
+            pageOffset = 0;
+
+        setRefreshing(true);
+        updateEmptyState();
+        if (Ticketing.isConnectedToInternet()) {
+            if (clearAlreadyLoadedOrders && pageOffset == 0)
+                offlinePromptHandler.sendEmptyMessageDelayed(0, Constants.OFFLINE_MODE_CACHE_DELAY);
+
+            PollingDialogFragment.PollingListener pollingListener = new PollingDialogFragment.PollingListener() {
+                @Override
+                public void onCountdownFinished() {
+                    loadSinglePage(clearAlreadyLoadedOrders);
                 }
 
-                hasMorePages = (response.size() % LIMIT_PER_PAGE == 0 && response.size() != 0);
-
-                swipeRefreshLayout.setRefreshing(false);
-                isFetching = false;
-                if (!Ticketing.getTicketService().hasSession()) {
-                    return;
+                @Override
+                public void onPollingCancelled() {
+                    setRefreshing(false);
                 }
+            };
+            final TimedEvent getOrderHistoryEvent = Ticketing.getAnalytics().startTimedEvent(TicketLibrary.Method.GET_ORDER_HISTORY);
+            getOrderHistoryEvent.getProperties().put("Pagination Offset", pageOffset);
+            Ticketing.getTicketService().getOrderHistory(pageOffset, LIMIT_PER_PAGE, new ResponseListener<OrderHistory>() {
 
-                orders.addAll(response);
+                @Override
+                public void onSuccess(int requestId, OrderHistory response) {
+                    setRefreshing(false);
+                    offlinePromptHandler.removeMessages(0);
 
-                if (orders.isEmpty()) {
-                    setEmptyState(EmptyState.NO_ORDERS);
-                    return;
-                }
-
-                if (!hasMorePages) {
-                    emptyViewFooter.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
-                } else {
-                    if (orders.size() <= LIMIT_PER_PAGE) {
-                        List<Cart> sortedCarts = sortCarts(orders);
-                        //Check that we did not refresh the list by this time
-                        if (sortedCarts.size() == orders.size()) {
-                            orders = sortedCarts;
-                            historyAdapter.addAll(orders);
-                        }
-                    } else {
-                        historyAdapter.addAll(orders);
+                    if (!Ticketing.getTicketService().hasSession()) {
+                        hasMore = false;
+                        return;
                     }
 
-                }
-            }
+                    if (pageOffset == 0)
+                        uploadOrderHistory(response.getOrders());
+                    OrdersCacheManager.getInstance().saveOrderHistory(getActivity(), response);
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                swipeRefreshLayout.setRefreshing(false);
-                isFetching = false;
-                if (emptyState == EmptyState.LOADING) {
-                    setEmptyState(EmptyState.EMPTY);
-                }
-            }
-        };
+                    ArrayList<Cart> carts = response.getOrders();
+                    if (clearAlreadyLoadedOrders) {
+                        historyAdapter.clear();
+                        loadedCarts.clear();
+                    }
 
-        if (Ticketing.isConnectedToInternet()) {
-            fetchOrderHistory(offset, new ArrayList<Cart>(), callback);
+                    if (carts != null) {
+                        historyAdapter.addAll(carts);
+                        loadedCarts.addAll(carts);
+                        hasMore = (carts.size() >= LIMIT_PER_PAGE);
+                    } else {
+                        hasMore = false;
+                    }
+
+                    updateEmptyState();
+
+                    Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
+                }
+            }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
+                @Override
+                public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
+                    offlinePromptHandler.removeMessages(0);
+
+                    if (!Ticketing.getTicketService().hasSession()) {
+                        hasMore = false;
+                        setRefreshing(false);
+                        return;
+                    }
+
+                    if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(getActivity(), pageOffset)) {
+                        Log.e(getClass().getName(), "Could not load orders. Error: " + error);
+                        loadOfflineCache(false);
+                    } else {
+                        setRefreshing(false);
+                        super.onError(requestId, httpStatusCode, error);
+                    }
+                }
+            }.finishTimedEvent(getOrderHistoryEvent));
         } else {
-            loadOfflineCache(callback, offset);
+            loadOfflineCache(false);
         }
     }
 
-    static private List<Cart> sortCarts(List<Cart> orders) {
-        List<Cart> copy = new ArrayList<>(orders);
+    private void loadNextPage() {
+        if (!hasMore || isRefreshing())
+            return;
 
-        Comparator<Cart> comparator = new Comparator<Cart>() {
-            @Override
-            public int compare(Cart lhs, Cart rhs) {
-                Long diff = rhs.getEvent().getShowTime() - lhs.getEvent().getShowTime();
-                Long sign = 0l;
-                if (diff != 0) {
-                    sign = diff / Math.abs(diff);
-                }
-                return sign.intValue();
-            }
-        };
+        if (!Ticketing.isConnectedToInternet() && !OrdersCacheManager.getInstance().hasOrderHistorySaved(getActivity(), pageOffset))
+            return;
 
-        Collections.sort(copy, comparator);
-
-        //Put the "Next show" at the first position, otherwise the first section is "All other shows"
-        int position = 0;
-        long now = Calendar.getInstance().getTimeInMillis();
-        while (position < copy.size()
-                && (copy.get(position).getEvent() == null
-                || copy.get(position).getEvent().getShowTime() - now > 0)
-                && !isNextShow(orders, position)) {
-            position++;
-        }
-
-        List<Cart> carts = new ArrayList<>();
-
-        if (position != 0 && position < orders.size()) {
-            Cart nextShow = copy.get(position);
-            copy.remove(position);
-
-            carts.add(nextShow);
-            carts.addAll(copy);
-
-        } else {
-            carts = orders;
-        }
-
-        return carts;
-    }
-
-    static private boolean isNextShow(List<Cart> response, int position) {
-        Cart currentCart = response.get(position);
-
-        long now = Calendar.getInstance().getTimeInMillis();
-        if (currentCart.getEvent() == null || currentCart.getEvent().getShowTime() - now < 0) {
-            return false;
-        }
-
-        Cart nextCart = null;
-        if (position + 1 < response.size()) {
-            nextCart = response.get(position + 1);
-        }
-
-        if (nextCart == null || nextCart.getEvent().getShowTime() - now < 0) {
-            return true;
-        }
-
-        return false;
+        pageOffset += LIMIT_PER_PAGE;
+        loadSinglePage(false);
     }
 
     //endregion
@@ -425,85 +374,20 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         startActivity(intent);
     }
 
-    //endregion
-
-    //region list item clicks
     @Override
     public void onItemClick(@NonNull AdapterView<?> adapterView, @NonNull View view, int position, long id) {
         Cart cart = historyAdapter.getItem(position);
         showDetailsForCart(cart);
     }
 
-    private void onUberSignupClick(Cart cart) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId()));
-        startActivity(intent);
-    }
-
-    private void onUberRideClick(final Cart cart) {
-        float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
-        float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
-        String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
-        String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
-
-        DialogFragment dialog = UberHelper.getUberEstimateDialog(uberClient, lat, lng, venueAddress, venueName);
-        dialog.setTargetFragment(OrderHistoryFragment.this, ACTIVITY_RESULT_UBER);
-        dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
-    }
-
     //endregion
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) return;
-        switch (requestCode) {
-            case ACTIVITY_RESULT_UBER:
-                if (resultCode ==  Activity.RESULT_OK) {
-                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
-                    getActivity().startActivity(intent);
-                } else if (resultCode == Activity.RESULT_CANCELED) {
-                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
-                    getActivity().startActivity(intent);
-                }
-                break;
-        }
-    }
 
-    private void fetchOrderHistory(final int pageOffset, @NonNull final List<Cart> previousCarts, final BasicApiCallback<List<Cart>> cartsCallback) {
-        final Context context = getActivity().getApplicationContext();
-
-        //Analytics
-        final TimedEvent getOrderHistoryEvent = Ticketing.getAnalytics().startTimedEvent(TicketLibrary.Method.GET_ORDER_HISTORY);
-        getOrderHistoryEvent.getProperties().put("Pagination Offset", pageOffset);
-
-        Ticketing.getTicketService().getOrderHistory(pageOffset, LIMIT_PER_PAGE, new ResponseListener<OrderHistory>() {
-
-            @Override
-            public void onSuccess(int requestId, OrderHistory response) {
-                uploadOrderHistory(response.getOrders());
-                OrdersCacheManager.getInstance().saveOrderHistory(context, response);
-
-                ArrayList<Cart> carts = response.getOrders();
-
-                if (previousCarts != null) {
-                    previousCarts.addAll(carts);
-                }
-
-                Ticketing.getAnalytics().finishTimedEvent(getOrderHistoryEvent);
-                cartsCallback.onResponse(previousCarts);
-
-            }
-        }, new CommonUIResponseListener(getOrderHistoryActivity(), null, pollingListener) {
-            @Override
-            public void onError(int requestId, int httpStatusCode, com.mobilitus.tm.tickets.models.Error error) {
-                if (!TicketingUtils.errorRequiresDisplay(httpStatusCode, error) && OrdersCacheManager.getInstance().hasOrderHistorySaved(context, pageOffset)) {
-                    Log.e(getClass().getName(), "Could not load orders. Error: " + error);
-                    loadOfflineCache(cartsCallback, pageOffset);
-                } else {
-                    super.onError(requestId, httpStatusCode, error);
-                    cartsCallback.onErrorResponse(new LiveNationError(error.getCode(), error.getMessage()));
-                }
-            }
-        }.finishTimedEvent(getOrderHistoryEvent));
+    private static enum EmptyState {
+        EMPTY,
+        LOADING,
+        NO_ORDERS,
+        SIGNED_OUT,
     }
 
     private class HistoryAdapter extends ArrayAdapter<Cart> implements StickyListHeadersAdapter {
@@ -514,13 +398,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         public HistoryAdapter(Context context) {
             super(context, R.layout.item_order_history);
+
             mInflater = LayoutInflater.from(context);
         }
 
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
-            if (view == null || view.getTag() == null) {
+            if (view == null) {
                 view = mInflater.inflate(R.layout.item_order_history, parent, false);
                 view.setTag(new ViewHolder(view));
             }
@@ -542,16 +427,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             holder.orderId.setText(cart.getDisplayOrderID());
 
-            holder.uberContent.removeAllViews();
-
-            if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
-                if (UberHelper.isUberAppInstalled(getActivity())) {
-                    holder.uberContent.addView(getUberRideView(parent, cart));
-                } else {
-                    holder.uberContent.addView(getUberSignUpView(parent, cart));
-                }
-            }
-
             return view;
         }
 
@@ -559,73 +434,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         public View getHeaderView(int position, View view, ViewGroup viewGroup) {
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 return mInflater.inflate(R.layout.header_order_history_next_show, viewGroup, false);
-            } else {
-                return mInflater.inflate(R.layout.header_order_history_other_shows, viewGroup, false);
             }
+            return mInflater.inflate(R.layout.header_order_history_other_shows, viewGroup, false);
         }
 
         @Override
         public long getHeaderId(int position) {
-            Cart currentCart = getItem(position);
-            long result = ITEM_TYPE_OTHER_SHOWS;
-
-            long now = Calendar.getInstance().getTimeInMillis();
-            if (currentCart.getEvent() != null && currentCart.getEvent().getShowTime() - now > 0 && position == 0) {
-                result = ITEM_TYPE_NEXT_SHOW;
-            }
-            return result;
-        }
-
-        private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
-            View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
-            TextView text = (TextView) view.findViewById(R.id.uber_free_ride_text);
-            text.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onUberSignupClick(cart);
-                    trakUberAnalytics(false);
-                }
-            });
-            return view;
-        }
-
-        private View getUberRideView(@NonNull ViewGroup parent, final Cart cart) {
-            final View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
-            float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
-            float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
-
-            UberHelper.getQuickEstimate(uberClient, lat, lng).
-                    subscribe(new Action1<LiveNationEstimate>() {
-                        @Override
-                        public void call(LiveNationEstimate liveNationEstimate) {
-                            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                            TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
-                            uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
-                            text1.setText(uberTitle);
-                            text2.setText(liveNationEstimate.getPrice().getEstimate());
-                        }
-                    });
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onUberRideClick(cart);
-                    trakUberAnalytics(true);
-                }
-            });
-            return view;
-        }
-
-        private void trakUberAnalytics(boolean isUberInstalled) {
-            Props props = new Props();
-            String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
-            if (isUberInstalled) {
-                uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
-            }
-            props.put(AnalyticConstants.UBER_APP, uber_app_value);
-            LiveNationAnalytics.track(AnalyticConstants.UBER_YOUR_ORDERS_TAP, AnalyticsCategory.YOUR_ORDERS, props);
+            if (position == 0) return ITEM_TYPE_NEXT_SHOW;
+            return ITEM_TYPE_OTHER_SHOWS;
         }
 
         private class ViewHolder {
@@ -634,7 +450,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             final TextView address;
             final TextView orderId;
             final TextView orderDate;
-            final ViewGroup uberContent;
 
             public ViewHolder(View view) {
                 this.date = (VerticalDateView) view.findViewById(R.id.item_order_history_date);
@@ -642,7 +457,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 this.address = (TextView) view.findViewById(R.id.item_order_history_address);
                 this.orderId = (TextView) view.findViewById(R.id.item_order_history_id);
                 this.orderDate = (TextView) view.findViewById(R.id.item_order_history_order_date);
-                this.uberContent = (ViewGroup) view.findViewById(R.id.item_order_history_uber);
+
             }
         }
     }
@@ -659,14 +474,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private class ListScrollListener implements AbsListView.OnScrollListener {
+    private class InfiniteScrollListener implements AbsListView.OnScrollListener {
         private int lastFirstVisibleItem;
         private int lastVisibleItemCount;
         private int lastTotalItemCount;
         private SwipeRefreshLayout refreshLayout;
         private StickyListHeadersListView listView;
 
-        public ListScrollListener(SwipeRefreshLayout refreshLayout, StickyListHeadersListView listView) {
+        public InfiniteScrollListener(SwipeRefreshLayout refreshLayout, StickyListHeadersListView listView) {
             this.refreshLayout = refreshLayout;
             this.listView = listView;
         }
@@ -685,8 +500,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             }
             //end: stickylistheaders workaround
 
-            //1 because the header  count in the totalItemCount
-            if (totalItemCount <= 1) {
+            if (totalItemCount == 0) {
                 return;
             }
 
@@ -706,16 +520,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         }
 
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        public void onScrollStateChanged(AbsListView absListView, int scrollState) {
 
         }
-    }
-
-    private void loadNextPage() {
-        if (!hasMorePages || isFetching) {
-            return;
-        }
-
-        loadHistory(orders.size());
     }
 }
