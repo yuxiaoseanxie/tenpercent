@@ -87,8 +87,11 @@ public class UberHelper {
         return intent;
     }
 
-    public static Uri getUberSignupLink(String clientId) {
-        return Uri.parse(String.format("https://m.uber.com/sign-up?client_id=%s", clientId));
+    public static Uri getUberSignupLink(String clientId, float dropoffLat, float dropoffLng, String dropoffAddress, String dropoffName) {
+        //It would be nice to use a URI builder here, but unfortunately it url encodes the square brackets in the key values, which breaks deep linking
+        String value = String.format("https://m.uber.com/sign-up?client_id=%s&pickup=my_location&dropoff[latitude]=%s&dropoff[longitude]=%s&dropoff[formatted_address]=%s&dropoff[nickname]=%s",
+                clientId,  dropoffLat, dropoffLng, dropoffAddress, dropoffName);
+        return Uri.parse(value);
     }
 
     public static String getUberVenueAddress(Venue venue) {

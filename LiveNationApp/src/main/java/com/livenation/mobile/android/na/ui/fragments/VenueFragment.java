@@ -374,8 +374,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                                 showEstimates(venue);
                             } else {
                                 //no uber app installed, show sign up link
-                                Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId()));
-                                startActivity(intent);
+                                goUberSignup(venue);
                             }
                             break;
 
@@ -413,5 +412,14 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
     }
 
+    private void goUberSignup(Venue venue) {
+        float endLat = Double.valueOf(venue.getLat()).floatValue();
+        float endLng = Double.valueOf(venue.getLng()).floatValue();
+        String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
+        String venueName = venue.getName();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), endLat, endLng, venueName, venueAddress));
+        startActivity(intent);
+    }
 
 }
