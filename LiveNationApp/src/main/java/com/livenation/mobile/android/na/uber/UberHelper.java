@@ -87,8 +87,11 @@ public class UberHelper {
         return intent;
     }
 
-    public static Uri getUberSignupLink(String clientId) {
-        return Uri.parse(String.format("https://m.uber.com/sign-up?client_id=%s", clientId));
+    public static Uri getUberSignupLink(String clientId, float dropoffLat, float dropoffLng, String dropoffAddress, String dropoffName) {
+        //It would be nice to use a URI builder here, but unfortunately it url encodes the square brackets in the key values, which breaks deep linking
+        String value = String.format("https://m.uber.com/sign-up?client_id=%s&pickup=my_location&dropoff[latitude]=%s&dropoff[longitude]=%s&dropoff[formatted_address]=%s&dropoff[nickname]=%s",
+                clientId,  dropoffLat, dropoffLng, dropoffAddress, dropoffName);
+        return Uri.parse(value);
     }
 
     public static String getUberVenueAddress(Venue venue) {
@@ -96,7 +99,8 @@ public class UberHelper {
         List<String> addresses = new ArrayList<String>();
         addresses.add(venue.getAddress1());
         addresses.add(venue.getAddress2());
-        addresses.add(venue.getState());
+        addresses.add(venue.getCity());
+        addresses.add(venue.getZip());
 
         StringBuilder out = new StringBuilder();
         for (String address : addresses) {
@@ -184,16 +188,11 @@ public class UberHelper {
     }
 
     private static Uri getUberAppLaunchUri(String clientId, String productId, float dropoffLat, float dropoffLng, String dropoffName, String dropoffAddress) {
-        Uri uberUri = getUberAppLaunchUri(clientId);
-        Uri.Builder builder = uberUri.buildUpon();
+        //It would be nice to use a URI builder here, but unfortunately it url encodes the square brackets in the key values, which breaks deep linking
+        String value = String.format("uber://?client_id=%s&action=setPickup&pickup=my_location&product_id=%s&dropoff[latitude]=%s&dropoff[longitude]=%s&dropoff[formatted_address]=%s&dropoff[nickname]=%s",
+                clientId, productId, dropoffLat, dropoffLng, dropoffAddress, dropoffName);
 
-        builder.appendQueryParameter("dropoff[latitude]", Float.valueOf(dropoffLat).toString());
-        builder.appendQueryParameter("dropoff[longitude]", Float.valueOf(dropoffLng).toString());
-        builder.appendQueryParameter("dropoff[formatted_address]", dropoffAddress);
-        builder.appendQueryParameter("product_id", productId);
-        builder.appendQueryParameter("dropoff[nickname]", dropoffName);
-
-        return builder.build();
+        return Uri.parse(value);
     }
 
     private static Uri getUberAppLaunchUri(String clientId) {
