@@ -176,15 +176,9 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
     }
 
     @Override
-    public int show(FragmentTransaction transaction, String tag) {
+    public void onStart() {
+        super.onStart();
         trackUberAnalytics();
-        return super.show(transaction, tag);
-    }
-
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        trackUberAnalytics();
-        super.show(manager, tag);
     }
 
     private class EstimationAdapter extends ArrayAdapter<LiveNationEstimate> {
