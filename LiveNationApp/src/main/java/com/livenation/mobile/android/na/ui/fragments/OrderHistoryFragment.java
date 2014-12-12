@@ -460,7 +460,9 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
     private static boolean isNextShowCandidate(Cart cart) {
         long now = Calendar.getInstance().getTimeInMillis();
-        return (cart.getEvent().getShowTime() >= now);
+        //twenty four hour "next show!" buffer
+        long nextShowBuffer = 1000L * 60L * 60L * 24L;
+        return (cart.getEvent().getShowTime() >= (now - nextShowBuffer));
     }
 
     private static enum EmptyState {
