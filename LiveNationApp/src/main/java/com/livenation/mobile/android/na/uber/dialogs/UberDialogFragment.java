@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -218,6 +219,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 holder.time.setText("");
             }
 
+            int visibility = View.GONE;
+            if (estimate.getPrice().getSurgeMultiplier() > 1) {
+                visibility = View.VISIBLE;
+            }
+
+            holder.surgeBadge.setVisibility(visibility);
+
             holder.cost.setText(estimate.getPrice().getEstimate());
             return convertView;
         }
@@ -227,12 +235,14 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             private final TextView cost;
             private final TextView capacity;
             private final TextView time;
+            private final ImageView surgeBadge;
 
             public ViewHolder(View root) {
                 this.title = (TextView) root.findViewById(R.id.uber_list_price_estimate_title);
                 this.cost = (TextView) root.findViewById(R.id.uber_list_price_estimate_cost);
                 this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
                 this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_time);
+                this.surgeBadge = (ImageView) root.findViewById(R.id.uber_list_surge_badge_imageview);
             }
         }
     }
