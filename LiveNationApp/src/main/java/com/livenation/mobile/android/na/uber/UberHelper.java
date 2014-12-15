@@ -54,11 +54,7 @@ public class UberHelper {
                                 dialog.setPriceEstimates(liveNationEstimates);
                                 dialog.setOriginLocation(startPoint[0].floatValue(), startPoint[1].floatValue());
                             }
-                        }, onError, new Action0() {
-                            @Override
-                            public void call() {
-                            }
-                        });
+                        }, onError);
             }
         }, onError);
         return dialog;
@@ -168,6 +164,13 @@ public class UberHelper {
     public static Observable<LiveNationEstimate> getQuickEstimate(final UberClient uberClient, final float endLat, final float endLng) {
         final PublishSubject<LiveNationEstimate> result = PublishSubject.create();
 
+        final Action1<Throwable> onError = new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                result.onError(throwable);
+            }
+        };
+
         ObservableProvider.getObservableLocation().subscribe(new Action1<Double[]>() {
             @Override
             public void call(Double[] doubles) {
@@ -182,7 +185,7 @@ public class UberHelper {
                             }
                         });
             }
-        });
+        }, onError);
 
         return result;
     }

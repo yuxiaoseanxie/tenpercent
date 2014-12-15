@@ -23,7 +23,9 @@ public class ObservableProvider {
                     }
 
                     @Override
-                    public void onErrorResponse() {}
+                    public void onErrorResponse() {
+                        subscriber.onError(new Exception("Location services unavailable"));
+                    }
                 });
             }
         });
