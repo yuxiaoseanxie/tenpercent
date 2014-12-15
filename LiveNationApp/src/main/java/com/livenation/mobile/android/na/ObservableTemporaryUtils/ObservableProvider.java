@@ -23,9 +23,7 @@ public class ObservableProvider {
                     }
 
                     @Override
-                    public void onErrorResponse() {
-                        subscriber.onError(null);
-                    }
+                    public void onErrorResponse() {}
                 });
             }
         });
