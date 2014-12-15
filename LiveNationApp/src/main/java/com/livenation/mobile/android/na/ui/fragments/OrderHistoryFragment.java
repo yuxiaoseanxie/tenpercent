@@ -426,7 +426,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) return;
         switch (requestCode) {
             case ACTIVITY_RESULT_UBER:
                 if (resultCode ==  Activity.RESULT_OK) {
@@ -569,6 +568,14 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
             float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
 
+            final Action1<Throwable> onError = new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    //Failed because Location Services unavailable, or network issues
+                    //Just leave the Default "Get an Uber!" view here.
+                }
+            };
+
             UberHelper.getQuickEstimate(uberClient, lat, lng).
                     subscribe(new Action1<LiveNationEstimate>() {
                         @Override
@@ -580,7 +587,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                             text1.setText(uberTitle);
                             text2.setText(liveNationEstimate.getPrice().getEstimate());
                         }
-                    });
+                    }, onError);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
