@@ -55,6 +55,7 @@
     <string name="account_notifications">Notifications</string>
     <string name="account_favorites">Your Favorites</string>
     <string name="account_footer_location_title">Your Location</string>
+    <string name="account_footer_location_default">Searching...</string>
 
     <string name="location_current">Current Location</string>
     <string name="location_previous_locations">Previous Locations</string>

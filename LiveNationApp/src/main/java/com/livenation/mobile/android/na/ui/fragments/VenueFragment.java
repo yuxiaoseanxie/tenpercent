@@ -306,13 +306,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private class OnAddressClick implements View.OnClickListener {
-        private double lat;
-        private double lng;
+        private Double lat;
+        private Double lng;
         private Context context;
         private String address;
         private Venue venue;
 
         private OnAddressClick(Venue venue, Context context) {
+            if (venue.getLng() == null || venue.getLng() == null) {
+                return;
+            }
             this.lat = Double.parseDouble(venue.getLat());
             this.lng = Double.parseDouble(venue.getLng());
             this.context = context;
@@ -322,6 +325,9 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         @Override
         public void onClick(View v) {
+            if (lat == null) {
+                return;
+            }
             Props props = new Props();
             props.put(AnalyticConstants.VENUE_NAME, venue.getName());
             props.put(AnalyticConstants.VENUE_ID, venue.getId());
