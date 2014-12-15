@@ -177,6 +177,13 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                         public void call(LiveNationEstimate liveNationEstimate) {
                             fastestUber.onNext(liveNationEstimate);
                         }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            //Error Handler.
+                            //API call failed, distance, network error, and so on.
+                            //Leave the default UI with no estimate text
+                        }
                     });
         } else {
             //hide travel options to unroutable venue
