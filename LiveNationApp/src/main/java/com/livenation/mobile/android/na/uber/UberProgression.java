@@ -24,7 +24,7 @@ public class UberProgression {
         this.uberClient = new UberClient(context);
     }
 
-    public void isUberAvailable(final UberProgressionAdpater adapter, final float destLat, final float destLng) {
+    public void isUberAvailable(final UberProgressionCallback adapter, final float destLat, final float destLng) {
         if (isUberAvailableCached != null) {
             if (isUberAvailableCached) {
                 adapter.onUberAvailable(liveNationEstimates);
@@ -74,7 +74,7 @@ public class UberProgression {
         return liveNationEstimates;
     }
 
-    public interface UberProgressionAdpater {
+    public interface UberProgressionCallback {
         void onUberAvailable(ArrayList<LiveNationEstimate> liveNationEstimates);
 
         void onUberNotAvailable(LiveNationError error);
