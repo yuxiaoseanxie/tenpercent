@@ -1,5 +1,6 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +8,14 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +59,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscription;
 import rx.functions.Action1;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -82,6 +87,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private boolean hasMore = false;
     private Handler offlinePromptHandler;
     private boolean isRefreshing = false;
+    private SparseArray<Observable> uberCache = new SparseArray<>();
 
     //region Lifecycle
 
@@ -423,12 +429,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
 
     //endregion
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case ACTIVITY_RESULT_UBER:
-                if (resultCode ==  Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
                     getActivity().startActivity(intent);
                 } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -486,12 +492,22 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         @Override
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             View view = convertView;
+            ViewHolder holder = null;
+
             if (view == null) {
                 view = mInflater.inflate(R.layout.item_order_history, parent, false);
-                view.setTag(new ViewHolder(view));
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+                //view got recycled, cancel any pending uber request that may interfere with recycled view
+                Subscription subscription = (Subscription) holder.uberContent.getTag();
+                if (subscription != null) {
+                    subscription.unsubscribe();
+                    holder.uberContent.setTag(null);
+                }
             }
 
-            ViewHolder holder = (ViewHolder) view.getTag();
             Cart cart = getItem(position);
 
             Event event = cart.getEvent();
@@ -512,7 +528,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 if (UberHelper.isUberAppInstalled(getActivity())) {
-                    holder.uberContent.addView(getUberRideView(parent, cart));
+                    fetchUberEstimate(holder.uberContent, cart);
                 } else {
                     holder.uberContent.addView(getUberSignUpView(parent, cart));
                 }
@@ -563,7 +579,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             return view;
         }
 
-        private View getUberRideView(@NonNull ViewGroup parent, final Cart cart) {
+        private void fetchUberEstimate(@NonNull final ViewGroup parent, final Cart cart) {
             final View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
             float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
             float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
@@ -576,18 +592,44 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 }
             };
 
-            UberHelper.getQuickEstimate(uberClient, lat, lng).
-                    subscribe(new Action1<LiveNationEstimate>() {
-                        @Override
-                        public void call(LiveNationEstimate liveNationEstimate) {
-                            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                            TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
-                            uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
-                            text1.setText(uberTitle);
-                            text2.setText(liveNationEstimate.getPrice().getEstimate());
-                        }
-                    }, onError);
+            //retrieve any previous uber api operation
+            final int hashCode = ((Object) cart).hashCode();
+            Observable uberFetch = uberCache.get(hashCode);
+
+            if (uberFetch == null) {
+                //no previous uber api operation, perform a new one, and cache the observable emission
+                uberFetch = UberHelper.getQuickEstimate(uberClient, lat, lng).cache();
+                uberCache.put(hashCode, uberFetch);
+            }
+
+            final long timeStarted = SystemClock.uptimeMillis();
+            Subscription subscription = uberFetch.subscribe(new Action1<LiveNationEstimate>() {
+                @Override
+                public void call(LiveNationEstimate liveNationEstimate) {
+                    TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                    TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                    String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
+                    uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
+                    text1.setText(uberTitle);
+                    text2.setText(liveNationEstimate.getPrice().getEstimate());
+
+                    //only animate adding the view if it took over 100ms to fetch the uber data
+                    //(if the this operation is called from cache, and we have already animated
+                    //adding the uber view, we don't want to animate it in again
+                    if (SystemClock.uptimeMillis() - timeStarted > 100) {
+                        LayoutTransition transition = new LayoutTransition();
+                        transition.setAnimator(LayoutTransition.CHANGE_APPEARING, null);
+                        transition.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, null);
+                        transition.setAnimator(LayoutTransition.DISAPPEARING, null);
+                        parent.setLayoutTransition(transition);
+                    } else {
+                        parent.setLayoutTransition(null);
+                    }
+
+                    parent.addView(view);
+                    parent.setTag(null);
+                }
+            }, onError);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -596,7 +638,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                     trackUberAnalytics(true);
                 }
             });
-            return view;
+
+            parent.setTag(subscription);
         }
 
         private void trackUberAnalytics(boolean isUberInstalled) {
