@@ -7,6 +7,11 @@
     <string name="urbanairship_permission"></string>
     <string name="urbanairship_authorities"></string>
 
+    <!-- Experience app -->
     <string name="experience_url">https://livenation.expapp.com/upgrade?app=true&amp;appId=5&amp;utm_source=livenation&amp;utm_medium=app</string>
     <string name="activity_title">Get experience</string>
+
+    <!-- Uber Client ID -->
+    <string name="uber_client_id">ZFneHoL_OZAz8gqY_jiB0deA2GVStQzm</string>
+    <string name="uber_token">IIZsYJmrwblTK1W_HsZY62jULS11HbvM1fReo0Bt</string>
 </resources>
