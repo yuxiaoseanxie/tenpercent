@@ -43,6 +43,7 @@ public class Constants {
         public static final String EXTRA_EVENT_INFO_LOCAL_START_TIME = "local_start_time";
 
         public static final String EXTRA_RICH_MESSAGE_ID = "_uamid";
+        public static final String EXTRA_RICH_NOTIFICATION_ID = "com.urbanairship.push.PUSH_ID";
         public static final String EXTRA_RICH_MESSAGE_VALUE = "com.urbanairship.push.ALERT";
     }
 

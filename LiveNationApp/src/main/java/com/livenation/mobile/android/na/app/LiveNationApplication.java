@@ -38,6 +38,7 @@ import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
+import com.livenation.mobile.android.na.notifications.GroupNotificationFactory;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
@@ -245,7 +246,7 @@ public class LiveNationApplication extends Application {
             public void onAirshipReady(UAirship airship) {
                 airship.getPushManager().setPushEnabled(true);
                 airship.getPushManager().setUserNotificationsEnabled(true);
-                DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(LiveNationApplication.this);
+                GroupNotificationFactory notificationBuilder = new GroupNotificationFactory(LiveNationApplication.this);
                 notificationBuilder.setSmallIconId(R.drawable.ic_stat_notify);
                 UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
                 NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
@@ -273,7 +274,6 @@ public class LiveNationApplication extends Application {
             public synchronized void onReceive(Context context, Intent intent) {
                 ConnectivityManager cm = (ConnectivityManager) context
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
-
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
                     checkInstalledAppForAnalytics();

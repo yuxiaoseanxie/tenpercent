@@ -20,6 +20,11 @@ public class PushReceiver extends BaseIntentReceiver {
     private static final String LOG_TAG = "Live Nation Notifications";
 
     @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+    }
+
+    @Override
     protected void onChannelRegistrationSucceeded(Context context, String s) {
         //getResultData()
         //getResultExtras(true)
@@ -61,6 +66,7 @@ public class PushReceiver extends BaseIntentReceiver {
     @Override
     protected void onBackgroundPushReceived(Context context, PushMessage pushMessage) {
     }
+
 
     @Override
     protected boolean onNotificationOpened(Context context, PushMessage pushMessage, int i) {
