@@ -148,7 +148,8 @@ dependencies {
     compile project(':LabsPlatform')
     compile project(':facebookSDK')
     compile project(':Ticketing')
-    compile 'com.android.support:support-v13:20.0.0'
+    compile project (':urbanairship-lib-5.1.4')
+    compile 'com.android.support:support-v4:21.+'
     compile 'com.google.android.gms:play-services:5.0.89'
     compile('se.emilsjolander:stickylistheaders:2.1.5').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
     compile 'com.crashlytics.android:crashlytics:1.1.11'

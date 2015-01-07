@@ -51,6 +51,7 @@ import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.segment.android.models.Props;
+import com.urbanairship.google.PlayServicesUtils;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 
@@ -71,6 +72,12 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         final SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
         if (!sharedPreferences.contains(Constants.SharedPreferences.IS_NEW_USER)) {
             sharedPreferences.edit().putBoolean(Constants.SharedPreferences.IS_NEW_USER, true).apply();
+        }
+
+        //Urban Airship
+        // Handle any Google Play Services errors
+        if (PlayServicesUtils.isGooglePlayStoreAvailable()) {
+            PlayServicesUtils.handleAnyPlayServicesError(this);
         }
 
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);

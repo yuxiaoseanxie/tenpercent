@@ -33,6 +33,7 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
 import com.segment.android.models.Props;
 import com.urbanairship.Logger;
+import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushMessage;
 
@@ -73,7 +74,7 @@ public class MessageFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         String messageId = getActivity().getIntent().getStringExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY);
-        message = RichPushManager.shared().getRichPushUser().getInbox().getMessage(messageId);
+        message = UAirship.shared().getRichPushManager().getRichPushInbox().getMessage(messageId);
         if (message != null) {
             message.markRead();
             subjectText.setText(message.getTitle());
