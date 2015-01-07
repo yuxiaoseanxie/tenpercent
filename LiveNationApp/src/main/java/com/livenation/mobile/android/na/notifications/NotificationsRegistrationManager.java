@@ -11,7 +11,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.urbanairship.push.PushManager;
+import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushManager;
 
 public class NotificationsRegistrationManager implements Ticketing.PushTokenProvider {
@@ -32,12 +32,12 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
         return new PreferencePersistence("notifications", LiveNationApplication.get().getApplicationContext());
     }
 
-    private void saveApid(String apid) {
-        Log.i(getClass().getName(), "saved apid:" + apid);
-        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, apid);
+    private void saveChannelId(String channelId) {
+        Log.i(getClass().getName(), "saved channelId:" + channelId);
+        getPreferences().write(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID, channelId);
     }
 
-    private String getSavedApid() {
+    private String getSavedChannelId() {
         return getPreferences().readString(Constants.SharedPreferences.NOTIFICATIONS_SAVED_APID);
     }
 
@@ -51,7 +51,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
         if (BuildConfig.DEBUG)
             return null;
         else
-            return PushManager.shared().getAPID();
+            return UAirship.shared().getPushManager().getChannelId();
     }
 
     //endregion
@@ -64,9 +64,9 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
     }
 
     public boolean shouldRegister() {
-        String apid = PushManager.shared().getAPID();
+        String channelId = UAirship.shared().getPushManager().getChannelId();
         String userId = RichPushManager.shared().getRichPushUser().getId();
-        return ((apid != null && !apid.equals(getSavedApid())) && userId != null);
+        return ((channelId != null && !channelId.equals(getSavedChannelId())) && userId != null);
     }
 
     public void register() {
@@ -76,13 +76,13 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
             return;
         }
 
-        final String apid = PushManager.shared().getAPID();
+        final String channelId = UAirship.shared().getPushManager().getChannelId();
         final String userId = RichPushManager.shared().getRichPushUser().getId();
 
-        Log.i(getClass().getName(), "Registering with platform with apid: " + apid + ", UA user id: " + userId);
+        Log.i(getClass().getName(), "Registering with platform with channelId: " + channelId + ", UA user id: " + userId);
 
         RegisterForNotificationsParameters params = new RegisterForNotificationsParameters();
-        params.setTokens(apid, userId);
+        params.setTokens(channelId, userId);
         LiveNationApplication.getLiveNationProxy().registerForNotifications(params, new BasicApiCallback<Void>() {
             @Override
             public void onErrorResponse(LiveNationError error) {
@@ -92,7 +92,7 @@ public class NotificationsRegistrationManager implements Ticketing.PushTokenProv
 
             @Override
             public void onResponse(Void response) {
-                saveApid(apid);
+                saveChannelId(channelId);
                 Log.i(getClass().getName(), "Completed platform registration");
             }
         });

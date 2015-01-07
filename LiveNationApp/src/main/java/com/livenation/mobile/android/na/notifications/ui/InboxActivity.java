@@ -69,7 +69,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_inbox);
 
-        this.richPushInbox = RichPushManager.shared().getRichPushUser().getInbox();
+        this.richPushInbox = UAirship.shared().getRichPushManager().getRichPushInbox();
 
         // Set up the activity_inbox fragment
         this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
@@ -94,8 +94,8 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         super.onResume();
 
         // Listen for any rich push activity_message changes
-        RichPushManager.shared().addListener(this);
-        RichPushManager.shared().getRichPushUser().getInbox().addListener(this);
+        UAirship.shared().getRichPushManager().addListener(this);
+        UAirship.shared().getRichPushManager().getRichPushInbox().addListener(this);
 
         // Update the rich push messages to the latest
         updateRichPushMessages();
@@ -408,7 +408,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
      * with the activity_inbox fragment and activity_message view pager if available
      */
     private void updateRichPushMessages() {
-        messages = RichPushManager.shared().getRichPushUser().getInbox().getMessages();
+        messages = UAirship.shared().getRichPushManager().getRichPushInbox().getMessages();
         this.inbox.setMessages(messages);
     }
 

@@ -42,6 +42,8 @@ import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+import com.mobilitus.tm.tickets.TicketLibrary;
+import com.urbanairship.UAirship;
 import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
@@ -138,7 +140,8 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
         accessTokenItem = new DebugItem(getString(R.string.debug_item_access_token), "...");
         actions.add(accessTokenItem);
 
-        actions.add(new DebugItem(getString(R.string.debug_item_apid), PushManager.shared().getAPID()));
+        //In UA library 5.+ the apid has been removed and has been replaced by the channel Id
+        actions.add(new DebugItem(getString(R.string.debug_item_ua_channel_id), UAirship.shared().getPushManager().getChannelId()));
 
         RichPushUser urbanAirshipUser = RichPushManager.shared().getRichPushUser();
         String urbanAirshipUserID = urbanAirshipUser != null ? urbanAirshipUser.getId() : "(None)";

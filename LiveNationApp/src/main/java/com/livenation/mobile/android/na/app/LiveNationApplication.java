@@ -42,7 +42,6 @@ import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
-import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -66,8 +65,7 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
-import com.urbanairship.push.BasicPushNotificationBuilder;
-import com.urbanairship.push.PushManager;
+import com.urbanairship.push.notifications.DefaultNotificationFactory;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
@@ -234,18 +232,27 @@ public class LiveNationApplication extends Application {
         Logger.logLevel = Log.VERBOSE;
         AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(this);
         airshipConfigOptions.inProduction = !BuildConfig.DEBUG;
-        UAirship.takeOff(this, airshipConfigOptions);
+        UAirship.takeOff(this, airshipConfigOptions, new UAirship.OnReadyCallback() {
+            @Override
+            public void onAirshipReady(UAirship airship) {
+                airship.getPushManager().setPushEnabled(true);
+            }
+        });
 
-        PushManager.enablePush();
-
-        BasicPushNotificationBuilder notificationBuilder = new BasicPushNotificationBuilder();
-        notificationBuilder.iconDrawableId = R.drawable.ic_stat_notify;
-        PushManager.shared().setNotificationBuilder(notificationBuilder);
-        PushManager.shared().setIntentReceiver(PushReceiver.class);
-
-        NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
-        if (notificationsRegistrationManager.shouldRegister())
-            notificationsRegistrationManager.register();
+        // Getting the UAirship instance asynchronously
+        // Be carefull: Calling shared() now blocks the first time until airship is ready
+        UAirship.shared(new UAirship.OnReadyCallback() {
+            @Override
+            public void onAirshipReady(UAirship airship) {
+                airship.getPushManager().setPushEnabled(true);
+                DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(LiveNationApplication.this);
+                notificationBuilder.setSmallIconId(R.drawable.ic_stat_notify);
+                UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
+                NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
+                if (notificationsRegistrationManager.shouldRegister())
+                    notificationsRegistrationManager.register();
+            }
+        });
     }
 
     private void setupTicketing() {
