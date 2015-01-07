@@ -245,6 +245,7 @@ public class LiveNationApplication extends Application {
             @Override
             public void onAirshipReady(UAirship airship) {
                 airship.getPushManager().setPushEnabled(true);
+                airship.getPushManager().setUserNotificationsEnabled(true);
                 DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(LiveNationApplication.this);
                 notificationBuilder.setSmallIconId(R.drawable.ic_stat_notify);
                 UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
