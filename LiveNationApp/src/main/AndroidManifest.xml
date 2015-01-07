@@ -240,6 +240,12 @@
         <!-- REQUIRED for PlayServiceUtils.handleAnyPlayServicesError to handle Google Play Services recoverable errors. -->
         <activity android:name="com.urbanairship.google.PlayServicesErrorActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- REQUIRED for Action.startActivityForResult -->
+        <activity android:name="com.urbanairship.actions.ActionActivity" />
+
+        <!-- REQUIRED for Urban Airship Push -->
+        <activity android:name="com.urbanairship.CoreActivity" />
+
         <!-- REQUIRED for Urban Airship Push. The priority is important to be set lower than the
         application's push intent receiver in order for the push intent receiver to handle push intents
         before the core receiver. This allows the application to launch any activities before Urban
