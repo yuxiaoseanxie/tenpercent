@@ -125,6 +125,7 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix " debug"
             signingConfig signingConfigs.debug
+            testCoverageEnabled true
         }
 
         labrats {
