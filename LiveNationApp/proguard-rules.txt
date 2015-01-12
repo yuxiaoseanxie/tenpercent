@@ -98,6 +98,11 @@
 -keep class com.experience.** { *; }
 -dontwarn com.experience.**
 
+-keep class org.hamcrest.**
+-dontwarn org.hamcrest.**
+-keep class com.google.**
+-dontwarn com.google.**
+
 # Crashyltics debugging
 -keepattributes SourceFile,LineNumberTable
 
