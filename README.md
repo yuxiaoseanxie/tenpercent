@@ -101,3 +101,28 @@ Do not forget to specify in the run/debug configuration the specific instrumenta
 
 ![exemple icon](docs/assets/example2.png)
 
+Code coverage
+=========================
+
+To generate the code coverage reports, run 
+ 
+	./gradlew createDebugCoverageReport
+	
+Because the task connectedCheck and test depends on createDebugCoverageReport, you can also run 
+
+	./gradlew connectedCheck
+
+or
+
+	./gradlew test
+
+
+The reports are generated under build/outputs/reports/coverage in each project.
+
+* LiveNationApp [Folder link][link1cov]
+* LabsPlatform [Folder link][link2cov]
+* Ticketing [Folder link][link3cov]
+
+[link1cov]: LiveNationApp/build/outputs/reports/coverage/debug/index.html
+[link2cov]: ../adr-libsLabsPlatform/LabsPlatform/build/outputs/reports/coverage/debug/index.html
+[link3cov]: ../adr-libTicketing/Ticketing/build/outputs/reports/coverage/debug/index.html
