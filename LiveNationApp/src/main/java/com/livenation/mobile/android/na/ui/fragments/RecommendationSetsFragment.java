@@ -45,7 +45,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.segment.android.models.Props;
+import com.livenation.mobile.android.na.analytics.Props;
 
 import java.util.ArrayList;
 import java.util.Calendar;

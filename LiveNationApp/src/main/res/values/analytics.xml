@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <!--Your Segment.io romain3/live-nation-android-app write key-->
-    <string name="analytics_write_key">lo8n2jkekw</string>
+    <string name="analytics_amplitude_apikey">1ce7093a922cd8f8a6512f3063518365</string>
 
     <!--Whether to print additional debug information as you develop.-->
     <string name="analytics_debug">false</string>
