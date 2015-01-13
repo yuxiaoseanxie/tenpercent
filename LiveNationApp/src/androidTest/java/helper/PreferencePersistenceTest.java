@@ -39,7 +39,7 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
         assertNull(readValue);
     }
 
-    public void testResetSuccess() {
+    /**public void testResetSuccess() {
         final String KEY = "key_test";
         final String VALUE = "value_test";
         preferencePersistence.write(KEY, VALUE);
@@ -47,6 +47,6 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
 
         String readValue = preferencePersistence.readString(KEY);
         assertNull(null, readValue);
-    }
+    }**/
 
 }
