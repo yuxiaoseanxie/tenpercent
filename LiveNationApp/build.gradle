@@ -153,7 +153,7 @@ dependencies {
     compile project(':LabsPlatform')
     compile project(':facebookSDK')
     compile project(':Ticketing')
-    compile 'com.android.support:support-v13:21.+'
+    compile 'com.android.support:support-v13:21.0.3'
     compile 'com.google.android.gms:play-services:5.0.89'
 
     compile('se.emilsjolander:stickylistheaders:2.5.2').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
