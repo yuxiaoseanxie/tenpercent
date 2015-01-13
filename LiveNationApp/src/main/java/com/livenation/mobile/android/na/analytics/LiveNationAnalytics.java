@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.analytics.services.AmplitudeAnalytics;
 import com.livenation.mobile.android.na.analytics.services.AnalyticService;
 import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
+import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,11 @@ public class LiveNationAnalytics {
         analyticServices.clear();
         analyticServices.add(new GoogleAnalytics(context));
         analyticServices.add(new AmplitudeAnalytics(context));
+    }
+
+    @VisibleForTesting
+    static public List<AnalyticService> getAnalyticServices() {
+        return analyticServices;
     }
 
     static public void track(String eventTitle, AnalyticsCategory category, Props props) {
@@ -45,7 +51,7 @@ public class LiveNationAnalytics {
         }
 
         props.put(AnalyticConstants.CATEGORY, category);
-        props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
+        props.put(AnalyticConstants.PLATFORM, AnalyticConstants.PLATFORM_VALUE);
 
         for (AnalyticService service : analyticServices) {
             service.track(eventTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);

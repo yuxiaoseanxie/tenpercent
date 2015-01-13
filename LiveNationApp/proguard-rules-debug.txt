@@ -1,2 +1,8 @@
 -dontoptimize
 -dontobfuscate
+
+# Keep classes and methods that have the @VisibleForTesting annotation
+-keep @com.livenation.mobile.android.na.helpers.VisibleForTesting class *
+-keepclassmembers class * {
+@com.livenation.mobile.android.na.helpers.VisibleForTesting *;
+}
