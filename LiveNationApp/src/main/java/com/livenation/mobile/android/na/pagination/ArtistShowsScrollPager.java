@@ -29,9 +29,8 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
     protected void fetch(int offset, int limit, final BasicApiCallback callback) {
         ArtistEventsParameters params = new ArtistEventsParameters();
         params.setPage(offset, limit);
-        params.setArtistId(artistId);
 
-        LiveNationApplication.getLiveNationProxy().getArtistEvents(params, new BasicApiCallback<List<Event>>() {
+        LiveNationApplication.getLiveNationProxy().getArtistEvents(artistId, new BasicApiCallback<List<Event>>() {
             @Override
             public void onResponse(final List<Event> response) {
                 LiveNationLibrary.getLocationProvider().getLocation(new ProviderCallback<Double[]>() {
@@ -53,7 +52,7 @@ public class ArtistShowsScrollPager extends BaseDecoratedScrollPager<Event, List
             public void onErrorResponse(LiveNationError error) {
                 callback.onErrorResponse(error);
             }
-        });
+        }, params);
     }
 
 

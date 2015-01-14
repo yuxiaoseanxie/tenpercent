@@ -204,11 +204,10 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 ArtistEventsParameters apiParams = new ArtistEventsParameters();
 
                 String artistIdRaw = getActivity().getIntent().getStringExtra(ArtistActivity.PARAMETER_ARTIST_ID);
-                apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
 
                 apiParams.setPage(0, 10);
 
-                LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, new BasicApiCallback<List<Event>>() {
+                LiveNationApplication.getLiveNationProxy().getArtistEvents(DataModelHelper.getNumericEntityId(artistIdRaw), new BasicApiCallback<List<Event>>() {
                     @Override
                     public void onResponse(List<Event> response) {
                         if (getActivity() == null) return;
@@ -219,7 +218,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                     @Override
                     public void onErrorResponse(LiveNationError error) {
                     }
-                });
+                }, apiParams);
             }
 
             @Override

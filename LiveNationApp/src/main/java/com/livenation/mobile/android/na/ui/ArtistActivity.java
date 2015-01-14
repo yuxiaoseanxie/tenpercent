@@ -15,7 +15,6 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
@@ -46,24 +45,30 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             setArtist(artist);
         } else {
+            Long artistId = null;
             SingleArtistParameters apiParams = new SingleArtistParameters();
             if (args.containsKey(PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
-                long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
-                apiParams.setArtistId(artistId);
+                artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
             }
 
-            LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
-                @Override
-                public void onResponse(Artist artist) {
-                    setArtist(artist);
-                }
+            if (artistId != null) {
+                LiveNationApplication.getLiveNationProxy().getSingleArtist(artistId, new BasicApiCallback<Artist>() {
+                    @Override
+                    public void onResponse(Artist artist) {
+                        setArtist(artist);
+                    }
 
-                @Override
-                public void onErrorResponse(LiveNationError error) {
-                    //TODO display an error message
-                }
-            });
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        //TODO display an error message
+                    }
+                });
+            } else {
+                finish();
+                return;
+            }
+
         }
     }
 
