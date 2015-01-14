@@ -3,10 +3,8 @@ package com.livenation.mobile.android.na.analytics;
 import android.app.Activity;
 
 import com.apsalar.sdk.Apsalar;
+import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
-import com.segment.android.Analytics;
-import com.segment.android.models.Props;
-
 import java.util.Map;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
@@ -29,25 +27,21 @@ public class TicketingAnalyticsBridge implements AnalyticsHandler {
 
     @Override
     public void activityStarted(Activity activity) {
-        Analytics.activityStart(activity);
         LiveNationAnalytics.logTrace("LifeCycle", "Activity started: " + activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityPaused(Activity activity) {
-        Analytics.activityPause(activity);
         LiveNationAnalytics.logTrace("LifeCycle", "Activity paused: " + activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityResumed(Activity activity) {
-        Analytics.activityResume(activity);
         LiveNationAnalytics.logTrace("LifeCycle", "Activity resumed: " + activity.getClass().getSimpleName());
     }
 
     @Override
     public void activityStopped(Activity activity) {
-        Analytics.activityStop(activity);
         LiveNationAnalytics.logTrace("LifeCycle", "Activity stopped: " + activity.getClass().getSimpleName());
     }
 

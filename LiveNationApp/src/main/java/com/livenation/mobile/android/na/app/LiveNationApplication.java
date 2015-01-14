@@ -28,10 +28,12 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
@@ -42,7 +44,6 @@ import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
 import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.notifications.PushReceiver;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
-import com.livenation.mobile.android.na.presenters.AccountPresenters;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
@@ -62,8 +63,6 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.segment.android.Analytics;
-import com.segment.android.models.Props;
 import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -174,9 +173,7 @@ public class LiveNationApplication extends Application {
         LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
 
         Crashlytics.start(this);
-        Analytics.initialize(this);
-        //override segment logging. this should be false already due to debug being disabled :(
-        com.segment.android.Logger.setLog(false);
+        LiveNationAnalytics.initialize(this);
 
         //Object useful wild app
         providerManager = new ProviderManager();

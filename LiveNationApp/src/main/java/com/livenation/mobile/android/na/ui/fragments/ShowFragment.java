@@ -60,7 +60,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
-import com.segment.android.models.Props;
+import com.livenation.mobile.android.na.analytics.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;

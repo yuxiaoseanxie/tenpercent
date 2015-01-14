@@ -27,10 +27,10 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
 import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -161,9 +161,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:0.22.0'
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'com.squareup.retrofit:converter-jackson:1.2.1'
+    compile 'com.amplitude:android-sdk:1.4.3'
 
-    compile('io.segment.analytics.android:all:1.4.4+@aar') {
-        transitive = true
-    }
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }

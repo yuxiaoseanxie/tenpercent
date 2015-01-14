@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregator;
 import com.livenation.mobile.android.na.scan.aggregators.ArtistAggregatorCallback;
 import com.livenation.mobile.android.na.scan.aggregators.DeviceArtistAggregator;
@@ -11,7 +12,6 @@ import com.livenation.mobile.android.na.scan.aggregators.GooglePlayMusicArtistAg
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibrary;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
-import com.segment.android.models.Props;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
