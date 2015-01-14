@@ -64,7 +64,7 @@ public class LiveNationAnalytics {
         if (props == null)
             props = new Props();
 
-        props.put("Platform", AnalyticConstants.PLATFORM_VALUE);
+        props.put(AnalyticConstants.PLATFORM, AnalyticConstants.PLATFORM_VALUE);
 
         for (AnalyticService service : analyticServices) {
             service.screen(screenTitle + AnalyticConstants.PLATFORM_EVENT_SUFFIX, props);
