@@ -29,6 +29,6 @@ public class AllShowsScrollPager extends BaseDecoratedScrollPager<Event, List<Ev
         Calendar end = Calendar.getInstance();
         end.add(Calendar.MONTH, 12);
         params.setTimeRange(start.getTimeInMillis(), end.getTimeInMillis());
-        LiveNationApplication.getLiveNationProxy().getEvents(callback, params);
+        LiveNationApplication.getLiveNationProxy().getEventsNearby(callback, params);
     }
 }

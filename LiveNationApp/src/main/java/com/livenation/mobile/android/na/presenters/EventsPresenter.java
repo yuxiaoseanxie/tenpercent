@@ -91,7 +91,7 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
                 params = new EventParameters();
             }
             params.setSortMethod(BasedParameters.SortField.StartTime);
-            LiveNationApplication.getLiveNationProxy().getEvents(EventsState.this, params);
+            LiveNationApplication.getLiveNationProxy().getEventsNearby(EventsState.this, params);
         }
 
         @Override
