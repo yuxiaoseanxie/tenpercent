@@ -52,7 +52,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.segment.android.models.Props;
 
@@ -219,7 +218,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case ACTIVITY_RESULT_UBER:
-                if (resultCode ==  Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
                     getActivity().startActivity(intent);
                 } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -230,9 +229,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private void loadBoxOfficeInfo(final long venueId) {
-        SingleVenueParameters parameters = new SingleVenueParameters();
-        parameters.setVenueId(venueId);
-        LiveNationApplication.getLiveNationProxy().getSingleVenue(parameters, new BasicApiCallback<Venue>() {
+        LiveNationApplication.getLiveNationProxy().getSingleVenue(venueId, new BasicApiCallback<Venue>() {
             @Override
             public void onResponse(Venue fullVenue) {
                 displayBoxOfficeInfo(fullVenue);

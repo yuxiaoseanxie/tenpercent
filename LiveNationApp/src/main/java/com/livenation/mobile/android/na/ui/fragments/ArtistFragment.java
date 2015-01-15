@@ -31,7 +31,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.segment.android.models.Props;
@@ -201,7 +201,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 final double lat = config.getLat();
                 final double lng = config.getLng();
 
-                ArtistEventsParameters apiParams = new ArtistEventsParameters();
+                EventParameters apiParams = new EventParameters();
 
                 String artistIdRaw = getActivity().getIntent().getStringExtra(ArtistActivity.PARAMETER_ARTIST_ID);
 

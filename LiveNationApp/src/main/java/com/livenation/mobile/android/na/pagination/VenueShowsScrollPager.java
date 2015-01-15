@@ -5,7 +5,7 @@ import android.widget.ArrayAdapter;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 
 import java.util.List;
 
@@ -23,10 +23,9 @@ public class VenueShowsScrollPager extends BaseDecoratedScrollPager<Event, List<
 
     @Override
     protected void fetch(int offset, int limit, BasicApiCallback<List<Event>> callback) {
-        VenueEventsParameters params = new VenueEventsParameters();
+        EventParameters params = new EventParameters();
         params.setPage(offset, limit);
-        params.setVenueId(venueId);
-        LiveNationApplication.getLiveNationProxy().getVenueEvents(params, callback);
+        LiveNationApplication.getLiveNationProxy().getVenueEvents(venueId, callback, params);
     }
 }
 
