@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/gap_smaller"
+    android:paddingLeft="@dimen/gap_small"
+    android:paddingRight="@dimen/gap_small"
+    android:paddingTop="@dimen/gap_smaller">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="45"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/uber_list_price_estimate_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/ln.text.medium.bold" />
+
+            <ImageView
+                android:id="@+id/uber_list_surge_badge_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/uber_surge_badge_spacing"
+                android:src="@drawable/uber_surge_badge"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/uber_list_price_estimate_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/ln.text.small.gray" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/uber_list_price_estimate_cost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="30"
+        android:textAppearance="@style/ln.text.small.gray" />
+
+    <TextView
+        android:id="@+id/uber_list_price_estimate_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="25"
+        android:textAppearance="@style/ln.text.small.gray" />
+
+</LinearLayout>

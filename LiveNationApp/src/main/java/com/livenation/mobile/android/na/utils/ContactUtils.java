@@ -9,11 +9,11 @@ import android.os.Build;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AppInitData;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.segment.android.Logger;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class ContactUtils {
             callIntent.setData(Uri.parse("tel:" + phoneNumber.trim()));
             activity.startActivity(callIntent);
         } catch (ActivityNotFoundException e) {
-            Logger.e(activity.getClass().getSimpleName() + " Call failed", e);
+            LiveNationAnalytics.logTrace(activity.getClass().getSimpleName() + " Call failed", e.getMessage());
         }
     }
 

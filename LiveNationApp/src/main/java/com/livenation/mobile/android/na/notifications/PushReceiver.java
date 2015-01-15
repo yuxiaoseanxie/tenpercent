@@ -9,10 +9,10 @@ import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.segment.android.models.Props;
 import com.urbanairship.push.BaseIntentReceiver;
 import com.urbanairship.push.PushMessage;
 
@@ -22,6 +22,7 @@ public class PushReceiver extends BaseIntentReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        Log.d("Elodie", "Elodie");
     }
 
     @Override
@@ -38,6 +39,7 @@ public class PushReceiver extends BaseIntentReceiver {
 
     @Override
     protected void onPushReceived(Context context, PushMessage pushMessage, int i) {
+        Log.d("Elodie", "Elodie");
         Log.i(LOG_TAG, "Push received: " + TextUtils.join(", ", pushMessage.getPushBundle().keySet()));
 
         //String type = intent.getStringExtra(Constants.Notifications.EXTRA_TYPE);
@@ -80,6 +82,7 @@ public class PushReceiver extends BaseIntentReceiver {
     }
 
     private void messageClicked(Context context, PushMessage message) {
+        Log.d("Elodie", "Elodie");
         Log.i(LOG_TAG, "User clicked (" + message.getRichPushMessageId() +
                 "): " + message.getPushBundle().toString());
 

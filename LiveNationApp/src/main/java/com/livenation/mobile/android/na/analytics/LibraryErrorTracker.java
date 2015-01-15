@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.analytics;
 
 import com.livenation.mobile.android.platform.api.service.livenation.analytics.ErrorTracker;
-import com.segment.android.models.Props;
 
 import java.util.Map;
 
