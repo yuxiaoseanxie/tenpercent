@@ -176,10 +176,10 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
     public void dispatchLiveNationIntent(Intent intent) {
         final Uri data = buildUri(intent.getData());
+        trackDeepLinks(data);
         if (isNavigate(data)) {
             dispatchNavigate(data);
         } else {
-            trackDeepLinks(data);
             List<String> pathSegments = data.getPathSegments();
             if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
                 dispatchEvent(data);
