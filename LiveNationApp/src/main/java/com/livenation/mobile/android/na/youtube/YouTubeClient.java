@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.youtube;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -61,8 +62,20 @@ public class YouTubeClient {
     private static boolean shouldFilterVideo(YouTubeVideo video, String query) {
         String title = video.getTitle();
         String queryWithoutSpaces = query.replace(" ", "");
-        return (!title.regionMatches(true, 0, query, 0, query.length()) &&
-                !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length()));
+
+        boolean match1 = !title.regionMatches(true, 0, query, 0, query.length());
+        boolean match2 = !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length());
+
+        Log.d("Elodie", "query:" + query.toString());
+        Log.d("Elodie", "result:" + String.valueOf(match1));
+
+        Log.d("Elodie", "queryWithoutSpaces:" + queryWithoutSpaces.toString());
+        Log.d("Elodie", "result:" + String.valueOf(match2));
+
+        Log.d("Elodie", "return : (!(match1 || match2))" + String.valueOf(!(match1 || match2)));
+
+
+        return (!(match1 || match2));
     }
 
     public static void filterVideos(List<YouTubeVideo> videos, String query) {
