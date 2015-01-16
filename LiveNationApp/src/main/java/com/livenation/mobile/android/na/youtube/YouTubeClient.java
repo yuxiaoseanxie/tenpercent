@@ -66,15 +66,6 @@ public class YouTubeClient {
         boolean match1 = !title.regionMatches(true, 0, query, 0, query.length());
         boolean match2 = !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length());
 
-        Log.d("Elodie", "query:" + query.toString());
-        Log.d("Elodie", "result:" + String.valueOf(match1));
-
-        Log.d("Elodie", "queryWithoutSpaces:" + queryWithoutSpaces.toString());
-        Log.d("Elodie", "result:" + String.valueOf(match2));
-
-        Log.d("Elodie", "return : (!(match1 || match2))" + String.valueOf(!(match1 || match2)));
-
-
         return (!(match1 || match2));
     }
 
