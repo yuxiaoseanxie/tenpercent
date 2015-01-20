@@ -15,18 +15,15 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.platform.api.service.livenation.analytics.ErrorTracker;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PlayServicesLocationProvider implements LocationProvider {
@@ -36,7 +33,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
     public static final int STATUS_GOOGLE_PLAY_FAILURE_RECOVERABLE = 1;
     public static final int STATUS_GOOGLE_PLAY_FAILURE_GIVEUP = 2;
 
-    public static int getGooglePlayServiceStatus(Context context) {
+    private int getGooglePlayServiceStatus(Context context) {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
 
         if (status == ConnectionResult.SUCCESS) {
@@ -58,9 +55,8 @@ public class PlayServicesLocationProvider implements LocationProvider {
         state.run();
     }
 
-    private class State implements GooglePlayServicesClient.ConnectionCallbacks,
-            GooglePlayServicesClient.OnConnectionFailedListener, Runnable {
-        private final LocationClient client;
+    private class State implements Runnable, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        private final GoogleApiClient client;
         private final ProviderCallback<Double[]> callback;
         private final int RETRY_LIMIT = 3;
         private Handler handler;
@@ -68,7 +64,12 @@ public class PlayServicesLocationProvider implements LocationProvider {
 
         private State(ProviderCallback<Double[]> callback, Context context) {
             this.callback = callback;
-            this.client = new LocationClient(context, this, this);
+
+            this.client = new GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
         }
 
         @Override
@@ -87,7 +88,8 @@ public class PlayServicesLocationProvider implements LocationProvider {
             //Check to avoid DeadObjectException
             if (client!= null && client.isConnected()) {
                 try {
-                    Location location = client.getLastLocation();
+                    Location location=LocationServices.FusedLocationApi.getLastLocation(client);
+
                     if (null != location) {
                         double lat = location.getLatitude();
                         double lng = location.getLongitude();
@@ -115,6 +117,11 @@ public class PlayServicesLocationProvider implements LocationProvider {
 
         }
 
+        @Override
+        public void onConnectionSuspended(int i) {
+
+        }
+
         private void retry() {
             handler = new Handler();
             if (retryCount < RETRY_LIMIT) {
@@ -123,10 +130,6 @@ public class PlayServicesLocationProvider implements LocationProvider {
             } else {
                 callback.onErrorResponse();
             }
-        }
-
-        @Override
-        public void onDisconnected() {
         }
 
     }

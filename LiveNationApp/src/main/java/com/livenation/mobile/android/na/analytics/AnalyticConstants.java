@@ -157,6 +157,8 @@ public class AnalyticConstants {
     public static final String CELL_POSITION = "Cell Position";
     public static final String USER_LOGGED_IN = "User Logged In";
     public static final String DEEP_LINK_URL = "Deep Link Url";
+    public static final String DEEP_LINK_OPEN_FROM = "Open from";
+    public static final String DEEP_LINK_HOST = "Host";
 
     //Category
     public static final String CATEGORY = "Category";

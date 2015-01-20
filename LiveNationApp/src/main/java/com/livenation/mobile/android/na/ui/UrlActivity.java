@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.google.android.gms.appindexing.AndroidAppUri;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -214,10 +215,41 @@ public class UrlActivity extends LiveNationFragmentActivity {
     private void trackDeepLinks(Uri uri) {
         Set<String> queryNames = uri.getQueryParameterNames();
         Props props = new Props();
-        for (String name: queryNames) {
+        for (String name : queryNames) {
             props.put(name, uri.getQueryParameter(name));
         }
         props.put(AnalyticConstants.DEEP_LINK_URL, uri.toString());
+
+        //Find out how the deep link has been opened
+        Intent intent = this.getIntent();
+        String appReferrerExtra = intent.getStringExtra("android.intent.extra.REFERRER_NAME");
+        if (appReferrerExtra != null) {
+            if (appReferrerExtra.startsWith("http://") || appReferrerExtra.startsWith("https://")) {
+                // App was opened from a browser
+                String host = Uri.parse(appReferrerExtra).getHost();
+                // host will contain the host path (e.g. www.google.com)
+                props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Browser");
+                props.put(AnalyticConstants.DEEP_LINK_HOST, host);
+                // Add analytics code below to track this click from web Search
+            } else if (appReferrerExtra.startsWith("android-app://")) {
+                // App was opened from another app
+                AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+                String referrerPackage = appUri.getPackageName();
+                if ("com.google.android.googlequicksearchbox".equals(referrerPackage)) {
+                    // App was opened from the Google app
+                    String host = appUri.getDeepLinkUri().getHost();
+                    // host will contain the host path (e.g. www.google.com)
+                    props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Google app");
+                    props.put(AnalyticConstants.DEEP_LINK_HOST, host);
+
+                    // Add analytics code below to track this click from the Google app
+                } else if ("com.google.appcrawler".equals(referrerPackage)) {
+                    // Make sure this is not being counted as part of app usage
+                    props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "com.google.appcrawler");
+                }
+            }
+        }
+
 
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
 
