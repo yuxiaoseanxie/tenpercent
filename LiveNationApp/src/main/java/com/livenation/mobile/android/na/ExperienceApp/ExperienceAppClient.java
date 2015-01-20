@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 
 /**
  * Created by cchilton on 8/19/14.
@@ -13,7 +13,7 @@ public class ExperienceAppClient  {
     private final RequestQueue requestQueue;
 
     public ExperienceAppClient(Context context) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        requestQueue = LiveNationApplication.get().getRequestQueue();
     }
 
     public void makeRequest(String eventId, ExperienceAppListener responseListener) {
