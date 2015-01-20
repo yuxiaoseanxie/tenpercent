@@ -27,7 +27,6 @@
             android:layout_toEndOf="@id/on_boarding_scanning_imageview"
             android:paddingLeft="@dimen/on_boarding_scan_message_padding"
             android:paddingRight="@dimen/on_boarding_scan_message_padding"
-            android:paddingStart="@dimen/on_boarding_scan_message_padding"
             android:paddingEnd="@dimen/on_boarding_scan_message_padding"
             android:text="@string/onboarding_scanning_description"
             android:gravity="center"

@@ -7,8 +7,8 @@
         android:id="@+id/favorite_checkbox_container"
         android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        >
 
         <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
             android:id="@+id/view_show_venue_favorite_checkbox"

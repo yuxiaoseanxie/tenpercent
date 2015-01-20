@@ -31,8 +31,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/uber_surge_badge_spacing"
-                android:src="@drawable/uber_surge_badge"
-                />
+                android:layout_marginStart="@dimen/uber_surge_badge_spacing"
+                android:src="@drawable/uber_surge_badge" />
         </LinearLayout>
 
         <TextView

@@ -59,7 +59,6 @@
             android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"
-            android:paddingStart="@dimen/gap_small"
             android:paddingEnd="@dimen/gap_small"
             android:text="@string/login_facebook_button" />
 
@@ -81,7 +80,6 @@
             android:drawableLeft="@drawable/login_google_plus_logo"
             android:drawablePadding="@dimen/gap_smaller"
             android:minWidth="@dimen/account_header_sso_button_width"
-            android:paddingStart="@dimen/gap_small"
             android:paddingLeft="@dimen/gap_small"
             android:paddingEnd="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"

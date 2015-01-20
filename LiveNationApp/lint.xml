@@ -43,6 +43,7 @@
 
     <issue id="UnusedResources">
         <ignore path="src/main/res/values/build_values.xml" />
+        <ignore path="src/main/res/xml/google_analytics.xml" />
         <!-- For ExperienceApp data-->
         <ignore path="src/main/res/values/com_crashlytics_export_strings.xml" />
     </issue>
@@ -107,6 +108,17 @@
     <issue id="RtlSymmetry">
         <ignore path="src/main/res/layout/view_show.xml" />
         <ignore path="src/main/res/layout/view_show_venue_details.xml" />
+    </issue>
+
+    <issue id="RelativeOverlap">
+        <ignore path="src/main/res/layout/view_show.xml"/>
+        <ignore path="src/main/res/layout/view_show_venue_details.xml"/>
+        <ignore path="src/main/res/layout/sub_account_detail.xml"/>
+        <ignore path="src/main/res/layout/on_boarding_scanning_view.xml"/>
+        <ignore path="src/main/res/layout/list_show_item_v2.xml"/>
+        <ignore path="src/main/res/layout/list_search_result.xml"/>
+        <ignore path="src/main/res/layout/list_search_city_item.xml"/>
+        <ignore path="src/main/res/layout/src/main/res/layout/sub_venue_details.xml"/>
     </issue>
 
 </lint>
