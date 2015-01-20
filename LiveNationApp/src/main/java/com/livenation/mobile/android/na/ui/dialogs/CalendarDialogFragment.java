@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
@@ -19,7 +20,6 @@ import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Presale;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -25,6 +25,7 @@ import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
@@ -37,7 +38,6 @@ import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 

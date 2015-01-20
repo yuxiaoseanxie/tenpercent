@@ -10,10 +10,10 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-import com.segment.android.models.Props;
 
 /**
  * Created by cchilton on 3/12/14.

@@ -9,6 +9,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -17,7 +18,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.segment.android.models.Props;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,24 +45,30 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             setArtist(artist);
         } else {
+            Long artistId = null;
             SingleArtistParameters apiParams = new SingleArtistParameters();
             if (args.containsKey(PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
-                long artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
-                apiParams.setArtistId(artistId);
+                artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
             }
 
-            LiveNationApplication.getLiveNationProxy().getSingleArtist(apiParams, new BasicApiCallback<Artist>() {
-                @Override
-                public void onResponse(Artist artist) {
-                    setArtist(artist);
-                }
+            if (artistId != null) {
+                LiveNationApplication.getLiveNationProxy().getSingleArtist(artistId, new BasicApiCallback<Artist>() {
+                    @Override
+                    public void onResponse(Artist artist) {
+                        setArtist(artist);
+                    }
 
-                @Override
-                public void onErrorResponse(LiveNationError error) {
-                    //TODO display an error message
-                }
-            });
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        //TODO display an error message
+                    }
+                });
+            } else {
+                finish();
+                return;
+            }
+
         }
     }
 

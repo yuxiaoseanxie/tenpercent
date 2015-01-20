@@ -8,7 +8,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.helpers.Dat
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.NearbyVenuesWithEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
@@ -23,6 +23,7 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
     for this purpose (since the size of venue events (adapter) != size of venues (api)
      */
     private int offset = 0;
+    private final static int RADIUS = 50;
 
     public NearbyVenuesScrollPager(ArrayAdapter<Event> adapter) {
         super(DEFAULT_LIMIT, adapter);
@@ -42,10 +43,13 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
 
     @Override
     protected void fetch(int offset, int limit, final BasicApiCallback callback) {
-        NearbyVenuesWithEventsParameters params = new NearbyVenuesWithEventsParameters();
+        VenueParameters params = new VenueParameters();
         params.setMinimumNumberOfEvents(2);
+        params.setIncludeEvents(true);
         params.setPage(offset, limit);
-        LiveNationApplication.getLiveNationProxy().getNearbyVenuesWithEvents(params, new BasicApiCallback<List<Venue>>() {
+        params.setRadius(RADIUS);
+
+        LiveNationApplication.getLiveNationProxy().getNearbyVenues(new BasicApiCallback<List<Venue>>() {
             @Override
             public void onResponse(List<Venue> response) {
                 NearbyVenuesScrollPager.this.offset += response.size();
@@ -60,7 +64,7 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
             public void onErrorResponse(LiveNationError error) {
                 callback.onErrorResponse(error);
             }
-        });
+        }, params);
     }
 
 }

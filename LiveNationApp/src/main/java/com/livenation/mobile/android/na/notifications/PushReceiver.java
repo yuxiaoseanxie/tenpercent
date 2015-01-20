@@ -10,10 +10,10 @@ import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.segment.android.models.Props;
 import com.urbanairship.push.PushManager;
 
 public class PushReceiver extends BroadcastReceiver {

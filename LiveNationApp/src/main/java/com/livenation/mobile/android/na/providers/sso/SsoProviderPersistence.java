@@ -10,8 +10,6 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.sso.SsoManager;
-import com.segment.android.Analytics;
-import com.segment.android.models.Traits;
 
 /**
  * Created by elodieferrais on 7/21/14.
@@ -64,8 +62,6 @@ public class SsoProviderPersistence {
         persistance.write(Constants.SharedPreferences.USER_NAME, user.getDisplayName());
         persistance.write(Constants.SharedPreferences.USER_EMAIL, user.getEmail());
         persistance.write(Constants.SharedPreferences.USER_PIC_URL, user.getUrl());
-        Analytics.identify(user.getId(), new Traits("name", user.getDisplayName(),
-                "email", user.getEmail()));
 
         if (type != null) {
             if (type.equals(SsoManager.SSO_TYPE.SSO_FACEBOOK)) {

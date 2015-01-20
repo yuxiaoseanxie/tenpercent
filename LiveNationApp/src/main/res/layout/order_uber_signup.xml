@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:background="@drawable/your_orders_action_cell_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/ui_gutter_width"
+            android:layout_height="@dimen/minimum_pressable"
+            android:scaleType="centerInside"
+            android:src="@drawable/uber_car_icon" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/uber_popup_book_ride_soon"
+                android:textAppearance="@style/ln.text.medium.bold" />
+
+            <TextView
+                style="@style/ln.text.small.gray"
+                android:layout_marginTop="@dimen/uber_new_rider_linespacing"
+                android:id="@+id/uber_free_ride_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -9,6 +9,7 @@ import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -16,7 +17,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
-import com.segment.android.models.Props;
 
 /**
  * Created by elodieferrais on 9/29/14.

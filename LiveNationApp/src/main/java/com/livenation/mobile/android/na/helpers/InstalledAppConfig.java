@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.livenation.mobile.android.na.BuildConfig;
+import com.livenation.mobile.android.na.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +37,8 @@ public class InstalledAppConfig {
 
     private static final String FEATURED_CAROUSEL_CHART = "featured_carousel_chart";
 
+    private static final String UBER_FREE_RIDE_TEXT = "uber_free_ride_text";
+
     private static final String CONFIRMATION_ACTIONS = "confirmation_actions";
 
 
@@ -43,6 +46,7 @@ public class InstalledAppConfig {
     private static final String DEFAULT_PLAY_STORE_LINK = "https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na";
     private static final long MINIMUM_UPDATE_TIME_ELAPSED = 60 * 60 * 1000; // 60 minutes
 
+    private final String DEFAULT_UBER_FREE_RIDE_TEXT;
     //endregion
 
 
@@ -58,6 +62,8 @@ public class InstalledAppConfig {
         this.applicationContext = context.getApplicationContext();
         this.requestQueue = requestQueue;
         this.preferences = applicationContext.getSharedPreferences(getClass().getName(), 0);
+
+        this.DEFAULT_UBER_FREE_RIDE_TEXT = context.getString(R.string.uber_free_ride_default);
 
         if (BuildConfig.DEBUG) {
             this.url = "http://adr-static-content.s3.amazonaws.com/config/debug.json";
@@ -104,6 +110,9 @@ public class InstalledAppConfig {
 
                 String upgradePlayStoreLink = response.optString(UPGRADE_PLAY_STORE_LINK);
                 editor.putString(UPGRADE_PLAY_STORE_LINK, upgradePlayStoreLink);
+
+                String uberFreeRide = response.optString(UBER_FREE_RIDE_TEXT);
+                editor.putString(UBER_FREE_RIDE_TEXT, uberFreeRide);
 
                 JSONArray confirmationActions = response.optJSONArray(CONFIRMATION_ACTIONS);
                 String accumulator = "";
@@ -177,6 +186,10 @@ public class InstalledAppConfig {
     @NonNull
     String getUpgradePlayStoreLink() {
         return preferences.getString(UPGRADE_PLAY_STORE_LINK, DEFAULT_PLAY_STORE_LINK);
+    }
+
+    public @NonNull String getUberFreeRideText() {
+        return preferences.getString(UBER_FREE_RIDE_TEXT, DEFAULT_UBER_FREE_RIDE_TEXT);
     }
 
 

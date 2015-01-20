@@ -36,6 +36,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
@@ -50,7 +51,6 @@ import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
 import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
-import com.segment.android.models.Props;
 
 public class HomeActivity extends LiveNationFragmentActivity implements AccountSaveAuthTokenView, AccountSignOutView {
 

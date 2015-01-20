@@ -17,13 +17,13 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;

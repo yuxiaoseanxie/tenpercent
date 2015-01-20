@@ -8,13 +8,16 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,12 +27,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.uber.UberClient;
+import com.livenation.mobile.android.na.uber.UberHelper;
+import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
+import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
+import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -42,27 +52,44 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.segment.android.models.Props;
+import com.livenation.mobile.android.na.analytics.Props;
 
 import java.util.List;
 
+import rx.functions.Action1;
+import rx.subjects.ReplaySubject;
+
 public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
     private static final float DEFAULT_MAP_ZOOM = 13f;
+    private static final int ACTIVITY_RESULT_UBER = 1;
     private final String SHOWS_FRAGMENT_TAG = "shows";
     private final String MAP_FRAGMENT_TAG = "maps";
+    private UberClient uberClient;
     private TextView venueTitle;
     private TextView location;
     private TextView telephone;
+    private ImageButton travelOptions;
     private View venueInfo;
     private View phonebox;
+    private TravelListPopupWindow popupWindow;
     private ShowsListNonScrollingFragment showsFragment;
     private LiveNationMapFragment mapFragment;
     private GoogleMap map;
     private FavoriteCheckBox favoriteCheckBox;
     private LatLng mapLocationCache = null;
     private final static int MAX_INLINE = 3;
+    private Venue venue;
+    //create a replay subject for our fastest uber estimation.
+    //this allows the API operation for the fastest uber to be cached, so the result is available instantly to anyone who subscribes to this object
+    //This is useful when the UI that shows the estimate is repeatedly created and destroyed, as we can cache the estimate
+    private ReplaySubject<LiveNationEstimate> fastestUber = ReplaySubject.create(1);
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        uberClient = new UberClient(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +101,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         venueInfo = result.findViewById(R.id.venue_detail_venue_info_link);
         favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
         phonebox = result.findViewById(R.id.venue_detail_phone_box);
-
+        travelOptions = (ImageButton) result.findViewById(R.id.venue_travel_button);
         return result;
     }
 
@@ -103,7 +130,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+    }
+
+    @Override
     public void setVenue(Venue venue) {
+        this.venue = venue;
         venueTitle.setText(venue.getName());
         if (null != venue.getAddress()) {
             Address address = venue.getAddress();
@@ -127,14 +163,34 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         }
 
         location.setOnClickListener(new OnAddressClick(venue, LiveNationApplication.get().getApplicationContext()));
-
-        double lat = Double.valueOf(venue.getLat());
-        double lng = Double.valueOf(venue.getLng());
-        setMapLocation(lat, lng);
+        if (venue.getLat() != null && venue.getLng() != null) {
+            Double lat = Double.valueOf(venue.getLat());
+            Double lng = Double.valueOf(venue.getLng());
+            setMapLocation(lat, lng);
+            travelOptions.setOnClickListener(new OnTravelOptionsClick());
+            //now that we have the venue, find out the fastest uber available to its location, and
+            //stash it in our fastestUber member variable
+            UberHelper.getQuickEstimate(uberClient, lat.floatValue(), lng.floatValue()).
+                    subscribe(new Action1<LiveNationEstimate>() {
+                        @Override
+                        public void call(LiveNationEstimate liveNationEstimate) {
+                            fastestUber.onNext(liveNationEstimate);
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            //Error Handler.
+                            //API call failed, distance, network error, and so on.
+                            //Leave the default UI with no estimate text
+                        }
+                    });
+        } else {
+            //hide travel options to unroutable venue
+            travelOptions.setVisibility(View.GONE);
+        }
 
         favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
         showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
-
     }
 
     @Override
@@ -158,10 +214,22 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ACTIVITY_RESULT_UBER:
+                if (resultCode == Activity.RESULT_OK) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
+                    getActivity().startActivity(intent);
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
+                    getActivity().startActivity(intent);
+                }
+        }
+    }
+
     private void loadBoxOfficeInfo(final long venueId) {
-        SingleVenueParameters parameters = new SingleVenueParameters();
-        parameters.setVenueId(venueId);
-        LiveNationApplication.getLiveNationProxy().getSingleVenue(parameters, new BasicApiCallback<Venue>() {
+        LiveNationApplication.getLiveNationProxy().getSingleVenue(venueId, new BasicApiCallback<Venue>() {
             @Override
             public void onResponse(Venue fullVenue) {
                 displayBoxOfficeInfo(fullVenue);
@@ -242,13 +310,16 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private class OnAddressClick implements View.OnClickListener {
-        private double lat;
-        private double lng;
+        private Double lat;
+        private Double lng;
         private Context context;
         private String address;
         private Venue venue;
 
         private OnAddressClick(Venue venue, Context context) {
+            if (venue.getLng() == null || venue.getLng() == null) {
+                return;
+            }
             this.lat = Double.parseDouble(venue.getLat());
             this.lng = Double.parseDouble(venue.getLng());
             this.context = context;
@@ -258,6 +329,9 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
         @Override
         public void onClick(View v) {
+            if (lat == null) {
+                return;
+            }
             Props props = new Props();
             props.put(AnalyticConstants.VENUE_NAME, venue.getName());
             props.put(AnalyticConstants.VENUE_ID, venue.getId());
@@ -289,4 +363,73 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             startActivity(intent);
         }
     }
+
+    private class OnTravelOptionsClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            //Analytics
+            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_MENU_TAP, AnalyticsCategory.VDP, getUberProps());
+
+            popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
+                @Override
+                public void onOptionClicked(TravelOption travelOption) {
+
+                    switch (travelOption) {
+                        case uber:
+                            //Analytics
+                            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_UBER_TAP, AnalyticsCategory.VDP, getUberProps());
+
+                            if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), getActivity())) {
+                                //show uber price estimates
+                                showEstimates(venue);
+                            } else {
+                                //no uber app installed, show sign up link
+                                goUberSignup(venue);
+                            }
+                            break;
+
+                        case maps:
+                            location.performClick();
+                            break;
+                    }
+                }
+            };
+
+            popupWindow.show();
+        }
+    }
+
+    private Props getUberProps() {
+        Props props = new Props();
+        boolean isUberInstalled = AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), LiveNationApplication.get().getApplicationContext());
+        String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
+        if (isUberInstalled) {
+            uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
+        }
+        props.put(AnalyticConstants.UBER_APP, uber_app_value);
+        return props;
+    }
+
+    private void showEstimates(Venue venue) {
+        float endLat = Double.valueOf(venue.getLat()).floatValue();
+        float endLng = Double.valueOf(venue.getLng()).floatValue();
+        String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
+        String venueName = venue.getName();
+
+        DialogFragment dialog = UberHelper.getUberEstimateDialog(uberClient, endLat, endLng, venueAddress, venueName);
+
+        dialog.setTargetFragment(VenueFragment.this, ACTIVITY_RESULT_UBER);
+        dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
+    }
+
+    private void goUberSignup(Venue venue) {
+        float endLat = Double.valueOf(venue.getLat()).floatValue();
+        float endLng = Double.valueOf(venue.getLng()).floatValue();
+        String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
+        String venueName = venue.getName();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), endLat, endLng, venueName, venueAddress));
+        startActivity(intent);
+    }
+
 }

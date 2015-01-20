@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -20,7 +21,6 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ApiParameterDefinitions;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.MultiGetParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.segment.android.models.Props;
 
 import java.util.List;
 import java.util.Set;
@@ -212,17 +212,12 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
     private void trackDeepLinks(Uri uri) {
-        String btid = uri.getQueryParameter("btid");
-        String ui = uri.getQueryParameter("ui");
-        String c = uri.getQueryParameter("c");
-        String from = uri.getQueryParameter("from");
-        String url = uri.toString();
+        Set<String> queryNames = uri.getQueryParameterNames();
         Props props = new Props();
-        props.put(AnalyticConstants.BTID, btid);
-        props.put(AnalyticConstants.UI, ui);
-        props.put(AnalyticConstants.C, c);
-        props.put(AnalyticConstants.FROM, from);
-        props.put(AnalyticConstants.DEEP_LINK_URL, url);
+        for (String name: queryNames) {
+            props.put(name, uri.getQueryParameter(name));
+        }
+        props.put(AnalyticConstants.DEEP_LINK_URL, uri.toString());
 
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
 

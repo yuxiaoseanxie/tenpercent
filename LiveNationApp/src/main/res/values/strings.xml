@@ -23,6 +23,8 @@
     <string name="tab_favorites_venues">Venues</string>
 
     <string name="venue_detail_link">Venue Info</string>
+    <string name="venue_travel_google_maps">Open in Google Maps</string>
+
     <string name="artist_events_overflow">See All Shows</string>
     <string name="artist_events_no_show">No Scheduled Events</string>
     <string name="artist_videos_overflow">See All Videos</string>
@@ -53,6 +55,7 @@
     <string name="account_notifications">Notifications</string>
     <string name="account_favorites">Your Favorites</string>
     <string name="account_footer_location_title">Your Location</string>
+    <string name="account_footer_location_default">Searching...</string>
 
     <string name="location_current">Current Location</string>
     <string name="location_previous_locations">Previous Locations</string>
@@ -154,6 +157,10 @@
     <string name="confirmation_action_tag_line_share">Brag, Boast. Share</string>
     <string name="confirmation_action_tag_line_seat_upgrade">Want a better seat?</string>
     <string name="confirmation_action_seat_upgrade">Get an Upgrade</string>
+
+    <!-- Order details -->
+    <string name="order_details_header_next_show">Next show</string>
+    <string name="order_details_header_other_shows">All other shows</string>
 
     <!-- Notifications -->
     <string name="no_messages">No messages</string>

@@ -26,3 +26,13 @@ android {
         }
     }
 }
+
+/** Disable facebook module testing
+ * The facebook sdk has no tests. A newer version of Gradle now wants to fail the project because
+ * the facebook module has no tests.
+ * http://stackoverflow.com/questions/26468796/no-tests-error-in-gradle
+ *
+*/
+project.afterEvaluate{
+    connectedAndroidTest {}.enabled false
+}

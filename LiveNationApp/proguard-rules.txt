@@ -67,6 +67,13 @@
     *;
 }
 
+# App - Uber
+# Leave model classes alone.  Jackson uses reflection heavily to work correctly, proguard destroys this
+
+-keepclassmembers class com.livenation.mobile.android.na.uber.service.model.** {
+    *;
+}
+
 # Facebook
 
 -keep class com.facebook.** { *; } 
@@ -91,6 +98,11 @@
 -keep class com.experience.** { *; }
 -dontwarn com.experience.**
 
+-keep class org.hamcrest.**
+-dontwarn org.hamcrest.**
+-keep class com.google.**
+-dontwarn com.google.**
+
 # Crashyltics debugging
 -keepattributes SourceFile,LineNumberTable
 
@@ -101,4 +113,16 @@
     public static int w(...);
     public static int d(...);
     public static int e(...);
+}
+
+# Retrofit warnings
+# https://github.com/square/retrofit/issues/435
+-dontwarn rx.**
+-dontwarn retrofit.appengine.UrlFetchClient
+-dontwarn com.squareup.okhttp.*
+-keepattributes *Annotation*
+-keepattributes Signature
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+@retrofit.http.* <methods>;
 }

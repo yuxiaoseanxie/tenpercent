@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
@@ -31,10 +32,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicA
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.ArtistEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.segment.android.models.Props;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,14 +201,13 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 final double lat = config.getLat();
                 final double lng = config.getLng();
 
-                ArtistEventsParameters apiParams = new ArtistEventsParameters();
+                EventParameters apiParams = new EventParameters();
 
                 String artistIdRaw = getActivity().getIntent().getStringExtra(ArtistActivity.PARAMETER_ARTIST_ID);
-                apiParams.setArtistId(DataModelHelper.getNumericEntityId(artistIdRaw));
 
                 apiParams.setPage(0, 10);
 
-                LiveNationApplication.getLiveNationProxy().getArtistEvents(apiParams, new BasicApiCallback<List<Event>>() {
+                LiveNationApplication.getLiveNationProxy().getArtistEvents(DataModelHelper.getNumericEntityId(artistIdRaw), new BasicApiCallback<List<Event>>() {
                     @Override
                     public void onResponse(List<Event> response) {
                         if (getActivity() == null) return;
@@ -219,7 +218,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                     @Override
                     public void onErrorResponse(LiveNationError error) {
                     }
-                });
+                }, apiParams);
             }
 
             @Override

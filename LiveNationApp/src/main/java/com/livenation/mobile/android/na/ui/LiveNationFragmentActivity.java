@@ -14,14 +14,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
-import com.segment.android.Analytics;
-import com.segment.android.models.Props;
 
 import java.util.Iterator;
 import java.util.List;
@@ -49,9 +48,6 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         setContentView(res);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Segment.io
-        Analytics.onCreate(this);
 
         if (!LiveNationApplication.get().isMusicSync()) {
             LiveNationApplication.get().setIsMusicSync(true);
@@ -100,15 +96,12 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     protected void onStart() {
         LiveNationAnalytics.logTrace("Activity", "Start: " + getClass().getName());
         super.onStart();
-        Analytics.activityStart(this);
     }
 
     @Override
     protected void onPause() {
         LiveNationAnalytics.logTrace("Activity", "Pause: " + getClass().getName());
         super.onPause();
-        //Segment.io
-        Analytics.activityPause(this);
         //Omniture
         Config.pauseCollectingLifecycleData();
     }
@@ -117,8 +110,6 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     protected void onResume() {
         LiveNationAnalytics.logTrace("Activity", "Resume: " + getClass().getName());
         super.onResume();
-        //Segment.io
-        Analytics.activityResume(this);
         //Omniture
         Config.collectLifecycleData();
     }
@@ -127,7 +118,6 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
     protected void onStop() {
         LiveNationAnalytics.logTrace("Activity", "Stop: " + getClass().getName());
         super.onStop();
-        Analytics.activityStop(this);
     }
 
     public void trackScreenWithLocation(final String screenName) {

@@ -19,15 +19,14 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleEventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.segment.android.models.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -48,24 +47,24 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_show);
 
-        SingleEventParameters apiParams = new SingleEventParameters();
-        if (args.containsKey(PARAMETER_EVENT_ID)) {
-            String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
-            long eventId = DataModelHelper.getNumericEntityId(eventIdRaw);
-            apiParams.setEventId(eventId);
-        }
-
+        // Start google app indexing
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
+
+
+        Long eventId = null;
+        if (args.containsKey(PARAMETER_EVENT_ID)) {
+            String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
+            eventId = DataModelHelper.getNumericEntityId(eventIdRaw);
+        }
+
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_EVENT_CACHED)) {
             event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
             setEvent(event);
-        } else {
-
-
-            LiveNationApplication.getLiveNationProxy().getSingleEvent(apiParams, new BasicApiCallback<Event>() {
+        } else if (eventId != null) {
+            LiveNationApplication.getLiveNationProxy().getSingleEvent(eventId, new BasicApiCallback<Event>() {
                 @Override
                 public void onResponse(Event event) {
                     setEvent(event);
@@ -76,6 +75,9 @@ public class ShowActivity extends DetailBaseFragmentActivity {
                     //TODO display an error message
                 }
             });
+        } else {
+            finish();
+            return;
         }
     }
 
