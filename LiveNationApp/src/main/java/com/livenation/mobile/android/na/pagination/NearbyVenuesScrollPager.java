@@ -23,6 +23,7 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
     for this purpose (since the size of venue events (adapter) != size of venues (api)
      */
     private int offset = 0;
+    private final static int RADIUS = 50;
 
     public NearbyVenuesScrollPager(ArrayAdapter<Event> adapter) {
         super(DEFAULT_LIMIT, adapter);
@@ -46,6 +47,7 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
         params.setMinimumNumberOfEvents(2);
         params.setIncludeEvents(true);
         params.setPage(offset, limit);
+        params.setRadius(RADIUS);
 
         LiveNationApplication.getLiveNationProxy().getNearbyVenues(new BasicApiCallback<List<Venue>>() {
             @Override

@@ -212,17 +212,12 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
     private void trackDeepLinks(Uri uri) {
-        String btid = uri.getQueryParameter("btid");
-        String ui = uri.getQueryParameter("ui");
-        String c = uri.getQueryParameter("c");
-        String from = uri.getQueryParameter("from");
-        String url = uri.toString();
+        Set<String> queryNames = uri.getQueryParameterNames();
         Props props = new Props();
-        props.put(AnalyticConstants.BTID, btid);
-        props.put(AnalyticConstants.UI, ui);
-        props.put(AnalyticConstants.C, c);
-        props.put(AnalyticConstants.FROM, from);
-        props.put(AnalyticConstants.DEEP_LINK_URL, url);
+        for (String name: queryNames) {
+            props.put(name, uri.getQueryParameter(name));
+        }
+        props.put(AnalyticConstants.DEEP_LINK_URL, uri.toString());
 
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
 
