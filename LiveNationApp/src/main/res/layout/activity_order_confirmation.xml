@@ -44,7 +44,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7"/>
+                    android:shadowRadius="7" />
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_event_name"
@@ -59,7 +59,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7"/>
+                    android:shadowRadius="7" />
             </LinearLayout>
 
         </FrameLayout>
@@ -84,6 +84,9 @@
                 android:layout_weight="1"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingRight="@dimen/activity_vertical_margin"
+                android:paddingEnd="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingStart="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:orientation="vertical">
 

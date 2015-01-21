@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_toRightOf="@id/view_overflow_icon"
+        android:layout_toEndOf="@id/view_overflow_icon"
         android:text="@string/mock_overflow"
         android:textAppearance="@style/ln.text.medium.bold_italic.red" />
 

@@ -21,6 +21,7 @@
             android:layout_width="0dip"
             android:layout_height="1dip"
             android:layout_marginRight="@dimen/gap_small"
+            android:layout_marginEnd="@dimen/gap_small"
             android:layout_weight="1"
             android:background="@color/ui_header1_accent" />
 
@@ -36,6 +37,7 @@
             android:layout_width="0dip"
             android:layout_height="1dip"
             android:layout_marginLeft="@dimen/gap_small"
+            android:layout_marginStart="@dimen/gap_small"
             android:layout_weight="1"
             android:background="@color/ui_header1_accent" />
     </LinearLayout>
@@ -51,11 +53,13 @@
             style="@style/account_facebook_login_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
+            android:drawableStart="@drawable/login_facebook_logo"
             android:drawableLeft="@drawable/login_facebook_logo"
             android:drawablePadding="@dimen/gap_smaller"
             android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"
+            android:paddingEnd="@dimen/gap_small"
             android:text="@string/login_facebook_button" />
 
         <TextView
@@ -72,13 +76,14 @@
             style="@style/account_google_plus_login_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/account_header_sso_button_height"
+            android:drawableStart="@drawable/login_google_plus_logo"
             android:drawableLeft="@drawable/login_google_plus_logo"
             android:drawablePadding="@dimen/gap_smaller"
             android:minWidth="@dimen/account_header_sso_button_width"
             android:paddingLeft="@dimen/gap_small"
+            android:paddingEnd="@dimen/gap_small"
             android:paddingRight="@dimen/gap_small"
             android:text="@string/login_google_plus_button" />
-
     </LinearLayout>
 
 </LinearLayout>

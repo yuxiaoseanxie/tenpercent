@@ -5,7 +5,9 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/calendar_dialog_cell_padding_vertically"
     android:paddingLeft="@dimen/ui_dialog_list_separator_padding_left"
+    android:paddingStart="@dimen/ui_dialog_list_separator_padding_left"
     android:paddingRight="@dimen/calendar_dialog_cell_padding_right"
+    android:paddingEnd="@dimen/calendar_dialog_cell_padding_right"
     android:paddingTop="@dimen/calendar_dialog_cell_padding_vertically">
 
     <TextView

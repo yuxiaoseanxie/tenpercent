@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
-import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 import java.io.IOException;

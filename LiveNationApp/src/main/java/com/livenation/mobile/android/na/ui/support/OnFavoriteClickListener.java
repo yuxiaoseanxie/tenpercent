@@ -7,12 +7,11 @@ import android.widget.CompoundButton;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
-import com.livenation.mobile.android.platform.init.LiveNationLibrary;
-import com.livenation.mobile.android.na.analytics.Props;
 
 public class OnFavoriteClickListener {
     public static class OnVenueFavoriteClick extends OnFavoriteClick {

@@ -7,6 +7,8 @@
     android:paddingBottom="15dp"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     android:paddingTop="15dp">
 
     <TextView
@@ -22,8 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
-        android:gravity="right"
+        android:layout_marginLeft="@dimen/gap_smaller"
+        android:layout_marginStart="@dimen/gap_smaller"
+        android:gravity="end"
         android:text="@string/mock_debug_action"
         android:textAppearance="@style/ln.text.small" />
 

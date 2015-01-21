@@ -9,7 +9,7 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by cchilton on 8/19/14.
  */
-public class ExperienceAppClient  {
+public class ExperienceAppClient {
     private final RequestQueue requestQueue;
 
     public ExperienceAppClient(Context context) {
@@ -21,5 +21,8 @@ public class ExperienceAppClient  {
         requestQueue.add(request);
     }
 
-    public static abstract class ExperienceAppListener implements Response.Listener<Boolean>, Response.ErrorListener {};
+    public static abstract class ExperienceAppListener implements Response.Listener<Boolean>, Response.ErrorListener {
+    }
+
+    ;
 }
