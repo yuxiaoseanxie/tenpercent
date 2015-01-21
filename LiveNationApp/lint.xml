@@ -57,6 +57,8 @@
         <ignore path="src/main/res/layout/view_decorated_edittext.xml" />
         <ignore path="src/main/res/layout/dialog_rating.xml" />
         <ignore path="src/main/res/layout/dialog_ticket_offerings.xml" />
+        <ignore path="src/main/res/layout/order_uber_ride.xml"/>
+        <ignore path="src/main/res/layout/order_uber_signup.xml"/>
     </issue>
 
     <issue id="NewApi">
@@ -86,6 +88,7 @@
         <!-- DialogFragment -->
         <ignore path="src/main/java/com/livenation/mobile/android/na/ui/CitySearchActivity.java" />
         <ignore path="src/main/java/com/livenation/mobile/android/na/ui/SearchActivity.java" />
+        <ignore path="src/main/java/com/livenation/mobile/android/na/uber/dialogs/UberDialogFragment.java"/>
         <!-- ActionBar custom view -->
         <ignore
             path="src/main/java/com/livenation/mobile/android/na/ui/fragments/FavoritesFragment.java" />
@@ -119,6 +122,8 @@
         <ignore path="src/main/res/layout/list_search_result.xml"/>
         <ignore path="src/main/res/layout/list_search_city_item.xml"/>
         <ignore path="src/main/res/layout/src/main/res/layout/sub_venue_details.xml"/>
+        <ignore path="src/main/res/layout/list_show_nearby_item.xml"/>
+        <ignore path="src/main/res/layout/sub_venue_details.xml"/>
     </issue>
 
 </lint>

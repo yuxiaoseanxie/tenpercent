@@ -12,14 +12,11 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -145,8 +142,8 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
             props.put(AnalyticConstants.UBER_USER_CURRENT_LOCATION, String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LATITUDE)) + ", " +
                     String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LONGITUDE)));
-            props.put(AnalyticConstants.UBER_USER_CURRENT_DESTINATION, getArguments().getString(EXTRA_RESULT_NAME)+ ", " +
-                    String.valueOf(getArguments().getFloat(EXTRA_RESULT_LATITUDE))+ ", " +
+            props.put(AnalyticConstants.UBER_USER_CURRENT_DESTINATION, getArguments().getString(EXTRA_RESULT_NAME) + ", " +
+                    String.valueOf(getArguments().getFloat(EXTRA_RESULT_LATITUDE)) + ", " +
                     String.valueOf(getArguments().getFloat(EXTRA_RESULT_LONGITUDE)));
             LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_PRODUCT_OPTION_TAP, AnalyticsCategory.UBER_MODAL, props);
         }
@@ -168,7 +165,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         String originValue = null;
         if (fragment instanceof VenueFragment) {
             originValue = AnalyticConstants.UBER_ORIGIN_VDP;
-        } else if (fragment instanceof OrderHistoryFragment){
+        } else if (fragment instanceof OrderHistoryFragment) {
             originValue = AnalyticConstants.UBER_ORIGIN_YOUR_ORDERS;
         }
         Props props = new Props();
@@ -219,12 +216,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                 holder.time.setText("");
             }
 
-            int visibility = View.GONE;
             if (estimate.getPrice().getSurgeMultiplier() > 1) {
-                visibility = View.VISIBLE;
+                holder.title.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.uber_surge_badge), null);
+                holder.title.setCompoundDrawablePadding(0);
+            } else {
+                holder.title.setCompoundDrawables(null, null, null, null);
+                holder.title.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.uber_surge_badge_spacing));
             }
-
-            holder.surgeBadge.setVisibility(visibility);
 
             holder.cost.setText(estimate.getPrice().getEstimate());
             return convertView;
@@ -235,14 +233,12 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             private final TextView cost;
             private final TextView capacity;
             private final TextView time;
-            private final ImageView surgeBadge;
 
             public ViewHolder(View root) {
                 this.title = (TextView) root.findViewById(R.id.uber_list_price_estimate_title);
                 this.cost = (TextView) root.findViewById(R.id.uber_list_price_estimate_cost);
                 this.capacity = (TextView) root.findViewById(R.id.uber_list_price_estimate_capacity);
                 this.time = (TextView) root.findViewById(R.id.uber_list_price_estimate_time);
-                this.surgeBadge = (ImageView) root.findViewById(R.id.uber_list_surge_badge_imageview);
             }
         }
     }

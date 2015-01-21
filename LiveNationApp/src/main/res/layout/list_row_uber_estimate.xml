@@ -24,15 +24,10 @@
                 android:id="@+id/uber_list_price_estimate_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/ln.text.medium.bold" />
-
-            <ImageView
-                android:id="@+id/uber_list_surge_badge_imageview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/uber_surge_badge_spacing"
-                android:layout_marginStart="@dimen/uber_surge_badge_spacing"
-                android:src="@drawable/uber_surge_badge" />
+                android:drawableRight="@drawable/uber_surge_badge"
+                android:drawableEnd="@drawable/uber_surge_badge"
+                android:textAppearance="@style/ln.text.medium.bold"
+                android:drawablePadding="@dimen/uber_surge_badge_spacing" />
         </LinearLayout>
 
         <TextView
