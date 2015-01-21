@@ -1,11 +1,10 @@
 package com.livenation.mobile.android.na.youtube;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +14,7 @@ public class YouTubeClient {
     private static String apiKey;
 
     public static void initialize(Context context, String inApiKey) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        requestQueue = LiveNationApplication.get().getRequestQueue();
         apiKey = inApiKey;
     }
 

@@ -9,8 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.adapters.HelpListAdapter;
 
 import org.json.JSONArray;
@@ -38,7 +38,7 @@ public class HelpMenuFragment extends ListFragment implements Response.ErrorList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        queue = Volley.newRequestQueue(getActivity());
+        queue = LiveNationApplication.get().getRequestQueue();
         loadHelpJson();
     }
 

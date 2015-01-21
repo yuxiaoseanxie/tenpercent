@@ -82,6 +82,8 @@ public class LiveNationApplication extends Application {
     private EventsPresenter eventsPresenter;
     private VenueEventsPresenter venueEventsPresenter;
     private InboxStatusPresenter inboxStatusPresenter;
+    private RequestQueue requestQueue;
+
     //Migration
     private String oldUserId;
     private BroadcastReceiver updateOldAppBroadcastReceiver;
@@ -191,11 +193,12 @@ public class LiveNationApplication extends Application {
         int defaultCacheSize = MemoryImageCache.getDefaultLruSize();
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
 
-        RequestQueue imageQueue = Volley.newRequestQueue(getApplicationContext());
-        imageQueue.getCache().clear();
-        imageLoader = new ImageLoader(imageQueue, cache);
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.getCache().clear();
 
-        installedAppConfig = new InstalledAppConfig(this, Volley.newRequestQueue(getApplicationContext()));
+        imageLoader = new ImageLoader(requestQueue, cache);
+
+        installedAppConfig = new InstalledAppConfig(this, requestQueue);
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 
@@ -311,6 +314,10 @@ public class LiveNationApplication extends Application {
     public Ticketing.Environment getTicketingEnvironment(Context context) {
         TicketingEnvironmentPreferences preferences = new TicketingEnvironmentPreferences(context);
         return preferences.getConfiguredEnvironment();
+    }
+
+    public RequestQueue getRequestQueue() {
+        return requestQueue;
     }
 
     public ImageLoader getImageLoader() {
