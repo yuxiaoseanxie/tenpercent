@@ -224,34 +224,44 @@ public class UrlActivity extends LiveNationFragmentActivity {
         Intent intent = this.getIntent();
         String appReferrerExtra = intent.getStringExtra("android.intent.extra.REFERRER_NAME");
         if (appReferrerExtra != null) {
-            if (appReferrerExtra.startsWith("http://") || appReferrerExtra.startsWith("https://")) {
-                // App was opened from a browser
+            if (appWasOpenedFromBrowser(appReferrerExtra)) {
                 String host = Uri.parse(appReferrerExtra).getHost();
-                // host will contain the host path (e.g. www.google.com)
                 props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Browser");
                 props.put(AnalyticConstants.DEEP_LINK_HOST, host);
-                // Add analytics code below to track this click from web Search
-            } else if (appReferrerExtra.startsWith("android-app://")) {
-                // App was opened from another app
-                AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
-                String referrerPackage = appUri.getPackageName();
-                if ("com.google.android.googlequicksearchbox".equals(referrerPackage)) {
-                    // App was opened from the Google app
+            } else if (appWasOpenedFromApp(appReferrerExtra)) {
+                if (appWasOpenedFromGoogleApp(appReferrerExtra)) {
+                    AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
                     String host = appUri.getDeepLinkUri().getHost();
-                    // host will contain the host path (e.g. www.google.com)
                     props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Google app");
                     props.put(AnalyticConstants.DEEP_LINK_HOST, host);
-
-                    // Add analytics code below to track this click from the Google app
-                } else if ("com.google.appcrawler".equals(referrerPackage)) {
-                    // Make sure this is not being counted as part of app usage
+                } else if (appWasCoveredByGoogleCrawler(appReferrerExtra)) {
                     props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "com.google.appcrawler");
                 }
             }
         }
 
-
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
+    }
 
+    private Boolean appWasOpenedFromBrowser(String appReferrerExtra) {
+        return (appReferrerExtra.startsWith("http://") || appReferrerExtra.startsWith("https://"));
+    }
+
+    private Boolean appWasOpenedFromGoogleApp(String appReferrerExtra) {
+        AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+        String referrerPackage = appUri.getPackageName();
+
+        return ("com.google.android.googlequicksearchbox".equals(referrerPackage));
+    }
+
+    private Boolean appWasOpenedFromApp(String appReferrerExtra) {
+        return (appReferrerExtra.startsWith("android-app://"));
+    }
+
+    private Boolean appWasCoveredByGoogleCrawler(String appReferrerExtra) {
+        AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+        String referrerPackage = appUri.getPackageName();
+
+        return ("com.google.appcrawler".equals(referrerPackage));
     }
 }
