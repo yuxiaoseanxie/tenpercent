@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.google.android.gms.appindexing.AndroidAppUri;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -176,10 +177,10 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
     public void dispatchLiveNationIntent(Intent intent) {
         final Uri data = buildUri(intent.getData());
+        trackDeepLinks(data);
         if (isNavigate(data)) {
             dispatchNavigate(data);
         } else {
-            trackDeepLinks(data);
             List<String> pathSegments = data.getPathSegments();
             if (pathSegments.size() > 0 && (pathSegments.get(0).equals("event") || pathSegments.get(0).equals("events"))) {
                 dispatchEvent(data);
@@ -214,12 +215,53 @@ public class UrlActivity extends LiveNationFragmentActivity {
     private void trackDeepLinks(Uri uri) {
         Set<String> queryNames = uri.getQueryParameterNames();
         Props props = new Props();
-        for (String name: queryNames) {
+        for (String name : queryNames) {
             props.put(name, uri.getQueryParameter(name));
         }
         props.put(AnalyticConstants.DEEP_LINK_URL, uri.toString());
 
-        LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
+        //Find out how the deep link has been opened
+        Intent intent = this.getIntent();
+        String appReferrerExtra = intent.getStringExtra("android.intent.extra.REFERRER_NAME");
+        if (appReferrerExtra != null) {
+            if (appWasOpenedFromBrowser(appReferrerExtra)) {
+                String host = Uri.parse(appReferrerExtra).getHost();
+                props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Browser");
+                props.put(AnalyticConstants.DEEP_LINK_HOST, host);
+            } else if (appWasOpenedFromApp(appReferrerExtra)) {
+                if (appWasOpenedFromGoogleApp(appReferrerExtra)) {
+                    AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+                    String host = appUri.getDeepLinkUri().getHost();
+                    props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "Google app");
+                    props.put(AnalyticConstants.DEEP_LINK_HOST, host);
+                } else if (appWasCoveredByGoogleCrawler(appReferrerExtra)) {
+                    props.put(AnalyticConstants.DEEP_LINK_OPEN_FROM, "com.google.appcrawler");
+                }
+            }
+        }
 
+        LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
+    }
+
+    private Boolean appWasOpenedFromBrowser(String appReferrerExtra) {
+        return (appReferrerExtra.startsWith("http://") || appReferrerExtra.startsWith("https://"));
+    }
+
+    private Boolean appWasOpenedFromGoogleApp(String appReferrerExtra) {
+        AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+        String referrerPackage = appUri.getPackageName();
+
+        return ("com.google.android.googlequicksearchbox".equals(referrerPackage));
+    }
+
+    private Boolean appWasOpenedFromApp(String appReferrerExtra) {
+        return (appReferrerExtra.startsWith("android-app://"));
+    }
+
+    private Boolean appWasCoveredByGoogleCrawler(String appReferrerExtra) {
+        AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+        String referrerPackage = appUri.getPackageName();
+
+        return ("com.google.appcrawler".equals(referrerPackage));
     }
 }
