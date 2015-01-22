@@ -13,11 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.BuildConfig;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.presenters.AccountPresenters;
-import com.livenation.mobile.android.na.presenters.EventsPresenter;
 
 public abstract class LiveNationFragment extends Fragment {
 

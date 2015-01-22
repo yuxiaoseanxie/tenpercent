@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.BasedParameters;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
@@ -89,8 +90,8 @@ public class EventsPresenter extends BasePresenter<EventsView, EventsPresenter.E
             if (null == params) {
                 params = new EventParameters();
             }
-            params.setSortMethod("start_time");
-            LiveNationApplication.getLiveNationProxy().getEvents(params, EventsState.this);
+            params.setSortMethod(BasedParameters.SortField.StartTime);
+            LiveNationApplication.getLiveNationProxy().getEventsNearby(EventsState.this, params);
         }
 
         @Override

@@ -14,7 +14,9 @@
             layout="@layout/fragment_artist_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <ImageView style="@style/SwooshDivider" />
+
         <TextView
             android:id="@+id/fragment_artist_shows_header"
             style="@style/ui_header_transparent"

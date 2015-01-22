@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/onsale_dates_and_times"
-            android:textAppearance="@style/ln.text.order_confirmation_button.details"/>
+            android:textAppearance="@style/ln.text.order_confirmation_button.details" />
 
         <TextView
             android:id="@+id/view_confirmation_action_button_title"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/add_to_calendar"
-            android:textAppearance="@style/ln.text.order_confirmation_button.title"/>
+            android:textAppearance="@style/ln.text.order_confirmation_button.title" />
 
     </LinearLayout>
 

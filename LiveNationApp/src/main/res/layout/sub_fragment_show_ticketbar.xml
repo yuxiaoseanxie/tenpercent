@@ -19,6 +19,7 @@
         android:layout_height="@dimen/ui_ticketbar_options_height"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/gap_small"
+        android:layout_marginStart="@dimen/gap_small"
         android:background="@drawable/findtickets_option_selector_background"
         android:text="@string/ticketbar_options" />
 

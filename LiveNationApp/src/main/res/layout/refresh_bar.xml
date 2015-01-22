@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:drawableLeft="@drawable/refresh_white"
+        android:drawableStart="@drawable/refresh_white"
         android:drawablePadding="@dimen/view_refresh_bar_separator_margin"
         android:fontFamily="sans-serif-light-bold"
         android:text="@string/refresh_label"

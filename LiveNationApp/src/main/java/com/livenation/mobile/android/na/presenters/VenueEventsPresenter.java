@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.VenueEventsParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
@@ -48,7 +48,8 @@ public class VenueEventsPresenter extends
 
     static class VenueEventsState extends BaseResultState<ArrayList<Event>, EventsView> implements
             BasicApiCallback<List<Event>> {
-        private VenueEventsParameters apiParams;
+        private long venueId;
+        private EventParameters apiParams;
 
         public VenueEventsState(StateListener<VenueEventsState> listener, Bundle args, EventsView view) {
             super(listener, args, view);
@@ -61,16 +62,16 @@ public class VenueEventsPresenter extends
 
         @Override
         public void retrieveResult() {
-            LiveNationApplication.getLiveNationProxy().getVenueEvents(apiParams, VenueEventsState.this);
+            LiveNationApplication.getLiveNationProxy().getVenueEvents(venueId, VenueEventsState.this, apiParams);
         }
 
         @Override
         public void applyArgs(Bundle args) {
             super.applyArgs(args);
-            apiParams = new VenueEventsParameters();
+            apiParams = new EventParameters();
 
             String venueIdRaw = args.getString(PARAMETER_EVENT_ID);
-            apiParams.setVenueId(DataModelHelper.getNumericEntityId(venueIdRaw));
+            venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
 
             if (args.containsKey(PARAMETER_LIMIT)) {
                 int limit = args.getInt(PARAMETER_LIMIT);

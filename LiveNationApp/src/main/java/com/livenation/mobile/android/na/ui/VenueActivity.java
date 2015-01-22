@@ -25,10 +25,8 @@ import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleVenueParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.HashMap;
@@ -69,11 +67,9 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         } else {
 
             //Get venue detail
-            SingleVenueParameters apiParams = new SingleVenueParameters();
             String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
             long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
-            apiParams.setVenueId(venueId);
-            LiveNationApplication.getLiveNationProxy().getSingleVenue(apiParams, new BasicApiCallback<Venue>() {
+            LiveNationApplication.getLiveNationProxy().getSingleVenue(venueId, new BasicApiCallback<Venue>() {
                 @Override
                 public void onResponse(Venue venue) {
                     setVenue(venue);

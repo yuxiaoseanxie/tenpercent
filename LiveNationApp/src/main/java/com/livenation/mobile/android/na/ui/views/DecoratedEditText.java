@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;

@@ -10,15 +10,14 @@ import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -113,7 +112,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         holder.getFavorite().setChecked(false);
 
         Venue venue = event.getVenue();
-        holder.getFavorite().bindToFavorite(Favorite.fromVenue(venue) , AnalyticsCategory.NEARBY);
+        holder.getFavorite().bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.NEARBY);
 
         return view;
     }

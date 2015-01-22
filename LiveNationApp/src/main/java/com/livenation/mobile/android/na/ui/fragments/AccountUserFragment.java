@@ -78,7 +78,6 @@ public class AccountUserFragment extends LiveNationFragment implements
         }
 
 
-
         return view;
     }
 

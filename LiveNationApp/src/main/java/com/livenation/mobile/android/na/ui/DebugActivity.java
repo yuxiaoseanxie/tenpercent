@@ -32,19 +32,17 @@ import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
+import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-import com.mobilitus.tm.tickets.TicketLibrary;
 import com.urbanairship.UAirship;
-import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
 
@@ -400,7 +398,7 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
 
                     Intent mStartActivity = new Intent(DebugActivity.this, OnBoardingActivity.class);
                     int mPendingIntentId = 123456;
-                    PendingIntent mPendingIntent = PendingIntent.getActivity(DebugActivity.this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(DebugActivity.this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                     System.exit(0);

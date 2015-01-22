@@ -14,6 +14,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="top"
         android:layout_marginLeft="@dimen/gap_tiny"
+        android:layout_marginStart="@dimen/gap_tiny"
         android:button="@drawable/checkbox_favorite_padding_selector"
         android:checked="false"
         android:minHeight="@dimen/minimum_pressable"
@@ -27,6 +28,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/list_search_type_margin_left"
         android:layout_toRightOf="@id/list_search_checkbox"
+        android:layout_marginStart="@dimen/list_search_type_margin_left"
+        android:layout_toEndOf="@id/list_search_checkbox"
         android:text="@string/mock_artist_type" />
 
     <TextView
@@ -36,7 +39,9 @@
         android:layout_alignTop="@id/list_search_type"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/gap_large"
+        android:layout_marginStart="@dimen/gap_large"
         android:layout_toRightOf="@+id/list_search_type"
+        android:layout_toEndOf="@+id/list_search_type"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/list_search_result_text" />
 
@@ -45,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
         android:layout_alignLeft="@id/list_search_type"
+        android:layout_alignStart="@id/list_search_type"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ui_underscore_background" />
 
