@@ -18,13 +18,13 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
+        android:name="com.livenation.mobile.android.na.debug.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.livenation.mobile.android.na.debug.permission.C2D_MESSAGE" />
     <permission
-        android:name="com.livenation.mobile.android.na.permission.UA_DATA"
+        android:name="com.livenation.mobile.android.na.debug.permission.UA_DATA"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
+    <uses-permission android:name="com.livenation.mobile.android.na.debug.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
     <!-- Begin segment.io Permissions -->
@@ -239,9 +239,7 @@
         <!-- UrbanAirship -->
 
         <!-- REQUIRED for PlayServiceUtils.handleAnyPlayServicesError to handle Google Play Services recoverable errors. -->
-        <activity
-            android:name="com.urbanairship.google.PlayServicesErrorActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.urbanairship.google.PlayServicesErrorActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- REQUIRED for Action.startActivityForResult -->
         <activity android:name="com.urbanairship.actions.ActionActivity" />
@@ -259,18 +257,16 @@
 
             <intent-filter android:priority="-999">
                 <action android:name="com.urbanairship.push.OPENED" />
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="com.livenation.mobile.android.na.debug" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".notifications.PushReceiver"
+        <receiver android:name=".notifications.PushReceiver"
             android:exported="false">
             <intent-filter android:priority="1">
                 <action android:name="com.urbanairship.push.CHANNEL_UPDATED" />
                 <action android:name="com.urbanairship.push.OPENED" />
                 <action android:name="com.urbanairship.push.RECEIVED" />
-
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="com.livenation.mobile.android.na.debug" />
             </intent-filter>
         </receiver>
         <receiver
@@ -280,7 +276,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="com.livenation.mobile.android.na.debug" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -305,6 +301,7 @@
             android:exported="true"
             android:multiprocess="true"
             android:permission="@string/urbanairship_permission" />
+
 
 
         <meta-data
