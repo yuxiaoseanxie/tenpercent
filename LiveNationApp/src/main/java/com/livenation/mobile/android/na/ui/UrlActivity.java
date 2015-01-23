@@ -259,9 +259,14 @@ public class UrlActivity extends LiveNationFragmentActivity {
     }
 
     private Boolean appWasCoveredByGoogleCrawler(String appReferrerExtra) {
-        AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
-        String referrerPackage = appUri.getPackageName();
+        try {
+            AndroidAppUri appUri = AndroidAppUri.newAndroidAppUri(Uri.parse(appReferrerExtra));
+            String referrerPackage = appUri.getPackageName();
 
-        return ("com.google.appcrawler".equals(referrerPackage));
+            return ("com.google.appcrawler".equals(referrerPackage));
+        } catch (Exception e) {
+            //AndroidAppUri.newAndroidAppUri() can return exception if the uri is not canonical
+            return false;
+        }
     }
 }
