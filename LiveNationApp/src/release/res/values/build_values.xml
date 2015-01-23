@@ -3,8 +3,6 @@
     <string name="google_api_key">AIzaSyB-m9XKAyFJRPIfzBMGZRJQ-yOeFzyTdKM</string>
     <string name="youtube_api_key">AIzaSyAmVqIc2WXXvc3MdDKJjXSAJf33rS2ACTY</string>
     <string name="facebook_app_id">120727820568</string>
-    <string name="urbanairship_permission">com.livenation.mobile.android.na.permission.UA_DATA</string>
-    <string name="urbanairship_authorities">com.livenation.mobile.android.na.urbanairship.provider</string>
 
     <!-- Uber Client ID -->
     <string name="uber_client_id">wgaUcqTEgDCYlQb_wqBB8zo5-hthS0ep</string>

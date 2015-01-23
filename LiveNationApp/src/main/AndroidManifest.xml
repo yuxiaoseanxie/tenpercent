@@ -18,13 +18,13 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
+        android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <permission
-        android:name="com.livenation.mobile.android.na.permission.UA_DATA"
+        android:name="${applicationId}.permission.UA_DATA"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
+    <uses-permission android:name="${applicationId}.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
     <!-- Begin segment.io Permissions -->
@@ -259,7 +259,7 @@
 
             <intent-filter android:priority="-999">
                 <action android:name="com.urbanairship.push.OPENED" />
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
         <receiver
@@ -270,7 +270,7 @@
                 <action android:name="com.urbanairship.push.OPENED" />
                 <action android:name="com.urbanairship.push.RECEIVED" />
 
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
         <receiver
@@ -280,7 +280,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="${applicationId}" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -301,10 +301,10 @@
 
         <provider
             android:name="com.urbanairship.UrbanAirshipProvider"
-            android:authorities="@string/urbanairship_authorities"
+            android:authorities="${applicationId}.urbanairship.provider"
             android:exported="true"
             android:multiprocess="true"
-            android:permission="@string/urbanairship_permission" />
+            android:permission="${applicationId}.permission.UA_DATA" />
 
 
         <meta-data
