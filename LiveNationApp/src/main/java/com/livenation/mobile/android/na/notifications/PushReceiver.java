@@ -16,41 +16,36 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.push.BaseIntentReceiver;
 import com.urbanairship.push.PushMessage;
 
+
+/**
+ * Sample to test:
+ * {"android":{"alert":"test","extra":{"payload":"testpayload","payload":"testpayload","type":"silent_push","_uamid":"idTest"}},"apids":["Replace with the channel ID"]}
+ */
 public class PushReceiver extends BaseIntentReceiver {
     private static final String LOG_TAG = "Live Nation Notifications";
 
     @Override
     protected void onChannelRegistrationSucceeded(Context context, String s) {
-        //getResultData()
-        //getResultExtras(true)
         registrationFinished(s);
     }
 
     @Override
     protected void onChannelRegistrationFailed(Context context) {
-        registrationFailed("a");
+        registrationFailed();
     }
 
     @Override
     protected void onPushReceived(Context context, PushMessage pushMessage, int i) {
         Log.i(LOG_TAG, "Push received: " + TextUtils.join(", ", pushMessage.getPushBundle().keySet()));
 
-        //String type = intent.getStringExtra(Constants.Notifications.EXTRA_TYPE);
-        String type = pushMessage.getInteractiveNotificationType();
-
+        String type = pushMessage.getPushBundle().getString(Constants.Notifications.EXTRA_TYPE);
         if (!BuildConfig.DEBUG && Constants.Notifications.TYPE_PUSH_CAPTCHA.equals(type)) {
-            //String pushCaptchaPayload = intent.getStringExtra(Constants.Notifications.EXTRA_PUSH_CAPTCHA_PAYLOAD);
-            String pushCaptchaPayload = pushMessage.getActionsPayload();
-
+            String pushCaptchaPayload = pushMessage.getPushBundle().getString(Constants.Notifications.EXTRA_PUSH_CAPTCHA_PAYLOAD);
             Ticketing.setPushCaptchaPayload(pushCaptchaPayload);
         }
 
-        //String messageValue = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_VALUE);
-        //String messageId = intent.getStringExtra(Constants.Notifications.EXTRA_RICH_MESSAGE_ID);
-
         String messageValue = pushMessage.getAlert();
         String messageId = pushMessage.getRichPushMessageId();
-
 
         Props props = new Props();
         props.put(AnalyticConstants.MESSAGE_VALUE, messageValue);
@@ -98,8 +93,8 @@ public class PushReceiver extends BaseIntentReceiver {
         NotificationsRegistrationManager.getInstance().register();
     }
 
-    private void registrationFailed(String string) {
-        Log.e(LOG_TAG, "Registration failed with ChannelId: " + string);
+    private void registrationFailed() {
+        Log.e(LOG_TAG, "Registration failed with ChannelId: ");
     }
 
     //endregion
