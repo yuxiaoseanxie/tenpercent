@@ -67,6 +67,7 @@ public class TravelAdapter extends BaseAdapter {
                     fastestUber.subscribe(new Action1<LiveNationEstimate>() {
                         @Override
                         public void call(LiveNationEstimate liveNationEstimate) {
+                            if (!liveNationEstimate.hasTime() || !liveNationEstimate.hasPrice()) return;
                             String uberTitle = context.getResources().getString(R.string.uber_popup_book_ride_mins);
                             uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
                             text1.setText(uberTitle);
