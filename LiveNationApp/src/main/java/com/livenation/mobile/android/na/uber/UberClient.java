@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.uber.service.UberService;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPrice;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
 import retrofit.converter.JacksonConverter;
 import rx.Observable;
 import rx.Subscriber;
@@ -46,10 +48,19 @@ public class UberClient {
     public UberClient(@NonNull Context context) {
         this.context = context.getApplicationContext();
         this.clientId = context.getString(R.string.uber_client_id);
-        this.service = createUberService();
+        this.service = createUberService(null);
         this.token = context.getString(R.string.uber_token);
     }
 
+    @VisibleForTesting
+    public UberClient(@NonNull Context context, @NonNull Client retroClient, @NonNull String clientId, @NonNull String token) {
+        this.context = context.getApplicationContext();
+        this.clientId = clientId;
+        this.service = createUberService(retroClient);
+        this.token = token;
+    }
+
+    @VisibleForTesting
     public UberService getService() {
         return service;
     }
@@ -120,12 +131,15 @@ public class UberClient {
         return estimates;
     }
 
-    private UberService createUberService() {
+    private UberService createUberService(Client retroClient) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         RestAdapter.Builder builder = new RestAdapter.Builder();
         builder.setEndpoint(API_ENDPOINT);
+        if (retroClient != null) {
+            builder.setClient(retroClient);
+        }
         builder.setConverter(new JacksonConverter(objectMapper));
         builder.setRequestInterceptor(new RequestInterceptor() {
             @Override
