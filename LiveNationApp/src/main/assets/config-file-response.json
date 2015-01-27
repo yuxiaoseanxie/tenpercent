@@ -1,0 +1,22 @@
+{
+    "checkout_requires": "2.0.0",
+    "upgrade_maximum_version": "2.0.0",
+    "upgrade_message": "Upgrade to our super awesome 2.5 version, it'll blow your feeble little mind",
+    "upgrade_play_store_link": "https://play.google.com/store/apps/details?id=com.livenation.mobile.android.na",
+    "featured_carousel_chart": "mobile-featured",
+    "confirmation_actions": [
+        "SPLIT_COST",
+        "UPGRADE",
+        "ADD_TO_CALENDAR",
+        "SHARE"
+    ],
+    "skip_SDP_feature": true, 
+    "uber_free_ride_text": "Get your first ride free (Up to $30)"
+    "youtube": {
+    "blacklisted_artist_ids": [
+      "art_119492",
+      "art_51862",
+      "art_42484"
+    ]
+  }
+}

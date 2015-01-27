@@ -16,6 +16,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.YouTubeVideoView;
@@ -33,6 +34,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     private List<YouTubeVideo> videos;
     private ViewGroup videoContainer;
     private EmptyListViewControl empty;
+    private YouTubeClient youTubeClient;
 
     //region Lifecycle
 
@@ -56,6 +58,10 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
             empty.setVisibility(View.VISIBLE);
         }
 
+        if (artistName != null) {
+            load();
+        }
+
         return view;
     }
 
@@ -66,6 +72,10 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
         if (videos != null) {
             displayVideos(videos);
         }
+    }
+
+    public void setYouTubeClient(YouTubeClient youTubeClient) {
+        this.youTubeClient = youTubeClient;
     }
 
     @Override
@@ -88,10 +98,20 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
     public void setArtistName(String artistName) {
         if (this.artistName != null && this.artistName.equals(artistName))
             return;
-
         this.artistName = artistName;
+        //The view is already created (rotation of the device for example)
+        //In that case the onCreateView method is cold before setArtistName so we need to load the videos
+        if (empty != null) {
+            load();
+        }
+    }
 
-        load();
+    public YouTubeClient getYouTubeClient() {
+        if (youTubeClient == null) {
+            //Use the application context because the activity can be not attached yet
+            youTubeClient = new YouTubeClient(LiveNationApplication.get().getString(R.string.youtube_api_key));
+        }
+        return youTubeClient;
     }
 
     public int getMaxVideos() {
@@ -100,8 +120,6 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
 
     public void setMaxVideos(int maxVideos) {
         this.maxVideos = maxVideos;
-        if (videos != null)
-            displayVideos(videos);
     }
 
     public View getShowMoreItemsView() {
@@ -165,7 +183,7 @@ public class YouTubeFragment extends LiveNationFragment implements Response.List
             return;
         }
 
-        currentSearchRequest = YouTubeClient.search(getArtistName(), 30, this, this);
+        currentSearchRequest = getYouTubeClient().search(getArtistName(), 30, this, this);
     }
 
 

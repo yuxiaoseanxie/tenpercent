@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 import java.util.List;
 
 public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
@@ -84,7 +85,7 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
             JSONArray rawVideos = json.getJSONArray("items");
             List<YouTubeVideo> videos = YouTubeVideo.processJsonItems(rawVideos);
             if (shouldFilterResults()) {
-                YouTubeClient.filterVideos(videos, getQuery());
+                filterVideos(videos, getQuery());
             }
             return Response.success(videos, HttpHeaderParser.parseCacheHeaders(response));
         } catch (JSONException e) {
@@ -92,5 +93,26 @@ public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
         } catch (UnsupportedEncodingException e) {
             return Response.error(new VolleyError("UnsupportedEncodingException: " + e.getMessage(), e));
         }
+    }
+
+    //Utils
+
+    private void filterVideos(List<YouTubeVideo> videos, String query) {
+        Iterator<YouTubeVideo> videoIterator = videos.iterator();
+        while (videoIterator.hasNext()) {
+            YouTubeVideo video = videoIterator.next();
+            if (shouldFilterVideo(video, query))
+                videoIterator.remove();
+        }
+    }
+
+    private boolean shouldFilterVideo(YouTubeVideo video, String query) {
+        String title = video.getTitle();
+        String queryWithoutSpaces = query.replace(" ", "");
+
+        boolean match1 = !title.regionMatches(true, 0, query, 0, query.length());
+        boolean match2 = !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length());
+
+        return (!(match1 || match2));
     }
 }

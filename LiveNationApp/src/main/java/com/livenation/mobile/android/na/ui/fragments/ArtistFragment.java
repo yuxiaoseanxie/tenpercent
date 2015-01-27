@@ -24,6 +24,7 @@ import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
@@ -100,22 +101,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
         shows.setShowMoreItemsView(showMoreView);
 
-        youTube = (YouTubeFragment) getChildFragmentManager().findFragmentByTag("youtube");
-        if (youTube == null) {
-            this.youTube = new YouTubeFragment();
-            addFragment(R.id.fragment_artist_youtube_container, youTube, "youtube");
-        }
-        youTube.setMaxVideos(MAX_INLINE);
-        youTube.setShowMoreItemsView(showMoreVideos);
-
-        this.showMoreVideos = new OverflowView(getActivity());
-        if (youTube.getMaxVideos() > MAX_INLINE) {
-            showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
-            showMoreVideos.setExpanded(true);
-        } else {
-            showMoreVideos.setTitle(R.string.artist_videos_overflow);
-        }
-        showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
+        //Youtube Fragment
 
         init();
     }
@@ -145,11 +131,32 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     //endregion
 
+    private void displayYoutubeVideos(YouTubeClient youTubeClient) {
+        youTube = (YouTubeFragment) getChildFragmentManager().findFragmentByTag("youtube");
+        if (youTube == null) {
+            this.youTube = new YouTubeFragment();
+            addFragment(R.id.fragment_artist_youtube_container, youTube, "youtube");
+        }
+        youTube.setArtistName(artist.getName());
+        youTube.setYouTubeClient(youTubeClient);
+        youTube.setMaxVideos(MAX_INLINE);
+        youTube.setShowMoreItemsView(showMoreVideos);
+
+        this.showMoreVideos = new OverflowView(getActivity());
+        if (youTube.getMaxVideos() > MAX_INLINE) {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow_close);
+            showMoreVideos.setExpanded(true);
+        } else {
+            showMoreVideos.setTitle(R.string.artist_videos_overflow);
+        }
+        showMoreVideos.setOnClickListener(new ShowAllVideosOnClickListener());
+    }
+
 
     //region Presenters
 
     @Override
-    public void setSingleArtist(Artist artist) {
+    public void setSingleArtist(final Artist artist) {
         if (artist == null || getActivity() == null)
             return;
 
@@ -172,7 +179,21 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
         favoriteCheckBox.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.ADP);
 
-        youTube.setArtistName(artist.getName());
+        final YouTubeClient youTubeClient = new YouTubeClient(getString(R.string.youtube_api_key));
+        youTubeClient.getArtistBlackList(new BasicApiCallback<List<String>>() {
+            @Override
+            public void onResponse(List<String> response) {
+                if (response == null || !response.contains(artist.getId())) {
+                    displayYoutubeVideos(youTubeClient);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                displayYoutubeVideos(youTubeClient);
+            }
+        });
+
     }
 
     @Override

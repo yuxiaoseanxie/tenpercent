@@ -58,7 +58,7 @@ public class EventUtils {
     }
 
     static public void redirectToSDPOrEDP(final Event event, final FragmentActivity activity) {
-        ConfigFileProvider provider = new ConfigFileProvider(activity);
+        ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
         provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
             @Override
             public void onResponse(ConfigFileProvider.ConfigFile response) {

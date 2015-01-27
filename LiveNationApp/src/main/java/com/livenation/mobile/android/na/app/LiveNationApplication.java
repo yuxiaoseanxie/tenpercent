@@ -47,6 +47,7 @@ import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferen
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
 import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
@@ -78,6 +79,7 @@ public class LiveNationApplication extends Application {
     private static EnvironmentAppProvider environmentProvider;
     private static AccessTokenProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
+    private static ConfigFileProvider configFileProvider;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private VenueEventsPresenter venueEventsPresenter;
@@ -196,13 +198,12 @@ public class LiveNationApplication extends Application {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.getCache().clear();
 
+        configFileProvider = new ConfigFileProvider(this, requestQueue);
         imageLoader = new ImageLoader(requestQueue, cache);
 
         installedAppConfig = new InstalledAppConfig(this, requestQueue);
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
-
-        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
         setupNotifications();
         setupTicketing();
@@ -324,10 +325,6 @@ public class LiveNationApplication extends Application {
         return imageLoader;
     }
 
-    public EventsPresenter getEventsPresenter() {
-        return eventsPresenter;
-    }
-
     public VenueEventsPresenter getVenueEventsPresenter() {
         return venueEventsPresenter;
     }
@@ -346,6 +343,10 @@ public class LiveNationApplication extends Application {
 
     public void setIsMusicSync(boolean isMusicSync) {
         this.isMusicSync = isMusicSync;
+    }
+
+    public static ConfigFileProvider getConfigFileProvider() {
+        return configFileProvider;
     }
 
     private String getIasId() {

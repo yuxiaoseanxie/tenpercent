@@ -12,7 +12,11 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by elodieferrais on 10/27/14.
@@ -22,13 +26,13 @@ public class ConfigFileProvider {
     private Context context;
     static private ConfigFile configFile;
 
-    public ConfigFileProvider(Context context) {
+    public ConfigFileProvider(Context context, RequestQueue queue) {
         this.context = context;
         if (context == null) {
             throw (new NullPointerException());
         }
 
-        queue = LiveNationApplication.get().getRequestQueue();
+        this.queue = queue;
     }
 
     public void getConfigFile(final BasicApiCallback<ConfigFile> callback) {
@@ -39,8 +43,7 @@ public class ConfigFileProvider {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, context.getString(R.string.config_file_url), null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    boolean isSdpOn = response.optBoolean("skip_SDP_feature", false);
-                    configFile = new ConfigFile(isSdpOn);
+                    configFile = new ConfigFile(response);
                     callback.onResponse(configFile);
                 }
             }, new Response.ErrorListener() {
@@ -55,9 +58,24 @@ public class ConfigFileProvider {
 
     public class ConfigFile {
         public boolean skipSDPFeature;
+        public List<String> youtubeBlackList;
 
-        public ConfigFile(boolean skipSDPFeature) {
-            this.skipSDPFeature = skipSDPFeature;
+        public ConfigFile(JSONObject config) {
+
+            //skipSDPFeature
+            this.skipSDPFeature = config.optBoolean("skip_SDP_feature", false);
+
+            //youtubeBlackList
+            JSONObject youtubeConfig = config.optJSONObject("youtube");
+            if (youtubeConfig != null) {
+                JSONArray youtubeBlackJSONArray = youtubeConfig.optJSONArray("blacklisted_artist_ids");
+                if (youtubeBlackJSONArray != null) {
+                    this.youtubeBlackList = new ArrayList<>(youtubeBlackJSONArray.length());
+                    for (int i = 0; i < youtubeBlackJSONArray.length(); i++) {
+                        this.youtubeBlackList.add(youtubeBlackJSONArray.optString(i));
+                    }
+                }
+            }
         }
     }
 }

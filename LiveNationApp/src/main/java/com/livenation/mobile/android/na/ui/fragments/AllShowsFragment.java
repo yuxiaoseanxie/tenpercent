@@ -142,7 +142,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
 
-        ConfigFileProvider provider = new ConfigFileProvider(view.getContext());
+        ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
         provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
             @Override
             public void onResponse(ConfigFileProvider.ConfigFile response) {
