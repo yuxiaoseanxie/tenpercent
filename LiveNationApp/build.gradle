@@ -151,8 +151,8 @@ test.dependsOn(':LiveNationApp:connectedCheck')
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')
-    compile project(':facebookSDK')
     compile project(':Ticketing')
+    compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.android.support:support-v13:21.0.3'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile('se.emilsjolander:stickylistheaders:2.5.2').ext.git = 'https://github.com/emilsjolander/StickyListHeaders.git'
