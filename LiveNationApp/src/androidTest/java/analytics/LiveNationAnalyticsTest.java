@@ -30,6 +30,12 @@ public class LiveNationAnalyticsTest extends InstrumentationTestCase {
         props.put(PROP_KEY3, PROP_VALUE3);
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        LiveNationAnalytics.initialize();
+    }
+
     public void testTrack() {
         LiveNationAnalytics.initialize(new MockAnalyticService(new MockAnalyticService.OnAnalytics() {
             @Override
