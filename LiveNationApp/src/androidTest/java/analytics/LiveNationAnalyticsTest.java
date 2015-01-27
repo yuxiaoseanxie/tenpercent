@@ -1,19 +1,15 @@
 package analytics;
 
-import android.test.ActivityInstrumentationTestCase2;
+import android.test.InstrumentationTestCase;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
-import com.livenation.mobile.android.na.ui.TestActivity;
-
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by cchilton on 1/13/15.
  */
-public class LiveNationAnalyticsTest extends ActivityInstrumentationTestCase2 {
-    private Props props = new Props();
+public class LiveNationAnalyticsTest extends InstrumentationTestCase {
     private final String EVENT_TITLE1 = "event_title_1";
     private final String EVENT_CATEGORY1 = "event_category_1";
     private final String SCREEN_TITLE1 = "screen_title_1";
@@ -23,15 +19,11 @@ public class LiveNationAnalyticsTest extends ActivityInstrumentationTestCase2 {
     private final String PROP_VALUE1 = "key1";
     private final String PROP_VALUE2 = "key2";
     private final int PROP_VALUE3 = 3;
-
-    public LiveNationAnalyticsTest() {
-        super(TestActivity.class);
-    }
+    private Props props = new Props();
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        LiveNationAnalytics.initialize(getActivity());
 
         props.put(PROP_KEY1, PROP_VALUE1);
         props.put(PROP_KEY2, PROP_VALUE2);
@@ -39,8 +31,7 @@ public class LiveNationAnalyticsTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testTrack() {
-        LiveNationAnalytics.getAnalyticServices().clear();
-        LiveNationAnalytics.getAnalyticServices().add(new MockAnalyticService(new MockAnalyticService.OnAnalytics() {
+        LiveNationAnalytics.initialize(new MockAnalyticService(new MockAnalyticService.OnAnalytics() {
             @Override
             public void onScreen(String screenTitle, Props props) {
                 fail();
@@ -63,8 +54,7 @@ public class LiveNationAnalyticsTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testScreen() {
-        LiveNationAnalytics.getAnalyticServices().clear();
-        LiveNationAnalytics.getAnalyticServices().add(new MockAnalyticService(new MockAnalyticService.OnAnalytics() {
+        LiveNationAnalytics.initialize(new MockAnalyticService(new MockAnalyticService.OnAnalytics() {
             @Override
             public void onScreen(String screenTitle, Props props) {
                 assertEquals(screenTitle, SCREEN_TITLE1 + AnalyticConstants.PLATFORM_EVENT_SUFFIX);
