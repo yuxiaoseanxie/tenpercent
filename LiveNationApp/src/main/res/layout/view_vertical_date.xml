@@ -7,13 +7,14 @@
 
     <TextView
         android:id="@+id/list_show_item_date_dotw"
+        android:maxWidth="@dimen/vertical_date_dotw_max_width"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/mock_date_dotw"
         android:textAllCaps="true"
         android:textAppearance="@style/list_show_date_dotw" />
-
     <TextView
         android:layout_marginTop="@dimen/view_show_venue_details_packing"
         android:layout_marginBottom="@dimen/view_show_venue_details_packing"

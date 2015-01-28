@@ -34,5 +34,6 @@
     <!-- On boarding -->
 
     <color name="onboarding_scanning_view_background">#f2f2f2</color>
+    <color name="megaticket">#ff8420</color>
 
 </resources>

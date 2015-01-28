@@ -23,6 +23,7 @@ public class ShowView extends LinearLayout {
     private TextView title;
     private TextView details;
     private VerticalDate date;
+    private View megaticket;
 
     public ShowView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -49,8 +50,14 @@ public class ShowView extends LinearLayout {
         } else {
             timeZone = TimeZone.getDefault();
         }
-        date.setDate(start, timeZone);
+        date.setDate(start, timeZone, event.getIsMegaticket());
         details.setText(getDisplayMode().getDetails(event, start));
+
+        if (event.getIsMegaticket()) {
+            megaticket.setVisibility(View.VISIBLE);
+        } else {
+            megaticket.setVisibility(View.GONE);
+        }
     }
 
     public DisplayMode getDisplayMode() {
@@ -69,6 +76,7 @@ public class ShowView extends LinearLayout {
         this.title = (TextView) view.findViewById(R.id.view_show_title);
         this.details = (TextView) view.findViewById(R.id.view_show_details);
         this.date = (VerticalDate) view.findViewById(R.id.view_show_date);
+        this.megaticket = view.findViewById(R.id.view_show_megaticket);
 
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 

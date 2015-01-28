@@ -6,38 +6,49 @@
     android:descendantFocusability="blocksDescendants"
     android:minHeight="@dimen/list_item_height">
 
+
     <com.livenation.mobile.android.na.ui.views.VerticalDate
         android:id="@+id/view_show_date"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/gap_medium"
-        android:layout_marginStart="@dimen/gap_medium"
-        android:layout_marginRight="@dimen/gap_medium"
-        android:layout_marginEnd="@dimen/gap_medium"
         android:layout_marginTop="@dimen/gap_small" />
 
-    <TextView
-        android:id="@+id/view_show_title"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="@dimen/gap_tiny"
-        android:paddingEnd="@dimen/gap_tiny"
         android:layout_alignTop="@id/view_show_date"
-        android:layout_toRightOf="@id/view_show_date"
         android:layout_toEndOf="@id/view_show_date"
-        android:text="@string/mock_artist_title_1"
-        android:textAppearance="@style/ln.text.medium.bold" />
+        android:layout_toLeftOf="@id/view_show_date"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/view_show_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/view_show_title"
-        android:layout_alignStart="@id/view_show_title"
-        android:paddingRight="@dimen/gap_tiny"
-        android:paddingEnd="@dimen/gap_tiny"
-        android:layout_below="@id/view_show_title"
-        android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/ln.text.small.gray" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_show_megaticket"
+            android:visibility="gone"
+            android:textAllCaps="true"
+            android:textAppearance="@style/megaticket_appearance"
+            android:text="@string/megaticket"/>
+
+        <TextView
+            android:id="@+id/view_show_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/gap_tiny"
+            android:paddingEnd="@dimen/gap_tiny"
+            android:text="@string/mock_artist_title_1"
+            android:textAppearance="@style/ln.text.medium.bold" />
+
+        <TextView
+            android:id="@+id/view_show_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/gap_tiny"
+            android:paddingEnd="@dimen/gap_tiny"
+            android:text="@string/mock_venue_title_1"
+            android:textAppearance="@style/ln.text.small.gray" />
+    </LinearLayout>
+
+
 
 </RelativeLayout>
