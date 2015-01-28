@@ -11,10 +11,10 @@
         "SHARE"
     ],
     "skip_SDP_feature": true, 
-    "uber_free_ride_text": "Get your first ride free (Up to $30)"
+    "uber_free_ride_text": "Get your first ride free (Up to $30)",
     "youtube": {
     "blacklisted_artist_ids": [
-      "art_119492",
+      "art_119491",
       "art_51862",
       "art_42484"
     ]

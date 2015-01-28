@@ -2,11 +2,10 @@ package com.tools;
 
 import android.content.Context;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Response;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.processor.GenericProcessor;
-
 import junit.framework.Assert;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,5 +39,17 @@ public class SampleJsonReader {
             return null;
         }
         return json;
+    }
+
+    public static JSONObject getJsonObjectFromAssets(Context context, String fileName) {
+        String json = loadJSONFromAsset(context, fileName);
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            return jsonObject;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

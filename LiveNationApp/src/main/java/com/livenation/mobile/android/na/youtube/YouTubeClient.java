@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -24,6 +25,7 @@ public class YouTubeClient {
         apiKey = inApiKey;
     }
 
+    @VisibleForTesting
     public void setRequestQueue(RequestQueue requestQueue) {
         if (requestQueue != null) {
             this.requestQueue = requestQueue;

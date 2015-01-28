@@ -1,15 +1,16 @@
 package na.youtube;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
-import com.android.volley.Cache;
-import com.android.volley.toolbox.NoCache;
 import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.tools.NetworkResponseTest;
+import com.tools.ObjectTest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -36,9 +37,9 @@ public class YoutubeClientTest extends ActivityInstrumentationTestCase2 {
         youTubeClient = new YouTubeClient("youtube");
         //Define a custom network to avoid the server call
         network = new NetworkMock();
-        Cache cache = new NoCache();
-        RequestQueueMock requestQueueMock = new RequestQueueMock(network, cache);
+        RequestQueueMock requestQueueMock = new RequestQueueMock(network);
         youTubeClient.setRequestQueue(requestQueueMock);
+        signal = new CountDownLatch(1);
     }
 
     public void testGetArtistBlackList() throws InterruptedException {
@@ -47,8 +48,15 @@ public class YoutubeClientTest extends ActivityInstrumentationTestCase2 {
         youTubeClient.getArtistBlackList(new BasicApiCallback<List<String>>() {
             @Override
             public void onResponse(List<String> response) {
-                Log.d("Elodie", response.toString());
-                assertTrue(true);
+                JSONObject configFile = ObjectTest.getConfigFileSample(getInstrumentation().getContext());
+                JSONObject youtube = configFile.optJSONObject("youtube");
+                JSONArray jsonArray = youtube.optJSONArray("blacklisted_artist_ids");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    assertTrue(response.contains(jsonArray.optString(i)));
+                    response.remove(jsonArray.optString(i));
+                }
+                assertTrue(response.isEmpty());
                 signal.countDown();
             }
 
