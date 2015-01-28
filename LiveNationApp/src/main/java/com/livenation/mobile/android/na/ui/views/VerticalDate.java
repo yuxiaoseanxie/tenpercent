@@ -51,22 +51,23 @@ public class VerticalDate extends LinearLayout {
             this.dateDotw.setText(getContext().getString(R.string.view_date_multiday));
             this.dateDay.setVisibility(View.GONE);
             this.dateMonth.setVisibility(View.GONE);
-        } else {
-            this.dateDay.setVisibility(View.VISIBLE);
-            this.dateMonth.setVisibility(View.VISIBLE);
-
-            DAY_FORMATTER.setTimeZone(timeZone);
-            String day = DAY_FORMATTER.format(date);
-            this.dateDay.setText(day);
-
-            DOTW_FORMATTER.setTimeZone(timeZone);
-            String dotw = DOTW_FORMATTER.format(date);
-            this.dateDotw.setText(dotw);
-
-            MONTH_FORMATTER.setTimeZone(timeZone);
-            String month = MONTH_FORMATTER.format(date);
-            this.dateMonth.setText(month);
+            return;
         }
+
+        this.dateDay.setVisibility(View.VISIBLE);
+        this.dateMonth.setVisibility(View.VISIBLE);
+
+        DAY_FORMATTER.setTimeZone(timeZone);
+        String day = DAY_FORMATTER.format(date);
+        this.dateDay.setText(day);
+
+        DOTW_FORMATTER.setTimeZone(timeZone);
+        String dotw = DOTW_FORMATTER.format(date);
+        this.dateDotw.setText(dotw);
+
+        MONTH_FORMATTER.setTimeZone(timeZone);
+        String month = MONTH_FORMATTER.format(date);
+        this.dateMonth.setText(month);
     }
 
     private void init(Context context) {
