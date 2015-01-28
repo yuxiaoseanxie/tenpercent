@@ -15,6 +15,7 @@
         android:text="@string/mock_date_dotw"
         android:textAllCaps="true"
         android:textAppearance="@style/list_show_date_dotw" />
+
     <TextView
         android:layout_marginTop="@dimen/view_show_venue_details_packing"
         android:layout_marginBottom="@dimen/view_show_venue_details_packing"
