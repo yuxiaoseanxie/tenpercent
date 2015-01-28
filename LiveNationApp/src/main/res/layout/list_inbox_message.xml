@@ -5,7 +5,7 @@
     android:contentDescription="@string/mock_inbox_message"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="@dimen/gap_smaller">
 
     <View
         android:id="@+id/unread_indicator"
@@ -18,8 +18,10 @@
         android:id="@+id/message_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="7dp"
+        android:layout_marginLeft="@dimen/gap_small"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginRight="@dimen/gap_smaller"
+        android:layout_marginEnd="@dimen/gap_smaller"
         android:button="@drawable/ui_checkbox"
         android:focusable="false"
         android:focusableInTouchMode="false" />

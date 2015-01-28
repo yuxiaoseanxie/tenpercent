@@ -24,13 +24,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.notifications.UrbanAirshipRequest;
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushManager;
@@ -94,7 +94,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void loadAndCustomizeMessage() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        RequestQueue requestQueue = LiveNationApplication.get().getRequestQueue();
         UrbanAirshipRequest urbanAirshipRequest = new UrbanAirshipRequest(Request.Method.GET, message.getMessageUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

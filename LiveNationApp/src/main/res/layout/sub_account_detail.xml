@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/account_detail_image_your_orders"
+            android:layout_toEndOf="@id/account_detail_image_your_orders"
             android:text="@string/account_your_orders_title"
             android:textAppearance="@style/ln.text.large.bold" />
 
@@ -33,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_your_orders_title"
+            android:layout_alignStart="@id/account_detail_text_your_orders_title"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
@@ -57,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/account_detail_image_favorites"
+            android:layout_toEndOf="@id/account_detail_image_favorites"
             android:text="@string/account_favorites"
             android:textAppearance="@style/ln.text.large.bold" />
 
@@ -65,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_favorites_title"
+            android:layout_alignStart="@id/account_detail_text_favorites_title"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
 

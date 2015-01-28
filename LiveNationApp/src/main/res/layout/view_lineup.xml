@@ -27,6 +27,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="top"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
+        android:layout_toEndOf="@id/view_lineup_favorite_checkbox_container"
         android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/ln.text.medium.bold" />
 
@@ -36,6 +37,7 @@
         android:layout_height="@dimen/one_dp"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
+        android:layout_toEndOf="@id/view_lineup_favorite_checkbox_container"
         android:background="@drawable/ui_underscore_background" />
 
 </RelativeLayout>

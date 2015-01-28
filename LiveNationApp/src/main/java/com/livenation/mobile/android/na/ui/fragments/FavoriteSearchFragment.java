@@ -29,6 +29,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.livenation.mobile.android.na.ui.fragments.FavoriteSearchFragment.CLICK_MODE.OPEN_DETAIL;
 
@@ -153,7 +154,7 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
             SearchViewHolder holder = (SearchViewHolder) view.getTag();
             SearchResult searchResult = getItem(position);
             holder.title.setText(searchResult.getName());
-            holder.type.setText(searchResult.getObjectType().toLowerCase());
+            holder.type.setText(searchResult.getObjectType().toLowerCase(Locale.getDefault()));
             holder.checkBox.setVisibility(View.VISIBLE);
 
             Favorite favorite = new Favorite();

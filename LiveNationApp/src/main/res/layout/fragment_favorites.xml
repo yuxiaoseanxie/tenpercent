@@ -34,6 +34,7 @@
                         android:id="@+id/fragment_favorite_artists_empty"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_artists_list"
                         android:layout_width="match_parent"
@@ -52,6 +53,7 @@
                         android:id="@+id/fragment_favorite_venues_empty"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_venues_list"
                         android:layout_width="match_parent"

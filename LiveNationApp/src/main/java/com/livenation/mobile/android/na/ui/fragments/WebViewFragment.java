@@ -53,7 +53,7 @@ public class WebViewFragment extends Fragment {
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(url));
                     startActivity(intent);
-                }else if(url.startsWith("http:") || url.startsWith("https:")) {
+                } else if (url.startsWith("http:") || url.startsWith("https:")) {
                     view.loadUrl(url);
                 }
                 return true;

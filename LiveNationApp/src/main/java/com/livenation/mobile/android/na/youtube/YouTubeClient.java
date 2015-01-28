@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +14,7 @@ public class YouTubeClient {
     private static String apiKey;
 
     public static void initialize(Context context, String inApiKey) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        requestQueue = LiveNationApplication.get().getRequestQueue();
         apiKey = inApiKey;
     }
 
@@ -61,8 +61,11 @@ public class YouTubeClient {
     private static boolean shouldFilterVideo(YouTubeVideo video, String query) {
         String title = video.getTitle();
         String queryWithoutSpaces = query.replace(" ", "");
-        return (!title.regionMatches(true, 0, query, 0, query.length()) &&
-                !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length()));
+
+        boolean match1 = !title.regionMatches(true, 0, query, 0, query.length());
+        boolean match2 = !title.regionMatches(true, 0, queryWithoutSpaces, 0, queryWithoutSpaces.length());
+
+        return (!(match1 || match2));
     }
 
     public static void filterVideos(List<YouTubeVideo> videos, String query) {

@@ -1,9 +1,6 @@
 package com.livenation.mobile.android.na.app.rating;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.View;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;

@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -43,7 +42,7 @@ public class AccountUserFragment extends LiveNationFragment implements
         }
     };
     private BitmapRequest bitmapRequest;
-    private RequestQueue requestQueue = Volley.newRequestQueue(LiveNationApplication.get().getApplicationContext());
+    private RequestQueue requestQueue = LiveNationApplication.get().getRequestQueue();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +75,6 @@ public class AccountUserFragment extends LiveNationFragment implements
                 }
             }, getActivity());
         }
-
 
 
         return view;

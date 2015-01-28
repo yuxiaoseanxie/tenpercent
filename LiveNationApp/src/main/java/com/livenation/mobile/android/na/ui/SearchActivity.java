@@ -14,18 +14,15 @@ import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.fragments.SearchFragment;
 import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by elodieferrais on 11/5/14.
  */
 public abstract class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
     private SearchFragment fragment;
     private EditText input;
-    private Handler limiter = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            fragment.searchForText(input.getText().toString());
-        }
-    };
+    private LimiterHandler limiter = new LimiterHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,8 @@ public abstract class SearchActivity extends LiveNationFragmentActivity implemen
         DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);
 
         input = editText.getEditText();
+        limiter.setFragment(fragment);
+        limiter.setInput(input);
         input.addTextChangedListener(this);
 
         editText.setHint(getSearchMode().hintId);
@@ -85,4 +84,31 @@ public abstract class SearchActivity extends LiveNationFragmentActivity implemen
         }
 
     }
+
+    private static class LimiterHandler extends Handler {
+        private final WeakReference<LiveNationFragmentActivity> mActivity;
+        private SearchForText fragment;
+        private EditText input;
+
+        public LimiterHandler(LiveNationFragmentActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        public void setFragment(SearchForText fragment) {
+            this.fragment = fragment;
+        }
+
+        public void setInput(EditText input) {
+            this.input = input;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            LiveNationFragmentActivity activity = mActivity.get();
+            if (activity != null) {
+                fragment.searchForText(input.getText().toString());
+            }
+        }
+    }
+
 }

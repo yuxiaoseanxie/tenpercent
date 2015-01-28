@@ -26,6 +26,14 @@ public class LiveNationAnalytics {
     }
 
     @VisibleForTesting
+    static public void initialize(AnalyticService... analytics) {
+        analyticServices.clear();
+        for (int i = 0; i < analytics.length; i++) {
+            analyticServices.add(analytics[i]);
+        }
+    }
+
+    @VisibleForTesting
     static public List<AnalyticService> getAnalyticServices() {
         return analyticServices;
     }
@@ -63,6 +71,7 @@ public class LiveNationAnalytics {
     static public void screen(String screenTitle, Props props) {
         if (props == null)
             props = new Props();
+
 
         props.put(AnalyticConstants.PLATFORM, AnalyticConstants.PLATFORM_VALUE);
 

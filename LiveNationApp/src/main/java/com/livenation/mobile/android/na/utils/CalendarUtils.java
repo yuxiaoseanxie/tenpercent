@@ -70,7 +70,7 @@ public class CalendarUtils {
         List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (resolveInfos.size() > 0) {
             activity.startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(activity, R.string.calendar_add_event_not_supported_message, Toast.LENGTH_SHORT).show();
         }
 

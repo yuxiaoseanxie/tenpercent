@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.livenation.mobile.android.na.R;
@@ -140,7 +139,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
                 text.setText(getContext().getString(R.string.recommendations_title_personal));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 text.setCompoundDrawablePadding(0);
-                text.setPadding(text.getPaddingLeft(), getContext().getResources().getDimensionPixelSize(R.dimen.gap_medium),text.getPaddingRight(), text.getPaddingBottom());
+                text.setPadding(text.getPaddingLeft(), getContext().getResources().getDimensionPixelSize(R.dimen.gap_medium), text.getPaddingRight(), text.getPaddingBottom());
         }
 
         return view;

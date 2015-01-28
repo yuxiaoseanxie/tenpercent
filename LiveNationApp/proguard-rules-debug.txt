@@ -6,3 +6,7 @@
 -keepclassmembers class * {
 @com.livenation.mobile.android.na.helpers.VisibleForTesting *;
 }
+
+-keep class rx.observers.TestSubscriber {
+    *;
+}

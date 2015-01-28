@@ -241,7 +241,7 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
 
         if (artistAdapter.getCount() == 0) {
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.NO_DATA);
-        }  else {
+        } else {
             artistEmptyView.setViewMode(EmptyListViewControl.ViewMode.INACTIVE);
         }
         venueList.setSelectionFromTop(venueScrollPosition, venueOffset);

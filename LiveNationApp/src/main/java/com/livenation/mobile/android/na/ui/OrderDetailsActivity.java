@@ -10,7 +10,8 @@ import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.mobilitus.tm.tickets.models.Cart;
 
-public class OrderDetailsActivity extends BaseActivity {private Cart eventInfoCart;
+public class OrderDetailsActivity extends BaseActivity {
+    private Cart eventInfoCart;
 
     //region Lifecycle
 
