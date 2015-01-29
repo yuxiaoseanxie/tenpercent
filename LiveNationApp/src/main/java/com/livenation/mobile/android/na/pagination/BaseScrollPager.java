@@ -80,7 +80,11 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     protected int getOffset() {
-        return adapter.getCount();
+        if (isFirstPage) {
+            return 0;
+        } else {
+            return adapter.getCount();
+        }
     }
 
     public void onNoMorePages() {
