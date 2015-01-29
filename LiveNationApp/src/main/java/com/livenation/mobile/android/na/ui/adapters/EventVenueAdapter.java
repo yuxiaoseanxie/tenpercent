@@ -71,7 +71,7 @@ public class EventVenueAdapter extends ArrayAdapter<Event> implements StickyList
         String startTime = START_TIME_FORMATTER.format(event.getLocalStartTime());
 
         holder.getStartTime().setText(startTime);
-        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone, event.getIsMegaticket());
 
         return view;
     }

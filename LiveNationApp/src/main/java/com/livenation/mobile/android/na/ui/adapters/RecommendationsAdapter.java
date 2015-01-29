@@ -101,7 +101,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         } else {
             timeZone = TimeZone.getDefault();
         }
-        holder.getDate().setDate(event.getLocalStartTime(), timeZone);
+        holder.getDate().setDate(event.getLocalStartTime(), timeZone, event.getIsMegaticket());
 
         if ((position + 1) < getCount() && getHeaderId(position) != getHeaderId(position + 1)) {
             holder.getDivider().setVisibility(View.GONE);

@@ -46,7 +46,17 @@ public class VerticalDate extends LinearLayout {
         init(context);
     }
 
-    public void setDate(Date date, TimeZone timeZone) {
+    public void setDate(Date date, TimeZone timeZone, boolean isMultiDay) {
+        if (isMultiDay) {
+            this.dateDotw.setText(getContext().getString(R.string.view_date_multiday));
+            this.dateDay.setVisibility(View.GONE);
+            this.dateMonth.setVisibility(View.GONE);
+            return;
+        }
+
+        this.dateDay.setVisibility(View.VISIBLE);
+        this.dateMonth.setVisibility(View.VISIBLE);
+
         DAY_FORMATTER.setTimeZone(timeZone);
         String day = DAY_FORMATTER.format(date);
         this.dateDay.setText(day);

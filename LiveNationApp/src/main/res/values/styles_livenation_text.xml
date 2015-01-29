@@ -353,5 +353,9 @@
     </style>
 
     <style name="rating_button" parent="android:Widget.Button"></style>
+    
+    <style name="megaticket_appearance" parent="ln.text.small.bold">
+        <item name="android:textColor">@color/megaticket</item>
+    </style>
 
 </resources>
