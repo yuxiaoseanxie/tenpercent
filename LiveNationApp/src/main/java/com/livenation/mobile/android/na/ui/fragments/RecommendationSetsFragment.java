@@ -47,7 +47,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            scrollPager.reset();
+            scrollPager.resetDataAndClearView();
             scrollPager.load();
         }
     };

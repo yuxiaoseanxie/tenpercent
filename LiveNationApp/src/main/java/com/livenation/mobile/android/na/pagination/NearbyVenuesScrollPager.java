@@ -31,8 +31,8 @@ public class NearbyVenuesScrollPager extends BaseDecoratedScrollPager<Event, Lis
 
 
     @Override
-    public void reset() {
-        super.reset();
+    public void resetDataAndClearView() {
+        super.resetDataAndClearView();
         offset = 0;
     }
 

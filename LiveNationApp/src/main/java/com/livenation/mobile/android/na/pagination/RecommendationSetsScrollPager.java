@@ -30,8 +30,8 @@ public class RecommendationSetsScrollPager extends BaseDecoratedScrollPager<Reco
     }
 
     @Override
-    public void reset() {
-        super.reset();
+    public void resetDataAndClearView() {
+        super.resetDataAndClearView();
         pagingOffset = 0;
     }
 

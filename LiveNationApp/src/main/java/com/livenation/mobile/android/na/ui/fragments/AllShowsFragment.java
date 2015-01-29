@@ -214,7 +214,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     //LocationUpdateReceiver callback
     @Override
     public void onLocationUpdated(int mode, double lat, double lng) {
-        scrollPager.reset();
+        scrollPager.resetDataAndClearView();
         scrollPager.load();
         retrieveCharts();
     }

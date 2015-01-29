@@ -43,9 +43,14 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
-    public void reset() {
-        stop();
+    public void resetDataAndClearView() {
+        resetData();
         adapter.clear();
+
+    }
+
+    public void resetData() {
+        stop();
         lastFetch = null;
         isFirstPage = true;
         setHasMorePages(true);
