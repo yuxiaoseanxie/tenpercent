@@ -89,6 +89,9 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     protected void onFetchResult(List<TItemType> result) {
+        if (isFirstPage) {
+            adapter.clear();
+        }
         if (result.size() == 0 || hasItemAlreadyBeenFetched(result)) {
             //end of result list, or
             //found a dupe, abort adding the data to the adapter
