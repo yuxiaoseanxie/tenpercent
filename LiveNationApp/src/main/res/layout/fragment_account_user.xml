@@ -10,6 +10,7 @@
         android:id="@+id/fragment_account_user_image"
         android:layout_width="@dimen/sso_image_size"
         android:layout_height="@dimen/sso_image_size"
+        android:src="@drawable/placeholder_account_photo"
         android:scaleType="centerCrop" />
 
     <TextView
