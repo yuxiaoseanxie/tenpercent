@@ -108,7 +108,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
     @Override
     public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-        //avoid modifying ui if response is no longer attached
+        //avoid modifying ui if activity is no longer attached
         if (getActivity() == null) return;
         Bitmap bitmap = response.getBitmap();
         if (bitmap != null) {
@@ -121,7 +121,7 @@ public class AccountUserFragment extends LiveNationFragment implements
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        //avoid modifying ui if response is no longer attached
+        //avoid modifying ui if activity is no longer attached
         if (getActivity() == null) return;
         image.setImageResource(R.drawable.placeholder_account_photo);
     }
