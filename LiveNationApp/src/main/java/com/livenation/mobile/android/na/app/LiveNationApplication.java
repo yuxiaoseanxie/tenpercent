@@ -199,7 +199,7 @@ public class LiveNationApplication extends Application {
         configFileProvider = new ConfigFileProvider(this, requestQueue);
         imageLoader = new ImageLoader(requestQueue, cache);
 
-        installedAppConfig = new ConfigFilePersistenceHelper(this, requestQueue);
+        installedAppConfig = new ConfigFilePersistenceHelper(this, configFileProvider);
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 
