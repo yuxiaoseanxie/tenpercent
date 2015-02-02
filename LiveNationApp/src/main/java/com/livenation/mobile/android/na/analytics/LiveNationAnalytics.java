@@ -26,6 +26,14 @@ public class LiveNationAnalytics {
     }
 
     @VisibleForTesting
+    static public void initialize(AnalyticService... analytics) {
+        analyticServices.clear();
+        for (int i = 0; i < analytics.length; i++) {
+            analyticServices.add(analytics[i]);
+        }
+    }
+
+    @VisibleForTesting
     static public List<AnalyticService> getAnalyticServices() {
         return analyticServices;
     }

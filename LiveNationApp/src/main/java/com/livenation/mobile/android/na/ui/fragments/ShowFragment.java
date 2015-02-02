@@ -115,20 +115,24 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         this.event = event;
 
         artistTitle.setText(event.getName());
-
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT, Locale.getDefault());
-        TimeZone timeZone;
-        if (event.getVenue().getTimeZone() != null) {
-            timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+        if (event.getIsMegaticket()) {
+            calendarText.setText(getString(R.string.show_multiple_dates));
+            calendarContainer.setOnClickListener(null);
+            calendarContainer.findViewById(R.id.sub_show_calendar_plus_image).setVisibility(View.GONE);
         } else {
-            timeZone = TimeZone.getDefault();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(CALENDAR_DATE_FORMAT, Locale.getDefault());
+            TimeZone timeZone;
+            if (event.getVenue().getTimeZone() != null) {
+                timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+            } else {
+                timeZone = TimeZone.getDefault();
+            }
+            dateFormatter.setTimeZone(timeZone);
+            String calendarValue = dateFormatter.format(event.getLocalStartTime());
+            calendarText.setText(calendarValue);
+            OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
+            calendarContainer.setOnClickListener(onCalendarViewClick);
         }
-        dateFormatter.setTimeZone(timeZone);
-        String calendarValue = dateFormatter.format(event.getLocalStartTime());
-        calendarText.setText(calendarValue);
-        OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
-        calendarContainer.setOnClickListener(onCalendarViewClick);
-
 
         if (null != event.getVenue()) {
             Venue venue = event.getVenue();

@@ -40,7 +40,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 
 public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
-    private final String PROFILE_FRAGMENT_TAG = "profile_fragment";
+    private final String LOCATION_NAME = "location";
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
@@ -54,7 +54,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Do not set RetainInstance to true because is the savedInstanceState to null
+        //Do not set RetainInstance to true because it sets the savedInstanceState to null
         //setRetainInstance(false);
     }
 
@@ -77,6 +77,9 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
         if (savedInstanceState == null) {
             //Get location for update the screen
             LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+        } else {
+            String locationName = savedInstanceState.getString(LOCATION_NAME);
+            locationText.setText(locationName);
         }
 
         //Register for being notify when the location change
@@ -192,5 +195,11 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
             Intent intent = new Intent(getActivity(), LocationActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(LOCATION_NAME, locationText.getText().toString());
     }
 }

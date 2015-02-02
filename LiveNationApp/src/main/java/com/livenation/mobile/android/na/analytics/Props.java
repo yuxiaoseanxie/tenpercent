@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.analytics;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,5 +22,10 @@ public class Props {
 
     public Set<String> keySet() {
         return data.keySet();
+    }
+
+    @Override
+    public String toString() {
+        return (new JSONObject(data)).toString();
     }
 }

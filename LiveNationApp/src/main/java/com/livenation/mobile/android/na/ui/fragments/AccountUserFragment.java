@@ -13,24 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.utils.BitmapRequest;
 import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 
 public class AccountUserFragment extends LiveNationFragment implements
-        AccountUserView, Response.Listener<Bitmap>, Response.ErrorListener {
+        AccountUserView, ImageLoader.ImageListener {
     private TextView name;
     private TextView email;
 
@@ -41,8 +38,6 @@ public class AccountUserFragment extends LiveNationFragment implements
             onResume();
         }
     };
-    private BitmapRequest bitmapRequest;
-    private RequestQueue requestQueue = LiveNationApplication.get().getRequestQueue();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +71,6 @@ public class AccountUserFragment extends LiveNationFragment implements
             }, getActivity());
         }
 
-
         return view;
     }
 
@@ -102,29 +96,21 @@ public class AccountUserFragment extends LiveNationFragment implements
 
         }
         email.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
-
-        bitmapRequest = new BitmapRequest(Request.Method.GET, user.getUrl(), this, this);
-        requestQueue.add(bitmapRequest);
+        LiveNationApplication.get().getImageLoader().get(user.getUrl(), this);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-            @Override
-            public boolean apply(Request<?> request) {
-                return true;
-            }
-        });
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(logoutBroadcastReceiver);
+
     }
 
     @Override
-    public void onErrorResponse(VolleyError error) {
-        image.setImageResource(R.drawable.placeholder_account_photo);
-    }
-
-    @Override
-    public void onResponse(Bitmap bitmap) {
+    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+        //avoid modifying ui if activity is no longer attached
+        if (getActivity() == null) return;
+        Bitmap bitmap = response.getBitmap();
         if (bitmap != null) {
             bitmap = ImageUtils.getCircleBitmap(bitmap, getResources().getDimensionPixelSize(R.dimen.one_dp));
             image.setImageBitmap(bitmap);
@@ -134,9 +120,9 @@ public class AccountUserFragment extends LiveNationFragment implements
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(LiveNationApplication.get().getApplicationContext()).unregisterReceiver(logoutBroadcastReceiver);
-
+    public void onErrorResponse(VolleyError error) {
+        //avoid modifying ui if activity is no longer attached
+        if (getActivity() == null) return;
+        image.setImageResource(R.drawable.placeholder_account_photo);
     }
 }

@@ -55,7 +55,7 @@
     <string name="account_notifications">Notifications</string>
     <string name="account_favorites">Your Favorites</string>
     <string name="account_footer_location_title">Your Location</string>
-    <string name="account_footer_location_default">Searching#8230;</string>
+    <string name="account_footer_location_default">Searching&#8230;</string>
 
     <string name="location_current">Current Location</string>
     <string name="location_previous_locations">Previous Locations</string>
@@ -134,7 +134,9 @@
     <string name="url_error_bad_entity">Item not found</string>
     <string name="url_error_platform">Please try again later</string>
     <string name="url_error_bad_url">Bad URL</string>
-
+    <string name="megaticket">Megaticket</string>
+    <string name="view_date_multiday">Multi Day</string>
+    <string name="show_multiple_dates">Multiple Dates and Times</string>
     <!-- Order Confirmation Screen -->
 
     <plurals name="order_confirmation_title_detail">
