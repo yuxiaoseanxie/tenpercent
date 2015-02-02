@@ -18,13 +18,13 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
+        android:name="${applicationId}.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
     <permission
-        android:name="com.livenation.mobile.android.na.permission.UA_DATA"
+        android:name="${applicationId}.permission.UA_DATA"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
+    <uses-permission android:name="${applicationId}.permission.UA_DATA" />
     <!-- End Urban Airship Permissions -->
 
     <!-- Begin segment.io Permissions -->
@@ -236,7 +236,43 @@
                 <action android:name="com.apsalar.sdk.SOFT_RESET"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.urbanairship.CoreReceiver" />
+        <!-- UrbanAirship -->
+
+        <!-- REQUIRED for PlayServiceUtils.handleAnyPlayServicesError to handle Google Play Services recoverable errors. -->
+        <activity
+            android:name="com.urbanairship.google.PlayServicesErrorActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- REQUIRED for Action.startActivityForResult -->
+        <activity android:name="com.urbanairship.actions.ActionActivity" />
+
+        <!-- REQUIRED for Urban Airship Push -->
+        <activity android:name="com.urbanairship.CoreActivity" />
+
+        <!-- REQUIRED for Urban Airship Push. The priority is important to be set lower than the
+        application's push intent receiver in order for the push intent receiver to handle push intents
+        before the core receiver. This allows the application to launch any activities before Urban
+        Airship performs any actions or falls back to launching the application launch intent. -->
+        <receiver
+            android:name="com.urbanairship.CoreReceiver"
+            android:exported="false">
+
+            <intent-filter android:priority="-999">
+                <action android:name="com.urbanairship.push.OPENED" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".notifications.PushReceiver"
+            android:exported="false">
+            <intent-filter android:priority="1">
+                <action android:name="com.urbanairship.push.CHANNEL_UPDATED" />
+                <action android:name="com.urbanairship.push.OPENED" />
+                <action android:name="com.urbanairship.push.RECEIVED" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name="com.urbanairship.push.GCMPushReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -244,7 +280,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.livenation.mobile.android.na" />
+                <category android:name="${applicationId}" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -265,12 +301,12 @@
 
         <provider
             android:name="com.urbanairship.UrbanAirshipProvider"
-            android:authorities="@string/urbanairship_authorities"
+            android:authorities="${applicationId}.urbanairship.provider"
             android:exported="true"
             android:multiprocess="true"
-            android:permission="@string/urbanairship_permission" />
+            android:permission="${applicationId}.permission.UA_DATA" />
 
-        <receiver android:name="com.livenation.mobile.android.na.notifications.PushReceiver" />
+
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="864f58eb35b59716829c5ae470eab6feb4f8a1c6" />

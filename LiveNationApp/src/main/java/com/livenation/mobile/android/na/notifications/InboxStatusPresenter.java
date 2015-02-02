@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
+import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
 
 /**
@@ -23,7 +24,7 @@ public class InboxStatusPresenter extends BasePresenter<InboxStatusView, InboxSt
         public InboxStatusState(StateListener listener, Bundle args, InboxStatusView view) {
             super(listener, args, view);
 
-            this.inbox = RichPushInbox.shared();
+            this.inbox = UAirship.shared().getRichPushManager().getRichPushInbox();
             inbox.addListener(this);
         }
 

@@ -82,7 +82,7 @@
     <string name="debug_header_actions">ACTIONS</string>
     <string name="debug_item_device_uuid">Device ID</string>
     <string name="debug_item_access_token">Access Token</string>
-    <string name="debug_item_apid">APID</string>
+    <string name="debug_item_ua_channel_id">Urban Airship channel Id</string>
     <string name="debug_item_urban_airship_id">Urban Airship ID</string>
     <string name="debug_item_environment">Environment</string>
     <string name="debug_item_ticketing_environment">Ticketing Environment</string>
