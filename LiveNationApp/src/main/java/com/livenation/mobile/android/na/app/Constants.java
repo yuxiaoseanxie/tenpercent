@@ -82,6 +82,14 @@ public class Constants {
         //AB-testing
         public static final String IS_NEW_USER = "is_new_user";
 
+        //Config File
+        public static final String MINIMUM_CHECKOUT_VERSION = "checkout_requires";
+        public static final String UPGRADE_MAXIMUM_VERSION = "upgrade_maximum_version";
+        public static final String UPGRADE_MESSAGE = "upgrade_message";
+        public static final String UPGRADE_PLAY_STORE_LINK = "upgrade_play_store_link";
+        public static final String FEATURED_CAROUSEL_CHART = "featured_carousel_chart";
+        public static final String UBER_FREE_RIDE_TEXT = "uber_free_ride_text";
+        public static final String CONFIRMATION_ACTIONS = "confirmation_actions";
 
     }
 

@@ -39,7 +39,7 @@ import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
 import com.livenation.mobile.android.na.notifications.InboxStatusView;
@@ -109,7 +109,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED.equals(intent.getAction())) {
+                if (ConfigFilePersistenceHelper.ACTION_INSTALLED_APP_CONFIG_UPDATED.equals(intent.getAction())) {
                     updateUpdateRequiredHeader();
                 } else {
                     invalidateOptionsMenu();
@@ -120,7 +120,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
-        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(InstalledAppConfig.ACTION_INSTALLED_APP_CONFIG_UPDATED));
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(ConfigFilePersistenceHelper.ACTION_INSTALLED_APP_CONFIG_UPDATED));
 
     }
 
@@ -128,7 +128,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
     protected void onResume() {
         super.onResume();
 
-        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+        final ConfigFilePersistenceHelper installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 
@@ -238,7 +238,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
 
     private void updateUpdateRequiredHeader() {
-        final InstalledAppConfig installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
+        final ConfigFilePersistenceHelper installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
 
         View updateRequiredLayout = contentLayout.findViewById(R.id.sub_update_required_layout);
         if (installedAppConfig.isUpgradeRequired()) {

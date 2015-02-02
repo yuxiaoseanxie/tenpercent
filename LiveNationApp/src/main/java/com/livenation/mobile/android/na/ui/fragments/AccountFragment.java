@@ -25,7 +25,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
@@ -171,7 +171,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
             }
         }
 
-        private InstalledAppConfig getInstalledAppConfig() {
+        private ConfigFilePersistenceHelper getInstalledAppConfig() {
             return LiveNationApplication.get().getInstalledAppConfig();
         }
     }

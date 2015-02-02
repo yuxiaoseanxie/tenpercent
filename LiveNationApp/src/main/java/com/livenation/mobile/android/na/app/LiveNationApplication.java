@@ -28,7 +28,6 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
@@ -36,7 +35,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
@@ -55,7 +54,6 @@ import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.SsoAppManager;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
-import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -98,7 +96,7 @@ public class LiveNationApplication extends Application {
     };
 
     private BroadcastReceiver internetStateReceiver;
-    private InstalledAppConfig installedAppConfig;
+    private ConfigFilePersistenceHelper installedAppConfig;
 
     private boolean isMusicSync = false;
 
@@ -201,7 +199,7 @@ public class LiveNationApplication extends Application {
         configFileProvider = new ConfigFileProvider(this, requestQueue);
         imageLoader = new ImageLoader(requestQueue, cache);
 
-        installedAppConfig = new InstalledAppConfig(this, requestQueue);
+        installedAppConfig = new ConfigFilePersistenceHelper(this, requestQueue);
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 
@@ -333,7 +331,7 @@ public class LiveNationApplication extends Application {
         return inboxStatusPresenter;
     }
 
-    public InstalledAppConfig getInstalledAppConfig() {
+    public ConfigFilePersistenceHelper getInstalledAppConfig() {
         return installedAppConfig;
     }
 

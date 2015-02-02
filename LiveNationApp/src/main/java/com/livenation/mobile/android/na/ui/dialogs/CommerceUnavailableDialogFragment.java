@@ -11,7 +11,7 @@ import android.support.v4.app.DialogFragment;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 
 public class CommerceUnavailableDialogFragment extends DialogFragment {
     public static final String TAG = CommerceUnavailableDialogFragment.class.getSimpleName();
@@ -42,7 +42,7 @@ public class CommerceUnavailableDialogFragment extends DialogFragment {
     }
 
 
-    private InstalledAppConfig getInstalledAppConfig() {
+    private ConfigFilePersistenceHelper getInstalledAppConfig() {
         return LiveNationApplication.get().getInstalledAppConfig();
     }
 }
