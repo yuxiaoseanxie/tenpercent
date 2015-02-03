@@ -192,7 +192,6 @@ public class LiveNationApplication extends Application {
         MemoryImageCache cache = new MemoryImageCache(defaultCacheSize);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.start();
         requestQueue.getCache().clear();
 
         imageLoader = new ImageLoader(requestQueue, cache);
