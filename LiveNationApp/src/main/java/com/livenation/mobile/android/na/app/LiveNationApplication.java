@@ -28,7 +28,6 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
@@ -268,7 +267,7 @@ public class LiveNationApplication extends Application {
         Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
     }
 
-    private void setupInternetStateReceiver() {
+    private synchronized void setupInternetStateReceiver() {
         internetStateReceiver = new BroadcastReceiver() {
             @Override
             public synchronized void onReceive(Context context, Intent intent) {
@@ -281,7 +280,7 @@ public class LiveNationApplication extends Application {
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
                     musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                         @Override
-                        public void onResponse(Void response) {
+                        public synchronized void onResponse(Void response) {
                             LiveNationApplication.get().setIsMusicSync(true);
                             if (internetStateReceiver != null) {
                                 unregisterReceiver(internetStateReceiver);
