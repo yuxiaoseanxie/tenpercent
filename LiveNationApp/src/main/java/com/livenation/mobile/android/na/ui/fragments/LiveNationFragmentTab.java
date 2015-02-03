@@ -67,7 +67,7 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setSoundEffectsEnabled(true);
-        getScrollPager().reset();
+        getScrollPager().resetData();
         getScrollPager().load();
     }
 

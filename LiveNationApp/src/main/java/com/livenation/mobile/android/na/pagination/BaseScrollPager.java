@@ -43,9 +43,14 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
-    public void reset() {
-        stop();
+    public void resetDataAndClearView() {
+        resetData();
         adapter.clear();
+
+    }
+
+    public void resetData() {
+        stop();
         lastFetch = null;
         isFirstPage = true;
         setHasMorePages(true);
@@ -75,7 +80,11 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     protected int getOffset() {
-        return adapter.getCount();
+        if (isFirstPage) {
+            return 0;
+        } else {
+            return adapter.getCount();
+        }
     }
 
     public void onNoMorePages() {
@@ -84,6 +93,9 @@ public abstract class BaseScrollPager<TItemType extends IdEquals<TItemType>> imp
     }
 
     protected void onFetchResult(List<TItemType> result) {
+        if (isFirstPage) {
+            adapter.clear();
+        }
         if (result.size() == 0 || hasItemAlreadyBeenFetched(result)) {
             //end of result list, or
             //found a dupe, abort adding the data to the adapter

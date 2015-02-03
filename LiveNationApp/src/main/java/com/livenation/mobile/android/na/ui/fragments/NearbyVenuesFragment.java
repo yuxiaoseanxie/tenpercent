@@ -42,6 +42,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
@@ -101,7 +102,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         super.onDestroyView();
         Context context = LiveNationApplication.get().getApplicationContext();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(locationUpdateReceiver);
-        scrollPager.reset();
+        scrollPager.resetDataAndClearView();
     }
 
     @Override
@@ -155,8 +156,8 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
         getActivity().startActivity(intent);
     }
 
-    private void refresh() {
-        scrollPager.reset();
+    private void cleanAndRefresh() {
+        scrollPager.resetDataAndClearView();
         scrollPager.load();
     }
 
@@ -176,17 +177,11 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     //Location update
     @Override
     public void onLocationUpdated(int mode, double lat, double lng) {
-        refresh();
+        cleanAndRefresh();
     }
 
     @Override
     BaseDecoratedScrollPager getScrollPager() {
         return scrollPager;
-    }
-
-    @Override
-    public void onRefresh() {
-        swipeRefreshLayout.setSoundEffectsEnabled(true);
-        refresh();
     }
 }
