@@ -280,12 +280,9 @@ public class LiveNationApplication extends Application {
                     MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
                     musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                         @Override
-                        public synchronized void onResponse(Void response) {
+                        public void onResponse(Void response) {
                             LiveNationApplication.get().setIsMusicSync(true);
-                            if (internetStateReceiver != null) {
-                                unregisterReceiver(internetStateReceiver);
-                                internetStateReceiver = null;
-                            }
+                            unregisterInternetStateReceiver();
                         }
 
                         @Override
@@ -298,6 +295,13 @@ public class LiveNationApplication extends Application {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(internetStateReceiver, intentFilter);
+    }
+
+    private synchronized void unregisterInternetStateReceiver() {
+        if (internetStateReceiver != null) {
+            unregisterReceiver(internetStateReceiver);
+            internetStateReceiver = null;
+        }
     }
 
     private void checkInstalledAppForAnalytics() {
