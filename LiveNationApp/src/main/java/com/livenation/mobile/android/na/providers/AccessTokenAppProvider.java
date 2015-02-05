@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -22,6 +23,10 @@ import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
  * Created by elodieferrais on 9/29/14.
  */
 public class AccessTokenAppProvider extends AccessTokenProvider {
+
+    public AccessTokenAppProvider(LiveNationProxy proxy) {
+        super(proxy);
+    }
 
     @Override
     public void getAccessToken(final BasicApiCallback<AccessToken> callback) {

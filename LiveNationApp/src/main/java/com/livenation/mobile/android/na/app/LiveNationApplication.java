@@ -135,10 +135,15 @@ public class LiveNationApplication extends Application {
         super.onCreate();
 
         instance = this;
+
+        //Object useful wild app
+        providerManager = new ProviderManager();
+        liveNationProxy = new LiveNationProxy(this);
+
         //Declare object used to start the library
         locationProvider = new LocationManager(this);
         environmentProvider = new EnvironmentAppProvider(this);
-        accessTokenProvider = new AccessTokenAppProvider();
+        accessTokenProvider = new AccessTokenAppProvider(liveNationProxy);
         ssoManager = new SsoAppManager(this);
         ssoManager.addSsoProvider(new FacebookSsoProvider(this));
         ssoManager.addSsoProvider(new GoogleSsoProvider(this));
@@ -174,12 +179,6 @@ public class LiveNationApplication extends Application {
 
         Crashlytics.start(this);
         LiveNationAnalytics.initialize(this);
-
-        //Object useful wild app
-        providerManager = new ProviderManager();
-        liveNationProxy = new LiveNationProxy();
-
-        instance = this;
 
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);

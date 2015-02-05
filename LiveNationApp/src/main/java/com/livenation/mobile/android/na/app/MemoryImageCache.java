@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 
 /**
  * Simple LRU in memory cache
@@ -31,6 +32,7 @@ public class MemoryImageCache extends LruCache<String, Bitmap> implements ImageC
 
         // Use 1/20th (5%) of the available memory for this memory cache.
         final int cacheSize = maxMemory / 20;
+
         return cacheSize;
     }
 
@@ -46,6 +48,7 @@ public class MemoryImageCache extends LruCache<String, Bitmap> implements ImageC
 
     @Override
     public void putBitmap(String url, Bitmap bitmap) {
+        LiveNationAnalytics.logTrace("MemoryImageCache", "putBitmap(" + String.valueOf(sizeOf(url, bitmap)) + "), max cache Size: " + String.valueOf(maxSize()) + " current cache size: " + String.valueOf(size()));
         put(url, bitmap);
     }
 
