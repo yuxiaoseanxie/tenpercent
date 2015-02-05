@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteWithNameParameters;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
 
 public class OnFavoriteClickListener {
     public static class OnVenueFavoriteClick extends OnFavoriteClick {
@@ -79,15 +79,15 @@ public class OnFavoriteClickListener {
             checkbox.setChecked(checkbox.isChecked());
             String idValue = Long.valueOf(getFavorite().getId()).toString();
             if (checkbox.isChecked()) {
-                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                FavoriteParameters apiParams = new FavoriteParameters();
                 apiParams.setId(idValue, getFavorite().getType());
                 apiParams.setName(getFavorite().getName());
-                LiveNationApplication.getLiveNationProxy().addFavorite(apiParams, null);
+                LiveNationApplication.getLiveNationProxy().addFavorite(null, apiParams);
             } else {
-                FavoriteWithNameParameters apiParams = new FavoriteWithNameParameters();
+                FavoriteParameters apiParams = new FavoriteParameters();
                 apiParams.setId(idValue, getFavorite().getType());
                 apiParams.setName(getFavorite().getName());
-                LiveNationApplication.getLiveNationProxy().removeFavorite(apiParams, null);
+                LiveNationApplication.getLiveNationProxy().removeFavorite(null, apiParams);
             }
 
             trackFavoriteChanged(checkbox.isChecked());
