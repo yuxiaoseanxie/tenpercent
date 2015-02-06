@@ -1,13 +1,17 @@
 package providers;
 
 import android.test.InstrumentationTestCase;
+import android.util.Log;
 
 import com.livenation.mobile.android.na.providers.location.LocationManager;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.concurrent.CountDownLatch;
 
+import mock.LocationManagerWithReverseGeocodeMocked;
 import mock.LocationProviderMock;
+import mock.ReverseGeocodeMock;
 
 /**
  * Created by elodieferrais on 2/4/15.
@@ -20,7 +24,7 @@ public class LocationManagerTest extends InstrumentationTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        locationManager = new LocationManager(getInstrumentation().getContext());
+        locationManager = new LocationManagerWithReverseGeocodeMocked(getInstrumentation().getContext());
         locationManager.clearLocationMode(getInstrumentation().getContext());
         signal = new CountDownLatch(1);
     }
@@ -36,8 +40,9 @@ public class LocationManagerTest extends InstrumentationTestCase {
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                assertTrue(newLoc.equals(response));
-                assertTrue(locationManager.getLocationMode() == LocationManager.MODE_SYSTEM);
+                assertTrue(response[0].equals(newLoc[0]));
+                assertTrue(response[1].equals(newLoc[1]));
+                assertEquals(locationManager.getMode(),LocationManager.MODE_SYSTEM);
                 signal.countDown();
             }
 
@@ -58,18 +63,14 @@ public class LocationManagerTest extends InstrumentationTestCase {
     public void testGetLocationWithSystemLocationProviderBroken() {
         LocationProviderMock systemProvider = new LocationProviderMock();
         systemProvider.setSuccessFull(false);
-
-        LocationProviderMock userProvider = new LocationProviderMock();
-        final Double[] newLoc = {2d, 2d};
-        userProvider.setLocation(newLoc);
         locationManager.setSystemLocationProvider(systemProvider);
-        locationManager.setUserLocationProvider(userProvider);
 
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                assertTrue(LocationManager.DEFAULT_LOCATION.equals(response));
-                assertTrue(locationManager.getLocationMode() == LocationManager.MODE_UNKNOWN_BECAUSE_ERROR);
+                assertTrue(LocationManager.DEFAULT_LOCATION[0].equals(response[0]));
+                assertTrue(LocationManager.DEFAULT_LOCATION[1].equals(response[1]));
+                assertTrue(locationManager.getMode() == LocationManager.MODE_UNKNOWN_BECAUSE_ERROR);
 
                 signal.countDown();
             }
@@ -94,12 +95,13 @@ public class LocationManagerTest extends InstrumentationTestCase {
         systemProvider.setLocation(newLoc);
         locationManager.setSystemLocationProvider(systemProvider);
 
-        locationManager.setLocationMode(LocationManager.MODE_SYSTEM, getInstrumentation().getContext());
+        locationManager.setLocationMode(LocationManager.MODE_SYSTEM);
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                assertTrue(newLoc.equals(response));
-                assertTrue(locationManager.getLocationMode() == LocationManager.MODE_SYSTEM);
+                assertTrue(newLoc[0].equals(response[0]));
+                assertTrue(newLoc[1].equals(response[1]));
+                assertTrue(locationManager.getMode() == LocationManager.MODE_SYSTEM);
 
                 signal.countDown();
             }
@@ -124,18 +126,19 @@ public class LocationManagerTest extends InstrumentationTestCase {
         final Double[] newSystemLoc = {3d, 3d};
         systemProvider.setLocation(newSystemLoc);
 
-        LocationProviderMock userProvider = new LocationProviderMock();
-        final Double[] newUserLoc = {4d, 4d};
-        userProvider.setLocation(newUserLoc);
         locationManager.setSystemLocationProvider(systemProvider);
-        locationManager.setUserLocationProvider(userProvider);
 
-        locationManager.setLocationMode(LocationManager.MODE_USER, getInstrumentation().getContext());
+        City city = new City("AA", 4d, 4d);
+        locationManager.addLocationHistory(city);
+        locationManager.setLocationMode(LocationManager.MODE_USER);
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                assertTrue(newUserLoc.equals(response));
-                assertTrue(locationManager.getLocationMode() == LocationManager.MODE_USER);
+                Double[] gpsCoor = {4d,4d};
+                assertTrue(gpsCoor[0].equals(response[0]));
+                assertTrue(gpsCoor[1].equals(response[1]));
+
+                assertTrue(locationManager.getMode() == LocationManager.MODE_USER);
                 signal.countDown();
             }
 
@@ -157,18 +160,14 @@ public class LocationManagerTest extends InstrumentationTestCase {
         LocationProviderMock systemProvider = new LocationProviderMock();
         final Double[] newSystemLoc = {3d, 3d};
         systemProvider.setLocation(newSystemLoc);
-
-        LocationProviderMock userProvider = new LocationProviderMock();
-        final Double[] newUserLoc = {4d, 4d};
-        userProvider.setLocation(newUserLoc);
         locationManager.setSystemLocationProvider(systemProvider);
-        locationManager.setUserLocationProvider(userProvider);
 
-        locationManager.setLocationMode(LocationManager.MODE_UNKNOWN_BECAUSE_ERROR, getInstrumentation().getContext());
+        locationManager.setLocationMode(LocationManager.MODE_UNKNOWN_BECAUSE_ERROR);
         locationManager.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                assertTrue(newSystemLoc.equals(response));
+                assertTrue(newSystemLoc[0].equals(response[0]));
+                assertTrue(newSystemLoc[1].equals(response[1]));
                 signal.countDown();
             }
 

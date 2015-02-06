@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.livenation.mobile.android.na.helpers.PlayServicesLocationProvider;
 import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
@@ -14,26 +15,22 @@ import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 public class SystemLocationAppProvider implements LocationProvider {
     private final LocationProvider playServices = new PlayServicesLocationProvider();
     private final LocationProvider device = new DeviceLocationProvider();
-    private Double[] cacheLocation;
+    private static Double[] cacheGPSLocation;
 
     @Override
     public void getLocation(final ProviderCallback<Double[]> callback) {
-        if (cacheLocation != null) {
-            callback.onResponse(cacheLocation);
+        if (cacheGPSLocation != null) {
+            callback.onResponse(cacheGPSLocation);
         } else {
             getLocationWith(playServices, callback);
         }
-    }
-
-    public void clearActualLocationCache() {
-        cacheLocation = null;
     }
 
     private void getLocationWith(final LocationProvider provider, final ProviderCallback<Double[]> callback) {
         provider.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                cacheLocation = response;
+                cacheGPSLocation = response;
                 callback.onResponse(response);
             }
 

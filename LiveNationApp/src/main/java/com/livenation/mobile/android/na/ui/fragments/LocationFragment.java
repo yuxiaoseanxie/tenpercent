@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
@@ -24,11 +25,13 @@ import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +47,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
     private TextView currentLocationText;
 
-    private City actualLocation;
-
-    private City configuredLocation;
+    private Double[] actualLocation;
 
     private LocationManager locationManager;
 
@@ -84,34 +85,27 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
 
         int mode = locationManager.getMode();
         showActiveMode(mode);
-
-        if (locationManager.getLocationHistory().size() > 0) {
-            showActiveLocation(locationManager.getLocationHistory().get(0));
-        }
+        showActiveLocation();
 
         //get our actual location, so that we can show valid "distance from you in miles" values.
-        locationManager.getSystemLocation(new BasicApiCallback<City>() {
+        new SystemLocationAppProvider().getLocation(new ProviderCallback<Double[]>() {
             @Override
-            public void onResponse(City response) {
+            public void onResponse(Double[] response) {
                 updateActualLocation(response);
             }
 
             @Override
-            public void onErrorResponse(LiveNationError error) {
-                //Never called
+            public void onErrorResponse() {
+                updateActualLocation(LocationManager.DEFAULT_LOCATION);
             }
         });
 
         autoLocationSwitch.setOnCheckedChangeListener(this);
-        //manually trip the onCheckedChanged listener for the UI, as the switch above wont trip it if
-        //isChecked() == false and then you setChecked(false);
-        onCheckedChanged(autoLocationSwitch, autoLocationSwitch.isChecked());
 
-        //retrieve a city for where the API is currently configured
         locationManager.getLocation(new BasicApiCallback<City>() {
             @Override
             public void onResponse(City response) {
-                showActiveLocation(response);
+                showActiveLocation();
             }
 
             @Override
@@ -132,8 +126,8 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(locationUpdateReceiver);
     }
 
-    private void updateActualLocation(City city) {
-        actualLocation = city;
+    private void updateActualLocation(Double[] actualLocation) {
+        this.actualLocation = actualLocation;
         autoLocationSwitch.setEnabled(true);
         adapter.notifyDataSetChanged();
     }
@@ -143,19 +137,17 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         if (actualLocation == null) {
             return;
         }
-        //actualLocation cannot be null because the switch is disable until we get the user location
+
         if (isChecked) {
             locationManager.setLocationMode(LocationManager.MODE_SYSTEM);
         } else {
-            locationManager.setUserLocation(LocationManager.MODE_USER, actualLocation.getLat(), actualLocation.getLng());
-            setNewLocation(actualLocation);
+            locationManager.setLocationMode(LocationManager.MODE_USER);
         }
 
         //Analytics
         final Props props = new Props();
         props.put(AnalyticConstants.LOCATION_CURRENT_LOCATION_USE, isChecked);
-        props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation.getLat() + "," + actualLocation.getLng());
-        props.put(AnalyticConstants.LOCATION_NAME, actualLocation.getName());
+        props.put(AnalyticConstants.LOCATION_LATLONG, actualLocation[0] + "," + actualLocation[1]);
         LiveNationAnalytics.track(AnalyticConstants.CURRENT_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
     }
 
@@ -167,33 +159,15 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
         props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
         LiveNationAnalytics.track(AnalyticConstants.PREVIOUS_LOCATION_TAP, AnalyticsCategory.LOCATION, props);
 
-        locationManager.setUserLocation(LocationManager.MODE_USER, city.getLat(), city.getLng());
-        setExistingLocation(city);
-    }
-
-
-    /**
-     * set the configuredLocation pointer to some city.
-     * The value of this member field will be used as the manual location when the fragment/activity
-     * finishes.
-     *
-     * @param city The location to track as the user's manual location
-     */
-    public void setNewLocation(@NonNull City city) {
-        if (null == city) throw new NullPointerException();
         locationManager.addLocationHistory(city);
-        setExistingLocation(city);
-
+        locationManager.setLocationMode(LocationManager.MODE_USER);
     }
 
-    private void setExistingLocation(@NonNull City city) {
-        if (null == city) throw new NullPointerException();
-        configuredLocation = city;
-        showActiveLocation(city);
-    }
-
-    private void showActiveLocation(@NonNull City city) {
-        currentLocationText.setText(city.getName());
+    private void showActiveLocation() {
+        List<City> city = locationManager.getLocationHistory();
+        if (city.size() > 0) {
+            currentLocationText.setText(locationManager.getLocationHistory().get(0).getName());
+        }
     }
 
     private void showActiveMode(@NonNull int mode) {
@@ -212,7 +186,11 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
     @Override
     public void onLocationUpdated(int mode, City city) {
         showActiveMode(mode);
-        showActiveLocation(city);
+        showActiveLocation();
+
+        if (mode == LocationManager.MODE_UNKNOWN_BECAUSE_ERROR) {
+            Toast.makeText(LiveNationApplication.get().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class LocationAdapter extends ArrayAdapter<City> {
@@ -241,7 +219,7 @@ public class LocationFragment extends LiveNationFragment implements ListView.OnI
             String distance = null;
             if (actualLocation != null) {
                 float[] result = new float[1];
-                Location.distanceBetween(actualLocation.getLat(), actualLocation.getLng(), city.getLat(), city.getLng(), result);
+                Location.distanceBetween(actualLocation[0], actualLocation[1], city.getLat(), city.getLng(), result);
                 int miles = (int) (result[0] / Constants.METERS_IN_A_MILE);
                 distance = String.format(MILES_AWAY, miles);
             }

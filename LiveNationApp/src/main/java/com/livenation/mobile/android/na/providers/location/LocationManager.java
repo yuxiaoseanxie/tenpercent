@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
-import com.livenation.mobile.android.na.providers.UserLocationAppProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -24,9 +23,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by cchilton on 3/13/14.
- */
 public class LocationManager implements LocationProvider {
     public static final int MODE_SYSTEM = 0;
     public static final int MODE_USER = 1;
@@ -36,15 +32,14 @@ public class LocationManager implements LocationProvider {
     public static final String DEFAULT_LOCATION_NAME = "San Francisco";
     public static final String UNKNOWN_LOCATION = "Unknown";
 
-    private LocationProvider userLocationProvider;
     private LocationProvider systemLocationProvider;
     private final LocationHistoryManager locationHistory;
-    private final Context context;
+    protected final Context context;
+    private Double[] cacheSystemLocation;
     private Integer mode = null;
 
     public LocationManager(Context context) {
-        this.context = context.getApplicationContext();
-        userLocationProvider = new UserLocationAppProvider(context);
+        this.context = context;
         systemLocationProvider = new SystemLocationAppProvider();
         locationHistory = new LocationHistoryManager(context);
     }
@@ -54,36 +49,84 @@ public class LocationManager implements LocationProvider {
         this.systemLocationProvider = systemLocationProvider;
     }
 
-    @VisibleForTesting
-    public void setUserLocationProvider(LocationProvider userLocationProvider) {
-        this.userLocationProvider = userLocationProvider;
-    }
-
-    public void getSystemLocation(final BasicApiCallback<City> callback) {
-        getSystemLocationProvider().getLocation(new ProviderCallback<Double[]>() {
+    private void getSystemLocation(final BasicApiCallback<Double[]> callback) {
+        if (cacheSystemLocation != null) {
+            callback.onResponse(cacheSystemLocation);
+            return;
+        }
+        systemLocationProvider.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                getCityWithGPSCoordinates(response, callback);
+                cacheSystemLocation = response;
+                callback.onResponse(response);
             }
 
             @Override
             public void onErrorResponse() {
-                callback.onResponse(new City(DEFAULT_LOCATION_NAME, DEFAULT_LOCATION[0], DEFAULT_LOCATION[1]));
+                callback.onResponse(DEFAULT_LOCATION);
+            }
+        });
+    }
+
+    private void getSystemCityLocation(final BasicApiCallback<City> callback) {
+        getSystemLocation(new BasicApiCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                getCityWithGPSCoordinates(response, new BasicApiCallback<City>() {
+                    @Override
+                    public void onResponse(City response) {
+                        callback.onResponse(response);
+                    }
+
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        callback.onErrorResponse(error);
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                callback.onErrorResponse(error);
             }
         });
     }
 
     public void getLocation(final BasicApiCallback<City> callback) {
-        getLocation(new ProviderCallback<Double[]>() {
+        if (getMode() == LocationManager.MODE_USER) {
+            if ( getLocationHistory().size() > 0) {
+                City city = getLocationHistory().get(0);
+                callback.onResponse(city);
+                return;
+            }
+        } else {
+            saveLocationMode(LocationManager.MODE_SYSTEM);
+        }
+
+        systemLocationProvider.getLocation(new ProviderCallback<Double[]>() {
             @Override
             public void onResponse(Double[] response) {
-                getCityWithGPSCoordinates(response, callback);
+                getCityWithGPSCoordinates(response, new BasicApiCallback<City>() {
+                    @Override
+                    public void onResponse(City response) {
+                        addLocationHistory(response);
+                        saveLocationMode(LocationManager.MODE_SYSTEM);
+                        callback.onResponse(response);
+                    }
+
+                    @Override
+                    public void onErrorResponse(LiveNationError error) {
+                        callback.onErrorResponse(error);
+                    }
+                });
             }
 
             @Override
             public void onErrorResponse() {
-                //Should never be called
-                throw new IllegalStateException("The LocationManager did not return any location (not even the default one)");
+                City city = new City(DEFAULT_LOCATION_NAME, DEFAULT_LOCATION[0], DEFAULT_LOCATION[1]);
+                addLocationHistory(city);
+                saveLocationMode(MODE_UNKNOWN_BECAUSE_ERROR);
+                callback.onResponse(city);
             }
         });
     }
@@ -91,7 +134,7 @@ public class LocationManager implements LocationProvider {
     private void getCityWithGPSCoordinates(Double[] response, final BasicApiCallback<City> callback) {
         final double lat = response[0];
         final double lng = response[1];
-        reverseGeocodeCity(lat, lng, new LocationManager.GetCityCallback() {
+        reverseGeocodeCity(lat, lng, new ReverseGeocode.GetCityCallback() {
             @Override
             public void onGetCity(City city) {
                 callback.onResponse(city);
@@ -112,33 +155,18 @@ public class LocationManager implements LocationProvider {
 
     @Override
     public void getLocation(final ProviderCallback<Double[]> callback) {
-        LocationProvider provider = getLocationProvider();
-        if (null == getLocationProvider()) throw new IllegalStateException();
-        provider.getLocation(new ProviderCallback<Double[]>() {
+        getLocation(new BasicApiCallback<City>() {
             @Override
-            public void onResponse(Double[] response) {
-                callback.onResponse(response);
+            public void onResponse(City response) {
+                Double[] result = {response.getLat(), response.getLng()};
+                callback.onResponse(result);
             }
 
             @Override
-            public void onErrorResponse() {
-                saveLocationMode(MODE_UNKNOWN_BECAUSE_ERROR);
-                callback.onResponse(DEFAULT_LOCATION);
+            public void onErrorResponse(LiveNationError error) {
+                callback.onErrorResponse();
             }
         });
-    }
-
-    public LocationProvider getLocationProvider() {
-        switch (getMode()) {
-            case MODE_SYSTEM:
-            case MODE_UNKNOWN_BECAUSE_ERROR:
-                return systemLocationProvider;
-            case MODE_USER:
-                return userLocationProvider;
-            default:
-                clearLocationMode(context);
-                return systemLocationProvider;
-        }
     }
 
     public void setLocationMode(int mode) {
@@ -146,22 +174,7 @@ public class LocationManager implements LocationProvider {
         sendBroadcastForLocation();
     }
 
-    public void setUserLocation(int mode, double lat, double lng) {
-        saveLocationMode(mode);
-        ((UserLocationAppProvider) userLocationProvider).setLocation(lat, lng, context);
-        sendBroadcastForLocation();
-    }
-
-    public LocationProvider getSystemLocationProvider() {
-        return systemLocationProvider;
-    }
-
-    public LocationProvider getUserLocationProvider() {
-        return userLocationProvider;
-    }
-
-    public void reverseGeocodeCity(double lat, double lng, GetCityCallback callback) {
-        Context context = LiveNationApplication.get().getApplicationContext();
+    protected void reverseGeocodeCity(double lat, double lng, ReverseGeocode.GetCityCallback callback) {
 
         ReverseGeocode task = new ReverseGeocode(context, lat, lng, callback);
         task.execute();
@@ -199,6 +212,7 @@ public class LocationManager implements LocationProvider {
     }
 
     public void clearLocationMode(Context context) {
+        mode = null;
         PreferencePersistence prefs = new PreferencePersistence("location", context);
         prefs.remove(LOCATION_MODE);
     }
@@ -226,66 +240,9 @@ public class LocationManager implements LocationProvider {
 
             @Override
             public void onErrorResponse() {
+                //Never called
             }
         });
 
-    }
-
-    public static interface GetCityCallback {
-        void onGetCity(City city);
-
-        void onGetCityFailure(double lat, double lng);
-    }
-
-    private class ReverseGeocode extends AsyncTask<Void, Void, String> {
-        private final Context context;
-        private final GetCityCallback callback;
-        private final double lat;
-        private final double lng;
-
-        private ReverseGeocode(Context context, double lat, double lng, GetCityCallback callback) {
-            this.context = context;
-            this.callback = callback;
-            this.lat = lat;
-            this.lng = lng;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-
-            try {
-                List<Address> matches = geocoder.getFromLocation(lat, lng, 1);
-                if (!matches.isEmpty()) {
-                    String locality = matches.get(0).getLocality();
-                    if (locality == null) {
-                        locality = matches.get(0).getSubLocality();
-                        if (locality == null) {
-                            locality = matches.get(0).getAdminArea();
-                            if (locality == null) {
-                                locality = matches.get(0).getCountryName();
-                                if (locality == null) {
-                                    locality = UNKNOWN_LOCATION + " " + String.valueOf(lat) + "," + String.valueOf(lng);
-                                }
-                            }
-                        }
-                    }
-                    return locality;
-                }
-            } catch (IOException ignored) {
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String value) {
-            if (null != value) {
-                City city = new City(value, lat, lng);
-                callback.onGetCity(city);
-            } else {
-                callback.onGetCityFailure(lat, lng);
-            }
-        }
     }
 }
