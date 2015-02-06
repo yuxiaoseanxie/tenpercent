@@ -2,13 +2,9 @@ package com.livenation.mobile.android.na.providers.location;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
@@ -19,9 +15,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 public class LocationManager implements LocationProvider {
     public static final int MODE_SYSTEM = 0;
@@ -94,7 +88,7 @@ public class LocationManager implements LocationProvider {
 
     public void getLocation(final BasicApiCallback<City> callback) {
         if (getMode() == LocationManager.MODE_USER) {
-            if ( getLocationHistory().size() > 0) {
+            if (getLocationHistory().size() > 0) {
                 City city = getLocationHistory().get(0);
                 callback.onResponse(city);
                 return;
