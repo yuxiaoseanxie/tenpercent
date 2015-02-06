@@ -224,6 +224,7 @@ public class AnalyticConstants {
     //Location
     public static final String LOCATION_LATLONG = "Location LatLong";
     public static final String LOCATION_NAME = "Location Name";
+    public static final String LOCATION_CURRENT_LOCATION_USE = "Use current Location";
 
     //HouseKeeping
     public static final String AIS_USER_ID = "AIS User ID";

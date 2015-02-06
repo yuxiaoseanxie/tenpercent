@@ -28,18 +28,16 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
-import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
-import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
-import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
-public class AccountFragment extends LiveNationFragment implements LocationManager.GetCityCallback, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener {
+public class AccountFragment extends LiveNationFragment implements BasicApiCallback<City>, LocationUpdateReceiver.LocationUpdateListener {
     private final String LOCATION_NAME = "location";
     private TextView locationText;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
@@ -76,7 +74,7 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
 
         if (savedInstanceState == null) {
             //Get location for update the screen
-            LiveNationApplication.getProviderManager().getConfigReadyFor(this, ProviderManager.ProviderType.LOCATION);
+            LiveNationApplication.getLocationProvider().getLocation(this);
         } else {
             String locationName = savedInstanceState.getString(LOCATION_NAME);
             locationText.setText(locationName);
@@ -128,34 +126,22 @@ public class AccountFragment extends LiveNationFragment implements LocationManag
         }
     }
 
+    //Location update
+
     @Override
-    public void onGetCity(City city) {
-        if (!isAdded()) return;
+    public void onLocationUpdated(int mode, City city) {
         locationText.setText(city.getName());
     }
 
     @Override
-    public void onGetCityFailure(double lat, double lng) {
+    public void onResponse(City response) {
         if (!isAdded()) return;
-        locationText.setText(getString(R.string.location_unknown) + " " + String.valueOf(lat) + "," + String.valueOf(lng));
-    }
-
-    //Get location for display data
-    @Override
-    public void onResponse(LiveNationConfig response) {
-        refreshUser(LoginHelper.isLogout());
-        LiveNationApplication.getLocationProvider().reverseGeocodeCity(response.getLat(), response.getLng(), this);
+        locationText.setText(response.getName());
     }
 
     @Override
-    public void onErrorResponse(int errorCode) {
-    }
-
-    //Location update
-
-    @Override
-    public void onLocationUpdated(int mode, double lat, double lng) {
-        LiveNationApplication.getLocationProvider().reverseGeocodeCity(lat, lng, this);
+    public void onErrorResponse(LiveNationError error) {
+        //Never called
     }
 
     //Click listener

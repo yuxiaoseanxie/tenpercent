@@ -86,7 +86,7 @@ public class LocationHistoryManager {
             Iterator<City> iterator = items.iterator();
             while (iterator.hasNext()) {
                 City city = iterator.next();
-                if (city.idEquals(target)) {
+                if (city.equals(target)) {
                     iterator.remove();
                 }
             }

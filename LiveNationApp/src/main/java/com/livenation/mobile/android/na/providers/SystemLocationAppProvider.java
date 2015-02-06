@@ -2,10 +2,8 @@ package com.livenation.mobile.android.na.providers;
 
 import android.content.Context;
 
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.PlayServicesLocationProvider;
 import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
-import com.livenation.mobile.android.na.providers.location.DummyLocationProvider;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
@@ -16,63 +14,42 @@ import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 public class SystemLocationAppProvider implements LocationProvider {
     private final LocationProvider playServices = new PlayServicesLocationProvider();
     private final LocationProvider device = new DeviceLocationProvider();
-    private final LocationProvider dummy = new DummyLocationProvider();
+    private Double[] cacheLocation;
 
     @Override
-    public void getLocation(ProviderCallback<Double[]> callback) {
-        playServices.getLocation(new LocationProxy(callback, playServices, LiveNationApplication.get().getApplicationContext()));
-    }
-
-    private void onProviderFailed(LocationProxy locationProxy) {
-        LocationProvider provider = locationProxy.getLocationProvider();
-        if (provider == playServices) {
-            Context context = locationProxy.getContext();
-            ProviderCallback<Double[]> callback = locationProxy.getCallback();
-            device.getLocation(new LocationProxy(callback, device, context));
-        }
-
-        if (provider == device) {
-            Context context = locationProxy.getContext();
-            ProviderCallback<Double[]> callback = locationProxy.getCallback();
-            dummy.getLocation(new LocationProxy(callback, dummy, context));
-        }
-
-        if (provider == dummy) {
-            locationProxy.getCallback().onErrorResponse();
+    public void getLocation(final ProviderCallback<Double[]> callback) {
+        if (cacheLocation != null) {
+            callback.onResponse(cacheLocation);
+        } else {
+            getLocationWith(playServices, callback);
         }
     }
 
-    private class LocationProxy implements ProviderCallback<Double[]> {
-        private final ProviderCallback<Double[]> callback;
-        private final LocationProvider locationProvider;
-        private final Context context;
+    public void clearActualLocationCache() {
+        cacheLocation = null;
+    }
 
-        private LocationProxy(ProviderCallback<Double[]> callback, LocationProvider locationProvider, Context context) {
-            this.callback = callback;
-            this.locationProvider = locationProvider;
-            this.context = context;
-        }
+    private void getLocationWith(final LocationProvider provider, final ProviderCallback<Double[]> callback) {
+        provider.getLocation(new ProviderCallback<Double[]>() {
+            @Override
+            public void onResponse(Double[] response) {
+                cacheLocation = response;
+                callback.onResponse(response);
+            }
 
-        @Override
-        public void onResponse(Double[] location) {
-            callback.onResponse(location);
-        }
+            @Override
+            public void onErrorResponse() {
+                onProviderFailedWith(provider, callback);
+            }
+        });
+    }
 
-        @Override
-        public void onErrorResponse() {
-            onProviderFailed(LocationProxy.this);
-        }
+    private void onProviderFailedWith(final LocationProvider provider, final ProviderCallback<Double[]> callback) {
+        if (provider instanceof SystemLocationAppProvider) {
+            getLocationWith(device, callback);
 
-        public LocationProvider getLocationProvider() {
-            return locationProvider;
-        }
-
-        public Context getContext() {
-            return context;
-        }
-
-        public ProviderCallback<Double[]> getCallback() {
-            return callback;
+        } else {
+            callback.onErrorResponse();
         }
     }
 }

@@ -11,6 +11,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
@@ -55,7 +57,8 @@ public class LocationActivity extends LiveNationFragmentActivity {
                     props.put(AnalyticConstants.LOCATION_NAME, city.getName());
                     props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
                     LiveNationAnalytics.track(AnalyticConstants.SUBMIT_LOCATION_QUERY, AnalyticsCategory.LOCATION, props);
-                    fragment.setConfiguredLocation(city);
+                    fragment.setNewLocation(city);
+                    LiveNationApplication.getLocationProvider().setUserLocation(LocationManager.MODE_USER, city.getLat(), city.getLng());
                 }
                 break;
             default:
