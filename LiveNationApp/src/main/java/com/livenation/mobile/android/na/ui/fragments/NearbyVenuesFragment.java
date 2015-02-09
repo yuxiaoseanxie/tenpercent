@@ -38,6 +38,7 @@ import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
@@ -47,10 +48,6 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
 public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener, ConfigCallback, LocationUpdateReceiver.LocationUpdateListener, SwipeRefreshLayout.OnRefreshListener {
-    private static final String START_TIME_FORMAT = "h:mm a zzz";
-    private static float METERS_IN_A_MILE = 1609.34f;
-    private Double lat;
-    private Double lng;
     private LocationUpdateReceiver locationUpdateReceiver = new LocationUpdateReceiver(this);
     private EventVenueAdapter adapter;
 
@@ -164,8 +161,6 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     //Get config for starting the screen
     @Override
     public void onResponse(LiveNationConfig response) {
-        this.lat = response.getLat();
-        this.lng = response.getLng();
         scrollPager.load();
     }
 
@@ -176,7 +171,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
     //Location update
     @Override
-    public void onLocationUpdated(int mode, double lat, double lng) {
+    public void onLocationUpdated(int mode, City city) {
         cleanAndRefresh();
     }
 

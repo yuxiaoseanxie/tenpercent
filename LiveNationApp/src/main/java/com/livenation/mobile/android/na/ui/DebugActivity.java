@@ -34,6 +34,7 @@ import com.livenation.mobile.android.na.ui.support.DebugItem;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 import com.livenation.mobile.android.platform.receiver.AccessTokenUpdateReceiver;
@@ -42,9 +43,7 @@ import com.livenation.mobile.android.ticketing.testing.RecordedResponse;
 import com.livenation.mobile.android.ticketing.testing.RecordingTicketService;
 import com.livenation.mobile.android.ticketing.testing.TestingUtil;
 import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-import com.mobilitus.tm.tickets.TicketLibrary;
 import com.urbanairship.UAirship;
-import com.urbanairship.push.PushManager;
 import com.urbanairship.richpush.RichPushManager;
 import com.urbanairship.richpush.RichPushUser;
 
@@ -264,9 +263,9 @@ public class DebugActivity extends LiveNationFragmentActivity implements Adapter
     }
 
     @Override
-    public void onLocationUpdated(int mode, double lat, double lng) {
+    public void onLocationUpdated(int mode, City city) {
         if (null != locationItem) {
-            locationItem.setValue(lat + "," + lng);
+            locationItem.setValue(city.getLat() + "," + city.getLng());
         }
 
         runOnUiThread(new Runnable() {

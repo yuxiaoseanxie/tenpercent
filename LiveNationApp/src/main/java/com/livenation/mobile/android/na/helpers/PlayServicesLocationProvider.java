@@ -10,6 +10,7 @@ package com.livenation.mobile.android.na.helpers;
 
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -88,6 +89,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
             //Check to avoid DeadObjectException
             if (client != null && client.isConnected()) {
                 try {
+
                     Location location=LocationServices.FusedLocationApi.getLastLocation(client);
 
                     if (null != location) {
@@ -97,6 +99,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
                         callback.onResponse(locationArray);
                         client.disconnect();
                     } else {
+                        client.disconnect();
                         retry();
                     }
                 } catch (IllegalStateException ex) {

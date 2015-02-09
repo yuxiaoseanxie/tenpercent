@@ -42,6 +42,7 @@ import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.TopChartParameters;
@@ -213,7 +214,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
     //LocationUpdateReceiver callback
     @Override
-    public void onLocationUpdated(int mode, double lat, double lng) {
+    public void onLocationUpdated(int mode, City city) {
         scrollPager.resetDataAndClearView();
         scrollPager.load();
         retrieveCharts();
