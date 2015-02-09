@@ -27,6 +27,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
@@ -115,7 +116,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
 
-        ConfigFileProvider provider = new ConfigFileProvider(view.getContext());
+        ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
         provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
             @Override
             public void onResponse(ConfigFileProvider.ConfigFile response) {

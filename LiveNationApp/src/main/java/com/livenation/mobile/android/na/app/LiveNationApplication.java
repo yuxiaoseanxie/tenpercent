@@ -35,7 +35,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.InstalledAppConfig;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
@@ -45,6 +45,7 @@ import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferen
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.AccessTokenAppProvider;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.providers.DeviceIdAppProvider;
 import com.livenation.mobile.android.na.providers.EnvironmentAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
@@ -52,7 +53,6 @@ import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
 import com.livenation.mobile.android.na.providers.sso.SsoAppManager;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
-import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -75,6 +75,7 @@ public class LiveNationApplication extends Application {
     private static EnvironmentAppProvider environmentProvider;
     private static AccessTokenProvider accessTokenProvider;
     private static SsoProviderPersistence ssoProviderPersistence;
+    private static ConfigFileProvider configFileProvider;
     private ImageLoader imageLoader;
     private EventsPresenter eventsPresenter;
     private VenueEventsPresenter venueEventsPresenter;
@@ -93,7 +94,7 @@ public class LiveNationApplication extends Application {
     };
 
     private BroadcastReceiver internetStateReceiver;
-    private InstalledAppConfig installedAppConfig;
+    private ConfigFilePersistenceHelper installedAppConfig;
 
     private boolean isMusicSync = false;
 
@@ -192,13 +193,12 @@ public class LiveNationApplication extends Application {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.getCache().clear();
 
+        configFileProvider = new ConfigFileProvider(this, requestQueue);
         imageLoader = new ImageLoader(requestQueue, cache);
 
-        installedAppConfig = new InstalledAppConfig(this, requestQueue);
+        installedAppConfig = new ConfigFilePersistenceHelper(this, configFileProvider);
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
-
-        YouTubeClient.initialize(this, getString(R.string.youtube_api_key));
 
         setupNotifications();
         setupTicketing();
@@ -334,10 +334,6 @@ public class LiveNationApplication extends Application {
         return imageLoader;
     }
 
-    public EventsPresenter getEventsPresenter() {
-        return eventsPresenter;
-    }
-
     public VenueEventsPresenter getVenueEventsPresenter() {
         return venueEventsPresenter;
     }
@@ -346,7 +342,7 @@ public class LiveNationApplication extends Application {
         return inboxStatusPresenter;
     }
 
-    public InstalledAppConfig getInstalledAppConfig() {
+    public ConfigFilePersistenceHelper getInstalledAppConfig() {
         return installedAppConfig;
     }
 
@@ -356,6 +352,10 @@ public class LiveNationApplication extends Application {
 
     public void setIsMusicSync(boolean isMusicSync) {
         this.isMusicSync = isMusicSync;
+    }
+
+    public static ConfigFileProvider getConfigFileProvider() {
+        return configFileProvider;
     }
 
     private String getIasId() {

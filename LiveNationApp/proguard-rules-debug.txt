@@ -7,6 +7,18 @@
 @com.livenation.mobile.android.na.helpers.VisibleForTesting *;
 }
 
+-keep class com.android.volley.toolbox.NoCache {
+   *;
+}
+
+-keep class com.android.volley.RequestQueue {
+   *;
+}
+
+-keep class com.android.volley.NetworkResponse {
+   *;
+}
+
 -keep class rx.observers.TestSubscriber {
     *;
 }
