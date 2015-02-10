@@ -28,4 +28,8 @@ public class Props {
     public String toString() {
         return (new JSONObject(data)).toString();
     }
+
+    public Map<String, Object> toMap() {
+        return data;
+    }
 }
