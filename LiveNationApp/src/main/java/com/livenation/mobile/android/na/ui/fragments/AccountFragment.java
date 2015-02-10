@@ -80,6 +80,7 @@ public class AccountFragment extends LiveNationFragment implements BasicApiCallb
             locationText.setText(locationName);
         }
 
+        refreshUser(LoginHelper.isLogout());
         //Register for being notify when the location change
         registerBroadcastReceiverForUpdate();
 
