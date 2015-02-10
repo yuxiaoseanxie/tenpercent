@@ -1,25 +1,5 @@
 package com.livenation.mobile.android.na.uber.dialogs;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.InsetDrawable;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -31,6 +11,27 @@ import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Created by cchilton on 11/18/14.
@@ -217,10 +218,10 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
             }
 
             if (estimate.getPrice().getSurgeMultiplier() > 1) {
-                holder.title.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.uber_surge_badge), null);
+                holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.uber_surge_badge), null);
                 holder.title.setCompoundDrawablePadding(0);
             } else {
-                holder.title.setCompoundDrawables(null, null, null, null);
+                holder.title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                 holder.title.setCompoundDrawablePadding(getResources().getDimensionPixelOffset(R.dimen.uber_surge_badge_spacing));
             }
 
