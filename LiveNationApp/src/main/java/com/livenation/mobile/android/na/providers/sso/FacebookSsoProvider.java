@@ -90,7 +90,7 @@ public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSs
 
         final OpenRequest op = new OpenRequest(activity);
         op.setCallback(statusCallback);
-        op.setPermissions(Arrays.asList("email", "user_likes", "user_events"));
+        op.setPermissions(Arrays.asList("email", "user_likes"));
         if (!allowForeground) {
             op.setLoginBehavior(SessionLoginBehavior.SSO_ONLY);
         }
