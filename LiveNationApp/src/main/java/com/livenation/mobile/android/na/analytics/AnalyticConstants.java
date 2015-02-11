@@ -139,6 +139,8 @@ public class AnalyticConstants {
     public static final String OMNITURE_SCREEN_HELP = "LN_Mob: NA App Android: Help";
     public static final String OMNITURE_SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
     public static final String OMNITURE_SCREEN_SDP = "LN_Mob: NA App Android: SDP";
+    public static final String OMNITURE_DEEP_LINK = "LN_Mob: NA App Android: Deep Link Redirection";
+
 
     public static final String OMNITURE_SCREEN_ORDERS = "LN_Mob: NA App Android: Orders";
     public static final String OMNITURE_SCREEN_SHARE = "LN_Mob: NA App Android: Share";

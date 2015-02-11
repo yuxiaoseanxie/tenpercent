@@ -13,6 +13,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -241,6 +242,8 @@ public class UrlActivity extends LiveNationFragmentActivity {
         }
 
         LiveNationAnalytics.track(AnalyticConstants.DEEP_LINK_REDIRECTION, AnalyticsCategory.HOUSEKEEPING, props);
+        OmnitureTracker.trackState(AnalyticConstants.OMNITURE_DEEP_LINK, props.toMap());
+
     }
 
     private Boolean appWasOpenedFromBrowser(String appReferrerExtra) {
