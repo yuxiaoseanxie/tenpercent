@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.preferences;
 
+import com.livenation.mobile.android.na.helpers.VisibleForTesting;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -45,6 +47,7 @@ public class PreferencePersistence {
         return true;
     }
 
+    @VisibleForTesting
     public boolean reset() {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         prefs.edit().clear().apply();

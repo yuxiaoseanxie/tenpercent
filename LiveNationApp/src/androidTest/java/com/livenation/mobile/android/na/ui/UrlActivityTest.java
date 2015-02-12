@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
+import tools.TestTools;
 
 /**
  * Created by elodieferrais on 1/21/15.
@@ -14,6 +15,12 @@ public class UrlActivityTest extends ActivityInstrumentationTestCase2 {
 
     public UrlActivityTest() {
         super(UrlActivity.class);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestTools.closeAllActivities(getInstrumentation());
+        super.tearDown();
     }
 
     @Override

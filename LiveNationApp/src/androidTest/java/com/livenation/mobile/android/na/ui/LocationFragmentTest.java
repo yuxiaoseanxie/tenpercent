@@ -5,6 +5,7 @@ import com.livenation.mobile.android.na.R;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
+import tools.TestTools;
 
 
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
@@ -29,6 +30,13 @@ public class LocationFragmentTest extends ActivityInstrumentationTestCase2 {
         super.setUp();
         activity = getActivity();
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestTools.closeAllActivities(getInstrumentation());
+        super.tearDown();
+    }
+
 
     public void testAllComponentsOnScreen() {
 

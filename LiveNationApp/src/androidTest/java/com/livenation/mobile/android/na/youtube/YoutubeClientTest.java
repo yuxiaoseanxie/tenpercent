@@ -1,8 +1,9 @@
 package com.livenation.mobile.android.na.youtube;
 
-import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
+import com.mock.NetworkMock;
+import com.mock.RequestQueueMock;
 import com.tools.NetworkResponseTest;
 import com.tools.ObjectTest;
 
@@ -12,22 +13,16 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import android.test.ActivityInstrumentationTestCase2;
-import com.mock.NetworkMock;
-import com.mock.RequestQueueMock;
+import android.test.InstrumentationTestCase;
 
 /**
  * Created by elodieferrais on 1/27/15.
  */
-public class YoutubeClientTest extends ActivityInstrumentationTestCase2 {
+public class YoutubeClientTest extends InstrumentationTestCase {
 
     private YouTubeClient youTubeClient;
     private NetworkMock network;
     CountDownLatch signal;
-
-    public YoutubeClientTest() {
-        super(TestActivity.class);
-    }
 
     @Override
     protected void setUp() throws Exception {
