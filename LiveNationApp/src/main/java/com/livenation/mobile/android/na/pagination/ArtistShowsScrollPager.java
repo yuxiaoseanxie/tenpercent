@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -13,6 +11,8 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.widget.ArrayAdapter;
 
 /**
  * Created by elodieferrais on 4/21/14.

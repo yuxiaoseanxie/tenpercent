@@ -1,14 +1,14 @@
 package com.livenation.mobile.android.na.presenters;
 
-import android.content.Context;
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.support.Presenter;
 import com.livenation.mobile.android.na.presenters.support.PresenterView;
 import com.livenation.mobile.android.na.presenters.views.AccountSaveAuthTokenView;
 import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import android.content.Context;
+import android.os.Bundle;
 
 public class AccountPresenters {
     private final SsoManager ssoManager;

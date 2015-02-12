@@ -1,10 +1,5 @@
 package com.livenation.mobile.android.na.scan.aggregators;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
-
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import java.util.ArrayList;
@@ -12,6 +7,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 /**
  * Aggregator used to get artist names from google play account used on the same device which runs the current app

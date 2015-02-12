@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
@@ -24,6 +17,13 @@ import com.mobilitus.tm.tickets.models.Captcha;
 import com.mobilitus.tm.tickets.models.Error;
 import com.mobilitus.tm.tickets.models.Polling;
 import com.mobilitus.tm.tickets.models.User;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class OrderHistoryActivity extends BaseActivity {
     private static final int LOGIN_ACTIVITY_CODE = 0xacc;

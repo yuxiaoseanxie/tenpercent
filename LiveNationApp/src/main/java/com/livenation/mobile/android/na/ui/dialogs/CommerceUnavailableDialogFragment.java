@@ -1,5 +1,9 @@
 package com.livenation.mobile.android.na.ui.dialogs;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,10 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 
 public class CommerceUnavailableDialogFragment extends DialogFragment {
     public static final String TAG = CommerceUnavailableDialogFragment.class.getSimpleName();

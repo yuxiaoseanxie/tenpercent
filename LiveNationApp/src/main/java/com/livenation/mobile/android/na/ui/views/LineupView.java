@@ -8,16 +8,16 @@
 
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
 public class LineupView extends LinearLayout {
     private FavoriteCheckBox favorite;

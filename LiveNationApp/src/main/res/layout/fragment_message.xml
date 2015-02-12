@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/fragment_message_info_layout"
@@ -21,19 +21,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/widget_margin"
-            android:textAppearance="@style/fragment_message_subject_text" />
+            android:textAppearance="@style/fragment_message_subject_text"/>
 
         <TextView
             android:id="@+id/fragment_message_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/widget_margin"
-            android:textAppearance="@style/fragment_message_details_text" />
+            android:textAppearance="@style/fragment_message_details_text"/>
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/one_dp" />
+            android:layout_height="@dimen/one_dp"/>
 
     </LinearLayout>
 
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/widget_margin"
-                android:textColorLink="@color/notification_link_color" />
+                android:textColorLink="@color/notification_link_color"/>
         </ScrollView>
 
         <TextView
@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/notif_error_loading_message"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <Button
@@ -69,6 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ui_deep_link_button_background"
-        android:text="@string/message_cta_default" />
+        android:text="@string/message_cta_default"/>
 
 </LinearLayout>

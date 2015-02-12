@@ -1,9 +1,9 @@
 package helper;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.na.ui.TestActivity;
+
+import android.test.ActivityInstrumentationTestCase2;
 
 /**
  * Created by elodieferrais on 3/31/14.
@@ -40,13 +40,13 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
     }
 
     /**public void testResetSuccess() {
-        final String KEY = "key_test";
-        final String VALUE = "value_test";
-        preferencePersistence.write(KEY, VALUE);
-        preferencePersistence.reset();
+     final String KEY = "key_test";
+     final String VALUE = "value_test";
+     preferencePersistence.write(KEY, VALUE);
+     preferencePersistence.reset();
 
-        String readValue = preferencePersistence.readString(KEY);
-        assertNull(null, readValue);
-    }**/
+     String readValue = preferencePersistence.readString(KEY);
+     assertNull(null, readValue);
+     }**/
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/activity_order_details_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.livenation.mobile.android.na.ui.fragments.OrderDetailsFragment" />
+        android:name="com.livenation.mobile.android.na.ui.fragments.OrderDetailsFragment"/>
 
 </merge>

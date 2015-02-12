@@ -2,5 +2,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/edittext_clear"
-        android:left="20dp" />
+        android:left="20dp"/>
 </layer-list>

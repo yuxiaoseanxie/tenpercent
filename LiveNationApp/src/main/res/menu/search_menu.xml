@@ -6,6 +6,6 @@
         android:id="@+id/menu_home_search_item"
         android:icon="@drawable/ic_menu_search_holo_light"
         android:showAsAction="always"
-        android:title="@string/home_menu_search" />
+        android:title="@string/home_menu_search"/>
 
 </menu>

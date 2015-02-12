@@ -1,8 +1,5 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.scan.ArtistAggregatorScanner;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -10,6 +7,9 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.Date;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 /**
  * Created by elodieferrais on 3/31/14.

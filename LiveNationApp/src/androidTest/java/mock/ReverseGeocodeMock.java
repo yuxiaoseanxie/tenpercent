@@ -1,10 +1,9 @@
 package mock;
 
-import android.content.Context;
-import android.os.AsyncTask;
-
 import com.livenation.mobile.android.na.providers.location.ReverseGeocode;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+
+import android.content.Context;
 
 /**
  * Created by elodieferrais on 2/6/15.

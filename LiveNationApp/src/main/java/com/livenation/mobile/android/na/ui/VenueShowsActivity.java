@@ -1,10 +1,10 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+
+import android.os.Bundle;
 
 public class VenueShowsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_VENUE_ID = "com.livenation.mobile.android.na.ui.VenueShowsActivity.EXTRA_VENUE_ID";

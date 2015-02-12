@@ -1,15 +1,15 @@
 package com.livenation.mobile.android.na.preferences;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
 import com.livenation.mobile.android.platform.init.Environment;
 
 import java.io.IOException;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by elodieferrais on 4/9/14.

@@ -1,13 +1,11 @@
 package com.livenation.mobile.android.na.analytics.services;
 
-import android.app.Activity;
-import android.content.Context;
-
-import com.amplitude.api.Amplitude;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.Props;
+
+import android.content.Context;
 
 /**
  * Created by cchilton on 1/12/15.
@@ -18,7 +16,7 @@ public class GoogleAnalytics implements AnalyticService {
 
     public GoogleAnalytics(Context context) {
         googleAnalytics = com.google.android.gms.analytics.GoogleAnalytics.getInstance(context).newTracker(R.xml.google_analytics);
-     }
+    }
 
     @Override
     public void screen(String screenTitle, Props props) {

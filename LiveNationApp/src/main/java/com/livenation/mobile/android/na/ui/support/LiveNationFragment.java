@@ -8,12 +8,12 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
+import com.livenation.mobile.android.na.BuildConfig;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-
-import com.livenation.mobile.android.na.BuildConfig;
 
 public abstract class LiveNationFragment extends Fragment {
 

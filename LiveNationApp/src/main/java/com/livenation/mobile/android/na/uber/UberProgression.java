@@ -1,13 +1,12 @@
 package com.livenation.mobile.android.na.uber;
 
-import android.content.Context;
-
 import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvider;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

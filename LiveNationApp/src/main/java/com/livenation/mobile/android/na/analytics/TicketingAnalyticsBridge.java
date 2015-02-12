@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.analytics;
 
-import android.app.Activity;
-
 import com.apsalar.sdk.Apsalar;
-import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
+
 import java.util.Map;
+
+import android.app.Activity;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
     private static Props mapToProps(Map<String, Object> properties) {

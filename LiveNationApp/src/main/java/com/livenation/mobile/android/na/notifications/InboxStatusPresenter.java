@@ -1,12 +1,12 @@
 package com.livenation.mobile.android.na.notifications;
 
-import android.content.Context;
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.presenters.support.BasePresenter;
 import com.livenation.mobile.android.na.presenters.support.BaseState;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushInbox;
+
+import android.content.Context;
+import android.os.Bundle;
 
 /**
  * Created by km on 3/5/14.

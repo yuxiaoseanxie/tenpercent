@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
-
-import com.livenation.mobile.android.na.R;
 
 /**
  * Created by elodieferrais on 4/22/14.

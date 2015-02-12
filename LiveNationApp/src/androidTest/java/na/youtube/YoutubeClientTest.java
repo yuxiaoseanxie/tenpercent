@@ -1,7 +1,5 @@
 package na.youtube;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 import com.livenation.mobile.android.na.ui.TestActivity;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -15,6 +13,7 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import android.test.ActivityInstrumentationTestCase2;
 import mock.NetworkMock;
 import mock.RequestQueueMock;
 

@@ -1,14 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.app.ActionBar.LayoutParams;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.livenation.mobile.android.na.R;
@@ -24,6 +15,15 @@ import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.na.youtube.YouTubeVideo;
 
 import java.util.List;
+
+import android.app.ActionBar.LayoutParams;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class YouTubeFragment extends LiveNationFragment implements Response.Listener<List<YouTubeVideo>>, Response.ErrorListener {
     private YouTubeClient.Cancelable currentSearchRequest;

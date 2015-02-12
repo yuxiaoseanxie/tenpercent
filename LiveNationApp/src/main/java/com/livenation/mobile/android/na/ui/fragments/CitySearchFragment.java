@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
@@ -17,6 +10,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 /**
  * Created by cchilton on 4/2/14.

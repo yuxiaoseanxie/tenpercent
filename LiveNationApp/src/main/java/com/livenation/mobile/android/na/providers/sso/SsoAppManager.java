@@ -1,13 +1,13 @@
 package com.livenation.mobile.android.na.providers.sso;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import android.app.Activity;
+import android.content.Context;
 
 /**
  * Created by elodieferrais on 9/16/14.

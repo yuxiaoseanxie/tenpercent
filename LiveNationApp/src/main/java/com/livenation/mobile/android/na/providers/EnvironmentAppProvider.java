@@ -1,10 +1,10 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
 import com.livenation.mobile.android.na.preferences.EnvironmentPreferences;
 import com.livenation.mobile.android.platform.init.Environment;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * Created by elodieferrais on 7/18/14.

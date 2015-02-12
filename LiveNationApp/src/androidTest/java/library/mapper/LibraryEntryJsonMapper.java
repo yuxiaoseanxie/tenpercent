@@ -1,13 +1,13 @@
 package library.mapper;
 
-import android.test.InstrumentationTestCase;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.MusicLibraryEntry;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.test.InstrumentationTestCase;
 
 /**
  * Created by elodieferrais on 3/26/14.

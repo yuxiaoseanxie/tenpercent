@@ -1,11 +1,11 @@
-import android.app.Application;
-import android.test.InstrumentationTestCase;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
+
+import android.app.Application;
+import android.test.InstrumentationTestCase;
 
 /**
  * Created by elodieferrais on 2/4/15.

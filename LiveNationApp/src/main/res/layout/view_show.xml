@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/livenation_selector_pressable_background"
-    android:descendantFocusability="blocksDescendants"
-    android:minHeight="@dimen/list_item_height">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/livenation_selector_pressable_background"
+                android:descendantFocusability="blocksDescendants"
+                android:minHeight="@dimen/list_item_height">
 
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
         android:id="@+id/view_show_date"
         android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/gap_small" />
+        android:layout_marginTop="@dimen/gap_small"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
             android:paddingRight="@dimen/gap_tiny"
             android:paddingEnd="@dimen/gap_tiny"
             android:text="@string/mock_artist_title_1"
-            android:textAppearance="@style/ln.text.medium.bold" />
+            android:textAppearance="@style/ln.text.medium.bold"/>
 
         <TextView
             android:id="@+id/view_show_details"
@@ -46,9 +46,8 @@
             android:paddingRight="@dimen/gap_tiny"
             android:paddingEnd="@dimen/gap_tiny"
             android:text="@string/mock_venue_title_1"
-            android:textAppearance="@style/ln.text.small.gray" />
+            android:textAppearance="@style/ln.text.small.gray"/>
     </LinearLayout>
-
 
 
 </RelativeLayout>

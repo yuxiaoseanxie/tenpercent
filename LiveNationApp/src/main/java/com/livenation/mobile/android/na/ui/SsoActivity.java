@@ -1,14 +1,14 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
 public class SsoActivity extends LiveNationFragmentActivity implements SsoLoginCallback {
     public static final String ARG_PROVIDER_ID = "provider_id";

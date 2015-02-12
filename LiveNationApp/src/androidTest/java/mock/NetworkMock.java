@@ -12,6 +12,7 @@ import com.android.volley.toolbox.HurlStack;
 public class NetworkMock extends BasicNetwork {
 
     private NetworkResponse response;
+
     public NetworkMock() {
         super(new HurlStack());
     }

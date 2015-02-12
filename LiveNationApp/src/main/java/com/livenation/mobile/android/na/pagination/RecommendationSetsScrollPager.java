@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -15,6 +13,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.widget.ArrayAdapter;
 
 /**
  * Created by elodieferrais on 4/20/14.

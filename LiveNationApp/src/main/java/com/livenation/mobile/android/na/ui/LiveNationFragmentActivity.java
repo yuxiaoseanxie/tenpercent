@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.ActivityManager;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
-
 import com.adobe.mobile.Config;
 import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.appindexing.AppIndex;
@@ -25,6 +18,13 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import android.app.ActivityManager;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 
 /**
  * Created by elodieferrais on 4/2/14.

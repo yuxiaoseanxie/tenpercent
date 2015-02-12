@@ -1,5 +1,10 @@
 package com.livenation.mobile.android.na.pagination;
 
+import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import com.livenation.mobile.android.na.ui.views.RefreshBar;
+import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
+
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -7,12 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-
-import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
-import com.livenation.mobile.android.na.ui.views.RefreshBar;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
-
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 

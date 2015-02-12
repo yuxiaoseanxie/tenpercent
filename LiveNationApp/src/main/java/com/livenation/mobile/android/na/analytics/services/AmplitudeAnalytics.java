@@ -1,14 +1,13 @@
 package com.livenation.mobile.android.na.analytics.services;
 
-import android.content.Context;
-
 import com.amplitude.api.Amplitude;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.Props;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Context;
 
 /**
  * Created by cchilton on 1/12/15.

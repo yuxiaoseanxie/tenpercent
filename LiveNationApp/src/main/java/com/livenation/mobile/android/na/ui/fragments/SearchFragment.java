@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
@@ -16,6 +9,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicA
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 
 /**
  * Created by elodieferrais on 11/6/14.

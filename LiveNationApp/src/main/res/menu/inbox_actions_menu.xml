@@ -6,18 +6,18 @@
         android:id="@+id/calendar"
         android:icon="@drawable/add_to_calendar"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/add_to_calendar" />
+        android:title="@string/add_to_calendar"/>
 
     <item
         android:id="@+id/mark_read"
         android:icon="@drawable/mark_all_as_red"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/mark_read" />
+        android:title="@string/mark_read"/>
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/inbox_delete"
         android:showAsAction="ifRoom|withText"
-        android:title="@string/delete" />
+        android:title="@string/delete"/>
 
 </menu>

@@ -4,14 +4,6 @@
 
 package com.livenation.mobile.android.na.notifications.ui;
 
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.RichPushMessageAdapter.ViewBinder;
@@ -23,6 +15,14 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 /**
  * Sample implementation of the BaseInboxFragment

@@ -1,9 +1,9 @@
 package com.livenation.mobile.android.na.app.rating;
 
+import com.livenation.mobile.android.na.preferences.RatingPreferences;
+
 import android.content.Context;
 import android.content.Intent;
-
-import com.livenation.mobile.android.na.preferences.RatingPreferences;
 
 /**
  * Created by elodieferrais on 8/14/14.
