@@ -127,4 +127,8 @@
         <ignore path="src/main/res/layout/sub_venue_details.xml"/>
     </issue>
 
+    <issue id="MissingRegistered">
+        <ignore path="src/main/AndroidManifest.xml"/>
+    </issue>
+
 </lint>
