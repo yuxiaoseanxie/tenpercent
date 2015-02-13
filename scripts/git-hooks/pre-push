@@ -10,16 +10,34 @@ import os
 import subprocess
 import sys
 
-
+# The following errors will be tracked by lint
+#    NewApi
+#    HardcodedText
+#    HardcodedText
+#    InefficientWeight
+#    ObsoleteLayoutParam
+#    UnusedAttribute
+#    UselessParent
+#    IconDuplicates
+#    IconLocation
+#    MenuTitle
+#    SuspiciousImport
+#    UnusedResources
+#    CommitPrefEdits
+#    DefaultLocale
+#    OldTargetApi
+#    ShowToast
+#    SimpleDateFormat
+#    InflateParams
+#    GradleOverrides
+#    StringFormatInvalid
+#    RtlHardcoded
+#    RtlEnabled
 
 CHECKS = [
     {
         'output': 'Looking for lint error...',
         'command': './gradlew lint',
-    },
-    {
-        'output': 'Running test and generate code coverage report ...',
-        'command': './gradlew createDebugCoverageReport',
     },
 ]
 
