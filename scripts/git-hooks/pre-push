@@ -48,20 +48,11 @@ def doCheck(checkValue):
     print checkValue['output']
     process = subprocess.Popen(checkValue['command'] , stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = process.communicate()
-    if out or err:
-        prefix = '\t'
-        output_lines = ['%s%s' % (prefix, line) for line in out.splitlines()]
-        print '\n'.join(output_lines)
-        if err:
-            print "An error occured"
-            print err
-            result = 1
+    if err:
+        print "An error occured"
+        print err
+        result = 1
     return result
-
-def stash():
-    # Stash any changes to the working tree that are not going to be committed
-    print "Stashing unstaged changes"
-    subprocess.call(['git', 'stash', '-u', '--keep-index'], stdout=subprocess.PIPE)
 
 def exit_with_result(result):
     if result != 0:
@@ -69,15 +60,11 @@ def exit_with_result(result):
     sys.exit(result)
 
 def main():
-    #stash()
-   
     result = 0
 
     for checkValue in CHECKS:
         result = doCheck(checkValue) or result
-        print ("result check", result)
     exit_with_result(result)
-    #unstash_and_exit_with_result(result)
 
 
 if __name__ == '__main__':
