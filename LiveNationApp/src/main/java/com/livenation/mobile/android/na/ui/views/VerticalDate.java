@@ -8,19 +8,19 @@
 
 package com.livenation.mobile.android.na.ui.views;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class VerticalDate extends LinearLayout {
     private final SimpleDateFormat DAY_FORMATTER = new SimpleDateFormat("d", Locale.getDefault());

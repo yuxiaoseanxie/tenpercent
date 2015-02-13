@@ -8,18 +8,18 @@
 
 package com.livenation.mobile.android.na.providers.location;
 
-import android.content.Context;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 
 public class DeviceLocationProvider implements LocationProvider {
     private List<State> activeStates = new ArrayList<State>();

@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -30,6 +23,14 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+
 
 import static com.livenation.mobile.android.na.ui.fragments.FavoriteSearchFragment.CLICK_MODE.OPEN_DETAIL;
 

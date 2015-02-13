@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/account_detail_order_history_container"
@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"
             android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
-            android:src="@drawable/your_orders" />
+            android:src="@drawable/your_orders"/>
 
         <TextView
             android:id="@+id/account_detail_text_your_orders_title"
@@ -27,7 +27,7 @@
             android:layout_toRightOf="@id/account_detail_image_your_orders"
             android:layout_toEndOf="@id/account_detail_image_your_orders"
             android:text="@string/account_your_orders_title"
-            android:textAppearance="@style/ln.text.large.bold" />
+            android:textAppearance="@style/ln.text.large.bold"/>
 
         <View
             style="@style/ui_underscore"
@@ -35,7 +35,7 @@
             android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_your_orders_title"
             android:layout_alignStart="@id/account_detail_text_your_orders_title"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:minWidth="@dimen/ui_gutter_width"
             android:scaleType="center"
-            android:src="@drawable/favorites" />
+            android:src="@drawable/favorites"/>
 
         <TextView
             android:id="@+id/account_detail_text_favorites_title"
@@ -61,7 +61,7 @@
             android:layout_toRightOf="@id/account_detail_image_favorites"
             android:layout_toEndOf="@id/account_detail_image_favorites"
             android:text="@string/account_favorites"
-            android:textAppearance="@style/ln.text.large.bold" />
+            android:textAppearance="@style/ln.text.large.bold"/>
 
         <View
             style="@style/ui_underscore"
@@ -69,7 +69,7 @@
             android:layout_height="@dimen/one_dp"
             android:layout_alignLeft="@id/account_detail_text_favorites_title"
             android:layout_alignStart="@id/account_detail_text_favorites_title"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
 </LinearLayout>

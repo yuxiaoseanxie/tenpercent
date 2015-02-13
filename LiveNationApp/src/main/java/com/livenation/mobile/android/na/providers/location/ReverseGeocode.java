@@ -1,15 +1,15 @@
 package com.livenation.mobile.android.na.providers.location;
 
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.AsyncTask;
-
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 
 /**
  * Created by elodieferrais on 2/6/15.

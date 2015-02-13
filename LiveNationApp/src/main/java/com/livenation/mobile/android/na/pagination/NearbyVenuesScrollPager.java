@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -12,6 +10,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
+
+import android.widget.ArrayAdapter;
 
 /**
  * Created by elodieferrais on 4/20/14.

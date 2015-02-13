@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -10,8 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
 
 @SuppressWarnings("UnusedDeclaration")
 public class ConfirmationActionButton extends FrameLayout {

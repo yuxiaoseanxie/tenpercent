@@ -1,10 +1,10 @@
 package com.livenation.mobile.android.na.ExperienceApp;
 
-import android.content.Context;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+
+import android.content.Context;
 
 /**
  * Created by cchilton on 8/19/14.

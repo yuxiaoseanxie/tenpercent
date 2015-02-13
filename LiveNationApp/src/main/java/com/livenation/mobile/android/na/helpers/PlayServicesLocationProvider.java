@@ -8,13 +8,6 @@
 
 package com.livenation.mobile.android.na.helpers;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,6 +19,12 @@ import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import android.content.Context;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 
 public class PlayServicesLocationProvider implements LocationProvider {
 
@@ -90,7 +89,7 @@ public class PlayServicesLocationProvider implements LocationProvider {
             if (client != null && client.isConnected()) {
                 try {
 
-                    Location location=LocationServices.FusedLocationApi.getLastLocation(client);
+                    Location location = LocationServices.FusedLocationApi.getLastLocation(client);
 
                     if (null != location) {
                         double lat = location.getLatitude();

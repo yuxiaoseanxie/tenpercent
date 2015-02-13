@@ -8,11 +8,11 @@
 
 package com.livenation.mobile.android.na.app;
 
-import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
-
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 
 /**
  * Simple LRU in memory cache

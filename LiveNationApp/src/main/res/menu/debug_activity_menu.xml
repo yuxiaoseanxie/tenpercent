@@ -5,5 +5,5 @@
         android:id="@+id/debug_activity_menu_item_share"
         android:icon="@drawable/ic_action_share"
         android:showAsAction="always"
-        android:title="@string/share_chooser_title" />
+        android:title="@string/share_chooser_title"/>
 </menu>

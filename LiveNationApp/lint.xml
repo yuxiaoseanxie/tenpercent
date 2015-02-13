@@ -1,116 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="TypographyDashes" severity="warning" />
-    <issue id="NewApi" severity="error" />
-    <issue id="HardcodedText" severity="error" />
-    <issue id="HardcodedText" severity="error" />
-    <issue id="ContentDescription" severity="ignore" />
-    <issue id="InefficientWeight" severity="error" />
-    <issue id="ObsoleteLayoutParam" severity="error" />
-    <issue id="UnusedAttribute" severity="error" />
-    <issue id="UselessParent" severity="error" />
-    <issue id="IconDuplicates" severity="error" />
-    <issue id="IconLocation" severity="error" />
-    <issue id="MenuTitle" severity="error" />
-    <issue id="SuspiciousImport" severity="error" />
-    <issue id="UnusedResources" severity="error" />
-    <issue id="CommitPrefEdits" severity="error" />
-    <issue id="DefaultLocale" severity="error" />
-    <issue id="OldTargetApi" severity="error" />
-    <issue id="ShowToast" severity="error" />
-    <issue id="SimpleDateFormat" severity="error" />
-    <issue id="InflateParams" severity="error" />
-    <issue id="GradleOverrides" severity="error" />
-    <issue id="StringFormatInvalid" severity="error" />
-    <issue id="IconDensities" severity="ignore" />
-    <issue id="RtlHardcoded" severity="error" />
-    <issue id="RtlEnabled" severity="error" />
+    <issue id="TypographyDashes" severity="warning"/>
+    <issue id="NewApi" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="HardcodedText" severity="error"/>
+    <issue id="ContentDescription" severity="ignore"/>
+    <issue id="InefficientWeight" severity="error"/>
+    <issue id="ObsoleteLayoutParam" severity="error"/>
+    <issue id="UnusedAttribute" severity="error"/>
+    <issue id="UselessParent" severity="error"/>
+    <issue id="IconDuplicates" severity="error"/>
+    <issue id="IconLocation" severity="error"/>
+    <issue id="MenuTitle" severity="error"/>
+    <issue id="SuspiciousImport" severity="error"/>
+    <issue id="UnusedResources" severity="error"/>
+    <issue id="CommitPrefEdits" severity="error"/>
+    <issue id="DefaultLocale" severity="error"/>
+    <issue id="OldTargetApi" severity="error"/>
+    <issue id="ShowToast" severity="error"/>
+    <issue id="SimpleDateFormat" severity="error"/>
+    <issue id="InflateParams" severity="error"/>
+    <issue id="GradleOverrides" severity="error"/>
+    <issue id="StringFormatInvalid" severity="error"/>
+    <issue id="IconDensities" severity="ignore"/>
+    <issue id="RtlHardcoded" severity="error"/>
+    <issue id="RtlEnabled" severity="error"/>
 
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
-        <ignore path="src/main/res/values/livenation_lib.xml" />
-        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml" />
+        <ignore path="src/main/res/values/livenation_lib.xml"/>
+        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
         <!-- For "-" is the licence key of the third parties libraries -->
     </issue>
 
     <issue id="UnusedAttribute">
-        <ignore path="src/main/res/layout/refresh_bar.xml" />
-        <ignore path="src/main/AndroidManifest.xml" />
+        <ignore path="src/main/res/layout/refresh_bar.xml"/>
+        <ignore path="src/main/AndroidManifest.xml"/>
         <!-- For android:fontFamily sans-serif-light-bold and sans-serif-light used sometimes-->
         <!-- For android:parentActivityName used in API level 16 and greater-->
     </issue>
 
     <issue id="UnusedResources">
-        <ignore path="src/main/res/values/build_values.xml" />
-        <ignore path="src/main/res/xml/google_analytics.xml" />
+        <ignore path="src/main/res/values/build_values.xml"/>
+        <ignore path="src/main/res/xml/google_analytics.xml"/>
         <!-- For ExperienceApp data-->
-        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml" />
+        <ignore path="src/main/res/values/com_crashlytics_export_strings.xml"/>
     </issue>
 
     <issue id="StringFormatInvalid">
-        <ignore path="src/main/res/values/strings.xml" />
+        <ignore path="src/main/res/values/strings.xml"/>
     </issue>
 
     <issue id="Overdraw">
-        <ignore path="src/main/res/layout/on_boarding_scanning_view.xml" />
-        <ignore path="src/main/res/layout/view_decorated_edittext.xml" />
-        <ignore path="src/main/res/layout/dialog_rating.xml" />
-        <ignore path="src/main/res/layout/dialog_ticket_offerings.xml" />
+        <ignore path="src/main/res/layout/on_boarding_scanning_view.xml"/>
+        <ignore path="src/main/res/layout/view_decorated_edittext.xml"/>
+        <ignore path="src/main/res/layout/dialog_rating.xml"/>
+        <ignore path="src/main/res/layout/dialog_ticket_offerings.xml"/>
         <ignore path="src/main/res/layout/order_uber_ride.xml"/>
         <ignore path="src/main/res/layout/order_uber_signup.xml"/>
     </issue>
 
     <issue id="NewApi">
-        <ignore path="src/main/res/values/styles_livenation_text.xml" />
+        <ignore path="src/main/res/values/styles_livenation_text.xml"/>
         <!-- For android:fontFamily sans-serif-condensed used sometimes-->
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/ShowsListNonScrollingFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/ShowsListNonScrollingFragment.java"/>
         <!-- For setBackground we checked the os version before-->
     </issue>
 
 
     <issue id="ShowToast">
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/helpers/MusicSyncHelper.java" />
+            path="src/main/java/com/livenation/mobile/android/na/helpers/MusicSyncHelper.java"/>
     </issue>
 
     <issue id="InflateParams">
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java"/>
         <!-- For the header view added to the list-->
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/CalendarDialogFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/CalendarDialogFragment.java"/>
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/app/rating/RatingDialogFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/app/rating/RatingDialogFragment.java"/>
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/TicketOfferingsDialogFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/dialogs/TicketOfferingsDialogFragment.java"/>
         <!-- DialogFragment -->
-        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/CitySearchActivity.java" />
-        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/SearchActivity.java" />
-        <ignore path="src/main/java/com/livenation/mobile/android/na/uber/dialogs/UberDialogFragment.java"/>
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/CitySearchActivity.java"/>
+        <ignore path="src/main/java/com/livenation/mobile/android/na/ui/SearchActivity.java"/>
+        <ignore
+            path="src/main/java/com/livenation/mobile/android/na/uber/dialogs/UberDialogFragment.java"/>
         <!-- ActionBar custom view -->
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/FavoritesFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/FavoritesFragment.java"/>
         <!-- To create our own tabs -->
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/notifications/ui/InboxActivity.java" />
+            path="src/main/java/com/livenation/mobile/android/na/notifications/ui/InboxActivity.java"/>
         <!-- To create a PopMenu -->
     </issue>
 
     <issue id="SetJavaScriptEnabled">
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/WebViewFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/WebViewFragment.java"/>
     </issue>
 
     <issue id="ClickableViewAccessibility">
         <ignore
-            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java" />
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/AllShowsFragment.java"/>
     </issue>
 
     <issue id="RtlSymmetry">
-        <ignore path="src/main/res/layout/view_show.xml" />
-        <ignore path="src/main/res/layout/view_show_venue_details.xml" />
+        <ignore path="src/main/res/layout/view_show.xml"/>
+        <ignore path="src/main/res/layout/view_show_venue_details.xml"/>
     </issue>
 
     <issue id="RelativeOverlap">
@@ -124,6 +125,10 @@
         <ignore path="src/main/res/layout/src/main/res/layout/sub_venue_details.xml"/>
         <ignore path="src/main/res/layout/list_show_nearby_item.xml"/>
         <ignore path="src/main/res/layout/sub_venue_details.xml"/>
+    </issue>
+
+    <issue id="MissingRegistered">
+        <ignore path="src/main/AndroidManifest.xml"/>
     </issue>
 
 </lint>

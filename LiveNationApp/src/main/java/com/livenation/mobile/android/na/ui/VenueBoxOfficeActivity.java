@@ -1,11 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -16,6 +10,12 @@ import com.livenation.mobile.android.na.ui.fragments.VenueBoxOfficeTabFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implements ViewPager.OnPageChangeListener {
     private static final String EXTRA_VENUE = "com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity.EXTRA_VENUE";

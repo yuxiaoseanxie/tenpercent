@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_show_header"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:id="@+id/fragment_show_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
             android:id="@+id/fragment_venue_map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/venue_map_foreground" />
+            android:foreground="@drawable/venue_map_foreground"/>
 
         <TextView
             android:id="@+id/fragment_venue_title"
@@ -22,7 +22,7 @@
             android:layout_marginBottom="@dimen/gap_medium"
             android:layout_marginLeft="@dimen/gap_medium"
             android:layout_marginRight="@dimen/gap_medium"
-            android:textAppearance="@style/ln.text.xlarge.bold" />
+            android:textAppearance="@style/ln.text.xlarge.bold"/>
 
     </FrameLayout>
 
@@ -39,6 +39,6 @@
         android:button="@drawable/checkbox_favorite_disc_selector"
         android:checked="false"
         android:minHeight="@dimen/minimum_pressable"
-        android:minWidth="@dimen/minimum_pressable" />
+        android:minWidth="@dimen/minimum_pressable"/>
 
 </RelativeLayout>

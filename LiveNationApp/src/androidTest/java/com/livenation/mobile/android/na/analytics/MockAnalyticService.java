@@ -1,6 +1,5 @@
-package analytics;
+package com.livenation.mobile.android.na.analytics;
 
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.analytics.services.AnalyticService;
 
 /**
@@ -25,6 +24,7 @@ public class MockAnalyticService implements AnalyticService {
 
     public static interface OnAnalytics {
         void onScreen(String screenTitle, Props props);
+
         void onTrack(String event, Props props);
     }
 }

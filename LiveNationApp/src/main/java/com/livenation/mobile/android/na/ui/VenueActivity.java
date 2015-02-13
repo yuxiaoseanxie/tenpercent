@@ -8,9 +8,6 @@
 
 package com.livenation.mobile.android.na.ui;
 
-import android.net.Uri;
-import android.os.Bundle;
-
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.livenation.mobile.android.na.R;
@@ -32,6 +29,9 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import android.net.Uri;
+import android.os.Bundle;
 
 
 public class VenueActivity extends DetailBaseFragmentActivity implements EventsView {

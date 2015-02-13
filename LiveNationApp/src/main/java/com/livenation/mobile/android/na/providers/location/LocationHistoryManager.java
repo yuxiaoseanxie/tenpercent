@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.providers.location;
 
-import android.content.Context;
-
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
@@ -10,6 +8,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import android.content.Context;
 
 /**
  * Created by cchilton on 4/22/14.

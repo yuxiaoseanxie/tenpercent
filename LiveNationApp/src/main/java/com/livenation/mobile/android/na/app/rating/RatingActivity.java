@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.app.rating;
 
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+
+import android.os.Bundle;
 
 /**
  * Created by elodieferrais on 8/15/14.

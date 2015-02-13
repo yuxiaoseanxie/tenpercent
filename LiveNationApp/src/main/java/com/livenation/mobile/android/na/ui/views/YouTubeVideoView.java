@@ -1,5 +1,11 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.youtube.YouTubeVideo;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -7,12 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.youtube.YouTubeVideo;
 
 public class YouTubeVideoView extends LinearLayout {
     private NetworkImageView imageView;

@@ -1,4 +1,4 @@
-package mock;
+package com.mock;
 
 import com.livenation.mobile.android.platform.init.Environment;
 import com.livenation.mobile.android.platform.init.provider.EnvironmentProvider;

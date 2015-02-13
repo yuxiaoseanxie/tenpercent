@@ -4,26 +4,6 @@
 
 package com.livenation.mobile.android.na.notifications.ui;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.Toast;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
@@ -47,6 +27,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.ActionMode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 /**
  * Activity that manages the activity_inbox.

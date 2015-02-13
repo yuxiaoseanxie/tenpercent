@@ -1,13 +1,5 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -27,6 +19,13 @@ import com.livenation.mobile.android.platform.sso.SsoManager;
 import java.util.List;
 import java.util.TimeZone;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**

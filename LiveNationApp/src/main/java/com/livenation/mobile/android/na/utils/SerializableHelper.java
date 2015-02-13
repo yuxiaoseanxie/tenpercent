@@ -1,13 +1,13 @@
 package com.livenation.mobile.android.na.utils;
 
-import android.util.Base64;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import android.util.Base64;
 
 /**
  * Created by elodieferrais on 3/1/14.

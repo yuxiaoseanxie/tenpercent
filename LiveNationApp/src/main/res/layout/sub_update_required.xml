@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sub_update_required_layout"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:id="@+id/sub_update_required_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:gravity="center"
         style="@style/ui_header_transparent"
-        android:text="@string/update_available" />
+        android:text="@string/update_available"/>
 
     <TextView
         android:id="@+id/sub_update_required_text"
@@ -21,7 +21,7 @@
         android:padding="@dimen/activity_vertical_margin"
         android:gravity="center"
         android:textAppearance="@style/ln.text.medium"
-        android:text="@string/mock_update_message" />
+        android:text="@string/mock_update_message"/>
 
     <Button
         android:id="@+id/sub_update_required_button"
@@ -30,8 +30,8 @@
         android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         style="@style/custom_center_container.green"
-        android:text="@string/update_now" />
+        android:text="@string/update_now"/>
 
-    <View style="@style/Divider" />
+    <View style="@style/Divider"/>
 
 </LinearLayout>

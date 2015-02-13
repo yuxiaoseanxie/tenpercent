@@ -1,8 +1,5 @@
-package uber;
+package com.livenation.mobile.android.na.uber;
 
-import android.test.InstrumentationTestCase;
-
-import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
@@ -15,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import android.test.InstrumentationTestCase;
 import retrofit.client.Client;
 import retrofit.client.Request;
 import retrofit.client.Response;

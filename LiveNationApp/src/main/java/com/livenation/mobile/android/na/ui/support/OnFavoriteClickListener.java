@@ -1,9 +1,5 @@
 package com.livenation.mobile.android.na.ui.support;
 
-import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.CompoundButton;
-
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -12,6 +8,10 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
+
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.CompoundButton;
 
 public class OnFavoriteClickListener {
     public static class OnVenueFavoriteClick extends OnFavoriteClick {

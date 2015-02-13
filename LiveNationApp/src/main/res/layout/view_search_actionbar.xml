@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <com.livenation.mobile.android.na.ui.views.DecoratedEditText
         android:id="@+id/view_search_actionbar_input"
@@ -11,5 +11,5 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/view_search_actionbar_input_margin_bottom"
         android:layout_marginLeft="@dimen/gap_tiny"
-        android:layout_marginRight="@dimen/gap_tiny" />
+        android:layout_marginRight="@dimen/gap_tiny"/>
 </RelativeLayout>

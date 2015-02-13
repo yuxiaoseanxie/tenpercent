@@ -1,15 +1,15 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.adapters.HelpListAdapter;
 import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
+
+import android.app.FragmentTransaction;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * Created by elodieferrais on 4/28/14.

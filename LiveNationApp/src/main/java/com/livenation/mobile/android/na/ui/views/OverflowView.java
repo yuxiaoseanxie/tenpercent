@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -7,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
 
 public class OverflowView extends LinearLayout {
     private ImageView icon;

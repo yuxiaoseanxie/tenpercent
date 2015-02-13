@@ -1,10 +1,7 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-
 import com.livenation.mobile.android.na.helpers.PlayServicesLocationProvider;
 import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 

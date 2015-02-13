@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/refresh_bar_background"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="@dimen/view_refresh_bar_padding">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/refresh_bar_background"
+              android:gravity="center"
+              android:orientation="horizontal"
+              android:padding="@dimen/view_refresh_bar_padding">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -20,14 +20,14 @@
             android:fontFamily="sans-serif-light"
             android:text="@string/refresh_bar_message"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/view_refresh_bar_message_size" />
+            android:textSize="@dimen/view_refresh_bar_message_size"/>
     </RelativeLayout>
 
     <View
         android:layout_width="@dimen/one_dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/view_refresh_bar_separator_margin"
-        android:background="@color/refresh_bar_separator" />
+        android:background="@color/refresh_bar_separator"/>
 
     <Button
         android:id="@+id/refreshbar_button"
@@ -41,6 +41,6 @@
         android:text="@string/refresh_label"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/view_refresh_bar_refresh_size" />
+        android:textSize="@dimen/view_refresh_bar_refresh_size"/>
 
 </LinearLayout>

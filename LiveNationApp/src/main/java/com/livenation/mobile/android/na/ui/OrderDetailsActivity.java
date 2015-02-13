@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.ticketing.activities.BaseActivity;
 import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
@@ -9,6 +7,8 @@ import com.livenation.mobile.android.ticketing.analytics.Analytics;
 import com.livenation.mobile.android.ticketing.analytics.Properties;
 import com.livenation.mobile.android.ticketing.utils.Constants;
 import com.mobilitus.tm.tickets.models.Cart;
+
+import android.os.Bundle;
 
 public class OrderDetailsActivity extends BaseActivity {
     private Cart eventInfoCart;

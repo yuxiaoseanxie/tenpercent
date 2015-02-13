@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.livenation.mobile.android.na.test">
+          package="com.livenation.mobile.android.na.test">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 
     <!-- Begin Urban Airship Permissions -->
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <permission
         android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.livenation.mobile.android.na.permission.C2D_MESSAGE"/>
 
     <permission
         android:name="com.livenation.mobile.android.na.permission.UA_DATA"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA" />
+    <uses-permission android:name="com.livenation.mobile.android.na.permission.UA_DATA"/>
     <!-- End Urban Airship Permissions -->
 
 
     <!-- Begin segment.io Permissions -->
     <!-- Allow you to see which activity was active when a crash occurs. -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <!-- Allows location to be tracked. -->
     <!-- android.permission.ACCESS_COARSE_LOCATION already there -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- End segment.io Permissions -->
 
 
@@ -58,7 +58,7 @@
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:allowBackup="true"

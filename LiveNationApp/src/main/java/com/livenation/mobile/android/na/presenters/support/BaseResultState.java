@@ -1,8 +1,8 @@
 package com.livenation.mobile.android.na.presenters.support;
 
-import android.os.Bundle;
-
 import java.io.Serializable;
+
+import android.os.Bundle;
 
 /**
  * Created by cchilton on 2/27/14.

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/on_boarding_scanning_view_height"
-    android:background="@color/onboarding_scanning_view_background"
-    android:padding="0dp">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/on_boarding_scanning_view_height"
+                android:background="@color/onboarding_scanning_view_background"
+                android:padding="0dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/onboarding_music_scan" />
+            android:src="@drawable/onboarding_music_scan"/>
 
         <TextView
             android:id="@+id/on_boarding_scanning_textview"
@@ -30,13 +30,13 @@
             android:paddingEnd="@dimen/on_boarding_scan_message_padding"
             android:text="@string/onboarding_scanning_description"
             android:gravity="center"
-            android:textAppearance="@style/onboarding_scan_text" />
+            android:textAppearance="@style/onboarding_scan_text"/>
     </RelativeLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="@dimen/one_dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/shadow_color" />
+        android:background="@color/shadow_color"/>
 
 </RelativeLayout>

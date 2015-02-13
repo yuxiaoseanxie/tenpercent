@@ -4,17 +4,17 @@
 
 package com.livenation.mobile.android.na.notifications.ui;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-
 import com.urbanairship.Logger;
 import com.urbanairship.richpush.RichPushMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 /**
  * ArrayAdapter for rich push messages

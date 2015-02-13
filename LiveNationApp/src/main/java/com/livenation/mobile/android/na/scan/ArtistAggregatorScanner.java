@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.scan;
 
-import android.content.Context;
-
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
@@ -19,6 +17,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import android.content.Context;
 
 public class ArtistAggregatorScanner {
 

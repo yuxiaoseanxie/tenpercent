@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.utils;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -16,6 +9,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.init.callback.ConfigCallback;
 
 import java.util.Map;
+
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 
 /**
  * Created by elodieferrais on 4/11/14.

@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
 
 /**
  * Created by cchilton on 4/7/14.

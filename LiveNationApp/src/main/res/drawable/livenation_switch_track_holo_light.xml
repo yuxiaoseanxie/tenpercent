@@ -14,6 +14,6 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/livenation_switch_bg_focused_holo_light" android:state_focused="true" />
-    <item android:drawable="@drawable/livenation_switch_bg_holo_light" />
+    <item android:drawable="@drawable/livenation_switch_bg_focused_holo_light" android:state_focused="true"/>
+    <item android:drawable="@drawable/livenation_switch_bg_holo_light"/>
 </selector>

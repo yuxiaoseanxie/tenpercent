@@ -30,13 +30,19 @@ public class LiveNationEstimate implements Serializable {
         return price;
     }
 
-    public UberTime getTime() { return time; }
+    public UberTime getTime() {
+        return time;
+    }
 
     public boolean hasProduct() {
         return product != null;
     }
 
-    public boolean hasTime() { return time != null; }
+    public boolean hasTime() {
+        return time != null;
+    }
 
-    public boolean hasPrice() { return price != null; }
+    public boolean hasPrice() {
+        return price != null;
+    }
 }

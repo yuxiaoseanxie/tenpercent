@@ -1,11 +1,5 @@
 package com.livenation.mobile.android.na.uber;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
-
 import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvider;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
@@ -16,9 +10,12 @@ import com.mobilitus.tm.tickets.models.Venue;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -86,7 +83,7 @@ public class UberHelper {
     public static Uri getUberSignupLink(String clientId, float dropoffLat, float dropoffLng, String dropoffAddress, String dropoffName) {
         //It would be nice to use a URI builder here, but unfortunately it url encodes the square brackets in the key values, which breaks deep linking
         String value = String.format("https://m.uber.com/sign-up?client_id=%s&pickup=my_location&dropoff[latitude]=%s&dropoff[longitude]=%s&dropoff[formatted_address]=%s&dropoff[nickname]=%s",
-                clientId,  dropoffLat, dropoffLng, dropoffAddress, dropoffName);
+                clientId, dropoffLat, dropoffLng, dropoffAddress, dropoffName);
         return Uri.parse(value);
     }
 

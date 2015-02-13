@@ -8,17 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableLayout.LayoutParams;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +19,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
@@ -57,12 +47,22 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
-import com.livenation.mobile.android.na.analytics.Props;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TableLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";

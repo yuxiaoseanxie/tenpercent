@@ -1,13 +1,5 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -15,7 +7,13 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow.TravelOption;
 
-import rx.Observable;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 import rx.functions.Action1;
 import rx.subjects.Subject;
 
@@ -67,7 +65,8 @@ public class TravelAdapter extends BaseAdapter {
                     fastestUber.subscribe(new Action1<LiveNationEstimate>() {
                         @Override
                         public void call(LiveNationEstimate liveNationEstimate) {
-                            if (!liveNationEstimate.hasTime() || !liveNationEstimate.hasPrice()) return;
+                            if (!liveNationEstimate.hasTime() || !liveNationEstimate.hasPrice())
+                                return;
                             String uberTitle = context.getResources().getString(R.string.uber_popup_book_ride_mins);
                             uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
                             text1.setText(uberTitle);

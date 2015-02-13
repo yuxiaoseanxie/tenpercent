@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.youtube;
 
-import android.net.Uri;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -15,6 +13,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
+
+import android.net.Uri;
 
 public class YouTubeSearchRequest extends JsonRequest<List<YouTubeVideo>> {
     private static final String API_HOST = "www.googleapis.com";

@@ -1,13 +1,13 @@
 package com.livenation.mobile.android.na.utils;
 
+import java.util.List;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-
-import java.util.List;
 
 /**
  * Created by elodieferrais on 4/24/14.

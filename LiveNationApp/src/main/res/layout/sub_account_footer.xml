@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/list_item_height">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/livenation_selector_pressable_background"
+                android:minHeight="@dimen/list_item_height">
 
     <ImageView
         android:id="@+id/account_footer_location_image"
@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:minWidth="@dimen/ui_gutter_width"
         android:scaleType="center"
-        android:src="@drawable/your_location" />
+        android:src="@drawable/your_location"/>
 
     <LinearLayout
         android:id="@+id/account_footer_text_container"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_footer_location_title"
-            android:textAppearance="@style/ln.text.large.bold" />
+            android:textAppearance="@style/ln.text.large.bold"/>
 
         <TextView
             android:id="@+id/account_footer_location_detail"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_footer_location_default"
-            android:textAppearance="@style/ln.text.small.bold.red" />
+            android:textAppearance="@style/ln.text.small.bold.red"/>
     </LinearLayout>
 
 </RelativeLayout>

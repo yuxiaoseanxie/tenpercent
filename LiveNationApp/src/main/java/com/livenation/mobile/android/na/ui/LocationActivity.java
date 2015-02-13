@@ -1,11 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -14,8 +8,13 @@ import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
-import com.livenation.mobile.android.na.ui.fragments.LocationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /**
  * Created by cchilton on 3/12/14.
