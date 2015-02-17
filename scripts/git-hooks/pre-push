@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+# Pre-commit hook that isolates staged files for testing
+# For details see http://tech.yipit.com/2011/11/16/183772396/
+
+# To enable locally from repo root:
+# pushd .git/hooks && ln -s ../../scripts/git-hooks/pre-push; popd
+
+import os
+import subprocess
+import sys
+
+# The following errors will be tracked by lint
+#    NewApi
+#    HardcodedText
+#    HardcodedText
+#    InefficientWeight
+#    ObsoleteLayoutParam
+#    UnusedAttribute
+#    UselessParent
+#    IconDuplicates
+#    IconLocation
+#    MenuTitle
+#    SuspiciousImport
+#    UnusedResources
+#    CommitPrefEdits
+#    DefaultLocale
+#    OldTargetApi
+#    ShowToast
+#    SimpleDateFormat
+#    InflateParams
+#    GradleOverrides
+#    StringFormatInvalid
+#    RtlHardcoded
+#    RtlEnabled
+
+CHECKS = [
+    {
+        'output': 'Looking for lint error...',
+        'command': './gradlew lint',
+    },
+]
+
+
+
+def doCheck(checkValue):
+    result = 0
+    print checkValue['output']
+    process = subprocess.Popen(checkValue['command'] , stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = process.communicate()
+    if err:
+        print "An error occured"
+        print err
+        result = 1
+    return result
+
+def exit_with_result(result):
+    if result != 0:
+         print "pre-commit check result failed."
+    sys.exit(result)
+
+def main():
+    result = 0
+
+    for checkValue in CHECKS:
+        result = doCheck(checkValue) or result
+    exit_with_result(result)
+
+
+if __name__ == '__main__':
+    main()
