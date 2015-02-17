@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <string name="analytics_google_apikey">1e75cf0f83a4a078cc31c589b8b56384</string>
+    <string name="analytics_amplitude_apikey">1e75cf0f83a4a078cc31c589b8b56384</string>
 </resources>
