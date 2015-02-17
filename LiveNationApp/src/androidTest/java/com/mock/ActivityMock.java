@@ -1,4 +1,4 @@
-package mock;
+package com.mock;
 
 import android.app.Activity;
 

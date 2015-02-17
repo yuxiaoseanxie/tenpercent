@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.ExperienceApp;
 
-import android.net.Uri;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -13,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+
+import android.net.Uri;
 
 public class ExperienceAppRequest extends JsonRequest<Boolean> {
     private static final String API_HOST = "api.expapp.com";

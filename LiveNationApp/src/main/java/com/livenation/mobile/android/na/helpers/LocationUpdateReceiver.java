@@ -1,12 +1,12 @@
 package com.livenation.mobile.android.na.helpers;
 
+import com.livenation.mobile.android.na.providers.location.LocationManager;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-
-import com.livenation.mobile.android.na.providers.location.LocationManager;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 /**
  * Created by elodieferrais on 4/24/14.

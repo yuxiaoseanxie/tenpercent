@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <com.livenation.mobile.android.na.ui.views.VerticalDate
         android:id="@+id/list_generic_show_date"
@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/gap_medium"
         android:layout_marginRight="@dimen/gap_medium"
-        android:layout_marginTop="@dimen/gap_large" />
+        android:layout_marginTop="@dimen/gap_large"/>
 
     <com.livenation.mobile.android.na.ui.views.TransitioningImageView
         android:id="@+id/list_item_show_image"
@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/gap_medium"
         android:layout_marginEnd="@dimen/gap_medium"
         android:layout_toRightOf="@id/list_generic_show_date"
-        android:layout_toEndOf="@id/list_generic_show_date" />
+        android:layout_toEndOf="@id/list_generic_show_date"/>
 
     <com.livenation.mobile.android.na.ui.views.LayoutedTextView
         android:id="@+id/list_generic_show_title"
@@ -32,7 +32,7 @@
         android:text="@string/mock_artist_title_1"
         android:maxLines="3"
         android:ellipsize="end"
-        android:textAppearance="@style/ln.text.medium.bold" />
+        android:textAppearance="@style/ln.text.medium.bold"/>
 
     <TextView
         android:id="@+id/list_generic_show_location"
@@ -44,7 +44,7 @@
         android:text="@string/mock_venue_title_1"
         android:textAppearance="@style/ln.text.small.gray"
         android:maxLines="2"
-        android:ellipsize="end" />
+        android:ellipsize="end"/>
 
     <View
         android:id="@+id/list_item_show_divider"
@@ -53,7 +53,7 @@
         android:layout_alignLeft="@id/list_item_show_image"
         android:layout_alignStart="@id/list_item_show_image"
         android:layout_below="@id/list_item_show_image"
-        android:background="@drawable/ui_underscore_background" />
+        android:background="@drawable/ui_underscore_background"/>
 
 
 </RelativeLayout>

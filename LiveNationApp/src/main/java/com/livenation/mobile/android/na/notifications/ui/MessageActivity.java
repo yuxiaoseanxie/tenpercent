@@ -4,13 +4,13 @@
 
 package com.livenation.mobile.android.na.notifications.ui;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
 import com.urbanairship.UAirship;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
 
 /**
  * Manages the activity_message view pager and display messages

@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.ui.fragments.ArtistShowsListFragment;
@@ -10,6 +8,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import java.util.HashMap;
 import java.util.Map;
+
+import android.os.Bundle;
 
 public class ArtistShowsActivity extends LiveNationFragmentActivity {
     public static final String EXTRA_ARTIST_ID = "com.livenation.mobile.android.na.ui.ArtistShowsActivity.EXTRA_ARTIST_ID";

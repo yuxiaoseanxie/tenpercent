@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,12 +18,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ff777777"
-                android:minHeight="@dimen/confirmation_image_height" />
+                android:minHeight="@dimen/confirmation_image_height"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/show_image_foreground" />
+                android:background="@drawable/show_image_foreground"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7" />
+                    android:shadowRadius="7"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_event_name"
@@ -59,7 +59,7 @@
                     android:shadowColor="@color/black"
                     android:shadowDx="0"
                     android:shadowDy="1"
-                    android:shadowRadius="7" />
+                    android:shadowRadius="7"/>
             </LinearLayout>
 
         </FrameLayout>
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:padding="@dimen/activity_vertical_margin"
-                android:orientation="vertical" />
+                android:orientation="vertical"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_cost"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_cost"
@@ -103,14 +103,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/gap_small"
                     android:text="@string/mock_price"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_number"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_number"
@@ -118,14 +118,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/gap_small"
                     android:text="@string/mock_artist_title_1"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_seats"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_seats"
@@ -133,14 +133,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/gap_small"
                     android:text="@string/mock_artist_title_1"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_date"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_date"
@@ -148,14 +148,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/gap_small"
                     android:text="@string/mock_event_date"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_venue_name"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_venue"
@@ -163,21 +163,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/gap_small"
                     android:text="@string/mock_venue_title_1"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/inter_item_padding_small"
                     android:text="@string/order_confirmation_note"
-                    android:textAppearance="@style/ln.text.small.bold" />
+                    android:textAppearance="@style/ln.text.small.bold"/>
 
                 <TextView
                     android:id="@+id/activity_order_confirmation_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/order_confirmation_note_fmt"
-                    android:textAppearance="@style/ln.text.small.gray" />
+                    android:textAppearance="@style/ln.text.small.gray"/>
 
             </LinearLayout>
 

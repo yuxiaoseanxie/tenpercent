@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/livenation_selector_pressable_background"
-    android:minHeight="@dimen/list_item_height">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/livenation_selector_pressable_background"
+                android:minHeight="@dimen/list_item_height">
 
     <ImageView
         android:id="@+id/view_overflow_icon"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:scaleType="center"
         android:layout_centerVertical="true"
-        android:src="@drawable/overflow_maximize" />
+        android:src="@drawable/overflow_maximize"/>
 
     <TextView
         android:id="@+id/view_overflow_title"
@@ -22,12 +22,12 @@
         android:layout_toRightOf="@id/view_overflow_icon"
         android:layout_toEndOf="@id/view_overflow_icon"
         android:text="@string/mock_overflow"
-        android:textAppearance="@style/ln.text.medium.bold_italic.red" />
+        android:textAppearance="@style/ln.text.medium.bold_italic.red"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/ui_underscore_background" />
+        android:background="@drawable/ui_underscore_background"/>
 
 </RelativeLayout>

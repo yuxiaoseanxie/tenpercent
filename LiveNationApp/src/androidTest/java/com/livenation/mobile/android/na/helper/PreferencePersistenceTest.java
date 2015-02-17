@@ -1,26 +1,28 @@
-package helper;
-
-import android.test.ActivityInstrumentationTestCase2;
+package com.livenation.mobile.android.na.helper;
 
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
-import com.livenation.mobile.android.na.ui.TestActivity;
+
+import android.test.InstrumentationTestCase;
+import tools.TestTools;
 
 /**
  * Created by elodieferrais on 3/31/14.
  */
-public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 {
+public class PreferencePersistenceTest extends InstrumentationTestCase {
 
     private static final String NAME = "test_name";
     private PreferencePersistence preferencePersistence;
 
-    public PreferencePersistenceTest() {
-        super(TestActivity.class);
+    @Override
+    protected void tearDown() throws Exception {
+        TestTools.closeAllActivities(getInstrumentation());
+        super.tearDown();
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preferencePersistence = new PreferencePersistence(NAME, getActivity());
+        preferencePersistence = new PreferencePersistence(NAME, getInstrumentation().getContext());
     }
 
     public void testWriteAndReadSuccess() {
@@ -40,13 +42,13 @@ public class PreferencePersistenceTest extends ActivityInstrumentationTestCase2 
     }
 
     /**public void testResetSuccess() {
-        final String KEY = "key_test";
-        final String VALUE = "value_test";
-        preferencePersistence.write(KEY, VALUE);
-        preferencePersistence.reset();
+     final String KEY = "key_test";
+     final String VALUE = "value_test";
+     preferencePersistence.write(KEY, VALUE);
+     preferencePersistence.reset();
 
-        String readValue = preferencePersistence.readString(KEY);
-        assertNull(null, readValue);
-    }**/
+     String readValue = preferencePersistence.readString(KEY);
+     assertNull(null, readValue);
+     }**/
 
 }

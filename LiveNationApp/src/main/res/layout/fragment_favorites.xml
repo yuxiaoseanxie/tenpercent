@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <TabHost
         android:id="@android:id/tabhost"
@@ -33,13 +33,13 @@
                     <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
                         android:id="@+id/fragment_favorite_artists_empty"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
 
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_artists_list"
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
@@ -52,13 +52,13 @@
                     <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
                         android:id="@+id/fragment_favorite_venues_empty"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
 
                     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                         android:id="@+id/fragment_favorite_venues_list"
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
             </FrameLayout>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/fragment_location_current_header"
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/location_current" />
+        android:text="@string/location_current"/>
 
 
     <TextView
@@ -18,27 +18,27 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/fragment_location_history_header"
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/location_previous_locations" />
+        android:text="@string/location_previous_locations"/>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
         android:layout_marginBottom="@dimen/fragment_location_auto_switch_margin_bottom"
         android:layout_marginTop="@dimen/gap_smaller"
-        android:background="@drawable/ui_underscore_background" />
+        android:background="@drawable/ui_underscore_background"/>
 
     <Switch
         android:id="@+id/fragment_location_current_location"
@@ -51,6 +51,6 @@
         android:textAppearance="@style/ln.text.medium.bold.red"
         android:text="@string/location_switch"
         android:thumb="@drawable/livenation_switch_inner_holo_light"
-        android:track="@drawable/livenation_switch_track_holo_light" />
+        android:track="@drawable/livenation_switch_track_holo_light"/>
 
 </LinearLayout>

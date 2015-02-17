@@ -1,17 +1,16 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
-
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**

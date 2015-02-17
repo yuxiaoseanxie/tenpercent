@@ -1,10 +1,10 @@
 package com.livenation.mobile.android.na.ui.support;
 
-import android.content.Context;
-import android.content.Intent;
-
 import java.io.Serializable;
 import java.util.List;
+
+import android.content.Context;
+import android.content.Intent;
 
 /**
  * Created by km on 2/28/14.

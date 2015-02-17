@@ -1,5 +1,15 @@
 package com.livenation.mobile.android.na.ui;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.app.Constants;
+import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,16 +25,6 @@ import android.view.animation.OvershootInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.platform.sso.SsoManager;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by elodieferrais on 5/22/14.

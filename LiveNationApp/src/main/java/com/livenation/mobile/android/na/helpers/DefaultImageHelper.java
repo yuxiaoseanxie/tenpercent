@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-
 import com.livenation.mobile.android.na.R;
 
 import java.util.Random;
+
+import android.content.Context;
+import android.content.res.TypedArray;
 
 /**
  * Created by cchilton on 5/28/14.

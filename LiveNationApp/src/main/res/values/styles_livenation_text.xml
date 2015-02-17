@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="ln.text" parent="@android:style/TextAppearance" />
+    <style name="ln.text" parent="@android:style/TextAppearance"/>
 
     <style name="ln.text.tiny">
         <item name="android:textSize">10sp</item>
@@ -344,7 +344,7 @@
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="text" />
+    <style name="text"/>
 
     <style name="ln.text.tab">
         <item name="android:textSize">12sp</item>
@@ -353,7 +353,7 @@
     </style>
 
     <style name="rating_button" parent="android:Widget.Button"></style>
-    
+
     <style name="megaticket_appearance" parent="ln.text.small.bold">
         <item name="android:textColor">@color/megaticket</item>
     </style>

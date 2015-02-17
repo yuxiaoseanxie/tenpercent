@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:baselineAligned="true"
-    android:descendantFocusability="blocksDescendants"
-    android:gravity="center_vertical"
-    android:minHeight="@dimen/list_item_height"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:baselineAligned="true"
+              android:descendantFocusability="blocksDescendants"
+              android:gravity="center_vertical"
+              android:minHeight="@dimen/list_item_height"
+              android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="@dimen/ui_gutter_width"
@@ -18,7 +18,7 @@
             android:id="@+id/favorite_item_checkbox"
             android:layout_width="@dimen/minimum_pressable"
             android:layout_height="@dimen/minimum_pressable"
-            android:button="@drawable/checkbox_favorite_padding_selector" />
+            android:button="@drawable/checkbox_favorite_padding_selector"/>
     </LinearLayout>
 
 
@@ -36,12 +36,12 @@
             android:gravity="center_vertical"
             android:text="@string/mock_favorite_title_1"
             android:textColor="@color/black"
-            android:textAppearance="@style/ln.text.medium.bold" />
+            android:textAppearance="@style/ln.text.medium.bold"/>
 
         <View
             style="@style/ui_underscore"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/one_dp" />
+            android:layout_height="@dimen/one_dp"/>
     </LinearLayout>
 
 

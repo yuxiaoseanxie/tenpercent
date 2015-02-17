@@ -1,8 +1,5 @@
 package com.livenation.mobile.android.na.providers.sso;
 
-import android.content.Context;
-import android.text.TextUtils;
-
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
@@ -10,6 +7,9 @@ import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * Created by elodieferrais on 7/21/14.

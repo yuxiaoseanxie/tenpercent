@@ -1,7 +1,5 @@
 package com.tools;
 
-import android.content.Context;
-
 import junit.framework.Assert;
 
 import org.json.JSONException;
@@ -9,6 +7,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import android.content.Context;
 
 /**
  * Created by elodieferrais on 1/9/15.

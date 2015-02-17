@@ -1,13 +1,5 @@
 package com.livenation.mobile.android.na.ui.views;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.AttributeSet;
-import android.widget.CheckBox;
-
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
@@ -18,6 +10,14 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.AttributeSet;
+import android.widget.CheckBox;
 
 /**
  * Created by cchilton on 4/3/14.

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/livenation_selector_pressable_background"
-    android:descendantFocusability="blocksDescendants">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/livenation_selector_pressable_background"
+                android:descendantFocusability="blocksDescendants">
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/view_youtube_video_image"
@@ -14,7 +14,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="@dimen/gap_small"
-        android:background="@color/black" />
+        android:background="@color/black"/>
 
     <ImageView
         android:layout_width="@dimen/view_youtube_video_image_width"
@@ -22,7 +22,7 @@
         android:layout_margin="@dimen/gap_small"
         android:contentDescription="@string/youtube_video_play"
         android:scaleType="center"
-        android:src="@drawable/youtube_play_icon" />
+        android:src="@drawable/youtube_play_icon"/>
 
     <TextView
         android:id="@+id/view_youtube_video_title"
@@ -36,13 +36,13 @@
         android:layout_toEndOf="@id/view_youtube_video_image"
         android:text="@string/mock_artist_title_1"
         android:maxLines="3"
-        android:ellipsize="end" />
+        android:ellipsize="end"/>
 
     <View
         android:id="@+id/view_lineup_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
         android:layout_below="@id/view_youtube_video_image"
-        android:background="@drawable/ui_underscore_background" />
+        android:background="@drawable/ui_underscore_background"/>
 
 </RelativeLayout>

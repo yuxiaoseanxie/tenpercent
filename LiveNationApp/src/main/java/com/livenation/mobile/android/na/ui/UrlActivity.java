@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.android.volley.Response;
 import com.google.android.gms.appindexing.AndroidAppUri;
 import com.livenation.mobile.android.na.R;
@@ -26,6 +19,13 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 
 import java.util.List;
 import java.util.Set;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 public class UrlActivity extends LiveNationFragmentActivity {
     @Override

@@ -1,15 +1,15 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 public class EventAdapter extends ArrayAdapter<Event> {
     private ShowView.DisplayMode displayMode;

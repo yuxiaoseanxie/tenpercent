@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.utils;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.provider.CalendarContract;
-import android.widget.Toast;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -14,6 +7,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.provider.CalendarContract;
+import android.widget.Toast;
 
 /**
  * Created by elodieferrais on 5/1/14.

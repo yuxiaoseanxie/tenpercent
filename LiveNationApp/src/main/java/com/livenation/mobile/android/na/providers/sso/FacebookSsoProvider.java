@@ -1,10 +1,5 @@
 package com.livenation.mobile.android.na.providers.sso;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.widget.Toast;
-
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -25,6 +20,11 @@ import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import java.util.Arrays;
 import java.util.Map;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
 
 public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {
     public FacebookSsoProvider(Context context) {

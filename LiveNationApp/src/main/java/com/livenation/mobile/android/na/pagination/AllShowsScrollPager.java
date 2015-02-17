@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -10,6 +8,8 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 import java.util.Calendar;
 import java.util.List;
+
+import android.widget.ArrayAdapter;
 
 /**
  * Created by elodieferrais on 4/20/14.

@@ -8,12 +8,12 @@
 
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
 
 public class ShowVenueView extends LinearLayout {
     private FavoriteCheckBox favorite;

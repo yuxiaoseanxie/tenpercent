@@ -1,5 +1,7 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.livenation.mobile.android.na.R;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -7,8 +9,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import com.livenation.mobile.android.na.R;
 
 /**
  * Created by cchilton on 4/4/14.

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/livenation_selector_pressable_background"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/livenation_selector_pressable_background"
+              android:descendantFocusability="blocksDescendants"
+              android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/one_dp"
-        android:background="@drawable/ui_underscore_background" />
+        android:background="@drawable/ui_underscore_background"/>
 
 
     <LinearLayout
@@ -35,7 +35,7 @@
                 android:button="@drawable/checkbox_favorite_padding_selector"
                 android:checked="false"
                 android:minHeight="@dimen/minimum_pressable"
-                android:minWidth="@dimen/minimum_pressable" />
+                android:minWidth="@dimen/minimum_pressable"/>
         </LinearLayout>
 
 
@@ -57,7 +57,7 @@
                     android:layout_weight="1"
                     android:paddingBottom="@dimen/list_venue_nearby_header_padding"
                     android:text="@string/mock_venue_title_1"
-                    android:textAppearance="@style/ln.text.medium.bold_italic" />
+                    android:textAppearance="@style/ln.text.medium.bold_italic"/>
 
                 <TextView
                     android:id="@+id/list_venue_header_distance"
@@ -69,7 +69,7 @@
                     android:layout_marginStart="@dimen/gap_tiny"
                     android:layout_marginEnd="@dimen/gap_small"
                     android:background="@drawable/list_venue_header_miles"
-                    android:text="@string/mock_venue_distance" />
+                    android:text="@string/mock_venue_distance"/>
             </LinearLayout>
 
             <TextView
@@ -80,7 +80,7 @@
                 android:drawableLeft="@drawable/venue_location_red"
                 android:drawablePadding="@dimen/gap_small"
                 android:text="@string/mock_venue_location"
-                android:textAppearance="@style/ln.text.small.italic.gray" />
+                android:textAppearance="@style/ln.text.small.italic.gray"/>
 
 
         </LinearLayout>

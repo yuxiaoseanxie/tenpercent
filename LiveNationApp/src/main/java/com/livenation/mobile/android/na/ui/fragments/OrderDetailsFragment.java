@@ -1,5 +1,36 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import com.android.volley.VolleyError;
+import com.experience.android.activities.ExpActivityConfig;
+import com.experience.android.activities.ExperienceWebViewActivity;
+import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
+import com.livenation.mobile.android.ticketing.Ticketing;
+import com.livenation.mobile.android.ticketing.activities.BarcodeActivity;
+import com.livenation.mobile.android.ticketing.activities.PostResaleActivity;
+import com.livenation.mobile.android.ticketing.activities.TransferTicketsActivity;
+import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
+import com.livenation.mobile.android.ticketing.analytics.Properties;
+import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
+import com.livenation.mobile.android.ticketing.dialogs.LoadingDialogFragment;
+import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
+import com.livenation.mobile.android.ticketing.utils.CommonUIResponseListener;
+import com.livenation.mobile.android.ticketing.utils.Constants;
+import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
+import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
+import com.livenation.mobile.android.ticketing.utils.orders.OrdersCacheManager;
+import com.livenation.mobile.android.ticketing.utils.orders.ValueCallback;
+import com.livenation.mobile.android.ticketing.widgets.TicketView;
+import com.mobilitus.tm.tickets.TicketLibrary;
+import com.mobilitus.tm.tickets.interfaces.ResponseListener;
+import com.mobilitus.tm.tickets.models.Cart;
+import com.mobilitus.tm.tickets.models.PostResaleCart;
+import com.mobilitus.tm.tickets.models.ResaleSeat;
+import com.mobilitus.tm.tickets.models.Seat;
+
+import java.util.ArrayList;
+
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,37 +62,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.VolleyError;
-import com.experience.android.activities.ExpActivityConfig;
-import com.experience.android.activities.ExperienceWebViewActivity;
-import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
-import com.livenation.mobile.android.ticketing.Ticketing;
-import com.livenation.mobile.android.ticketing.activities.BarcodeActivity;
-import com.livenation.mobile.android.ticketing.activities.PostResaleActivity;
-import com.livenation.mobile.android.ticketing.activities.TransferTicketsActivity;
-import com.livenation.mobile.android.ticketing.analytics.AnalyticConstants;
-import com.livenation.mobile.android.ticketing.analytics.Properties;
-import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
-import com.livenation.mobile.android.ticketing.dialogs.LoadingDialogFragment;
-import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
-import com.livenation.mobile.android.ticketing.utils.CommonUIResponseListener;
-import com.livenation.mobile.android.ticketing.utils.Constants;
-import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
-import com.livenation.mobile.android.ticketing.utils.TicketingUtils;
-import com.livenation.mobile.android.ticketing.utils.orders.OrdersCacheManager;
-import com.livenation.mobile.android.ticketing.utils.orders.ValueCallback;
-import com.livenation.mobile.android.ticketing.widgets.TicketView;
-import com.mobilitus.tm.tickets.TicketLibrary;
-import com.mobilitus.tm.tickets.interfaces.ResponseListener;
-import com.mobilitus.tm.tickets.models.Cart;
-import com.mobilitus.tm.tickets.models.PostResaleCart;
-import com.mobilitus.tm.tickets.models.ResaleSeat;
-import com.mobilitus.tm.tickets.models.Seat;
-
-import java.util.ArrayList;
 
 public class OrderDetailsFragment extends Fragment {
     // When we load an order details cart from mTopia immediately after a purchase,

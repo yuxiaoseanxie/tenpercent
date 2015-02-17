@@ -1,14 +1,14 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
-
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.UUID;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 /**
  * Created by elodieferrais on 4/11/14.

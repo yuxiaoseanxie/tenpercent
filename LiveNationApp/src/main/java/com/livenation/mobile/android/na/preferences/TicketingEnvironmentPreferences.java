@@ -1,14 +1,14 @@
 package com.livenation.mobile.android.na.preferences;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.utils.SerializableHelper;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 import java.io.IOException;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 public class TicketingEnvironmentPreferences {
     SharedPreferences sharedPreferences;

@@ -2,7 +2,7 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/favorite_disc_on" android:state_checked="true" />
-    <item android:drawable="@drawable/favorite_disc_off" android:state_checked="false" />
+    <item android:drawable="@drawable/favorite_disc_on" android:state_checked="true"/>
+    <item android:drawable="@drawable/favorite_disc_off" android:state_checked="false"/>
 
 </selector>

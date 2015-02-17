@@ -1,5 +1,11 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
+
+import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -8,12 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
-
-import java.util.Map;
 
 public class VenueBoxOfficeTabFragment extends Fragment {
     private static final String BOX_OFFICE_INFO = "box_office_info";

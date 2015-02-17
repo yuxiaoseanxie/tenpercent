@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.notifications;
 
-import android.util.Log;
-
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
@@ -13,6 +11,8 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.urbanairship.UAirship;
 import com.urbanairship.richpush.RichPushManager;
+
+import android.util.Log;
 
 public class NotificationsRegistrationManager implements Ticketing.PushTokenProvider {
     //region Lifecycle

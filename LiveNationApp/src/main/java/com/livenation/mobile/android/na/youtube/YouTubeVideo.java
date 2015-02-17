@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.youtube;
 
-import android.net.Uri;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import android.net.Uri;
 
 public class YouTubeVideo implements Serializable {
     private final String identifier;

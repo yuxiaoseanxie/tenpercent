@@ -1,8 +1,5 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.sso.SsoProviderPersistence;
 import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
@@ -12,6 +9,9 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.platform.sso.SsoLoginCallback;
 import com.livenation.mobile.android.platform.sso.SsoLogoutCallback;
 import com.livenation.mobile.android.platform.sso.SsoManager;
+
+import android.app.Activity;
+import android.content.Context;
 
 /**
  * Created by elodieferrais on 5/8/14.

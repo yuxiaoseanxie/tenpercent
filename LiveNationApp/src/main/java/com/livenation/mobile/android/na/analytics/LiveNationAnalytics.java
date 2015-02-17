@@ -1,9 +1,6 @@
 package com.livenation.mobile.android.na.analytics;
 
 
-import android.content.Context;
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.analytics.services.AmplitudeAnalytics;
 import com.livenation.mobile.android.na.analytics.services.AnalyticService;
@@ -12,6 +9,9 @@ import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by elodieferrais on 4/15/14.

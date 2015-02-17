@@ -1,12 +1,6 @@
 package com.livenation.mobile.android.na.utils;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.ConfigFileProvider;
@@ -20,6 +14,12 @@ import com.livenation.mobile.android.ticketing.Ticketing;
 
 import java.util.Calendar;
 import java.util.List;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 /**
  * Created by elodieferrais on 10/20/14.

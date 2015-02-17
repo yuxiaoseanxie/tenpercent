@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,6 +14,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Context;
 
 /**
  * Created by elodieferrais on 10/27/14.

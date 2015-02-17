@@ -3,5 +3,5 @@
     <item
         android:drawable="@drawable/favorite_off"
         android:left="10dp"
-        android:top="0dp" />
+        android:top="0dp"/>
 </layer-list>

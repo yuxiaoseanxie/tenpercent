@@ -1,5 +1,12 @@
 package com.livenation.mobile.android.na.ui.views;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -11,13 +18,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by cchilton on 7/16/14.

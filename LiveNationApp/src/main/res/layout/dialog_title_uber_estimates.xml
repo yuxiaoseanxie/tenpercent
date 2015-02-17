@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/gap_small">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/gap_small">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +11,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"
         android:text="@string/uber_dialog_title"
-        android:textAppearance="@style/ln.text.medium.bold" />
+        android:textAppearance="@style/ln.text.medium.bold"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,6 +19,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/uber_dialog_title_spacing"
         android:text="@string/uber_dialog_title_secondary"
-        android:textAppearance="@style/ln.text.small.gray" />
+        android:textAppearance="@style/ln.text.small.gray"/>
 
 </LinearLayout>

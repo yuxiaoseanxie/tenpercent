@@ -1,25 +1,16 @@
-package ui;
-
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
-import android.test.ActivityInstrumentationTestCase2;
+package com.livenation.mobile.android.na.ui;
 
 import com.google.android.apps.common.testing.ui.espresso.Espresso;
-import com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions;
+import com.livenation.mobile.android.na.R;
+
+import android.app.Activity;
+import android.test.ActivityInstrumentationTestCase2;
+import tools.TestTools;
 
 
 import static com.google.android.apps.common.testing.ui.espresso.assertion.ViewAssertions.matches;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withId;
 import static com.google.android.apps.common.testing.ui.espresso.matcher.ViewMatchers.withText;
-
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.LocationActivity;
-
-import org.hamcrest.Matchers;
-
-
-import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 
 
 /**
@@ -39,6 +30,13 @@ public class LocationFragmentTest extends ActivityInstrumentationTestCase2 {
         super.setUp();
         activity = getActivity();
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestTools.closeAllActivities(getInstrumentation());
+        super.tearDown();
+    }
+
 
     public void testAllComponentsOnScreen() {
 

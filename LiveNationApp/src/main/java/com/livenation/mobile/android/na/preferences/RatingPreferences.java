@@ -1,9 +1,9 @@
 package com.livenation.mobile.android.na.preferences;
 
+import com.livenation.mobile.android.na.app.Constants;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.livenation.mobile.android.na.app.Constants;
 
 /**
  * Created by elodieferrais on 8/14/14.
