@@ -19,6 +19,7 @@ import com.livenation.mobile.android.na.uber.service.model.UberProduct;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberTime;
 import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
+import com.livenation.mobile.android.platform.api.transport.error.UnexpectedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +89,26 @@ public class UberClient {
                         //Note: neither the API calls nor this operation occur on the UI thread
                         return getProductEstimates(uberPrices.getPrices(), uberProducts.getProducts(), uberTimes.getTimes());
                     }
-                }).subscribe(subscriber);
+                }).subscribe(new Subscriber<ArrayList<LiveNationEstimate>>() {
+                    @Override
+                    public void onCompleted() {
+                        subscriber.onStart();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        subscriber.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<LiveNationEstimate> liveNationEstimates) {
+                        if (liveNationEstimates == null || liveNationEstimates.isEmpty()) {
+                            onError(new Exception("Uber returned an empty List"));
+                        } else {
+                            subscriber.onNext(liveNationEstimates);
+                        }
+                    }
+                });
             }
 
         });
