@@ -1,6 +1,5 @@
-package uber;
+package com.livenation.mobile.android.na.uber;
 
-import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPriceResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;

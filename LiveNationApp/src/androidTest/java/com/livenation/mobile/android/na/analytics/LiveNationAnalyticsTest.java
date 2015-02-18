@@ -1,10 +1,6 @@
-package analytics;
+package com.livenation.mobile.android.na.analytics;
 
 import android.test.InstrumentationTestCase;
-
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.Props;
 
 /**
  * Created by cchilton on 1/13/15.

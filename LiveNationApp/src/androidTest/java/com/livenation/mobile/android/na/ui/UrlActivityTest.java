@@ -1,13 +1,11 @@
-package ui;
-
-import android.app.Activity;
-import android.test.ActivityInstrumentationTestCase2;
-
-import com.livenation.mobile.android.na.ui.TestActivity;
-import com.livenation.mobile.android.na.ui.UrlActivity;
+package com.livenation.mobile.android.na.ui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import android.app.Activity;
+import android.test.ActivityInstrumentationTestCase2;
+import tools.TestTools;
 
 /**
  * Created by elodieferrais on 1/21/15.
@@ -17,6 +15,12 @@ public class UrlActivityTest extends ActivityInstrumentationTestCase2 {
 
     public UrlActivityTest() {
         super(UrlActivity.class);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        TestTools.closeAllActivities(getInstrumentation());
+        super.tearDown();
     }
 
     @Override
@@ -152,7 +156,6 @@ public class UrlActivityTest extends ActivityInstrumentationTestCase2 {
             e.printStackTrace();
         }
     }
-
 
 
 }

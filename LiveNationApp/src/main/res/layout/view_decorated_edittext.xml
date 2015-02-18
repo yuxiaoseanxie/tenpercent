@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/livenation_textfield_activated_holo_light"
-    android:focusable="false">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/livenation_textfield_activated_holo_light"
+             android:focusable="false">
 
     <EditText
         android:id="@android:id/edit"
@@ -16,7 +16,7 @@
         android:focusable="true"
         android:imeOptions="actionDone"
         android:inputType="textAutoCorrect"
-        android:singleLine="true" />
+        android:singleLine="true"/>
 
     <TextView
         android:id="@android:id/hint"
@@ -28,7 +28,7 @@
         android:drawableStart="@drawable/edittext_search"
         android:drawablePadding="@dimen/gap_tiny"
         android:focusable="false"
-        android:textAppearance="@style/decorated_edittext_hint_text" />
+        android:textAppearance="@style/decorated_edittext_hint_text"/>
 
     <ImageButton
         android:id="@android:id/button1"
@@ -36,5 +36,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:background="@null"
-        android:src="@drawable/edittext_clear_with_padding" />
+        android:src="@drawable/edittext_clear_with_padding"/>
 </FrameLayout>

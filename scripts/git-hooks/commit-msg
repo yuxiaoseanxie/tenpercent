@@ -23,7 +23,8 @@
 echo
 echo
 echo "Checking for Tracker story commit reference..."
-test "" != "$(egrep -i '\[refs|fixes|closes:? #\d+\D+' "$1")" || {
-	echo >&2 "Missing tracker story reference of format [Refs|Fixes|closes \#123123]"
+test "" != "$(egrep -i '\[.*#\d+\D+' "$1")" || {
+	echo >&2 "Missing tracker story reference of format [#8675309]. Can also include state changing keywords: Fixes|Finished|Completed|Delivered"
+	echo >&2 "Example: [Fixes #1337]"
 	exit 5
 }

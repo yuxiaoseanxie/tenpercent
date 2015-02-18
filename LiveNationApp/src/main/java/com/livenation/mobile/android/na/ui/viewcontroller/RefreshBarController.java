@@ -1,12 +1,12 @@
 package com.livenation.mobile.android.na.ui.viewcontroller;
 
+import com.livenation.mobile.android.na.R;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-
-import com.livenation.mobile.android.na.R;
 
 /**
  * Created by elodieferrais on 4/22/14.

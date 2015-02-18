@@ -1,16 +1,16 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
+
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
-
-import java.util.List;
 
 /**
  * Created by elodieferrais on 4/28/14.

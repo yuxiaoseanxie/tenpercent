@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/favorite_checkbox_container"
@@ -15,7 +15,7 @@
             android:layout_width="@dimen/minimum_pressable"
             android:layout_height="@dimen/minimum_pressable"
             android:button="@drawable/checkbox_favorite_padding_selector"
-            android:checked="false" />
+            android:checked="false"/>
     </LinearLayout>
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_toRightOf="@id/favorite_checkbox_container"
         android:layout_toEndOf="@id/favorite_checkbox_container"
         android:text="@string/mock_venue_title_1"
-        android:textAppearance="@style/ln.text.medium.bold_italic" />
+        android:textAppearance="@style/ln.text.medium.bold_italic"/>
 
     <LinearLayout
         android:id="@+id/view_show_venue_telephone"
@@ -49,7 +49,7 @@
             android:layout_marginEnd="@dimen/gap_small"
             android:minWidth="@dimen/gap_large"
             android:scaleType="center"
-            android:src="@drawable/venue_phone" />
+            android:src="@drawable/venue_phone"/>
 
         <TextView
             android:id="@+id/venue_detail_telephone"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/view_show_venue_details_packing"
             android:text="@string/mock_venue_telephone"
-            android:textAppearance="@style/ln.text.small.italic.gray" />
+            android:textAppearance="@style/ln.text.small.italic.gray"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +78,7 @@
             android:layout_marginEnd="@dimen/gap_small"
             android:minWidth="@dimen/gap_large"
             android:scaleType="center"
-            android:src="@drawable/venue_location" />
+            android:src="@drawable/venue_location"/>
 
         <TextView
             android:id="@+id/venue_detail_location"
@@ -87,7 +87,7 @@
             android:paddingRight="@dimen/gap_tiny"
             android:paddingEnd="@dimen/gap_tiny"
             android:text="@string/mock_venue_location"
-            android:textAppearance="@style/ln.text.small.italic.gray" />
+            android:textAppearance="@style/ln.text.small.italic.gray"/>
     </LinearLayout>
 
 </RelativeLayout>

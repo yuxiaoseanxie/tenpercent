@@ -60,7 +60,6 @@
     <string name="location_current">Current Location</string>
     <string name="location_previous_locations">Previous Locations</string>
     <string name="location_switch">Use Current Location</string>
-    <string name="location_unknown">Unknown</string>
     <string name="location_miles_away">%d mi away</string>
 
     <string name="login_connect_or_create">Connect or Create Account</string>

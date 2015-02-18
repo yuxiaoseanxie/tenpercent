@@ -1,13 +1,13 @@
 package com.livenation.mobile.android.na.pagination;
 
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
+
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 
 /**
  * Created by cchilton on 3/11/14.

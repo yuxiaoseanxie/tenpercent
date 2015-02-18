@@ -16,6 +16,13 @@
 
 package com.livenation.mobile.android.na.helpers;
 
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -28,13 +35,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to

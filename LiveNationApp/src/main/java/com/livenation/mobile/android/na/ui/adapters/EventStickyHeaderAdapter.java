@@ -1,12 +1,5 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
-import android.content.Context;
-import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -15,6 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 public class EventStickyHeaderAdapter extends EventAdapter implements StickyListHeadersAdapter {

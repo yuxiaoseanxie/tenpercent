@@ -1,6 +1,4 @@
-package providers;
-
-import android.test.InstrumentationTestCase;
+package com.livenation.mobile.android.na.providers;
 
 import com.livenation.mobile.android.na.providers.location.LocationManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -10,9 +8,10 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 
 import java.util.concurrent.CountDownLatch;
 
-import mock.LocationManagerWithReverseGeocodeMocked;
-import mock.LocationProviderMock;
-import mock.ReverseGeocodeMock;
+import android.test.InstrumentationTestCase;
+import com.mock.LocationManagerWithReverseGeocodeMocked;
+import com.mock.LocationProviderMock;
+import com.mock.ReverseGeocodeMock;
 
 /**
  * Created by elodieferrais on 2/4/15.

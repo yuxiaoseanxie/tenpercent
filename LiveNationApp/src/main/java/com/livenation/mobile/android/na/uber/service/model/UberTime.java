@@ -22,7 +22,9 @@ public class UberTime implements Serializable {
         return productId;
     }
 
-    public int getEstimate() { return estimate; }
+    public int getEstimate() {
+        return estimate;
+    }
 
     public int getEstimateMins() {
         int mins = (int) Math.ceil((float) getEstimate() / 60f);

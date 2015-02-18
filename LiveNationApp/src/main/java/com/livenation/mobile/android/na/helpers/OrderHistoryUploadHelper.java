@@ -1,7 +1,5 @@
 package com.livenation.mobile.android.na.helpers;
 
-import android.util.Log;
-
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.YenteResponse;
@@ -10,6 +8,8 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 import org.json.JSONObject;
+
+import android.util.Log;
 
 public class OrderHistoryUploadHelper implements Ticketing.OrderHistoryUploadHandler {
     @Override

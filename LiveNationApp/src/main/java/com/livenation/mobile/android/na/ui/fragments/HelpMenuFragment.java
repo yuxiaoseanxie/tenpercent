@@ -1,9 +1,5 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
-import android.app.ListFragment;
-import android.os.Bundle;
-import android.widget.AdapterView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,6 +15,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.ListFragment;
+import android.os.Bundle;
+import android.widget.AdapterView;
 
 /**
  * Created by elodieferrais on 4/28/14.

@@ -1,10 +1,5 @@
 package com.livenation.mobile.android.na.providers.location;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
@@ -16,6 +11,11 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 
 import java.util.List;
+
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
 public class LocationManager implements LocationProvider {
     public static final int MODE_SYSTEM = 0;

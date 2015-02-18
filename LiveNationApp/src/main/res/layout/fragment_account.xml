@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,13 +18,13 @@
                 android:id="@+id/fragment_account_header"
                 layout="@layout/sub_account_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <include
                 android:id="@+id/fragment_account_detail"
                 layout="@layout/sub_account_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 
@@ -38,6 +38,6 @@
             android:id="@+id/fragment_account_footer"
             layout="@layout/sub_account_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

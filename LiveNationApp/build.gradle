@@ -148,7 +148,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')
     compile project(':Ticketing')
-    compile project (':urbanairship-lib-5.1.4')
+    compile project(':urbanairship-lib-5.1.4')
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.android.support:support-v13:21.0.3'
     compile 'com.google.android.gms:play-services-base:6.5.87'

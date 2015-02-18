@@ -1,10 +1,5 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.content.LocalBroadcastManager;
-
 import com.apsalar.sdk.Apsalar;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -18,6 +13,11 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Created by elodieferrais on 9/29/14.

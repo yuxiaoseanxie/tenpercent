@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="mock_venue_title_1" />
-    <string name="mock_artist_title_1" />
-    <string name="mock_show_time" />
+    <string name="mock_venue_title_1"/>
+    <string name="mock_artist_title_1"/>
+    <string name="mock_show_time"/>
 
-    <string name="mock_placeholder_artist_title_1" />
+    <string name="mock_placeholder_artist_title_1"/>
 
-    <string name="mock_venue_telephone" />
-    <string name="mock_venue_location" />
-    <string name="mock_venue_title_linebreak_1" />
-    <string name="mock_venue_distance" />
+    <string name="mock_venue_telephone"/>
+    <string name="mock_venue_location"/>
+    <string name="mock_venue_title_linebreak_1"/>
+    <string name="mock_venue_distance"/>
 
-    <string name="mock_date_day" />
-    <string name="mock_date_dotw" />
-    <string name="mock_date_month" />
+    <string name="mock_date_day"/>
+    <string name="mock_date_dotw"/>
+    <string name="mock_date_month"/>
 
-    <string name="mock_show_calendar_date_time" />
+    <string name="mock_show_calendar_date_time"/>
 
-    <string name="mock_favorite_title_1" />
+    <string name="mock_favorite_title_1"/>
 
-    <string name="mock_overflow" />
-    <string name="mock_artist_bio" />
+    <string name="mock_overflow"/>
+    <string name="mock_artist_bio"/>
 
-    <string name="mock_artist_type" />
+    <string name="mock_artist_type"/>
 
-    <string name="mock_order_quantity" />
-    <string name="mock_order_event_name" />
+    <string name="mock_order_quantity"/>
+    <string name="mock_order_event_name"/>
 
-    <string name="mock_update_message" />
-
-
-    <string name="mock_debug_title" />
-    <string name="mock_debug_action" />
+    <string name="mock_update_message"/>
 
 
-    <string name="mock_inbox_message_title" />
-    <string name="mock_inbox_message_info" />
-    <string name="mock_inbox_message_detail" />
-    <string name="mock_inbox_message" />
+    <string name="mock_debug_title"/>
+    <string name="mock_debug_action"/>
+
+
+    <string name="mock_inbox_message_title"/>
+    <string name="mock_inbox_message_info"/>
+    <string name="mock_inbox_message_detail"/>
+    <string name="mock_inbox_message"/>
 </resources>

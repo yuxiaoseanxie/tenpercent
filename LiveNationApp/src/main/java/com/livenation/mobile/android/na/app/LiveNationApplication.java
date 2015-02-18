@@ -8,18 +8,6 @@
 
 package com.livenation.mobile.android.na.app;
 
-import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.LruCache;
-import android.util.Log;
-
 import com.adobe.mobile.Config;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -65,6 +53,18 @@ import com.urbanairship.AirshipConfigOptions;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.notifications.DefaultNotificationFactory;
+
+import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.LruCache;
+import android.util.Log;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;

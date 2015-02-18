@@ -1,11 +1,11 @@
 package com.livenation.mobile.android.na.providers;
 
-import android.content.Context;
-import android.text.TextUtils;
-
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
+
+import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * Created by cchilton on 3/13/14.

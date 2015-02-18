@@ -1,10 +1,5 @@
 package com.livenation.mobile.android.na.ui;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -13,6 +8,11 @@ import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
 
 /**
  * Created by elodieferrais on 4/25/14.

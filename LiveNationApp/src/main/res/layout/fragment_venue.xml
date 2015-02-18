@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <include
         android:id="@+id/fragment_venue_header"
@@ -18,18 +18,18 @@
         android:layout_marginTop="@dimen/gap_medium"
         android:background="@drawable/ui_underscore_background"></include>
 
-    <ImageView style="@style/SwooshDivider.with_top_margin" />
+    <ImageView style="@style/SwooshDivider.with_top_margin"/>
 
     <TextView
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/gap_tiny"
-        android:text="@string/venue_upcoming_shows" />
+        android:text="@string/venue_upcoming_shows"/>
 
     <FrameLayout
         android:id="@+id/fragment_venue_container_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

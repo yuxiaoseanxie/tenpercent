@@ -1,13 +1,12 @@
 package com.livenation.mobile.android.na.ui.dialogs;
 
+import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.ui.adapters.TravelAdapter;
+
 import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListPopupWindow;
-
-import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.adapters.TravelAdapter;
-
 import rx.subjects.Subject;
 
 /**

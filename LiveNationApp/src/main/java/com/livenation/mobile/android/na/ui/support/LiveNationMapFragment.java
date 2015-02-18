@@ -8,11 +8,11 @@
 
 package com.livenation.mobile.android.na.ui.support;
 
-import android.os.Bundle;
-import android.view.View;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+
+import android.os.Bundle;
+import android.view.View;
 
 /**
  * This class exists because of this:

@@ -1,8 +1,8 @@
 package com.livenation.mobile.android.na.ui.viewcontroller;
 
-import android.widget.TextView;
-
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+
+import android.widget.TextView;
 
 /**
  * Created by elodieferrais on 11/7/14.

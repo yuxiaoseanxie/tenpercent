@@ -1,4 +1,4 @@
-package mock;
+package com.mock;
 
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
