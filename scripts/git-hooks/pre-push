@@ -37,7 +37,7 @@ import sys
 CHECKS = [
     {
         'output': 'Looking for lint error...',
-        'command': './gradlew lint',
+        'command': './gradlew lintDebug',
     },
 ]
 
