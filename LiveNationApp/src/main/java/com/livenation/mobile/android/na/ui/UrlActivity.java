@@ -9,6 +9,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Entity;
@@ -100,11 +101,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         fetchEntity(id, new Response.Listener<Event>() {
             @Override
             public void onResponse(Event event) {
-                Intent intent = new Intent(UrlActivity.this, ShowActivity.class);
-                Bundle extras = ShowActivity.getArguments(event);
-                ;
-                intent.putExtras(extras);
-                startActivity(intent);
+                EventUtils.redirectToSDP(UrlActivity.this, event);
                 finish();
             }
         });
@@ -154,22 +151,21 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
         Intent intent = null;
         if (id.startsWith("evt_")) {
-            intent = new Intent(this, ShowActivity.class);
-            intent.putExtras(ShowActivity.getArguments(id));
+            EventUtils.redirectToSDP(this, id);
         } else if (id.startsWith("art_")) {
             intent = new Intent(this, ArtistActivity.class);
             intent.putExtras(ArtistActivity.getArguments(id));
+            startActivity(intent);
         } else if (id.startsWith("ven_")) {
             intent = new Intent(this, VenueActivity.class);
             intent.putExtras(VenueActivity.getArguments(id));
+            startActivity(intent);
         } else {
             Log.i(getClass().getName(), "Unhandled incoming url " + data);
             displayError(R.string.url_error_bad_url);
-
             finish();
         }
 
-        startActivity(intent);
         finish();
     }
 

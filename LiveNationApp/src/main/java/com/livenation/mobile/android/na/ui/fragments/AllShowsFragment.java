@@ -215,10 +215,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
         @Override
         public void onClick(View v) {
-            String eventId = Event.makeTypedId(chart.getChartableId().toString());
-            Intent intent = new Intent(getActivity(), ShowActivity.class);
-            intent.putExtras(ShowActivity.getArguments(eventId));
-            startActivity(intent);
+            EventUtils.redirectToSDP(getActivity(), chart.getChartableId().toString());
         }
     }
 }

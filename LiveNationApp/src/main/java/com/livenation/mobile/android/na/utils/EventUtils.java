@@ -32,4 +32,11 @@ public class EventUtils {
         intent.putExtras(args);
         context.startActivity(intent);
     }
+
+    static public void redirectToSDP(Context context, String eId) {
+        String eventId = Event.makeTypedId(eId);
+        Intent intent = new Intent(context, ShowActivity.class);
+        intent.putExtras(ShowActivity.getArguments(eventId));
+        context.startActivity(intent);
+    }
 }
