@@ -121,12 +121,6 @@ android {
             signingConfig signingConfigs.debug
             testCoverageEnabled true
         }
-
-        labrats {
-            applicationIdSuffix ".labrats"
-            versionNameSuffix " labrats"
-            signingConfig signingConfigs.debug
-        }
     }
 }
 
