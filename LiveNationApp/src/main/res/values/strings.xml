@@ -8,7 +8,6 @@
 
     <string name="featured_title">Featured</string>
 
-    <string name="show_lineup">Lineup</string>
     <string name="venue_upcoming_shows">Upcoming Shows</string>
     <string name="artist_nearby_shows">Nearby Shows</string>
     <string name="artist_all_shows">On Tour</string>
@@ -264,6 +263,11 @@
         <item quantity="one">We\'re glad you got a ticket. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
         <item quantity="other">We\'re glad you got tickets. If your experience with Live Nation has been positive, please rate us on Google Play.</item>
     </plurals>
+
+    <!-- Show -->
+    <string name="show_lineup">Lineup</string>
+    <string name="show_tips_title">Show Tips</string>
+    <string name="show_venue_info_title">Venue Info</string>
 
     <!-- App Google Indexing-->
     <string name="web_url_show">http://www.livenation.com/events/</string>
