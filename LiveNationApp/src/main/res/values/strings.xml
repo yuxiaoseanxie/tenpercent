@@ -9,6 +9,8 @@
     <string name="featured_title">Featured</string>
 
     <string name="show_lineup">Lineup</string>
+    <string name="lineup_header">Schedule</string>
+
     <string name="venue_upcoming_shows">Upcoming Shows</string>
     <string name="artist_nearby_shows">Nearby Shows</string>
     <string name="artist_all_shows">On Tour</string>
