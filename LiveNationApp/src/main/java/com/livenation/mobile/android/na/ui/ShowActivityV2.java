@@ -6,12 +6,16 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
-import com.livenation.mobile.android.na.ui.fragments.VenueBoxOfficeTabFragment;
+import com.livenation.mobile.android.na.ui.fragments.ShowTipsFragment;
+import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
+import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
@@ -25,14 +29,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 /**
  * Created by elodieferrais on 2/24/15.
  */
-public class ShowActivityV2 extends DetailBaseFragmentActivity implements ViewPager.OnPageChangeListener {
+public class ShowActivityV2 extends DetailBaseFragmentActivity {
 
     private SlidingTabLayout tabs;
     private ViewPager pager;
@@ -40,13 +46,20 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity implements ViewPa
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
     public static final String PARAMETER_EVENT_ID = "event_id";
     public static final String PARAMETER_EVENT_CACHED = "event_cached";
+    private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
 
     private Event event;
+
+    private TransitioningImageView artistImageView;
+    private TextView artistTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sliding_tabs_with_pager);
+        setContentView(R.layout.activity_v2_show);
+
+        artistImageView = (TransitioningImageView) findViewById(R.id.show_image);
+        artistTitleTextView = (TextView) findViewById(R.id.show_artist_title);
 
         Long eventId = null;
         if (args.containsKey(PARAMETER_EVENT_ID)) {
@@ -74,41 +87,43 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity implements ViewPa
             finish();
             return;
         }
-
+        artistImageView.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(this, eventId));
 
         this.pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new TabFragmentAdapter(getSupportFragmentManager()));
 
         this.tabs = (SlidingTabLayout) findViewById(R.id.slidingtab);
-        tabs.setOnPageChangeListener(this);
         tabs.setViewPager(pager);
         int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
         tabs.setBottomBorderColor(tabAccentColor);
         tabs.setSelectedIndicatorColors(tabAccentColor);
 
-
     }
 
     private void setEvent(Event event) {
+        if (event == null) {
+            return;
+        }
         this.event = event;
         refresh();
     }
 
     private void refresh() {
-    }
+        //Set image and artist title
+        String imageUrl = null;
+        for (Artist lineup : event.getLineup()) {
+                String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
+                if (null != imageKey) {
+                    imageUrl = lineup.getImageURL(imageKey);
+                    break;
+                }
+        }
+        if (null != imageUrl) {
+            artistImageView.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
+        }
+        artistTitleTextView.setText(event.getName());
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
 
     }
 
@@ -245,9 +260,11 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity implements ViewPa
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-
+                return new ShowTipsFragment();
             } else if (position == 1) {
-
+                VenueFragment venueFragment = new VenueFragment();
+                venueFragment.setVenue(event.getVenue());
+                return venueFragment;
             }
 
             return null;

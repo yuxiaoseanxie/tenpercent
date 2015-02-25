@@ -2,7 +2,9 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -20,11 +22,22 @@ import android.widget.TextView;
  * Created by elodieferrais on 2/23/15.
  */
 public class LineUpFragment extends Fragment {
+    private static final String ARTISTS = "com.livenation.mobile.android.na.ui.fragments.LineUpFragment.ARTISTS";
     private List<Artist> artists;
+
+    public static LineUpFragment newInstance(ArrayList<Artist> artists) {
+        LineUpFragment fragment = new LineUpFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARTISTS, artists);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lineup, container, false);
+
+        artists = (List<Artist>) getArguments().getSerializable(ARTISTS);
 
         TextView header = (TextView) view.findViewById(R.id.lineup_header);
         header.setText(R.string.lineup_header);
@@ -33,11 +46,6 @@ public class LineUpFragment extends Fragment {
         ArrayAdapter adapter = new LineUpAdapter(getActivity(), artists);
         listView.setAdapter(adapter);
         return view;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        //Should be call before onCreateView
-        this.artists = artists;
     }
 
     private class LineUpAdapter extends ArrayAdapter {

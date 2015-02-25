@@ -86,6 +86,11 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name="com.livenation.mobile.android.na.ui.ShowActivityV2"
+            android:label="@string/activity_label_show"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue"/>
         <activity

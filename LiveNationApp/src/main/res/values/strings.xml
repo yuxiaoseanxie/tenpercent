@@ -279,5 +279,6 @@
 
     <!-- Config File -->
     <string name="config_file_url">https://adr-static-content.s3.amazonaws.com/config/debug.json</string>
+    <string name="lineup_header">Schedule</string>
 
 </resources>

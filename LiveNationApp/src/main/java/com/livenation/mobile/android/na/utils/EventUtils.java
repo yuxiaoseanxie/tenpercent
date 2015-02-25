@@ -6,6 +6,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.ShowActivity;
+import com.livenation.mobile.android.na.ui.ShowActivityV2;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
@@ -27,8 +28,8 @@ import android.support.v4.app.FragmentActivity;
 public class EventUtils {
 
     static public void redirectToSDP(Context context, Event event) {
-        Intent intent = new Intent(context, ShowActivity.class);
-        Bundle args = ShowActivity.getArguments(event);
+        Intent intent = new Intent(context, ShowActivityV2.class);
+        Bundle args = ShowActivityV2.getArguments(event);
         intent.putExtras(args);
         context.startActivity(intent);
     }

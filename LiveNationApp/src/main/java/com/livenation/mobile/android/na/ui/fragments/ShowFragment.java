@@ -87,9 +87,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_show, container,
                 false);
-        artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
+        artistTitle = (TextView) result.findViewById(R.id.show_artist_title);
         lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
-        artistImage = (TransitioningImageView) result.findViewById(R.id.fragment_show_image);
+        artistImage = (TransitioningImageView) result.findViewById(R.id.show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
         calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);

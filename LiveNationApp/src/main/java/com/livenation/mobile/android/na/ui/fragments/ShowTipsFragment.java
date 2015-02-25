@@ -21,8 +21,7 @@ public class ShowTipsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_showtips, container,false);
 
-        LineUpFragment lineUpFragment = new LineUpFragment();
-        lineUpFragment.setArtists(new ArrayList<Artist>());
+        LineUpFragment lineUpFragment = LineUpFragment.newInstance(new ArrayList<Artist>());
         getChildFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
 
         return view;
