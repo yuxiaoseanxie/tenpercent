@@ -11,6 +11,8 @@
     <dimen name="ui_gutter_width">58dp</dimen>
     <dimen name="list_item_height">80dp</dimen>
     <dimen name="popup_list_item_height">60dp</dimen>
+
+    <dimen name="lineup_list_item_height">60dp</dimen>
     <dimen name="popup_list_item_padding">8dp</dimen>
     <dimen name="one_dp">1dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
@@ -101,6 +103,11 @@
     <dimen name="on_boarding_login_margin_top">32dp</dimen>
     <dimen name="on_boarding_lnlogo_margin_top">48dp</dimen>
     <dimen name="on_boarding_skip_height">32dp</dimen>
+
+
+    <!-- Lineup -->
+    <dimen name="line_up_time_width">60dp</dimen>
+    <dimen name="line_up_margin_left_divider">74dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>
