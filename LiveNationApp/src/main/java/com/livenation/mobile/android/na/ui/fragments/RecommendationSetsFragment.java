@@ -109,28 +109,13 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         }
 
         final Event event = recommendationItem.get();
-        EventUtils.redirectToSDPOrEDP(event, getActivity());
+        EventUtils.redirectToSDP(getActivity(), event);
 
 
         //Analytics
         final Props props = AnalyticsHelper.getPropsForEvent(event);
         props.put(AnalyticConstants.CELL_POSITION, position);
-
-        ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
-        provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
-            @Override
-            public void onResponse(ConfigFileProvider.ConfigFile response) {
-                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, !EventUtils.isSDPAvoidable(event, response, view.getContext()));
-                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                props.put(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, true);
-                LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
-            }
-        });
-
+        LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, AnalyticsCategory.RECOMMENDATIONS, props);
 
     }
 

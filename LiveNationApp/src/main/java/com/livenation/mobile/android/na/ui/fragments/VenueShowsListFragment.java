@@ -6,6 +6,7 @@ import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventAdapter;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -59,8 +60,7 @@ public class VenueShowsListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         if (position < adapter.getCount()) {
             Event event = adapter.getItem(position);
-            Bundle arguments = ShowActivity.getArguments(event);
-            startActivity(new Intent(getActivity(), ShowActivity.class).putExtras(arguments));
+            EventUtils.redirectToSDP(getActivity(), event);
         }
     }
 }

@@ -26,54 +26,17 @@ import android.support.v4.app.FragmentActivity;
  */
 public class EventUtils {
 
-    static public boolean isSDPAvoidable(Event event, ConfigFileProvider.ConfigFile configFile, Context context) {
-        List<TicketOffering> offerings = event.getTicketOfferings();
-
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.AB_TESTING, Context.MODE_PRIVATE);
-        boolean isNewUser = sharedPreferences.getBoolean(Constants.SharedPreferences.IS_NEW_USER, true);
-
-        return (event.getOnSaleDate() != null
-                && event.getOnSaleDate().compareTo(Calendar.getInstance().getTime()) <= 0
-                && offerings.size() == 1
-                && Ticketing.isTicketmasterUrl(offerings.get(0).getPurchaseUrl())
-                && LiveNationApplication.get().getInstalledAppConfig().isCommerceAvailable()
-                && configFile.skipSDPFeature
-                && isNewUser);
-    }
-
-    static private void redirectToSDP(Context context, Event event) {
+    static public void redirectToSDP(Context context, Event event) {
         Intent intent = new Intent(context, ShowActivity.class);
         Bundle args = ShowActivity.getArguments(event);
         intent.putExtras(args);
         context.startActivity(intent);
     }
 
-    static private void redirectToEDP(FragmentActivity activity, Event event) {
-        List<TicketOffering> offerings = event.getTicketOfferings();
-        Intent confirmIntent = new Intent(activity, OrderConfirmationActivity.class);
-        confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-        confirmIntent.putExtra(com.livenation.mobile.android.ticketing.analytics.AnalyticConstants.PROP_IS_SDP_SHOWN, false);
-        Ticketing.showFindTicketsActivityForUrl(activity, confirmIntent, offerings.get(0).getPurchaseUrl());
-
-    }
-
-    static public void redirectToSDPOrEDP(final Event event, final FragmentActivity activity) {
-        ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
-        provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
-            @Override
-            public void onResponse(ConfigFileProvider.ConfigFile response) {
-                if (EventUtils.isSDPAvoidable(event, response, activity)) {
-                    redirectToEDP(activity, event);
-                } else {
-                    redirectToSDP(activity, event);
-                }
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                redirectToSDP(activity, event);
-            }
-        });
-
+    static public void redirectToSDP(Context context, String eId) {
+        String eventId = Event.makeTypedId(eId);
+        Intent intent = new Intent(context, ShowActivity.class);
+        intent.putExtras(ShowActivity.getArguments(eventId));
+        context.startActivity(intent);
     }
 }
