@@ -66,38 +66,6 @@ public class ComingShowFragment extends Fragment {
         return rootView;
     }
 
-    private class TabFragmentAdapter extends FragmentStatePagerAdapter {
-        public TabFragmentAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return getString(R.string.show_tips_title);
-            } else if (position == 1) {
-                return getString(R.string.show_venue_info_title);
-            }
-            return null;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return ShowTipsFragment.newInstance(event);
-            } else if (position == 1) {
-                return ShowTipsFragment.newInstance(event);
-            }
-
-            return null;
-        }
-    }
-
     private View createTab(Context context, String title) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_tab, null);
         TextView text = (TextView) view.findViewWithTag("titleText");

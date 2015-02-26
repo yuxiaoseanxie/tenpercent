@@ -30,7 +30,7 @@ public class ShowTipsFragment extends Fragment {
             View view = inflater.inflate(R.layout.fragment_showtips, container, false);
         Event event = (Event) getArguments().getSerializable(EVENT);
         LineUpTipsFragment lineUpFragment = LineUpTipsFragment.newInstance(event);
-        getChildFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
 
         return view;
     }
