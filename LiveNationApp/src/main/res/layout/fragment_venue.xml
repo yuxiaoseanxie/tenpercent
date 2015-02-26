@@ -8,15 +8,15 @@
         android:id="@+id/fragment_venue_header"
         layout="@layout/fragment_venue_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content"/>
 
-    <include
-        android:id="@+id/fragment_venue_details"
-        layout="@layout/sub_venue_details"
+    <FrameLayout
+        android:id="@+id/fragment_venue_detail_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/gap_medium"
-        android:background="@drawable/ui_underscore_background"></include>
+        android:background="@drawable/ui_underscore_background"
+        />
 
     <ImageView style="@style/SwooshDivider.with_top_margin"/>
 

@@ -3,6 +3,10 @@
 
     <style name="ln.text" parent="@android:style/TextAppearance"/>
 
+    <style name="ln.text.minuscule">
+        <item name="android:textSize">8sp</item>
+    </style>
+
     <style name="ln.text.tiny">
         <item name="android:textSize">10sp</item>
     </style>

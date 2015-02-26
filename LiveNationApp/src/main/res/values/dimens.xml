@@ -51,6 +51,7 @@
     <dimen name="ui_find_tickets_height">56dp</dimen>
     <dimen name="venue_travel_popup_width">280dp</dimen>
     <dimen name="uber_dialog_title_spacing">-3dp</dimen>
+    <dimen name="uber_button_drawable_padding">-10dp</dimen>
     <dimen name="uber_surge_badge_spacing">9dp</dimen>
     <dimen name="vertical_date_dotw_max_width">40dp</dimen>
 
