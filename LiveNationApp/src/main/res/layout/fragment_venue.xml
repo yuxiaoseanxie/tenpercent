@@ -15,10 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/gap_medium"
-        android:background="@drawable/ui_underscore_background"
         />
-
-    <ImageView style="@style/SwooshDivider.with_top_margin"/>
 
     <TextView
         style="@style/ui_header_transparent"
