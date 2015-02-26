@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
+import com.livenation.mobile.android.na.ui.fragments.ComingShowFragment;
 import com.livenation.mobile.android.na.ui.fragments.ShowTipsFragment;
 import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
 import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
@@ -30,8 +31,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -40,35 +47,32 @@ import android.widget.TextView;
  */
 public class ShowActivityV2 extends DetailBaseFragmentActivity {
 
-    private SlidingTabLayout tabs;
-    private ViewPager pager;
-
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
     public static final String PARAMETER_EVENT_ID = "event_id";
     public static final String PARAMETER_EVENT_CACHED = "event_cached";
     private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
 
     private Event event;
-
     private TransitioningImageView artistImageView;
     private TextView artistTitleTextView;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_v2_show);
+        super.onCreate(savedInstanceState, R.layout.activity_v2_show);
 
         artistImageView = (TransitioningImageView) findViewById(R.id.show_image);
         artistTitleTextView = (TextView) findViewById(R.id.show_artist_title);
-
+        scrollView = (ScrollView) findViewById(R.id.scrollview);
         Long eventId = null;
-        if (args.containsKey(PARAMETER_EVENT_ID)) {
+        args = getIntent().getExtras();
+        if (args != null && args.containsKey(PARAMETER_EVENT_ID)) {
             String eventIdRaw = args.getString(PARAMETER_EVENT_ID);
             eventId = DataModelHelper.getNumericEntityId(eventIdRaw);
         }
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
-        if (args.containsKey(PARAMETER_EVENT_CACHED)) {
+        if (args != null && args.containsKey(PARAMETER_EVENT_CACHED)) {
             Event event = (Event) args.getSerializable(PARAMETER_EVENT_CACHED);
             setEvent(event);
         } else if (eventId != null) {
@@ -88,15 +92,6 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity {
             return;
         }
         artistImageView.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(this, eventId));
-
-        this.pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new TabFragmentAdapter(getSupportFragmentManager()));
-
-        this.tabs = (SlidingTabLayout) findViewById(R.id.slidingtab);
-        tabs.setViewPager(pager);
-        int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
-        tabs.setBottomBorderColor(tabAccentColor);
-        tabs.setSelectedIndicatorColors(tabAccentColor);
 
     }
 
@@ -123,6 +118,8 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity {
         }
         artistTitleTextView.setText(event.getName());
 
+        //Fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ComingShowFragment.newInstance(event)).commit();
 
 
     }
@@ -171,7 +168,7 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity {
 
     @Override
     protected Map<String, Object> getOmnitureProductsProps() {
-        if (args.containsKey(PARAMETER_EVENT_ID)) {
+        if (args != null && args.containsKey(PARAMETER_EVENT_ID)) {
             HashMap cdata = new HashMap<String, Object>();
             cdata.put("&&products", ";" + DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
             return cdata;
@@ -235,39 +232,5 @@ public class ShowActivityV2 extends DetailBaseFragmentActivity {
         }
         props.put(AnalyticConstants.SOURCE, AnalyticsCategory.SDP);
         LiveNationAnalytics.track(event, AnalyticsCategory.ACTION_BAR);
-    }
-
-    private class TabFragmentAdapter extends FragmentStatePagerAdapter {
-        public TabFragmentAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
-
-        @Override
-        public int getCount() {
-            return BoxOfficeTabs.values().length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return getString(R.string.show_tips_title);
-            } else if (position == 1) {
-                return getString(R.string.show_venue_info_title);
-            }
-            return null;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new ShowTipsFragment();
-            } else if (position == 1) {
-                VenueFragment venueFragment = new VenueFragment();
-                venueFragment.setVenue(event.getVenue());
-                return venueFragment;
-            }
-
-            return null;
-        }
     }
 }

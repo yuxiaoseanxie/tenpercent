@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
     <include
         android:id="@+id/lineup_header"
@@ -10,10 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <ListView
-        android:id="@+id/lineup_listview"
-        android:layout_below="@id/lineup_header"
+    <LinearLayout
+        android:id="@+id/lineup_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@android:color/transparent"/>
+        android:layout_below="@id/lineup_header"
+        android:orientation="vertical"/>
 </RelativeLayout>
