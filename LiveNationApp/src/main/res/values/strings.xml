@@ -3,8 +3,11 @@
     <!-- Specific to its build variant-->
     <string name="app_name"></string>
 
+    <!-- Common strings -->>
     <string name="action_settings">Settings</string>
     <string name="action_share">Share</string>
+    <string name="internet_broken">Please connect to the internet and try again.</string>
+
 
     <string name="featured_title">Featured</string>
 
@@ -254,7 +257,6 @@
 
     <!-- Rating Dialog -->
     <string name="rating_dialog_title">Have a great time!</string>
-
     <string name="rating_dialog_rate_us">Rate Us Highly</string>
     <string name="rating_dialog_not_now">Not Now</string>
     <string name="rating_dialog_dont_ask_again">Don\'t Show This Again</string>

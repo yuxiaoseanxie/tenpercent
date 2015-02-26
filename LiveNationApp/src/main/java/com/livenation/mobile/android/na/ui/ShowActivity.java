@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class ShowActivity extends DetailBaseFragmentActivity {
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -72,7 +73,8 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
-                    //TODO display an error message
+                    Toast.makeText(getApplicationContext(), R.string.internet_broken, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
         } else {
