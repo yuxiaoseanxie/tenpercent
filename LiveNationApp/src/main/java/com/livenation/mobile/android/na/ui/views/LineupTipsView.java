@@ -38,9 +38,9 @@ public class LineupTipsView extends LinearLayout{
     private void init() {
         inflate(getContext(), R.layout.view_lineup_tips_cell, this);
 
-        //time = (TextView) findViewById(R.id.view_lineup_time);
-        //title = (TextView) findViewById(R.id.view_lineup_title);
-        //divider = findViewById(R.id.view_lineup_divider);
+        time = (TextView) findViewById(R.id.view_lineup_time);
+        title = (TextView) findViewById(R.id.view_lineup_title);
+        divider = findViewById(R.id.view_lineup_divider);
     }
 
     public TextView getTitle() {

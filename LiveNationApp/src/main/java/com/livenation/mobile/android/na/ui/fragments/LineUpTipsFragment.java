@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.LineupTipsView;
-import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.EventTips;
@@ -70,7 +69,7 @@ public class LineUpTipsFragment extends Fragment {
         lineupContainer.removeAllViews();
         for (TipsTime lineup : setTimes) {
             LineupTipsView view = new LineupTipsView(getActivity());
-            /**view.getTitle().setText(lineup.getName());
+            view.getTitle().setText(lineup.getName());
             view.getTime().setText(timeFormat.format(lineup.getStartTimeUtc()));
             TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
@@ -84,8 +83,7 @@ public class LineUpTipsFragment extends Fragment {
             } else {
                 view.getDivider().setBackgroundColor(getResources().getColor(R.color.underscore));
                 view.getDivider().setVisibility(View.VISIBLE);
-            }**/
-        lineupContainer.addView(view);
+            }
         }
     }
 }

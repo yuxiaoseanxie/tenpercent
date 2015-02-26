@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/list_item_height"
                 android:background="@drawable/livenation_selector_pressable_background"
-                android:minHeight="@dimen/list_item_height">
+                >
 
     <LinearLayout
         android:id="@+id/view_lineup_favorite_checkbox_container"
@@ -26,9 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="top"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_toRightOf="@id/view_lineup_favorite_checkbox_container"
         android:layout_toEndOf="@id/view_lineup_favorite_checkbox_container"
-        android:text="@string/mock_artist_title_1"
         android:textAppearance="@style/ln.text.medium.bold"/>
 
     <View

@@ -7,7 +7,7 @@
     <include
         android:id="@+id/lineup_header"
         layout="@layout/list_header"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/ui_header_transparent_min_height"
         android:layout_width="match_parent"/>
 
     <LinearLayout
