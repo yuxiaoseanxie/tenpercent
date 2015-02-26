@@ -27,14 +27,14 @@ import android.widget.TextView;
 public class LineUpTipsFragment extends Fragment {
     private static final String TIME_FORMAT = "h:mm";
     private SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT, Locale.getDefault());
-    private static final String EVENT = "com.livenation.mobile.android.na.ui.fragments.LineUpFragment.EVENT";
-    private Event event;
+    private static final String EVENTTIPS = "com.livenation.mobile.android.na.ui.fragments.LineUpFragment.EVENTTIPS";
+    private EventTips eventTips;
     private ViewGroup lineupContainer;
 
-    public static LineUpTipsFragment newInstance(Event event) {
+    public static LineUpTipsFragment newInstance(EventTips eventTips) {
         LineUpTipsFragment fragment = new LineUpTipsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(EVENT, event);
+        args.putSerializable(EVENTTIPS, eventTips);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,20 +47,9 @@ public class LineUpTipsFragment extends Fragment {
         lineupContainer = (ViewGroup) view.findViewById(R.id.lineup_container);
 
         header.setText(R.string.lineup_header);
-        event = (Event) getArguments().getSerializable(EVENT);
+        EventTips eventTips = (EventTips) getArguments().getSerializable(EVENTTIPS);
         //TODO display a loader
-        event.getTips(new BasicApiCallback<EventTips>() {
-            @Override
-            public void onResponse(EventTips response) {
-                populateList(response.getSetTimes());
-            }
-
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                //TODO display an error
-            }
-        });
-
+        populateList(eventTips.getSetTimes());
 
         return view;
     }

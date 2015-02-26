@@ -1,13 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/activity_show_content"
-        android:name="com.livenation.mobile.android.na.ui.fragments.ShowFragment"
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="fill_parent"
+        >
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollview_child"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/view_show_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <ImageView style="@style/SwooshDivider"/>
+
+            <FrameLayout
+                android:id="@+id/fragment_show_detail_container"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/ui_find_tickets_height">
+
+                <ProgressBar
+                    android:id="@+id/show_container_pb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/fragment_show_ticketbar_find"
+            style="@style/bottom_bar_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ui_find_tickets_height"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ui_ticketbar_background"
+            android:text="@string/ticketbar_find_ticket"/>
+
+        <Button
+            android:id="@+id/fragment_show_ticketbar_options"
+            style="@style/ticketbar_options_text"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ui_ticketbar_options_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/gap_small"
+            android:layout_marginStart="@dimen/gap_small"
+            android:background="@drawable/findtickets_option_selector_background"
+            android:text="@string/ticketbar_options"/>
+
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -86,11 +86,6 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name="com.livenation.mobile.android.na.ui.ShowActivityV2"
-            android:label="@string/activity_label_show"
-            android:launchMode="singleTop"/>
-
-        <activity
             android:name="com.livenation.mobile.android.na.ui.VenueActivity"
             android:label="@string/activity_label_venue"/>
         <activity
@@ -124,7 +119,7 @@
             android:parentActivityName="com.livenation.mobile.android.na.ui.OrderHistoryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.livenation.mobile.android.ticketing.activities.OrderHistoryActivity"/>
+                android:value=".ui.OrderHistoryActivity"/>
         </activity>
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderHistoryActivity"
