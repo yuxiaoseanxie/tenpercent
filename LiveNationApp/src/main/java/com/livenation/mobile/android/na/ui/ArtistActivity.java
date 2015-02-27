@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SingleArtistParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.HashMap;
@@ -21,9 +20,11 @@ import java.util.Map;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.Toast;
 
 public class ArtistActivity extends DetailBaseFragmentActivity {
-    private ArtistFragment artistFragment;
     public static final String PARAMETER_ARTIST_ID = "artist_id";
     public static final String PARAMETER_ARTIST_CACHED = "artists_cached";
     private Uri appUrl;
@@ -35,34 +36,39 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_artist);
-        artistFragment = (ArtistFragment) getSupportFragmentManager().findFragmentById(R.id.activity_artist_fragment);
 
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
 
 
+        Long artistId = null;
+        if (args != null && args.containsKey(PARAMETER_ARTIST_ID)) {
+            String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
+            artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
+        }
+
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
             artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
             setArtist(artist);
-        } else {
-            Long artistId = null;
-            SingleArtistParameters apiParams = new SingleArtistParameters();
-            if (args.containsKey(PARAMETER_ARTIST_ID)) {
-                String artistIdRaw = args.getString(PARAMETER_ARTIST_ID);
-                artistId = DataModelHelper.getNumericEntityId(artistIdRaw);
-            }
+        } else if (artistId != null) {
+            final View pb = findViewById(R.id.activity_artist_pb);
+            pb.setVisibility(View.VISIBLE);
+
 
             if (artistId != null) {
                 LiveNationApplication.getLiveNationProxy().getSingleArtist(artistId, new BasicApiCallback<Artist>() {
                     @Override
                     public void onResponse(Artist artist) {
+                        pb.setVisibility(View.GONE);
                         setArtist(artist);
                     }
 
                     @Override
                     public void onErrorResponse(LiveNationError error) {
-                        //TODO display an error message
+                        pb.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), R.string.internet_broken, Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
             } else {
@@ -80,15 +86,14 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
 
     @Override
     protected Map<String, Object> getAnalyticsProps() {
-        if (artistFragment != null) {
-            Map<String, Object> props = new HashMap<String, Object>();
-            if (args.containsKey(ArtistActivity.PARAMETER_ARTIST_ID)) {
-                String artistIdRaw = args.getString(ArtistActivity.PARAMETER_ARTIST_ID);
-                props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistIdRaw));
-            }
-            return props;
+        Map<String, Object> props = new HashMap<String, Object>();
+        if (args.containsKey(ArtistActivity.PARAMETER_ARTIST_ID)) {
+            String artistIdRaw = args.getString(ArtistActivity.PARAMETER_ARTIST_ID);
+            props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistIdRaw));
+        } else if (artist != null) {
+            props.put(AnalyticConstants.ARTIST_ID, artist.getNumericId());
         }
-        return null;
+        return props;
     }
 
     //endregion
@@ -96,10 +101,8 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onShare() {
         Props props = new Props();
-        if (artistFragment != null) {
-            props.put(AnalyticConstants.ARTIST_NAME, artistFragment.getArtist().getName());
-            props.put(AnalyticConstants.ARTIST_ID, artistFragment.getArtist().getId());
-        }
+        props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
+        props.put(AnalyticConstants.ARTIST_ID, artist.getId());
         trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
         super.onShare();
     }
@@ -110,31 +113,26 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         super.onSearch();
     }
 
-    //region Share Overrides
-
     @Override
     protected boolean isShareAvailable() {
-        return (artistFragment != null && artistFragment.getArtist() != null);
+        return (artist != null);
     }
 
     @Override
     protected String getShareSubject() {
-        return artistFragment.getArtist().getName();
+        return artist.getName();
     }
 
     @Override
     protected String getShareText() {
-        Artist artist = artistFragment.getArtist();
         String artistTemplate = getString(R.string.share_template_artist);
         return artistTemplate.replace("$ARTIST", artist.getName())
                 .replace("$LINK", artist.getWebUrl());
     }
 
-    //endregion
-
     private void setArtist(Artist artist) {
-        artistFragment.setSingleArtist(artist);
-        ArtistActivity.this.artist = artist;
+        addFragment(ArtistFragment.newInstance(artist), R.id.activity_artist_fragment_container);
+        this.artist = artist;
         invalidateIsShareAvailable();
         googleViewStart(artist);
     }

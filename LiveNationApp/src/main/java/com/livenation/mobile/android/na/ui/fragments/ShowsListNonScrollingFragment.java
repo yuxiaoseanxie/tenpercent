@@ -7,6 +7,7 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -26,6 +27,12 @@ import android.widget.TextView;
 public class ShowsListNonScrollingFragment extends LiveNationFragment {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
     public static final String EVENTS = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.EVENTS";
+    public static final String DISPLAY_MODE = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.DISPLAY_MODE";
+    public static final String MAX_EVENTS = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.MAX_EVENTS";
+    public static final String OVEFLOW_TITLE = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.OVEFLOW_TITLE";
+    public static final String OVEFLOW_SHOWN = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.OVEFLOW_SHOWN";
+    public static final String CATEGORY = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.CATEGORY";
+
 
     private int dividerHeight;
     private int dividerLeftMargin;
@@ -35,9 +42,10 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
     private ViewGroup showContainer;
 
     private int maxEvents;
-    private View showMoreItemsView;
+    private int showMoreItemsTitle = 0;
     private boolean alwaysShowMoreItemsView;
     private AnalyticsCategory category;
+    private View.OnClickListener listener = null;
 
     //region Lifecycle
 
@@ -46,7 +54,6 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
 
         this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
-
     }
 
     public static ShowsListNonScrollingFragment newInstance(ArrayList<Event> events, ShowView.DisplayMode displayMode, AnalyticsCategory category) {
@@ -59,9 +66,26 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
         return instance;
     }
 
+    public void setMoreShowClickListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setMoreShowTitle(int resId) {
+        showMoreItemsTitle = resId;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            maxEvents = savedInstanceState.getInt(MAX_EVENTS, maxEvents);
+            displayMode = (ShowView.DisplayMode) savedInstanceState.getSerializable(DISPLAY_MODE);
+            showMoreItemsTitle = savedInstanceState.getInt(OVEFLOW_TITLE, showMoreItemsTitle);
+            alwaysShowMoreItemsView = savedInstanceState.getBoolean(OVEFLOW_SHOWN, alwaysShowMoreItemsView);
+            setMoreShowTitle(showMoreItemsTitle);
+            category = (AnalyticsCategory) savedInstanceState.getSerializable(CATEGORY);
+        }
 
         this.dividerHeight = (int) getResources().getDimension(R.dimen.one_dp);
         this.dividerLeftMargin = (int) getResources().getDimension(R.dimen.ui_gutter_width);
@@ -128,11 +152,14 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
                 addNewDivider();
         }
 
-        if ((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && getShowMoreItemsView() != null) {
+        OverflowView showMoreItemsView = new OverflowView(getActivity());
+        showMoreItemsView.setTitle(showMoreItemsTitle);
+        showMoreItemsView.setOnClickListener(listener);
+        if ((events.size() > getMaxEvents() || alwaysShowMoreItemsView()) && showMoreItemsView != null) {
             addNewDivider();
 
             LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-            showContainer.addView(getShowMoreItemsView(), layoutParams);
+            showContainer.addView(showMoreItemsView, layoutParams);
         }
 
         if (events.size() == 0) {
@@ -159,15 +186,6 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
 
     public void setMaxEvents(int maxEvents) {
         this.maxEvents = maxEvents;
-    }
-
-
-    public View getShowMoreItemsView() {
-        return showMoreItemsView;
-    }
-
-    public void setShowMoreItemsView(View showMoreItemsView) {
-        this.showMoreItemsView = showMoreItemsView;
     }
 
     private View getEmptyView() {
@@ -205,5 +223,15 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment {
 
             EventUtils.redirectToSDP(getActivity(), event);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(DISPLAY_MODE, displayMode);
+        outState.putInt(MAX_EVENTS, maxEvents);
+        outState.putInt(OVEFLOW_TITLE, showMoreItemsTitle);
+        outState.putBoolean(OVEFLOW_SHOWN, alwaysShowMoreItemsView);
+        outState.putSerializable(CATEGORY, category);
+        super.onSaveInstanceState(outState);
     }
 }

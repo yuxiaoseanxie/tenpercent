@@ -14,12 +14,12 @@ import android.view.ViewGroup;
  * Created by elodieferrais on 2/26/15.
  */
 public class ShowVenueInfoFragment extends Fragment {
-    private static final String VENUE ="com.livenation.mobile.android.na.ui.fragments.ShowVenueInfoFragment.VENUE";
+    private static final String VENUE = "com.livenation.mobile.android.na.ui.fragments.ShowVenueInfoFragment.VENUE";
     private Venue venue;
 
     public static ShowVenueInfoFragment newInstance(Venue venue) {
         ShowVenueInfoFragment showVenueInfoFragment = new ShowVenueInfoFragment();
-        Bundle bundle = new Bundle()    ;
+        Bundle bundle = new Bundle();
         bundle.putSerializable(VENUE, venue);
         showVenueInfoFragment.setArguments(bundle);
         return showVenueInfoFragment;
@@ -30,8 +30,8 @@ public class ShowVenueInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_show_venue_info, container, false);
         venue = (Venue) getArguments().getSerializable(VENUE);
 
-        getFragmentManager().beginTransaction().add(R.id.fragment_show_venue_map_container, VenueMapFragment.newInstance(venue));
-        getFragmentManager().beginTransaction().add(R.id.fragment_show_venue_detail_container, ShowVenueInfoFragment.newInstance(venue));
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_show_venue_map_container, VenueMapFragment.newInstance(venue)).commit();
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_show_venue_detail_container, ShowVenueInfoFragment.newInstance(venue)).commit();
 
         return view;
     }

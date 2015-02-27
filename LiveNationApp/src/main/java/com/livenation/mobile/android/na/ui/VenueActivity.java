@@ -47,7 +47,6 @@ public class VenueActivity extends DetailBaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_venue);
 
-
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
 
@@ -86,7 +85,7 @@ public class VenueActivity extends DetailBaseFragmentActivity {
 
     private void setVenue(Venue venue) {
         VenueActivity.this.venue = venue;
-        getSupportFragmentManager().beginTransaction().add(R.id.activity_venue_container, VenueFragment.newInstance(venue)).commit();
+        addFragment(VenueFragment.newInstance(venue), R.id.activity_venue_container);
         invalidateIsShareAvailable();
         googleViewStart(venue);
     }

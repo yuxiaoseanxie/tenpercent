@@ -16,7 +16,6 @@ import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -92,16 +91,15 @@ public class VenueFragment extends LiveNationFragment {
     }
 
     public void setEvents(ArrayList<Event> events) {
-        showsFragment = ShowsListNonScrollingFragment.newInstance(events, ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-        showsFragment.setMaxEvents(MAX_INLINE);
-        showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
-        OverflowView showMoreView = new OverflowView(getActivity());
-        showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener(venue));
-        showsFragment.setShowMoreItemsView(showMoreView);
+        if (getActivity() != null) {
+            showsFragment = ShowsListNonScrollingFragment.newInstance(events, ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
+            showsFragment.setMaxEvents(MAX_INLINE);
+            showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
+            showsFragment.setMoreShowTitle(R.string.artist_events_overflow);
+            showsFragment.setMoreShowClickListener(new ShowAllEventsOnClickListener(venue));
 
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_container_list, showsFragment).commit();
-
+            addFragment(R.id.fragment_venue_container_list, showsFragment, ShowsListNonScrollingFragment.class.getSimpleName());
+        }
     }
 
 

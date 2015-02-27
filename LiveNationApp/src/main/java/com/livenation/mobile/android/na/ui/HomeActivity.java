@@ -81,12 +81,8 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
 
         contentLayout = (LinearLayout) findViewById(R.id.activity_landing_content);
-        AccountFragment accountFragment = (AccountFragment) getSupportFragmentManager().findFragmentByTag(AccountFragment.class.getSimpleName());
-        if (accountFragment == null) {
-            accountFragment = new AccountFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_home_account_container, accountFragment, AccountFragment.class.getSimpleName()).commitAllowingStateLoss();
-        }
 
+        addFragment(new AccountFragment(), R.id.activity_home_account_container);
 
         DrawerLayout rootView = (DrawerLayout) findViewById(R.id.activity_landing_drawer);
         drawerToggle = new ActionBarDrawerToggle(HomeActivity.this, rootView,

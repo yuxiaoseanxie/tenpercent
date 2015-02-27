@@ -40,7 +40,7 @@ public class ShowTipsFragment extends Fragment {
             public void onResponse(EventTips response) {
                 pb.setVisibility(View.GONE);
                 LineUpTipsFragment lineUpFragment = LineUpTipsFragment.newInstance(response);
-                getFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
+                getChildFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
             }
 
             @Override

@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
-import com.livenation.mobile.android.na.ui.fragments.ComingShowFragment;
+import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
 import com.livenation.mobile.android.na.ui.fragments.ShowFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -141,7 +141,7 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
         //Fragment
         //getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ComingShowFragment.newInstance(event)).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ShowFragment.newInstance(event)).commit();
+        addFragment(ShowFragment.newInstance(event), R.id.fragment_show_detail_container);
 
         //Action bar
         invalidateIsShareAvailable();
@@ -151,19 +151,15 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     }
 
     private void updateTicketButton() {
-        //Set image and artist title
-        String imageUrl = null;
-        for (Artist lineup : event.getLineup()) {
-            String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
-            if (null != imageKey) {
-                imageUrl = lineup.getImageURL(imageKey);
-                break;
-            }
-        }
-        if (null != imageUrl) {
-            artistImageView.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
-        }
-        artistTitleTextView.setText(event.getName());
+        if (event.getTicketOfferings().size() < 2)
+            findTicketsOptions.setVisibility(View.GONE);
+        else
+            findTicketsOptions.setVisibility(View.VISIBLE);
+        findTicketsOptions.setOnClickListener(new OnFindTicketsOptionsClick(event));
+
+        OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
+        findTickets.setOnClickListener(onFindTicketsClick);
+
     }
 
     private void updateHeader() {

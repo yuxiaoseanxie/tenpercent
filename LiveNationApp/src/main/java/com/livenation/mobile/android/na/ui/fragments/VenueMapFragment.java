@@ -51,7 +51,7 @@ public class VenueMapFragment extends Fragment implements LiveNationMapFragment.
 
         mapFragment = new LiveNationMapFragment();
         mapFragment.setMapReadyListener(this);
-        getFragmentManager().beginTransaction().add(R.id.fragment_venue_map_container, mapFragment).commit();
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_map_container, mapFragment).commit();
 
         venueTitle.setText(venue.getName());
         favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);

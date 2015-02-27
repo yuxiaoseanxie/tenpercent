@@ -7,8 +7,6 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
-import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -38,13 +36,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
+public class ArtistFragment extends LiveNationFragment {
     private static final String ARTIST = "com.livenation.mobile.android.na.ui.fragments.ArtistFragment.ARTIST";
+    private static final String ARTISTEVENTS = "com.livenation.mobile.android.na.ui.fragments.ArtistFragment.ARTISTEVENTS";
+
     private final static int BIO_TRUNCATION_LENGTH = 300;
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
     private final static int MAX_INLINE = 3;
 
     private Artist artist;
+    private ArtistEvents artistEvents;
 
     private TransitioningImageView artistImageView;
     private FavoriteCheckBox favoriteCheckBox;
@@ -74,7 +75,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
         artist = (Artist) getArguments().getSerializable(ARTIST);
-
+        if (savedInstanceState != null) {
+            artistEvents = (ArtistEvents) savedInstanceState.getSerializable(ARTISTEVENTS);
+        }
         this.artistImageView = (TransitioningImageView) view.findViewById(R.id.fragment_artist_image);
         this.favoriteCheckBox = (FavoriteCheckBox) view.findViewById(R.id.fragment_artist_favorite_checkbox);
         this.artistTitle = (TextView) view.findViewById(R.id.fragment_artist_title);
@@ -89,17 +92,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         bioShowMore.setOnClickListener(new ShowFullBioOnClickListener());
         suppressBio();
 
+        setSingleArtist(artist);
+
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        //Youtube Fragment
-
-        init();
     }
     //endregion
 
@@ -149,13 +144,7 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     }
 
 
-    //region Presenters
-
-    @Override
     public void setSingleArtist(final Artist artist) {
-        if (artist == null || getActivity() == null)
-            return;
-
         this.artist = artist;
 
         artistTitle.setText(artist.getName());
@@ -174,7 +163,18 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             suppressBio();
 
         favoriteCheckBox.bindToFavorite(Favorite.fromArtist(artist), AnalyticsCategory.ADP);
+        ShowsListNonScrollingFragment shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(ShowsListNonScrollingFragment.class.getSimpleName());
+        if (getChildFragmentManager().findFragmentByTag(ShowsListNonScrollingFragment.class.getSimpleName()) == null) {
+            loadEvents();
+        } else {
+            if (artistEvents != null) {
+                setArtistEvents(artistEvents);
+            }
+            loadYoutubeVideo();
+        }
+    }
 
+    public void loadYoutubeVideo() {
         final YouTubeClient youTubeClient = new YouTubeClient(getString(R.string.youtube_api_key));
         youTubeClient.getArtistBlackList(new BasicApiCallback<List<String>>() {
             @Override
@@ -189,36 +189,38 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 displayYoutubeVideos(youTubeClient);
             }
         });
-
     }
 
-    @Override
     public void setArtistEvents(ArtistEvents artistEvents) {
-
-        ShowsListNonScrollingFragment shows;
-
-        if (artistEvents == null)
+        this.artistEvents = artistEvents;
+        if (getActivity() == null) {
             return;
-
-        if (artistEvents.getNearby().isEmpty()) {
-            showsHeader.setText(R.string.artist_all_shows);
-            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getAll(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-        } else {
-            showsHeader.setText(R.string.artist_nearby_shows);
-            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getNearby(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-            shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
         }
 
-        shows.setMaxEvents(MAX_INLINE);
-        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
-        OverflowView showMoreView = new OverflowView(getActivity());
-        showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
-        shows.setShowMoreItemsView(showMoreView);
-        getFragmentManager().beginTransaction().add(R.id.fragment_artist_shows_container, shows);
+        ShowsListNonScrollingFragment shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(ShowsListNonScrollingFragment.class.getSimpleName());
+        if (shows == null) {
+            if (artistEvents == null)
+                return;
+
+            if (artistEvents.getNearby().isEmpty()) {
+                showsHeader.setText(R.string.artist_all_shows);
+                shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getAll(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+            } else {
+                showsHeader.setText(R.string.artist_nearby_shows);
+                shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getNearby(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+                shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
+            }
+
+            shows.setMaxEvents(MAX_INLINE);
+            shows.setMoreShowClickListener(new ShowAllEventsOnClickListener());
+            shows.setMoreShowTitle(R.string.artist_events_overflow);
+            addFragment(R.id.fragment_artist_shows_container, shows, ShowsListNonScrollingFragment.class.getSimpleName());
+
+        }
+
     }
 
-    private void init() {
+    private void loadEvents() {
         LiveNationApplication.getProviderManager().getConfigReadyFor(new ConfigCallback() {
             @Override
             public void onResponse(LiveNationConfig config) {
@@ -235,10 +237,12 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                         if (getActivity() == null) return;
                         ArtistEvents result = ArtistEvents.from((ArrayList<Event>) response, lat, lng);
                         setArtistEvents(result);
+                        loadYoutubeVideo();
                     }
 
                     @Override
                     public void onErrorResponse(LiveNationError error) {
+                        loadYoutubeVideo();
                     }
                 }, apiParams);
             }
@@ -248,18 +252,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             }
         }, ProviderManager.ProviderType.LOCATION);
     }
-
-    //endregion
-
-
-    //region Getters
-
-    public Artist getArtist() {
-        return artist;
-    }
-
-
-    //endregion
 
 
     private class ShowAllEventsOnClickListener implements View.OnClickListener {
@@ -316,5 +308,11 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 bioShowMore.setExpanded(true);
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(ARTISTEVENTS, artistEvents);
+        super.onSaveInstanceState(outState);
     }
 }
