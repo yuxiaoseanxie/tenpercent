@@ -19,7 +19,7 @@ public class ShowVenueInfoFragment extends Fragment {
 
     public static ShowVenueInfoFragment newInstance(Venue venue) {
         ShowVenueInfoFragment showVenueInfoFragment = new ShowVenueInfoFragment();
-        Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle()    ;
         bundle.putSerializable(VENUE, venue);
         showVenueInfoFragment.setArguments(bundle);
         return showVenueInfoFragment;

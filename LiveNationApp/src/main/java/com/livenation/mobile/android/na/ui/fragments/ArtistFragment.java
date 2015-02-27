@@ -9,7 +9,6 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
-import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -20,7 +19,6 @@ import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.ArtistEvents;
-import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -41,18 +39,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ArtistFragment extends LiveNationFragment implements SingleArtistView, ArtistEventsView {
+    private static final String ARTIST = "com.livenation.mobile.android.na.ui.fragments.ArtistFragment.ARTIST";
     private final static int BIO_TRUNCATION_LENGTH = 300;
     private final static String[] IMAGE_PREFERRED_ARTIST_KEYS = {"mobile_detail", "tap"};
     private final static int MAX_INLINE = 3;
 
     private Artist artist;
-    private ArtistEvents artistEvents;
 
     private TransitioningImageView artistImageView;
     private FavoriteCheckBox favoriteCheckBox;
     private TextView artistTitle;
     private TextView showsHeader;
-    private ShowsListNonScrollingFragment shows;
 
     private LinearLayout bioContainer;
     private TextView bioText;
@@ -61,11 +58,22 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     private YouTubeFragment youTube;
     private OverflowView showMoreVideos;
 
+
+    public static ArtistFragment newInstance(Artist artist) {
+        ArtistFragment artistFragment = new ArtistFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARTIST, artist);
+        artistFragment.setArguments(bundle);
+        return artistFragment;
+    }
+
     //region Lifecycle
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_artist, container, false);
+
+        artist = (Artist) getArguments().getSerializable(ARTIST);
 
         this.artistImageView = (TransitioningImageView) view.findViewById(R.id.fragment_artist_image);
         this.favoriteCheckBox = (FavoriteCheckBox) view.findViewById(R.id.fragment_artist_favorite_checkbox);
@@ -88,18 +96,6 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag("shows");
-        if (shows == null) {
-            this.shows = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-            addFragment(R.id.fragment_artist_shows_container, shows, "shows");
-        }
-        shows.setMaxEvents(MAX_INLINE);
-        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
-
-        OverflowView showMoreView = new OverflowView(getActivity());
-        showMoreView.setTitle(R.string.artist_events_overflow);
-        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
-        shows.setShowMoreItemsView(showMoreView);
 
         //Youtube Fragment
 
@@ -198,20 +194,28 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
 
     @Override
     public void setArtistEvents(ArtistEvents artistEvents) {
+
+        ShowsListNonScrollingFragment shows;
+
         if (artistEvents == null)
             return;
 
-        this.artistEvents = artistEvents;
-
         if (artistEvents.getNearby().isEmpty()) {
             showsHeader.setText(R.string.artist_all_shows);
-            shows.setEvents(artistEvents.getAll());
-
+            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getAll(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
         } else {
             showsHeader.setText(R.string.artist_nearby_shows);
+            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getNearby(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
             shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
-            shows.setEvents(artistEvents.getNearby());
         }
+
+        shows.setMaxEvents(MAX_INLINE);
+        shows.setDisplayMode(ShowView.DisplayMode.ARTIST);
+        OverflowView showMoreView = new OverflowView(getActivity());
+        showMoreView.setTitle(R.string.artist_events_overflow);
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener());
+        shows.setShowMoreItemsView(showMoreView);
+        getFragmentManager().beginTransaction().add(R.id.fragment_artist_shows_container, shows);
     }
 
     private void init() {
@@ -223,12 +227,9 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
                 final double lng = config.getLng();
 
                 EventParameters apiParams = new EventParameters();
-
-                String artistIdRaw = getActivity().getIntent().getStringExtra(ArtistActivity.PARAMETER_ARTIST_ID);
-
                 apiParams.setPage(0, 10);
 
-                LiveNationApplication.getLiveNationProxy().getArtistEvents(DataModelHelper.getNumericEntityId(artistIdRaw), new BasicApiCallback<List<Event>>() {
+                LiveNationApplication.getLiveNationProxy().getArtistEvents(artist.getNumericId(), new BasicApiCallback<List<Event>>() {
                     @Override
                     public void onResponse(List<Event> response) {
                         if (getActivity() == null) return;

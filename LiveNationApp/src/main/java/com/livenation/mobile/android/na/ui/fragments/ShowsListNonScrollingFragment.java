@@ -6,16 +6,14 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -25,8 +23,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-public class ShowsListNonScrollingFragment extends LiveNationFragment implements EventsView {
+public class ShowsListNonScrollingFragment extends LiveNationFragment {
     public static final int MAX_EVENTS_INFINITE = Integer.MAX_VALUE;
+    public static final String EVENTS = "com.livenation.mobile.android.na.ui.fragments.ShowsListNonScrollingFragment.EVENTS";
 
     private int dividerHeight;
     private int dividerLeftMargin;
@@ -47,12 +46,16 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
 
         this.displayMode = ShowView.DisplayMode.VENUE;
         this.maxEvents = MAX_EVENTS_INFINITE;
+
     }
 
-    public static ShowsListNonScrollingFragment newInstance(ShowView.DisplayMode displayMode, AnalyticsCategory category) {
+    public static ShowsListNonScrollingFragment newInstance(ArrayList<Event> events, ShowView.DisplayMode displayMode, AnalyticsCategory category) {
         ShowsListNonScrollingFragment instance = new ShowsListNonScrollingFragment();
         instance.setDisplayMode(displayMode);
         instance.setCategory(category);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EVENTS, events);
+        instance.setArguments(bundle);
         return instance;
     }
 
@@ -70,6 +73,9 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         View result = inflater.inflate(R.layout.fragment_show_fixed, container, false);
 
         showContainer = (ViewGroup) result;
+
+        List<Event> events = (List<Event>) getArguments().getSerializable(EVENTS);
+        setEvents(events);
 
         return result;
     }
@@ -101,8 +107,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
         this.category = category;
     }
 
-    @Override
-    public void setEvents(List<Event> events) {
+    private void setEvents(List<Event> events) {
         showContainer.removeAllViews();
 
         int position = 0;

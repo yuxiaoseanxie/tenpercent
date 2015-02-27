@@ -113,16 +113,18 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (appUrl == null && event != null) {
+        if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
-            googleViewStart(event);
         }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        googleViewEnd();
+        if (appUrl != null) {
+            googleViewEnd();
+        }
         googleApiClient.disconnect();
     }
 

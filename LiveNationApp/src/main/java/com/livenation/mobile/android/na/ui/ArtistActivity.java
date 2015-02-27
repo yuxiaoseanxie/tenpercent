@@ -171,16 +171,17 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (appUrl == null && artist != null) {
+        if (googleApiClient.isConnected()) {
             googleApiClient.connect();
-            googleViewStart(artist);
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        googleViewEnd();
+        if (appUrl != null) {
+            googleViewEnd();
+        }
         googleApiClient.disconnect();
     }
 

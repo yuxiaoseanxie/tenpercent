@@ -13,15 +13,18 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.EventParameters;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -30,12 +33,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView {
-    private final String SHOWS_FRAGMENT_TAG = "shows";
-    private final String MAP_FRAGMENT_TAG = "maps";
+public class VenueFragment extends LiveNationFragment {
+
+    private static final int EVENTS_PER_VENUE_LIMIT = 30;
+    private final static String VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueFragment.VENUE";
+    private final static String VENUE_EVENT_LIST = "com.livenation.mobile.android.na.ui.fragments.VenueFragment.EVENT_LIST";
 
     private ShowsListNonScrollingFragment showsFragment;
     private final static int MAX_INLINE = 3;
+    private Venue venue;
+
+    public static VenueFragment newInstance(Venue venue) {
+        VenueFragment venueFragment = new VenueFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(VENUE, venue);
+        venueFragment.setArguments(bundle);
+        return venueFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,32 +61,47 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showsFragment = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(SHOWS_FRAGMENT_TAG);
-        if (showsFragment == null) {
-            showsFragment = ShowsListNonScrollingFragment.newInstance(ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
-            addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
+        venue = (Venue) getArguments().getSerializable(VENUE);
+        List<Event> events = (List<Event>) getArguments().getSerializable(VENUE_EVENT_LIST);
+        if (events == null) {
+            EventParameters apiParams = new EventParameters();
+            apiParams.setPage(0, EVENTS_PER_VENUE_LIMIT);
+            LiveNationApplication.getLiveNationProxy().getVenueEvents(venue.getNumericId(), new BasicApiCallback<List<Event>>() {
+                @Override
+                public void onResponse(List<Event> response) {
+                    ArrayList<Event> events = new ArrayList<Event>(response);
+                    VenueFragment.this.getArguments().putSerializable(VENUE_EVENT_LIST, events);
+                    setEvents(events);
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                }
+            }, apiParams);
+
         }
 
+        refresh();
+    }
+
+
+    private void refresh() {
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue)).commit();
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true)).commit();
+
+    }
+
+    public void setEvents(ArrayList<Event> events) {
+        showsFragment = ShowsListNonScrollingFragment.newInstance(events, ShowView.DisplayMode.VENUE, AnalyticsCategory.VDP);
         showsFragment.setMaxEvents(MAX_INLINE);
         showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
         OverflowView showMoreView = new OverflowView(getActivity());
         showMoreView.setTitle(R.string.artist_events_overflow);
-
+        showMoreView.setOnClickListener(new ShowAllEventsOnClickListener(venue));
         showsFragment.setShowMoreItemsView(showMoreView);
-    }
 
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_container_list, showsFragment).commit();
 
-    @Override
-    public void setVenue(Venue venue) {
-        showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
-        getFragmentManager().beginTransaction().add(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue)).commit();
-        getFragmentManager().beginTransaction().add(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true)).commit();
-
-    }
-
-    @Override
-    public void setEvents(List<Event> events) {
-        showsFragment.setEvents(events);
     }
 
 
@@ -97,5 +126,4 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             startActivity(intent);
         }
     }
-
 }
