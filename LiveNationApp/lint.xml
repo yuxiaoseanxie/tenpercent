@@ -93,6 +93,8 @@
         <!-- ActionBar custom view -->
         <ignore
             path="src/main/java/com/livenation/mobile/android/na/ui/fragments/FavoritesFragment.java"/>
+        <ignore
+            path="src/main/java/com/livenation/mobile/android/na/ui/fragments/ComingShowFragment.java"/>
         <!-- To create our own tabs -->
         <ignore
             path="src/main/java/com/livenation/mobile/android/na/notifications/ui/InboxActivity.java"/>

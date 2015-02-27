@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/fragment_show_content_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/sub_show_calender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.livenation.mobile.android.na.ui.views.ShowVenueView
+        android:id="@+id/fragment_show_venue_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gap_tiny"
+        android:background="@drawable/livenation_selector_pressable_background"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_show_map_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fragment_show_map_height"
+        android:foreground="@drawable/show_map_foreground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/map_shadow"></View>
+
+    <TextView
+        style="@style/ui_header_transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_lineup"/>
 
     <LinearLayout
+        android:id="@+id/fragment_show_artist_lineup_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/fragment_show_header"
+        <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-        <ImageView style="@style/SwooshDivider"/>
-
-        <include
-            layout="@layout/sub_show_calender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <com.livenation.mobile.android.na.ui.views.ShowVenueView
-            android:id="@+id/fragment_show_venue_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/gap_tiny"
-            android:background="@drawable/livenation_selector_pressable_background"/>
-
-        <FrameLayout
-            android:id="@+id/fragment_show_map_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/fragment_show_map_height"
-            android:foreground="@drawable/show_map_foreground"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/map_shadow"></View>
-
-        <TextView
-            style="@style/ui_header_transparent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_lineup"/>
-
-        <LinearLayout
-            android:id="@+id/fragment_show_artist_lineup_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
     </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

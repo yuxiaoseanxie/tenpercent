@@ -118,7 +118,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         View view = null;
         ViewHeaderHolder holder = null;
         if (null == convertView) {
-            view = inflater.inflate(R.layout.list_recommended_header, parent, false);
+            view = inflater.inflate(R.layout.list_header, parent, false);
             holder = new ViewHeaderHolder(view);
             view.setTag(holder);
         } else {
@@ -305,7 +305,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         private final TextView text;
 
         public ViewHeaderHolder(View view) {
-            this.text = (TextView) view.findViewById(R.id.list_recommended_header_textview);
+            this.text = (TextView) view.findViewById(R.id.list_header_textview);
         }
 
         public TextView getText() {

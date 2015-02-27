@@ -40,6 +40,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
 
+
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_ARTIST_CACHED)) {
             artist = (Artist) args.getSerializable(PARAMETER_ARTIST_CACHED);
