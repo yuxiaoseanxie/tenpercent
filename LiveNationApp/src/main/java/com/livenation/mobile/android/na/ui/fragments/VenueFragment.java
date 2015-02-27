@@ -8,10 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
@@ -21,12 +17,9 @@ import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 import java.util.List;
@@ -36,26 +29,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView, LiveNationMapFragment.MapReadyListener {
-    private static final float DEFAULT_MAP_ZOOM = 13f;
+public class VenueFragment extends LiveNationFragment implements SingleVenueView, EventsView {
     private final String SHOWS_FRAGMENT_TAG = "shows";
     private final String MAP_FRAGMENT_TAG = "maps";
-    private TextView venueTitle;
 
     private ShowsListNonScrollingFragment showsFragment;
-    private LiveNationMapFragment mapFragment;
-    private GoogleMap map;
-    private FavoriteCheckBox favoriteCheckBox;
-    private LatLng mapLocationCache = null;
     private final static int MAX_INLINE = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_venue, container, false);
-        venueTitle = (TextView) result.findViewById(R.id.fragment_venue_title);
-        favoriteCheckBox = (FavoriteCheckBox) result.findViewById(R.id.fragment_venue_favorite_checkbox);
 
         return result;
     }
@@ -69,13 +53,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
             addFragment(R.id.fragment_venue_container_list, showsFragment, SHOWS_FRAGMENT_TAG);
         }
 
-        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = new LiveNationMapFragment();
-            addFragment(R.id.fragment_venue_map_container, mapFragment, MAP_FRAGMENT_TAG);
-        }
-        mapFragment.setMapReadyListener(this);
-
         showsFragment.setMaxEvents(MAX_INLINE);
         showsFragment.setDisplayMode(ShowView.DisplayMode.VENUE);
         OverflowView showMoreView = new OverflowView(getActivity());
@@ -87,16 +64,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
 
     @Override
     public void setVenue(Venue venue) {
-        venueTitle.setText(venue.getName());
-        favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
         showsFragment.getShowMoreItemsView().setOnClickListener(new ShowAllEventsOnClickListener(venue));
-
-        if (venue.getLat() != null && venue.getLng() != null) {
-            Double lat = Double.valueOf(venue.getLat());
-            Double lng = Double.valueOf(venue.getLng());
-            setMapLocation(lat, lng);
-        }
-
+        getFragmentManager().beginTransaction().add(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue)).commit();
         getFragmentManager().beginTransaction().add(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true)).commit();
 
     }
@@ -106,34 +75,6 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         showsFragment.setEvents(events);
     }
 
-    @Override
-    public void onMapReady(GoogleMap map) {
-        this.map = map;
-
-        if (map != null) {
-            map.getUiSettings().setZoomControlsEnabled(false);
-            map.getUiSettings().setAllGesturesEnabled(false);
-            if (null != mapLocationCache) {
-                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
-            }
-        } else {
-            //TODO: Possible No Google play services installed
-        }
-
-    }
-
-
-    private void setMapLocation(double lat, double lng) {
-        mapLocationCache = new LatLng(lat, lng);
-        if (null == map) return;
-
-        MarkerOptions marker = new MarkerOptions();
-        marker.position(mapLocationCache);
-
-        map.clear();
-        map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
-    }
 
     private class ShowAllEventsOnClickListener implements View.OnClickListener {
         private final Venue venue;
