@@ -84,7 +84,7 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
 
         mapFragment = new LiveNationMapFragment();
         mapFragment.setMapReadyListener(this);
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_show_map_container, mapFragment).commit();
+        addFragment(R.id.fragment_show_map_container, mapFragment, LiveNationMapFragment.class.getSimpleName());
 
         return result;
     }

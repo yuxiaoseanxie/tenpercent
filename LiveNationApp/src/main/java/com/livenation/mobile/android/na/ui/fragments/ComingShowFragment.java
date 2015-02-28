@@ -1,16 +1,12 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.helpers.SlidingTabLayout;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,7 @@ import android.widget.TextView;
 /**
  * Created by elodieferrais on 2/25/15.
  */
-public class ComingShowFragment extends Fragment {
+public class ComingShowFragment extends LiveNationFragment {
     private static final String EVENT = "com.livenation.mobile.android.na.ui.fragments.ComingShowFragment.EVENT";
     private static final String TAB_TAG_SHOWTIPS = "show_tips";
     private static final String TAB_TAG_VENUE = "venue";
@@ -62,7 +58,9 @@ public class ComingShowFragment extends Fragment {
 
         tabHost.addTab(tabSpec);
 
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_show_tips_container, ShowTipsFragment.newInstance(event)).commit();
+        addFragment(R.id.fragment_show_tips_container, ShowTipsFragment.newInstance(event), ShowTipsFragment.class.getSimpleName());
+        addFragment(R.id.fragment_venue_container, ShowVenueInfoFragment.newInstance(event.getVenue()), ShowVenueInfoFragment.class.getSimpleName());
+
         return rootView;
     }
 

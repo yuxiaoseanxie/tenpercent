@@ -39,6 +39,7 @@ public class VenueDetailFragment extends Fragment {
     private View venueInfo;
     private View phonebox;
     private Button uberButton;
+    private View swoochdivider;
 
     public static VenueDetailFragment newInstance(Venue venue, boolean withUberRide) {
         VenueDetailFragment venueDetailFragment = new VenueDetailFragment();
@@ -61,6 +62,7 @@ public class VenueDetailFragment extends Fragment {
         venueInfo = result.findViewById(R.id.fragment_venue_detail_venue_info_link);
         phonebox = result.findViewById(R.id.fragment_venue_detail_phone_box);
         uberButton = (Button) result.findViewById(R.id.fragment_venue_uber_button);
+        swoochdivider = result.findViewById(R.id.fragment_venue_detail_swoochdivider);
 
         refresh();
         return result;
@@ -97,9 +99,11 @@ public class VenueDetailFragment extends Fragment {
         //Uber
         if (withUberRide && venue.getLat() != null && venue.getLng() != null) {
             uberButton.setOnClickListener(new UberClick(this, venue));
+            swoochdivider.setVisibility(View.VISIBLE);
         } else {
             //hide travel options to unroutable venue
             uberButton.setVisibility(View.GONE);
+            swoochdivider.setVisibility(View.GONE);
         }
 
     }

@@ -26,6 +26,7 @@
     <dimen name="fragment_featured_container_min_height">90dp</dimen>
     <dimen name="fragment_show_image_gradient_height">75dp</dimen>
     <dimen name="fragment_venue_map_height">250dp</dimen>
+    <dimen name="fragment_show_venue_map_height">125dp</dimen>
     <dimen name="account_header_container_width">255dp</dimen>
     <dimen name="account_header_sso_button_width">112dp</dimen>
     <dimen name="account_header_sso_button_height">40dp</dimen>

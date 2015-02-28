@@ -14,6 +14,7 @@ import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.fragments.ArtistFragment;
+import com.livenation.mobile.android.na.ui.fragments.ComingShowFragment;
 import com.livenation.mobile.android.na.ui.fragments.ShowFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -140,8 +141,8 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         updateTicketButton();
 
         //Fragment
-        //getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ComingShowFragment.newInstance(event)).commit();
-        addFragment(ShowFragment.newInstance(event), R.id.fragment_show_detail_container);
+        addFragment(ComingShowFragment.newInstance(event), R.id.fragment_show_detail_container);
+        //addFragment(ShowFragment.newInstance(event), R.id.fragment_show_detail_container);
 
         //Action bar
         invalidateIsShareAvailable();

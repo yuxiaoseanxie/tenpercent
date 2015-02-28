@@ -97,6 +97,7 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/fragment_venue_detail_swoochdivider"
         android:layout_below="@id/fragment_data_root_container"
         style="@style/SwooshDivider.with_top_margin"/>
 </RelativeLayout>

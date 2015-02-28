@@ -197,26 +197,24 @@ public class ArtistFragment extends LiveNationFragment {
             return;
         }
 
-        ShowsListNonScrollingFragment shows = (ShowsListNonScrollingFragment) getChildFragmentManager().findFragmentByTag(ShowsListNonScrollingFragment.class.getSimpleName());
-        if (shows == null) {
-            if (artistEvents == null)
-                return;
+        if (artistEvents == null)
+            return;
 
-            if (artistEvents.getNearby().isEmpty()) {
-                showsHeader.setText(R.string.artist_all_shows);
-                shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getAll(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-            } else {
-                showsHeader.setText(R.string.artist_nearby_shows);
-                shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getNearby(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
-                shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
-            }
+        ShowsListNonScrollingFragment shows;
 
-            shows.setMaxEvents(MAX_INLINE);
-            shows.setMoreShowClickListener(new ShowAllEventsOnClickListener());
-            shows.setMoreShowTitle(R.string.artist_events_overflow);
-            addFragment(R.id.fragment_artist_shows_container, shows, ShowsListNonScrollingFragment.class.getSimpleName());
-
+        if (artistEvents.getNearby().isEmpty()) {
+            showsHeader.setText(R.string.artist_all_shows);
+            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getAll(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+        } else {
+            showsHeader.setText(R.string.artist_nearby_shows);
+            shows = ShowsListNonScrollingFragment.newInstance(artistEvents.getNearby(), ShowView.DisplayMode.ARTIST, AnalyticsCategory.ADP);
+            shows.setAlwaysShowMoreItemsView(artistEvents.getNearby().size() < artistEvents.getAll().size());
         }
+
+        shows.setMaxEvents(MAX_INLINE);
+        shows.setMoreShowClickListener(new ShowAllEventsOnClickListener());
+        shows.setMoreShowTitle(R.string.artist_events_overflow);
+        addFragment(R.id.fragment_artist_shows_container, shows, ShowsListNonScrollingFragment.class.getSimpleName());
 
     }
 

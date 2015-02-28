@@ -1,6 +1,8 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.EventTips;
@@ -17,7 +19,7 @@ import android.widget.ProgressBar;
 /**
  * Created by elodieferrais on 2/23/15.
  */
-public class ShowTipsFragment extends Fragment {
+public class ShowTipsFragment extends LiveNationFragment {
     private static final String EVENT = "com.livenation.mobile.android.na.ui.fragments.ShowTipsFragment.EVENT";
 
     public static ShowTipsFragment newInstance(Event event) {
@@ -34,21 +36,25 @@ public class ShowTipsFragment extends Fragment {
             View view = inflater.inflate(R.layout.fragment_showtips, container, false);
         Event event = (Event) getArguments().getSerializable(EVENT);
         final ProgressBar pb = (ProgressBar) view.findViewById(R.id.lineup_pb);
-        pb.setVisibility(View.VISIBLE);
-        event.getTips(new BasicApiCallback<EventTips>() {
-            @Override
-            public void onResponse(EventTips response) {
-                pb.setVisibility(View.GONE);
-                LineUpTipsFragment lineUpFragment = LineUpTipsFragment.newInstance(response);
-                getChildFragmentManager().beginTransaction().add(R.id.lineup_container, lineUpFragment).commit();
-            }
 
-            @Override
-            public void onErrorResponse(LiveNationError error) {
-                pb.setVisibility(View.GONE);
-                //TODO display an error message
-            }
-        });
+
+        if (getChildFragmentManager().findFragmentByTag(LineUpTipsFragment.class.getSimpleName()) == null) {
+            pb.setVisibility(View.VISIBLE);
+            event.getTips(new BasicApiCallback<EventTips>() {
+                @Override
+                public void onResponse(EventTips response) {
+                    pb.setVisibility(View.GONE);
+                    LineUpTipsFragment lineUpFragment = LineUpTipsFragment.newInstance(response);
+                    addFragment(R.id.lineup_container, lineUpFragment, LineUpTipsFragment.class.getSimpleName());
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
+                    pb.setVisibility(View.GONE);
+                    //TODO display an error message
+                }
+            });
+        }
 
         return view;
     }

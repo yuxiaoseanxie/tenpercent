@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
+import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -17,6 +18,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -24,6 +27,9 @@ import android.widget.TextView;
  */
 public class VenueMapFragment extends Fragment implements LiveNationMapFragment.MapReadyListener {
     private static final String VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueMapFragment.VENUE";
+    private static final String IS_FAVORITABLE = "com.livenation.mobile.android.na.ui.fragments.VenueMapFragment.IS_FAVORITABLE";
+    private static final String HEIGHT = "com.livenation.mobile.android.na.ui.fragments.VenueMapFragment.HEIGHT";
+
     private static final float DEFAULT_MAP_ZOOM = 13f;
     private TextView venueTitle;
     private FavoriteCheckBox favoriteCheckBox;
@@ -31,10 +37,12 @@ public class VenueMapFragment extends Fragment implements LiveNationMapFragment.
     private GoogleMap map;
     private Venue venue;
 
-    public static VenueMapFragment newInstance(Venue venue) {
+    public static VenueMapFragment newInstance(Venue venue, boolean isFavoritable, int heightMapDimen) {
         VenueMapFragment venueMapFragment = new VenueMapFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(VENUE, venue);
+        bundle.putBoolean(IS_FAVORITABLE, isFavoritable);
+        bundle.putInt(HEIGHT, heightMapDimen);
         venueMapFragment.setArguments(bundle);
         return venueMapFragment;
 
@@ -55,6 +63,19 @@ public class VenueMapFragment extends Fragment implements LiveNationMapFragment.
 
         venueTitle.setText(venue.getName());
         favoriteCheckBox.bindToFavorite(Favorite.fromVenue(venue), AnalyticsCategory.VDP);
+
+        Boolean isFavoritable = getArguments().getBoolean(IS_FAVORITABLE, true);
+        int visibility = View.GONE;
+        if (isFavoritable) {
+            visibility = View.VISIBLE;
+        }
+        favoriteCheckBox.setVisibility(visibility);
+
+        View mapContainer = view.findViewById(R.id.fragment_map_container);
+        int heightMapDimen = getArguments().getInt(HEIGHT, R.dimen.fragment_venue_map_height);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(heightMapDimen));
+        mapContainer.setLayoutParams(params);
+
 
         return view;
     }
