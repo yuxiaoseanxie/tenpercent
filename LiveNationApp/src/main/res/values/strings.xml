@@ -270,6 +270,13 @@
     <string name="show_tips_title">Show Tips</string>
     <string name="show_venue_info_title">Venue Info</string>
 
+    <!-- Show tips -->
+    <string name="tips_parking_time">Parking Lot Opens</string>
+    <string name="tips_start_time">Start Time</string>
+    <string name="tips_box_office_time">Box Office Open</string>
+    <string name="tips_gate_time">Doors Opens</string>
+
+
     <!-- App Google Indexing-->
     <string name="web_url_show">http://www.livenation.com/events/</string>
     <string name="app_url_show">android-app://com.livenation.mobile.android.na/livenation//navigate/</string>
