@@ -41,11 +41,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-<<<<<<<HEAD
-        =======
-        >>>>>>>89224958-show-refac
-
 /**
  * Created by elodieferrais on 2/24/15.
  */
