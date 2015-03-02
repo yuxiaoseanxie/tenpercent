@@ -36,12 +36,12 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venue_box_office);
+        setContentView(R.layout.sliding_tabs_with_pager);
 
-        this.pager = (ViewPager) findViewById(R.id.activity_venue_box_pager);
+        this.pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new TabFragmentAdapter(getSupportFragmentManager()));
 
-        this.tabs = (SlidingTabLayout) findViewById(R.id.activity_venue_box_office_tabs);
+        this.tabs = (SlidingTabLayout) findViewById(R.id.slidingtab);
         tabs.setOnPageChangeListener(this);
         tabs.setViewPager(pager);
         int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
