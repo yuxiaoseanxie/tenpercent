@@ -3,8 +3,16 @@
 
     <style name="ln.text" parent="@android:style/TextAppearance"/>
 
+    <style name="ln.text.minuscule">
+        <item name="android:textSize">8sp</item>
+    </style>
+
     <style name="ln.text.tiny">
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="ln.text.minuscule.gray">
+        <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
     <style name="ln.text.tiny.gray">
@@ -52,6 +60,13 @@
     </style>
 
     <style name="ln.text.small.italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+    <style name="ln.text.tiny.italic">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="ln.text.minuscule.italic">
         <item name="android:textStyle">italic</item>
     </style>
 

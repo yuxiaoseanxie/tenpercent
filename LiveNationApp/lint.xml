@@ -126,7 +126,7 @@
         <ignore path="src/main/res/layout/list_search_city_item.xml"/>
         <ignore path="src/main/res/layout/src/main/res/layout/sub_venue_details.xml"/>
         <ignore path="src/main/res/layout/list_show_nearby_item.xml"/>
-        <ignore path="src/main/res/layout/sub_venue_details.xml"/>
+        <ignore path="src/main/res/layout/fragment_venue_detail.xml"/>
     </issue>
 
     <issue id="MissingRegistered">

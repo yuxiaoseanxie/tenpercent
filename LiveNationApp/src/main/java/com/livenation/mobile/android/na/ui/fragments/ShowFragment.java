@@ -32,10 +32,13 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
+import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import android.content.Intent;
@@ -50,14 +53,12 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
     private static final String EVENT = "com.livenation.mobile.android.na.ui.fragments.ShowFragment.EVENT";
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
     private static final float DEFAULT_MAP_ZOOM = 13f;
-    private final String MAP_FRAGMENT_TAG = "maps";
     private TextView calendarText;
     private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
     private ShowVenueView venueDetails;
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
-    private LatLng mapLocationCache = null;
     private Event event;
 
     public static ShowFragment newInstance(Event event) {
@@ -78,21 +79,14 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
         calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
 
-        return result;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         Event event = (Event) getArguments().getSerializable(EVENT);
         setEvent(event);
 
-        mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
-        if (mapFragment == null) {
-            mapFragment = new LiveNationMapFragment();
-            addFragment(R.id.fragment_show_map_container, mapFragment, MAP_FRAGMENT_TAG);
-        }
+        mapFragment = new LiveNationMapFragment();
         mapFragment.setMapReadyListener(this);
+        addFragment(R.id.fragment_show_map_container, mapFragment, LiveNationMapFragment.class.getSimpleName());
+
+        return result;
     }
 
     private void updateCalendar() {
@@ -136,7 +130,6 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
             view.bindToFavoriteArtist(lineup);
 
             view.setOnClickListener(new OnLineupViewClick(lineup, event));
-
 
             boolean lastItem = (event.getLineup().indexOf(lineup) == event.getLineup().size() - 1);
             if (lastItem) {
@@ -183,13 +176,20 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
 
     @Override
     public void onMapReady(GoogleMap map) {
+        if (event.getVenue() == null || event.getVenue().getLat() == null) {
+            Map<String, Object> props = new HashMap<>();
+            props.put("eventId", event.getId());
+            props.put("eventName", event.getName());
+            LiveNationLibrary.getErrorTracker().track("Missing venue information for the following show", props);
+        }
+
+        Double lat = Double.valueOf(event.getVenue().getLat());
+        Double lng = Double.valueOf(event.getVenue().getLng());
         this.map = map;
         if (map != null) {
             map.getUiSettings().setZoomControlsEnabled(false);
             map.getUiSettings().setAllGesturesEnabled(false);
-            if (null != mapLocationCache) {
-                setMapLocation(mapLocationCache.latitude, mapLocationCache.longitude);
-            }
+            setMapLocation(lat, lng);
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
@@ -210,15 +210,15 @@ public class ShowFragment extends LiveNationFragment implements LiveNationMapFra
     }
 
     private void setMapLocation(double lat, double lng) {
-        mapLocationCache = new LatLng(lat, lng);
         if (null == map) return;
 
+        LatLng latLng = new LatLng(lat, lng);
         MarkerOptions marker = new MarkerOptions();
-        marker.position(mapLocationCache);
+        marker.position(latLng);
 
         map.clear();
         map.addMarker(marker);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_MAP_ZOOM));
     }
 
     private class OnVenueDetailsClick implements View.OnClickListener {

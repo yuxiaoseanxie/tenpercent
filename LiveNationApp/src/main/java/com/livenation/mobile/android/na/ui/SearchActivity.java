@@ -20,7 +20,6 @@ import android.widget.EditText;
  * Created by elodieferrais on 11/5/14.
  */
 public abstract class SearchActivity extends LiveNationFragmentActivity implements TextWatcher {
-    private SearchFragment fragment;
     private EditText input;
     private LimiterHandler limiter = new LimiterHandler(this);
 
@@ -34,12 +33,8 @@ public abstract class SearchActivity extends LiveNationFragmentActivity implemen
         View view = getLayoutInflater().inflate(R.layout.view_search_actionbar, null);
         getActionBar().setCustomView(view);
 
-        fragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("search");
-
-        if (fragment == null) {
-            fragment = getFragmentInstance();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_search_container, fragment, "search").commit();
-        }
+        SearchFragment fragment = getFragmentInstance();
+        addFragment(fragment, R.id.fragment_search_container, "search");
 
         DecoratedEditText editText = (DecoratedEditText) view.findViewById(R.id.view_search_actionbar_input);
 

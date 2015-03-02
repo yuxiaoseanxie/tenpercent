@@ -19,6 +19,9 @@ public abstract class LiveNationFragment extends Fragment {
 
 
     public void addFragment(int containerId, Fragment fragment, String tag) {
+        if (getChildFragmentManager().findFragmentByTag(tag) != null) {
+            return;
+        }
         if (getActivity() == null) {
             Log.e("AddFragment", "Called after activity destroyed");
             if (!BuildConfig.DEBUG) {
@@ -26,10 +29,7 @@ public abstract class LiveNationFragment extends Fragment {
                 return;
             }
         }
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(containerId, fragment, tag);
-        transaction.commitAllowingStateLoss();
+        getChildFragmentManager().beginTransaction().add(containerId, fragment, tag).commitAllowingStateLoss();
     }
 
     public void removeFragment(Fragment fragment) {
@@ -45,4 +45,5 @@ public abstract class LiveNationFragment extends Fragment {
         transaction.remove(fragment);
         transaction.commitAllowingStateLoss();
     }
+
 }

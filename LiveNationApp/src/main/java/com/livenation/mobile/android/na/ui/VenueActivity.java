@@ -17,31 +17,28 @@ import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
-import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
+import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 
-public class VenueActivity extends DetailBaseFragmentActivity implements EventsView {
+public class VenueActivity extends DetailBaseFragmentActivity {
     private static final int EVENTS_PER_VENUE_LIMIT = 30;
 
     public static final String PARAMETER_VENUE_ID = "venue_id";
     private static final String PARAMETER_VENUE_CACHED = "venue_cached";
     private Venue venue;
-    private SingleVenueView singleVenueView;
-    private EventsView eventsView;
     private Uri appUrl;
     private GoogleApiClient googleApiClient;
 
@@ -49,16 +46,13 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_venue);
-        if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
-            getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
-        }
-        singleVenueView = (SingleVenueView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-        eventsView = (EventsView) getSupportFragmentManager().findFragmentById(R.id.activity_venue_content);
-
-        init();
 
         googleApiClient = new GoogleApiClient.Builder(this).addApi(AppIndex.APP_INDEX_API).build();
         googleApiClient.connect();
+
+        if (!getIntent().hasExtra(VenueEventsPresenter.PARAMETER_LIMIT)) {
+            getIntent().putExtra(VenueEventsPresenter.PARAMETER_LIMIT, EVENTS_PER_VENUE_LIMIT);
+        }
 
         //Use cached event for avoiding the blank page while we are waiting for the http response
         if (args.containsKey(PARAMETER_VENUE_CACHED)) {
@@ -67,56 +61,33 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         } else {
 
             //Get venue detail
+            final View pb = findViewById(R.id.activity_pb);
+            pb.setVisibility(View.VISIBLE);
             String venueIdRaw = args.getString(PARAMETER_VENUE_ID);
             long venueId = DataModelHelper.getNumericEntityId(venueIdRaw);
             LiveNationApplication.getLiveNationProxy().getSingleVenue(venueId, new BasicApiCallback<Venue>() {
                 @Override
                 public void onResponse(Venue venue) {
+                    pb.setVisibility(View.GONE);
                     setVenue(venue);
                 }
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
-                    //TODO display an error message
+                    pb.setVisibility(View.GONE);
+                    Toast.makeText(VenueActivity.this, R.string.internet_broken, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
         }
-    }
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        deinit();
-    }
-
-    @Override
-    public void setEvents(List<Event> events) {
-        if (eventsView == null) {
-            //TODO: this
-            throw new RuntimeException("TODO: investigate possible race condition here");
-        }
-        eventsView.setEvents(events);
-        invalidateIsShareAvailable();
     }
 
     private void setVenue(Venue venue) {
         VenueActivity.this.venue = venue;
-        singleVenueView.setVenue(venue);
+        addFragment(VenueFragment.newInstance(venue), R.id.activity_venue_container);
         invalidateIsShareAvailable();
         googleViewStart(venue);
-    }
-
-    private void init() {
-        getVenueEventPresenter().initialize(VenueActivity.this, getIntent().getExtras(), VenueActivity.this);
-    }
-
-    private void deinit() {
-        getVenueEventPresenter().cancel(VenueActivity.this);
-    }
-
-    private VenueEventsPresenter getVenueEventPresenter() {
-        return LiveNationApplication.get().getVenueEventsPresenter();
     }
 
     @Override
@@ -208,9 +179,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     @Override
     protected void onStart() {
         super.onStart();
-        if (appUrl == null && venue != null) {
+        if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
-            googleViewStart(venue);
         }
     }
 
@@ -222,7 +192,9 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
 
     protected void onStop() {
         super.onStop();
-        googleViewEnd();
+        if (appUrl != null) {
+            googleViewEnd();
+        }
         googleApiClient.disconnect();
     }
 

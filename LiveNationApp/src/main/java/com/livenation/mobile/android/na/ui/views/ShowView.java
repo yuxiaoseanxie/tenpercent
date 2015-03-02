@@ -40,7 +40,7 @@ public class ShowView extends LinearLayout {
     }
 
     public void setEvent(Event event) {
-        title.setText(getDisplayMode().getTitle(event));
+        title.setText(ShowViewController.getTitle(getDisplayMode(), event));
 
         Date start = event.getLocalStartTime();
         TimeZone timeZone;
@@ -50,7 +50,7 @@ public class ShowView extends LinearLayout {
             timeZone = TimeZone.getDefault();
         }
         date.setDate(start, timeZone, event.getIsMegaticket());
-        details.setText(getDisplayMode().getDetails(event, start));
+        details.setText(ShowViewController.getDetails(getDisplayMode(), event, start));
 
         if (event.getIsMegaticket()) {
             megaticket.setVisibility(View.VISIBLE);
@@ -83,53 +83,48 @@ public class ShowView extends LinearLayout {
     }
 
 
+    private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz", Locale.getDefault());
+
+    private static class ShowViewController {
+        static String getTitle(DisplayMode displayMode, Event event) {
+            switch (displayMode) {
+                case VENUE:
+                    return event.getName();
+                case EVENT:
+                    return event.getVenue().getName();
+                case ARTIST:
+                    return event.getVenue().getName();
+                default:
+                    return null;
+            }
+
+        }
+
+        static String getDetails(DisplayMode displayMode, Event event, Date localStartTime) {
+            switch (displayMode) {
+                case VENUE:
+                    TimeZone timeZone;
+                    if (event.getVenue().getTimeZone() != null) {
+                        timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
+                    } else {
+                        timeZone = TimeZone.getDefault();
+                    }
+                    TIME_FORMATTER.setTimeZone(timeZone);
+                    return TIME_FORMATTER.format(localStartTime);
+                case EVENT:
+                    return event.getVenue().getName();
+                case ARTIST:
+                    Venue venue = event.getVenue();
+                    return String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState());
+                default:
+                    return null;
+            }
+        }
+    }
+
     public static enum DisplayMode {
-        VENUE {
-            private final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mm aa zzz", Locale.getDefault());
-
-            @Override
-            String getTitle(Event event) {
-                return event.getName();
-            }
-
-            @Override
-            String getDetails(Event event, Date localStartTime) {
-                TimeZone timeZone;
-                if (event.getVenue().getTimeZone() != null) {
-                    timeZone = TimeZone.getTimeZone(event.getVenue().getTimeZone());
-                } else {
-                    timeZone = TimeZone.getDefault();
-                }
-                TIME_FORMATTER.setTimeZone(timeZone);
-                return TIME_FORMATTER.format(localStartTime);
-            }
-        },
-        ARTIST {
-            @Override
-            String getTitle(Event event) {
-                return event.getVenue().getName();
-            }
-
-            @Override
-            String getDetails(Event event, Date localStartTime) {
-                Venue venue = event.getVenue();
-                return String.format("%s, %s", venue.getAddress().getCity(), venue.getAddress().getState());
-            }
-        },
-        EVENT {
-            @Override
-            String getTitle(Event event) {
-                return event.getDisplayName();
-            }
-
-            @Override
-            String getDetails(Event event, Date localStartTime) {
-                return event.getVenue().getName();
-            }
-        };
-
-        abstract String getTitle(Event event);
-
-        abstract String getDetails(Event event, Date localStartTime);
+        VENUE,
+        ARTIST,
+        EVENT
     }
 }

@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
-import com.livenation.mobile.android.na.ui.fragments.ShowFragment;
+import com.livenation.mobile.android.na.ui.fragments.ComingShowFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
@@ -42,10 +42,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<<HEAD
+        =======
+        >>>>>>>89224958-show-refac
+
 /**
  * Created by elodieferrais on 2/24/15.
  */
-
 public class ShowActivity extends DetailBaseFragmentActivity {
 
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -98,10 +101,9 @@ public class ShowActivity extends DetailBaseFragmentActivity {
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
-                    progressBar.setVisibility(View.GONE);
-                    //TODO display an error message
                     Toast.makeText(getApplicationContext(), R.string.internet_broken, Toast.LENGTH_SHORT).show();
                     finish();
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         } else {
@@ -141,8 +143,8 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         updateTicketButton();
 
         //Fragment
-        //getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ComingShowFragment.newInstance(event)).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_show_detail_container, ShowFragment.newInstance(event)).commit();
+        addFragment(ComingShowFragment.newInstance(event), R.id.fragment_show_detail_container);
+        //addFragment(ShowFragment.newInstance(event), R.id.fragment_show_detail_container);
 
         //Action bar
         invalidateIsShareAvailable();
@@ -152,19 +154,15 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     }
 
     private void updateTicketButton() {
-        //Set image and artist title
-        String imageUrl = null;
-        for (Artist lineup : event.getLineup()) {
-            String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
-            if (null != imageKey) {
-                imageUrl = lineup.getImageURL(imageKey);
-                break;
-            }
-        }
-        if (null != imageUrl) {
-            artistImageView.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
-        }
-        artistTitleTextView.setText(event.getName());
+        if (event.getTicketOfferings().size() < 2)
+            findTicketsOptions.setVisibility(View.GONE);
+        else
+            findTicketsOptions.setVisibility(View.VISIBLE);
+        findTicketsOptions.setOnClickListener(new OnFindTicketsOptionsClick(event));
+
+        OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
+        findTickets.setOnClickListener(onFindTicketsClick);
+
     }
 
     private void updateHeader() {
@@ -196,7 +194,6 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         super.onShare();
     }
 
-    @Override
     protected boolean isShareAvailable() {
         return (event != null);
     }
@@ -296,16 +293,17 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (appUrl == null && event != null) {
+        if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
-            googleViewStart(event);
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        googleViewEnd();
+        if (appUrl != null) {
+            googleViewEnd();
+        }
         googleApiClient.disconnect();
     }
 

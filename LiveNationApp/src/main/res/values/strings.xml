@@ -25,7 +25,6 @@
     <string name="tab_favorites_venues">Venues</string>
 
     <string name="venue_detail_link">Venue Info</string>
-    <string name="venue_travel_google_maps">Open in Google Maps</string>
 
     <string name="artist_events_overflow">See All Shows</string>
     <string name="artist_events_no_show">No Scheduled Events</string>
@@ -270,6 +269,13 @@
     <string name="show_lineup">Lineup</string>
     <string name="show_tips_title">Show Tips</string>
     <string name="show_venue_info_title">Venue Info</string>
+
+    <!-- Show tips -->
+    <string name="tips_parking_time">Parking Lot Opens</string>
+    <string name="tips_start_time">Start Time</string>
+    <string name="tips_box_office_time">Box Office Open</string>
+    <string name="tips_gate_time">Doors Opens</string>
+
 
     <!-- App Google Indexing-->
     <string name="web_url_show">http://www.livenation.com/events/</string>
