@@ -170,6 +170,6 @@ public class ConfigFilePersistenceHelper {
 
     public boolean isUpgradeRequired() {
         String upgradeMaximumVersion = getUpgradeMaximumVersion();
-        return (upgradeMaximumVersion != null && upgradeMaximumVersion.compareTo(BuildConfig.VERSION_NAME) >= 0);
+        return (upgradeMaximumVersion != null && upgradeMaximumVersion.compareTo(BuildConfig.VERSION_NAME) > 0);
     }
 }
