@@ -13,7 +13,6 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
-import com.livenation.mobile.android.na.ui.fragments.ComingShowFragment;
 import com.livenation.mobile.android.na.ui.fragments.ShowFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -46,6 +45,7 @@ import android.widget.Toast;
 /**
  * Created by elodieferrais on 2/24/15.
  */
+
 public class ShowActivity extends DetailBaseFragmentActivity {
 
     private static SimpleDateFormat SHORT_DATE_FORMATTER = new SimpleDateFormat("MMM d", Locale.US);
@@ -100,6 +100,8 @@ public class ShowActivity extends DetailBaseFragmentActivity {
                 public void onErrorResponse(LiveNationError error) {
                     progressBar.setVisibility(View.GONE);
                     //TODO display an error message
+                    Toast.makeText(getApplicationContext(), R.string.internet_broken, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
         } else {
