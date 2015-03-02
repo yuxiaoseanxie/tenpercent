@@ -107,7 +107,6 @@
 
     <!-- Lineup -->
     <dimen name="line_up_time_width">60dp</dimen>
-    <dimen name="line_up_margin_left_divider">74dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

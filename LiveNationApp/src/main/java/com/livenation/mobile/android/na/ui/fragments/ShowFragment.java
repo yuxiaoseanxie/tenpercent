@@ -8,7 +8,6 @@
 
 package com.livenation.mobile.android.na.ui.fragments;
 
-import com.apsalar.sdk.Apsalar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,81 +19,64 @@ import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
-import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
-import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
-import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
-import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
-import com.livenation.mobile.android.platform.api.service.livenation.impl.model.TicketOffering;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
-import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
-import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.utils.OnThrottledClickListener;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class ShowFragment extends LiveNationFragment implements SingleEventView, LiveNationMapFragment.MapReadyListener {
+public class ShowFragment extends LiveNationFragment implements LiveNationMapFragment.MapReadyListener {
+    private static final String EVENT = "com.livenation.mobile.android.na.ui.fragments.ShowFragment.EVENT";
     private static final String CALENDAR_DATE_FORMAT = "EEE MMM d'.' yyyy 'at' h:mm aa";
     private static final float DEFAULT_MAP_ZOOM = 13f;
-    private final static String[] IMAGE_PREFERRED_SHOW_KEYS = {"mobile_detail", "tap"};
     private final String MAP_FRAGMENT_TAG = "maps";
-    private TextView artistTitle;
     private TextView calendarText;
     private ViewGroup calendarContainer;
     private ViewGroup lineupContainer;
-    private TransitioningImageView artistImage;
     private ShowVenueView venueDetails;
-    private Button findTicketsOptions;
-    private Button findTickets;
     private GoogleMap map;
     private LiveNationMapFragment mapFragment;
     private LatLng mapLocationCache = null;
     private Event event;
+
+    public static ShowFragment newInstance(Event event) {
+        ShowFragment showFragment = new ShowFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EVENT, event);
+        showFragment.setArguments(bundle);
+        return showFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_show, container,
                 false);
-        artistTitle = (TextView) result.findViewById(R.id.fragment_show_artist_title);
         lineupContainer = (ViewGroup) result.findViewById(R.id.fragment_show_artist_lineup_container);
-        artistImage = (TransitioningImageView) result.findViewById(R.id.fragment_show_image);
         venueDetails = (ShowVenueView) result.findViewById(R.id.fragment_show_venue_details);
         calendarText = (TextView) result.findViewById(R.id.sub_show_calendar_text);
         calendarContainer = (ViewGroup) result.findViewById(R.id.sub_show_calendar_container);
-        findTicketsOptions = (Button) result.findViewById(R.id.fragment_show_ticketbar_options);
-        findTickets = (Button) result.findViewById(R.id.fragment_show_ticketbar_find);
 
         return result;
     }
@@ -102,6 +84,9 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Event event = (Event) getArguments().getSerializable(EVENT);
+        setEvent(event);
+
         mapFragment = (LiveNationMapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
         if (mapFragment == null) {
             mapFragment = new LiveNationMapFragment();
@@ -110,11 +95,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         mapFragment.setMapReadyListener(this);
     }
 
-    @Override
-    public void setEvent(Event event) {
-        this.event = event;
-
-        artistTitle.setText(event.getName());
+    private void updateCalendar() {
         if (event.getIsMegaticket()) {
             calendarText.setText(getString(R.string.show_multiple_dates));
             calendarContainer.setOnClickListener(null);
@@ -133,7 +114,39 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             OnCalendarViewClick onCalendarViewClick = new OnCalendarViewClick(event);
             calendarContainer.setOnClickListener(onCalendarViewClick);
         }
+    }
 
+    private void setEvent(Event event) {
+        this.event = event;
+        updateCalendar();
+        updateVenue();
+        updateLineup();
+
+    }
+
+    private void updateLineup() {
+        lineupContainer.removeAllViews();
+        for (Artist lineup : event.getLineup()) {
+            LineupView view = new LineupView(getActivity());
+            view.getTitle().setText(lineup.getName());
+
+            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            lineupContainer.addView(view, layoutParams);
+
+            view.bindToFavoriteArtist(lineup);
+
+            view.setOnClickListener(new OnLineupViewClick(lineup, event));
+
+
+            boolean lastItem = (event.getLineup().indexOf(lineup) == event.getLineup().size() - 1);
+            if (lastItem) {
+                view.getDivider().setVisibility(View.GONE);
+            }
+
+        }
+    }
+
+    private void updateVenue() {
         if (null != event.getVenue()) {
             Venue venue = event.getVenue();
 
@@ -165,49 +178,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             }
         } else {
             venueDetails.setOnClickListener(null);
-        }
-
-        if (event.getTicketOfferings().size() < 2)
-            findTicketsOptions.setVisibility(View.GONE);
-        else
-            findTicketsOptions.setVisibility(View.VISIBLE);
-        findTicketsOptions.setOnClickListener(new OnFindTicketsOptionsClick(event));
-
-        OnFindTicketsClick onFindTicketsClick = new OnFindTicketsClick(event);
-        findTickets.setOnClickListener(onFindTicketsClick);
-
-        artistImage.setDefaultImage(DefaultImageHelper.computeDefaultDpDrawableId(getActivity(), event.getNumericId()));
-
-        String imageUrl = null;
-        //TODO: Refactor this when Activity -> Fragment data lifecycle gets implemented
-        lineupContainer.removeAllViews();
-        for (Artist lineup : event.getLineup()) {
-            LineupView view = new LineupView(getActivity());
-            view.getTitle().setText(lineup.getName());
-
-            LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-            lineupContainer.addView(view, layoutParams);
-
-            view.bindToFavoriteArtist(lineup);
-
-            view.setOnClickListener(new OnLineupViewClick(lineup, event));
-
-            if (null == imageUrl) {
-                String imageKey = lineup.getBestImageKey(IMAGE_PREFERRED_SHOW_KEYS);
-
-                if (null != imageKey) {
-                    imageUrl = lineup.getImageURL(imageKey);
-                }
-            }
-
-            boolean lastItem = (event.getLineup().indexOf(lineup) == event.getLineup().size() - 1);
-            if (lastItem) {
-                view.getDivider().setVisibility(View.GONE);
-            }
-
-        }
-        if (null != imageUrl) {
-            artistImage.setImageUrl(imageUrl, LiveNationApplication.get().getImageLoader(), TransitioningImageView.LoadAnimation.FADE_ZOOM);
         }
     }
 
@@ -250,93 +220,6 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         map.addMarker(marker);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapLocationCache, DEFAULT_MAP_ZOOM));
     }
-
-    private ConfigFilePersistenceHelper getInstalledAppConfig() {
-        return LiveNationApplication.get().getInstalledAppConfig();
-    }
-
-
-    //region Find Tickets
-
-    protected void showTicketOffering(TicketOffering offering) {
-        String buyLink = offering.getPurchaseUrl();
-        if (Ticketing.isTicketmasterUrl(buyLink)) {
-            if (getInstalledAppConfig().isCommerceAvailable()) {
-                Intent confirmIntent = new Intent(getActivity(), OrderConfirmationActivity.class);
-                confirmIntent.putExtra(OrderConfirmationActivity.EXTRA_EVENT, event);
-                Ticketing.showFindTicketsActivityForUrl(getActivity(), confirmIntent, buyLink);
-            } else {
-                CommerceUnavailableDialogFragment dialogFragment = new CommerceUnavailableDialogFragment();
-                dialogFragment.show(getFragmentManager(), CommerceUnavailableDialogFragment.TAG);
-            }
-        } else {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(buyLink)));
-            Toast.makeText(getActivity(), R.string.tickets_third_party_toast, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class OnFindTicketsOptionsClick implements View.OnClickListener, TicketOfferingsDialogFragment.OnTicketOfferingClickedListener {
-        private final Event event;
-
-        private OnFindTicketsOptionsClick(Event event) {
-            this.event = event;
-        }
-
-        @Override
-        public void onClick(View view) {
-            Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.OPTIONS_BUTTON_TAP, AnalyticsCategory.SDP, props);
-
-            TicketOfferingsDialogFragment dialogFragment = TicketOfferingsDialogFragment.newInstance(event);
-            dialogFragment.setOnTicketOfferingClickedListener(this);
-            dialogFragment.show(getFragmentManager(), "TicketOfferingsDialogFragment");
-        }
-
-        @Override
-        public void onTicketOfferingClicked(TicketOffering offering) {
-            showTicketOffering(offering);
-        }
-    }
-
-    private class OnFindTicketsClick implements View.OnClickListener {
-        private final Event event;
-
-        public OnFindTicketsClick(Event event) {
-            this.event = event;
-        }
-
-        @Override
-        public void onClick(final View v) {
-            List<TicketOffering> offerings = event.getTicketOfferings();
-            if (offerings.isEmpty()) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        R.string.no_ticket_offerings,
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            TicketOffering ticketOffering = offerings.get(0);
-
-            final Props props = AnalyticsHelper.getPropsForEvent(event);
-            LiveNationAnalytics.track(AnalyticConstants.FIND_TICKETS_TAP, AnalyticsCategory.SDP, props);
-
-            LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
-                @Override
-                public void onResponse(AccessToken response) {
-                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP, AnalyticConstants.TOKEN, response.getToken(), AnalyticConstants.TOKEN_TYPE, response.getType());
-                }
-
-                @Override
-                public void onErrorResponse(LiveNationError error) {
-                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP);
-                }
-            });
-            showTicketOffering(ticketOffering);
-        }
-    }
-
-    //endregion
-
 
     private class OnVenueDetailsClick implements View.OnClickListener {
         private final Event event;
