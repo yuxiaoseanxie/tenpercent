@@ -44,14 +44,14 @@ public class ShowTipsFragment extends LiveNationFragment {
                 @Override
                 public void onResponse(EventTips response) {
                     pb.setVisibility(View.GONE);
-                    LineUpTipsFragment lineUpFragment = LineUpTipsFragment.newInstance(response);
-                    addFragment(R.id.lineup_container, lineUpFragment, LineUpTipsFragment.class.getSimpleName());
+                    addFragment(R.id.lineup_container, LineUpTipsFragment.newInstance(response), LineUpTipsFragment.class.getSimpleName());
+                    addFragment(R.id.permissions_container, ShowPermissionsFragment.newInstance(response), ShowPermissionsFragment.class.getSimpleName());
                 }
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
                     pb.setVisibility(View.GONE);
-                    //TODO display an error message
+                    //TODO display an error message?
                 }
             });
         }

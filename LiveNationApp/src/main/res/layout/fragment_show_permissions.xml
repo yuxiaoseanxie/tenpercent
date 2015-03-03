@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <include
+        android:id="@+id/fragment_permissions_header"
+        layout="@layout/list_header"
+        android:layout_height="@dimen/ui_header_transparent_min_height"
+        android:layout_width="match_parent"/>
+    <LinearLayout
+        android:id="@+id/fragment_permissions_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_permissions_header"
+        android:orientation="vertical"/>
+</RelativeLayout>
