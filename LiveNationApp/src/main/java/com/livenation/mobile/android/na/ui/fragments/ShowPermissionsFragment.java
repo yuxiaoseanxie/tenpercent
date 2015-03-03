@@ -18,7 +18,8 @@ import android.widget.TextView;
  */
 public class ShowPermissionsFragment extends LiveNationFragment {
     private static final String EVENT_TIPS = "com.livenation.mobile.android.na.ui.fragments.ShowPermissionsFragment.EVENT_TIPS";
-    private ViewGroup permissionContainer;
+    private ViewGroup allowedpermissionContainer;
+    private ViewGroup notAllowedpermissionContainer;
 
     public static ShowPermissionsFragment newInstance(EventTips eventTips) {
         ShowPermissionsFragment fragment = new ShowPermissionsFragment();
@@ -31,27 +32,32 @@ public class ShowPermissionsFragment extends LiveNationFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_permissions, container, false);
-        TextView header = (TextView) view.findViewById(R.id.fragment_permissions_header);
-        header.setText(R.string.tips_allowed_section_title);
-        permissionContainer = (ViewGroup) view.findViewById(R.id.fragment_permissions_container);
+        TextView allowedHeader = (TextView) view.findViewById(R.id.fragment_permissions_allowed_header);
+        allowedHeader.setText(R.string.tips_allowed_section_title);
+
+        TextView notAllowedHeader = (TextView) view.findViewById(R.id.fragment_permissions_not_allowed_header);
+        notAllowedHeader.setText(R.string.tips_not_allowed_section_title);
+
+        ViewGroup allowedpermissionContainer = (ViewGroup) view.findViewById(R.id.fragment_permissions_allowed_container);
+        ViewGroup notAllowedpermissionContainer = (ViewGroup) view.findViewById(R.id.fragment_permissions_not_allowed_container);
 
         EventTips eventTips = (EventTips) getArguments().getSerializable(EVENT_TIPS);
         String[] allowed = eventTips.getTipsRules().getAllowed();
         String[] notAllowed = eventTips.getTipsRules().getNotAllowed();
 
-        permissionContainer.removeAllViews();
-        populateList(allowed, R.drawable.show_tip_allowed_checkmark);
-        populateList(notAllowed, R.drawable.show_tip_disallowed);
+        populateList(allowedpermissionContainer, allowed, R.drawable.show_tip_allowed_checkmark);
+        populateList(notAllowedpermissionContainer, notAllowed, R.drawable.show_tip_disallowed);
         return view;
     }
 
-    private void populateList(String[] permissions, int iconRes) {
+    private void populateList(ViewGroup container, String[] permissions, int iconRes) {
+        container.removeAllViews();
         for (int i = 0; i < permissions.length; i++) {
             PermissionView view = new PermissionView(getActivity());
             view.getTitle().setText(permissions[i]);
             view.getIcon().setImageDrawable(getResources().getDrawable(iconRes));
             TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
-            permissionContainer.addView(view, layoutParams);
+            container.addView(view, layoutParams);
         }
     }
 }

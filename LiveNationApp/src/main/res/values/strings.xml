@@ -276,6 +276,7 @@
     <string name="tips_box_office_time">Box Office Open</string>
     <string name="tips_gate_time">Doors Opens</string>
     <string name="tips_allowed_section_title">What\'s allowed</string>
+    <string name="tips_not_allowed_section_title">What\'s not allowed</string>
 
 
     <!-- App Google Indexing-->
