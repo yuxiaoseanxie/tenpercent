@@ -10,7 +10,6 @@
     <dimen name="minimum_pressable">48dp</dimen>
     <dimen name="ui_gutter_width">58dp</dimen>
     <dimen name="list_item_height">80dp</dimen>
-    <dimen name="lineup_list_item_height">60dp</dimen>
     <dimen name="one_dp">1dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
 
@@ -106,7 +105,9 @@
     <dimen name="on_boarding_skip_height">32dp</dimen>
 
     <!-- Lineup -->
-    <dimen name="line_up_time_width">60dp</dimen>
+    <dimen name="tips_left_column_width">60dp</dimen>
+    <dimen name="tips_lineup_list_item_height">45dp</dimen>
+    <dimen name="tips_permission_list_item_margin_top_bottom">12dp</dimen>
 
     <!-- Urban Airship -->
     <dimen name="widget_margin">8dp</dimen>

@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         </FrameLayout>
+    <FrameLayout android:id="@+id/permissions_container"
+                 android:layout_below="@id/lineup_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+    </FrameLayout>
     <ProgressBar
         android:id="@+id/lineup_pb"
         android:layout_centerInParent="true"
