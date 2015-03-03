@@ -4,21 +4,18 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <include
-        android:id="@+id/fragment_venue_header"
-        layout="@layout/fragment_venue_header"
+    <FrameLayout
+        android:id="@+id/fragment_venue_header_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content"
+        />
 
-    <include
-        android:id="@+id/fragment_venue_details"
-        layout="@layout/sub_venue_details"
+    <FrameLayout
+        android:id="@+id/fragment_venue_detail_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/gap_medium"
-        android:background="@drawable/ui_underscore_background"></include>
-
-    <ImageView style="@style/SwooshDivider.with_top_margin"/>
+        />
 
     <TextView
         style="@style/ui_header_transparent"

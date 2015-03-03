@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/fragment_show_header"
+                android:id="@+id/show_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
     <FrameLayout
-        android:id="@+id/fragment_show_frame_foreground"
+        android:id="@+id/show_frame_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="@drawable/show_image_foreground">
 
         <com.livenation.mobile.android.na.ui.views.TransitioningImageView
-            android:id="@+id/fragment_show_image"
+            android:id="@+id/show_image"
             android:layout_width="match_parent"
             android:background="@color/black"
             android:layout_height="@dimen/detail_page_image_height"/>
     </FrameLayout>
 
     <TextView
-        android:id="@+id/fragment_show_artist_title"
+        android:id="@+id/show_artist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/fragment_show_frame_foreground"
+        android:layout_alignBottom="@id/show_frame_foreground"
         android:layout_marginBottom="@dimen/gap_medium"
         android:layout_marginLeft="@dimen/gap_medium"
         android:layout_marginRight="@dimen/gap_medium"

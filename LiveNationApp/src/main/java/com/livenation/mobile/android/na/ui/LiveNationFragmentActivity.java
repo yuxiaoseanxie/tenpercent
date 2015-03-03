@@ -23,6 +23,7 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
@@ -228,5 +229,19 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
         }
 
         super.onDestroy();
+    }
+
+    protected void addFragment(Fragment fragment, int idContainer) {
+        Fragment existingFragment = getSupportFragmentManager().findFragmentByTag(fragment.getClass().getSimpleName());
+        if (existingFragment == null) {
+            getSupportFragmentManager().beginTransaction().add(idContainer, fragment, fragment.getClass().getSimpleName()).commit();
+        }
+    }
+
+    protected void addFragment(Fragment fragment, int idContainer, String tag) {
+        Fragment existingFragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (existingFragment == null) {
+            getSupportFragmentManager().beginTransaction().add(idContainer, fragment, tag).commit();
+        }
     }
 }
