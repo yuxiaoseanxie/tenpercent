@@ -13,22 +13,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
-import com.livenation.mobile.android.na.BuildConfig;
-import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
-import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
-import com.livenation.mobile.android.na.helpers.OrderHistoryUploadHelper;
 import com.livenation.mobile.android.na.notifications.InboxStatusPresenter;
-import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.EventsPresenter;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
@@ -49,10 +44,6 @@ import com.livenation.mobile.android.platform.init.LiveNationLibrary;
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.urbanairship.AirshipConfigOptions;
-import com.urbanairship.Logger;
-import com.urbanairship.UAirship;
-import com.urbanairship.push.notifications.DefaultNotificationFactory;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -64,7 +55,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 
 public class LiveNationApplication extends Application {
     private static LiveNationApplication instance;
@@ -200,8 +190,8 @@ public class LiveNationApplication extends Application {
         if (installedAppConfig.isUpdateAdvisable())
             installedAppConfig.update();
 
-        setupNotifications();
-        setupTicketing();
+        //setupNotifications();
+        //setupTicketing();
         setupInternetStateReceiver();
 
 
@@ -226,45 +216,46 @@ public class LiveNationApplication extends Application {
         }
     }
 
-    private void setupNotifications() {
-        Logger.logLevel = Log.VERBOSE;
-        AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(this);
-        airshipConfigOptions.inProduction = !BuildConfig.DEBUG;
-        UAirship.takeOff(this, airshipConfigOptions, new UAirship.OnReadyCallback() {
-            @Override
-            public void onAirshipReady(UAirship airship) {
-                airship.getPushManager().setPushEnabled(true);
-            }
-        });
-
-        // Getting the UAirship instance asynchronously
-        // Be carefull: Calling shared() now blocks the first time until airship is ready
-        UAirship.shared(new UAirship.OnReadyCallback() {
-            @Override
-            public void onAirshipReady(UAirship airship) {
-                airship.getPushManager().setPushEnabled(true);
-                airship.getPushManager().setUserNotificationsEnabled(true);
-                DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(LiveNationApplication.this);
-                notificationBuilder.setSmallIconId(R.drawable.ic_stat_notify);
-                UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
-                NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
-                if (notificationsRegistrationManager.shouldRegister())
-                    notificationsRegistrationManager.register();
-            }
-        });
-    }
-
-    private void setupTicketing() {
-        Ticketing.Config ticketingConfig = new Ticketing.Config();
-        ticketingConfig.setContext(this);
-        ticketingConfig.setImageLoader(getImageLoader());
-        ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
-        ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
-        ticketingConfig.setOrderHistoryUploadHandler(new OrderHistoryUploadHelper());
-        ticketingConfig.setEnvironment(getTicketingEnvironment(getApplicationContext()));
-        Ticketing.init(ticketingConfig);
-        Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
-    }
+    /**
+     * private void setupNotifications() {
+     * Logger.logLevel = Log.VERBOSE;
+     * AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(this);
+     * airshipConfigOptions.inProduction = !BuildConfig.DEBUG;
+     * UAirship.takeOff(this, airshipConfigOptions, new UAirship.OnReadyCallback() {
+     *
+     * @Override public void onAirshipReady(UAirship airship) {
+     * airship.getPushManager().setPushEnabled(true);
+     * }
+     * });
+     * <p/>
+     * // Getting the UAirship instance asynchronously
+     * // Be carefull: Calling shared() now blocks the first time until airship is ready
+     * UAirship.shared(new UAirship.OnReadyCallback() {
+     * @Override public void onAirshipReady(UAirship airship) {
+     * airship.getPushManager().setPushEnabled(true);
+     * airship.getPushManager().setUserNotificationsEnabled(true);
+     * DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(LiveNationApplication.this);
+     * notificationBuilder.setSmallIconId(R.drawable.ic_stat_notify);
+     * UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
+     * NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
+     * if (notificationsRegistrationManager.shouldRegister())
+     * notificationsRegistrationManager.register();
+     * }
+     * });
+     * }
+     * <p/>
+     * private void setupTicketing() {
+     * Ticketing.Config ticketingConfig = new Ticketing.Config();
+     * ticketingConfig.setContext(this);
+     * ticketingConfig.setImageLoader(getImageLoader());
+     * ticketingConfig.setAnalyticsHandler(new TicketingAnalyticsBridge());
+     * ticketingConfig.setPushTokenProvider(NotificationsRegistrationManager.getInstance());
+     * ticketingConfig.setOrderHistoryUploadHandler(new OrderHistoryUploadHelper());
+     * ticketingConfig.setEnvironment(getTicketingEnvironment(getApplicationContext()));
+     * Ticketing.init(ticketingConfig);
+     * Ticketing.setQaModeEnabled(BuildConfig.DEBUG);
+     * }*
+     */
 
     private synchronized void setupInternetStateReceiver() {
         internetStateReceiver = new BroadcastReceiver() {
