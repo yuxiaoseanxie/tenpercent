@@ -4,6 +4,10 @@ package com.livenation.mobile.android.na.utils;
 import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,5 +29,17 @@ public class EventUtils {
         Intent intent = new Intent(context, ShowActivity.class);
         intent.putExtras(ShowActivity.getArguments(eventId));
         context.startActivity(intent);
+    }
+
+    static public boolean isAcomingEvent(Event event) {
+        Date startDate = event.getLocalStartTime();
+        if (startDate != null) {
+            long timeDiff = startDate.getTime() - Calendar.getInstance(Locale.getDefault()).getTimeInMillis();
+            if (Math.abs(timeDiff) <= (12 * 60 * 60 * 1000)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
