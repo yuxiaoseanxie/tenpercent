@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/uber_icon"
             android:layout_width="@dimen/ui_gutter_width"
             android:layout_height="@dimen/minimum_pressable"
             android:scaleType="centerInside"
@@ -23,6 +24,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/uber_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/uber_popup_book_ride_soon"
@@ -31,7 +33,7 @@
             <TextView
                 style="@style/ln.text.small.gray"
                 android:layout_marginTop="@dimen/uber_new_rider_linespacing"
-                android:id="@+id/uber_free_ride_text"
+                android:id="@+id/uber_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

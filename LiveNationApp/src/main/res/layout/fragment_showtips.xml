@@ -2,17 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
+              android:animateLayoutChanges="true"
+              android:layout_alignWithParentIfMissing="true"
               android:layout_height="match_parent">
+
 
     <FrameLayout android:id="@+id/lineup_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        </FrameLayout>
-    <FrameLayout android:id="@+id/permissions_container"
-                 android:layout_below="@id/lineup_container"
+        android:layout_height="wrap_content"/>
+    <FrameLayout android:id="@+id/uber_view_container"
+                 android:animateLayoutChanges="true"
                  android:layout_width="match_parent"
-                 android:layout_height="wrap_content">
-    </FrameLayout>
+                 android:layout_below="@id/lineup_container"
+                 android:layout_height="wrap_content"/>
+
+    <FrameLayout android:id="@+id/permissions_container"
+                 android:layout_below="@id/uber_view_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
+
     <ProgressBar
         android:id="@+id/lineup_pb"
         android:layout_centerInParent="true"

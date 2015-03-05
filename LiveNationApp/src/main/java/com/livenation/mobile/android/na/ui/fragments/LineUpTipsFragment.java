@@ -67,7 +67,9 @@ public class LineUpTipsFragment extends Fragment {
             TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             lineupContainer.addView(view, layoutParams);
 
-            if (lineup.type.equals(ScheduleEventType.PRE_EVENT)) {
+            if (scheduledEvents.indexOf(lineup) == scheduledEvents.size()-1) {
+                view.getDivider().setVisibility(View.GONE);
+            } else if (lineup.type.equals(ScheduleEventType.PRE_EVENT)) {
                 view.getDivider().setBackgroundDrawable(getResources().getDrawable(R.drawable.dotted_gray));
                 view.getDivider().setVisibility(View.VISIBLE);
             } else {

@@ -566,7 +566,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
         private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
             View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
-            TextView text = (TextView) view.findViewById(R.id.uber_free_ride_text);
+            TextView text = (TextView) view.findViewById(R.id.uber_subtitle);
             text.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
