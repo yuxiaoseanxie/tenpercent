@@ -26,6 +26,11 @@
     <issue id="RtlHardcoded" severity="error"/>
     <issue id="RtlEnabled" severity="error"/>
 
+    <issue id="RtlHardcoded">
+        <ignore path="src/main/res/layout/list_item_ticket_offering.xml"/>
+        <!-- Cannot add paddingStart because can result in a crash on some specific devices older than API 17-->
+    </issue>
+
 
     <!-- adr-appLiveNation/LiveNationApp/src/main/res/values/* -->
     <issue id="TypographyDashes">
