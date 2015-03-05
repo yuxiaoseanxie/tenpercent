@@ -28,7 +28,7 @@ public abstract class LiveNationFragmentTab extends LiveNationFragment implement
         listView = (StickyListHeadersListView) view.findViewById(R.id.fragment_tab_list);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_tab_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorScheme(com.livenation.mobile.android.ticketing.R.color.refresh_color_1, com.livenation.mobile.android.ticketing.R.color.refresh_color_2, com.livenation.mobile.android.ticketing.R.color.refresh_color_3, com.livenation.mobile.android.ticketing.R.color.refresh_color_4);
+        swipeRefreshLayout.setColorScheme(R.color.refresh_color_1, R.color.refresh_color_2, R.color.refresh_color_3, R.color.refresh_color_4);
 
         emptyListViewControl = (EmptyListViewControl) view.findViewById(android.R.id.empty);
         emptyListViewControl.setViewMode(EmptyListViewControl.ViewMode.LOADING);

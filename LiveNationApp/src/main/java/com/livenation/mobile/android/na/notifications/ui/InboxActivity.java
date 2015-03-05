@@ -157,15 +157,14 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refresh:
-                inbox.setListShownNoAnimation(false);
-                RichPushManager.shared().refreshMessages();
-                break;
+        int i = item.getItemId();
+        if (i == R.id.refresh) {
+            inbox.setListShownNoAnimation(false);
+            RichPushManager.shared().refreshMessages();
 
-            case android.R.id.home:
-                navigateToMain();
-                break;
+        } else if (i == android.R.id.home) {
+            navigateToMain();
+
         }
         return true;
     }
@@ -248,52 +247,51 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         Logger.debug("onActionItemClicked");
-        switch (item.getItemId()) {
-            case R.id.mark_read:
-                richPushInbox.markMessagesRead(new HashSet<String>(inbox.getSelectedMessages()));
-                break;
-            case R.id.delete:
-                richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));
-                break;
-            case R.id.calendar:
+        int i = item.getItemId();
+        if (i == R.id.mark_read) {
+            richPushInbox.markMessagesRead(new HashSet<String>(inbox.getSelectedMessages()));
 
-                String messageId = inbox.getSelectedMessages().get(0);
-                RichPushMessage message = richPushInbox.getMessage(messageId);
-                final int type = getMessageType(message);
-                final String eventId = String.valueOf(DataModelHelper.getNumericEntityId(message.getExtras().getString("id")));
-                final String artistName = message.getExtras().getString("artist_name");
-                final String venueName = message.getExtras().getString("venue_name");
-                final String localStartTime = message.getExtras().getString("local_start_time");
-                final String onSaleDate = message.getExtras().getString("on_sale_date");
-                if (artistName != null) {
-                    DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
-                    CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(null, artistName + " " + venueName);
-                    switch (type) {
-                        case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
-                        case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:
-                        case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE:
-                            if (onSaleDate != null) {
-                                Date onSaleDateFormatted = fmt.parseDateTime(onSaleDate).toDate();
-                                calendarItem.setStartDate(onSaleDateFormatted);
-                            }
-                            break;
-                        case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
-                            if (localStartTime != null) {
-                                Date localStartTimeonSaleDateFormatted = fmt.parseDateTime(localStartTime).toDate();
-                                calendarItem.setStartDate(localStartTimeonSaleDateFormatted);
-                            }
-                            break;
-                    }
+        } else if (i == R.id.delete) {
+            richPushInbox.deleteMessages(new HashSet<String>(inbox.getSelectedMessages()));
 
-                    if (calendarItem.getStartDate() != null && calendarItem.getStartDate().compareTo(Calendar.getInstance().getTime()) > 0) {
-                        CalendarUtils.addEventToCalendar(calendarItem, eventId, InboxActivity.this);
-                    } else {
-                        Toast.makeText(InboxActivity.this, R.string.calendar_add_event_not_possible_message, Toast.LENGTH_SHORT).show();
-                    }
+        } else if (i == R.id.calendar) {
+            String messageId = inbox.getSelectedMessages().get(0);
+            RichPushMessage message = richPushInbox.getMessage(messageId);
+            final int type = getMessageType(message);
+            final String eventId = String.valueOf(DataModelHelper.getNumericEntityId(message.getExtras().getString("id")));
+            final String artistName = message.getExtras().getString("artist_name");
+            final String venueName = message.getExtras().getString("venue_name");
+            final String localStartTime = message.getExtras().getString("local_start_time");
+            final String onSaleDate = message.getExtras().getString("on_sale_date");
+            if (artistName != null) {
+                DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
+                CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(null, artistName + " " + venueName);
+                switch (type) {
+                    case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
+                    case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:
+                    case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE:
+                        if (onSaleDate != null) {
+                            Date onSaleDateFormatted = fmt.parseDateTime(onSaleDate).toDate();
+                            calendarItem.setStartDate(onSaleDateFormatted);
+                        }
+                        break;
+                    case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
+                        if (localStartTime != null) {
+                            Date localStartTimeonSaleDateFormatted = fmt.parseDateTime(localStartTime).toDate();
+                            calendarItem.setStartDate(localStartTimeonSaleDateFormatted);
+                        }
+                        break;
                 }
-                break;
-            default:
-                return false;
+
+                if (calendarItem.getStartDate() != null && calendarItem.getStartDate().compareTo(Calendar.getInstance().getTime()) > 0) {
+                    CalendarUtils.addEventToCalendar(calendarItem, eventId, InboxActivity.this);
+                } else {
+                    Toast.makeText(InboxActivity.this, R.string.calendar_add_event_not_possible_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        } else {
+            return false;
         }
 
         actionMode.finish();

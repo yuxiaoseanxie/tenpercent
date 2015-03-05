@@ -199,47 +199,41 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         }
 
 
-        switch (item.getItemId()) {
-            case R.id.menu_home_notifications_item:
-                LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR);
-                startActivity(new Intent(this, InboxActivity.class));
-                return true;
+        int i = item.getItemId();
+        if (i == R.id.menu_home_notifications_item) {
+            LiveNationAnalytics.track(AnalyticConstants.NOTIFICATION_ICON_TAP, AnalyticsCategory.ACTION_BAR);
+            startActivity(new Intent(this, InboxActivity.class));
+            return true;
+        } else if (i == R.id.menu_home_debug_item) {
+            startActivity(new Intent(this, DebugActivity.class));
+            return true;
+        } else if (i == R.id.menu_home_search_item) {//Analytics attributes
+            Props props = new Props();
+            props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
 
-            case R.id.menu_home_debug_item:
-                startActivity(new Intent(this, DebugActivity.class));
-                return true;
-
-            case R.id.menu_home_search_item:
-                //Analytics attributes
-                Props props = new Props();
-                props.put(AnalyticConstants.SOURCE, AnalyticsCategory.HOME_SCREEN);
-
-                LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
-                startActivity(new Intent(this, FavoriteSearchActivity.class));
-                return true;
-            case R.id.menu_home_help_item:
-                startActivity(new Intent(this, HelpMenuActivity.class));
-                LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR);
-                return true;
-
-            case R.id.menu_home_legal_item:
-                LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR);
-                startActivity(new Intent(this, LegalActivity.class));
-                return true;
-
-            case R.id.menu_home_contact_item:
-                LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
-                LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
-                OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
-                ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
-                return true;
-
-            case R.id.menu_home_logout_item:
-                LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
-                LoginHelper.logout(null);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            LiveNationAnalytics.track(AnalyticConstants.SEARCH_ICON_TAP, AnalyticsCategory.ACTION_BAR, props);
+            startActivity(new Intent(this, FavoriteSearchActivity.class));
+            return true;
+        } else if (i == R.id.menu_home_help_item) {
+            startActivity(new Intent(this, HelpMenuActivity.class));
+            LiveNationAnalytics.track(AnalyticConstants.HELP_TAP, AnalyticsCategory.ACTION_BAR);
+            return true;
+        } else if (i == R.id.menu_home_legal_item) {
+            LiveNationAnalytics.track(AnalyticConstants.LEGAL_CREDIT_TAP, AnalyticsCategory.ACTION_BAR);
+            startActivity(new Intent(this, LegalActivity.class));
+            return true;
+        } else if (i == R.id.menu_home_contact_item) {
+            LiveNationAnalytics.track(AnalyticConstants.CONTACT_TAP, AnalyticsCategory.ACTION_BAR);
+            LiveNationAnalytics.screen(AnalyticConstants.SCREEN_CONTACTS_US, null);
+            OmnitureTracker.trackState(AnalyticConstants.OMNITURE_SCREEN_CONTACTS_US, null);
+            ContactUtils.buildAndOpenContactUsEmail(this.getApplicationContext());
+            return true;
+        } else if (i == R.id.menu_home_logout_item) {
+            LiveNationAnalytics.track(AnalyticConstants.LOGOUT_TAP, AnalyticsCategory.ACTION_BAR);
+            LoginHelper.logout(null);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

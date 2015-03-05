@@ -26,14 +26,14 @@ public class FavoriteActivity extends LiveNationFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_home_search_item:
-                Intent intent = new Intent(this, FavoriteSearchActivity.class);
-                intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_SEARCH_MODE, FavoriteSearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES);
-                intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_ON_CLICK_ACTION, FavoriteSearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
+        int i = item.getItemId();
+        if (i == R.id.menu_home_search_item) {
+            Intent intent = new Intent(this, FavoriteSearchActivity.class);
+            intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_SEARCH_MODE, FavoriteSearchActivity.EXTRA_VALUE_SEARCH_MODE_ARTIST_VENUES);
+            intent.putExtra(FavoriteSearchActivity.EXTRA_KEY_ON_CLICK_ACTION, FavoriteSearchActivity.EXTRA_VALUE_ON_CLICK_ACTION_FAVORITE);
 
-                startActivity(intent);
-                return true;
+            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

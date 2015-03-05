@@ -42,17 +42,15 @@ public abstract class DetailBaseFragmentActivity extends LiveNationFragmentActiv
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                onSearch();
-                return true;
-
-            case R.id.action_share:
-                onShare();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        int i = item.getItemId();
+        if (i == R.id.action_search) {
+            onSearch();
+            return true;
+        } else if (i == R.id.action_share) {
+            onShare();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

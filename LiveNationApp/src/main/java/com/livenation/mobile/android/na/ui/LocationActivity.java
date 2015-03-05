@@ -36,30 +36,28 @@ public class LocationActivity extends LiveNationFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_home_search_item:
-                startCitySearchActivity();
-                break;
+        int i = item.getItemId();
+        if (i == R.id.menu_home_search_item) {
+            startCitySearchActivity();
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE_CITY_SEARCH:
-                if (resultCode == Activity.RESULT_OK) {
-                    City city = (City) data.getSerializableExtra(CitySearchFragment.DATA_RESULT_KEY);
-                    Props props = new Props();
-                    props.put(AnalyticConstants.LOCATION_NAME, city.getName());
-                    props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
-                    LiveNationAnalytics.track(AnalyticConstants.SUBMIT_LOCATION_QUERY, AnalyticsCategory.LOCATION, props);
-                    LiveNationApplication.getLocationProvider().addLocationHistory(city);
-                    LiveNationApplication.getLocationProvider().setLocationMode(LocationManager.MODE_USER);
-                }
-                break;
-            default:
+        if (requestCode == REQUEST_CODE_CITY_SEARCH) {
+            if (resultCode == Activity.RESULT_OK) {
+                City city = (City) data.getSerializableExtra(CitySearchFragment.DATA_RESULT_KEY);
+                Props props = new Props();
+                props.put(AnalyticConstants.LOCATION_NAME, city.getName());
+                props.put(AnalyticConstants.LOCATION_LATLONG, city.getLat() + "," + city.getLng());
+                LiveNationAnalytics.track(AnalyticConstants.SUBMIT_LOCATION_QUERY, AnalyticsCategory.LOCATION, props);
+                LiveNationApplication.getLocationProvider().addLocationHistory(city);
+                LiveNationApplication.getLocationProvider().setLocationMode(LocationManager.MODE_USER);
+            }
 
+        } else {
         }
     }
 
