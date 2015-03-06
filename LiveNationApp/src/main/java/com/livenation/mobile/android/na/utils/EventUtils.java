@@ -39,7 +39,6 @@ public class EventUtils {
                 return true;
             }
         }
-
         return false;
     }
 }
