@@ -36,7 +36,6 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private final static String VENUE_LNG = "com.livenation.mobile.android.na.ui.fragments.UberFragment.VENUE_LNG";
     private final static String VENUE_ADDRESS = "com.livenation.mobile.android.na.ui.fragments.UberFragment.VENUE";
     private final static String VENUE_NAME = "com.livenation.mobile.android.na.ui.fragments.UberFragment.VENUE";
-    private final static String UBER_LISTENER = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_LISTENER";
     private final static String UBER_MIN = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_MIN";
     private final static String UBER_ESTIMATES = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_ESTIMATES";
 
@@ -53,33 +52,41 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private String estimates;
 
     public static UberFragment newInstance(Venue venue, Context context) {
-        UberFragment fragment = new UberFragment();
         float lat = Double.valueOf(venue.getLatitude()).floatValue();
         float lng = Double.valueOf(venue.getLongitude()).floatValue();
         String venueAddress = UberHelper.getUberVenueAddress(venue);
         String venueName = UberHelper.getUberVenueName(venue);
+
+        return init(lat, lng, venueAddress, venueName, context);
+    }
+
+    public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue, Context context) {
+        float endLat = Double.valueOf(venue.getLat()).floatValue();
+        float endLng = Double.valueOf(venue.getLng()).floatValue();
+        String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
+        String venueName = venue.getName();
+
+        return init(endLat, endLng, venueAddress, venueName, context);
+    }
+
+    private static UberFragment init(float lat, float lng, String address, String name, Context context) {
+        UberFragment fragment = new UberFragment();
         uberClient = new UberClient(context);
 
-        /**Bundle bundle = new Bundle();
-         bundle.putFloat(VENUE_LAT, lat);
-         bundle.putFloat(VENUE_LNG, lng);
-         bundle.putString(VENUE_ADDRESS, venueAddress);
-         bundle.putString(VENUE_NAME, venueName);
-         bundle.putSerializable(UBER_LISTENER, listener);**/
-
         Bundle bundle = new Bundle();
-        Double[] array = {34.0878, -118.3722};
+        bundle.putFloat(VENUE_LAT, lat);
+        bundle.putFloat(VENUE_LNG, lng);
+        bundle.putString(VENUE_ADDRESS, address);
+        bundle.putString(VENUE_NAME, name);
 
-        bundle.putFloat(VENUE_LAT, 34.0878f);
-        bundle.putFloat(VENUE_LNG, -118.3728f);
+        /**Bundle bundle = new Bundle();
+         Double[] array = {34.0878, -118.3722};**/
+
+        bundle.putFloat(VENUE_LAT, lat);
+        bundle.putFloat(VENUE_LNG, lng);
         bundle.putString(VENUE_ADDRESS, "8470 Santa Monica Blvd West Hollywood, CA 90069");
         bundle.putString(VENUE_NAME, "Irish Coffee Bistro");
         fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue) {
-        UberFragment fragment = new UberFragment();
         return fragment;
     }
 
