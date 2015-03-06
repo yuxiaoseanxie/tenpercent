@@ -25,7 +25,9 @@
     <View
         android:id="@+id/view_lineup_divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/one_dp"
+        android:layout_height="@dimen/divider_height"
+        android:background="@drawable/dotted_gray"
+        android:layerType="software"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/view_lineup_time"
         android:layout_toEndOf="@id/view_lineup_time"/>
