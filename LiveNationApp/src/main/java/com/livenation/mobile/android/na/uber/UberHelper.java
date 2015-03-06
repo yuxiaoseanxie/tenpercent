@@ -1,10 +1,18 @@
 package com.livenation.mobile.android.na.uber;
 
 import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvider;
+import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
+import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
+import com.livenation.mobile.android.na.analytics.Props;
+import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
+import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
+import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.mobilitus.tm.tickets.models.Venue;
 
 import java.util.ArrayList;
@@ -204,5 +212,21 @@ public class UberHelper {
         builder.appendQueryParameter("pickup", "my_location");
 
         return builder.build();
+    }
+
+    public static void trackUberkWebLaunch(final AnalyticsCategory category) {
+        final Props props = new Props();
+        LiveNationApplication.getLiveNationProxy().getCurrentUser(new BasicApiCallback<User>() {
+            @Override
+            public void onResponse(User response) {
+                props.put(AnalyticConstants.USER_ID, response.getId());
+                LiveNationAnalytics.track(AnalyticConstants.UBER_WEB_LAUNCH, category, props);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                LiveNationAnalytics.track(AnalyticConstants.UBER_WEB_LAUNCH, category, props);
+            }
+        });
     }
 }

@@ -405,11 +405,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void onUberSignupClick(Cart cart) {
+        UberHelper.trackUberkWebLaunch(AnalyticsCategory.YOUR_ORDERS);
+
         float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
         float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
         String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
         String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
-
 
         Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), lat, lng, venueAddress, venueName));
         startActivity(intent);

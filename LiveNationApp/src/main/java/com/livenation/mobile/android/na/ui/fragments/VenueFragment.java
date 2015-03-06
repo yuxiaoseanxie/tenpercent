@@ -422,6 +422,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private void goUberSignup(Venue venue) {
+        UberHelper.trackUberkWebLaunch(AnalyticsCategory.VDP);
+
         float endLat = Double.valueOf(venue.getLat()).floatValue();
         float endLng = Double.valueOf(venue.getLng()).floatValue();
         String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
