@@ -1,11 +1,12 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.listener.OnAddressClick;
 import com.livenation.mobile.android.na.listener.OnPhoneNumberClick;
-import com.livenation.mobile.android.na.listener.UberClick;
 import com.livenation.mobile.android.na.listener.OnVenueDetailClick;
+import com.livenation.mobile.android.na.listener.UberClick;
 import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
@@ -98,7 +99,7 @@ public class VenueDetailFragment extends Fragment {
 
         //Uber
         if (withUberRide && venue.getLat() != null && venue.getLng() != null) {
-            uberButton.setOnClickListener(new UberClick(this, venue));
+            uberButton.setOnClickListener(new UberClick(this, venue, AnalyticsCategory.ADP));
             swoochdivider.setVisibility(View.VISIBLE);
         } else {
             //hide travel options to unroutable venue

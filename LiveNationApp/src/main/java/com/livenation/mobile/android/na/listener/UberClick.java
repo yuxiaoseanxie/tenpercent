@@ -30,15 +30,17 @@ public class UberClick implements View.OnClickListener {
     private Fragment fragment;
     private Context context;
     private UberClient uberClient;
+    private AnalyticsCategory category;
     //create a replay subject for our fastest uber estimation.
     //this allows the API operation for the fastest uber to be cached, so the result is available instantly to anyone who subscribes to this object
     //This is useful when the UI that shows the estimate is repeatedly created and destroyed, as we can cache the estimate
     private ReplaySubject<LiveNationEstimate> fastestUber = ReplaySubject.create(1);
 
 
-    public UberClick(Fragment fragment, Venue venue) {
+    public UberClick(Fragment fragment, Venue venue, AnalyticsCategory category) {
         this.venue = venue;
         this.fragment = fragment;
+        this.category = category;
         this.context = fragment.getActivity().getApplicationContext();
         uberClient = new UberClient(context);
 
@@ -61,8 +63,7 @@ public class UberClick implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         //Analytics
-        LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_UBER_TAP, AnalyticsCategory.VDP, getUberProps());
-
+        UberHelper.trackUberTap(category);
         if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), context)) {
             //show uber price estimates
             showEstimates(venue);
@@ -86,6 +87,8 @@ public class UberClick implements View.OnClickListener {
     }
 
     private void goUberSignup(Venue venue) {
+        UberHelper.trackUberkWebLaunch(category);
+
         float endLat = Double.valueOf(venue.getLat()).floatValue();
         float endLng = Double.valueOf(venue.getLng()).floatValue();
         String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
@@ -93,16 +96,5 @@ public class UberClick implements View.OnClickListener {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), endLat, endLng, venueName, venueAddress));
         fragment.startActivity(intent);
-    }
-
-    private Props getUberProps() {
-        Props props = new Props();
-        boolean isUberInstalled = AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), LiveNationApplication.get().getApplicationContext());
-        String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
-        if (isUberInstalled) {
-            uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
-        }
-        props.put(AnalyticConstants.UBER_APP, uber_app_value);
-        return props;
     }
 }

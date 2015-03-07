@@ -123,5 +123,5 @@ public class VenueFragment extends LiveNationFragment {
             intent.putExtras(VenueShowsActivity.getArguments(venue));
             startActivity(intent);
         }
-    
+
 }
