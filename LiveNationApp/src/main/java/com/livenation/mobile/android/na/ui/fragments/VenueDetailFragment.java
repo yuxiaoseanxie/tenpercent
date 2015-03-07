@@ -7,7 +7,9 @@ import com.livenation.mobile.android.na.listener.OnAddressClick;
 import com.livenation.mobile.android.na.listener.OnPhoneNumberClick;
 import com.livenation.mobile.android.na.listener.OnVenueDetailClick;
 import com.livenation.mobile.android.na.listener.UberClick;
+import com.livenation.mobile.android.na.uber.UberFragmentListener;
 import com.livenation.mobile.android.na.uber.UberHelper;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Address;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
@@ -17,18 +19,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 /**
  * Created by elodieferrais on 2/26/15.
  */
-public class VenueDetailFragment extends Fragment {
+public class VenueDetailFragment extends LiveNationFragment {
     private final static String VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueDetailFragment.VENUE";
     private final static String WITH_UBER_RIDE_VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueDetailFragment.WITH_UBER_RIDE_VENUE";
 
@@ -39,8 +39,6 @@ public class VenueDetailFragment extends Fragment {
     private TextView telephone;
     private View venueInfo;
     private View phonebox;
-    private Button uberButton;
-    private View swoochdivider;
 
     public static VenueDetailFragment newInstance(Venue venue, boolean withUberRide) {
         VenueDetailFragment venueDetailFragment = new VenueDetailFragment();
@@ -62,8 +60,6 @@ public class VenueDetailFragment extends Fragment {
         telephone = (TextView) result.findViewById(R.id.fragment_venue_detail_telephone);
         venueInfo = result.findViewById(R.id.fragment_venue_detail_venue_info_link);
         phonebox = result.findViewById(R.id.fragment_venue_detail_phone_box);
-        uberButton = (Button) result.findViewById(R.id.fragment_venue_uber_button);
-        swoochdivider = result.findViewById(R.id.fragment_venue_detail_swoochdivider);
 
         refresh();
         return result;
@@ -98,13 +94,18 @@ public class VenueDetailFragment extends Fragment {
         }
 
         //Uber
-        if (withUberRide && venue.getLat() != null && venue.getLng() != null) {
-            uberButton.setOnClickListener(new UberClick(this, venue, AnalyticsCategory.ADP));
-            swoochdivider.setVisibility(View.VISIBLE);
-        } else {
-            //hide travel options to unroutable venue
-            uberButton.setVisibility(View.GONE);
-            swoochdivider.setVisibility(View.GONE);
+        if (withUberRide && getChildFragmentManager().findFragmentByTag(UberFragment.class.getSimpleName()) == null) {
+            UberFragment uberFragment = UberFragment.newInstance(venue, getActivity(), AnalyticsCategory.VDP, true);
+            uberFragment.fetchEstimation(new UberFragmentListener() {
+                @Override
+                public void onUberFragmentReady(UberFragment uberFragment) {
+                    VenueDetailFragment.this.addFragment(R.id.fragment_venue_uber_container, uberFragment, UberFragment.class.getSimpleName());
+                }
+
+                @Override
+                public void onUberFragmentNotAvailable(Throwable error) {
+                }
+            });
         }
 
     }

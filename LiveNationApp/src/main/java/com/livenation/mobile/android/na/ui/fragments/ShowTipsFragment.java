@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.uber.UberFragmentListener;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -66,7 +67,7 @@ public class ShowTipsFragment extends LiveNationFragment {
                     anim.setDuration(500);
                     lt.setAnimator(LayoutTransition.APPEARING, anim);
                     uberContainer.setLayoutTransition(lt);
-                    UberFragment fragment = UberFragment.newInstance(new com.mobilitus.tm.tickets.models.Venue(), getActivity());
+                    UberFragment fragment = UberFragment.newInstance(event.getVenue(), getActivity(), AnalyticsCategory.SDP);
                     fragment.fetchEstimation(new UberFragmentListener() {
                         @Override
                         public void onUberFragmentReady(UberFragment uberFragment) {

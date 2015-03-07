@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/uber_icon"
+    android:layout_width="@dimen/uber_button_width"
+    android:layout_height="@dimen/uber_button_height"
+    android:scaleType="fitCenter"
+    android:background="@null"
+    android:drawablePadding="@dimen/uber_button_drawable_padding"
+    android:text="@string/uber_book_ride"
+    android:textColor="@color/livenation_gray"
+    android:textAppearance="@style/ln.text.tiny.italic"
+    android:drawableTop="@drawable/uber_car_icon"/>

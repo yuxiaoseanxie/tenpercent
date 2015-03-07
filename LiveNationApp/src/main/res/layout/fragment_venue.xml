@@ -17,6 +17,10 @@
         android:layout_marginTop="@dimen/gap_medium"
         />
 
+    <ImageView
+        android:id="@+id/fragment_venue_detail_swoochdivider"
+        style="@style/SwooshDivider.with_top_margin"/>
+
     <TextView
         style="@style/ui_header_transparent"
         android:layout_width="match_parent"

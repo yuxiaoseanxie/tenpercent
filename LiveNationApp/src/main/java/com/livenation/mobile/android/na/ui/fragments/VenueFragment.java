@@ -85,8 +85,8 @@ public class VenueFragment extends LiveNationFragment {
 
 
     private void refresh() {
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue, true, R.dimen.fragment_venue_map_height)).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true)).commit();
+        addFragment(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue, true, R.dimen.fragment_venue_map_height), VenueMapFragment.class.getSimpleName());
+        addFragment(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true), VenueDetailFragment.class.getSimpleName());
 
     }
 
@@ -124,4 +124,5 @@ public class VenueFragment extends LiveNationFragment {
             startActivity(intent);
         }
 
+    }
 }

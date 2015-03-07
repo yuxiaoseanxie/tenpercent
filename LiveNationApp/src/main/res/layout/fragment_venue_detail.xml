@@ -60,22 +60,17 @@
                 android:textAppearance="@style/ln.text.small.italic.gray"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/fragment_venue_uber_button"
+        <FrameLayout
+            android:id="@+id/fragment_venue_uber_container"
+            android:animateLayoutChanges="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_width="@dimen/uber_button_width"
             android:layout_height="@dimen/uber_button_height"
             android:layout_marginRight="@dimen/gap_medium"
-            android:layout_marginEnd="@dimen/gap_medium"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:drawablePadding="@dimen/uber_button_drawable_padding"
-            android:text="@string/uber_book_ride"
-            android:textColor="@color/livenation_gray"
-            android:textAppearance="@style/ln.text.tiny.italic"
-            android:drawableTop="@drawable/uber_car_icon"/>
+            android:layout_marginEnd="@dimen/gap_medium">
+            </FrameLayout>
 
         <TextView
             android:id="@+id/fragment_venue_detail_venue_info_link"
@@ -84,7 +79,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@id/fragment_venue_detail_phone_box"
-            android:layout_below="@id/fragment_venue_uber_button"
+            android:layout_below="@id/fragment_venue_uber_container"
             android:layout_marginRight="@dimen/gap_medium"
             android:layout_marginEnd="@dimen/gap_medium"
             android:background="@drawable/livenation_selector_pressable_background"
@@ -95,9 +90,4 @@
             android:textAppearance="@style/ln.text.small.red"
             android:visibility="gone"/>
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/fragment_venue_detail_swoochdivider"
-        android:layout_below="@id/fragment_data_root_container"
-        style="@style/SwooshDivider.with_top_margin"/>
 </RelativeLayout>

@@ -1,10 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberFragmentListener;
@@ -23,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import rx.functions.Action1;
@@ -39,6 +37,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private final static String UBER_MIN = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_MIN";
     private final static String UBER_ESTIMATES = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_ESTIMATES";
     private final static String CATEGORY = "com.livenation.mobile.android.na.ui.fragments.UberFragment.CATEGORY";
+    private final static String IS_BUTTON_VERSION = "com.livenation.mobile.android.na.ui.fragments.UberFragment.IS_BUTTON_VERSION";
 
 
     private static final int ACTIVITY_RESULT_UBER = 1;
@@ -48,10 +47,12 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private String adress;
     private String name;
     private AnalyticsCategory category;
+    private boolean isButtonVersion = false;
     private View rootView;
 
     private Integer minutes;
     private String estimates;
+
 
     public static UberFragment newInstance(Venue venue, Context context, AnalyticsCategory category) {
         float lat = Double.valueOf(venue.getLatitude()).floatValue();
@@ -59,19 +60,29 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         String venueAddress = UberHelper.getUberVenueAddress(venue);
         String venueName = UberHelper.getUberVenueName(venue);
 
-        return init(lat, lng, venueAddress, venueName, context, category);
+        return init(lat, lng, venueAddress, venueName, context, category, false);
     }
 
     public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue, Context context, AnalyticsCategory category) {
-        float endLat = Double.valueOf(venue.getLat()).floatValue();
-        float endLng = Double.valueOf(venue.getLng()).floatValue();
+        return newInstance(venue, context, category, false);
+    }
+
+
+    public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue, Context context, AnalyticsCategory category, boolean isButtonVersion) {
+        Float endLat = null;
+        Float endLng = null;
+        if (venue.getLat() != null && venue.getLng() != null) {
+            endLat = Double.valueOf(venue.getLat()).floatValue();
+            endLng = Double.valueOf(venue.getLng()).floatValue();
+        }
         String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
         String venueName = venue.getName();
 
-        return init(endLat, endLng, venueAddress, venueName, context, category);
+        return init(endLat, endLng, venueAddress, venueName, context, category, isButtonVersion);
     }
 
-    private static UberFragment init(float lat, float lng, String address, String name, Context context, AnalyticsCategory category) {
+
+    private static UberFragment init(float lat, float lng, String address, String name, Context context, AnalyticsCategory category, boolean isButtonVersion) {
         UberFragment fragment = new UberFragment();
         uberClient = new UberClient(context);
 
@@ -81,14 +92,15 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         bundle.putString(VENUE_ADDRESS, address);
         bundle.putString(VENUE_NAME, name);
         bundle.putSerializable(CATEGORY, category);
+        bundle.putBoolean(IS_BUTTON_VERSION, isButtonVersion);
 
         /**Bundle bundle = new Bundle();
          Double[] array = {34.0878, -118.3722};
 
-        bundle.putFloat(VENUE_LAT, lat);
-        bundle.putFloat(VENUE_LNG, lng);
-        bundle.putString(VENUE_ADDRESS, "8470 Santa Monica Blvd West Hollywood, CA 90069");
-        bundle.putString(VENUE_NAME, "Irish Coffee Bistro");**/
+         bundle.putFloat(VENUE_LAT, lat);
+         bundle.putFloat(VENUE_LNG, lng);
+         bundle.putString(VENUE_ADDRESS, "8470 Santa Monica Blvd West Hollywood, CA 90069");
+         bundle.putString(VENUE_NAME, "Irish Coffee Bistro");**/
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -103,21 +115,29 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         minutes = getArguments().getInt(UBER_MIN);
         estimates = getArguments().getString(UBER_ESTIMATES);
         category = (AnalyticsCategory) getArguments().getSerializable(CATEGORY);
+        isButtonVersion = getArguments().getBoolean(IS_BUTTON_VERSION);
     }
 
 
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
+        //Need those value assigned because they are used before onCreate()
         lat = getArguments().getFloat(VENUE_LAT);
         lng = getArguments().getFloat(VENUE_LNG);
         adress = getArguments().getString(VENUE_ADDRESS);
         name = getArguments().getString(VENUE_NAME);
+        category = (AnalyticsCategory) getArguments().getSerializable(CATEGORY);
+        isButtonVersion = getArguments().getBoolean(IS_BUTTON_VERSION);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.order_uber_signup, container, false);
+        if (isButtonVersion) {
+            rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_uber_button, container, false);
+        } else {
+            rootView = LayoutInflater.from(getActivity()).inflate(R.layout.order_uber_signup, container, false);
+        }
         if (minutes != null && name != null) {
             updateView();
         } else {
@@ -143,13 +163,15 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     }
 
     private void updateUberSignUpView(int min) {
-        TextView title = (TextView) rootView.findViewById(R.id.uber_title);
-        TextView subtitle = (TextView) rootView.findViewById(R.id.uber_subtitle);
-        String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
-        uberTitle = String.format(uberTitle, min);
-        title.setText(uberTitle);
+        if (!isButtonVersion) {
+            TextView title = (TextView) rootView.findViewById(R.id.uber_title);
+            TextView subtitle = (TextView) rootView.findViewById(R.id.uber_subtitle);
+            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
+            uberTitle = String.format(uberTitle, min);
+            title.setText(uberTitle);
 
-        subtitle.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
+            subtitle.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
+        }
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,14 +183,19 @@ public class UberFragment extends Fragment implements UberFragmentListener {
 
 
     private void updateUberRideView(int min, String estimates) {
-        ImageView icon = (ImageView) rootView.findViewById(R.id.uber_icon);
-        TextView title = (TextView) rootView.findViewById(R.id.uber_title);
-        TextView subtitle = (TextView) rootView.findViewById(R.id.uber_subtitle);
-        String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
-        icon.setImageDrawable(getResources().getDrawable(R.drawable.uber_logo_icon));
-        uberTitle = String.format(uberTitle, min);
-        title.setText(uberTitle);
-        subtitle.setText(estimates);
+        if (!isButtonVersion) {
+            ImageView icon = (ImageView) rootView.findViewById(R.id.uber_icon);
+            icon.setImageDrawable(getResources().getDrawable(R.drawable.uber_logo_icon));
+            TextView title = (TextView) rootView.findViewById(R.id.uber_title);
+            TextView subtitle = (TextView) rootView.findViewById(R.id.uber_subtitle);
+            String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
+            uberTitle = String.format(uberTitle, min);
+            title.setText(uberTitle);
+            subtitle.setText(estimates);
+        } else {
+            ((Button) rootView).setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.uber_logo_icon), null, null);
+            ((Button) rootView).setText(estimates);
+        }
 
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override

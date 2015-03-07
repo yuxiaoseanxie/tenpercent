@@ -49,7 +49,7 @@
     <dimen name="account_footer_item_packing">-5dp</dimen>
     <dimen name="ui_find_tickets_height">56dp</dimen>
     <dimen name="uber_dialog_title_spacing">-3dp</dimen>
-    <dimen name="uber_button_drawable_padding">-10dp</dimen>
+    <dimen name="uber_button_drawable_padding">-6dp</dimen>
     <dimen name="uber_button_height">48dp</dimen>
     <dimen name="uber_button_width">60dp</dimen>
 
