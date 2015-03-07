@@ -2,13 +2,11 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.uber.UberClient;
-import com.livenation.mobile.android.na.uber.UberHelper;
-import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
-import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
+import com.livenation.mobile.android.na.uber.UberFragmentListener;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
+import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.ticketing.Ticketing;
 import com.livenation.mobile.android.ticketing.analytics.TimedEvent;
 import com.livenation.mobile.android.ticketing.dialogs.PollingDialogFragment;
@@ -31,7 +29,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,14 +36,10 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,17 +48,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class OrderHistoryFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class OrderHistoryFragment extends LiveNationFragment implements AdapterView.OnItemClickListener {
     private static final int LIMIT_PER_PAGE = 20;
-    private static final int ACTIVITY_RESULT_UBER = 1;
-
-    private UberClient uberClient;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -83,7 +70,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     private boolean hasMore = false;
     private Handler offlinePromptHandler;
     private boolean isRefreshing = false;
-    private SparseArray<Observable> uberCache = new SparseArray<>();
 
     //region Lifecycle
 
@@ -106,7 +92,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         });
 
         setRetainInstance(true);
-        this.uberClient = new UberClient(getActivity());
     }
 
     @Override
@@ -401,46 +386,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
         showDetailsForCart(cart);
     }
 
-    private void onUberSignupClick(Cart cart) {
-        UberHelper.trackUberkWebLaunch(AnalyticsCategory.YOUR_ORDERS);
-
-        float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
-        float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
-        String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
-        String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), lat, lng, venueAddress, venueName));
-        startActivity(intent);
-    }
-
-    private void onUberRideClick(final Cart cart) {
-        float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
-        float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
-        String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
-        String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
-
-        DialogFragment dialog = UberHelper.getUberEstimateDialog(uberClient, lat, lng, venueAddress, venueName);
-        dialog.setTargetFragment(OrderHistoryFragment.this, ACTIVITY_RESULT_UBER);
-        dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
-    }
-
 
     //endregion
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ACTIVITY_RESULT_UBER:
-                if (resultCode == Activity.RESULT_OK) {
-                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId(), data);
-                    getActivity().startActivity(intent);
-                } else if (resultCode == Activity.RESULT_CANCELED) {
-                    Intent intent = UberHelper.getUberAppLaunchIntent(uberClient.getClientId());
-                    getActivity().startActivity(intent);
-                }
-                break;
-        }
-    }
 
     private static Cart getNextShow(List<Cart> response) {
 
@@ -497,12 +444,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 view.setTag(holder);
             } else {
                 holder = (ViewHolder) view.getTag();
-                //view got recycled, cancel any pending uber request that may interfere with recycled view
-                Subscription subscription = (Subscription) holder.uberContent.getTag();
-                if (subscription != null) {
-                    subscription.unsubscribe();
-                    holder.uberContent.setTag(null);
-                }
             }
 
             Cart cart = getItem(position);
@@ -521,14 +462,20 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
 
             holder.orderId.setText(cart.getDisplayOrderID());
 
-            holder.uberContent.removeAllViews();
-
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
-                if (UberHelper.isUberAppInstalled(getActivity())) {
-                    fetchUberEstimate(holder.uberContent, cart);
-                } else {
-                    holder.uberContent.addView(getUberSignUpView(parent, cart));
-                }
+                UberFragment uberFragment = UberFragment.newInstance(cart.getEvent().getVenue(), getContext(), AnalyticsCategory.YOUR_ORDERS);
+                uberFragment.fetchEstimation(new UberFragmentListener() {
+                    @Override
+                    public void onUberFragmentReady(UberFragment uberFragment) {
+                        addFragment(R.id.item_order_history_uber_container, uberFragment, UberFragment.class.getSimpleName());
+                    }
+
+                    @Override
+                    public void onUberFragmentNotAvailable(Throwable error) {
+                    }
+                });
+            } else {
+                ((ViewGroup) view).removeView(view.findViewById(R.id.item_order_history_uber_container));
             }
 
             return view;
@@ -562,92 +509,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             super.addAll(objects);
         }
 
-        private View getUberSignUpView(@NonNull ViewGroup parent, final Cart cart) {
-            View view = mInflater.inflate(R.layout.order_uber_signup, parent, false);
-            TextView text = (TextView) view.findViewById(R.id.uber_subtitle);
-            text.setText(LiveNationApplication.get().getInstalledAppConfig().getUberFreeRideText());
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onUberSignupClick(cart);
-                    UberHelper.trackUberTap(AnalyticsCategory.YOUR_ORDERS);
-                }
-            });
-            return view;
-        }
-
-        private void fetchUberEstimate(@NonNull final ViewGroup parent, final Cart cart) {
-            final View view = mInflater.inflate(R.layout.order_uber_ride, parent, false);
-            float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
-            float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
-
-            final Action1<Throwable> onError = new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    //Failed because Location Services unavailable, or network issues
-                    //Just leave the Default "Get an Uber!" view here.
-                }
-            };
-
-            //retrieve any previous uber api operation
-            final int hashCode = ((Object) cart).hashCode();
-            Observable uberFetch = uberCache.get(hashCode);
-
-            if (uberFetch == null) {
-                //no previous uber api operation, perform a new one, and cache the observable emission
-                uberFetch = UberHelper.getQuickEstimate(uberClient, lat, lng).cache();
-                uberCache.put(hashCode, uberFetch);
-            }
-
-            final long timeStarted = SystemClock.uptimeMillis();
-            Subscription subscription = uberFetch.subscribe(new Action1<LiveNationEstimate>() {
-                @Override
-                public void call(LiveNationEstimate liveNationEstimate) {
-                    UberHelper.trackUberDisplayedButton(AnalyticsCategory.YOUR_ORDERS);
-
-                    TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                    TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                    String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
-                    uberTitle = String.format(uberTitle, liveNationEstimate.getTime().getEstimateMins());
-                    text1.setText(uberTitle);
-                    text2.setText(liveNationEstimate.getPrice().getEstimate());
-
-                    //only animate adding the view if it took over 100ms to fetch the uber data
-                    //(if the this operation is called from cache, and we have already animated
-                    //adding the uber view, we don't want to animate it in again
-                    if (SystemClock.uptimeMillis() - timeStarted > 100) {
-                        LayoutTransition transition = new LayoutTransition();
-                        transition.setAnimator(LayoutTransition.CHANGE_APPEARING, null);
-                        transition.setAnimator(LayoutTransition.CHANGE_DISAPPEARING, null);
-                        transition.setAnimator(LayoutTransition.DISAPPEARING, null);
-                        parent.setLayoutTransition(transition);
-                    } else {
-                        parent.setLayoutTransition(null);
-                    }
-
-                    parent.addView(view);
-                    parent.setTag(null);
-                }
-            }, onError);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onUberRideClick(cart);
-                    UberHelper.trackUberTap(AnalyticsCategory.YOUR_ORDERS);
-                }
-            });
-
-            parent.setTag(subscription);
-        }
-
         private class ViewHolder {
             final VerticalDateView date;
             final TextView eventTitle;
             final TextView address;
             final TextView orderId;
             final TextView orderDate;
-            final ViewGroup uberContent;
 
             public ViewHolder(View view) {
                 this.date = (VerticalDateView) view.findViewById(R.id.item_order_history_date);
@@ -655,7 +522,6 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 this.address = (TextView) view.findViewById(R.id.item_order_history_address);
                 this.orderId = (TextView) view.findViewById(R.id.item_order_history_id);
                 this.orderDate = (TextView) view.findViewById(R.id.item_order_history_order_date);
-                this.uberContent = (ViewGroup) view.findViewById(R.id.item_order_history_uber);
             }
         }
     }

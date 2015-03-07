@@ -21,6 +21,7 @@ import com.mobilitus.tm.tickets.models.User;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,8 +39,11 @@ public class OrderHistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
 
-        fragment = (OrderHistoryFragment) getSupportFragmentManager().findFragmentById(R.id.activity_order_history_fragment);
 
+        fragment = (OrderHistoryFragment) getSupportFragmentManager().findFragmentByTag(OrderHistoryFragment.class.getSimpleName());
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_order_history_fragment_container, new OrderHistoryFragment(), OrderHistoryFragment.class.getSimpleName()).commit();
+        }
         //noinspection ConstantConditions
         getActionBar().setTitle(R.string.activity_order_history);
     }

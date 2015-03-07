@@ -3,12 +3,10 @@
        xmlns:tools="http://schemas.android.com/tools"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
-
-    <fragment
-        android:id="@+id/activity_order_history_fragment"
+    <FrameLayout
+        android:id="@+id/activity_order_history_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment"
-        tools:layout="@layout/fragment_order_history"/>
+        />
 
 </merge>
