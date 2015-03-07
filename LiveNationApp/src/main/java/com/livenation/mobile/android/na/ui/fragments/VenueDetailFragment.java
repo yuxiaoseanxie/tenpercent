@@ -31,20 +31,23 @@ import android.widget.TextView;
 public class VenueDetailFragment extends LiveNationFragment {
     private final static String VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueDetailFragment.VENUE";
     private final static String WITH_UBER_RIDE_VENUE = "com.livenation.mobile.android.na.ui.fragments.VenueDetailFragment.WITH_UBER_RIDE_VENUE";
+    private final static String CATEGORY = "com.livenation.mobile.android.na.ui.fragments.VenueDetailFragment.CATEGORY";
 
     private Venue venue;
     private Boolean withUberRide;
+    private AnalyticsCategory category;
 
     private TextView location;
     private TextView telephone;
     private View venueInfo;
     private View phonebox;
 
-    public static VenueDetailFragment newInstance(Venue venue, boolean withUberRide) {
+    public static VenueDetailFragment newInstance(Venue venue, boolean withUberRide, AnalyticsCategory category) {
         VenueDetailFragment venueDetailFragment = new VenueDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(VENUE, venue);
         bundle.putSerializable(WITH_UBER_RIDE_VENUE, withUberRide);
+        bundle.putSerializable(CATEGORY, category);
         venueDetailFragment.setArguments(bundle);
         return venueDetailFragment;
     }
@@ -55,6 +58,7 @@ public class VenueDetailFragment extends LiveNationFragment {
 
         venue = (Venue) getArguments().getSerializable(VENUE);
         withUberRide = getArguments().getBoolean(WITH_UBER_RIDE_VENUE, true);
+        category = (AnalyticsCategory) getArguments().getSerializable(CATEGORY);
 
         location = (TextView) result.findViewById(R.id.fragment_venue_detail_location);
         telephone = (TextView) result.findViewById(R.id.fragment_venue_detail_telephone);
@@ -99,6 +103,7 @@ public class VenueDetailFragment extends LiveNationFragment {
             uberFragment.fetchEstimation(new UberFragmentListener() {
                 @Override
                 public void onUberFragmentReady(UberFragment uberFragment) {
+                    UberHelper.trackUberDisplayedButton(category);
                     VenueDetailFragment.this.addFragment(R.id.fragment_venue_uber_container, uberFragment, UberFragment.class.getSimpleName());
                 }
 

@@ -1,6 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
+import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
@@ -32,7 +33,7 @@ public class ShowVenueInfoFragment extends LiveNationFragment {
         venue = (Venue) getArguments().getSerializable(VENUE);
 
         addFragment(R.id.fragment_show_venue_map_container, VenueMapFragment.newInstance(venue, false, R.dimen.fragment_show_venue_map_height), VenueMapFragment.class.getSimpleName());
-        addFragment(R.id.fragment_show_venue_detail_container, VenueDetailFragment.newInstance(venue, false), VenueDetailFragment.class.getSimpleName());
+        addFragment(R.id.fragment_show_venue_detail_container, VenueDetailFragment.newInstance(venue, false, AnalyticsCategory.SDP), VenueDetailFragment.class.getSimpleName());
 
         return view;
     }

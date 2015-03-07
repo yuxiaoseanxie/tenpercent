@@ -86,7 +86,7 @@ public class VenueFragment extends LiveNationFragment {
 
     private void refresh() {
         addFragment(R.id.fragment_venue_header_container, VenueMapFragment.newInstance(venue, true, R.dimen.fragment_venue_map_height), VenueMapFragment.class.getSimpleName());
-        addFragment(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true), VenueDetailFragment.class.getSimpleName());
+        addFragment(R.id.fragment_venue_detail_container, VenueDetailFragment.newInstance(venue, true, AnalyticsCategory.VDP), VenueDetailFragment.class.getSimpleName());
 
     }
 
