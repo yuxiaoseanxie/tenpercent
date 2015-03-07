@@ -606,6 +606,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             Subscription subscription = uberFetch.subscribe(new Action1<LiveNationEstimate>() {
                 @Override
                 public void call(LiveNationEstimate liveNationEstimate) {
+                    UberHelper.trackUberDisplayedButton(AnalyticsCategory.YOUR_ORDERS);
+
                     TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                     TextView text2 = (TextView) view.findViewById(android.R.id.text2);
                     String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);

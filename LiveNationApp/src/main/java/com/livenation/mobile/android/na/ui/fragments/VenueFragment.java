@@ -367,7 +367,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             //Analytics
-            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_MENU_TAP, AnalyticsCategory.VDP, getUberProps());
+            UberHelper.trackUberDisplayedButton(AnalyticsCategory.VDP);
 
             popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
                 @Override

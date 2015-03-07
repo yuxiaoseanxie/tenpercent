@@ -215,7 +215,7 @@ public class UberHelper {
     }
 
     public static void trackUberkWebLaunch(final AnalyticsCategory category) {
-        final Props props = new Props();
+        final Props props = getUberProps();
         LiveNationApplication.getLiveNationProxy().getCurrentUser(new BasicApiCallback<User>() {
             @Override
             public void onResponse(User response) {
@@ -228,5 +228,32 @@ public class UberHelper {
                 LiveNationAnalytics.track(AnalyticConstants.UBER_WEB_LAUNCH, category, props);
             }
         });
+    }
+
+    public static void trackUberDisplayedButton(final AnalyticsCategory category) {
+        final Props props = getUberProps();
+        LiveNationApplication.getLiveNationProxy().getCurrentUser(new BasicApiCallback<User>() {
+            @Override
+            public void onResponse(User response) {
+                props.put(AnalyticConstants.USER_ID, response.getId());
+                LiveNationAnalytics.track(AnalyticConstants.UBER_DISPLAYED_BUTTON, category, props);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                LiveNationAnalytics.track(AnalyticConstants.UBER_DISPLAYED_BUTTON, category, props);
+            }
+        });
+    }
+
+    private static Props getUberProps() {
+        Props props = new Props();
+        boolean isUberInstalled = AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), LiveNationApplication.get().getApplicationContext());
+        String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
+        if (isUberInstalled) {
+            uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
+        }
+        props.put(AnalyticConstants.UBER_APP, uber_app_value);
+        return props;
     }
 }

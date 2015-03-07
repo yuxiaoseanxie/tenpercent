@@ -101,6 +101,8 @@ public class AnalyticConstants {
 
     //Uber
     public static final String UBER_WEB_LAUNCH = "Uber Web Launch";
+    public static final String UBER_DISPLAYED_BUTTON = "Displayed Uber Button";
+
     public static final String UBER_VDP_MENU_TAP = "VDP Address Menu Tap";
     public static final String UBER_VDP_UBER_TAP = "VDP Uber Tap";
     public static final String UBER_YOUR_ORDERS_TAP = "Your Orders Uber Tap";
