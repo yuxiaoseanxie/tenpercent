@@ -38,6 +38,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private final static String VENUE_NAME = "com.livenation.mobile.android.na.ui.fragments.UberFragment.VENUE";
     private final static String UBER_MIN = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_MIN";
     private final static String UBER_ESTIMATES = "com.livenation.mobile.android.na.ui.fragments.UberFragment.UBER_ESTIMATES";
+    private final static String CATEGORY = "com.livenation.mobile.android.na.ui.fragments.UberFragment.CATEGORY";
 
 
     private static final int ACTIVITY_RESULT_UBER = 1;
@@ -46,30 +47,31 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     private float lng;
     private String adress;
     private String name;
+    private AnalyticsCategory category;
     private View rootView;
 
     private Integer minutes;
     private String estimates;
 
-    public static UberFragment newInstance(Venue venue, Context context) {
+    public static UberFragment newInstance(Venue venue, Context context, AnalyticsCategory category) {
         float lat = Double.valueOf(venue.getLatitude()).floatValue();
         float lng = Double.valueOf(venue.getLongitude()).floatValue();
         String venueAddress = UberHelper.getUberVenueAddress(venue);
         String venueName = UberHelper.getUberVenueName(venue);
 
-        return init(lat, lng, venueAddress, venueName, context);
+        return init(lat, lng, venueAddress, venueName, context, category);
     }
 
-    public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue, Context context) {
+    public static UberFragment newInstance(com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue venue, Context context, AnalyticsCategory category) {
         float endLat = Double.valueOf(venue.getLat()).floatValue();
         float endLng = Double.valueOf(venue.getLng()).floatValue();
         String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);
         String venueName = venue.getName();
 
-        return init(endLat, endLng, venueAddress, venueName, context);
+        return init(endLat, endLng, venueAddress, venueName, context, category);
     }
 
-    private static UberFragment init(float lat, float lng, String address, String name, Context context) {
+    private static UberFragment init(float lat, float lng, String address, String name, Context context, AnalyticsCategory category) {
         UberFragment fragment = new UberFragment();
         uberClient = new UberClient(context);
 
@@ -78,14 +80,15 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         bundle.putFloat(VENUE_LNG, lng);
         bundle.putString(VENUE_ADDRESS, address);
         bundle.putString(VENUE_NAME, name);
+        bundle.putSerializable(CATEGORY, category);
 
         /**Bundle bundle = new Bundle();
-         Double[] array = {34.0878, -118.3722};**/
+         Double[] array = {34.0878, -118.3722};
 
         bundle.putFloat(VENUE_LAT, lat);
         bundle.putFloat(VENUE_LNG, lng);
         bundle.putString(VENUE_ADDRESS, "8470 Santa Monica Blvd West Hollywood, CA 90069");
-        bundle.putString(VENUE_NAME, "Irish Coffee Bistro");
+        bundle.putString(VENUE_NAME, "Irish Coffee Bistro");**/
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -99,6 +102,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         name = getArguments().getString(VENUE_NAME);
         minutes = getArguments().getInt(UBER_MIN);
         estimates = getArguments().getString(UBER_ESTIMATES);
+        category = (AnalyticsCategory) getArguments().getSerializable(CATEGORY);
     }
 
 
@@ -150,7 +154,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
             @Override
             public void onClick(View v) {
                 onUberSignupClick(lat, lng, adress, name);
-                trackUberAnalytics(false);
+                UberHelper.trackUberTap(category);
             }
         });
     }
@@ -170,7 +174,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
             @Override
             public void onClick(View v) {
                 onUberRideClick(lat, lng, adress, name);
-                trackUberAnalytics(true);
+                UberHelper.trackUberTap(category);
             }
         });
     }
@@ -184,16 +188,6 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         DialogFragment dialog = UberHelper.getUberEstimateDialog(uberClient, endLat, endLng, address, addressName);
         dialog.setTargetFragment(this, ACTIVITY_RESULT_UBER);
         dialog.show(getFragmentManager(), UberDialogFragment.UBER_DIALOG_TAG);
-    }
-
-    private void trackUberAnalytics(boolean isUberInstalled) {
-        Props props = new Props();
-        String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
-        if (isUberInstalled) {
-            uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
-        }
-        props.put(AnalyticConstants.UBER_APP, uber_app_value);
-        LiveNationAnalytics.track(AnalyticConstants.UBER_YOUR_ORDERS_TAP, AnalyticsCategory.YOUR_ORDERS, props);
     }
 
     private void updateView() {
