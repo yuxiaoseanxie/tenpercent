@@ -103,13 +103,8 @@ public class AnalyticConstants {
     public static final String UBER_WEB_LAUNCH = "Uber Web Launch";
     public static final String UBER_DISPLAYED_BUTTON = "Displayed Uber Button";
     public static final String UBER_MODAL_PRODUCT_OPTION_TAP = "Uber Modal Product Option Tap";
-
-
-    public static final String UBER_VDP_MENU_TAP = "VDP Address Menu Tap";
-    public static final String UBER_VDP_UBER_TAP = "VDP Uber Tap";
-    public static final String UBER_YOUR_ORDERS_TAP = "Your Orders Uber Tap";
+    public static final String UBER_TAP = "Uber Tap";
     public static final String UBER_MODAL_LOAD = "Uber Modal Load";
-    public static final String UBER_MODAL_DISMISS = "Uber Modal Dismiss";
 
     /**
      * Screen name

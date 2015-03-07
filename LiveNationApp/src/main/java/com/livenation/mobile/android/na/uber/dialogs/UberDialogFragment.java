@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
@@ -147,12 +146,6 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
                     String.valueOf(getArguments().getFloat(EXTRA_RESULT_LONGITUDE)));
             UberHelper.trackUberOptionTap(props, AnalyticsCategory.UBER_MODAL);
         }
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_DISMISS, AnalyticsCategory.UBER_MODAL);
     }
 
     public void onUberError() {

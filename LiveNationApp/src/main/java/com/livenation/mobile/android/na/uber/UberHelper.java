@@ -262,6 +262,22 @@ public class UberHelper {
         });
     }
 
+    public static void trackUberTap(final AnalyticsCategory category) {
+        final Props props = getUberProps(null);
+        LiveNationApplication.getLiveNationProxy().getCurrentUser(new BasicApiCallback<User>() {
+            @Override
+            public void onResponse(User response) {
+                props.put(AnalyticConstants.USER_ID, response.getId());
+                LiveNationAnalytics.track(AnalyticConstants.UBER_TAP, category, props);
+            }
+
+            @Override
+            public void onErrorResponse(LiveNationError error) {
+                LiveNationAnalytics.track(AnalyticConstants.UBER_TAP, category, props);
+            }
+        });
+    }
+
     private static Props getUberProps(Props existingProps) {
         Props props = existingProps;
         if (props == null) {

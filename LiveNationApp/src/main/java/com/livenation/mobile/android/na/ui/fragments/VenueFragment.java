@@ -376,7 +376,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     switch (travelOption) {
                         case uber:
                             //Analytics
-                            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_UBER_TAP, AnalyticsCategory.VDP, getUberProps());
+                            UberHelper.trackUberTap(AnalyticsCategory.VDP);
 
                             if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), getActivity())) {
                                 //show uber price estimates
