@@ -21,6 +21,7 @@ public class AnalyticConstants {
     public static final String ARTIST_CELL_TAP = "Artist Cell Tap";
     public static final String FAVORITE_VENUE_STAR_TAP = "Favorite Venue Star Tap";
     public static final String FAVORITE_ARTIST_STAR_TAP = "Favorite Artist Star Tap";
+    public static final String USER_ID = "user Id";
 
     //On Boarding
     public static final String SKIP_TAP = "Skip Tap";
@@ -99,12 +100,11 @@ public class AnalyticConstants {
     public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
     //Uber
-    public static final String UBER_VDP_MENU_TAP = "VDP Address Menu Tap";
-    public static final String UBER_VDP_UBER_TAP = "VDP Uber Tap";
-    public static final String UBER_YOUR_ORDERS_TAP = "Your Orders Uber Tap";
-    public static final String UBER_MODAL_LOAD = "Uber Modal Load";
+    public static final String UBER_WEB_LAUNCH = "Uber Web Launch";
+    public static final String UBER_DISPLAYED_BUTTON = "Displayed Uber Button";
     public static final String UBER_MODAL_PRODUCT_OPTION_TAP = "Uber Modal Product Option Tap";
-    public static final String UBER_MODAL_DISMISS = "Uber Modal Dismiss";
+    public static final String UBER_TAP = "Uber Tap";
+    public static final String UBER_MODAL_LOAD = "Uber Modal Load";
 
     /**
      * Screen name

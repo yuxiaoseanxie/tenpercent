@@ -367,7 +367,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             //Analytics
-            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_MENU_TAP, AnalyticsCategory.VDP, getUberProps());
+            UberHelper.trackUberDisplayedButton(AnalyticsCategory.VDP);
 
             popupWindow = new TravelListPopupWindow(getActivity(), travelOptions, fastestUber) {
                 @Override
@@ -376,7 +376,7 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                     switch (travelOption) {
                         case uber:
                             //Analytics
-                            LiveNationAnalytics.track(AnalyticConstants.UBER_VDP_UBER_TAP, AnalyticsCategory.VDP, getUberProps());
+                            UberHelper.trackUberTap(AnalyticsCategory.VDP);
 
                             if (AnalyticsHelper.isAppInstalled(ExternalApplicationAnalytics.UBER.getPackageName(), getActivity())) {
                                 //show uber price estimates
@@ -422,6 +422,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
     }
 
     private void goUberSignup(Venue venue) {
+        UberHelper.trackUberkWebLaunch(AnalyticsCategory.VDP);
+
         float endLat = Double.valueOf(venue.getLat()).floatValue();
         float endLng = Double.valueOf(venue.getLng()).floatValue();
         String venueAddress = venue.getAddress().getSmallFriendlyAddress(false);

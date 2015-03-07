@@ -5,6 +5,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.analytics.Props;
+import com.livenation.mobile.android.na.uber.UberHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.fragments.OrderHistoryFragment;
 import com.livenation.mobile.android.na.ui.fragments.VenueFragment;
@@ -17,7 +18,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.InsetDrawable;
@@ -139,20 +139,13 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
 
             Props props = new Props();
             props.put(AnalyticConstants.UBER_PRODUCT, estimate.getProduct().getDisplayName());
-
             props.put(AnalyticConstants.UBER_USER_CURRENT_LOCATION, String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LATITUDE)) + ", " +
                     String.valueOf(getArguments().getFloat(EXTRA_ORIGIN_LONGITUDE)));
             props.put(AnalyticConstants.UBER_USER_CURRENT_DESTINATION, getArguments().getString(EXTRA_RESULT_NAME) + ", " +
                     String.valueOf(getArguments().getFloat(EXTRA_RESULT_LATITUDE)) + ", " +
                     String.valueOf(getArguments().getFloat(EXTRA_RESULT_LONGITUDE)));
-            LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_PRODUCT_OPTION_TAP, AnalyticsCategory.UBER_MODAL, props);
+            UberHelper.trackUberOptionTap(props, AnalyticsCategory.UBER_MODAL);
         }
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        LiveNationAnalytics.track(AnalyticConstants.UBER_MODAL_DISMISS, AnalyticsCategory.UBER_MODAL);
     }
 
     public void onUberError() {
