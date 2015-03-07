@@ -1,10 +1,7 @@
 package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberHelper;
@@ -405,11 +402,12 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void onUberSignupClick(Cart cart) {
+        UberHelper.trackUberkWebLaunch(AnalyticsCategory.YOUR_ORDERS);
+
         float lat = Double.valueOf(cart.getEvent().getVenue().getLatitude()).floatValue();
         float lng = Double.valueOf(cart.getEvent().getVenue().getLongitude()).floatValue();
         String venueAddress = UberHelper.getUberVenueAddress(cart.getEvent().getVenue());
         String venueName = UberHelper.getUberVenueName(cart.getEvent().getVenue());
-
 
         Intent intent = new Intent(Intent.ACTION_VIEW, UberHelper.getUberSignupLink(uberClient.getClientId(), lat, lng, venueAddress, venueName));
         startActivity(intent);
@@ -572,7 +570,7 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 @Override
                 public void onClick(View v) {
                     onUberSignupClick(cart);
-                    trackUberAnalytics(false);
+                    UberHelper.trackUberTap(AnalyticsCategory.YOUR_ORDERS);
                 }
             });
             return view;
@@ -605,6 +603,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             Subscription subscription = uberFetch.subscribe(new Action1<LiveNationEstimate>() {
                 @Override
                 public void call(LiveNationEstimate liveNationEstimate) {
+                    UberHelper.trackUberDisplayedButton(AnalyticsCategory.YOUR_ORDERS);
+
                     TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                     TextView text2 = (TextView) view.findViewById(android.R.id.text2);
                     String uberTitle = getResources().getString(R.string.uber_order_book_ride_mins);
@@ -634,21 +634,11 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
                 @Override
                 public void onClick(View v) {
                     onUberRideClick(cart);
-                    trackUberAnalytics(true);
+                    UberHelper.trackUberTap(AnalyticsCategory.YOUR_ORDERS);
                 }
             });
 
             parent.setTag(subscription);
-        }
-
-        private void trackUberAnalytics(boolean isUberInstalled) {
-            Props props = new Props();
-            String uber_app_value = AnalyticConstants.UBER_APP_UNINSTALLED;
-            if (isUberInstalled) {
-                uber_app_value = AnalyticConstants.UBER_APP_INSTALLED;
-            }
-            props.put(AnalyticConstants.UBER_APP, uber_app_value);
-            LiveNationAnalytics.track(AnalyticConstants.UBER_YOUR_ORDERS_TAP, AnalyticsCategory.YOUR_ORDERS, props);
         }
 
         private class ViewHolder {
