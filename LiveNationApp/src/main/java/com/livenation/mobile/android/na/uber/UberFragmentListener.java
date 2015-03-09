@@ -8,7 +8,7 @@ import java.io.Serializable;
 * Created by elodieferrais on 3/4/15.
 */
 public interface UberFragmentListener extends Serializable {
-    public void onUberFragmentReady(UberFragment uberFragment);
+    public void onUberFragmentReady(UberFragment uberFragment, String estimates, int minutes);
 
     public void onUberFragmentNotAvailable(Throwable error);
 }

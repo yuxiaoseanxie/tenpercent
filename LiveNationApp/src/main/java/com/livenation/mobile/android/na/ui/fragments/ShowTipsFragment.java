@@ -70,7 +70,7 @@ public class ShowTipsFragment extends LiveNationFragment {
                     UberFragment fragment = UberFragment.newInstance(event.getVenue(), getActivity(), AnalyticsCategory.SDP);
                     fragment.fetchEstimation(new UberFragmentListener() {
                         @Override
-                        public void onUberFragmentReady(UberFragment uberFragment) {
+                        public void onUberFragmentReady(UberFragment uberFragment, String estimates, int minutes) {
                             addFragment(R.id.uber_view_container, uberFragment, UberFragment.class.getSimpleName());
                             TranslateAnimation animation = new TranslateAnimation(0,0,-getResources().getDimension(R.dimen.list_item_height),0);
                             animation.setFillAfter(true);

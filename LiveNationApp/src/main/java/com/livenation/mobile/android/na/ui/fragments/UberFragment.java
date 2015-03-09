@@ -112,8 +112,8 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         lng = getArguments().getFloat(VENUE_LNG);
         adress = getArguments().getString(VENUE_ADDRESS);
         name = getArguments().getString(VENUE_NAME);
-        minutes = getArguments().getInt(UBER_MIN);
-        estimates = getArguments().getString(UBER_ESTIMATES);
+        minutes = getArguments().getInt(UBER_MIN, minutes);
+        estimates = getArguments().getString(UBER_ESTIMATES, estimates);
         category = (AnalyticsCategory) getArguments().getSerializable(CATEGORY);
         isButtonVersion = getArguments().getBoolean(IS_BUTTON_VERSION);
     }
@@ -138,13 +138,21 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         } else {
             rootView = LayoutInflater.from(getActivity()).inflate(R.layout.order_uber_signup, container, false);
         }
-        if (minutes != null && name != null) {
+        if (minutes != null && estimates != null) {
             updateView();
         } else {
             fetchEstimation(this);
         }
 
         return rootView;
+    }
+
+    public void setMinutes(Integer minutes) {
+        this.minutes = minutes;
+    }
+
+    public void setEstimates(String estimates) {
+        this.estimates = estimates;
     }
 
     @Override
@@ -234,7 +242,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
                         getArguments().putInt(UBER_MIN, minutes);
                         estimates = liveNationEstimate.getPrice().getEstimate();
                         getArguments().putString(UBER_ESTIMATES, estimates);
-                        listener.onUberFragmentReady(UberFragment.this);
+                        listener.onUberFragmentReady(UberFragment.this, estimates, minutes);
                         if (rootView != null) {
                             updateView();
                         }
@@ -249,7 +257,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
     }
 
     @Override
-    public void onUberFragmentReady(UberFragment uberFragment) {
+    public void onUberFragmentReady(UberFragment uberFragment, String estimates, int minutes) {
         updateView();
     }
 

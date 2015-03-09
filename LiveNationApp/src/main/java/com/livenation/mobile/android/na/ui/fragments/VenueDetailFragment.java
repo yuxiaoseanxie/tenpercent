@@ -102,7 +102,7 @@ public class VenueDetailFragment extends LiveNationFragment {
             UberFragment uberFragment = UberFragment.newInstance(venue, getActivity(), AnalyticsCategory.VDP, true);
             uberFragment.fetchEstimation(new UberFragmentListener() {
                 @Override
-                public void onUberFragmentReady(UberFragment uberFragment) {
+                public void onUberFragmentReady(UberFragment uberFragment, String estimates, int minutes) {
                     UberHelper.trackUberDisplayedButton(category);
                     VenueDetailFragment.this.addFragment(R.id.fragment_venue_uber_container, uberFragment, UberFragment.class.getSimpleName());
                 }

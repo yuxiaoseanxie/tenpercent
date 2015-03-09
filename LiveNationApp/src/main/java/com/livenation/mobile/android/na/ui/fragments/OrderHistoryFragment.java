@@ -2,7 +2,6 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.uber.UberClient;
 import com.livenation.mobile.android.na.uber.UberFragmentListener;
 import com.livenation.mobile.android.na.ui.OrderDetailsActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
@@ -29,6 +28,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -70,6 +70,8 @@ public class OrderHistoryFragment extends LiveNationFragment implements AdapterV
     private boolean hasMore = false;
     private Handler offlinePromptHandler;
     private boolean isRefreshing = false;
+    private String estimates;
+    private Integer min;
 
     //region Lifecycle
 
@@ -464,16 +466,30 @@ public class OrderHistoryFragment extends LiveNationFragment implements AdapterV
 
             if (getHeaderId(position) == ITEM_TYPE_NEXT_SHOW) {
                 UberFragment uberFragment = UberFragment.newInstance(cart.getEvent().getVenue(), getContext(), AnalyticsCategory.YOUR_ORDERS);
-                uberFragment.fetchEstimation(new UberFragmentListener() {
-                    @Override
-                    public void onUberFragmentReady(UberFragment uberFragment) {
-                        addFragment(R.id.item_order_history_uber_container, uberFragment, UberFragment.class.getSimpleName());
-                    }
 
-                    @Override
-                    public void onUberFragmentNotAvailable(Throwable error) {
-                    }
-                });
+                if (estimates == null && min == null) {
+                    uberFragment.fetchEstimation(new UberFragmentListener() {
+                        @Override
+                        public void onUberFragmentReady(UberFragment uberFragment, String estimates, int mins) {
+                            OrderHistoryFragment.this.estimates = estimates;
+                            OrderHistoryFragment.this.min = mins;
+                            addFragment(R.id.item_order_history_uber_container, uberFragment, UberFragment.class.getSimpleName());
+                        }
+
+                        @Override
+                        public void onUberFragmentNotAvailable(Throwable error) {
+                        }
+                    });
+                } else {
+                    uberFragment.setEstimates(estimates);
+                    uberFragment.setMinutes(min);
+                    LayoutTransition transitioner = new LayoutTransition();
+                    transitioner.setAnimator(LayoutTransition.APPEARING, null);
+                    ViewGroup containier = (ViewGroup) view.findViewById(R.id.item_order_history_uber_container);
+                    containier.setLayoutTransition(transitioner);
+                    addFragment(R.id.item_order_history_uber_container, uberFragment, UberFragment.class.getSimpleName());
+                }
+
             } else {
                 ((ViewGroup) view).removeView(view.findViewById(R.id.item_order_history_uber_container));
             }
