@@ -26,11 +26,9 @@ public class DeviceLocationProvider implements LocationProvider {
 
     @Override
     public void getLocation(ProviderCallback<Double[]> callback) {
-        Double[] array = {34.0878, -118.3722};
-        callback.onResponse(array);
-        //State state = new State(LiveNationApplication.get().getApplicationContext(), callback);
-        //activeStates.add(state);
-        //state.run();
+        State state = new State(LiveNationApplication.get().getApplicationContext(), callback);
+        activeStates.add(state);
+        state.run();
     }
 
     private class State implements LocationListener, Runnable {
