@@ -3,91 +3,85 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/fragment_data_root_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/fragment_venue_detail_location_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/minimum_pressable"
+        android:layout_marginEnd="@dimen/minimum_pressable"
+        android:gravity="top"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/fragment_venue_detail_location_box"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/minimum_pressable"
-            android:layout_marginEnd="@dimen/minimum_pressable"
-            android:gravity="top"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/gap_large"
-                android:minWidth="@dimen/ui_gutter_width"
-                android:scaleType="center"
-                android:src="@drawable/venue_location_red"/>
-
-            <TextView
-                android:id="@+id/fragment_venue_detail_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mock_venue_title_linebreak_1"
-                android:textAppearance="@style/ln.text.small.italic.gray"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/fragment_venue_detail_phone_box"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fragment_venue_detail_location_box"
-            android:layout_marginTop="@dimen/gap_small"
-            android:gravity="top"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/gap_large"
-                android:minWidth="@dimen/ui_gutter_width"
-                android:scaleType="center"
-                android:src="@drawable/venue_phone_red"/>
-
-            <TextView
-                android:id="@+id/fragment_venue_detail_telephone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/livenation_selector_pressable_background"
-                android:text="@string/mock_venue_telephone"
-                android:textAppearance="@style/ln.text.small.italic.gray"/>
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/fragment_venue_uber_container"
-            android:animateLayoutChanges="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_width="@dimen/uber_button_width"
-            android:layout_height="@dimen/uber_button_height"
-            android:layout_marginRight="@dimen/gap_medium"
-            android:layout_marginEnd="@dimen/gap_medium">
-            </FrameLayout>
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
+            android:scaleType="center"
+            android:src="@drawable/venue_location_red"/>
 
         <TextView
-            android:id="@+id/fragment_venue_detail_venue_info_link"
+            android:id="@+id/fragment_venue_detail_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@id/fragment_venue_detail_phone_box"
-            android:layout_below="@id/fragment_venue_uber_container"
-            android:layout_marginRight="@dimen/gap_medium"
-            android:layout_marginEnd="@dimen/gap_medium"
+            android:text="@string/mock_venue_title_linebreak_1"
+            android:textAppearance="@style/ln.text.small.italic.gray"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/fragment_venue_detail_phone_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_venue_detail_location_box"
+        android:layout_marginTop="@dimen/gap_small"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/gap_large"
+            android:minWidth="@dimen/ui_gutter_width"
+            android:scaleType="center"
+            android:src="@drawable/venue_phone_red"/>
+
+        <TextView
+            android:id="@+id/fragment_venue_detail_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/livenation_selector_pressable_background"
-            android:drawableLeft="@drawable/venue_info_plus"
-            android:drawableStart="@drawable/venue_info_plus"
-            android:drawablePadding="@dimen/gap_tiny"
-            android:text="@string/venue_detail_link"
-            android:textAppearance="@style/ln.text.small.red"
-            android:visibility="gone"/>
-    </RelativeLayout>
+            android:text="@string/mock_venue_telephone"
+            android:textAppearance="@style/ln.text.small.italic.gray"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_venue_uber_container"
+        android:animateLayoutChanges="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="@dimen/uber_button_width"
+        android:layout_height="@dimen/uber_button_height"
+        android:layout_marginRight="@dimen/gap_medium"
+        android:layout_marginEnd="@dimen/gap_medium">
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/fragment_venue_detail_venue_info_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/fragment_venue_detail_phone_box"
+        android:layout_below="@id/fragment_venue_uber_container"
+        android:layout_marginRight="@dimen/gap_medium"
+        android:layout_marginEnd="@dimen/gap_medium"
+        android:background="@drawable/livenation_selector_pressable_background"
+        android:drawableLeft="@drawable/venue_info_plus"
+        android:drawableStart="@drawable/venue_info_plus"
+        android:drawablePadding="@dimen/gap_tiny"
+        android:text="@string/venue_detail_link"
+        android:textAppearance="@style/ln.text.small.red"
+        android:visibility="gone"/>
 </RelativeLayout>

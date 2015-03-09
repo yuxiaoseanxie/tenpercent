@@ -136,7 +136,7 @@ public class UberFragment extends Fragment implements UberFragmentListener {
         if (isButtonVersion) {
             rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_uber_button, container, false);
         } else {
-            rootView = LayoutInflater.from(getActivity()).inflate(R.layout.order_uber_signup, container, false);
+            rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_uber_cell, container, false);
         }
         if (minutes != null && estimates != null) {
             updateView();
