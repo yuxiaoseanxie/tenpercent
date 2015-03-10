@@ -1,3 +1,4 @@
-include 'LabsPlatform', 'Ticketing', 'LiveNationApp', ':urbanairship-lib-5.1.4'
+include 'LabsPlatform', 'Ticketing', 'LiveNationApp',':LiveNationUI', ':urbanairship-lib-5.1.4'
 project(':LabsPlatform').projectDir = new File(settingsDir, "../adr-libsLabsPlatform/LabsPlatform")
 project(':Ticketing').projectDir = new File(settingsDir, "../adr-libTicketing/Ticketing")
+project(':LiveNationUI').projectDir = new File(settingsDir, "../adr-libLiveNationUI/LiveNationUI")

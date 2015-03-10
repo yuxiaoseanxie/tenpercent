@@ -20,8 +20,9 @@ def computeVersionCode() {
 }
 
 def computeVersionName(def versionCode) {
-    return "2.1." + versionCode - 100
+    return "2.1." + (versionCode - 100)
 }
+
 
 def computeGitSha(File rootDir) {
     ProcessBuilder processBuilder = new ProcessBuilder("git", "rev-parse", "--short", "HEAD")
@@ -138,6 +139,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')
     compile project(':Ticketing')
+    compile project(':LiveNationUI')
     compile project(':urbanairship-lib-5.1.4')
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.android.support:support-v13:21.0.3'
