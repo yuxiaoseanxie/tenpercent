@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.helpers;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.mobile.livenation.com.livenationui.analytics.Props;
 
 /**
  * Created by elodieferrais on 3/25/14.

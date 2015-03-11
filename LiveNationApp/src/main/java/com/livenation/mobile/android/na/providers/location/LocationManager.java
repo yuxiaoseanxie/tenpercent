@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.providers.location;
 
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
-import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.tools.VisibleForTesting;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 

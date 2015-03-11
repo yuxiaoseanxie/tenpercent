@@ -6,6 +6,9 @@ import com.livenation.mobile.android.ticketing.analytics.AnalyticsHandler;
 import java.util.Map;
 
 import android.app.Activity;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.Props;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {
     private static Props mapToProps(Map<String, Object> properties) {

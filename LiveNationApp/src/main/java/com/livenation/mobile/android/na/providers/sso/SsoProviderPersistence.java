@@ -1,14 +1,14 @@
 package com.livenation.mobile.android.na.providers.sso;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.preferences.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.text.TextUtils;
 
 /**
@@ -20,15 +20,6 @@ public class SsoProviderPersistence {
 
     public SsoProviderPersistence(Context context) {
         persistance = new PreferencePersistence(Constants.SharedPreferences.AUTHENTIFICATION_NAME, context);
-    }
-
-    public SsoManager.SSO_TYPE getConfiguredSsoProvider() {
-        SsoManager.AuthConfiguration authConfig = getAuthConfiguration();
-        SsoManager.SSO_TYPE type = null;
-        if (authConfig != null) {
-            type = authConfig.getSsoProviderId();
-        }
-        return type;
     }
 
     public void saveAuthConfiguration(SsoManager.SSO_TYPE ssoProviderId, String token) {

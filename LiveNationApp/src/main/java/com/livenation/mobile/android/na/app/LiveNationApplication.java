@@ -16,12 +16,12 @@ import com.crashlytics.android.Crashlytics;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
+import com.livenation.mobile.android.na.analytics.services.AmplitudeAnalytics;
+import com.livenation.mobile.android.na.analytics.services.CrashlyticsAnalytics;
+import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
@@ -60,6 +60,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
@@ -172,13 +175,15 @@ public class LiveNationApplication extends Application {
         LocalBroadcastManager.getInstance(this).registerReceiver(updateSsoAccessTokenReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.SSO_ACCESS_TOKEN_UPDATE_INTENT_FILTER));
 
 
-        //Start Library
+        //Start Platform Library
         LiveNationLibrary.start(this, environmentProvider, new DeviceIdAppProvider(this), locationProvider, accessTokenProvider, oldUserId);
         LiveNationLibrary.setSsoProvider(ssoManager);
         LiveNationLibrary.setErrorTracker(new LibraryErrorTracker());
 
+        //Initialize the UI library
         Crashlytics.start(this);
-        LiveNationAnalytics.initialize(this);
+        LiveNationAnalytics.initializeAnalyticTools(new GoogleAnalytics(this), new AmplitudeAnalytics(this));
+        LiveNationAnalytics.initializeCrashTools(new CrashlyticsAnalytics());
 
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);

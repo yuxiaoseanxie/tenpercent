@@ -3,13 +3,13 @@ package com.livenation.mobile.android.na.youtube;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.providers.ConfigFileProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 
 import java.util.List;
 
+import android.mobile.livenation.com.livenationui.tools.VisibleForTesting;
 import android.support.annotation.NonNull;
 
 public class YouTubeClient {

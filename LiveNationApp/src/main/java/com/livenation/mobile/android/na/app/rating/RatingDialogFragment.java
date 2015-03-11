@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.app.rating;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.preferences.RatingPreferences;
 import com.livenation.mobile.android.na.ui.dialogs.LiveNationDialogFragment;
 
@@ -11,6 +9,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -1,9 +1,8 @@
 package com.livenation.mobile.android.na.preferences;
 
-import com.livenation.mobile.android.na.helpers.VisibleForTesting;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.mobile.livenation.com.livenationui.tools.VisibleForTesting;
 
 public class PreferencePersistence {
     protected final String name;

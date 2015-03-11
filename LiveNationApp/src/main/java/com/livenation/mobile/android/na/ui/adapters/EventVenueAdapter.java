@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.ui.adapters;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.VerticalDate;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
@@ -18,6 +17,7 @@ import java.util.TimeZone;
 
 import android.content.Context;
 import android.location.Location;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.helpers.VisibleForTesting;
 import com.livenation.mobile.android.na.uber.service.UberService;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.uber.service.model.UberPrice;
@@ -13,7 +12,6 @@ import com.livenation.mobile.android.na.uber.service.model.UberProduct;
 import com.livenation.mobile.android.na.uber.service.model.UberProductResponse;
 import com.livenation.mobile.android.na.uber.service.model.UberTime;
 import com.livenation.mobile.android.na.uber.service.model.UberTimeResponse;
-import com.livenation.mobile.android.platform.api.transport.error.UnexpectedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.tools.VisibleForTesting;
 import android.support.annotation.NonNull;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;

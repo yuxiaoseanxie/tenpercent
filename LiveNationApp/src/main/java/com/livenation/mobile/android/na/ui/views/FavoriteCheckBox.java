@@ -1,6 +1,5 @@
 package com.livenation.mobile.android.na.ui.views;
 
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener;
 import com.livenation.mobile.android.platform.Constants;
@@ -15,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.widget.CheckBox;

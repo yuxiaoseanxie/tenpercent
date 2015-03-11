@@ -4,6 +4,10 @@ import com.livenation.mobile.android.platform.api.service.livenation.analytics.E
 
 import java.util.Map;
 
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.Props;
+
 
 /**
  * Created by elodieferrais on 4/17/14.

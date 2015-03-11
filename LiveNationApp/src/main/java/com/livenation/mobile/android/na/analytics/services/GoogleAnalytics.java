@@ -3,9 +3,10 @@ package com.livenation.mobile.android.na.analytics.services;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.Props;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticService;
+import android.mobile.livenation.com.livenationui.analytics.Props;
 
 /**
  * Created by cchilton on 1/12/15.

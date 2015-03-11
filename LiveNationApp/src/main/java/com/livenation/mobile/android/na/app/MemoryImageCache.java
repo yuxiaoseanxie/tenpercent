@@ -9,9 +9,9 @@
 package com.livenation.mobile.android.na.app;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 
 import android.graphics.Bitmap;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.support.v4.util.LruCache;
 
 /**

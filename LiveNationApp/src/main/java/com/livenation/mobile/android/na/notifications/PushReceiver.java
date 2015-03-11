@@ -2,9 +2,6 @@ package com.livenation.mobile.android.na.notifications;
 
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
-import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.notifications.ui.InboxActivity;
 import com.livenation.mobile.android.ticketing.Ticketing;
@@ -13,6 +10,9 @@ import com.urbanairship.push.PushMessage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.text.TextUtils;
 import android.util.Log;
 

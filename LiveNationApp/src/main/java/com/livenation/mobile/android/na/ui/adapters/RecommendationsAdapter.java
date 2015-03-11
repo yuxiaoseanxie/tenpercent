@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
-import com.livenation.mobile.android.na.analytics.LiveNationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.helpers.TaggedReference;
@@ -21,6 +19,8 @@ import java.util.TimeZone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

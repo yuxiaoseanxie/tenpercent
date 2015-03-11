@@ -3,9 +3,7 @@ package com.livenation.mobile.android.na.ui.views;
 import com.livenation.mobile.android.na.R;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +19,17 @@ public class ConfirmationActionButton extends FrameLayout {
 
     public ConfirmationActionButton(Context context) {
         super(context);
-        initialize(null);
+        initialize();
     }
 
     public ConfirmationActionButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ConfirmationActionButton);
-        initialize(attributes);
+        initialize();
     }
 
     public ConfirmationActionButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.ConfirmationActionButton, defStyle, 0);
-        initialize(attributes);
+        initialize();
     }
 
 
@@ -72,7 +66,7 @@ public class ConfirmationActionButton extends FrameLayout {
     //endregion
 
 
-    protected void initialize(@Nullable TypedArray attributes) {
+    protected void initialize() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.view_confirmation_action_button, this, false);
 
@@ -81,16 +75,5 @@ public class ConfirmationActionButton extends FrameLayout {
         this.tagLine = (TextView) view.findViewById(R.id.view_confirmation_action_button_tag_line);
 
         addView(view);
-
-        if (attributes != null) {
-            String title = attributes.getString(R.styleable.ConfirmationActionButton_title);
-            setTitle(title);
-
-            String tagLine = attributes.getString(R.styleable.ConfirmationActionButton_tagLine);
-            setTagLine(tagLine);
-
-            Drawable image = attributes.getDrawable(R.styleable.ConfirmationActionButton_image);
-            setImageDrawable(image);
-        }
     }
 }

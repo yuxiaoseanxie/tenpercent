@@ -9,11 +9,11 @@
 package com.livenation.mobile.android.na.ui.views;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.analytics.AnalyticsCategory;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
