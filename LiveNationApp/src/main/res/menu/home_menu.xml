@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_home_notifications_item"
         android:icon="@drawable/notifications_normal"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/account_notifications"/>
     <item
         android:id="@+id/menu_home_search_item"
         android:icon="@drawable/ic_menu_search_holo_light"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/home_menu_search"/>
     <item
         android:id="@+id/menu_home_legal_item"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/home_menu_legal"/>
     <item
         android:id="@+id/menu_home_contact_item"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/home_menu_contact"/>
     <item
         android:id="@+id/menu_home_help_item"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/home_menu_help"/>
     <item
         android:id="@+id/menu_home_logout_item"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/home_menu_logout"/>
     <item
         android:id="@+id/menu_home_debug_item"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/debug_menu_title"/>
 
 </menu>
