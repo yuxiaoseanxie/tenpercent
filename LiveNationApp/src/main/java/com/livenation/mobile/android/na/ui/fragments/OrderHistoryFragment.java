@@ -569,8 +569,8 @@ public class OrderHistoryFragment extends Fragment implements AdapterView.OnItem
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onUberSignupClick(cart);
                     UberHelper.trackUberTap(AnalyticsCategory.YOUR_ORDERS);
+                    onUberSignupClick(cart);
                 }
             });
             return view;
