@@ -20,7 +20,7 @@ def computeVersionCode() {
 }
 
 def computeVersionName(def versionCode) {
-    return "2.1." + versionCode - 100
+    return "2.1." + (versionCode - 100)
 }
 
 def computeGitSha(File rootDir) {
