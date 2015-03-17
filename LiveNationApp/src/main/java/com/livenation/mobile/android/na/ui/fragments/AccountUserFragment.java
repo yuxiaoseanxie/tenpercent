@@ -7,7 +7,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.presenters.views.AccountUserView;
 import com.livenation.mobile.android.na.providers.sso.SsoUpdatedUserCallback;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.utils.ImageUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;

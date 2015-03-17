@@ -8,7 +8,7 @@ import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.ArtistShowsActivity;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;

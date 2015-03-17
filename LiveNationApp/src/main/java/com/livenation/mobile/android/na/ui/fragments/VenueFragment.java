@@ -26,7 +26,7 @@ import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;

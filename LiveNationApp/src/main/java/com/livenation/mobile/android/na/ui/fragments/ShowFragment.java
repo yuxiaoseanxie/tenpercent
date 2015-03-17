@@ -28,7 +28,7 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;

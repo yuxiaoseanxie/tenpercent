@@ -4,7 +4,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;

@@ -2,7 +2,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
 
 import android.os.Bundle;

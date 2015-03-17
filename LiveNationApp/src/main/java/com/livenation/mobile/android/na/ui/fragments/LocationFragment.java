@@ -7,7 +7,7 @@ import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
 import com.livenation.mobile.android.na.providers.location.LocationManager;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;

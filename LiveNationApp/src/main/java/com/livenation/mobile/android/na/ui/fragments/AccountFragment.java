@@ -18,7 +18,7 @@ import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
-import com.livenation.mobile.android.na.ui.support.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
