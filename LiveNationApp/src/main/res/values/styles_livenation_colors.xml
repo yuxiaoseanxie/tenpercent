@@ -26,10 +26,6 @@
     <!-- notification -->
     <color name="notification_link_color">#E51837</color>
 
-    <!-- refresh toast -->
-    <color name="refresh_bar_background">#9B000000</color>
-    <color name="refresh_bar_separator">#22000000</color>
-
     <!-- On boarding -->
 
     <color name="onboarding_scanning_view_background">#f2f2f2</color>

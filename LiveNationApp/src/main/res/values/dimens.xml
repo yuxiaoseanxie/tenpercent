@@ -13,7 +13,6 @@
     <dimen name="list_item_height">80dp</dimen>
     <dimen name="popup_list_item_height">60dp</dimen>
     <dimen name="popup_list_item_padding">8dp</dimen>
-    <dimen name="one_dp">1dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -62,13 +61,6 @@
 
     <!-- Common dimen -->
     <dimen name="ui_dialog_list_separator_padding_left">32dp</dimen>
-
-    <!-- Refresh bar -->
-    <dimen name="view_refresh_bar_margin">28dp</dimen>
-    <dimen name="view_refresh_bar_padding">8dp</dimen>
-    <dimen name="view_refresh_bar_separator_margin">8dp</dimen>
-    <dimen name="view_refresh_bar_message_size">16sp</dimen>
-    <dimen name="view_refresh_bar_refresh_size">13sp</dimen>
 
     <!-- Help -->
     <dimen name="help_menu_item_margin">10dip</dimen>

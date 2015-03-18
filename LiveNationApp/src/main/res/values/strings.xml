@@ -193,10 +193,6 @@
     <string name="notif_no_notification_title">You have no notifications.</string>
     <string name="notif_no_notification_description">To receive artist presale and event notifications make sure you\'ve added them as favorites.</string>
 
-    <!-- Refresh bar -->
-    <string name="refresh_bar_message">Could not load more.\nCheck your connectivity.</string>
-    <string name="refresh_label">Retry</string>
-
     <!-- Legal and credit-->
     <string name="legal_terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
     <string name="legal_privacy_policy_url">https://s3.amazonaws.com/adr-static-content/en_US/privacy_policy.html</string>
