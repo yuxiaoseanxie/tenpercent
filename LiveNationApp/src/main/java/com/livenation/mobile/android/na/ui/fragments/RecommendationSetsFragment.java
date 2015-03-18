@@ -13,11 +13,9 @@ import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import android.mobile.livenation.com.livenationui.view.RefreshBar;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -30,6 +28,9 @@ import android.content.IntentFilter;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
+import android.mobile.livenation.com.livenationui.view.RefreshBar;
+import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -116,7 +117,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
     }
 
     @Override
-    BaseDecoratedScrollPager getScrollPager() {
+    protected BaseDecoratedScrollPager getScrollPager() {
         return scrollPager;
     }
 }

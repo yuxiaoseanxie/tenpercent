@@ -15,6 +15,8 @@ import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
+
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
 import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
@@ -177,7 +179,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
     }
 
     @Override
-    BaseDecoratedScrollPager getScrollPager() {
+    protected BaseDecoratedScrollPager getScrollPager() {
         return scrollPager;
     }
 

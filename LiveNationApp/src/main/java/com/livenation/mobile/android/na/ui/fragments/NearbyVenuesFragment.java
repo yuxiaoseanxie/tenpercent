@@ -13,6 +13,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
 import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.ui.VenueActivity;
@@ -158,7 +160,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
     }
 
     @Override
-    BaseDecoratedScrollPager getScrollPager() {
+    protected BaseDecoratedScrollPager getScrollPager() {
         return scrollPager;
     }
 }
