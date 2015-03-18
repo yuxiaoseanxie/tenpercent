@@ -4,7 +4,7 @@ import com.livenation.mobile.android.na.ObservableTemporaryUtils.ObservableProvi
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.dialogs.UberDialogFragment;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;

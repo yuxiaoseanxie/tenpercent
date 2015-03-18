@@ -23,6 +23,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.os.Bundle;
@@ -92,8 +93,8 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
         Props props = new Props();
         switch (searchResult.getSearchResultType()) {
             case Venue: {
-                props.put(AnalyticConstants.VENUE_NAME, searchResult.getName());
-                props.put(AnalyticConstants.VENUE_ID, searchResult.getNumericalId());
+                props.put(ConstantAnalytics.VENUE_NAME, searchResult.getName());
+                props.put(ConstantAnalytics.VENUE_ID, searchResult.getNumericalId());
 
                 Intent intent = new Intent(getActivity(), VenueActivity.class);
                 String entityId = Venue.getAlphanumericId(searchResult.getNumericalId());
@@ -104,8 +105,8 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
             }
 
             case Artist: {
-                props.put(AnalyticConstants.ARTIST_NAME, searchResult.getName());
-                props.put(AnalyticConstants.ARTIST_ID, searchResult.getNumericalId());
+                props.put(ConstantAnalytics.ARTIST_NAME, searchResult.getName());
+                props.put(ConstantAnalytics.ARTIST_ID, searchResult.getNumericalId());
 
                 Intent intent = new Intent(getActivity(), ArtistActivity.class);
                 String entityId = Artist.getAlphanumericId(searchResult.getNumericalId());
@@ -116,8 +117,8 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
             }
 
             case Event: {
-                props.put(AnalyticConstants.EVENT_NAME, searchResult.getName());
-                props.put(AnalyticConstants.EVENT_ID, searchResult.getNumericalId());
+                props.put(ConstantAnalytics.EVENT_NAME, searchResult.getName());
+                props.put(ConstantAnalytics.EVENT_ID, searchResult.getNumericalId());
 
                 EventUtils.redirectToSDP(getActivity(), searchResult.getNumericalId().toString());
                 break;

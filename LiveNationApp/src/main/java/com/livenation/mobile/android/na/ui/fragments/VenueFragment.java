@@ -16,7 +16,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleVenueView;
 import com.livenation.mobile.android.na.uber.UberClient;
@@ -26,6 +26,8 @@ import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.VenueBoxOfficeActivity;
 import com.livenation.mobile.android.na.ui.VenueShowsActivity;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
+
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -276,8 +278,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
             LiveNationAnalytics.track(AnalyticConstants.MORE_VENUE_INFO_TAP, AnalyticsCategory.VDP, props);
 
             Intent intent = new Intent(getActivity(), VenueBoxOfficeActivity.class);
@@ -296,8 +298,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         @Override
         public void onClick(View v) {
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
             LiveNationAnalytics.track(AnalyticConstants.VENUE_PHONE_TAP, AnalyticsCategory.VDP, props);
 
 
@@ -332,8 +334,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
                 return;
             }
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
             LiveNationAnalytics.track(AnalyticConstants.VENUE_ADDRESS_TAP, AnalyticsCategory.VDP, props);
 
             MapUtils.redirectToMapApplication(lat, lng, address, context);
@@ -352,8 +354,8 @@ public class VenueFragment extends LiveNationFragment implements SingleVenueView
         public void onClick(View view) {
             //Analytics
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
 
             LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_SHOWS_TAP, AnalyticsCategory.VDP, props);
 

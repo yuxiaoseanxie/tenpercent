@@ -9,6 +9,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.HashMap;
 import java.util.Map;
 
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.os.Bundle;
 
 public class ArtistShowsActivity extends LiveNationFragmentActivity {
@@ -45,7 +46,7 @@ public class ArtistShowsActivity extends LiveNationFragmentActivity {
     protected Map<String, Object> getAnalyticsProps() {
         Map<String, Object> props = new HashMap<String, Object>();
         String artistId = getIntent().getStringExtra(ArtistShowsActivity.EXTRA_ARTIST_ID);
-        props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistId));
+        props.put(ConstantAnalytics.ARTIST_ID, DataModelHelper.getNumericEntityId(artistId));
         return props;
     }
 

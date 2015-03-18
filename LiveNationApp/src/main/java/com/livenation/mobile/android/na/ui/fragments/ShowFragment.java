@@ -18,9 +18,11 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
-import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
+
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
+import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
@@ -355,7 +357,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
 
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
             LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.SDP, props);
 
             startActivity(intent);
@@ -375,8 +377,8 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
         public void onClick(View view) {
             //Analytics
             Props props = AnalyticsHelper.getPropsForEvent(event);
-            props.put(AnalyticConstants.ARTIST_NAME, lineupArtist.getName());
-            props.put(AnalyticConstants.ARTIST_ID, lineupArtist.getId());
+            props.put(ConstantAnalytics.ARTIST_NAME, lineupArtist.getName());
+            props.put(ConstantAnalytics.ARTIST_ID, lineupArtist.getId());
             LiveNationAnalytics.track(AnalyticConstants.ARTIST_CELL_TAP, AnalyticsCategory.SDP, props);
 
             Intent intent = new Intent(getActivity(), ArtistActivity.class);

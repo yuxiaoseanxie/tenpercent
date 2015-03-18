@@ -9,6 +9,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.os.Bundle;
@@ -61,8 +62,8 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
         //Analytics
         Props props = new Props();
         String eventName = analyticsEvent[position];
-        props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-        props.put(AnalyticConstants.VENUE_ID, venue.getId());
+        props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+        props.put(ConstantAnalytics.VENUE_ID, venue.getId());
 
         LiveNationAnalytics.track(eventName, AnalyticsCategory.VDP, props);
 

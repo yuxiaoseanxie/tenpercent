@@ -7,7 +7,7 @@ import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.app.rating.AppRaterManager;
-import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
+import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;

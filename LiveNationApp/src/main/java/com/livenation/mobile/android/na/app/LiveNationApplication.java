@@ -22,7 +22,7 @@ import com.livenation.mobile.android.na.analytics.TicketingAnalyticsBridge;
 import com.livenation.mobile.android.na.analytics.services.AmplitudeAnalytics;
 import com.livenation.mobile.android.na.analytics.services.CrashlyticsAnalytics;
 import com.livenation.mobile.android.na.analytics.services.GoogleAnalytics;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;

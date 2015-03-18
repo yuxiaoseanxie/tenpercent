@@ -3,7 +3,9 @@ package com.livenation.mobile.android.na.ui.fragments;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
+
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
+import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.ArtistEventsView;
 import com.livenation.mobile.android.na.presenters.views.SingleArtistView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
@@ -269,8 +271,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
             }
             //Analytics
             Props props = new Props();
-            props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
-            props.put(AnalyticConstants.ARTIST_ID, artist.getId());
+            props.put(ConstantAnalytics.ARTIST_NAME, artist.getName());
+            props.put(ConstantAnalytics.ARTIST_ID, artist.getId());
 
             LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_SHOWS_TAP, AnalyticsCategory.ADP, props);
 
@@ -285,8 +287,8 @@ public class ArtistFragment extends LiveNationFragment implements SingleArtistVi
         public void onClick(View view) {
             //Analytics
             Props props = new Props();
-            props.put(AnalyticConstants.ARTIST_NAME, artist.getName());
-            props.put(AnalyticConstants.ARTIST_ID, artist.getId());
+            props.put(ConstantAnalytics.ARTIST_NAME, artist.getName());
+            props.put(ConstantAnalytics.ARTIST_ID, artist.getId());
 
             LiveNationAnalytics.track(AnalyticConstants.SEE_MORE_VIDEOS_TAP, AnalyticsCategory.ADP, props);
 

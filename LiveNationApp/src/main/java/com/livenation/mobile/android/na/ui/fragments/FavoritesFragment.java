@@ -13,6 +13,8 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
+
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
@@ -75,8 +77,8 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //Analytics
             Props props = new Props();
-            props.put(AnalyticConstants.ARTIST_NAME, artistAdapter.getItem(position).getName());
-            props.put(AnalyticConstants.ARTIST_ID, String.valueOf(artistAdapter.getItem(position).getId()));
+            props.put(ConstantAnalytics.ARTIST_NAME, artistAdapter.getItem(position).getName());
+            props.put(ConstantAnalytics.ARTIST_ID, String.valueOf(artistAdapter.getItem(position).getId()));
             LiveNationAnalytics.track(AnalyticConstants.ARTIST_CELL_TAP, AnalyticsCategory.FAVORITES, props);
 
             Favorite favorite = artistAdapter.getItem(position);
@@ -92,8 +94,8 @@ public class FavoritesFragment extends LiveNationFragment implements TabHost.OnT
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //Analytics
             Props props = new Props();
-            props.put(AnalyticConstants.VENUE_NAME, venueAdapter.getItem(position).getName());
-            props.put(AnalyticConstants.VENUE_ID, String.valueOf(venueAdapter.getItem(position).getId()));
+            props.put(ConstantAnalytics.VENUE_NAME, venueAdapter.getItem(position).getName());
+            props.put(ConstantAnalytics.VENUE_ID, String.valueOf(venueAdapter.getItem(position).getId()));
             LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.FAVORITES, props);
 
 

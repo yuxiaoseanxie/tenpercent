@@ -7,6 +7,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.FavoriteParameters;
 
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.support.annotation.NonNull;
@@ -47,8 +48,8 @@ public class OnFavoriteClickListener {
             switch (favorite.getIntType()) {
                 case Favorite.FAVORITE_ARTIST:
 
-                    props.put(AnalyticConstants.ARTIST_ID, String.valueOf(favorite.getId()));
-                    props.put(AnalyticConstants.ARTIST_NAME, favorite.getName());
+                    props.put(ConstantAnalytics.ARTIST_ID, String.valueOf(favorite.getId()));
+                    props.put(ConstantAnalytics.ARTIST_NAME, favorite.getName());
                     if (added) {
                         props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_FAVORITED_VALUE);
                     } else {
@@ -57,8 +58,8 @@ public class OnFavoriteClickListener {
                     LiveNationAnalytics.track(AnalyticConstants.FAVORITE_ARTIST_STAR_TAP, category, props);
                     break;
                 case Favorite.FAVORITE_VENUE:
-                    props.put(AnalyticConstants.VENUE_NAME, favorite.getName());
-                    props.put(AnalyticConstants.VENUE_ID, String.valueOf(favorite.getId()));
+                    props.put(ConstantAnalytics.VENUE_NAME, favorite.getName());
+                    props.put(ConstantAnalytics.VENUE_ID, String.valueOf(favorite.getId()));
                     if (added) {
                         props.put(AnalyticConstants.STATE, AnalyticConstants.STATE_FAVORITED_VALUE);
                     } else {

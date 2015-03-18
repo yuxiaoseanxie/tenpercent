@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.net.Uri;
@@ -83,7 +84,7 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
             Map<String, Object> props = new HashMap<String, Object>();
             if (args.containsKey(ArtistActivity.PARAMETER_ARTIST_ID)) {
                 String artistIdRaw = args.getString(ArtistActivity.PARAMETER_ARTIST_ID);
-                props.put(AnalyticConstants.ARTIST_ID, DataModelHelper.getNumericEntityId(artistIdRaw));
+                props.put(ConstantAnalytics.ARTIST_ID, DataModelHelper.getNumericEntityId(artistIdRaw));
             }
             return props;
         }
@@ -96,8 +97,8 @@ public class ArtistActivity extends DetailBaseFragmentActivity {
     protected void onShare() {
         Props props = new Props();
         if (artistFragment != null) {
-            props.put(AnalyticConstants.ARTIST_NAME, artistFragment.getArtist().getName());
-            props.put(AnalyticConstants.ARTIST_ID, artistFragment.getArtist().getId());
+            props.put(ConstantAnalytics.ARTIST_NAME, artistFragment.getArtist().getName());
+            props.put(ConstantAnalytics.ARTIST_ID, artistFragment.getArtist().getId());
         }
         trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
         super.onShare();

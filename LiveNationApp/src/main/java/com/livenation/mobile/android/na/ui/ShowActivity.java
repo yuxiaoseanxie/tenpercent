@@ -28,6 +28,7 @@ import java.util.TimeZone;
 
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.net.Uri;
@@ -103,8 +104,8 @@ public class ShowActivity extends DetailBaseFragmentActivity {
     protected void onShare() {
         Props props = new Props();
         if (this.event != null) {
-            props.put(AnalyticConstants.EVENT_NAME, event.getName());
-            props.put(AnalyticConstants.EVENT_ID, event.getId());
+            props.put(ConstantAnalytics.EVENT_NAME, event.getName());
+            props.put(ConstantAnalytics.EVENT_ID, event.getId());
         }
         trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
         super.onShare();
@@ -181,16 +182,16 @@ public class ShowActivity extends DetailBaseFragmentActivity {
         Map<String, Object> props = new HashMap<String, Object>();
 
         if (args.containsKey(PARAMETER_EVENT_ID)) {
-            props.put(AnalyticConstants.EVENT_ID, DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
+            props.put(ConstantAnalytics.EVENT_ID, DataModelHelper.getNumericEntityId(args.getString(PARAMETER_EVENT_ID)));
         }
         if (event != null) {
-            props.put(AnalyticConstants.EVENT_ID, event.getNumericId());
+            props.put(ConstantAnalytics.EVENT_ID, event.getNumericId());
 
             if (event.getVenue() != null) {
-                props.put(AnalyticConstants.VENUE_ID, event.getVenue().getNumericId());
+                props.put(ConstantAnalytics.VENUE_ID, event.getVenue().getNumericId());
             }
             if (event.getLineup() != null && event.getLineup().size() > 0) {
-                props.put(AnalyticConstants.ARTIST_ID, event.getLineup().get(0).getNumericId());
+                props.put(ConstantAnalytics.ARTIST_ID, event.getLineup().get(0).getNumericId());
             }
         }
         return props;

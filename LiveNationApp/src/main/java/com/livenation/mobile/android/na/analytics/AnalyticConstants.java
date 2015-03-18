@@ -197,16 +197,6 @@ public class AnalyticConstants {
     public static final String PLATFORM = "Platform";
     public static final String PLATFORM_VALUE = "LNANDROID";
 
-    //Event
-    public static final String EVENT_NAME = "Event Name";
-    public static final String EVENT_ID = "Event Id";
-
-    public static final String ARTIST_NAME = "Artist Name";
-    public static final String ARTIST_ID = "Artist Id";
-
-    public static final String VENUE_NAME = "Venue Name";
-    public static final String VENUE_ID = "Venue Id";
-
     //Favorites
     public static final String STATE = "state";
     public static final String STATE_FAVORITED_VALUE = "favorited";

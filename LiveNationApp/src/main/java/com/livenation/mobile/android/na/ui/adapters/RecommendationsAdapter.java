@@ -3,13 +3,9 @@ package com.livenation.mobile.android.na.ui.adapters;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
-import com.livenation.mobile.android.na.helpers.TaggedReference;
+import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.FavoriteSearchActivity;
 import com.livenation.mobile.android.na.ui.SsoActivity;
-import android.mobile.livenation.com.livenationui.view.LayoutedTextView;
-import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
-import android.mobile.livenation.com.livenationui.view.VerticalDate;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 import com.livenation.mobile.android.platform.sso.SsoManager;
@@ -21,6 +17,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.view.LayoutedTextView;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.VerticalDate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +77,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
             holder = (EventViewHolder) convertView.getTag();
         }
 
-        Event event = getItem(position).get();
+        Event event = getItem(position).event;
 
         holder.getTitle().setText(event.getDisplayName());
         holder.getLocation().setText(event.getVenue().getName());
@@ -127,7 +126,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         }
 
         TextView text = holder.getText();
-        switch (getItem(position).getTag()) {
+        switch (getItem(position).type) {
             case EVENT_POPULAR:
                 text.setText(getContext().getString(R.string.recommendations_title_popular));
                 text.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.swoosh_divider, 0, 0);
@@ -149,7 +148,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         //simply returning getItem(position).getTag() here would prevent efficient view recycling in getView(),
         //as views for personal and popular would be in separate view recycle pools.
 
-        switch (getItem(position).getTag()) {
+        switch (getItem(position).type) {
             case FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK:
                 return ITEM_TYPE_UPSELL_SEARCH_WITH_FACEBOOK;
             case FAVORITE_UPSELL_SEARCH:
@@ -168,7 +167,7 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
 
     @Override
     public long getHeaderId(int position) {
-        switch (getItem(position).getTag()) {
+        switch (getItem(position).type) {
             case EVENT_PERSONAL:
                 return RecommendationItem.RecommendationType.EVENT_PERSONAL.ordinal();
             case EVENT_POPULAR:
@@ -230,25 +229,32 @@ public class RecommendationsAdapter extends ArrayAdapter<RecommendationsAdapter.
         getContext().startActivity(intent);
     }
 
-    public static class RecommendationItem extends TaggedReference<Event, RecommendationItem.RecommendationType> implements IdEquals<RecommendationItem> {
+    public static class RecommendationItem implements IdEquals<RecommendationItem> {
+        public Event event;
+        RecommendationType type;
+
         public RecommendationItem() {
-            super(null);
         }
 
         public RecommendationItem(Event event) {
-            super(event);
+            this.event = event;
+
+        }
+
+        public void setTag(RecommendationType type) {
+            this.type = type;
         }
 
         @Override
         public boolean idEquals(RecommendationItem target) {
             if (hasEvent()) {
-                return get().idEquals(target.get()) && getTag().equals(target.getTag());
+                return event.idEquals(target.event) && type.equals(target.type);
             }
             return false;
         }
 
         public boolean hasEvent() {
-            return get() != null;
+            return event != null;
         }
 
         public static enum RecommendationType {EVENT_PERSONAL, EVENT_POPULAR, FAVORITE_UPSELL_DISCREET, FAVORITE_UPSELL_SEARCH, FAVORITE_UPSELL_SEARCH_WITH_FACEBOOK}

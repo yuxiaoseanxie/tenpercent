@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.ui.adapters;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.ExternalApplicationAnalytics;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.uber.service.model.LiveNationEstimate;
 import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow.TravelOption;
 

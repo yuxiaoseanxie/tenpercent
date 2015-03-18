@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
@@ -100,12 +100,12 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
                             long id) {
         RecommendationItem recommendationItem = (RecommendationItem) parent.getItemAtPosition(position);
 
-        if (recommendationItem == null || recommendationItem.get() == null) {
+        if (recommendationItem == null || recommendationItem.event == null) {
             //user clicked the footer/loading view
             return;
         }
 
-        final Event event = recommendationItem.get();
+        final Event event = recommendationItem.event;
         EventUtils.redirectToSDP(getActivity(), event);
 
 

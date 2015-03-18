@@ -2,7 +2,7 @@ package com.livenation.mobile.android.na.ui.dialogs;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LoginHelper;
 import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
 import com.livenation.mobile.android.na.utils.CalendarUtils;

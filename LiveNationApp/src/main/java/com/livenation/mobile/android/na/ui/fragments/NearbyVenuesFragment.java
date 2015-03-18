@@ -11,9 +11,10 @@ package com.livenation.mobile.android.na.ui.fragments;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
 import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
@@ -128,8 +129,8 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
 
         //Analytics
         Props props = new Props();
-        props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-        props.put(AnalyticConstants.VENUE_ID, venue.getId());
+        props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+        props.put(ConstantAnalytics.VENUE_ID, venue.getId());
         props.put(AnalyticConstants.CELL_POSITION, position);
         LiveNationAnalytics.track(AnalyticConstants.VENUE_CELL_TAP, AnalyticsCategory.NEARBY, props);
 

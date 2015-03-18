@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.net.Uri;
@@ -123,8 +124,8 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
     protected void onShare() {
         Props props = new Props();
         if (this.venue != null) {
-            props.put(AnalyticConstants.VENUE_NAME, venue.getName());
-            props.put(AnalyticConstants.VENUE_ID, venue.getId());
+            props.put(ConstantAnalytics.VENUE_NAME, venue.getName());
+            props.put(ConstantAnalytics.VENUE_ID, venue.getId());
         }
         trackActionBarAction(AnalyticConstants.SHARE_ICON_TAP, props);
         super.onShare();
@@ -175,7 +176,7 @@ public class VenueActivity extends DetailBaseFragmentActivity implements EventsV
         Map<String, Object> props = new HashMap<String, Object>();
         if (args.containsKey(VenueActivity.PARAMETER_VENUE_ID)) {
             String venueIdRaw = args.getString(VenueActivity.PARAMETER_VENUE_ID);
-            props.put(AnalyticConstants.VENUE_ID, DataModelHelper.getNumericEntityId(venueIdRaw));
+            props.put(ConstantAnalytics.VENUE_ID, DataModelHelper.getNumericEntityId(venueIdRaw));
         }
         return props;
     }
