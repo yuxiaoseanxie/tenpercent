@@ -6,6 +6,7 @@ import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.view.listener.BaseScrollPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.ViewGroup;
