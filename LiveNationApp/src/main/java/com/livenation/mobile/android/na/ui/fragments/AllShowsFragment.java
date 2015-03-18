@@ -22,7 +22,7 @@ import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
 import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import android.mobile.livenation.com.livenationui.view.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;

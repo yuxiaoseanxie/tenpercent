@@ -17,7 +17,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="list_show_item_date_min_width">30dp</dimen>
     <dimen name="ui_ticket_offering_padding">21dp</dimen>
     <dimen name="ui_header_transparent_min_height">40dp</dimen>
     <dimen name="ui_ticketbar_options_height">32dp</dimen>
@@ -44,13 +43,11 @@
     <dimen name="confirmation_image_height">176dp</dimen>
     <dimen name="sso_image_size">90dp</dimen>
     <dimen name="list_venue_nearby_header_padding">3dp</dimen>
-    <dimen name="view_show_venue_details_packing">-3dp</dimen>
     <dimen name="account_footer_item_packing">-5dp</dimen>
     <dimen name="ui_find_tickets_height">56dp</dimen>
     <dimen name="venue_travel_popup_width">280dp</dimen>
     <dimen name="uber_dialog_title_spacing">-3dp</dimen>
     <dimen name="uber_surge_badge_spacing">9dp</dimen>
-    <dimen name="vertical_date_dotw_max_width">40dp</dimen>
 
     <!-- Uber -->
     <dimen name="uber_new_rider_linespacing">-1dp</dimen>

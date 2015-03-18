@@ -11,7 +11,7 @@ import com.livenation.mobile.android.na.helpers.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
 import com.livenation.mobile.android.na.ui.views.ConfirmationActionButton;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;

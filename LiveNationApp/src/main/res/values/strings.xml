@@ -134,7 +134,6 @@
     <string name="url_error_platform">Please try again later</string>
     <string name="url_error_bad_url">Bad URL</string>
     <string name="megaticket">Megaticket</string>
-    <string name="view_date_multiday">Multi Day</string>
     <string name="show_multiple_dates">Multiple Dates and Times</string>
     <!-- Order Confirmation Screen -->
 

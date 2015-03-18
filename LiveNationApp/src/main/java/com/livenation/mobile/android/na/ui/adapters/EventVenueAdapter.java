@@ -2,7 +2,7 @@ package com.livenation.mobile.android.na.ui.adapters;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
-import com.livenation.mobile.android.na.ui.views.VerticalDate;
+import android.mobile.livenation.com.livenationui.view.VerticalDate;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;

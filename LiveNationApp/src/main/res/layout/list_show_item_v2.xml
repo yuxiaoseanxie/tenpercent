@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <com.livenation.mobile.android.na.ui.views.VerticalDate
+    <android.mobile.livenation.com.livenationui.view.VerticalDate
         android:id="@+id/list_generic_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,7 +11,7 @@
         android:layout_marginRight="@dimen/gap_medium"
         android:layout_marginTop="@dimen/gap_large"/>
 
-    <com.livenation.mobile.android.na.ui.views.TransitioningImageView
+    <android.mobile.livenation.com.livenationui.view.TransitioningImageView
         android:id="@+id/list_item_show_image"
         android:layout_width="96dp"
         android:layout_height="72dp"
@@ -22,7 +22,7 @@
         android:layout_toRightOf="@id/list_generic_show_date"
         android:layout_toEndOf="@id/list_generic_show_date"/>
 
-    <com.livenation.mobile.android.na.ui.views.LayoutedTextView
+    <android.mobile.livenation.com.livenationui.view.LayoutedTextView
         android:id="@+id/list_generic_show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,7 +12,7 @@ import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragme
 import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;

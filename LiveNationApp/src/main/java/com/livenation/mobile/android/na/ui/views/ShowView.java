@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.view.VerticalDate;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;

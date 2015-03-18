@@ -7,7 +7,7 @@
                 android:minHeight="@dimen/list_item_height">
 
 
-    <com.livenation.mobile.android.na.ui.views.VerticalDate
+    <android.mobile.livenation.com.livenationui.view.VerticalDate
         android:id="@+id/view_show_date"
         android:layout_width="@dimen/ui_gutter_width"
         android:layout_height="wrap_content"

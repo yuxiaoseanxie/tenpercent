@@ -33,7 +33,7 @@ import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
-import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;

@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <com.livenation.mobile.android.na.ui.views.VerticalDate
+    <android.mobile.livenation.com.livenationui.view.VerticalDate
         android:id="@+id/list_nearby_show_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
