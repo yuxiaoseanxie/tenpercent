@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.ui.fragments;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;

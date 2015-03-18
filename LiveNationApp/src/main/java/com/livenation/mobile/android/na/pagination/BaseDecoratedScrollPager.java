@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.pagination;
 
 import com.livenation.mobile.android.na.ui.viewcontroller.RefreshBarController;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.IdEquals;
 

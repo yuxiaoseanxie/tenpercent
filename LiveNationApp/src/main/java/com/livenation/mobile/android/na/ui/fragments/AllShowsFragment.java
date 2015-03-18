@@ -16,10 +16,8 @@ import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
-import com.livenation.mobile.android.na.providers.ConfigFileProvider;
-import com.livenation.mobile.android.na.ui.ShowActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventStickyHeaderAdapter;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.ui.views.TransitioningImageView;
@@ -35,7 +33,6 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;

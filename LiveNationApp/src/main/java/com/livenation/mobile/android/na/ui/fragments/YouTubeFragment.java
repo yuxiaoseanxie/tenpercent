@@ -6,7 +6,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import com.livenation.mobile.android.na.ui.views.YouTubeVideoView;
 import com.livenation.mobile.android.na.youtube.YouTubeClient;
 import com.livenation.mobile.android.na.youtube.YouTubeVideo;

@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.pagination;
 
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.ui.views.EmptyListViewControl;
+import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;

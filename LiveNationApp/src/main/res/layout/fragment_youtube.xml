@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/artist_youtube"/>
 
-    <com.livenation.mobile.android.na.ui.views.EmptyListViewControl
+    <android.mobile.livenation.com.livenationui.view.EmptyListViewControl
         android:id="@+id/fragment_youtube_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

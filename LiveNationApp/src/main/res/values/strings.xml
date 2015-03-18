@@ -105,9 +105,6 @@
 
     <string name="city_search_input_hint">Search cities by name</string>
 
-    <string name="view_empty_list_retry_button">Retry</string>
-    <string name="view_empty_list_no_data">No Results Found</string>
-
     <string name="youtube_video_play">Play Video</string>
 
     <string name="no_ticket_offerings">No Tickets Available&#8230;</string>

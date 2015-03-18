@@ -1,5 +1,6 @@
 <resources>
 
+
     <!-- Generic sizes, can be replaced later with named values if needed -->
     <dimen name="gap_tiny">5dp</dimen>
     <dimen name="gap_smaller">8dp</dimen>
@@ -43,7 +44,6 @@
     <dimen name="view_featured_text_margin_bottom">4dp</dimen>
     <dimen name="detail_page_image_height">270dp</dimen>
     <dimen name="confirmation_image_height">176dp</dimen>
-    <dimen name="fan_man_min_height">48dp</dimen>
     <dimen name="sso_image_size">90dp</dimen>
     <dimen name="list_venue_nearby_header_padding">3dp</dimen>
     <dimen name="view_show_venue_details_packing">-3dp</dimen>
@@ -103,6 +103,5 @@
     <dimen name="on_boarding_skip_height">32dp</dimen>
 
     <!-- Urban Airship -->
-    <dimen name="widget_margin">8dp</dimen>
 
 </resources>

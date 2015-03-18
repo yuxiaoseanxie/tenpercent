@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="ln.text" parent="@android:style/TextAppearance"/>
-
     <style name="ln.text.tiny">
         <item name="android:textSize">10sp</item>
     </style>
@@ -93,17 +91,11 @@
         <item name="android:textColor">@color/livenation_gray</item>
     </style>
 
-    <style name="ln.text.medium">
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <style name="ln.text.medium.bold.white">
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="ln.text.medium.gray">
-        <item name="android:textColor">@color/livenation_gray</item>
-    </style>
+
 
     <style name="ln.text.medium.italic">
         <item name="android:textStyle">italic</item>
