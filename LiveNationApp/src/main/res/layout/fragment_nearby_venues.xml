@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.livenation.mobile.android.na.ui.views.RefreshBar
+        <android.mobile.livenation.com.livenationui.view.RefreshBar
             android:id="@+id/fragment_nearby_venues_refresh_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

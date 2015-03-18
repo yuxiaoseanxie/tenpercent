@@ -12,6 +12,7 @@ import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import android.widget.ArrayAdapter;
 
 /**

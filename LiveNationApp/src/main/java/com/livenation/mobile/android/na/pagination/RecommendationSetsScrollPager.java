@@ -14,6 +14,7 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import java.util.ArrayList;
 import java.util.List;
 
+import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import android.widget.ArrayAdapter;
 
 /**

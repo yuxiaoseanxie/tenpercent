@@ -7,6 +7,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.parame
 
 import java.util.List;
 
+import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import android.widget.ArrayAdapter;
 
 /**

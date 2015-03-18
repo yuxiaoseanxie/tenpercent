@@ -13,11 +13,11 @@ import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.AnalyticsHelper;
-import com.livenation.mobile.android.na.pagination.BaseDecoratedScrollPager;
+import android.mobile.livenation.com.livenationui.view.listener.BaseDecoratedScrollPager;
 import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
 import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
-import com.livenation.mobile.android.na.ui.views.RefreshBar;
+import android.mobile.livenation.com.livenationui.view.RefreshBar;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
