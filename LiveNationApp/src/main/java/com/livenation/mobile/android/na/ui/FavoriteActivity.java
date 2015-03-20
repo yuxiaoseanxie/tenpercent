@@ -12,6 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;

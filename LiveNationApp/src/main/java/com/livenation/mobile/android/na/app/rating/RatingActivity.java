@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.app.rating;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;

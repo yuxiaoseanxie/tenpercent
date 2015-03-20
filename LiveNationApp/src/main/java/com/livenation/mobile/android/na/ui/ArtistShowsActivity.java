@@ -9,6 +9,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 import java.util.HashMap;
 import java.util.Map;
 
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.os.Bundle;
 

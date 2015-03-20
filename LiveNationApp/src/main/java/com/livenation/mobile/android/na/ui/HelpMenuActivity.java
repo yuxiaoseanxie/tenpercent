@@ -7,6 +7,7 @@ import com.livenation.mobile.android.na.ui.fragments.HelpMenuFragment;
 import com.livenation.mobile.android.na.ui.fragments.WebViewFragment;
 
 import android.app.FragmentTransaction;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;

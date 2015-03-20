@@ -2,11 +2,12 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.ui.SsoActivity;
+import android.mobile.livenation.com.livenationui.activity.SsoActivity;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,7 +34,7 @@ public class AccountSignInFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP, AnalyticsCategory.DRAWER);
+            LiveNationAnalytics.track(ConstantAnalytics.FACEBOOK_CONNECT_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
             intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
             startActivity(intent);

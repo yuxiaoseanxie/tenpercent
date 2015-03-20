@@ -10,6 +10,7 @@ import java.util.List;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.os.Bundle;

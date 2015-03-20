@@ -10,7 +10,6 @@ package com.livenation.mobile.android.na.app;
 
 public class Constants {
 
-    public static final int DEFAULT_RADIUS = 50;
     public static final float METERS_IN_A_MILE = 1609.34f;
 
     //arbitary delay between user keypresses and sending user text to the API
@@ -60,21 +59,7 @@ public class Constants {
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";
         public static final String ON_BOARDING_HAS_BEEN_DISPLAYED = "on_boarding_has_been_displayed";
         //1.X key
-        public static final String PREF_NAME = "TM_USER_PREF";
-        public static final String INSTALLATION_ID = "INSTALLATION_ID";
         public static final String USER_ALLOWS_MEDIA_SCRAPE = "USER_ALLOWS_MEDIA_SCRAPE";
-
-        public static final String IAS_NAME = "ias_name";
-        public static final String IAS_USER_ID = "ias_user_id";
-        //Authentification
-        public static final String AUTHENTIFICATION_NAME = "auth_configuration";
-        public static final String PARAMETER_ACCESS_TOKEN_KEY = "access_token";
-        public static final String PARAMETER_TIMESTAMP = "timestamp";
-        public static final String PARAMETER_SSO_PROVIDER_ID_KEY = "sso_provider_id";
-        public static final String USER_ID = "user_id";
-        public static final String USER_NAME = "user_name";
-        public static final String USER_EMAIL = "user_email";
-        public static final String USER_PIC_URL = "user_pic_url";
 
         //Rating
         public static final String RATING_DIALOG_CLICKED = "rating_dialog_clicked";
@@ -91,10 +76,6 @@ public class Constants {
         public static final String UBER_FREE_RIDE_TEXT = "uber_free_ride_text";
         public static final String CONFIRMATION_ACTIONS = "confirmation_actions";
 
-    }
-
-    public class BroadCastReceiver {
-        public static final String MUSIC_LIBRARY_UPDATE = "music_library_update";
     }
 
 }

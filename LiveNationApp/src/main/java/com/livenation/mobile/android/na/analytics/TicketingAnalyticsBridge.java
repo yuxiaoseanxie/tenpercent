@@ -8,6 +8,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 
 public class TicketingAnalyticsBridge implements AnalyticsHandler {

@@ -5,7 +5,7 @@
 package com.livenation.mobile.android.na.notifications.ui;
 
 import com.livenation.mobile.android.na.R;
-import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import com.urbanairship.UAirship;
 
 import android.content.Intent;

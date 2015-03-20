@@ -2,7 +2,7 @@ package com.livenation.mobile.android.na.providers.location;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import android.mobile.livenation.com.livenationui.persistence.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 
 import java.util.ArrayList;

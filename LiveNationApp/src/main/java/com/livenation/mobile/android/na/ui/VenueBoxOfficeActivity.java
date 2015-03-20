@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.ui.support.BoxOfficeTabs;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.BoxOffice;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;

@@ -24,6 +24,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.sso.SsoProviderPersistence;
 import android.widget.Toast;
 
 public class FacebookSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {

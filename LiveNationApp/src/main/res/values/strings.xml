@@ -71,13 +71,6 @@
     <string name="login_button_or">or</string>
     <string name="login_connection_problem">Can\'t establish a reliable connection to the server</string>
 
-    <string name="recommendations_favorite_upsell_facebook_button">Connect with Facebook</string>
-    <string name="recommendations_favorite_upsell_search_button">Find Your Favorites</string>
-    <string name="recommendations_favorite_upsell_small_text">For better recommendations add more favorite artists</string>
-    <string name="recommendations_favorite_upsell_large_title">No show recommendations? Lets fix that.</string>
-    <string name="recommendations_favorite_upsell_large_text1">Tell us your music \'likes\' via Facebook</string>
-    <string name="recommendations_favorite_upsell_large_text2">Or, let us know who you want to see live</string>
-
     <string name="debug_menu_title">Debug</string>
     <string name="debug_actionbar_title">Debug</string>
     <string name="debug_header_info">INFO</string>
@@ -95,9 +88,6 @@
     <string name="debug_item_commerce_session_recording">Record Commerce Session</string>
     <string name="debug_item_commerce_session_recording_on">Stop</string>
     <string name="debug_item_commerce_session_recording_off">Start</string>
-
-    <string name="recommendations_title_personal">Recommended for you</string>
-    <string name="recommendations_title_popular">Popular shows</string>
 
     <string name="search_input_hint_events_artists_venues">Events, Artists, Venues</string>
     <string name="search_input_hint_artists">Search Artists</string>

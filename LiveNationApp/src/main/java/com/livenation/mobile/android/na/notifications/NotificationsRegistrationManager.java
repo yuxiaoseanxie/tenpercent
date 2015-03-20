@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.notifications;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import android.mobile.livenation.com.livenationui.persistence.PreferencePersistence;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.support.RegisterForNotificationsParameters;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;

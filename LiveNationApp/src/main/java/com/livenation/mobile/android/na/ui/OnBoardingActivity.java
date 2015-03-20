@@ -12,7 +12,10 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.mobile.livenation.com.livenationui.activity.SsoActivity;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -294,7 +297,7 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
     }
 
     private void loginWithFacebook() {
-        LiveNationAnalytics.track(AnalyticConstants.FACEBOOK_CONNECT_TAP, AnalyticsCategory.ON_BOARDING);
+        LiveNationAnalytics.track(ConstantAnalytics.FACEBOOK_CONNECT_TAP, AnalyticsCategory.ON_BOARDING);
         Intent intent = new Intent(this, SsoActivity.class);
         intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
         startActivityForResult(intent, FACEBOOK_LOGIN_REQUEST_CODE);

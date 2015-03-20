@@ -11,11 +11,7 @@ public class AnalyticConstants {
      */
     //Common
     public static final String GOOGLE_SIGN_IN_TAP = "Google Sign In Tap";
-    public static final String FACEBOOK_CONNECT_TAP = "Facebook Connect Tap";
     public static final String NOTIFICATION_ICON_TAP = "Notification Icon Tap";
-    public static final String GOOGLE_CONNECT = "Google Sign In";
-    public static final String FACEBOOK_CONNECT = "Facebook Connect";
-    public static final String FAVORITES_UPSELL_TAP = "Favorites Upsell Tap";
     public static final String EVENT_CELL_TAP = "Event Cell Tap";
     public static final String VENUE_CELL_TAP = "Venue Cell Tap";
     public static final String ARTIST_CELL_TAP = "Artist Cell Tap";
@@ -91,13 +87,11 @@ public class AnalyticConstants {
 
     //HouseKeeping 1.x Updated (LN_Android)
     public static final String UPDATED = "1.x Updated";
-    public static final String MIGRATION_COMPLETED = "1.x Migration Completed";
     public static final String GRANTED_ACCESS_TO_MUSIC = "1.x Granted Access to Music Library";
     public static final String APPLICATION_OPEN = "User Opens App";
     public static final String DEEP_LINK_REDIRECTION = "Deep Link Redirection";
 
     //Music Library Analysis
-    public static final String AFFINITY_MUSIC_LIBRARY_SCAN_COMPLETED = "Affinity Music Library Scan Completed";
 
     //Uber
     public static final String UBER_WEB_LAUNCH = "Uber Web Launch";
@@ -147,7 +141,6 @@ public class AnalyticConstants {
     public static final String OMNITURE_SCREEN_VDP_VENUE_INFO = "LN_Mob: NA App Android: VDP: Venue Info";
 
     //Apsalar
-    public static final String APSALAR_LN_LOGIN = "Livenation Login";
     public static final String APSALAR_FIND_TICKET_TAP = "Find Ticket Tap";
     public static final String APSALAR_PURCHASE_CONFIRMATION = "Purchase Confirmation";
 
@@ -219,14 +212,9 @@ public class AnalyticConstants {
     public static final String LOCATION_CURRENT_LOCATION_USE = "Use current Location";
 
     //HouseKeeping
-    public static final String AIS_USER_ID = "AIS User ID";
     public static final String ANDROID_DEVICE_ID = "Android Device ID";
     public static final String TOKEN = "Token";
-    public static final String TOKEN_TYPE = "Token type";
     public static final String GRANTED_ACCESS_TO_MUSIC_LIBRARY = "Granted Access to Music Library";
-
-    //Music Library Analysis
-    public static final String NUMBER_OF_ARTISTS_FOUND = "Number of artists found";
 
     //Login
     public static final String FB_LOGGED_IN = "FB Logged In";

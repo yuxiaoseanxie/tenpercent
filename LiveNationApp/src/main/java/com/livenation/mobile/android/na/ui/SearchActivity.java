@@ -8,6 +8,7 @@ import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
 
 import java.lang.ref.WeakReference;
 
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

@@ -4,7 +4,7 @@ import com.android.volley.Response;
 import com.google.android.gms.appindexing.AndroidAppUri;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;

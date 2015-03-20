@@ -13,9 +13,10 @@ import com.livenation.mobile.android.na.R.id;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
-import com.livenation.mobile.android.na.pagination.RecommendationSetsScrollPager;
-import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter;
-import com.livenation.mobile.android.na.ui.adapters.RecommendationsAdapter.RecommendationItem;
+import android.mobile.livenation.com.livenationui.receiver.ConstantReceiver;
+import android.mobile.livenation.com.livenationui.view.listener.RecommendationSetsScrollPager;
+import android.mobile.livenation.com.livenationui.adapter.RecommendationsAdapter;
+import android.mobile.livenation.com.livenationui.adapter.RecommendationsAdapter.RecommendationItem;
 import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
@@ -73,7 +74,7 @@ public class RecommendationSetsFragment extends LiveNationFragmentTab implements
         RefreshBar refreshBar = (RefreshBar) view.findViewById(id.fragment_all_shows_refresh_bar);
         scrollPager.setRefreshBarView(refreshBar);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(Constants.BroadCastReceiver.MUSIC_LIBRARY_UPDATE));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(ConstantReceiver.MUSIC_LIBRARY_UPDATE));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGOUT_INTENT_FILTER));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOGIN_INTENT_FILTER));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter(com.livenation.mobile.android.platform.Constants.LOCATION_UPDATE_INTENT_FILTER));

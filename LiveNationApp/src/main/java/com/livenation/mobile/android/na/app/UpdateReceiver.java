@@ -1,7 +1,6 @@
 package com.livenation.mobile.android.na.app;
 
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -12,9 +11,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.mobile.livenation.com.livenationui.LivenationUILibrary;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
+import android.mobile.livenation.com.livenationui.persistence.ConstantSharedPreferences;
+import android.mobile.livenation.com.livenationui.scan.MusicSyncHelper;
 import android.util.Log;
 
 /**
@@ -25,7 +27,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(UpdateReceiver.class.getSimpleName(), "Package Updated, UpdateReceiver Called");
 
-        final SharedPreferences oldSharedPreferences = context.getSharedPreferences(Constants.SharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
+        final SharedPreferences oldSharedPreferences = context.getSharedPreferences(ConstantSharedPreferences.PREF_NAME, Context.MODE_PRIVATE);
         final Boolean isMusicScanAllowed = oldSharedPreferences.getBoolean(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE, false);
 
 
@@ -35,20 +37,20 @@ public class UpdateReceiver extends BroadcastReceiver {
         }
 
         if (isMusicScanAllowed) {
-            LiveNationApplication.get().setIsMusicSync(true);
+            LivenationUILibrary.getInstance().setIsMusicSync(true);
             sendGrantedAccessToMusicLibraryAnalytics(isMusicScanAllowed);
             MusicSyncHelper musicSyncHelper = new MusicSyncHelper();
             musicSyncHelper.syncMusic(context, new BasicApiCallback<Void>() {
                 @Override
                 public void onResponse(Void response) {
                     sharedPreferences.edit().remove(Constants.SharedPreferences.USER_ALLOWS_MEDIA_SCRAPE).apply();
-                    LiveNationApplication.get().setIsMusicSync(true);
+                    LivenationUILibrary.getInstance().setIsMusicSync(true);
                 }
 
                 @Override
                 public void onErrorResponse(LiveNationError error) {
                     //Nothing to do
-                    LiveNationApplication.get().setIsMusicSync(false);
+                    LivenationUILibrary.getInstance().setIsMusicSync(false);
                 }
             });
         }

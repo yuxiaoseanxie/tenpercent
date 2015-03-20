@@ -7,6 +7,8 @@ import com.livenation.mobile.android.na.ExperienceApp.ExperienceAppClient;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.app.rating.AppRaterManager;
+
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.support.DetailBaseFragmentActivity;
@@ -130,7 +132,7 @@ public class OrderConfirmationActivity extends DetailBaseFragmentActivity {
                 }
 
                 Ticketing.getAnalytics().trackApsalarEvent(com.livenation.mobile.android.na.analytics.AnalyticConstants.APSALAR_PURCHASE_CONFIRMATION,
-                        com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN, response.getToken(), com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN_TYPE, response.getType(),
+                        com.livenation.mobile.android.na.analytics.AnalyticConstants.TOKEN, response.getToken(), ConstantAnalytics.TOKEN_TYPE, response.getType(),
                         AnalyticConstants.PROP_TICKET_QUANTITY, getCharges().getTicketQuantity(),
                         AnalyticConstants.PROP_REVENUE, getCharges().getRevenue(),
                         AnalyticConstants.PROP_TOTAL_CONVENIENCE_CHARGE, getCharges().getConvFee(),

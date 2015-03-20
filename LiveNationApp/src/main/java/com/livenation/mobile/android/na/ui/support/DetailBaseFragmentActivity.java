@@ -2,9 +2,9 @@ package com.livenation.mobile.android.na.ui.support;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.OmnitureTracker;
+import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.ui.FavoriteSearchActivity;
-import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

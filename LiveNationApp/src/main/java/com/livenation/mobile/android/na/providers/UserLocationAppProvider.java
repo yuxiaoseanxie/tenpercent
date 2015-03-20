@@ -1,6 +1,6 @@
 package com.livenation.mobile.android.na.providers;
 
-import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import android.mobile.livenation.com.livenationui.persistence.PreferencePersistence;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 

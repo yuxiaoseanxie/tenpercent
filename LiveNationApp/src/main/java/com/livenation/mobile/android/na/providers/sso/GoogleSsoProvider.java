@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.ui.SsoActivity;
+import android.mobile.livenation.com.livenationui.activity.SsoActivity;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.User;
 import com.livenation.mobile.android.platform.api.transport.ApiSsoProvider;
 import com.livenation.mobile.android.platform.api.transport.error.ErrorDictionary;
@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.mobile.livenation.com.livenationui.sso.SsoProviderPersistence;
 import android.os.Bundle;
 
 public class GoogleSsoProvider extends SsoProviderPersistence implements ApiSsoProvider {

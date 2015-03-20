@@ -121,7 +121,7 @@ public class UberDialogFragment extends DialogFragment implements AdapterView.On
         int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
         View titleDivider = getDialog().findViewById(titleDividerId);
         if (titleDivider != null)
-            titleDivider.setBackgroundColor(getResources().getColor(R.color.accent_red));
+            titleDivider.setBackgroundColor(getResources().getColor(R.color.livenation_red));
     }
 
     @Override

@@ -8,8 +8,8 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.ui.HomeActivity;
-import com.livenation.mobile.android.na.ui.LiveNationFragmentActivity;
-import com.livenation.mobile.android.na.ui.ShowActivity;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
+
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.na.utils.EventUtils;

@@ -4,6 +4,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Venue;
 
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.os.Bundle;
 
 public class VenueShowsActivity extends LiveNationFragmentActivity {

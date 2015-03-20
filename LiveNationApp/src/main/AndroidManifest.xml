@@ -104,7 +104,7 @@
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity"/>
         <activity android:name="com.livenation.mobile.android.na.ui.DebugActivity"></activity>
         <activity
-            android:name="com.livenation.mobile.android.na.ui.SsoActivity"
+            android:name="android.mobile.livenation.com.livenationui.activity.SsoActivity"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 

@@ -15,6 +15,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.os.Bundle;
@@ -78,7 +79,7 @@ public abstract class BaseInboxFragment extends ListFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        LiveNationAnalytics.track(AnalyticConstants.FAVORITES_UPSELL_TAP, AnalyticsCategory.NOTIFICATION);
+        LiveNationAnalytics.track(ConstantAnalytics.FAVORITES_UPSELL_TAP, AnalyticsCategory.NOTIFICATION);
         Intent favoriteIntent = new Intent(v.getContext(), FavoriteActivity.class);
         startActivity(favoriteIntent);
     }

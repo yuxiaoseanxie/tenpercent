@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.providers.location;
 
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
-import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import android.mobile.livenation.com.livenationui.persistence.PreferencePersistence;
 import com.livenation.mobile.android.na.providers.SystemLocationAppProvider;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;

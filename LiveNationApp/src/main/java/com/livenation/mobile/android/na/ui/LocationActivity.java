@@ -9,6 +9,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import android.app.Activity;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;

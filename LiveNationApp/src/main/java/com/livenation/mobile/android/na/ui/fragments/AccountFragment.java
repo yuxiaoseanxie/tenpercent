@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
-import com.livenation.mobile.android.na.helpers.LoginHelper;
+import android.mobile.livenation.com.livenationui.sso.LoginHelper;
 import com.livenation.mobile.android.na.ui.FavoriteActivity;
 import com.livenation.mobile.android.na.ui.LocationActivity;
 import com.livenation.mobile.android.na.ui.OrderHistoryActivity;

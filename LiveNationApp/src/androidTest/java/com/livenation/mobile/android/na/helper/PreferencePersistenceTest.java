@@ -1,6 +1,6 @@
 package com.livenation.mobile.android.na.helper;
 
-import com.livenation.mobile.android.na.preferences.PreferencePersistence;
+import android.mobile.livenation.com.livenationui.persistence.PreferencePersistence;
 
 import android.test.InstrumentationTestCase;
 import tools.TestTools;

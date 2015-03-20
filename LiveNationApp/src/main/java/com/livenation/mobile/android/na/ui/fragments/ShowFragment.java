@@ -18,11 +18,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
-
-import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
-import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;
 import com.livenation.mobile.android.na.ui.ArtistActivity;
 import com.livenation.mobile.android.na.ui.OrderConfirmationActivity;
@@ -30,12 +26,10 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.CommerceUnavailableDialogFragment;
 import com.livenation.mobile.android.na.ui.dialogs.TicketOfferingsDialogFragment;
-import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
 import com.livenation.mobile.android.na.ui.support.OnFavoriteClickListener.OnVenueFavoriteClick;
 import com.livenation.mobile.android.na.ui.views.LineupView;
 import com.livenation.mobile.android.na.ui.views.ShowVenueView;
-import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.AccessToken;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
@@ -54,8 +48,13 @@ import java.util.TimeZone;
 
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
+import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
+import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
+import android.mobile.livenation.com.livenationui.view.tools.DefaultImageHelper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -325,7 +324,7 @@ public class ShowFragment extends LiveNationFragment implements SingleEventView,
             LiveNationApplication.getAccessTokenProvider().getAccessToken(new BasicApiCallback<AccessToken>() {
                 @Override
                 public void onResponse(AccessToken response) {
-                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP, AnalyticConstants.TOKEN, response.getToken(), AnalyticConstants.TOKEN_TYPE, response.getType());
+                    Apsalar.event(AnalyticConstants.APSALAR_FIND_TICKET_TAP, AnalyticConstants.TOKEN, response.getToken(), ConstantAnalytics.TOKEN_TYPE, response.getType());
                 }
 
                 @Override
