@@ -8,7 +8,7 @@ import com.livenation.mobile.android.na.ui.SearchActivity;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
 import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
-import com.livenation.mobile.android.na.utils.EventUtils;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;
@@ -120,7 +120,7 @@ public class FavoriteSearchFragment extends SearchFragment<SearchResult> {
                 props.put(ConstantAnalytics.EVENT_NAME, searchResult.getName());
                 props.put(ConstantAnalytics.EVENT_ID, searchResult.getNumericalId());
 
-                EventUtils.redirectToSDP(getActivity(), searchResult.getNumericalId().toString());
+                ActivityOpener.redirectToSDP(getActivity(), searchResult.getNumericalId().toString());
                 break;
             }
         }

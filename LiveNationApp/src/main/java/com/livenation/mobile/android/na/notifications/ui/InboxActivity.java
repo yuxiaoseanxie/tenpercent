@@ -11,8 +11,8 @@ import com.livenation.mobile.android.na.ui.HomeActivity;
 import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
-import com.livenation.mobile.android.na.utils.EventUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.urbanairship.Logger;
 import com.urbanairship.UAirship;
@@ -357,7 +357,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
         Bundle extras = message.getExtras();
         if (extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
-            EventUtils.redirectToSDP(this, extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
+            ActivityOpener.redirectToSDP(this, extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
         } else {
             Intent intent = new Intent(this, MessageActivity.class);
             intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);

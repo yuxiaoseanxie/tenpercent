@@ -6,7 +6,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.utils.EventUtils;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Entity;
@@ -102,7 +102,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         fetchEntity(id, new Response.Listener<Event>() {
             @Override
             public void onResponse(Event event) {
-                EventUtils.redirectToSDP(UrlActivity.this, event);
+                ActivityOpener.redirectToSDP(UrlActivity.this, event);
                 finish();
             }
         });
@@ -152,7 +152,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
         Intent intent = null;
         if (id.startsWith("evt_")) {
-            EventUtils.redirectToSDP(this, id);
+            ActivityOpener.redirectToSDP(this, id);
         } else if (id.startsWith("art_")) {
             intent = new Intent(this, ArtistActivity.class);
             intent.putExtras(ArtistActivity.getArguments(id));

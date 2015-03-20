@@ -1,7 +1,7 @@
 package com.mock;
 
-import com.livenation.mobile.android.na.providers.location.LocationManager;
-import com.livenation.mobile.android.na.providers.location.ReverseGeocode;
+import android.mobile.livenation.com.livenationui.provider.location.LocationManager;
+import android.mobile.livenation.com.livenationui.provider.location.ReverseGeocode;
 
 import android.content.Context;
 

@@ -1,6 +1,6 @@
 package com.livenation.mobile.android.na.providers;
 
-import com.livenation.mobile.android.na.providers.location.LocationManager;
+import android.mobile.livenation.com.livenationui.provider.location.LocationManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;

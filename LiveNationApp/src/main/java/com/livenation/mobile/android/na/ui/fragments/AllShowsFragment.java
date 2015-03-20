@@ -13,7 +13,7 @@ import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
-import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import android.mobile.livenation.com.livenationui.receiver.LocationUpdateReceiver;
 import com.livenation.mobile.android.na.pagination.AllShowsScrollPager;
 
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
@@ -23,7 +23,8 @@ import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
 import android.mobile.livenation.com.livenationui.view.RefreshBar;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import android.mobile.livenation.com.livenationui.view.TransitioningImageView;
-import com.livenation.mobile.android.na.utils.EventUtils;
+
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Chart;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
@@ -136,7 +137,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         }
 
         List<TicketOffering> offerings = event.getTicketOfferings();
-        EventUtils.redirectToSDP(getActivity(), event);
+        ActivityOpener.redirectToSDP(getActivity(), event);
 
         //Analytics
         final Props props = AnalyticsHelper.getPropsForEvent(event);
@@ -214,7 +215,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
         @Override
         public void onClick(View v) {
-            EventUtils.redirectToSDP(getActivity(), chart.getChartableId().toString());
+            ActivityOpener.redirectToSDP(getActivity(), chart.getChartableId().toString());
         }
     }
 }

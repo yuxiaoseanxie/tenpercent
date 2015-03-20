@@ -1,6 +1,6 @@
 package com.livenation.mobile.android.na.ObservableTemporaryUtils;
 
-import com.livenation.mobile.android.na.providers.location.DeviceLocationProvider;
+import android.mobile.livenation.com.livenationui.provider.location.DeviceLocationProvider;
 import com.livenation.mobile.android.platform.init.callback.ProviderCallback;
 import com.livenation.mobile.android.platform.init.provider.LocationProvider;
 

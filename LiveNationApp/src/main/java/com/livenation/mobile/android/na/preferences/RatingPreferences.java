@@ -4,6 +4,7 @@ import com.livenation.mobile.android.na.app.Constants;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.mobile.livenation.com.livenationui.persistence.ConstantSharedPreferences;
 
 /**
  * Created by elodieferrais on 8/14/14.
@@ -13,7 +14,7 @@ public class RatingPreferences {
 
 
     public RatingPreferences(Context context) {
-        sharedPreferences = context.getApplicationContext().getSharedPreferences(Constants.SharedPreferences.ENVIRONMENT, Context.MODE_PRIVATE);
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(ConstantSharedPreferences.ENVIRONMENT, Context.MODE_PRIVATE);
     }
 
     public boolean hasBeenClicked() {

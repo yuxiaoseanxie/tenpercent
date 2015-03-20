@@ -24,7 +24,7 @@ import com.livenation.mobile.android.na.presenters.views.AccountSignOutView;
 import com.livenation.mobile.android.na.ui.fragments.AccountFragment;
 import com.livenation.mobile.android.na.ui.fragments.AllShowsFragment;
 import com.livenation.mobile.android.na.ui.fragments.NearbyVenuesFragment;
-import com.livenation.mobile.android.na.ui.fragments.RecommendationSetsFragment;
+import android.mobile.livenation.com.livenationui.fragment.RecommendationSetsFragment;
 import com.livenation.mobile.android.na.utils.ContactUtils;
 import com.urbanairship.google.PlayServicesUtils;
 

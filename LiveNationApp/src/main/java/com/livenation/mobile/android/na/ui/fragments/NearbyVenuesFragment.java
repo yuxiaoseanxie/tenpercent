@@ -12,7 +12,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
-import com.livenation.mobile.android.na.helpers.LocationUpdateReceiver;
+import android.mobile.livenation.com.livenationui.receiver.LocationUpdateReceiver;
 
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragmentTab;
@@ -21,7 +21,8 @@ import com.livenation.mobile.android.na.pagination.NearbyVenuesScrollPager;
 import com.livenation.mobile.android.na.ui.VenueActivity;
 import com.livenation.mobile.android.na.ui.adapters.EventVenueAdapter;
 import android.mobile.livenation.com.livenationui.view.RefreshBar;
-import com.livenation.mobile.android.na.utils.EventUtils;
+
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationConfig;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
@@ -109,7 +110,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
             return;
         }
 
-        EventUtils.redirectToSDP(getActivity(), event);
+        ActivityOpener.redirectToSDP(getActivity(), event);
 
         //Analytics
         final Props props = AnalyticsHelper.getPropsForEvent(event);

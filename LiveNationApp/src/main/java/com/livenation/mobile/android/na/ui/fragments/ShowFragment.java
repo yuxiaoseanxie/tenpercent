@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import com.livenation.mobile.android.na.analytics.LibraryErrorTracker;
+import android.mobile.livenation.com.livenationui.analytics.LibraryErrorTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
 import com.livenation.mobile.android.na.presenters.views.SingleEventView;

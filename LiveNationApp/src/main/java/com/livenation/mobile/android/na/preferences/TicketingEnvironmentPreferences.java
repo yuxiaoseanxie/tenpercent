@@ -1,7 +1,7 @@
 package com.livenation.mobile.android.na.preferences;
 
 import com.livenation.mobile.android.na.app.Constants;
-import com.livenation.mobile.android.na.utils.SerializableHelper;
+import android.mobile.livenation.com.livenationui.tools.SerializableHelper;
 import com.livenation.mobile.android.ticketing.Ticketing;
 
 import java.io.IOException;

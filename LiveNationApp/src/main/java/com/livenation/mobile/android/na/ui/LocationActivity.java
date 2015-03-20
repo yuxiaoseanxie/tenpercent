@@ -3,7 +3,7 @@ package com.livenation.mobile.android.na.ui;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.providers.location.LocationManager;
+import android.mobile.livenation.com.livenationui.provider.location.LocationManager;
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 

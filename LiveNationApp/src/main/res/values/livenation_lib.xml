@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="production">0361b9ba-9381-11e3-bc4c-bad30bc9cabe</string>
-    <string name="productionDirect">0361b9ba-9381-11e3-bc4c-bad30bc9cabe</string>
-    <string name="staging">9e34bce8-5ea3-11e3-a9e5-5a59eb79d850</string>
-    <string name="stagingDirect">9e34bce8-5ea3-11e3-a9e5-5a59eb79d850</string>
-    <string name="integration">486e2ff6-98f5-11e3-b37c-ca4ec9c3f32c</string>
-
-</resources>

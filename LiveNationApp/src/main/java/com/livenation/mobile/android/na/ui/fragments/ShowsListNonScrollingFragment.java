@@ -6,7 +6,7 @@ import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import com.livenation.mobile.android.na.presenters.views.EventsView;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.views.ShowView;
-import com.livenation.mobile.android.na.utils.EventUtils;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
 
 import java.util.List;
@@ -196,7 +196,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, category, props);
 
-            EventUtils.redirectToSDP(getActivity(), event);
+            ActivityOpener.redirectToSDP(getActivity(), event);
         }
     }
 }
