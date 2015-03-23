@@ -10,7 +10,7 @@
     <item
         android:id="@+id/menu_home_search_item"
         android:icon="@drawable/ic_menu_search_holo_light"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/home_menu_search"/>
     <item
         android:id="@+id/menu_home_legal_item"
