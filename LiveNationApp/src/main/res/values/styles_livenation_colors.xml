@@ -8,7 +8,6 @@
     <color name="ticketbar_text_color_focused">#ffc000</color>
     <color name="tab_accent_color">#e11d39</color>
 
-    <color name="decorated_edittext_hint_text_color">#bcbcbc</color>
     <color name="text_pressed_color">#bd1931</color>
     <color name="shadow_color">#e0e0e0</color>
 

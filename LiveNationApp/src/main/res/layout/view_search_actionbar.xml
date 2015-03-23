@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <com.livenation.mobile.android.na.ui.views.DecoratedEditText
+    <android.mobile.livenation.com.livenationui.view.DecoratedEditText
         android:id="@+id/view_search_actionbar_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

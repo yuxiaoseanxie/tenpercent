@@ -4,7 +4,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.helpers.SearchForText;
 import com.livenation.mobile.android.na.ui.fragments.SearchFragment;
-import com.livenation.mobile.android.na.ui.views.DecoratedEditText;
+import android.mobile.livenation.com.livenationui.view.DecoratedEditText;
 
 import java.lang.ref.WeakReference;
 
