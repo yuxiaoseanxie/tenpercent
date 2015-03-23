@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-            <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+            <android.mobile.livenation.com.livenationui.view.FavoriteCheckBox
                 android:id="@+id/list_venue_header_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

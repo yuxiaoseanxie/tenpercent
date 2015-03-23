@@ -11,6 +11,7 @@ package com.livenation.mobile.android.na.ui.views;
 import com.livenation.mobile.android.na.R;
 
 import android.content.Context;
+import android.mobile.livenation.com.livenationui.view.FavoriteCheckBox;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;

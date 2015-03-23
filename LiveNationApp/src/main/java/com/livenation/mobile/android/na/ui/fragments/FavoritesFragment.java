@@ -17,7 +17,7 @@ import com.livenation.mobile.android.na.ui.VenueActivity;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import android.mobile.livenation.com.livenationui.view.EmptyListViewControl;
-import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import android.mobile.livenation.com.livenationui.view.FavoriteCheckBox;
 import com.livenation.mobile.android.platform.Constants;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Favorite;

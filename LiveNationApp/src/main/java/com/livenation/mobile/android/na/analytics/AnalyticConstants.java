@@ -15,8 +15,6 @@ public class AnalyticConstants {
     public static final String EVENT_CELL_TAP = "Event Cell Tap";
     public static final String VENUE_CELL_TAP = "Venue Cell Tap";
     public static final String ARTIST_CELL_TAP = "Artist Cell Tap";
-    public static final String FAVORITE_VENUE_STAR_TAP = "Favorite Venue Star Tap";
-    public static final String FAVORITE_ARTIST_STAR_TAP = "Favorite Artist Star Tap";
     public static final String USER_ID = "user Id";
 
     //On Boarding
@@ -77,9 +75,6 @@ public class AnalyticConstants {
     public static final String PUSH_NOTIFICATION_RECEIVE = "Push Notification Receive";
     public static final String PUSH_NOTIFICATION_TAP = "Push Notification Tap";
 
-    //Search
-    public static final String SEARCH_RESULT_TAP = "Search Result Tap";
-
     //Location
     public static final String CURRENT_LOCATION_TAP = "Current Location Tap";
     public static final String SUBMIT_LOCATION_QUERY = "Submit Location Query";
@@ -130,7 +125,6 @@ public class AnalyticConstants {
     public static final String OMNITURE_SCREEN_NOTIFICATIONS = "LN_Mob: NA App Android: Notifications";
     public static final String OMNITURE_SCREEN_CONTACTS_US = "LN_Mob: NA App Android: Contact Us";
     public static final String OMNITURE_SCREEN_HELP = "LN_Mob: NA App Android: Help";
-    public static final String OMNITURE_SCREEN_SEARCH = "LN_Mob: NA App Android: Search";
     public static final String OMNITURE_SCREEN_SDP = "LN_Mob: NA App Android: SDP";
     public static final String OMNITURE_DEEP_LINK = "LN_Mob: NA App Android: Deep Link Redirection";
 
@@ -188,11 +182,6 @@ public class AnalyticConstants {
     //Platform
     public static final String PLATFORM = "Platform";
     public static final String PLATFORM_VALUE = "LNANDROID";
-
-    //Favorites
-    public static final String STATE = "state";
-    public static final String STATE_FAVORITED_VALUE = "favorited";
-    public static final String STATE_UNFAVORITED_VALUE = "unfavorited";
 
     //Sdp
     public static final String TYPE_OF_FIND_TICKETS_OPTIONS_SELECTED = "Type of Find Tickets option selected";

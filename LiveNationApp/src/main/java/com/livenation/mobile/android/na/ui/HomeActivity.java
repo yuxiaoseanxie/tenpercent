@@ -11,6 +11,8 @@ package com.livenation.mobile.android.na.ui;
 import com.livenation.mobile.android.na.BuildConfig;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
+
+import android.mobile.livenation.com.livenationui.activity.FavoriteSearchActivity;
 import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;

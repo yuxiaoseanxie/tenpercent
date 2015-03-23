@@ -89,12 +89,6 @@
     <string name="debug_item_commerce_session_recording_on">Stop</string>
     <string name="debug_item_commerce_session_recording_off">Start</string>
 
-    <string name="search_input_hint_events_artists_venues">Events, Artists, Venues</string>
-    <string name="search_input_hint_artists">Search Artists</string>
-    <string name="search_input_hint_artists_venues">Search Artists, Venues</string>
-
-    <string name="city_search_input_hint">Search cities by name</string>
-
     <string name="youtube_video_play">Play Video</string>
 
     <string name="no_ticket_offerings">No Tickets Available&#8230;</string>

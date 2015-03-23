@@ -30,7 +30,7 @@ import com.livenation.mobile.android.na.ui.dialogs.TravelListPopupWindow;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.fragment.base.LiveNationFragment;
 import com.livenation.mobile.android.na.ui.support.LiveNationMapFragment;
-import com.livenation.mobile.android.na.ui.views.FavoriteCheckBox;
+import android.mobile.livenation.com.livenationui.view.FavoriteCheckBox;
 import com.livenation.mobile.android.na.ui.views.OverflowView;
 import com.livenation.mobile.android.na.ui.views.ShowView;
 import com.livenation.mobile.android.na.utils.ContactUtils;

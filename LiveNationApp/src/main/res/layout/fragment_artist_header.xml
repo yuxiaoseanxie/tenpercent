@@ -18,7 +18,7 @@
 
     </FrameLayout>
 
-    <com.livenation.mobile.android.na.ui.views.FavoriteCheckBox
+    <android.mobile.livenation.com.livenationui.view.FavoriteCheckBox
         android:id="@+id/fragment_artist_favorite_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

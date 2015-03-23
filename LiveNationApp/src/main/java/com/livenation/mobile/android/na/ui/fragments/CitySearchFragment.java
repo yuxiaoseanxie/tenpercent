@@ -2,8 +2,9 @@ package com.livenation.mobile.android.na.ui.fragments;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import com.livenation.mobile.android.na.ui.adapters.SearchAdapter;
-import com.livenation.mobile.android.na.ui.viewcontroller.SearchViewHolder;
+import android.mobile.livenation.com.livenationui.adapter.SearchAdapter;
+import android.mobile.livenation.com.livenationui.adapter.SearchFragment;
+import android.mobile.livenation.com.livenationui.view.holder.SearchViewHolder;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.City;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.parameter.SearchCitiesParameters;

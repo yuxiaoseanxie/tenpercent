@@ -2,7 +2,6 @@
 
 
     <!-- Generic sizes, can be replaced later with named values if needed -->
-    <dimen name="list_item_height">80dp</dimen>
     <dimen name="popup_list_item_height">60dp</dimen>
     <dimen name="popup_list_item_padding">8dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
@@ -20,9 +19,6 @@
     <dimen name="account_header_container_width">255dp</dimen>
     <dimen name="account_header_sso_button_width">112dp</dimen>
     <dimen name="account_header_sso_button_height">40dp</dimen>
-    <dimen name="list_search_type_margin_left">4dp</dimen>
-    <dimen name="list_search_type_min_height">26dp</dimen>
-    <dimen name="view_search_actionbar_input_margin_bottom">2dp</dimen>
     <dimen name="fragment_location_auto_switch_margin_bottom">10dp</dimen>
     <dimen name="view_youtube_video_image_width">106dp</dimen>
     <dimen name="view_youtube_video_image_height">60dp</dimen>

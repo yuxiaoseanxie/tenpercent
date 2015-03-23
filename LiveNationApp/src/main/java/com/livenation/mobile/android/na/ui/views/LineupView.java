@@ -14,6 +14,7 @@ import com.livenation.mobile.android.platform.api.service.livenation.impl.model.
 
 import android.content.Context;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.view.FavoriteCheckBox;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;

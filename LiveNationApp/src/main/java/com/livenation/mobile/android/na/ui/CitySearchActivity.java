@@ -1,7 +1,9 @@
 package com.livenation.mobile.android.na.ui;
 
 import com.livenation.mobile.android.na.ui.fragments.CitySearchFragment;
-import com.livenation.mobile.android.na.ui.fragments.SearchFragment;
+
+import android.mobile.livenation.com.livenationui.activity.SearchActivity;
+import android.mobile.livenation.com.livenationui.adapter.SearchFragment;
 
 /**
  * Created by cchilton on 4/2/14.
