@@ -5,7 +5,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import android.mobile.livenation.com.livenationui.receiver.LocationUpdateReceiver;
-import com.livenation.mobile.android.na.notifications.NotificationsRegistrationManager;
+import android.mobile.livenation.com.livenationui.notification.NotificationsRegistrationManager;
 import android.mobile.livenation.com.livenationui.persistence.EnvironmentPreferences;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.ui.support.DebugItem;

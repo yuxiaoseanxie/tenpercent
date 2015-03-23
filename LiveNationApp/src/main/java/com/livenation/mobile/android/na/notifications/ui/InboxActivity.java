@@ -8,10 +8,7 @@ import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
 import com.livenation.mobile.android.na.app.Constants;
 import com.livenation.mobile.android.na.ui.HomeActivity;
-import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
-
 import com.livenation.mobile.android.na.ui.dialogs.CalendarDialogFragment;
-import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.helpers.DataModelHelper;
 import com.urbanairship.Logger;
@@ -36,6 +33,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
+import android.mobile.livenation.com.livenationui.notification.ConstantNotification;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.ActionMode;
@@ -412,8 +412,8 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
     public int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
-        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
-            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
+        if (extras.containsKey(ConstantNotification.EXTRA_TYPE)) {
+            String typeString = extras.getString(ConstantNotification.EXTRA_TYPE);
             return Integer.valueOf(typeString);
         } else {
             return Constants.Notifications.TYPE_FEATURED_CONTENT;

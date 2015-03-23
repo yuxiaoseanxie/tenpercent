@@ -13,9 +13,6 @@ public class Constants {
     public static final float METERS_IN_A_MILE = 1609.34f;
 
     public class Notifications {
-        public static final String EXTRA_TYPE = "type";
-
-        public static final String TYPE_PUSH_CAPTCHA = "silent_push";
         public static final int TYPE_FEATURED_CONTENT = -1;
         public static final int TYPE_EVENT_ON_SALE_NOW = 0;
         public static final int TYPE_EVENT_ANNOUNCEMENT = 1;
@@ -25,7 +22,6 @@ public class Constants {
 
 
         public static final String EXTRA_ENTITY_ID = "id";
-        public static final String EXTRA_PUSH_CAPTCHA_PAYLOAD = "payload";
 
         public static final String EXTRA_MESSAGE_ACTION_URL = "message_action_url";
         public static final String EXTRA_MESSAGE_ACTION_NAME = "message_action_name";
@@ -46,7 +42,6 @@ public class Constants {
         public static final String DEBUG_MODE_DATA = "debug_mode_data";
         public static final String DEBUG_MODE_IS_DEBUG_MODE_ACTIVATED = "debug_mode_is_debug_mode_activated";
         public static final String TICKETING_ENVIRONMENT = "ticketing_environment";
-        public static final String NOTIFICATIONS_SAVED_APID = "notifications_saved_apid";
         public static final String AB_TESTING = "ab_testing";
 
         public static final String ON_BOARDING_NAME = "on_boarding_has_been_displayed";

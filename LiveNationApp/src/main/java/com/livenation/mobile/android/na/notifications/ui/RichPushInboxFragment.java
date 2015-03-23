@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.graphics.Color;
+import android.mobile.livenation.com.livenationui.notification.ConstantNotification;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,8 +43,8 @@ public class RichPushInboxFragment extends BaseInboxFragment implements AdapterV
 
     public int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
-        if (extras.containsKey(Constants.Notifications.EXTRA_TYPE)) {
-            String typeString = extras.getString(Constants.Notifications.EXTRA_TYPE);
+        if (extras.containsKey(ConstantNotification.EXTRA_TYPE)) {
+            String typeString = extras.getString(ConstantNotification.EXTRA_TYPE);
             return Integer.valueOf(typeString);
         } else {
             return Constants.Notifications.TYPE_FEATURED_CONTENT;
