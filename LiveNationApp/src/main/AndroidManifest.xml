@@ -28,6 +28,15 @@
     <!-- android.permission.VIBRATE already there -->
     <!-- End Experience app -->
 
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+    <permission
+        android:name="${applicationId}.permission.UA_DATA"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="${applicationId}.permission.UA_DATA"/>
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>
@@ -161,6 +170,26 @@
         <activity
             android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity"
             android:label="@string/message_title"/>
+        <receiver
+            android:name="com.urbanairship.CoreReceiver"
+            android:exported="false">
+
+            <intent-filter android:priority="-999">
+                <action android:name="com.urbanairship.push.OPENED"/>
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="android.mobile.livenation.com.livenationui.notification.PushReceiver"
+            android:exported="false">
+            <intent-filter android:priority="1">
+                <action android:name="com.urbanairship.push.CHANNEL_UPDATED"/>
+                <action android:name="com.urbanairship.push.OPENED"/>
+                <action android:name="com.urbanairship.push.RECEIVED"/>
+
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
 
         <!-- Experience App -->
 

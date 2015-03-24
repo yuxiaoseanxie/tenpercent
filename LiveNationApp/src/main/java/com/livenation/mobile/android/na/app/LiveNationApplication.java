@@ -34,6 +34,9 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
+import com.urbanairship.AirshipConfigOptions;
+import com.urbanairship.UAirship;
+import com.urbanairship.push.notifications.DefaultNotificationFactory;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -45,6 +48,7 @@ import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
+import android.mobile.livenation.com.livenationui.notification.NotificationsRegistrationManager;
 import android.mobile.livenation.com.livenationui.provider.EnvironmentAppProvider;
 import android.mobile.livenation.com.livenationui.provider.location.LocationManager;
 import android.mobile.livenation.com.livenationui.scan.MusicSyncHelper;
@@ -136,7 +140,7 @@ public class LiveNationApplication extends Application {
 
         setupTicketing();
         setupInternetStateReceiver();
-
+        setupNotifications(this);
 
         //Analytics
         Props props = new Props();
@@ -155,6 +159,34 @@ public class LiveNationApplication extends Application {
             cache.evictAll();
         }
     }
+
+    private void setupNotifications(final Application application) {
+        AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(application);
+        airshipConfigOptions.inProduction = !android.mobile.livenation.com.livenationui.BuildConfig.DEBUG;
+        UAirship.takeOff(application, airshipConfigOptions, new UAirship.OnReadyCallback() {
+            @Override
+            public void onAirshipReady(UAirship airship) {
+                airship.getPushManager().setPushEnabled(true);
+            }
+        });
+
+        // Getting the UAirship instance asynchronously
+        // Be carefull: Calling shared() now blocks the first time until airship is ready
+        UAirship.shared(new UAirship.OnReadyCallback() {
+            @Override
+            public void onAirshipReady(UAirship airship) {
+                airship.getPushManager().setPushEnabled(true);
+                airship.getPushManager().setUserNotificationsEnabled(true);
+                DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(application);
+                notificationBuilder.setSmallIconId(android.mobile.livenation.com.livenationui.R.drawable.ic_stat_notify);
+                UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
+                NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
+                if (notificationsRegistrationManager.shouldRegister())
+                    notificationsRegistrationManager.register();
+            }
+        });
+    }
+
 
 
     private void setupTicketing() {
