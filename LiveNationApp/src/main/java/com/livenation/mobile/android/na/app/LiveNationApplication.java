@@ -118,7 +118,7 @@ public class LiveNationApplication extends Application {
         LivenationUILibrary.getInstance().start(this);
         getSsoManager().addSsoProvider(new FacebookSsoProvider(this));
         getSsoManager().addSsoProvider(new GoogleSsoProvider(this));
-
+        LivenationUILibrary.getInstance().setupNotifications(this);
 
         providerManager = new ProviderManager();
         //Initialize the UI library
@@ -140,7 +140,7 @@ public class LiveNationApplication extends Application {
 
         setupTicketing();
         setupInternetStateReceiver();
-        setupNotifications(this);
+
 
         //Analytics
         Props props = new Props();
@@ -159,35 +159,6 @@ public class LiveNationApplication extends Application {
             cache.evictAll();
         }
     }
-
-    private void setupNotifications(final Application application) {
-        AirshipConfigOptions airshipConfigOptions = AirshipConfigOptions.loadDefaultOptions(application);
-        airshipConfigOptions.inProduction = !android.mobile.livenation.com.livenationui.BuildConfig.DEBUG;
-        UAirship.takeOff(application, airshipConfigOptions, new UAirship.OnReadyCallback() {
-            @Override
-            public void onAirshipReady(UAirship airship) {
-                airship.getPushManager().setPushEnabled(true);
-            }
-        });
-
-        // Getting the UAirship instance asynchronously
-        // Be carefull: Calling shared() now blocks the first time until airship is ready
-        UAirship.shared(new UAirship.OnReadyCallback() {
-            @Override
-            public void onAirshipReady(UAirship airship) {
-                airship.getPushManager().setPushEnabled(true);
-                airship.getPushManager().setUserNotificationsEnabled(true);
-                DefaultNotificationFactory notificationBuilder = new DefaultNotificationFactory(application);
-                notificationBuilder.setSmallIconId(android.mobile.livenation.com.livenationui.R.drawable.ic_stat_notify);
-                UAirship.shared().getPushManager().setNotificationFactory(notificationBuilder);
-                NotificationsRegistrationManager notificationsRegistrationManager = NotificationsRegistrationManager.getInstance();
-                if (notificationsRegistrationManager.shouldRegister())
-                    notificationsRegistrationManager.register();
-            }
-        });
-    }
-
-
 
     private void setupTicketing() {
         Ticketing.Config ticketingConfig = new Ticketing.Config();

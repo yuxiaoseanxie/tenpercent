@@ -241,6 +241,13 @@
                     android:scheme="package"/>
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="com.urbanairship.UrbanAirshipProvider"
+            android:authorities="${applicationId}.urbanairship.provider"
+            android:exported="true"
+            android:multiprocess="true"
+            android:permission="${applicationId}.permission.UA_DATA"/>
     </application>
 
 </manifest>
