@@ -191,6 +191,29 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name="com.urbanairship.push.GCMPushReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="com.urbanairship.UrbanAirshipProvider"
+            android:authorities="${applicationId}.urbanairship.provider"
+            android:exported="true"
+            android:multiprocess="true"
+            android:permission="${applicationId}.permission.UA_DATA"/>
+
         <!-- Experience App -->
 
         <activity
@@ -242,12 +265,7 @@
             </intent-filter>
         </receiver>
 
-        <provider
-            android:name="com.urbanairship.UrbanAirshipProvider"
-            android:authorities="${applicationId}.urbanairship.provider"
-            android:exported="true"
-            android:multiprocess="true"
-            android:permission="${applicationId}.permission.UA_DATA"/>
+
     </application>
 
 </manifest>
