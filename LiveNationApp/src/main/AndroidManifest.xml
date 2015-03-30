@@ -90,10 +90,6 @@
             android:launchMode="singleTop"/>
         <activity android:name="com.livenation.mobile.android.na.ui.TestActivity"/>
         <activity android:name="com.livenation.mobile.android.na.ui.DebugActivity"></activity>
-        <activity
-            android:name="android.mobile.livenation.com.livenationui.activity.SsoActivity"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <activity
             android:name="com.livenation.mobile.android.na.ui.OrderConfirmationActivity"
@@ -171,15 +167,6 @@
             android:name="com.livenation.mobile.android.na.notifications.ui.MessageActivity"
             android:label="@string/message_title"/>
         <receiver
-            android:name="com.urbanairship.CoreReceiver"
-            android:exported="false">
-
-            <intent-filter android:priority="-999">
-                <action android:name="com.urbanairship.push.OPENED"/>
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name="android.mobile.livenation.com.livenationui.notification.PushReceiver"
             android:exported="false">
             <intent-filter android:priority="1">
@@ -188,22 +175,6 @@
                 <action android:name="com.urbanairship.push.RECEIVED"/>
 
                 <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="com.urbanairship.push.GCMPushReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-
-                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 

@@ -25,8 +25,6 @@ import com.livenation.mobile.android.na.notifications.NotificationTokenProvider;
 import com.livenation.mobile.android.na.preferences.TicketingEnvironmentPreferences;
 import com.livenation.mobile.android.na.presenters.VenueEventsPresenter;
 import com.livenation.mobile.android.na.providers.ConfigFileProvider;
-import com.livenation.mobile.android.na.providers.sso.FacebookSsoProvider;
-import com.livenation.mobile.android.na.providers.sso.GoogleSsoProvider;
 import com.livenation.mobile.android.platform.api.proxy.LiveNationProxy;
 import com.livenation.mobile.android.platform.api.proxy.ProviderManager;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
@@ -34,9 +32,6 @@ import com.livenation.mobile.android.platform.api.transport.error.LiveNationErro
 import com.livenation.mobile.android.platform.init.provider.AccessTokenProvider;
 import com.livenation.mobile.android.platform.sso.SsoManager;
 import com.livenation.mobile.android.ticketing.Ticketing;
-import com.urbanairship.AirshipConfigOptions;
-import com.urbanairship.UAirship;
-import com.urbanairship.push.notifications.DefaultNotificationFactory;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -48,7 +43,6 @@ import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
-import android.mobile.livenation.com.livenationui.notification.NotificationsRegistrationManager;
 import android.mobile.livenation.com.livenationui.provider.EnvironmentAppProvider;
 import android.mobile.livenation.com.livenationui.provider.location.LocationManager;
 import android.mobile.livenation.com.livenationui.scan.MusicSyncHelper;
@@ -116,9 +110,7 @@ public class LiveNationApplication extends Application {
 
         //UI library
         LivenationUILibrary.getInstance().start(this);
-        getSsoManager().addSsoProvider(new FacebookSsoProvider(this));
-        getSsoManager().addSsoProvider(new GoogleSsoProvider(this));
-        LivenationUILibrary.getInstance().setupNotifications(this);
+        LivenationUILibrary.getInstance().setupNotifications(this, !BuildConfig.DEBUG);
 
         providerManager = new ProviderManager();
         //Initialize the UI library
@@ -144,8 +136,8 @@ public class LiveNationApplication extends Application {
 
         //Analytics
         Props props = new Props();
-        props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isUsingFacebook());
-        props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isUsingGoogle());
+        props.put(AnalyticConstants.FB_LOGGED_IN, LoginHelper.isConnectedToFacebook());
+        props.put(AnalyticConstants.GOOGLE_LOGGED_IN, LoginHelper.isConnectedToGoogle());
         LiveNationAnalytics.track(AnalyticConstants.APPLICATION_OPEN, AnalyticsCategory.HOUSEKEEPING, props);
 
     }

@@ -44,7 +44,7 @@ public class AccountFragment extends LiveNationFragment implements BasicApiCallb
     private BroadcastReceiver loginLogoutReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            refreshUser(LoginHelper.isLogout());
+            refreshUser(LoginHelper.getAuthConfiguration().isEmpty());
         }
     };
 
@@ -80,7 +80,7 @@ public class AccountFragment extends LiveNationFragment implements BasicApiCallb
             locationText.setText(locationName);
         }
 
-        refreshUser(LoginHelper.isLogout());
+        refreshUser(LoginHelper.getAuthConfiguration().isEmpty());
         //Register for being notify when the location change
         registerBroadcastReceiverForUpdate();
 

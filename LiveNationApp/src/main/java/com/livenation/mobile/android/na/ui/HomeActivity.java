@@ -190,7 +190,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         debug.setVisible(BuildConfig.DEBUG);
 
         MenuItem logout = menu.findItem(R.id.menu_home_logout_item);
-        logout.setVisible(LoginHelper.isLogin());
+        logout.setVisible(!LoginHelper.getAuthConfiguration().isEmpty());
 
         return true;
     }

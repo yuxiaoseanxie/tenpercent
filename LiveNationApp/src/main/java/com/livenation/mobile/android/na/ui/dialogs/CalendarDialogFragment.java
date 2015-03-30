@@ -2,8 +2,6 @@ package com.livenation.mobile.android.na.ui.dialogs;
 
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
-import android.mobile.livenation.com.livenationui.sso.LoginHelper;
 import com.livenation.mobile.android.na.ui.adapters.CalendarAdapter;
 import com.livenation.mobile.android.na.utils.CalendarUtils;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Event;
@@ -18,8 +16,10 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.AnalyticsHelper;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.Props;
+import android.mobile.livenation.com.livenationui.sso.LoginHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -104,7 +104,7 @@ public class CalendarDialogFragment extends LiveNationDialogFragment implements 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Props props = AnalyticsHelper.getPropsForEvent(event);
-        props.put(AnalyticConstants.USER_LOGGED_IN, LoginHelper.isLogin());
+        props.put(AnalyticConstants.USER_LOGGED_IN, !LoginHelper.getAuthConfiguration().isEmpty());
 
         LiveNationAnalytics.track(AnalyticConstants.ADD_TO_CALENDAR_TAP, AnalyticsCategory.SDP, props);
         CalendarItem item = adapter.getItem(position);

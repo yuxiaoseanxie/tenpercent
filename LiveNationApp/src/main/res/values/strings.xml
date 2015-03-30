@@ -65,12 +65,6 @@
     <string name="location_switch">Use Current Location</string>
     <string name="location_miles_away">%d mi away</string>
 
-    <string name="login_connect_or_create">Connect or Create Account</string>
-    <string name="login_facebook_button">Facebook</string>
-    <string name="login_google_plus_button">Google</string>
-    <string name="login_button_or">or</string>
-    <string name="login_connection_problem">Can\'t establish a reliable connection to the server</string>
-
     <string name="debug_menu_title">Debug</string>
     <string name="debug_actionbar_title">Debug</string>
     <string name="debug_header_info">INFO</string>

@@ -52,14 +52,14 @@ public class AccountUserFragment extends LiveNationFragment implements
 
         //User cached data
         User user = LoginHelper.getSavedUser();
-        setUser(user, LoginHelper.getAuthConfiguration());
+        setUser(user, LoginHelper.getAuthConfiguration().get(0));
 
         if (savedInstanceState == null) {
             LoginHelper.getUpdatedUser(new SsoUpdatedUserCallback() {
                 @Override
                 public void onResponse(boolean hasChanged, String accessToken, User user) {
                     if (hasChanged) {
-                        setUser(user, LoginHelper.getAuthConfiguration());
+                        setUser(user, LoginHelper.getAuthConfiguration().get(0));
                     }
                 }
 
