@@ -10,6 +10,8 @@ import com.livenation.mobile.android.na.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.analytics.Props;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.MusicSyncHelper;
+import com.livenation.mobile.android.na.providers.ConfigFileProvider;
+import com.livenation.mobile.android.na.ui.dialogs.AppForceUpdateDialogFragment;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.transport.error.LiveNationError;
 import com.livenation.mobile.android.platform.init.LiveNationLibrary;
@@ -21,6 +23,8 @@ import java.util.Map;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -31,6 +35,7 @@ import android.view.MenuItem;
  */
 public abstract class LiveNationFragmentActivity extends FragmentActivity {
     private static boolean isApsalarStarted = false;
+    private static boolean isUpdateRequirementChecked = false;
     protected static Class apsalarSessionActivity = null;
 
     protected void onCreate(Bundle savedInstanceState, int res) {
@@ -61,6 +66,40 @@ public abstract class LiveNationFragmentActivity extends FragmentActivity {
                 @Override
                 public void onErrorResponse(LiveNationError error) {
                     LiveNationApplication.get().setIsMusicSync(false);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (!isUpdateRequirementChecked) {
+            ConfigFileProvider provider = LiveNationApplication.getConfigFileProvider();
+            provider.getConfigFile(new BasicApiCallback<ConfigFileProvider.ConfigFile>() {
+                @Override
+                public void onResponse(ConfigFileProvider.ConfigFile response) {
+                    if (response.upgradeMinimumRequired != null) {
+                        PackageInfo pInfo = null;
+                        try {
+                            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                            String version = pInfo.versionName;
+                            if (version.compareTo(response.upgradeMinimumRequired) < 0) {
+                                if (getSupportFragmentManager().findFragmentByTag(AppForceUpdateDialogFragment.TAG) == null && !isDestroyed() && !isFinishing()) {
+                                    AppForceUpdateDialogFragment forceUpdateDialogFragment = new AppForceUpdateDialogFragment();
+                                    forceUpdateDialogFragment.show(getSupportFragmentManager(), AppForceUpdateDialogFragment.TAG);
+                                }
+                            } else {
+                                isUpdateRequirementChecked = true;
+                            }
+                        } catch (PackageManager.NameNotFoundException e) {
+                        }
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(LiveNationError error) {
                 }
             });
         }

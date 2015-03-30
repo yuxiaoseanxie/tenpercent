@@ -168,6 +168,11 @@ public class ConfigFilePersistenceHelper {
         return (minimumCheckoutVersion == null || minimumCheckoutVersion.compareTo(BuildConfig.VERSION_NAME) < 1);
     }
 
+    public boolean isUpgradeAvailable() {
+        String upgradeMaximumVersion = getUpgradeMaximumVersion();
+        return (upgradeMaximumVersion != null && upgradeMaximumVersion.compareTo(BuildConfig.VERSION_NAME) > 0);
+    }
+
     public boolean isUpgradeRequired() {
         String upgradeMaximumVersion = getUpgradeMaximumVersion();
         return (upgradeMaximumVersion != null && upgradeMaximumVersion.compareTo(BuildConfig.VERSION_NAME) > 0);
