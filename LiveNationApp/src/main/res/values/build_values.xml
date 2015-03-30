@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="google_api_key"></string>
     <string name="youtube_api_key"></string>
-    <string name="facebook_app_id"></string>
 
     <!-- Experience app -->
     <string name="experience_url">https://livenation.expapp.com/upgrade?app=true&amp;appId=5&amp;utm_source=livenation&amp;utm_medium=app</string>
