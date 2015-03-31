@@ -3,9 +3,7 @@ package com.livenation.mobile.android.na.ui.dialogs;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
 import com.livenation.mobile.android.na.helpers.ConfigFilePersistenceHelper;
-import com.livenation.mobile.android.na.ui.SsoActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -53,7 +51,10 @@ public abstract class ForceUpdateDialogFragment extends DialogFragment {
     }
 
     abstract protected int getTitle();
+
     abstract protected int getMessage();
+
     abstract protected void performNeutralButtonAction();
+
     abstract protected boolean isDialogCancelable();
 }
