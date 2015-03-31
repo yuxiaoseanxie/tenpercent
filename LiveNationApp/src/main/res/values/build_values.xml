@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
     <string name="youtube_api_key"></string>
 
     <!-- Experience app -->
@@ -9,4 +10,10 @@
     <!-- Uber Client ID -->
     <string name="uber_client_id">ZFneHoL_OZAz8gqY_jiB0deA2GVStQzm</string>
     <string name="uber_token">IIZsYJmrwblTK1W_HsZY62jULS11HbvM1fReo0Bt</string>
+    
+    
+    
+    <string name="facebook_app_id">387261387994194</string>
+    <string name="google_api_key">AIzaSyAvrAEFr9l3O6Rvb8R2i-acnhrAgOV5mBo</string>
+    
 </resources>

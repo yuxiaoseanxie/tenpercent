@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.sso.LoginHelper;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,9 +36,8 @@ public class AccountSignInFragment extends Fragment {
         @Override
         public void onClick(View v) {
             LiveNationAnalytics.track(ConstantAnalytics.FACEBOOK_CONNECT_TAP, AnalyticsCategory.DRAWER);
-            Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
-            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
-            startActivity(intent);
+            LoginHelper.login(getActivity(), SsoManager.SSO_TYPE.SSO_FACEBOOK);
+
         }
 
     }
@@ -47,9 +47,7 @@ public class AccountSignInFragment extends Fragment {
         @Override
         public void onClick(View v) {
             LiveNationAnalytics.track(AnalyticConstants.GOOGLE_SIGN_IN_TAP, AnalyticsCategory.DRAWER);
-            Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
-            intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_GOOGLE.name());
-            startActivity(intent);
+            LoginHelper.login(getActivity(), SsoManager.SSO_TYPE.SSO_GOOGLE);
         }
 
     }

@@ -17,6 +17,7 @@ import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragme
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
 import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.sso.LoginHelper;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -298,16 +299,12 @@ public class OnBoardingActivity extends LiveNationFragmentActivity implements Vi
 
     private void loginWithFacebook() {
         LiveNationAnalytics.track(ConstantAnalytics.FACEBOOK_CONNECT_TAP, AnalyticsCategory.ON_BOARDING);
-        Intent intent = new Intent(this, SsoActivity.class);
-        intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_FACEBOOK.name());
-        startActivityForResult(intent, FACEBOOK_LOGIN_REQUEST_CODE);
+        LoginHelper.login(this, SsoManager.SSO_TYPE.SSO_FACEBOOK);
     }
 
     private void loginWithGoogle() {
         LiveNationAnalytics.track(AnalyticConstants.GOOGLE_SIGN_IN_TAP, AnalyticsCategory.ON_BOARDING);
-        Intent intent = new Intent(this, SsoActivity.class);
-        intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_GOOGLE.name());
-        startActivityForResult(intent, GOOGLE_LOGIN_REQUEST_CODE);
+        LoginHelper.login(this, SsoManager.SSO_TYPE.SSO_GOOGLE);
     }
 
     @Override
