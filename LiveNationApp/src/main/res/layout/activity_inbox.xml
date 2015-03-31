@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/inbox"
-        class="com.livenation.mobile.android.na.notifications.ui.RichPushInboxFragment"
+        class="android.mobile.livenation.com.livenationui.notification.RichPushInboxFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

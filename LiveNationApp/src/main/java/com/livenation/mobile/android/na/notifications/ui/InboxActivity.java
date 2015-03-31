@@ -34,6 +34,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
+import android.mobile.livenation.com.livenationui.notification.BaseInboxFragment;
 import android.mobile.livenation.com.livenationui.notification.ConstantNotification;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -72,6 +73,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
         // Set up the activity_inbox fragment
         this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
+        inbox.setMessageListener(this);
         this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
     }
@@ -234,10 +236,10 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
             String messageId = inbox.getSelectedMessages().get(0);
             RichPushMessage message = richPushInbox.getMessage(messageId);
             final int type = getMessageType(message);
-            calendarItem.setVisible((type == Constants.Notifications.TYPE_EVENT_ON_SALE_NOW
-                    || type == Constants.Notifications.TYPE_EVENT_LAST_MINUTE
-                    || type == Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE
-                    || type == Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT));
+            calendarItem.setVisible((type == ConstantNotification.TYPE_EVENT_ON_SALE_NOW
+                    || type == ConstantNotification.TYPE_EVENT_LAST_MINUTE
+                    || type == ConstantNotification.TYPE_EVENT_MOBILE_PRESALE
+                    || type == ConstantNotification.TYPE_EVENT_ANNOUNCEMENT));
         }
 
         return true;
@@ -267,15 +269,15 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
                     DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis();
                     CalendarDialogFragment.CalendarItem calendarItem = new CalendarDialogFragment.CalendarItem(null, artistName + " " + venueName);
                     switch (type) {
-                        case Constants.Notifications.TYPE_EVENT_ON_SALE_NOW:
-                        case Constants.Notifications.TYPE_EVENT_LAST_MINUTE:
-                        case Constants.Notifications.TYPE_EVENT_MOBILE_PRESALE:
+                        case ConstantNotification.TYPE_EVENT_ON_SALE_NOW:
+                        case ConstantNotification.TYPE_EVENT_LAST_MINUTE:
+                        case ConstantNotification.TYPE_EVENT_MOBILE_PRESALE:
                             if (onSaleDate != null) {
                                 Date onSaleDateFormatted = fmt.parseDateTime(onSaleDate).toDate();
                                 calendarItem.setStartDate(onSaleDateFormatted);
                             }
                             break;
-                        case Constants.Notifications.TYPE_EVENT_ANNOUNCEMENT:
+                        case ConstantNotification.TYPE_EVENT_ANNOUNCEMENT:
                             if (localStartTime != null) {
                                 Date localStartTimeonSaleDateFormatted = fmt.parseDateTime(localStartTime).toDate();
                                 calendarItem.setStartDate(localStartTimeonSaleDateFormatted);
@@ -414,7 +416,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
             String typeString = extras.getString(ConstantNotification.EXTRA_TYPE);
             return Integer.valueOf(typeString);
         } else {
-            return Constants.Notifications.TYPE_FEATURED_CONTENT;
+            return ConstantNotification.TYPE_FEATURED_CONTENT;
         }
     }
 

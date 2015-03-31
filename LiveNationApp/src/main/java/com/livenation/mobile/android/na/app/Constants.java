@@ -13,14 +13,6 @@ public class Constants {
     public static final float METERS_IN_A_MILE = 1609.34f;
 
     public class Notifications {
-        public static final int TYPE_FEATURED_CONTENT = -1;
-        public static final int TYPE_EVENT_ON_SALE_NOW = 0;
-        public static final int TYPE_EVENT_ANNOUNCEMENT = 1;
-        public static final int TYPE_EVENT_LAST_MINUTE = 2;
-        public static final int TYPE_EVENT_MOBILE_PRESALE = 3;
-        public static final int TYPE_IN_VENUE = 4;
-
-
         public static final String EXTRA_ENTITY_ID = "id";
 
         public static final String EXTRA_MESSAGE_ACTION_URL = "message_action_url";

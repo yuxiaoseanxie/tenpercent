@@ -64,7 +64,6 @@ public class AnalyticConstants {
     public static final String PRIVACY_POLICY_TAP = "Privacy Policy Tap";
 
     //Notification
-    public static final String NOTIFICATION_CELL_TAP = "Notification Tap";
     public static final String DEEP_LINK_BUTTON_TAP = "Deep Link Button Tap";
 
     //Location
@@ -181,10 +180,6 @@ public class AnalyticConstants {
     //Video
     public static final String VIDEO_NAME = "Video name";
     public static final String VIDEO_URL = "Video URL";
-
-    //Notification
-    public static final String NOTIFICATION_NAME = "Notification name";
-    public static final String NOTIFICATION_ID = "Notification Id";
 
     //Location
     public static final String LOCATION_LATLONG = "Location LatLong";

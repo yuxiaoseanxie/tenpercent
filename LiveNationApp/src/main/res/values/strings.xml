@@ -138,7 +138,6 @@
     <string name="order_details_header_other_shows">All other shows</string>
 
     <!-- Notifications -->
-    <string name="no_messages">No messages</string>
     <string name="inbox_title">Notifications</string>
     <string name="message_title">Featured</string>
     <string name="mark_read">Mark Read</string>
@@ -151,21 +150,6 @@
     <string name="menu_select_all">Select all</string>
     <string name="cab_selection">%d Selected</string>
     <string name="message_cta_default">Go</string>
-
-    <string name="notif_type_on_sale">NOW ON SALE</string>
-    <string name="notif_type_announcement">GOES ON SALE</string>
-    <string name="notif_type_last_minute">LAST MINUTE</string>
-    <string name="notif_type_presale">PRESALE NOW</string>
-    <string name="notif_type_in_venue">LIVE FEED</string>
-    <string name="notif_type_featured">FEATURED</string>
-
-    <string name="notif_date_now">NOW</string>
-    <string name="notif_event_info_format" formatted="false">%s - %s</string>
-    <string name="notif_event_details_format" formatted="false">%s at %s</string>
-    <string name="notif_error_loading_message">We had an issue loading this notification\'s message.\nPlease check your connectivity.</string>
-
-    <string name="notif_no_notification_title">You have no notifications.</string>
-    <string name="notif_no_notification_description">To receive artist presale and event notifications make sure you\'ve added them as favorites.</string>
 
     <!-- Legal and credit-->
     <string name="legal_terms_of_use_url">https://s3.amazonaws.com/adr-static-content/en_US/terms_of_use.html</string>
