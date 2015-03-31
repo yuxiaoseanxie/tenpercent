@@ -46,7 +46,6 @@ public class AccountSignInFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-
             LiveNationAnalytics.track(AnalyticConstants.GOOGLE_SIGN_IN_TAP, AnalyticsCategory.DRAWER);
             Intent intent = new Intent(AccountSignInFragment.this.getActivity(), SsoActivity.class);
             intent.putExtra(SsoActivity.ARG_PROVIDER_ID, SsoManager.SSO_TYPE.SSO_GOOGLE.name());

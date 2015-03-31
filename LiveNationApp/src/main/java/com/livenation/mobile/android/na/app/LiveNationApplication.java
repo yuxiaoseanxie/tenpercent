@@ -109,7 +109,7 @@ public class LiveNationApplication extends Application {
         instance = this;
 
         //UI library
-        LivenationUILibrary.getInstance().start(this);
+        LivenationUILibrary.getInstance().start(this, !BuildConfig.DEBUG);
         LivenationUILibrary.getInstance().setupNotifications(this, !BuildConfig.DEBUG);
 
         providerManager = new ProviderManager();
