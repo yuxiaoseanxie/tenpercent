@@ -251,7 +251,9 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
         final ConfigFilePersistenceHelper installedAppConfig = LiveNationApplication.get().getInstalledAppConfig();
 
         View updateRequiredLayout = contentLayout.findViewById(R.id.sub_update_required_layout);
-        if (installedAppConfig.isUpgradeRequired()) {
+        if (installedAppConfig.isUpgradeAvailable()) {
+
+
             if (updateRequiredLayout == null) {
                 updateRequiredLayout = getLayoutInflater().inflate(R.layout.sub_update_required, contentLayout, false);
                 contentLayout.addView(updateRequiredLayout, 1); // After the tab strip

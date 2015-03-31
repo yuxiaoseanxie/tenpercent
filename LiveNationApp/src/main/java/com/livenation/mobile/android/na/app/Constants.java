@@ -57,6 +57,7 @@ public class Constants {
 
         //Config File
         public static final String MINIMUM_CHECKOUT_VERSION = "checkout_requires";
+        public static final String UPGRADE_MINIMUM_REQUIRED = "upgrade_minimum_required";
         public static final String UPGRADE_MAXIMUM_VERSION = "upgrade_maximum_version";
         public static final String UPGRADE_MESSAGE = "upgrade_message";
         public static final String UPGRADE_PLAY_STORE_LINK = "upgrade_play_store_link";

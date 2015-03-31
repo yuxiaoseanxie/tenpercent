@@ -107,17 +107,16 @@ public class LiveNationApplication extends Application {
         super.onCreate();
 
         instance = this;
+        //Analytics
+        Crashlytics.start(this);
+        LiveNationAnalytics.initializeAnalyticTools(new GoogleAnalytics(this), new AmplitudeAnalytics(this));
+        LiveNationAnalytics.initializeCrashTools(new CrashlyticsAnalytics());
 
         //UI library
         LivenationUILibrary.getInstance().start(this, !BuildConfig.DEBUG);
         LivenationUILibrary.getInstance().setupNotifications(this, !BuildConfig.DEBUG);
 
         providerManager = new ProviderManager();
-        //Initialize the UI library
-        Crashlytics.start(this);
-        LiveNationAnalytics.initializeAnalyticTools(new GoogleAnalytics(this), new AmplitudeAnalytics(this));
-        LiveNationAnalytics.initializeCrashTools(new CrashlyticsAnalytics());
-
         //App init
         providerManager.getConfigReadyFor(ProviderManager.ProviderType.APP_INIT);
 

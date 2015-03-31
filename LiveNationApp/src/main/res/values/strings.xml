@@ -218,9 +218,10 @@
 
 
     <!-- Installed App Config -->
-    <string name="commerce_unavailable_error_title">New Version Required</string>
+    <string name="force_update_error_title">New Version Required</string>
     <string name="commerce_unavailable_error_message">A new version of the Live Nation app is available on the Play Store. You must update to purchase tickets and view your orders.</string>
-    <string name="commerce_unavailable_error_button_play_store">Play Store</string>
+    <string name="force_update_button_play_store">Play Store</string>
+    <string name="force_update_app_error_message">A new version of the Live Nation app is available on the Play Store. Please update it to continue.</string>
 
     <string name="update_available">New Version Available</string>
     <string name="update_now">Update Now</string>

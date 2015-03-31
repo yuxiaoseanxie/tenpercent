@@ -58,6 +58,7 @@ public class ConfigFileProvider {
     public class ConfigFile {
         public boolean skipSDPFeature;
         public List<String> youtubeBlackList;
+        public String upgradeMinimumRequired;
         public String minimumCheckoutVersion;
         public String featuredCarouselName;
         public String upgradeMaximumVersion;
@@ -78,6 +79,8 @@ public class ConfigFileProvider {
             final String FEATURED_CAROUSEL_CHART = "featured_carousel_chart";
             final String UBER_FREE_RIDE_TEXT = "uber_free_ride_text";
             final String CONFIRMATION_ACTIONS = "confirmation_actions";
+            final String UPGRADE_MINIMUM_REQUIRED = "upgrade_minimum_required";
+
 
             //skipSDPFeature
             this.skipSDPFeature = config.optBoolean(SKIP_SDP_FEATURE, false);
@@ -101,6 +104,7 @@ public class ConfigFileProvider {
             upgradePlayStoreLink = config.optString(UPGRADE_PLAY_STORE_LINK);
             uberFreeRide = config.optString(UBER_FREE_RIDE_TEXT);
             confirmationActions = config.optJSONArray(CONFIRMATION_ACTIONS);
+            upgradeMinimumRequired = config.optString(UPGRADE_MINIMUM_REQUIRED);
 
         }
     }
