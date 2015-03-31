@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -60,7 +59,6 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
     private BaseInboxFragment inbox;
     private RichPushInbox richPushInbox;
-    private ActionBar actionBar;
 
     private List<RichPushMessage> messages;
 

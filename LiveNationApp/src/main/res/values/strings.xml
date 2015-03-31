@@ -22,9 +22,6 @@
     <string name="tab_title_all_shows">All shows</string>
     <string name="tab_title_nearby">Nearby</string>
 
-    <string name="tab_favorites_artists">Artists</string>
-    <string name="tab_favorites_venues">Venues</string>
-
     <string name="venue_detail_link">Venue Info</string>
     <string name="venue_travel_google_maps">Open in Google Maps</string>
 

@@ -59,10 +59,6 @@ public class AnalyticConstants {
     public static final String PARKING_TRANSIT_TAB_TAP = "Parking Transit Tab Tap";
     public static final String BOX_OFFICE_TAB_TAP = "Box Office Tab Tap";
 
-    //Favorites
-    public static final String ARTISTS_TAB_TAP = "Artists Tab Tap";
-    public static final String VENUES_TAB_TAP = "Venues Tab Tap";
-
     //Legal
     public static final String TERMS_OF_USE_TAP = "Terms of Use Tap";
     public static final String PRIVACY_POLICY_TAP = "Privacy Policy Tap";

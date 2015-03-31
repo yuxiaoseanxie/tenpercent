@@ -110,7 +110,7 @@ public class HomeActivity extends LiveNationFragmentActivity implements AccountS
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.activity_home_sliding_tabs);
         slidingTabLayout.setViewPager(pager);
-        int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
+        int tabAccentColor = getResources().getColor(R.color.livenation_red);
         slidingTabLayout.setBottomBorderColor(tabAccentColor);
         slidingTabLayout.setSelectedIndicatorColors(tabAccentColor);
 

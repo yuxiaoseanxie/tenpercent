@@ -46,7 +46,7 @@ public class VenueBoxOfficeActivity extends LiveNationFragmentActivity implement
         this.tabs = (SlidingTabLayout) findViewById(R.id.activity_venue_box_office_tabs);
         tabs.setOnPageChangeListener(this);
         tabs.setViewPager(pager);
-        int tabAccentColor = getResources().getColor(R.color.tab_accent_color);
+        int tabAccentColor = getResources().getColor(R.color.livenation_red);
         tabs.setBottomBorderColor(tabAccentColor);
         tabs.setSelectedIndicatorColors(tabAccentColor);
 

@@ -129,7 +129,7 @@
 
     <style name="onboarding_title_text">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/tab_accent_color</item>
+        <item name="android:textColor">@color/livenation_red</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -164,12 +164,6 @@
     </style>
 
     <style name="text"/>
-
-    <style name="ln.text.tab">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
 
     <style name="rating_button" parent="android:Widget.Button"></style>
 
