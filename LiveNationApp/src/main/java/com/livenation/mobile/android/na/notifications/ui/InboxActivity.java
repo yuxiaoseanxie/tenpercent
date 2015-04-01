@@ -36,6 +36,7 @@ import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragme
 import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import android.mobile.livenation.com.livenationui.notification.BaseInboxFragment;
 import android.mobile.livenation.com.livenationui.notification.ConstantNotification;
+import android.mobile.livenation.com.livenationui.notification.RichPushInboxFragment;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.ActionMode;
@@ -45,7 +46,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -53,7 +53,7 @@ import android.widget.Toast;
  * Activity that manages the activity_inbox.
  * On a tablet it also manages the activity_message view pager.
  */
-public class InboxActivity extends LiveNationFragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback, RichPushManager.Listener, RichPushInbox.Listener {
+public class InboxActivity extends LiveNationFragmentActivity implements BaseInboxFragment.OnMessageListener, ActionMode.Callback {
     public static final String MESSAGE_ID_RECEIVED_KEY = "com.livenation.mobile.android.na.notifications.MESSAGE_ID_RECEIVED_KEY";
 
     private ActionMode actionMode;
@@ -69,13 +69,15 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.activity_inbox);
 
+        inbox = (BaseInboxFragment) getSupportFragmentManager().findFragmentByTag(RichPushInboxFragment.class.getSimpleName());
+        if (inbox == null) {
+            inbox = new RichPushInboxFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_inbox_container, inbox, RichPushInboxFragment.class.getSimpleName()).commit();
+        }
+
         this.richPushInbox = UAirship.shared().getRichPushManager().getRichPushInbox();
 
-        // Set up the activity_inbox fragment
-        this.inbox = (BaseInboxFragment) this.getSupportFragmentManager().findFragmentById(R.id.inbox);
         inbox.setMessageListener(this);
-        this.inbox.getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
     }
 
     @Override
@@ -94,13 +96,6 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     protected void onResume() {
         super.onResume();
 
-        // Listen for any rich push activity_message changes
-        UAirship.shared().getRichPushManager().addListener(this);
-        UAirship.shared().getRichPushManager().getRichPushInbox().addListener(this);
-
-        // Update the rich push messages to the latest
-        updateRichPushMessages();
-
         // Show any pending activity_message ids from the intent
         showPendingMessageId();
 
@@ -108,16 +103,6 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
 
         // Dismiss any notifications
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Remove listener for activity_message changes
-        RichPushManager.shared().removeListener(this);
-        richPushInbox.removeListener(this);
-
     }
 
     @Override
@@ -378,37 +363,6 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         }
     }
 
-    @Override
-    public void onUpdateMessages(boolean success) {
-        // Stop the progress spinner and display the list
-        inbox.setListShownNoAnimation(true);
-
-        // If the activity_message update failed
-        if (!success) {
-            // Show an error dialog
-            DialogFragment fragment = new InboxRefreshFailedDialog();
-            fragment.show(getSupportFragmentManager(), "dialog");
-        }
-    }
-
-    @Override
-    public void onUpdateUser(boolean success) {
-        // no-op
-    }
-
-    @Override
-    public void onUpdateInbox() {
-        updateRichPushMessages();
-    }
-
-    /**
-     * Grabs the latest messages from the rich push activity_inbox, and syncs them
-     * with the activity_inbox fragment and activity_message view pager if available
-     */
-    private void updateRichPushMessages() {
-        messages = UAirship.shared().getRichPushManager().getRichPushInbox().getMessages();
-        this.inbox.setMessages(messages);
-    }
 
     public int getMessageType(RichPushMessage message) {
         Bundle extras = message.getExtras();
@@ -423,26 +377,6 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
     @Override
     protected String getScreenName() {
         return AnalyticConstants.SCREEN_NOTIFICATIONS;
-    }
-
-    /**
-     * Alert dialog for when messages fail to inbox_refresh
-     */
-    public static class InboxRefreshFailedDialog extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-                    .setIcon(R.drawable.icon)
-                    .setTitle(R.string.inbox_refresh_failed_dialog_title)
-                    .setMessage(R.string.inbox_refresh_failed_dialog_message)
-                    .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create();
-        }
     }
 
     @Override
