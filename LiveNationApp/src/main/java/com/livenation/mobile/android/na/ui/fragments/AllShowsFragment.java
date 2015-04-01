@@ -137,7 +137,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
         }
 
         List<TicketOffering> offerings = event.getTicketOfferings();
-        ActivityOpener.redirectToSDP(getActivity(), event);
+        ActivityOpener.openSDP(getActivity(), event);
 
         //Analytics
         final Props props = AnalyticsHelper.getPropsForEvent(event);
@@ -215,7 +215,7 @@ public class AllShowsFragment extends LiveNationFragmentTab implements OnItemCli
 
         @Override
         public void onClick(View v) {
-            ActivityOpener.redirectToSDP(getActivity(), chart.getChartableId().toString());
+            ActivityOpener.openSDP(getActivity(), chart.getChartableId().toString());
         }
     }
 }

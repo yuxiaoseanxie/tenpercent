@@ -26,19 +26,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
 import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
-import android.mobile.livenation.com.livenationui.notification.BaseInboxFragment;
+import android.mobile.livenation.com.livenationui.fragment.base.BaseInboxFragment;
 import android.mobile.livenation.com.livenationui.notification.ConstantNotification;
-import android.mobile.livenation.com.livenationui.notification.RichPushInboxFragment;
+import android.mobile.livenation.com.livenationui.activity.MessageActivity;
+import android.mobile.livenation.com.livenationui.fragment.RichPushInboxFragment;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -113,11 +110,7 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         UAirship.shared().getAnalytics().activityStopped(this);
     }
 
-    @Override
     public void onMessageOpen(RichPushMessage message) {
-        message.markRead();
-        showMessage(message.getMessageId());
-
         // If we are in actionMode, update the menu items
         if (actionMode != null) {
             actionMode.invalidate();
@@ -341,8 +334,8 @@ public class InboxActivity extends LiveNationFragmentActivity implements BaseInb
         message.markRead();
 
         Bundle extras = message.getExtras();
-        if (extras.containsKey(Constants.Notifications.EXTRA_ENTITY_ID)) {
-            ActivityOpener.redirectToSDP(this, extras.getString(Constants.Notifications.EXTRA_ENTITY_ID));
+        if (extras.containsKey(ConstantNotification.EXTRA_ENTITY_ID)) {
+            ActivityOpener.openSDP(this, extras.getString(ConstantNotification.EXTRA_ENTITY_ID));
         } else {
             Intent intent = new Intent(this, MessageActivity.class);
             intent.putExtra(MessageActivity.EXTRA_MESSAGE_ID_KEY, messageId);

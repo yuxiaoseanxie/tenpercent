@@ -110,7 +110,7 @@ public class NearbyVenuesFragment extends LiveNationFragmentTab implements ListV
             return;
         }
 
-        ActivityOpener.redirectToSDP(getActivity(), event);
+        ActivityOpener.openSDP(getActivity(), event);
 
         //Analytics
         final Props props = AnalyticsHelper.getPropsForEvent(event);

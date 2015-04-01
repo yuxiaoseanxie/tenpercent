@@ -196,7 +196,7 @@ public class ShowsListNonScrollingFragment extends LiveNationFragment implements
             Props props = AnalyticsHelper.getPropsForEvent(event);
             LiveNationAnalytics.track(AnalyticConstants.EVENT_CELL_TAP, category, props);
 
-            ActivityOpener.redirectToSDP(getActivity(), event);
+            ActivityOpener.openSDP(getActivity(), event);
         }
     }
 }

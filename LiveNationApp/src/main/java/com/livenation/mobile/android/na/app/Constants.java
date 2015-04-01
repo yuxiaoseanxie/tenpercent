@@ -13,10 +13,6 @@ public class Constants {
     public static final float METERS_IN_A_MILE = 1609.34f;
 
     public class Notifications {
-        public static final String EXTRA_ENTITY_ID = "id";
-
-        public static final String EXTRA_MESSAGE_ACTION_URL = "message_action_url";
-        public static final String EXTRA_MESSAGE_ACTION_NAME = "message_action_name";
 
         public static final String EXTRA_IMAGE_URL = "image_url";
         public static final String EXTRA_VIDEO_URL = "video_url";

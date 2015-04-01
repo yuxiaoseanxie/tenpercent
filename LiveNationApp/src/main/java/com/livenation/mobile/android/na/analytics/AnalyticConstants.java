@@ -63,9 +63,6 @@ public class AnalyticConstants {
     public static final String TERMS_OF_USE_TAP = "Terms of Use Tap";
     public static final String PRIVACY_POLICY_TAP = "Privacy Policy Tap";
 
-    //Notification
-    public static final String DEEP_LINK_BUTTON_TAP = "Deep Link Button Tap";
-
     //Location
     public static final String CURRENT_LOCATION_TAP = "Current Location Tap";
     public static final String SUBMIT_LOCATION_QUERY = "Submit Location Query";
@@ -135,7 +132,6 @@ public class AnalyticConstants {
     //Common
     public static final String CELL_POSITION = "Cell Position";
     public static final String USER_LOGGED_IN = "User Logged In";
-    public static final String DEEP_LINK_URL = "Deep Link Url";
     public static final String DEEP_LINK_OPEN_FROM = "Open from";
     public static final String DEEP_LINK_HOST = "Host";
 

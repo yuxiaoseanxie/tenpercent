@@ -4,9 +4,7 @@ import com.android.volley.Response;
 import com.google.android.gms.appindexing.AndroidAppUri;
 import com.livenation.mobile.android.na.R;
 import com.livenation.mobile.android.na.analytics.AnalyticConstants;
-import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import com.livenation.mobile.android.na.app.LiveNationApplication;
-import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.BasicApiCallback;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Artist;
 import com.livenation.mobile.android.platform.api.service.livenation.impl.model.Entity;
@@ -20,8 +18,11 @@ import java.util.Set;
 
 import android.content.Intent;
 import android.mobile.livenation.com.livenationui.activity.base.LiveNationFragmentActivity;
+import android.mobile.livenation.com.livenationui.activity.tools.ActivityOpener;
 import android.mobile.livenation.com.livenationui.analytics.AnalyticsCategory;
+import android.mobile.livenation.com.livenationui.analytics.ConstantAnalytics;
 import android.mobile.livenation.com.livenationui.analytics.LiveNationAnalytics;
+import android.mobile.livenation.com.livenationui.analytics.OmnitureTracker;
 import android.mobile.livenation.com.livenationui.analytics.Props;
 import android.net.Uri;
 import android.os.Bundle;
@@ -102,7 +103,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         fetchEntity(id, new Response.Listener<Event>() {
             @Override
             public void onResponse(Event event) {
-                ActivityOpener.redirectToSDP(UrlActivity.this, event);
+                ActivityOpener.openSDP(UrlActivity.this, event);
                 finish();
             }
         });
@@ -152,7 +153,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
 
         Intent intent = null;
         if (id.startsWith("evt_")) {
-            ActivityOpener.redirectToSDP(this, id);
+            ActivityOpener.openSDP(this, id);
         } else if (id.startsWith("art_")) {
             intent = new Intent(this, ArtistActivity.class);
             intent.putExtras(ArtistActivity.getArguments(id));
@@ -216,7 +217,7 @@ public class UrlActivity extends LiveNationFragmentActivity {
         for (String name : queryNames) {
             props.put(name, uri.getQueryParameter(name));
         }
-        props.put(AnalyticConstants.DEEP_LINK_URL, uri.toString());
+        props.put(ConstantAnalytics.DEEP_LINK_URL, uri.toString());
 
         //Find out how the deep link has been opened
         Intent intent = this.getIntent();

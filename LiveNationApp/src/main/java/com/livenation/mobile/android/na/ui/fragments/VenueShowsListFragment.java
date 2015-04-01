@@ -58,7 +58,7 @@ public class VenueShowsListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         if (position < adapter.getCount()) {
             Event event = adapter.getItem(position);
-            ActivityOpener.redirectToSDP(getActivity(), event);
+            ActivityOpener.openSDP(getActivity(), event);
         }
     }
 }
