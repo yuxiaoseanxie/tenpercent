@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- selected state -->
+    <item android:drawable="@drawable/appetize_btn_bg_action_normal"
+          android:state_selected="false"
+          android:state_pressed="true" />
+    <!-- unselected state (default) -->
+    <item android:drawable="@drawable/appetize_btn_bg_action_pressed" />
+</selector>

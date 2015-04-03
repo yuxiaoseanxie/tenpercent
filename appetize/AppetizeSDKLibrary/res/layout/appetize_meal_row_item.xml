@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/item_list_background_color_appetizelibrary">
+    	
+    	<FrameLayout
+    	    android:id="@+id/meal_image_layout"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="168dp">
+    		<ProgressBar 
+    	    	android:id="@+id/image_progress"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_gravity="center"
+    	    	android:focusable="false"
+        		android:focusableInTouchMode="false"/>    
+    		<ImageView
+        		android:id="@+id/meal_image"
+        		android:layout_width="match_parent"
+        		android:layout_height="match_parent"
+        		android:scaleType="centerCrop"
+        		android:focusable="false"
+        		android:focusableInTouchMode="false"/>
+    	</FrameLayout>
+    	<View 
+    	    android:id="@+id/meal_separator"
+    	    android:layout_below="@+id/meal_image_layout"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="1dp"
+    	    android:background="#4f4f4f"
+    	    android:focusable="false"
+        	android:focusableInTouchMode="false"/>
+    	<TextView
+    	    android:id="@+id/chase_terms"
+    	    android:background="@color/item_list_background_color_appetizelibrary"
+    	    android:layout_below="@+id/meal_separator"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="147dp"
+    	    android:gravity="center"
+    	    android:textSize="12sp"
+    	    android:visibility="gone"
+    	  
+    	    />
+    	
+    	
+    	
+</RelativeLayout>

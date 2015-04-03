@@ -1,0 +1,122 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/item_list_background_color_appetizelibrary">
+    <include
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true"
+        layout="@layout/appetize_actionbar" />
+    <LinearLayout android:id="@+id/drinks_buttons"
+        android:layout_width="fill_parent"
+   		android:layout_height="50dp"
+   		android:layout_below="@id/actionbar"
+   		android:gravity="center_vertical" 
+   		android:weightSum="2.0"> 	
+	    <Button android:id="@+id/tab_build_drink"
+	        style="@style/appetize_button"
+	        android:layout_height="fill_parent"
+        	android:layout_width="0dp"
+	        android:layout_weight="1.0"
+	        android:text="@string/appetize_tab_build_drink" 
+	        android:textSize="14sp"
+	        android:textStyle="bold"
+	        android:onClick="onTabBuildDrinkClick" 
+	        android:textColor="@drawable/appetize_build_drink_tab_text_color"/>
+	    <Button android:id="@+id/tab_pre_built"
+	        style="@style/appetize_button"
+	        android:layout_width="0dp"
+	        android:layout_weight="1.0"
+	        android:layout_height="fill_parent"
+	        android:text="@string/appetize_tab_pre_built" 
+	        android:textSize="14sp"
+	        android:textStyle="bold"
+	        android:onClick="onTabPreBuilt"
+	        android:textColor="@drawable/appetize_build_drink_tab_text_color"/>
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/root" 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/drinks_buttons"
+        android:layout_above="@+id/next_step_layout"
+        android:background="@color/item_list_background_color_appetizelibrary">
+	    <LinearLayout android:id="@+id/alcohol_layout"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="4dp"
+	        android:orientation="vertical"
+	        android:background="@color/item_list_background_color_appetizelibrary">
+		    <Gallery 
+		        android:id="@+id/gallery"
+		        android:layout_width="fill_parent"
+		        android:layout_height="@dimen/appetize_mixer_gallery_height"
+		        android:layout_marginTop="8dp"
+		        android:spacing="35dp"
+		        android:gravity="center_vertical"
+		        android:background="@color/item_list_background_color_appetizelibrary"/>
+		    <TextView android:id="@+id/alcohol_name"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		       android:textSize="20sp"
+		        android:gravity="center"
+		        android:textColor="@color/build_drink_labels_text_color_appetizelibrary"
+		        android:background="@color/item_list_background_color_appetizelibrary"/>
+		    <TextView android:id="@+id/alcohol_price"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="4dp"
+		        android:textSize="18sp"
+		        android:gravity="center"
+		        android:fontFamily="sans-serif-thin" 
+		        android:textColor="@color/build_drink_labels_text_color_appetizelibrary"
+		        android:background="@color/item_list_background_color_appetizelibrary"/>
+	 	</LinearLayout>
+    </RelativeLayout>
+    <ListView android:id="@+id/lv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/drinks_buttons"
+        android:layout_above="@+id/btn_layout"
+        android:background="@color/item_list_background_color_appetizelibrary"
+        android:cacheColorHint="@android:color/transparent"
+        android:visibility="gone"/>
+    
+    <LinearLayout android:id="@+id/next_step_layout"
+	  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+ 				android:layout_above="@+id/btn_layout"
+                  android:layout_marginLeft="15dp"
+                  android:layout_marginRight="15dp"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btn_next_step"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/appetize_basic_button"
+            android:text="@string/appetize_next_step"
+            android:textColor="@color/basic_button_text_color_appetizelibrary"
+            android:textStyle="bold" />
+
+	 </LinearLayout>
+	 
+<!-- 	 <View android:layout_width="fill_parent" -->
+<!--           android:layout_height="1px" -->
+<!--           android:layout_above="@id/btn_layout" -->
+<!--           android:background="@color/bottom_food_type_menu_horizontal_separator"/> -->
+	 
+    <include layout="@layout/appetize_menu_mixer_tab_layout"/>	
+    <!--ImageView 
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_mascot_small"
+        android:layout_centerInParent="true"
+        android:visibility="gone" /!-->
+    <ProgressBar android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"/>        
+</RelativeLayout>

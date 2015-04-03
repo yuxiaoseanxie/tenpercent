@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="appetize_eat_shop_activity_title">Food/Drink/Merchandise</string>
+    <string name="appetize_shop_activity_title">Merchandise</string>
+    <string name="appetize_eat_activity_title">Food/Drink</string>
+    <string name="appetize_build_drink_activity_title">Build a Drink</string>
+    <string name="appetize_chase_terms_of_service_title">Disclosures</string>
+    <string name="app_name">Appetize</string>
+    <string name="appetize_food">Food</string>
+    <string name="appetize_drinks">Drinks</string>
+    <string name="appetize_browse">Browse</string>
+    <string name="appetize_checkout">Checkout</string>
+    <string name="appetize_facebook">Sign In with Facebook</string>
+    <string name="appetize_label_closed">Closed</string>
+    <string name="appetize_list_cost">%1$s</string>
+    <string name="appetize_stadiums_welcome">Appetize - It\'s good food at your fingertips! Please choose your stadium to begin…</string>
+    <string name="appetize_action_btn_checkout">Checkout (%1$d)</string>
+    <string name="appetize_btn_add">Add to Order</string>
+    <string name="appetize_btn_add_dollar">Add to Order ($%.02f)</string>
+    <string name="appetize_btn_submit">Submit</string>
+    <string name="appetize_btn_save">Save</string>
+    <string name="appetize_alcoholic">Alcohol</string>
+    <string name="appetize_non_alcohol">Drinks</string>
+    <string name="appetize_meals">Meals</string>
+    <string name="appetize_select_level">Choose Your Level</string>
+    <string name="appetize_select_counter">Select a Food Counter!</string>
+    <string name="appetize_confirm_btn">Confirm</string>
+    <string name="appetize_change_seat_btn">Change Seat</string>
+    <string name="appetize_section">Section</string>
+    <string name="appetize_row">Row</string>
+    <string name="appetize_seat">Seat</string>
+    <string name="appetize_closed">%1$s is currently closed.</string>
+    <string name="appetize_could_not_parse_venue">Could not read venue data from server.</string>
+    <string name="appetize_loading">Loading…</string>
+    <string name="appetize_updating">Updating…</string>
+    <string name="appetize_no_featured">No featured Items</string>
+    <string name="appetize_continue_guest">Continue as Guest</string>
+    <string name="appetize_cart">Cart</string>
+    <string name="appetize_login">Login</string>
+    <string name="appetize_login_with_facebook">Login with facebook</string>
+    <string name="appetize_logout">Logout</string>
+    <string name="appetize_forgot_password">Forgot Password</string>
+    <string name="appetize_signup">Sign Up</string>
+    <string name="appetize_signin">Sign in</string>
+    <string name="appetize_contact">Contact</string>
+    <string name="appetize_about">About</string>
+    <string name="appetize_faq">FAQ</string>
+    <string name="appetize_account">Account</string>
+    <string name="appetize_create_account">Create Account</string>
+    <string name="appetize_username">Username</string>
+    <string name="appetize_password">Password</string>
+    <string name="appetize_old_password">Old Password</string>
+    <string name="appetize_new_password">New Password</string>
+    <string name="appetize_verify_password">Verify Password</string>
+    <string name="appetize_name">Name</string>
+    <string name="appetize_email">Email</string>
+    <string name="appetize_zip_code">Zip Code</string>
+    <string name="appetize_okay">Okay</string>
+    <string name="appetize_cancel">Cancel</string>
+    <string name="appetize_yes">Yes</string>
+    <string name="appetize_no">No</string>
+    <string name="appetize_title_login">Account Login</string>
+    <string name="appetize_title_signup">Sign Up</string>
+    <string name="appetize_title_guest">Enter Email Address</string>
+    <string name="appetize_title_pswd">Change Password</string>
+    <string name="appetize_pswd_changed">Password Changed Successfully.</string>
+    <string name="appetize_valid_email">Please enter a valid email address.</string>
+    <string name="appetize_short_pswd">Your password must be at least 5 characters.</string>
+    <string name="appetize_pswd_not_matching">Password not matching.</string>
+    <string name="appetize_change_seat">Change Seat</string>
+    <string name="appetize_edit_payment">Edit Payment Info</string>
+    <string name="appetize_edit_success">Successfully Updated Payment Info</string>
+    <string name="appetize_past_orders">Past Orders</string>
+    <string name="appetize_update_account_info">Update</string>
+    <string name="appetize_sharing">Sharing</string>
+    <string name="appetize_edit_account_info">Edit Account Info</string>
+    <string name="appetize_about_us">About Us/Customer Service</string>
+    <string name="appetize_change_psw">Change Password</string>
+    <string name="appetize_welcome_signup">Account was successfully created. Logging you in…</string>
+    <string name="appetize_account_saved">Account changes were saved.</string>
+    <string name="appetize_credit_card_saved">Credit card information saved.</string>
+    <string name="appetize_logged_in">Logged in successfully.</string>
+    <string name="appetize_empty_cart">No Items in Cart</string>
+    <string name="appetize_add_tip">Add A Tip</string>
+    <string name="appetize_tip">Tip</string>
+    <string name="appetize_total">Total  </string>
+    <string name="appetize_seat_string">%1$s / %2$s / %3$s</string>
+    <string name="appetize_delivering">Deliver to:</string>
+    <string name="appetize_delivery">Delivery</string>
+    <string name="appetize_convenience_percent">%1$s convenience fee</string>
+    <string name="appetize_convenience_dollar">$%1$s convenience fee</string>
+    <string name="appetize_changeseat">(change seat)</string>
+    <string name="appetize_item_unavailable">Sorry, this item is currently unavailable.</string>
+    <string name="appetize_cart_error">Sorry, there was an error with your cart. Please re-add items.</string>
+    <string name="appetize_thanks_order">Thanks For Your Order!</string>
+    <string name="appetize_esitmated_delivery">Estimated Delivery Time -</string>
+    <string name="appetize_receipt_emailed">Have Your Order Receipt Emailed!</string>
+    <string name="appetize_share_order">Share Order!</string>
+    <string name="appetize_add_favorite">Add Order to Favorites</string>
+    <string name="appetize_use_saved_title">Use Saved Card?</string>
+    <string name="appetize_wait_sec">%1$s secs</string>
+    <string name="appetize_wait_min">%1$s mins</string>
+    <string name="appetize_wait_hour">%1$s hours</string>
+    <string name="appetize_use_saved_card">Would you like to use your saved card: %1$s</string>
+    <string name="appetize_error_uncaught">Sorry, there was an unexpected error.</string>
+   
+    <string name="appetize_error_payment">There was an error processing your order. Please try again.</string>
+    <string name="appetize_error_card">Sorry, there was an error updating your payment information.</string>
+    <string name="appetize_error_login">Error logging you in. Please try again.</string>
+    <string name="appetize_invalid_card">Sorry, Your card is invalid.</string>
+    <string name="appetize_warning">Warning</string>
+    <string name="appetize_alcohol_sales">Alcohol Sales</string>
+    <string name="appetize_error">Error</string>
+    <string name="appetize_alcohol_restrictions_dialog_text">Alcoholic beverages are for fans 21 years or older. Please be prepared to show ID upon delivery.</string>
+    <string name="appetize_alcohol_restrictions_dialog_title">Warning</string>
+    
+    <string name="appetize_twenty_one">Alcoholic beverages are for fans 21 years or older. Please be prepared to show ID upon delivery.</string>
+	<string name="appetize_confirm_list_price"> - %1$s</string>
+    <string name="appetize_confirm_total">TOTAL - %1$s</string>
+    <string name="appetize_order_num">Order #</string>
+    <string name="appetize_order">Order</string>
+    <string name="appetize_seat_label">Seat:</string>
+    <string name="appetize_fee_label">Fee:</string>
+    <string name="appetize_tip_label">Tip:</string>
+    <string name="appetize_total_label">Total:</string>
+    <string name="appetize_done">Done</string>
+    <string name="appetize_share_title">Tell Your Friends!</string>
+    <string name="appetize_share">…just ordered something yummy with @appetizeapp at %1$s!</string>
+    <string name="appetize_contact_text">Appetize is here to help!\n\nChoose one of the options below to get in contact with us.</string>
+    <string name="appetize_call">Call</string>
+    <string name="appetize_text">Text</string>
+    <string name="appetize_email_btn">Email</string>
+    <string name="appetize_tweet">Tweet</string>
+    <string name="appetize_retry">Retry</string>
+    <string name="appetize_percent_ten">10%</string>
+    <string name="appetize_percent_fifteen">15%</string>
+    <string name="appetize_percent_twenty">20%</string>
+    <string name="appetize_no_connection">Unable to connect to our servers. Please check your data connection.</string>
+    <string name="appetize_no_stadiums">There are currently no stadiums open. Come back soon!</string>
+    <string name="appetize_contact_body">I am sitting in\nLevel:\nSection:\nRow:\nSeat:\n…My issue is</string>
+    <string name="appetize_create_payment_profile">No payment profile found. Please create payment profile!</string>
+    <string name="appetize_all_compulsory">All fields compulsory!</string>
+    <string name="appetize_merchandise">Merchandise</string>
+    <string name="appetize_mixer">Mixer</string>
+    <string name="appetize_alcohol">Alcohol</string>
+    <string name="appetize_build_drink">Build Your Drink</string>
+    <string name="appetize_food_drink">Food/Drinks</string>
+    <string name="appetize_featured">Featured</string>
+    <string name="appetize_home">Home</string>
+    <string name="appetize_alcohol_limit_reached_dialog_title"><b>Alcohol drinks limit reached</b></string>
+    <string name="appetize_alcohol_per_event_limit_reached_dialog_title"><b>Alcohol drinks limit reached</b></string>  
+    <string name="appetize_drink_limit" formatted="false">You can order only %s alcohol drinks.</string>
+    <string name="appetize_alcohol_limit_reached_dialog_text" >You can order only %1$s alcohol drinks.</string>
+    <string name="appetize_alcohol_per_event_limit_reached_dialog_text" >You can order only %1$s alcohol drinks.</string>
+    <string name="appetize_appetize_sign_in">Sign In To Appetize</string>
+    <string name="appetize_logout_success">Logged out successfully.</string>
+    <string name="appetize_please_wait">Please wait</string>
+    <string name="appetize_not_sign_up">You cancelled Sign Up.</string>
+    <string name="appetize_no_seat_specified">No seat Specified.</string>
+    <string name="appetize_venue">Venue</string>
+    <string name="appetize_info">Info</string>
+    <string name="appetize_tickets">Tickets</string>
+    <string name="appetize_no_ticket_url">Ticket Url not found.</string>
+    <string name="appetize_welcome">Welcome to</string>
+    <string name="appetize_new_here">New here?</string>
+    <string name="appetize_pull_down_to_update">Pull down to update.</string>
+    <string name="appetize_release_to_update">Release to update.</string>
+    <string name="appetize_no_seat_selected">Seat Not Selected.</string>
+    <string name="appetize_soldout">Sold out</string>
+    <string name="appetize_item_soldout">Item is currently sold out</string>
+    <string name="appetize_loc_not_fetched">Location cannot fetched.</string>
+    <string name="appetize_loc_disabled">Location settings disabled.</string>
+    <string name="appetize_card_number">Card Number</string>
+    <string name="appetize_card_can_be">Visa, Mastercard, AMEX, Discover</string>
+    <string name="appetize_mmyy">MM/YY</string>
+    <string name="appetize_get_in_touch">Get In Touch</string>
+    <string name="appetize_btn_call">Call</string>
+    <string name="appetize_btn_email">Email</string>
+    <string name="appetize_btn_tweet">Tweet</string>
+    <string name="appetize_btn_privacy">Privacy</string>
+    <string name="appetize_btn_terms">Terms</string>
+    <string name="appetize_btn_faq">FAQ</string>
+    <string name="appetize_seat_no" formatted="false">Current Seat: %s/%s/%s</string>
+    <string name="appetize_alert">Do you really want to go to venues list?</string>
+    <string name="appetize_seat_saved">Seat updated successfully.</string>
+    <string name="appetize_alert_title">Alert</string>
+    <string name="appetize_mobile_order_closed_title">Alert</string>
+<!--     <string name="appetize_info">Appetize is one of those no brainers...food and drinks delivered to your seat? Duh!?\n\nDon\'t miss a second of the evet!\n\nJust select your venue, seat, choose your food and drinks, sit back and wait for it to be delivered!\n\nYou will receive an emailed receipt with your purchase, rest assured, your transaction is completely secure.</string> -->
+    <string name="appetize_tab_build_drink">Build-a-Drink</string>
+    <string name="appetize_tab_pre_built">Pre-Built Drinks</string>
+    <string name="appetize_next_step">Next Step</string>
+    <string name="appetize_add_order">Add to Order %s</string>
+    <string name="appetize_label_add_mixer">Add Mixer</string>
+    <string name="appetize_label_add_garnish">Add Garnish</string>
+    <string name="appetize_label_add_more_garnish">Another item?</string>
+    <string name="appetize_mixer_error_title">Mixer Error</string>
+    <string name="appetize_mixer_error_message">Please select a Mixer to add to cart.</string>
+    <string name="appetize_added_to_cart">Item added to cart</string>
+    <string name="appetize_label_order_code">Order Code</string>
+    <string name="appetize_delivery_time">Delivering within %s to:</string>
+    <string name="appetize_delivery_no_time">Delivering to:</string>
+    <string name="appetize_confirm_seat_no" formatted="false">Section %s, Row %s, Seat %s</string>
+    <string name="appetize_label_subtotal">Sub Total</string>
+    <string name="appetize_label_conv_fee">+ 10% convenience fee</string>
+    <string name="appetize_label_tip">%s%% Tip</string>
+    <string name="appetize_label_grandtotal">Total</string>
+    <string name="appetize_label_charged_to">charged to %s</string>
+    <string name="appetize_deliveryText">...available behind the bar.</string>
+    <string name="appetize_label_edit_cart">Edit Cart</string>
+    <string name="appetize_label_pickup">Pickup</string>
+    <string name="appetize_select_option">Select Options</string>
+    <string name="appetize_user_logged_out_successfully">Logged out Successfully.</string>
+    <string name="appetize_user_logging_out_failed">User logging out failed.</string>
+    <string name="appetize_user_logging_off_dialog_text">Logging off</string>
+    <string name="appetize_applying_promo_code">Applying code...</string>
+    <string name="appetize_json_parsing_exception">Unable to parse json data</string>
+    <string name="appetize_promo_code_placeholder">Subscriber ID #</string>
+    <string name="appetize_promo_code_hint">Please enter promo code</string>
+    <string name="appetize_promo_code_explanation">Enter your Subscriber ID # to receive your tenure discount.</string>
+    <string name="appetize_promo_code_apply_button_text">Apply</string>
+    <string name="appetize_promo_code_clear_button_text">Clear</string>
+    <string name="appetize_promo_code_applying_empty_warning">Promo code cannot be empty</string>
+    <string name="appetize_promo_code_applying_unknown_error">Unknown promo code applying error</string>
+    <string name="appetize_checkout_discount_label_text">Discount</string>
+    <string name="appetize_vendor_type_order_food_drinks">Order Food / Drinks</string>
+    <string name="appetize_vendor_type_shop_for_merchandise">Shop for Merchandise</string>
+    <string name="appetize_order_save_failed">Unable to save order in local database</string>
+    <string name="appetize_checkout_no_order_id">Payment error (no order id assinged)</string>
+    <string name="appetize_vendor_type_no_food_available_info">Sorry! Food and drink service is not available in your section.
+    </string>
+    <string name="appetize_vendor_type_would_you_like_text">Would you like to…</string>
+    <string name="appetize_vendor_type_or_text">or</string>
+    <string name="appetize_vendor_type_server_no_vendors_error_text">Mobile ordering is currently closed.</string>
+    <string name="appetize_vendor_closed">Vendor is currently closed.</string>
+    <string name="appetize_item_details_add_to_order_button_text">Add to Order</string>
+    <string name="appetize_credit_card_total_text">Total</string>
+    <string name="appetize_edit_card_chase_text">Use a Chase Card and get 2x points on MSG dining</string>
+    <string name="appetize_edit_card_chase_used_text">Spend $75 get $25 on a Chase Card at the MSG Team Stores</string>
+    <string name="appetize_edit_card_total_with_card">TOTAL WITH CART</string>
+    <string name="appetize_credit_card_payment_button_text">Purchase</string>
+    <string name="appetize_credit_card_enter_details_text">Enter your credit card details</string>
+    <string name="appetize_user_registration_error">User registration error</string>
+<!--     <string name="appetize_customer_phone_number_at_checkout_ask">Enter your phone number if you’d like to receive a text message when your order is ready for pick-up! -->
+<!--     </string> -->
+     <string name="appetize_customer_phone_number_at_checkout_ask">Enter your phone number if you’d like to receive a text message when your order is ready !
+    </string>
+    <string name="appetize_confirmation_charged_to_card_format">charged to card %s</string>
+    <string name="appetize_confirmation_title">Confirmation</string>
+	<string name="appetize_vendor_type_cola_stand_info">Look for Coca-Cola Freestyle Machines Serving 100+ flavors, located at Gate 112</string>
+	<string name="appetize_no_internet_connection_error">You may either not be connected or have a very slow Internet connection.</string>
+	<string name="appetize_item_details_ingredients_available_text">Choose your own ingredients!</string>
+	<string name="appetize_confirmation_seat_info" formatted="false">Sec:%s | Row:%s | Seat:%s</string>
+	<string name="appetize_confirmation_chase_voucher_title">Chase Merch Voucher Earned</string>
+	<string name="appetize_quest_login_failed_at_checkout_message_format">Unable to connect with ordering module. Please try again later (%s)</string>
+	<string name="appetize_signup_empty_email_error">Email cannot be empty</string>
+	<string name="appetize_signup_empty_password_error">Password cannot be empty</string>
+	<string name="appetize_signup_empty_fields">Email and Password cannot be empty</string>
+	<string name="appetize_profile_update_error">Update method error</string>
+	<string name="appetize_vendor_pickup_description">Pick-Up</string>
+	<string name="appetize_vendor_delivery_description">In-Seat Delivery</string>
+	<string name="appetize_close">Close</string>
+	<string name="appetize_error_retrieving_data">Error during retrieving data</string>
+	<string name="appetize_errog_guest_signup">Error occurred. Please logout and log in again.</string>
+    <string name="appetize_guest_password">guestpassword</string>
+    <string name="appetize_chase_credit_owner_text">To order the Deal Meal you need to be a Chase card holder.\n\nPlease enter first 6 digits of your card number to order</string>
+    <string name="appetize_chase_meal_deal">Chase Meal Deal</string>
+    <string name="appetize_enter_chase_credit_card">Enter Chase Credit Card</string>
+    <string name="appetize_chase_meal_deal_name">$%s MEAL DEAL</string>
+    <string name="appetize_meal_saved_amount">You have saved $%s</string>
+    <string name="appetize_leave_vendor">There are still items in the cart. Proceeding will clear the cart. Do you wish to continue?</string>
+    <string-array name="appetize_array_account_no_login">
+        <item >Login</item>
+        <item >Sign Up</item>
+        <item >Forgot Password</item>
+    </string-array>
+    <string-array name="appetize_array_account_login">
+        <item >Logout</item>
+        <item >Sign Up</item>
+        <item >Forgot Password</item>
+    </string-array>
+    <string-array name="array_appetize">
+        <item >Contact</item>
+        <item >About</item>
+        <item >FAQ</item>
+    </string-array>
+    <string-array name="appetize_array_stadium_no_login_menu_list">
+        <item >Venues</item>
+        <item >Support</item>
+        <item >Sign In</item>
+        <item >Sign Up</item>
+    </string-array>
+    <string-array name="appetize_array_stadium_login_menu_list">
+        <item >Venues</item>
+        <item >Billing</item>
+        <item >My Profile</item>
+        <item >Support</item>
+        <item >Logout</item>
+    </string-array>
+    <string-array name="appetize_array_no_login_menu_list">
+        <item>Venue</item>
+        <item>Menu</item>
+        <item>Support</item>
+        <item>Sign In</item>
+        <item>Sign Up</item>
+    </string-array>
+    <string-array name="appetize_array_login_menu_list">
+        <item >Venue</item>
+        <item >Menu</item>
+        <item >Billing</item>
+        <item >My Profile</item>
+        <item >Support</item>
+        <item >Logout</item>
+    </string-array>
+    
+    <!-- string resources to modify  -->
+    
+    <string name="promo_code_hint_appetizelibrary">Promo Code</string>
+    <string name="promo_code_explanation_appetizelibrary"></string>
+<!--     Enter your Subscriber ID # to receive your tenure discount. -->
+    
+</resources>

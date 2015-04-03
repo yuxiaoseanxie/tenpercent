@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:background="@color/item_list_background_color_appetizelibrary">
+    <include android:id="@+id/actionbar"
+        layout="@layout/appetize_actionbar"/>
+    <RelativeLayout android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar"
+        android:layout_above="@+id/btn_layout">
+        <LinearLayout  
+            android:id="@+id/imageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+        >
+        	<RelativeLayout
+        	    android:id="@+id/img_layout"
+        	    android:layout_width="match_parent"
+        	    android:layout_height="wrap_content">
+        	    
+				<ImageView android:id="@+id/stadium_image"
+	        		android:layout_width="fill_parent"
+	        		android:layout_height="88dp"
+
+	        		android:scaleType="centerCrop"/>
+            	<com.appetizeapp.android.revolving.RevolvingImageView
+                    android:id="@+id/revolving_imageview"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+
+                    android:padding="0dp"
+                    android:background="@android:color/transparent"
+                    />
+            </RelativeLayout>
+            
+		    <LinearLayout android:id="@+id/drinks_buttons"
+		        android:layout_width="match_parent"
+		   		android:layout_height="46dp"
+		   		
+				android:weightSum="4.0"
+		   		android:gravity="center_vertical" 
+		   		> 
+		    		
+			    <Button android:id="@+id/food_btn"
+			        style="@style/appetize_button"
+			        android:background="@color/menu_section_normal_color_appetizelibrary"
+		        	android:layout_width="0dp"
+			        android:layout_weight="1.0"
+			        android:text="@string/appetize_food" 
+			        android:textSize="14sp"
+			        android:textStyle="bold"
+			        android:textColor="@drawable/appetize_food_type_tab_text_color"
+			        android:onClick="onFoodClick"
+                        android:layout_height="match_parent"
+                        />
+			    
+			    <Button android:id="@+id/drinks_btn"
+			        style="@style/appetize_button"
+			        android:background="@color/menu_section_normal_color_appetizelibrary"
+		        	android:layout_width="0dp"
+			        android:layout_weight="1.0"
+			        android:text="@string/appetize_drinks" 
+			        android:textSize="14sp"
+			        android:textColor="@drawable/appetize_food_type_tab_text_color"
+			        android:textStyle="bold"
+			        android:onClick="onDrinkClick"
+                    android:layout_height="match_parent"/>
+			    	    
+			    <Button android:id="@+id/alcohol_btn"
+			        style="@style/appetize_button"
+			        android:background="@color/menu_section_normal_color_appetizelibrary"
+			        android:layout_width="0dp"
+			        android:layout_weight="1.0"
+			        android:text="@string/appetize_alcoholic" 
+			        android:textSize="14sp"
+			        android:textColor="@drawable/appetize_food_type_tab_text_color"
+			        android:textStyle="bold"
+			        android:onClick="onAlcoholClick"
+                    android:layout_height="match_parent"/>
+			    
+			    <Button android:id="@+id/meals_btn"
+			        style="@style/appetize_button"
+			        android:background="@color/menu_section_normal_color_appetizelibrary"
+			        android:layout_width="0dp"
+			        android:layout_weight="1.0"
+			        android:text="@string/appetize_meals" 
+			        android:textSize="14sp"
+			        android:textColor="@drawable/appetize_food_type_tab_text_color"
+			        android:textStyle="bold"
+			        android:onClick="onMealsClick"
+                    android:layout_height="match_parent"
+                    />
+			    
+		    </LinearLayout>
+        </LinearLayout>
+	    <!--ImageView 
+	        android:id="@+id/spinner"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/ic_mascot_small"
+	        android:layout_centerInParent="true"
+	        android:visibility="gone" /!-->
+	    <ProgressBar android:id="@+id/spinner"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerInParent="true"
+	        android:visibility="gone"
+	        style="?android:attr/progressBarStyle"/>
+	    
+	    
+	    <ImageView
+	        android:layout_below="@+id/imageLayout"
+	        android:id="@+id/chase_meal_banner"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/appetize_top_meals_banner"
+	        android:scaleType="centerCrop"
+	        android:layout_centerHorizontal="true"/>
+	    <!-- list was placed in frame layout because setVisibility function is executed after animation
+	    framelayout has no animation so setVisibility will work instantly  -->
+	    
+	    <FrameLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:id="@+id/list_container"
+	        android:layout_below="@+id/chase_meal_banner">
+		    
+			<com.handmark.pulltorefresh.library.PullToRefreshListView 
+			    android:id="@+id/list"
+	       		xmlns:ptr="http://schemas.android.com/apk/res-auto"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="match_parent"
+	        	android:cacheColorHint="#00000000"
+	        	android:dividerHeight="1px"
+	        	android:divider="@android:color/transparent"
+	        	android:fadingEdge="none" 
+	        	
+	        	android:background="@color/item_list_background_color_appetizelibrary"
+	        	ptr:ptrHeaderTextColor="@color/pull_to_refresh_label_text_color_appetizelibrary"/>
+			
+	    </FrameLayout>
+	    <com.handmark.pulltorefresh.library.PullToRefreshListView
+	        android:id="@+id/meals_list"
+	       	xmlns:ptr="http://schemas.android.com/apk/res-auto"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_below="@+id/chase_meal_banner"
+	        android:layout_above="@+id/btn_layout"
+	        android:cacheColorHint="#00000000"
+	        android:dividerHeight="0px"
+	        android:divider="@android:color/transparent"
+	        android:fadingEdge="none" 
+	        android:layout_alignWithParentIfMissing="true"
+	        android:background="@color/item_list_background_color_appetizelibrary"
+	        ptr:ptrHeaderTextColor="@color/pull_to_refresh_label_text_color_appetizelibrary"
+	        
+	        />
+	</RelativeLayout>
+
+<!--     <View  -->
+<!--         	android:id="@+id/menu_mixer_tab_separator" -->
+<!--         	android:layout_width="fill_parent" -->
+<!--           android:layout_height="1px" -->
+<!--           android:layout_above="@id/btn_layout" -->
+<!--           android:background="@color/beetween_item_sepator_color_appetizelibrary"/> -->
+         
+    <include layout="@layout/appetize_menu_mixer_tab_layout"/>
+</RelativeLayout>

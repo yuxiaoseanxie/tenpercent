@@ -103,6 +103,34 @@
 -keep class com.google.**
 -dontwarn com.google.**
 
+-keep class  com.inmobi.androidsdk.**
+-dontwarn  com.inmobi.androidsdk.**
+
+-keep class  com.jumptap.**
+-dontwarn  com.jumptap.**
+
+-keep class  com.millennialmedia.**
+-dontwarn  com.millennialmedia.**
+
+-keep class  com.mobclix.android.**
+-dontwarn  com.mobclix.android.**
+
+-keep class  org.slf4j.**
+-dontwarn  org.slf4j.**
+
+-keep class  org.springframework.**
+-dontwarn  org.springframework.**
+
+
+-keep class  org.codehaus.jackson.**
+-dontwarn  org.codehaus.jackson.**
+
+-keep class  com.flurry.android.**
+-dontwarn  com.flurry.android.**
+
+-keep class  com.gimbal.android.**
+-dontwarn  com.gimbal.android.**
+
 # Crashyltics debugging
 -keepattributes SourceFile,LineNumberTable
 

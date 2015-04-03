@@ -1,3 +1,5 @@
 include 'LabsPlatform', 'Ticketing', 'LiveNationApp', ':urbanairship-lib-5.1.4'
+include ':appetize:AppetizeSDKLibrary'
+include ':appetize:Pull-To-Refresh'
 project(':LabsPlatform').projectDir = new File(settingsDir, "../adr-libsLabsPlatform/LabsPlatform")
 project(':Ticketing').projectDir = new File(settingsDir, "../adr-libTicketing/Ticketing")

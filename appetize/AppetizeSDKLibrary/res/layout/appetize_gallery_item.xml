@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <ImageView android:id="@+id/cover_page" 
+        android:layout_width="@dimen/appetize_gallery_item_width"
+        android:layout_height="@dimen/appetize_gallery_item_height"
+        android:gravity="center"/>
+</RelativeLayout>

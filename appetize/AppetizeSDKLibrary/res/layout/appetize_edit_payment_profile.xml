@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color_appetizelibrary">
+    <include
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true"
+        layout="@layout/appetize_actionbar" />
+    <LinearLayout android:id="@+id/credit_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionbar"
+        android:orientation="vertical"
+        >
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="39dp"
+                      android:id="@+id/total_layout"
+                android:orientation="horizontal"
+                android:paddingLeft="22dp"
+                android:paddingRight="14dp">
+
+            <TextView android:layout_width="0dp"
+                      android:layout_weight="1"
+                      android:layout_height="match_parent"
+                      android:textSize="17sp"
+                      android:textColor="@color/edit_payment_profile_label_text_color_appetizelibrary"
+                      android:text="@string/appetize_credit_card_total_text"
+                      android:gravity="center_vertical"
+                      
+                      />
+            <TextView android:id="@+id/appetize_credit_card_total_value_text_view"
+                      android:layout_width="120dp"
+                      android:layout_height="match_parent"
+                      android:textSize="18sp"
+                      android:textStyle="bold"
+                      android:text="$1,300.00"
+                      android:textColor="@color/edit_payment_profile_label_text_color_appetizelibrary"
+                      android:gravity="center_vertical|right"
+                     
+                      />
+        </LinearLayout>
+        
+          <ImageView
+        android:layout_below="@id/actionbar"
+        android:id="@+id/chaseBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:src="@drawable/appetize_chase_merch_banner_transparent"/>
+        
+       
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="36dp"
+                android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="18dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/appetize_credit_card_enter_details_text"
+                android:textColor="@color/edit_payment_profile_label_text_color_appetizelibrary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="wrap_content"
+                          android:layout_height="match_parent"
+                    android:layout_marginRight="5dp">
+
+                <ImageView android:id="@+id/appetize_visa_img"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                        android:src="@drawable/appetize_card_visa"/>
+                <ImageView android:id="@+id/appetize_mastercard_img"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:src="@drawable/appetize_card_mastercard"/>
+                <ImageView android:id="@+id/appetize_amex_img"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:src="@drawable/appetize_card_amex"/>
+                <ImageView android:id="@+id/appetize_discover_img"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:src="@drawable/appetize_card_discover"/>
+
+                <ImageView android:id="@+id/appetize_chase_img"
+                           android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:src="@drawable/appetize_card_chase"
+                        android:visibility="gone"/>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+	    <LinearLayout android:id="@+id/credit_layout"
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+                android:layout_margin="5dp"
+                android:background="@android:color/white">
+
+	          
+			<EditText
+			    android:id="@+id/guest_email"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:background="@color/credit_card_input_color_appetizelibrary"
+			    android:hint="@string/appetize_email"
+			    android:textCursorDrawable="@null"
+			    android:inputType="textEmailAddress"
+			    android:padding="5dp"
+			    android:singleLine="true"
+			    android:textColor="@color/edit_payment_profile_text_color_appetizelibrary"
+			    android:textSize="17sp"
+			    android:visibility="gone" />
+	        
+	        
+	         <View android:id="@+id/guest_email_separator" 
+	              android:layout_width="match_parent"
+                  android:layout_height="1px"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                    android:background="#cccccc"
+                    android:visibility="gone"/>
+	        
+			<EditText
+			    android:id="@+id/edit_credit_card_no"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:background="@color/credit_card_input_color_appetizelibrary"
+			    
+			    android:textCursorDrawable="@null"
+			    android:hint="@string/appetize_card_number"
+			    android:inputType="number|phone"
+			    android:maxLength="19"
+			    android:padding="5dp"
+			    android:singleLine="true"
+			    android:textColor="@color/edit_payment_profile_text_color_appetizelibrary"
+			    android:textSize="17sp" />
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="1px"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                    android:background="#cccccc"/>
+
+			<EditText
+			    android:id="@+id/edit_expiry_date"
+			    android:layout_width="match_parent"
+			    android:layout_height="40dp"
+			    android:background="@color/credit_card_input_color_appetizelibrary"
+			    android:digits="0123456789/"
+			    android:hint="@string/appetize_mmyy"
+			    android:textCursorDrawable="@null"
+			    android:inputType="number"
+			    android:maxLength="5"
+			    android:padding="5dp"
+			    android:singleLine="true"
+			    android:textColor="@color/edit_payment_profile_text_color_appetizelibrary"
+			    android:textSize="17sp" />
+			
+			
+
+			
+	    </LinearLayout>
+
+
+        <Button android:id="@+id/btn_submit"
+		    style="@style/appetize_button"
+		    android:layout_width="fill_parent"
+		    android:layout_margin="10dp"
+            android:textSize="20sp"
+		    android:text="@string/appetize_credit_card_payment_button_text"
+		    android:textColor="@drawable/appetize_large_button_text_color"
+            android:enabled="false"
+		    android:background="@drawable/appetize_large_button_background"/>
+        
+        <ImageView 
+        	android:id="@+id/powered_by_appetize_badge"
+        	android:src="@drawable/appetize_powered_by"
+        	android:layout_gravity="right"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       	
+        	android:layout_marginRight="5dp"
+        	android:layout_marginBottom="5dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

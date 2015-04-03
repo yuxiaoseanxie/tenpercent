@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"	
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	    
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Debug logs"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_debug_logs"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			   
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_debug_logs_enabled"
+	       		    style="?android:attr/buttonBarButtonStyle"
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		    
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_debug_logs_disabled"
+			         style="?android:attr/buttonBarButtonStyle"
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	
+	    
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Stage API"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_api"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_stage"
+	       		    style="?android:attr/buttonBarButtonStyle"
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		    
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_production"
+			         style="?android:attr/buttonBarButtonStyle"
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Powered By Appetize Badge"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_powered_by"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_powered_by_enabled"
+	       		    style="?android:attr/buttonBarButtonStyle"
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		    
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_powered_by_disabled"
+			         style="?android:attr/buttonBarButtonStyle"
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Appetize login at checkout"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_login_at_checkout"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_login_at_checkout_enabled"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		    
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_login_at_checkout_disabled"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Merch List Presentatin"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_merch_list_presentation"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_compact"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		    android:textSize="15sp"
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="Compact"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_categorized"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         android:textSize="15sp"
+			         android:text="Categorized"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Chase Banners"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_chase_banners"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_chase_enabled"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		   
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_chase_disabled"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Chase Banners Clickable"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_chase_banners_clickable"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_chase_click_enabled"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		   
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_chase_click_disabled"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Show Bundle Food Type"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_bundle_food_type"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_bundle_enabled"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		   
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_bundle_disabled"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	    
+	    	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	android:text="Show Restrict Bundle Purchase"
+	          	android:layout_marginRight="2dp"/>
+	        
+	       	<LinearLayout 
+	       	     
+	       	     android:id="@+id/btn_restrict_bundle"
+			     android:layout_width="wrap_content"
+			     android:layout_height="30dp"
+			     android:layout_marginLeft="12dp"
+			     android:layout_marginRight="5dp"
+			     android:orientation="horizontal"
+			 
+			     android:background="@drawable/appetize_config_button"
+			     >
+	
+	       		<Button
+	       		    android:id="@+id/btn_restrict_bundle_enabled"
+	       		    
+	       		    android:layout_width="wrap_content"
+	       		    android:layout_height="fill_parent"
+	       		   
+	       		    android:background="@drawable/appetize_config_button_background"
+	       		    android:text="On"
+	       		    android:textColor="@drawable/appetize_large_button_text_color" />
+	
+			     <Button android:id="@+id/btn_restrict_bundle_disabled"
+			         
+			         android:layout_width="wrap_content"
+			         android:layout_height="fill_parent"
+			         
+			         android:text="Off"
+			         android:textColor="@drawable/appetize_large_button_text_color"
+			         android:background="@drawable/appetize_config_button_background"/>
+	      	</LinearLayout>
+	   	</LinearLayout>
+	   	
+	    <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="match_parent" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:descendantFocusability="beforeDescendants"
+			android:focusableInTouchMode="true">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	
+	          	android:text="Event Alcohol Limit Time ( in ms)"
+	          	android:layout_marginRight="2dp"/>
+	        
+	        <EditText
+	            android:id="@+id/edit_event_alcohol_time_limit"
+	            android:layout_width="match_parent"
+	            android:layout_marginRight="10dp" 
+	        	android:layout_height="wrap_content"
+	        	android:inputType="number"
+	        	android:singleLine="true"
+	        	android:imeOptions="actionDone"
+	        	/>
+	            
+	   	</LinearLayout>
+	   	
+	    
+	     <LinearLayout
+	        android:layout_margin="5dp"
+	        android:layout_width="match_parent" 
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:descendantFocusability="beforeDescendants"
+			android:focusableInTouchMode="true">
+	        
+	        <TextView 
+	            android:layout_gravity="center"
+	            android:layout_width="wrap_content" 
+	        	android:layout_height="wrap_content"
+	          	
+	          	android:text="Venue ID"
+	          	android:layout_marginRight="2dp"/>
+	        
+	        <EditText
+	            android:id="@+id/edit_venue_id"
+	            android:layout_width="match_parent"
+	            android:layout_marginRight="10dp" 
+	        	android:layout_height="wrap_content"
+	        	android:inputType="number"
+	        	android:singleLine="true"
+	        	android:imeOptions="actionDone"
+	        	/>
+	            
+	   	</LinearLayout>
+	</LinearLayout>
+</ScrollView>	

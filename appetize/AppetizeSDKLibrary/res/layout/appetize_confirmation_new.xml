@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_confirmation_background_color_appetizelibrary"
+        >
+    <include android:id="@+id/actionbar"
+             layout="@layout/appetize_actionbar"/>
+    
+    
+    
+    <RelativeLayout android:id="@+id/checkout_topbar"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@id/actionbar">
+
+        <LinearLayout android:id="@+id/order_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/label_order_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/appetize_label_order_code"
+                android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/orderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12ABC"
+                android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <LinearLayout android:id="@+id/delivery_layout"
+            android:layout_toRightOf="@id/order_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentRight="true"
+            android:paddingRight="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/deliveryTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:text="Delivering within 10 minutes to:"
+                android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="right"
+                android:text="Section 400 | Row 13 | Seat 23"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+                android:textSize="12sp" />
+
+			<TextView
+                android:id="@+id/pickup_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="left"
+                android:textAlignment="viewStart"
+                android:text="Pickup"
+                android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+                android:textSize="12sp"
+                android:visibility="gone" 
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+     <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkout_topbar"
+        android:layout_above="@+id/fee_layout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:cacheColorHint="@android:color/transparent"
+        android:background="@color/order_confirmation_list_color_appetizelibrary">
+    </ListView> 
+
+    <RelativeLayout android:id="@+id/fee_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/done_container"
+        >
+
+        <RelativeLayout android:id="@+id/grand_total_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="55dp"
+            >
+			
+			<TextView 
+			    android:id="@+id/meal_saved_amount"
+			    android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_marginLeft="8dp"
+	            android:text="@string/appetize_meal_saved_amount"
+	            android:textSize="14sp"
+	            android:textStyle="bold"
+	            android:visibility="visible"
+	            android:textColor="#ff0000" />
+            
+            
+            <LinearLayout
+                android:id="@+id/total_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/meal_saved_amount"
+                 android:layout_centerVertical="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_marginLeft="8dp"
+	            android:orientation="horizontal">
+                
+            	<TextView
+	            	android:id="@+id/label_grandtotal"
+	            
+	            	android:layout_width="wrap_content"
+	            	android:layout_height="wrap_content"
+	           
+	            
+	            	android:text="@string/appetize_label_grandtotal"
+	            	android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+	            	android:textSize="14sp"
+	            	android:textStyle="bold" />
+            	<TextView android:id="@+id/appetize_confirmation_charged_to_text_view"
+                      android:layout_height="wrap_content"
+                      android:layout_width="wrap_content"
+                      android:textSize="9sp"
+                      android:layout_marginLeft="8dp"
+                     
+                      android:text="Charged to card"
+                      android:textColor="@color/order_confirmation_text_color_appetizelibrary"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	               android:layout_centerVertical="true"
+	            android:layout_alignParentRight="true"
+	            android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_alignParentBottom="true"
+	            android:orientation="vertical">
+                <TextView
+	            android:id="@+id/appetize_original_total"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="right"
+	            android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+	            android:text="$"
+	            android:textSize="12sp"
+	            android:textStyle="bold"
+	            android:visibility="visible" 
+	            />
+                <TextView
+	            android:id="@+id/grand_total"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	         
+	            android:textColor="@color/order_confirmation_text_color_appetizelibrary"
+	            android:text="$"
+	            android:textSize="18sp"
+	            android:textStyle="bold" />
+            </LinearLayout>
+            
+        </RelativeLayout>   
+        <RelativeLayout
+           android:id="@+id/chase_voucher_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@+id/grand_total_layout"
+           >
+           
+                <TextView
+                    android:id="@+id/appetize_chase_voucher_title"
+	             android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentLeft="true"
+	            android:layout_marginLeft="8dp"
+	            android:textColor="@color/confirmation_chase_voucher_text_color_appetizelibrary"
+	            android:text="@string/appetize_confirmation_chase_voucher_title"
+	            android:textSize="12sp"
+	            />
+                
+                <TextView
+	            android:id="@+id/appetize_chase_voucher_amount"
+	             android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentRight="true"
+	            
+	            android:textColor="@color/confirmation_chase_voucher_text_color_appetizelibrary"
+	            android:text="$"
+	            android:textSize="12sp"
+	            android:layout_marginRight="8dp"
+	             />
+           
+         </RelativeLayout> 
+    </RelativeLayout>
+    
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/done_container">
+	    <Button
+	        android:id="@+id/btn_done"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="16dp"
+	        android:layout_marginBottom="8dp"
+	   	    android:layout_marginLeft="10dp"
+	   	    android:layout_marginRight="10dp"
+	    	android:background="@drawable/appetize_basic_button"
+	        android:text="@string/appetize_done"
+	        android:textColor="@color/basic_button_text_color_appetizelibrary"
+	        android:onClick="onDoneClick"
+	        android:layout_gravity="center_horizontal"
+	        />
+	    
+	      <ImageView
+	        android:layout_gravity="center_horizontal"    
+	        android:id="@+id/chaseBanner"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:src="@drawable/appetize_chase_merch_banner_transparent"/>
+	      
+	      
+  
+	</LinearLayout>
+</RelativeLayout>

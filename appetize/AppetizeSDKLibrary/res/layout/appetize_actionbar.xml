@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/appetize_actionbar" 
+    android:id="@+id/appetize_action_bar">
+
+    <ImageView android:id="@+id/logo"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/appetize_eat_shop_bar_title"/>
+   
+    <Button
+     
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableLeft="@drawable/appetize_back_arrow"
+        android:textColor="#FFFFFF"
+        android:id="@+id/barBackButton"
+        android:paddingLeft="6dp"
+        android:paddingRight="8dp"
+        android:layout_centerVertical="true"
+        android:drawablePadding="3sp"/>
+    
+    <TextView
+        android:id="@+id/appetize_actionbar_title" 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:clickable="true"
+        android:textSize="18sp"
+        android:layout_marginLeft="25dp"
+        android:textColor="@color/action_bar_text_color_appetizelibrary"/>
+        
+    
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MENU"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/appetize_menu_bar_button"/>
+ <!--   <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/eat_shop_bar_title"
+        android:textSize="29sp"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#ffffff"
+        android:textStyle="bold"/>-->
+
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentRight="true">
+
+       <!--
+    <ImageView android:id="@+id/separator2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/cart_layout"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/separator_header"/>
+       -->
+
+    <ImageButton android:id="@+id/action_navigation_btn"
+        style="@style/appetize_actionbar_navigation_btn"
+        android:visibility="invisible"
+        android:onClick="onActionBtnClick"/>
+    
+    <ImageView android:id="@+id/separator1"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/action_navigation_btn"
+        android:src="@drawable/appetize_separator_header"/>
+    
+    <LinearLayout android:id="@+id/cart_layout" 
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:clickable="true"
+        >
+	    <TextView android:id="@+id/cart_total"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+
+	        android:gravity="center"
+	        android:textColor="@android:color/white"
+	        android:textStyle="bold"
+	        android:visibility="visible"/>
+	    <ImageButton android:id="@+id/action_cart_btn"
+	        style="@style/appetize_actionbar_cart_btn"
+	        android:visibility="gone"
+        android:onClick="onActionBtnClick"
+	      />
+    </LinearLayout>
+    
+    
+    </LinearLayout>
+</RelativeLayout>

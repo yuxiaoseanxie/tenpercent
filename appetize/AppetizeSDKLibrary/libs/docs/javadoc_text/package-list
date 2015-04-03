@@ -1,0 +1,9 @@
+com.appetizeapp.android
+com.appetizeapp.android.data
+com.appetizeapp.android.http
+com.appetizeapp.android.json
+com.appetizeapp.android.revolving
+com.appetizeapp.android.util
+com.appetizeapp.android.wheel
+com.appetizeapp.android.wheel.adapter
+com.appetizeapp.android.widget

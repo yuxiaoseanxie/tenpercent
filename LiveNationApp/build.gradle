@@ -47,12 +47,18 @@ android {
         abortOnError true
     }
 
+    dexOptions {
+        preDexLibraries = false
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         versionCode computeVersionCode()
         versionName computeVersionName(versionCode)
         minSdkVersion 14
         targetSdkVersion 21
-
+        multiDexEnabled true
 
         testApplicationId "com.livenation.mobile.android.na.test"
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
@@ -138,6 +144,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     compile project(':LabsPlatform')
     compile project(':Ticketing')
+    compile project(':appetize:AppetizeSDKLibrary')
     compile project(':urbanairship-lib-5.1.4')
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.android.support:support-v13:21.0.3'
@@ -154,6 +161,7 @@ dependencies {
     compile 'com.squareup.retrofit:converter-jackson:1.2.1'
     compile 'com.amplitude:android-sdk:1.4.3'
     compile 'com.mcxiaoke.volley:library:1.0.10'
+    compile 'com.android.support:multidex:1.0.0'
 
     androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
 }

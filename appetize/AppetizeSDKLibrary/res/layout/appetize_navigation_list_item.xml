@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<RelativeLayout android:id="@+id/menu_row" 
+	    android:layout_width="fill_parent"   
+	    android:layout_height="fill_parent"  
+	    android:paddingTop="10dip"  
+	    android:paddingBottom="10dip"
+	    android:paddingLeft="10dip">
+	    <ImageView android:id="@+id/nav_item_icon"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"/>
+	    <LinearLayout android:id="@+id/text_layout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:layout_toRightOf="@id/nav_item_icon"
+	        android:layout_centerVertical="true"
+	        android:orientation="vertical">
+			<TextView android:id="@+id/list_item_title"  
+			    android:layout_width="fill_parent"   
+			    android:layout_height="fill_parent"  
+			    android:textSize="18sp"
+			    android:textColor="@android:color/white"/>
+			<TextView android:id="@+id/seat"  
+			    android:layout_width="fill_parent"   
+			    android:layout_height="fill_parent"  
+			    android:textSize="12sp"
+			    android:textColor="@android:color/white"/>
+	    </LinearLayout>
+	</RelativeLayout>
+    <View android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menu_row"
+        android:background="@drawable/appetize_horizontal_separator"/>
+</RelativeLayout>

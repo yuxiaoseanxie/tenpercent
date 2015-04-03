@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    
+   >
+    
+    <ImageView 
+        android:id="@+id/vendorImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/appetize_about"
+        android:scaleType="centerCrop"
+       
+    />
+    
+    <View 
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fadeView"
+        android:background="@android:color/black"
+        android:alpha="0.55"
+        
+        
+        />
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+        <TextView
+           android:lines="1" 
+        android:id="@+id/vendorName"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:textColor="@color/vendor_chooser_main_color_appetizelibrary"
+        android:paddingTop="16dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        
+        />
+        
+        <TextView
+            android:layout_marginTop="2dp"
+        android:id="@+id/transportType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:lines="1"
+         android:textColor="@color/vendor_chooser_secondary_color_appetizelibrary"
+        android:textSize="17sp"
+        android:gravity="center"
+         />
+        
+        <TextView
+            android:layout_marginTop="2dp"
+        android:id="@+id/infoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:lines="1"
+         android:textColor="@color/vendor_chooser_transparent_overlay_color_appetizelibrary"
+        android:textSize="17sp"
+        android:gravity="center"
+         />
+  
+   </LinearLayout>
+
+
+</RelativeLayout>

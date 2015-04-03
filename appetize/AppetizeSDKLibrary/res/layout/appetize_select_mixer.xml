@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/item_list_background_color_appetizelibrary" xmlns:tools="http://schemas.android.com/tools">
+    <include
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true"
+        layout="@layout/appetize_actionbar"/>
+    <RelativeLayout android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/actionbar"
+        >
+    <RelativeLayout android:id="@+id/alcohol_item_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appetize_white">
+        <LinearLayout android:id="@+id/image_ll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/alcohol_image"
+                android:layout_width="50dp"
+                android:layout_height="180dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/alcohol_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="alcohol"
+                    android:textColor="@color/select_mixer_text_color_appetizelibrary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+			    <TextView
+			        android:id="@+id/alcohol_price"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:gravity="center"
+			        android:text="$20"
+			        android:textColor="@color/select_mixer_text_color_appetizelibrary"
+			        android:textSize="20sp"
+			        tools:ignore="HardcodedText" />
+
+            </LinearLayout>    
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/rule01"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/image_ll"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/appetize_faq_separator"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout> 
+    <ScrollView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alcohol_item_layout"
+        android:layout_above="@+id/btn_add_order_layout"
+        >
+        
+        
+        
+        <RelativeLayout android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+
+            <LinearLayout android:id="@+id/add_mixer_layout"
+	            android:layout_width="fill_parent"
+	            android:orientation="vertical"
+	            android:layout_height="75dp"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:clickable="true">
+                
+                <LinearLayout android:layout_height="74dp"
+	            	android:orientation="horizontal"
+	            	android:layout_width="fill_parent">
+                
+                     <ImageView
+                         android:id="@+id/mixer_icon_image"
+                         android:layout_width="46dp"
+                         android:layout_height="46dp"
+                         android:layout_gravity="center_vertical"
+                         android:visibility="gone"
+                         tools:ignore="ContentDescription" />
+                 
+	                 <LinearLayout 
+	                     android:layout_width="0dp"
+	                     android:layout_weight="1.0"
+	                     android:layout_height="wrap_content"
+	                     android:layout_marginLeft="10dp"
+	                     android:layout_gravity="center_vertical"
+		                 android:orientation="vertical">
+			            <TextView android:id="@+id/label_add_mixer"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:textSize="20sp"
+			                android:textColor="@color/mixer_text_color_appetizelibrary"
+			                android:text="@string/appetize_label_add_mixer"/>
+
+			            <TextView
+			                android:id="@+id/label_mixer_cost"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="$10"
+			                android:textColor="@color/mixer_text_color_appetizelibrary"
+			                android:textSize="20sp"
+			                android:visibility="gone"
+			                tools:ignore="HardcodedText" />
+
+		              </LinearLayout>
+		       		
+			          <ImageView
+			              android:id="@+id/btn_add"
+			              android:layout_width="wrap_content"
+			              android:layout_height="wrap_content"
+			              android:layout_gravity="center_vertical"
+			              android:background="@android:color/transparent"
+			              android:src="@drawable/appetize_ic_list_add"
+			              tools:ignore="ContentDescription" />
+   
+	             </LinearLayout>
+
+                 <View android:layout_width="fill_parent"
+			           android:layout_height="1dp"
+			           android:background="@color/item_separator_color_appetizelibrary"/>
+            </LinearLayout>
+            
+            
+            <LinearLayout android:id="@+id/add_garnish_layout"
+	            android:layout_width="fill_parent"
+	            android:orientation="vertical"
+	             android:layout_below="@id/add_mixer_layout"
+	            android:layout_height="75dp"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:clickable="true">
+                
+                <LinearLayout android:layout_height="74dp"
+	            	android:orientation="horizontal"
+	            	android:layout_width="fill_parent">
+                <!-- 
+                     <ImageView 
+                         android:id="@+id/mixer_icon_image"
+                         android:layout_width="46dp"
+                         android:layout_height="46dp"
+                         android:layout_gravity="center_vertical"
+                         android:visibility="gone"/>
+                 -->
+	                 <LinearLayout 
+	                     android:layout_width="0dp"
+	                     android:layout_weight="1.0"
+	                     android:layout_height="wrap_content"
+	                     android:layout_marginLeft="10dp"
+	                     android:layout_gravity="center_vertical"
+		                 android:orientation="vertical">
+			            <TextView android:id="@+id/label_add_garnish"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:textSize="20sp"
+			                android:textColor="@color/mixer_text_color_appetizelibrary"
+			                android:text="@string/appetize_label_add_garnish"/>
+
+			            <TextView
+			                android:id="@+id/label_garnish_cost"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="$10"
+			                android:textColor="@color/mixer_text_color_appetizelibrary"
+			                android:textSize="20sp"
+			                android:visibility="gone"
+			                tools:ignore="HardcodedText" />
+
+		              </LinearLayout>
+		       		
+			          <ImageView
+			              android:id="@+id/btn_add2"
+			              android:layout_width="wrap_content"
+			              android:layout_height="wrap_content"
+			              android:layout_gravity="center_vertical"
+			              android:background="@android:color/transparent"
+			              android:src="@drawable/appetize_ic_list_add"
+			              tools:ignore="ContentDescription" />
+   
+	             </LinearLayout>
+
+                 <View android:layout_width="fill_parent"
+			           android:layout_height="1dp"
+			           android:background="@color/item_separator_color_appetizelibrary"/>
+            </LinearLayout>
+            
+            
+	       
+	         
+	         <!-- here they seem to insert layout with the garnish user chose (add_garnish_layout.xml) -->
+	         <LinearLayout android:id="@+id/new_garnish_layout"
+	             android:layout_width="fill_parent"
+	             android:layout_height="wrap_content"
+	             android:layout_marginLeft="2dp"
+	             android:layout_marginRight="2dp"
+	             android:layout_below="@id/add_garnish_layout"
+	             android:orientation="vertical"
+	             android:visibility="gone">
+	         </LinearLayout>
+	         
+	         <LinearLayout android:id="@+id/add_more_garnish_layout"
+	            android:layout_width="fill_parent"
+	            android:orientation="vertical"
+	            android:layout_below="@id/new_garnish_layout"
+	            android:layout_height="75dp"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:clickable="true">
+                
+                <LinearLayout android:layout_height="74dp"
+	            	android:orientation="horizontal"
+	            	android:layout_width="fill_parent">
+                <!-- 
+                     <ImageView 
+                         android:id="@+id/mixer_icon_image"
+                         android:layout_width="46dp"
+                         android:layout_height="46dp"
+                         android:layout_gravity="center_vertical"
+                         android:visibility="gone"/>
+                 -->
+	                 <LinearLayout 
+	                     android:layout_width="0dp"
+	                     android:layout_weight="1.0"
+	                     android:layout_height="wrap_content"
+	                     android:layout_marginLeft="10dp"
+	                     android:layout_gravity="center_vertical"
+		                 android:orientation="vertical">
+			            <TextView android:id="@+id/label_add_more_garnish"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:textSize="20sp"
+			                android:textColor="@color/mixer_text_color_appetizelibrary"
+			                android:text="@string/appetize_label_add_more_garnish"/>
+			            
+		              </LinearLayout>
+		       		
+			          <ImageView
+			              android:id="@+id/btn_add3"
+			              android:layout_width="wrap_content"
+			              android:layout_height="wrap_content"
+			              android:layout_gravity="center_vertical"
+			              android:background="@android:color/transparent"
+			              android:src="@drawable/appetize_ic_list_add"
+			              tools:ignore="ContentDescription" />
+   
+	             </LinearLayout>
+
+                 <View android:layout_width="fill_parent"
+			           android:layout_height="1dp"
+			           android:background="@color/item_separator_color_appetizelibrary"/>
+            </LinearLayout>
+
+	         <!--
+	         <RelativeLayout android:id="@+id/add_more_garnish_layout"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/new_garnish_layout"
+	            android:layout_marginTop="12dp"
+	            android:layout_marginLeft="2dp"
+	            android:layout_marginRight="2dp"
+	            android:clickable="true"
+	            android:visibility="gone"
+	            android:orientation="horizontal"
+	            android:background="@drawable/text_item_detail">
+	            <ImageView android:id="@+id/btn_add3"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginLeft="10dp"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentLeft="true"
+	                android:src="@drawable/ic_list_add"
+	                android:background="@android:color/transparent"/>
+	            <TextView android:id="@+id/label_add_more_garnish"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_toRightOf="@id/btn_add3"
+	                android:layout_centerVertical="true"
+	                android:layout_marginLeft="10dp"
+	                android:textSize="16sp"
+	                android:textColor="@android:color/white"
+	                android:text="@string/label_add_more_garnish"/>
+		        <ImageButton android:id="@+id/btn_down3"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_marginRight="10dp"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentRight="true"
+	                android:src="@drawable/row_down_detail"
+	                android:background="@android:color/transparent"/>
+	         </RelativeLayout>  
+	         -->
+	          
+		</RelativeLayout>
+    </ScrollView>  
+    
+       <LinearLayout
+           android:id="@+id/btn_add_order_layout"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@+id/btn_layout"
+           android:layout_marginBottom="10dp"
+           android:layout_marginLeft="15dp"
+           android:layout_marginRight="15dp"
+           android:layout_marginTop="10dp"
+           tools:ignore="UnknownIdInLayout" >
+        
+        <Button  android:id="@+id/btn_add_order"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/appetize_basic_button"
+                android:textColor="@color/basic_button_text_color_appetizelibrary"
+                android:text="@string/appetize_add_order"
+                android:textStyle="bold"/>
+    </LinearLayout>
+    
+       <!-- 
+    <Button android:id="@+id/btn_add_order"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+   		android:layout_marginLeft="10dp"
+   	    android:layout_marginRight="10dp"
+   	    android:layout_marginBottom="4dp"
+       	
+        android:text="@string/add_order"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/btn_layout"/>
+     -->
+    
+<!--     	 <View android:layout_width="fill_parent" -->
+<!--           android:layout_height="1px" -->
+<!--           android:layout_above="@id/btn_layout" -->
+<!--           android:background="#a4a4a4"/> -->
+    	 
+    <include layout="@layout/appetize_menu_mixer_tab_layout"/>	
+    
+    </RelativeLayout>
+</RelativeLayout>

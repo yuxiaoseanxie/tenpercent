@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:background="@color/background_color_appetizelibrary">
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/appetize_actionbar"/>
+    
+    <ImageView
+        android:layout_below="@id/actionbar"
+        android:id="@+id/chaseBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:src="@drawable/appetize_chase_merch_banner_transparent"/>
+    
+    <org.lucasr.twowayview.TwoWayView
+        android:id="@+id/merch_categories"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/chaseBanner"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:dividerHeight="2dp"
+	    android:divider="@android:color/transparent"/>
+    
+<!--     <LinearLayout  -->
+        
+<!--         android:id="@+id/merch_categories" -->
+<!--         android:layout_height="40dp" -->
+<!--         android:layout_width="match_parent" -->
+<!--        > -->
+        
+<!--     </LinearLayout> -->
+	<com.handmark.pulltorefresh.library.PullToRefreshListView 
+	    android:id="@+id/listView"
+		xmlns:ptr="http://schemas.android.com/apk/res-auto"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/merch_categories"
+		android:layout_above="@+id/btn_layout"
+		android:gravity="center"
+		android:divider="@android:color/transparent"
+		android:dividerHeight="1dp"
+		android:cacheColorHint="@android:color/transparent"
+		ptr:ptrHeaderTextColor="@color/pull_to_refresh_label_text_color_appetizelibrary"/>
+    <!--ImageView android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_mascot_small"
+        android:layout_centerInParent="true"
+        android:visibility="gone" /!-->
+     <ProgressBar android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyle"/>  
+<!--     <LinearLayout android:id="@+id/btn_layout" -->
+<!--         android:layout_width="fill_parent" -->
+<!--         android:layout_height="50dp" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:orientation="horizontal" -->
+<!--         android:background="@drawable/appetize_menu_footer_bg" -->
+<!--         android:weightSum="3.0"> -->
+<!--         <ImageButton android:id="@+id/btn_menu" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:layout_weight="1.0" -->
+<!--             android:gravity="center" -->
+<!--             android:src="@drawable/appetize_bottom_food_type_menu_food_normal_image" -->
+<!--             android:background="@android:color/transparent"/> -->
+<!--         <ImageView android:layout_width="wrap_content" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:src="@drawable/appetize_food_menu_separator"/> -->
+<!--         <ImageButton android:id="@+id/btn_build_drink" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:layout_weight="1.0" -->
+<!--             android:gravity="center" -->
+<!--             android:src="@drawable/appetize_bottom_food_type_menu_build_drink_normal_image" -->
+<!--             android:background="@android:color/transparent"/> -->
+<!--         <ImageView android:layout_width="wrap_content" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:src="@drawable/appetize_food_menu_separator"/> -->
+<!--         <ImageButton android:id="@+id/btn_merch" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="fill_parent" -->
+<!--             android:layout_weight="1.0" -->
+<!--             android:gravity="center" -->
+<!--             android:background="@android:color/transparent"/> -->
+<!--     </LinearLayout> -->
+		<include 
+		    layout="@layout/appetize_menu_mixer_tab_layout"/>
+</RelativeLayout> 

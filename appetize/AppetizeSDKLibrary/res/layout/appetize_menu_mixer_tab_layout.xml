@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/btn_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+		>
+           
+        <View 
+        	android:id="@+id/menu_mixer_tab_separator"
+        	android:layout_width="fill_parent"
+          	android:layout_height="1px"
+          	android:background="@color/bottom_food_type_menu_horizontal_separator"/>
+   		<LinearLayout
+   		    android:layout_width="fill_parent"
+        	android:layout_height="71dp"
+       	 	android:layout_alignParentBottom="true"
+        	android:orientation="horizontal"
+
+        	>
+           
+        	<ImageButton android:id="@+id/btn_menu"
+            	android:layout_width="0dp"
+            	android:layout_height="fill_parent"
+            	android:layout_weight="1.0"
+            	android:gravity="center"
+            	android:src="@drawable/appetize_bottom_bar_food_button_selector"
+            	android:background="@android:color/transparent"/>
+        	<View android:id="@+id/rule01"
+            	android:layout_width="1px"
+            	android:layout_height="fill_parent"
+            	android:layout_marginTop="8dp"
+            	android:layout_marginBottom="8dp"
+             	android:background="@color/bottom_food_type_menu_vertical_separator"   />
+        	<ImageButton android:id="@+id/btn_build_drink"
+            	android:layout_width="0dp"
+            	android:layout_height="fill_parent"
+
+            	android:layout_weight="1.0"
+            	android:gravity="center"
+            	android:src="@drawable/appetize_bottom_bar_builddrink_button_selector"
+            	android:background="@android:color/transparent"/>
+        	<View android:id="@+id/rule02" 
+            	
+            	android:layout_width="1px"
+            	android:layout_height="fill_parent"
+            	android:layout_marginTop="8dp"
+            	android:layout_marginBottom="8dp"
+             	android:background="@color/bottom_food_type_menu_vertical_separator"
+             	android:visibility="gone"
+                />
+        	<ImageButton android:id="@+id/btn_merch"
+            	android:layout_width="0dp"
+            	android:layout_height="fill_parent"
+            	android:layout_weight="1.0"
+            	android:gravity="center"
+            	android:visibility="gone"
+            	android:src="@drawable/appetize_bottom_food_type_menu_merch_normal_image"
+            	android:background="@android:color/transparent"
+            	  />
+        </LinearLayout>
+</LinearLayout>	

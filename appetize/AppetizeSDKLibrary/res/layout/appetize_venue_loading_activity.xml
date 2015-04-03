@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+
+    android:background="#ebebeb">
+    
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/appetize_actionbar" 
+      />
+
+  
+    
+    <LinearLayout 
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/actionbar"
+        android:weightSum="2.0">
+        
+	        <View android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="1.0"/>
+        
+	        <LinearLayout android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
+
+			
+			    <ProgressBar
+			        android:id="@+id/progressBar1"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_horizontal"
+			         />
+		    </LinearLayout>
+
+	         <View android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="1.0"/>
+
+    </LinearLayout>
+    
+    
+    <LinearLayout 
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/actionbar"
+        android:id="@+id/seat_btn_layout"
+        android:visibility="gone">
+         <Button
+	        android:id="@+id/btn_use_saved_seat"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:layout_gravity="center"
+	        android:layout_marginBottom="10dp"
+	        android:background="@drawable/appetize_basic_button"
+	        android:gravity="center"
+	        android:text="Use seat ..."
+	        android:textColor="@color/basic_button_text_color_appetizelibrary"
+         />
+    
+    	 <Button
+	        android:id="@+id/btn_change_seat"
+	        android:layout_width="match_parent"
+	        android:layout_height="40dp"
+	        android:layout_gravity="center"
+	        android:layout_marginBottom="10dp"
+	        android:background="@drawable/appetize_basic_button"
+	        android:gravity="center"
+	        android:text="Change seat"
+	        android:textColor="@color/basic_button_text_color_appetizelibrary"
+	     
+         />
+    </LinearLayout>
+</RelativeLayout>

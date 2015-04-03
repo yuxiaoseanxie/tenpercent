@@ -1,0 +1,211 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color_appetizelibrary"
+    android:orientation="vertical" >    
+        
+        <LinearLayout
+            android:id="@+id/datacontainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:layout_marginTop="10dp"
+       		 android:layout_marginRight="10dp"
+       		 android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/fullname_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/credit_card_input_color_appetizelibrary"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/fullname"
+                    android:background="#ffffff"
+                    android:layout_width="220dp"
+                    android:layout_height="40dp"
+                    android:textCursorDrawable="@null"
+                    android:hint="Full Name"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/fullnamelabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="bottom|right"
+                    android:text="@string/appetize_name"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="1px"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                    android:background="#cccccc"/>
+            
+            <LinearLayout
+                
+                android:id="@+id/email_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/credit_card_input_color_appetizelibrary"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/email"
+                    android:background="#ffffff"
+                    android:layout_width="220dp"
+                    android:layout_height="40dp"
+                  	android:hint="Email Address"
+                  	android:textCursorDrawable="@null"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="17sp" 
+                    android:inputType="textEmailAddress"/>
+
+                <TextView
+                    android:id="@+id/emaillabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="bottom|right"
+                    android:text="@string/appetize_email"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="1px"
+                  android:layout_marginLeft="5dp"
+                  android:layout_marginRight="5dp"
+                    android:background="#cccccc"/>
+            
+            <LinearLayout
+                android:id="@+id/password_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/credit_card_input_color_appetizelibrary"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/password"
+                    android:background="#ffffff"
+                    android:layout_width="220dp"
+                    android:layout_height="40dp"
+                    android:hint="Password"
+                    android:textCursorDrawable="@null"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="17sp" 
+                    android:inputType="textPassword"
+                    />
+
+                <TextView
+                    android:id="@+id/passwordlabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:gravity="bottom|right"
+                    android:text="@string/appetize_password"
+                    android:textColor="@color/signin_text_color_appetizelibrary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+			
+            
+      
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/ctn_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/appetize_basic_button"
+        android:gravity="center"
+        android:text="Register"
+        android:textColor="@color/basic_button_text_color_appetizelibrary"
+         />
+    
+     <Button
+        android:id="@+id/create_account_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/appetize_basic_button"
+        android:gravity="center"
+        android:text="Create account"
+        android:textColor="@color/basic_button_text_color_appetizelibrary"
+        android:visibility="gone"
+         />
+    
+<!--      <LinearLayout  -->
+<!--          android:id="@+id/facebook_login_layout" -->
+<!--          android:layout_width="match_parent" -->
+<!--          android:layout_height="wrap_content" -->
+<!--          android:orientation="vertical" -->
+<!--          android:visibility="gone"> -->
+<!--      	<LinearLayout  -->
+<!--         	android:layout_width="match_parent" -->
+<!--          	android:layout_height="20dp" -->
+<!--          	android:layout_marginLeft="10dp" -->
+<!--          	android:layout_marginRight="10dp" -->
+<!--          	android:orientation="horizontal"> -->
+            
+<!--          	<View  -->
+<!--             	android:layout_width="0dp" -->
+<!--             	android:layout_height="1dp" -->
+<!--             	android:layout_gravity="center_vertical" -->
+<!--             	android:background="#4f4f4f" -->
+<!--             	android:layout_weight="2.0"/>   -->
+         
+<!--          	<TextView  -->
+<!--              	android:layout_width="0dp" -->
+<!--              	android:layout_height="wrap_content" -->
+<!--              	android:layout_gravity="center_horizontal" -->
+<!--              	android:text="or" -->
+<!--              	android:gravity="center_horizontal" -->
+<!--              	android:layout_weight="0.5" -->
+<!--              	android:layout_marginLeft="5dp" -->
+<!--          	 	android:layout_marginRight="5dp"/> -->
+<!--           	<View  -->
+<!--              	android:layout_width="0dp" -->
+<!--              	android:layout_height="1dp" -->
+<!--              	android:layout_gravity="center_vertical" -->
+<!--              	android:background="#4f4f4f" -->
+<!--              	android:layout_weight="2.0"/>  -->
+         
+<!--      	</LinearLayout> -->
+     
+     
+     
+<!--      	<com.facebook.widget.LoginButton android:id="@+id/facebook_button" -->
+<!-- 		    	android:layout_width="wrap_content" -->
+<!-- 		    	android:layout_height="wrap_content" -->
+<!-- 		    	android:layout_gravity="center_horizontal"  -->
+<!-- 		    	android:layout_marginBottom="10dp"/> -->
+<!--     </LinearLayout> -->
+    
+    <ImageView 
+        	android:id="@+id/powered_by_appetize_badge"
+        	android:src="@drawable/appetize_powered_by"
+        	android:layout_gravity="right|bottom"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       		
+       		
+        	android:layout_marginRight="5dp"
+        	android:layout_marginBottom="5dp"/>
+</LinearLayout>

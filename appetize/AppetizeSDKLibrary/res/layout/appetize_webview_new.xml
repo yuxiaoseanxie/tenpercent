@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <include
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true"
+        layout="@layout/appetize_actionbar" />
+    <LinearLayout android:id="@+id/layout"
+        android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_above="@+id/rule01"
+	    android:layout_below="@id/actionbar"
+	    android:background="@drawable/appetize_overlay_bg">
+	    <WebView android:id="@+id/webview"
+	        android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"/>
+    </LinearLayout>
+    <ImageView android:id="@+id/rule01" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/appetize_faq_separator"
+        android:layout_above="@+id/btn_get_in_touch"/>
+    <Button android:id="@+id/btn_get_in_touch"
+        style="@style/appetize_button"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        
+        android:text="@string/appetize_get_in_touch"/>
+</RelativeLayout>

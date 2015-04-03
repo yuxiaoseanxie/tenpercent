@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:orientation="vertical" 
+    android:minHeight="75dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+       android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:background="@color/dialog_item_background_color_appetizelibrary" xmlns:tools="http://schemas.android.com/tools">
+
+   <ImageView
+       android:id="@+id/mixer_image"
+       android:layout_width="46dp"
+       android:layout_height="46dp"
+       android:layout_alignParentLeft="true"
+       android:layout_centerVertical="true"
+       tools:ignore="ContentDescription" />
+
+   <LinearLayout 
+       android:layout_marginLeft="10dp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:layout_toRightOf="@id/mixer_image"
+       android:layout_centerVertical="true">
+	   <TextView android:id="@+id/mixer_name"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"   
+	       android:textSize="14sp"
+	       android:textStyle="bold"
+	       android:textColor="@color/mixer_text_color_appetizelibrary"
+	       
+	       />
+	   <TextView android:id="@+id/mixer_cost"
+	       android:layout_width="wrap_content"
+	       android:layout_height="wrap_content"
+	       android:textSize="14sp"
+	       
+	       android:textColor="@color/mixer_text_color_appetizelibrary"/>
+   </LinearLayout>
+    	   <View android:layout_width="fill_parent"
+          android:layout_height="1dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/dialog_item_separator_color_appetizelibrary"/> 
+
+</RelativeLayout>

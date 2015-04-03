@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/appetize_list_bg"
+    android:minHeight="50dp" >
+
+    <ImageView
+        android:id="@+id/list_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="8dp" />
+
+    <LinearLayout android:id="@+id/list_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_toLeftOf="@+id/list_price"
+        android:layout_toRightOf="@+id/list_icon"
+        android:orientation="vertical" >
+
+        <TextView android:id="@+id/list_title"
+            style="@style/appetize_list_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/list_additional"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/list_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/list_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/list_text"
+        
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+</RelativeLayout>

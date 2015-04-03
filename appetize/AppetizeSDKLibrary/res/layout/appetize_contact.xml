@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/appetize_actionbar" />
+    
+    <TextView 
+        android:id="@+id/desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionbar"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:text="@string/appetize_contact_text"
+        android:gravity="center"
+        android:layout_margin="20dp" />
+
+    <Button
+        android:id="@+id/btn_call"
+        style="@style/appetize_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/desc"
+        android:layout_alignLeft="@+id/desc"
+        android:layout_alignRight="@+id/desc"
+        android:background="@drawable/appetize_btn_orange"
+        android:onClick="onCallClick"
+        android:text="@string/appetize_call"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btn_text"
+        style="@style/appetize_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_call"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:layout_alignLeft="@+id/desc"
+        android:layout_alignRight="@+id/desc"
+        android:background="@drawable/appetize_btn_orange"
+        android:onClick="onTextClick"
+        android:text="@string/appetize_text"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_email"
+        style="@style/appetize_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/desc"
+        android:layout_alignRight="@+id/desc"
+        android:layout_below="@+id/btn_text"
+        android:background="@drawable/appetize_btn_orange"
+        android:onClick="onEmailClick"
+        android:text="@string/appetize_email_btn"
+        android:textSize="16sp" />
+    
+    <Button
+        android:id="@+id/btn_tweet"
+        style="@style/appetize_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/desc"
+        android:layout_alignRight="@+id/desc"
+        android:layout_below="@+id/btn_email"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/appetize_btn_orange"
+        android:onClick="onTweetClick"
+        android:text="@string/appetize_tweet"
+        android:textSize="16sp" />
+
+</RelativeLayout>

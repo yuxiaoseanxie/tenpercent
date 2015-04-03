@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/appetize_bottom_food_type_menu_build_drink_selected_image" android:state_selected="true"></item>
+    <item android:drawable="@drawable/appetize_bottom_food_type_menu_build_drink_selected_image" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/appetize_bottom_food_type_menu_build_drink_normal_image"></item>
+</selector>

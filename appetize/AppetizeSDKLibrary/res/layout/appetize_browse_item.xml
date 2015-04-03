@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+        android:background="@color/background_color_appetizelibrary" xmlns:tools="http://schemas.android.com/tools">
+	<RelativeLayout android:id="@+id/mailLayout" 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+		android:paddingLeft="11dp"
+        android:paddingRight="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+        <FrameLayout android:layout_width="72dp"
+                     android:layout_height="72dp"
+                     android:background="@drawable/appetize_list_item_rounded_corners"
+                     android:layout_centerVertical="true"
+                android:id="@+id/img_merch_rounded_container">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:ignore="UselessParent" >
+
+            <ImageView
+                android:id="@+id/img_merch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
+            
+            <ProgressBar android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:id="@+id/appetize_merch_image_spinner"
+						        android:layout_centerInParent="true"/>
+		
+	    	</RelativeLayout>
+        </FrameLayout>
+
+	    <RelativeLayout android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:layout_toRightOf="@id/img_merch_rounded_container"
+	        android:layout_toLeftOf="@+id/add_remove_item_btn_layout"
+	        android:layout_marginLeft="10dp"
+	        android:layout_centerVertical="true"
+	        android:gravity="center_vertical"
+	        android:orientation="vertical">
+			<TextView android:id="@+id/label_merch"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@color/merch_item_text_color_appetizelibrary"
+			    android:textStyle="bold"/>
+			<TextView android:id="@+id/price_merch"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_below="@id/label_merch"
+			    android:textColor="@color/merch_item_text_color_appetizelibrary"
+			    />
+			<TextView android:id="@+id/count"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_toRightOf="@id/price_merch"
+			    android:layout_below="@id/label_merch"
+			    android:layout_marginLeft="4dp"
+			    android:textColor="@color/merch_item_multiple_text_color_appetizelibrary"
+			    />
+	    </RelativeLayout>
+	    <LinearLayout android:id="@+id/add_remove_item_btn_layout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:orientation="horizontal"
+	        android:gravity="center">
+	        <Button android:id="@+id/btn_remove"
+                    android:padding="8dp"
+	            android:layout_width="38dp"
+	            android:layout_height="38dp"
+                android:background="@null"
+	            android:drawableLeft="@drawable/appetize_ic_list_minus"/>
+	        <Button android:id="@+id/btn_add"
+                    android:padding="8dp"
+	            android:layout_width="38dp"
+	            android:layout_height="38dp"
+                android:background="@null"
+	            android:drawableLeft="@drawable/appetize_ic_list_add"/>
+
+	        <ImageView
+	            android:id="@+id/img_details_indicator"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="6dp"
+	            android:src="@drawable/appetize_row_detail"
+	            tools:ignore="ContentDescription" />
+
+	    </LinearLayout>
+		<TextView android:id="@+id/soldout"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="50dp"
+		    android:layout_centerHorizontal="true"
+		    android:text="@string/appetize_soldout"
+		    android:textColor="#FF0000"
+		    android:textSize="24sp"
+		    android:singleLine="true"
+		    android:visibility="invisible"/>
+	</RelativeLayout>
+
+	<ImageView
+	    android:id="@+id/separator"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/appetize_horizontal_separator"
+	    android:visibility="gone"
+	    tools:ignore="ContentDescription" />
+
+    <View 
+          android:id="@+id/browse_item_separator"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginLeft="11dp"
+          android:layout_marginRight="10dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/item_separator_color_appetizelibrary"   />
+</RelativeLayout>

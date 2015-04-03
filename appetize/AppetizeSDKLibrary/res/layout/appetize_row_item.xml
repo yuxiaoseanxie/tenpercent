@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:background="@android:color/transparent">
+	<RelativeLayout android:id="@+id/mainLayout" 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+        android:paddingLeft="11dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" >
+
+        <FrameLayout android:layout_width="72dp"
+                     android:layout_height="72dp"
+                     android:background="@drawable/appetize_list_item_rounded_corners"
+                     android:layout_alignParentLeft="true"
+                     android:layout_centerVertical="true"
+                     android:layout_marginRight="12dp"
+                     android:id="@+id/img_item_rounded_container"
+                      >
+                      
+            <RelativeLayout
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+   			>
+	    
+	            <ImageView
+	                android:id="@+id/list_icon"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	
+	                android:scaleType="centerCrop"
+	              />
+	            <ProgressBar android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:id="@+id/appetize_item_image_spinner"
+						        android:layout_centerInParent="true"/>
+		
+	    	</RelativeLayout>
+        </FrameLayout>
+
+	    <LinearLayout
+	        android:id="@+id/list_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toLeftOf="@+id/list_add_remove"
+	        android:layout_toRightOf="@+id/img_item_rounded_container"
+	        android:layout_centerVertical="true"
+	        android:orientation="vertical">
+	
+	        <TextView
+	            android:id="@+id/list_title"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:textSize="16sp"
+	            android:textColor="@color/row_item_text_color_appetizelibrary"
+	            android:textStyle="bold"
+	            android:ellipsize="end"
+	            android:maxLines="2" />
+	        
+	        <LinearLayout android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="2dp"
+	            android:orientation="horizontal">
+		        <TextView
+		            android:id="@+id/list_price"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textColor="@color/row_item_text_color_appetizelibrary"
+		            android:textSize="12sp" />
+		        
+			    <TextView android:id="@+id/list_total"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="2dp"
+			        android:textColor="@color/item_multiple_color_appetizelibrary"
+			        android:textSize="12sp"
+			        android:textStyle="bold"
+			        android:visibility="invisible" />
+	        </LinearLayout>
+	
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:id="@+id/list_add_remove"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentRight="true"
+	        android:orientation="horizontal"
+	        android:layout_centerVertical="true">
+	
+	        <ImageButton android:id="@+id/list_btn_remove"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:layout_gravity="center_vertical"
+	            android:background="@null"
+	            android:paddingBottom="14dp"
+	            android:paddingLeft="10dp"
+	            android:paddingRight="4dp"
+	            android:paddingTop="14dp"
+	            android:src="@drawable/appetize_ic_list_minus"
+	            android:visibility="gone" />
+	
+	        <ImageButton android:id="@+id/list_btn_add"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:layout_gravity="center_vertical"
+	            android:background="@null"
+	            android:paddingBottom="14dp"
+	            android:paddingLeft="10dp"
+	            android:paddingRight="10dp"
+	            android:paddingTop="14dp"
+	            android:src="@drawable/appetize_ic_list_add"
+	            android:visibility="visible" />
+	        
+	        <ImageView android:id="@+id/list_indicator"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical"
+	            android:background="@null"
+	            android:paddingBottom="14dp"
+	            android:paddingLeft="2dp"
+	            android:paddingRight="14dp"
+	            android:paddingTop="14dp"
+	            android:src="@drawable/appetize_row_detail"
+	            android:visibility="visible" />
+
+	    </LinearLayout>
+	    
+	</RelativeLayout>
+<!--     <View android:layout_width="fill_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_below="@id/mainLayout" -->
+<!--         android:background="@drawable/item_separator" -->
+<!--         android:visibility="gone"/> -->
+    <View 
+        	android:id="@+id/itemrowseparator"
+        	android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:layout_marginLeft="11dp"
+          android:layout_marginRight="10dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/item_separator_color_appetizelibrary"
+            />
+</RelativeLayout>

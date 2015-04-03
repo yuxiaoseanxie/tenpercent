@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="appetize_orange">#fb6b00</color>
+  <color name="appetize_orange_alpha">#BBfb6b00</color>
+  <color name="appetize_brown">#382922</color>
+  <color name="appetize_green">#3fb34f</color>
+
+  <color name="appetize_action_bar_color">@color/action_bar_color_appetizelibrary</color>
+
+  <color name="appetize_menu_section_normal">@color/menu_section_normal_color_appetizelibrary</color>
+  <color name="appetize_menu_section_selected">@color/menu_section_selected_color_appetizelibrary</color>
+
+  <color name="appetize_actionbar_bg_start">#FF32241d</color>
+  <color name="appetize_actionbar_bg_end">#FF523c30</color>
+  <color name="appetize_empty_list_bg">#CC000000</color>
+  <color name="appetize_tab_active_bg">#66999999</color>
+  <color name="appetize_tab_title_inactive">#9a9a9a</color>
+  <color name="appetize_cart_total_bg">#33999999</color>
+  <color name="appetize_list_bg">#11FFFFFF</color>
+  <color name="appetize_soldout_red">#FF0000</color>
+  <color name="appetize_white">#FFFFFF</color>
+  <color name="appetize_stadium_info_bg">#40000000</color>
+  <color name="appetize_header_btn_pressed">#80000000</color>
+
+  <color name="appetize_cart_separator_color">#e6e6e6</color>
+  <color name="appetize_standard_text_color">#4f4f4f</color>
+  <color name="appetize_confirmation_chase_voucher_text_color">#2C7DD3</color>
+
+  <!-- add new colors for compatibility with 3rd part libraries using appetize library -->
+
+  <color name="action_bar_color_appetizelibrary">#FFFFFF</color> <!-- NEW -->
+  <color name="enabled_button_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="menu_section_selected_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="menu_section_normal_color_appetizelibrary">#333333</color>
+  <color name="apply_promo_button_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="disabled_button_color_appetizelibrary">#c7c7c7</color>
+  <color name="order_confirmation_background_color_appetizelibrary">#ebebeb</color>
+  <color name="revolving_image_time_elapsed_color_appetizelibrary">#8eac48</color>
+  <color name="revolving_image_time_color_appetizelibrary">#c4c1bf</color>
+  <color name="background_color_appetizelibrary">#ebebeb</color>
+  <color name="wheel_background_color_appetizelibrary">#ffffff</color>
+  <color name="stadium_info_color_appetizelibrary">#000000</color>
+  <color name="tip_button_active_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="tip_button_inactive_color_appetizelibrary">@color/menu_section_normal_color_appetizelibrary</color>
+  <color name="cart_summary_background_color_appetizelibrary">#d6d6d6</color>
+  <color name="credit_card_input_color_appetizelibrary">#ffffff</color>
+  <color name="order_confirmation_list_color_appetizelibrary">#ffffff</color>
+  <color name="item_separator_color_appetizelibrary">#d6d6d6</color>
+  <color name="cart_summary_separator_color_appetizelibrary">#ffffff</color>
+  <color name="wheel_separator_color_appetizelibrary">#ebebeb</color>
+  <color name="action_bar_text_color_appetizelibrary">#af0000</color>
+  <color name="stadium_info_text_color_appetizelibrary">#ebebeb</color>
+  <color name="level_title_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="section_title_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="row_title_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="seat_title_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="food_tab_text_color_appetizelibrary">#ffffff</color>
+  <color name="row_item_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="build_drink_labels_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="item_details_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="basic_button_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="basic_button_text_color_appetizelibrary">#ffffff</color>
+  <color name="bottom_food_type_menu_horizontal_separator">#c6c6c6</color>
+  <color name="bottom_food_type_menu_vertical_separator">#c6c6c6</color>
+  <color name="select_mixer_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="item_multiple_color_appetizelibrary">@color/appetize_green</color> 
+  <color name="mixer_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="cart_item_separator_color_appetizelibrary">#a4a4a4</color>
+  <color name="cart_item_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="promo_code_text_color_appetizelibrary">#000000</color>
+  <color name="apply_promo_button_text_color_appetizelibrary">#ffffff</color>
+  <color name="cart_item_multiple_text_color_appetizelibrary">@color/appetize_green</color> 
+  <color name="cart_summary_text_color_appetizelibrary">#a4a4a4</color>
+  <color name="edit_payment_profile_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="order_confirmation_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="confirmation_chase_voucher_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="confirmation_item_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="wheel_choice_rectangle_color_appetizelibrary">#333333</color>
+  <color name="food_type_tab_selected_text_color_appetizelibrary">#ffffff</color>
+  <color name="food_type_tab_normal_text_color_appetizelibrary">#ffffff</color>
+  <color name="tip_button_selected_text_color_appetizelibrary">#ffffff</color>
+  <color name="tip_button_normal_text_color_appetizelibrary">#ffffff</color>
+  <color name="enabled_button_text_color_appetizelibrary">#ffffff</color>
+  <color name="disabled_button_text_color_appetizelibrary">#ffffff</color>
+  <color name="vendor_chooser_main_color_appetizelibrary">#a4a4a4</color>
+  <color name="vendor_chooser_secondary_color_appetizelibrary">#a7aaad</color>
+  <color name="vendor_chooser_transparent_overlay_color_appetizelibrary">#a7aaad</color>
+  <color name="confirmation_row_separator_color_appetizelibrary">#ebebeb</color>
+  <color name="dialog_item_separator_color_appetizelibrary">#ebebeb</color>
+  <color name="dialog_item_background_color_appetizelibrary">#ffffff</color>
+  <color name="edit_payment_profile_label_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="merch_item_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="merch_item_multiple_text_color_appetizelibrary">@color/appetize_green</color>
+  <color name="build_drink_tab_normal_text_color_appetizelibrary">#ffffff</color>
+  <color name="build_drink_tab_selected_text_color_appetizelibrary">#ffffff</color>
+  <color name="pull_to_refresh_label_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="default_text_color_appetizelibrary">#4f4f4f</color>
+  <color name="wheel_out_text_color_appetizelibrary">#4f4f4f</color>
+  <color name="wheel_in_text_color_appetizelibrary">#ffffff</color>
+  <color name="promo_code_hint_text_color_appetizelibrary">#efefef</color>
+  <color name="bottom_button_color_selected_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="bottom_button_color_normal_appetizelibrary">#333333</color>
+  <color name="item_list_indicator_color_appetizelibrary">#cacaca</color>
+
+  <color name="chase_meal_name_cost_text_color_appetizelibrary">#0065a5</color>
+  <color name="chase_meal_description_text_color_appetizelibrary">#2d2d2d</color>
+  <color name="merch_category_normal_color_appetizelibrary">#e6e6e6</color>
+  <color name="merch_category_selected_color_appetizelibrary">@color/background_color_appetizelibrary</color>
+  <color name="merch_category_normal_text_color_appetizelibrary">#5c5c5c</color>
+  <color name="merch_category_selected_text_color_appetizelibrary">@color/action_bar_color_appetizelibrary</color>
+  <color name="merch_category_item_description_text_color_appetizelibrary">#4a4a4a</color>
+  <color name="merch_category_item_border_color">#dddddd</color>
+  <color name="merch_category_item_details_name_text_color_appetizelibrary">#4a4a4a</color>
+  <color name="merch_category_item_details_price_text_color_appetizelibrary">#969696</color>
+  <color name="merch_category_item_details_description_text_color_appetizelibrary">#636363</color>
+  <color name="merch_category_item_separator_color_appetizelibrary">#dbdbd9</color>
+  <color name="item_list_background_color_appetizelibrary">#ffffff</color>
+
+
+  <color name="signin_text_color_appetizelibrary">@color/default_text_color_appetizelibrary</color>
+  <color name="create_account_btn_color_appetizelibrary">#af0000</color> <!-- NEW -->
+  <color name="create_account_btn_text_color_appetizelibrary">#ffffff</color>
+
+
+</resources>

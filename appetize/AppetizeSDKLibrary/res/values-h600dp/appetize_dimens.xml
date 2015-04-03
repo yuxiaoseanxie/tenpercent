@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="appetize_actionbar_height">49dp</dimen>
+    <dimen name="appetize_actionbar_logo_marginLR">6dp</dimen>
+    <dimen name="appetize_actionbar_logo_marginTB">8dp</dimen>
+    <dimen name="appetize_actionbar_title">13sp</dimen>
+    <dimen name="appetize_actionbar_btn_width">90dp</dimen>
+    <dimen name="appetize_actionbar_text">12sp</dimen>
+    <dimen name="appetize_seat_selector_inner_area_marginLR">10dp</dimen>
+ <!--     
+    <dimen name="gallery_mixer_item_width_2x">100dp</dimen>
+	<dimen name="gallery_mixer_item_height_2x">150dp</dimen>
+	<dimen name="gallery_mixer_item_width">50dp</dimen>
+	<dimen name="gallery_mixer_item_height">75dp</dimen>
+	-->
+	   <dimen name="appetize_gallery_item_width_2x">100dp</dimen>
+  <dimen name="appetize_gallery_item_height_2x">240dp</dimen>
+  <dimen name="appetize_gallery_item_width">50dp</dimen>
+  <dimen name="appetize_gallery_item_height">150dp</dimen>
+  <dimen name="appetize_mixer_gallery_height">300dp</dimen>
+  
+</resources>

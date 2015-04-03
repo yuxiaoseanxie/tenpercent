@@ -1,0 +1,22 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:sliding="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/no_menu_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="horizontal"
+    android:background="@color/action_bar_color_appetizelibrary">
+
+	<TextView 
+	    android:id="@+id/close"
+	    android:layout_height="match_parent"
+	    android:layout_width="wrap_content"
+	    android:layout_marginLeft="15dp"
+	    android:text="@string/appetize_close"
+	    android:gravity="center"
+	    android:textSize="18sp"
+	    android:background="@android:color/transparent"
+	    android:textColor="@color/action_bar_text_color_appetizelibrary"/>
+   
+
+</LinearLayout>

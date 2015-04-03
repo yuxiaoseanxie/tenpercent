@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href="styles_css">
+      
+
+      
+      <style type="text/css">
+          %@
+          </style>
+
+</head>
+
+<body id="body-id">
+
+        <div class="about-background">
+            <p class="about-question">Choose your seat, menu items, checkout securely, and relax while your order is delivered to you.</p>
+            <p class="answer">- Free download<br>
+            - Quick and easy to use<br>
+            - Food, drinks, and merchandise delivered right to your seat<br>
+            - Completly secure transactions with emailed receipt<br>
+            - Responsive Customer Support team</p>
+            <img class="separator">
+        </div>
+
+        <p class="question">How can I contact Appetize Customer Support?</p>
+        
+        <p class="answer">Just click on the Get in Touch button at the bottom of this screen and you will be able to Call, Email, or Tweet us from there. Please don't hesitate to contact us with any needs you have before, during, or after your event.</p>
+
+        <img class="separator">
+            
+        <p class="question">How long does it take to get my order delivered?</p>
+            
+        <p class="answer">The answer depends on the venue and the amount of orders that are currently being served. We would estimate that most orders will take anywhere from 10-20 min to be delivered. You are prompted with the current delivery time on the confirmation of your order.</p>
+            
+        <img class="separator">
+            
+        <p class="question">Once I have submitted my order can I make any changes?</p>
+                
+        <p class="answer">Unfortunately once an order is submitted, it cannot be changed. Please contact us if you need any help.</p>
+        
+        <img class="separator">
+                
+        <p class="question">Does Appetize save my payment and personal information? Is it Safe?</p>
+
+        <p class="answer">If you create an account and save your credit card info, your information is stored to give you the best expirience possible. This eliminates the extra work of having to input your credit card info every time you want to make an order. Your information is safe with us behind industry standard encryption.</p>
+
+
+
+</body>
+
+</html>

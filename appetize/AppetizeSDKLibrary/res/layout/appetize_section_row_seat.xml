@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/background_color_appetizelibrary">
+
+    <include
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true"
+        layout="@layout/appetize_actionbar" />
+    
+    <!--android:layout_height="362dp"  -->
+    <RelativeLayout android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+   
+     
+        android:background="@color/background_color_appetizelibrary">
+        <LinearLayout android:id="@+id/ll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+	        <TextView android:id="@+id/seat_info"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textColor="@android:color/white"
+	            android:layout_marginTop="8dp"
+	            android:layout_marginLeft="6dp"
+	            android:text="Current Seat: "
+	            android:textSize="16sp"
+	            android:visibility="gone"/>
+			<ImageView android:id="@+id/stadium_image"
+	        	android:layout_width="fill_parent"
+	        	android:layout_height="145dp"
+	        	android:layout_margin="0dp"
+	        	android:padding="0dp"
+	        	android:background="#cc333333"
+	        	android:scaleType="centerCrop"/> <!-- bakcground color is just temp!! -->
+		</LinearLayout>
+		<RelativeLayout android:id="@+id/stadium_info" 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:minHeight="40dp"
+		    android:layout_alignParentTop="true"
+		    android:layout_margin="0dp"
+		    android:paddingTop="4dp"
+		    android:paddingBottom="4dp"
+		    android:paddingLeft="@dimen/appetize_seat_selector_inner_area_marginLR"
+		    android:paddingRight="@dimen/appetize_seat_selector_inner_area_marginLR"
+		    android:orientation="vertical"
+		    android:background="@color/stadium_info_color_appetizelibrary"
+		    android:alpha="0.7">
+		    <LinearLayout android:id="@+id/name_layout" 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:gravity="center_vertical">
+				<TextView android:id="@+id/stadium_name"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textSize="9sp"
+			        android:textColor="@color/stadium_info_text_color_appetizelibrary"
+			        android:textStyle="bold"/>
+				<TextView android:id="@+id/distance"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="6dp"
+			        android:drawablePadding="4dp"
+			        
+			        android:textSize="9sp"
+			        android:textColor="@color/appetize_green"
+			        android:textStyle="bold"/>
+		    </LinearLayout>
+			<TextView android:id="@+id/event"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/name_layout"
+		        android:textSize="14sp"
+		        android:textColor="@color/stadium_info_text_color_appetizelibrary"/>
+		</RelativeLayout>
+		<RelativeLayout android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_margin="0dp"
+		    android:layout_below="@id/ll"
+		    android:background="@android:color/transparent">
+			<View android:id="@+id/rule01"
+			    android:layout_marginLeft="@dimen/appetize_seat_selector_inner_area_marginLR" 
+		    android:layout_marginRight="@dimen/appetize_seat_selector_inner_area_marginLR" 
+			    android:layout_width="fill_parent"
+			    android:layout_height="40dp"
+			    android:background="#ebebeb"/>
+			<RelativeLayout android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_below="@id/rule01"
+			    android:layout_marginLeft="@dimen/appetize_seat_selector_inner_area_marginLR"
+			    android:layout_marginRight="@dimen/appetize_seat_selector_inner_area_marginLR"
+			    android:background="@color/wheel_background_color_appetizelibrary">
+			</RelativeLayout>
+			<LinearLayout android:id="@+id/outer_layout"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:orientation="horizontal"
+			    android:weightSum="3.0">
+				<View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@android:color/transparent"/>
+				<View android:layout_width="1dp"
+				    android:layout_marginTop="47dp"
+				    android:layout_marginBottom="5dp"
+			        android:layout_height="fill_parent"
+			        android:background="@color/wheel_separator_color_appetizelibrary"/>
+				<View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@android:color/transparent"/>
+				<View android:layout_width="1dp"
+				    android:layout_marginTop="47dp"
+				    android:layout_marginBottom="5dp"
+			        android:layout_height="fill_parent"
+			        android:background="@color/wheel_separator_color_appetizelibrary"/>
+				<View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@android:color/transparent"/>
+			</LinearLayout>
+			
+			<RelativeLayout android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_below="@id/rule01"
+			    android:background="@android:color/transparent">
+				<View android:layout_width="fill_parent"
+				    android:layout_height="42dp"
+				    android:layout_centerInParent="true"
+				    android:background="#333333"/>
+				<LinearLayout android:layout_width="fill_parent"
+				    android:layout_height="42dp"
+				    android:layout_centerInParent="true"
+				 
+				    android:orientation="horizontal">
+				    <View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@color/wheel_choice_rectangle_color_appetizelibrary"/>
+				<View android:layout_width="1dp"
+			
+			        android:layout_height="fill_parent"
+			        android:background="@color/wheel_separator_color_appetizelibrary"/>
+				<View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@color/wheel_choice_rectangle_color_appetizelibrary"/>
+				<View android:layout_width="1dp"
+			
+			        android:layout_height="fill_parent"
+			        android:background="@color/wheel_separator_color_appetizelibrary"/>
+				<View android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="1.0"
+				    android:background="@color/wheel_choice_rectangle_color_appetizelibrary"/>
+				    
+				</LinearLayout>
+			</RelativeLayout>		
+			<LinearLayout android:id="@+id/outer_layout"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:orientation="horizontal"
+			    android:weightSum="3.0">
+			    <RelativeLayout android:id="@+id/section_layout"
+			        android:layout_width="0dp"
+			        android:layout_height="fill_parent"
+			        android:layout_weight="1.0"
+			        android:orientation="vertical"
+			        android:background="@android:color/transparent">
+					<TextView android:id="@+id/section_title"
+					    android:layout_width="fill_parent"
+					    android:layout_height="40dp"
+					    android:textColor="@color/section_title_text_color_appetizelibrary"
+					    android:textSize="14sp"
+					    android:text="@string/appetize_section"
+					    android:gravity="center"
+					    android:background="@color/background_color_appetizelibrary"/>
+
+			        <com.appetizeapp.android.wheel.WheelView
+			            android:id="@+id/sections"
+			            android:layout_width="match_parent"
+			            android:layout_height="match_parent"
+			            android:layout_below="@id/section_title"
+			            android:layout_gravity="center_vertical"
+			            android:layout_marginTop="8dp"
+			            android:layout_marginBottom="8dp"/>
+
+			    </RelativeLayout>
+			    <!--ImageView android:layout_width="wrap_content"
+			        android:layout_height="fill_parent"
+			        android:background="@drawable/separator_header"/!-->
+			    <RelativeLayout android:id="@+id/row_layout"
+			        android:layout_width="0dp"
+			        android:layout_height="fill_parent"
+			        android:layout_weight="1.0"
+			        android:orientation="vertical"
+			        android:background="@android:color/transparent">
+					<TextView android:id="@+id/row_title"
+					    android:layout_width="fill_parent"
+					    android:layout_height="40dp"
+					    android:textSize="14sp"
+					    android:textColor="@color/row_title_text_color_appetizelibrary"
+					    android:text="@string/appetize_row"
+					    android:gravity="center"
+					    android:background="@color/background_color_appetizelibrary"/>
+					 <com.appetizeapp.android.wheel.WheelView
+			            android:id="@+id/rows"
+			            android:layout_width="match_parent"
+			            android:layout_height="match_parent"
+			            android:layout_below="@id/row_title"
+			            android:layout_gravity="center_vertical"
+			            android:layout_marginTop="8dp"
+			            android:layout_marginBottom="8dp"/>
+					
+			    </RelativeLayout>
+			    <!--ImageView android:layout_width="wrap_content"
+			        android:layout_height="fill_parent"
+			        android:background="@drawable/separator_header"/!-->
+			    <RelativeLayout android:id="@+id/seat_layout"
+			        android:layout_width="0dp"
+			        android:layout_height="fill_parent"
+			        android:layout_weight="1.0"
+			        android:orientation="vertical"
+			        android:background="@android:color/transparent">
+					<TextView android:id="@+id/seat_title"
+					    android:layout_width="fill_parent"
+					    android:layout_height="40dp"
+					    android:textColor="@color/seat_title_text_color_appetizelibrary"
+					    android:text="@string/appetize_seat"
+					    android:textSize="14sp"
+					    android:gravity="center"
+					    android:background="@color/background_color_appetizelibrary"/>
+			        <com.appetizeapp.android.wheel.WheelView
+			            android:id="@+id/seats"
+			            android:layout_width="match_parent"
+			            android:layout_height="match_parent"
+			            android:layout_below="@id/seat_title"
+			            android:layout_gravity="center_vertical"
+			            android:layout_marginTop="8dp"
+			            android:layout_marginBottom="8dp"/>
+			    </RelativeLayout>
+			</LinearLayout>
+		</RelativeLayout>
+    </RelativeLayout>
+    <LinearLayout android:id="@+id/rl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+      
+        android:orientation="vertical"
+        android:background="@color/background_color_appetizelibrary">
+	    <Button
+	        android:id="@+id/continueBtn"
+	        style="@style/appetize_wheel_btn"
+	        android:layout_gravity="center"
+	        android:layout_above="@+id/btn_layout"
+            android:layout_marginBottom="10dp"
+	        android:onClick="onContinueClick" 
+	        android:textColor="@color/basic_button_text_color_appetizelibrary"/>
+		<LinearLayout android:id="@+id/btn_layout"
+	        android:layout_width="fill_parent"
+	        android:layout_height="50dp"
+	        android:orientation="horizontal"
+	        android:background="@drawable/appetize_menu_footer_bg"
+	        android:weightSum="2.0"
+	        android:visibility="gone">
+	        <ImageButton android:id="@+id/btn_info"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1.0"
+	            android:gravity="center"
+	            
+	            android:background="@android:color/transparent"/>
+	        <ImageView android:layout_width="wrap_content"
+	            android:layout_height="fill_parent"
+	            android:src="@drawable/appetize_food_menu_separator"/>
+	        <ImageButton android:id="@+id/btn_seat"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="1.0"
+	            android:gravity="center"
+	            
+	            android:background="@android:color/transparent"/>
+	    </LinearLayout>
+	
+
+    </LinearLayout>
+    
+    
+</LinearLayout>

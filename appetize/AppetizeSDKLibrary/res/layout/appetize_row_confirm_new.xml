@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+	<RelativeLayout android:id="@+id/mainLayout" 
+	    android:layout_width="match_parent"
+	    android:layout_height="55dp"
+	    android:paddingLeft="5dp"
+	    android:paddingRight="5dp">
+	
+	    <LinearLayout android:id="@+id/list_text"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_centerVertical="true"
+	        android:gravity="center_vertical"
+	        android:layout_toLeftOf="@+id/list_price"
+	        android:orientation="vertical" >
+
+	        <LinearLayout android:id="@+id/item_layout"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal">
+		        <TextView android:id="@+id/list_title"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="center_vertical"
+		            android:textSize="16sp"
+                    android:textStyle="bold"
+		            android:textColor="@color/confirmation_item_text_color_appetizelibrary"/>
+			    <TextView android:id="@+id/list_count"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_marginLeft="5dp"
+			        android:textColor="@color/appetize_green"
+			        android:textSize="15sp"
+			        android:textStyle="bold"/>
+	        </LinearLayout>
+
+	        <TextView android:id="@+id/list_additional"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:ellipsize="end"
+	            android:singleLine="true"
+	            android:textColor="@color/confirmation_item_text_color_appetizelibrary"
+	            android:textSize="12sp"
+	            android:visibility="gone" />
+	        
+	    </LinearLayout>
+	
+	    <TextView android:id="@+id/list_price"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="4dp"
+       		android:layout_centerVertical="true"
+	        android:textColor="@color/confirmation_item_text_color_appetizelibrary"
+	        android:textSize="15sp" />
+	</RelativeLayout>
+	<View android:layout_width="fill_parent"
+	    android:layout_height="1px"
+	    android:layout_below="@id/mainLayout"
+	    android:background="@color/confirmation_row_separator_color_appetizelibrary"/>
+</RelativeLayout>

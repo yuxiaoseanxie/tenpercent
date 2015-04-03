@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:background="@color/background_color_appetizelibrary"
+	>
+    
+    <FrameLayout
+        android:layout_height="99dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/appetize_categorized_merch_background">
+    	
+    	<ImageView
+        	android:id="@+id/merch_image"
+        	android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+        	android:scaleType="centerCrop"
+			/>
+    	
+    	<ProgressBar
+    	    android:id="@+id/image_merch_progress"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_gravity="center"
+    	
+			/>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="43dp" >
+	
+        <TextView
+            android:id="@+id/merch_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:text="fsdfsdfs"
+            android:textColor="@color/merch_category_item_description_text_color_appetizelibrary"
+            android:textSize="15sp" 
+            android:layout_toLeftOf="@+id/item_details_indicator"
+            android:layout_alignParentLeft="true"/>
+
+        <ImageView
+            android:id="@+id/item_details_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="12dp"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/appetize_row_detail" />
+        
+      
+    </RelativeLayout>
+	  <View 
+        	android:id="@+id/categorized_merch_item_separator"
+        	android:background="@color/merch_category_item_separator_color_appetizelibrary"
+        	android:layout_height="2dp"
+        	android:layout_width="match_parent"
+        	/>
+    
+</LinearLayout>
